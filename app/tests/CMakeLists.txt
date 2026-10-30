@@ -1152,6 +1152,8 @@ ss_add_unit_test(tst_gsusb_protocol
 # OpcUaWire.h (spec 0066) is the delta-frame vocabulary the OPC UA driver encodes and the opcua
 # native template decodes; the suite links the template registry so the latch semantics are tested
 # through the real makeParser() path. Commercial-only TU, so the suite defines BUILD_COMMERCIAL.
+# The registry names every template, so a new one (TextLineValues, spec 0106) joins this list and
+# tst_cframe_parser's together with the TUs it tokenizes through (LineFormat, JsonLeafScanner).
 #
 ss_add_unit_test(tst_opcua_wire
   SOURCES tst_opcua_wire.cpp
@@ -1185,6 +1187,9 @@ ss_add_unit_test(tst_opcua_wire
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextXmlData.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextYamlData.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/TextCodec.cpp
@@ -1503,6 +1508,9 @@ ss_add_unit_test(tst_cframe_parser
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextXmlData.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextYamlData.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/TextCodec.cpp
