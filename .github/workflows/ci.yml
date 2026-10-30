@@ -495,6 +495,22 @@ jobs:
         gpg-key-id: ${{secrets.GPG_KEY_ID}}
 
     #
+    # Spec 0107: the file users download is launched as that file, through the post-root QML
+    # suite, before it is uploaded. No libfuse2 on the runner, so the runtime extracts to a temp
+    # dir and runs from there; the extracted-tree glibc smoke in the composite action stays.
+    # continue-on-error is the R9 probe landing; the hardening commit removes it
+    #
+    - name: '🧪 Prove the AppImage runs its self-test (spec 0107)'
+      continue-on-error: true
+      timeout-minutes: 5
+      env:
+        QT_QPA_PLATFORM: offscreen
+        APPIMAGE_EXTRACT_AND_RUN: '1'
+      run: |
+        chmod +x "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
+        ./"${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage" --headless --selftest-suite qml
+
+    #
     # Release artifact: the Linux AppImage users download — the glibc-bundled build (spec
     # 0065) runs on everything from Debian 10 / RHEL 8 up, so it is the only one shipped
     #
@@ -795,6 +811,22 @@ jobs:
         gpg-key-id: ${{secrets.GPG_KEY_ID}}
 
     #
+    # Spec 0107: the file users download is launched as that file, through the post-root QML
+    # suite, before it is uploaded. No libfuse2 on the runner, so the runtime extracts to a temp
+    # dir and runs from there; the extracted-tree glibc smoke in the composite action stays.
+    # continue-on-error is the R9 probe landing; the hardening commit removes it
+    #
+    - name: '🧪 Prove the AppImage runs its self-test (spec 0107)'
+      continue-on-error: true
+      timeout-minutes: 5
+      env:
+        QT_QPA_PLATFORM: offscreen
+        APPIMAGE_EXTRACT_AND_RUN: '1'
+      run: |
+        chmod +x "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
+        ./"${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage" --headless --selftest-suite qml
+
+    #
     # Release artifact: the Linux AppImage users download — the glibc-bundled build (spec
     # 0065) runs on everything from Debian 10 / RHEL 8 up, so it is the only one shipped
     #
@@ -987,6 +1019,7 @@ jobs:
           -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
           -DCMAKE_OSX_ARCHITECTURES="arm64" \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
+          -DSS_INAPP_TESTS=ON \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
@@ -1191,6 +1224,7 @@ jobs:
           -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
           -DCMAKE_OSX_ARCHITECTURES="x86_64" \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
+          -DSS_INAPP_TESTS=ON \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
@@ -1420,6 +1454,37 @@ jobs:
         xcrun stapler staple "$PRODUCT"
 
     #
+    # Spec 0107: the stapled image is mounted and its app launched on both slices, natively and
+    # under Rosetta 2, before upload. Rosetta is installed when the probe finds it missing; a
+    # slice that cannot run fails the step, it never falls back to the native run alone.
+    # continue-on-error is the R9 probe landing; the hardening commit removes it
+    #
+    - name: '🧪 Prove the DMG runs its self-test on both slices (spec 0107)'
+      continue-on-error: true
+      timeout-minutes: 10
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: |
+        set -euo pipefail
+        PRODUCT="${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg"
+        MOUNT="$RUNNER_TEMP/ssdmg"
+        if ! arch -x86_64 /usr/bin/true 2>/dev/null; then
+          echo "Rosetta 2 is missing on this runner; installing"
+          sudo softwareupdate --install-rosetta --agree-to-license
+        fi
+        arch -x86_64 /usr/bin/true
+        hdiutil attach "$PRODUCT" -nobrowse -readonly -mountpoint "$MOUNT"
+        trap 'hdiutil detach "$MOUNT" -force || true' EXIT
+        EXE="$MOUNT/${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}"
+        lipo -archs "$EXE"
+        echo "::group::native ($(uname -m))"
+        "$EXE" --headless --selftest-suite qml
+        echo "::endgroup::"
+        echo "::group::x86_64 under Rosetta 2 ($(arch -x86_64 /usr/bin/uname -m))"
+        arch -x86_64 "$EXE" --headless --selftest-suite qml
+        echo "::endgroup::"
+
+    #
     # Release artifact: the signed, notarized, stapled universal DMG
     #
     - name: '📤 Upload artifact: DMG'
@@ -1613,6 +1678,7 @@ jobs:
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
           -DSS_PACKAGE_TYPE=msi `
           -DCMAKE_BUILD_TYPE=Release `
+          -DSS_INAPP_TESTS=ON `
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF
 
@@ -1687,6 +1753,40 @@ jobs:
         cpack --verbose
         mv *.msi ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi ../
+
+    #
+    # Spec 0107: the installer users run, installed silently, launched from Program Files
+    # through the post-root QML suite, then uninstalled; a directory left behind fails the step.
+    # The MSI ships only the windows platform plugin, so the offscreen one is taken from the
+    # runner's Qt; QT_LOGGING_TO_CONSOLE keeps the [selftest] lines on stderr, where the
+    # redirect can read them, instead of the debugger channel.
+    # continue-on-error is the R9 probe landing; the hardening commit removes it
+    #
+    - name: '🧪 Prove the MSI installs, runs its self-test and uninstalls (spec 0107)'
+      continue-on-error: true
+      timeout-minutes: 10
+      env:
+        QT_QPA_PLATFORM: offscreen
+        QT_QPA_PLATFORM_PLUGIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/msvc2022_64/plugins/platforms
+        QT_LOGGING_TO_CONSOLE: '1'
+      run: |
+        $msi = "$PWD\${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi"
+        $dir = "$env:ProgramFiles\${{env.APPLICATION}}"
+        $exe = "$dir\bin\${{env.EXECUTABLE}}.exe"
+        $install = Start-Process msiexec -ArgumentList "/i `"$msi`" /qn /norestart /l*v install.log" -Wait -PassThru
+        if ($install.ExitCode -ne 0) { Get-Content install.log -Tail 80; throw "install failed with $($install.ExitCode)" }
+        if (-not (Test-Path $exe)) { Get-ChildItem -Recurse $dir -ErrorAction SilentlyContinue; throw "installed executable missing: $exe" }
+        Write-Host "installed: $exe"
+        $p = Start-Process -FilePath $exe -ArgumentList '--headless','--selftest-suite','qml' `
+          -WorkingDirectory $PWD -PassThru -NoNewWindow `
+          -RedirectStandardOutput selftest.out -RedirectStandardError selftest.err
+        if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'self-test timed out' }
+        Get-Content selftest.out, selftest.err
+        if ($p.ExitCode -ne 0) { throw "self-test failed with $($p.ExitCode)" }
+        $uninstall = Start-Process msiexec -ArgumentList "/x `"$msi`" /qn /norestart /l*v uninstall.log" -Wait -PassThru
+        if ($uninstall.ExitCode -ne 0) { Get-Content uninstall.log -Tail 80; throw "uninstall failed with $($uninstall.ExitCode)" }
+        if (Test-Path $dir) { Get-ChildItem -Recurse $dir; throw "install directory still present: $dir" }
+        Write-Host "uninstalled: $dir is gone"
 
     #
     # The same build packaged as a plain archive, the base of the portable ZIP
