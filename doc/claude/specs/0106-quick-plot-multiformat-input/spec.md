@@ -1,7 +1,7 @@
 ---
 spec: 0106-quick-plot-multiformat-input
 title: Quick Plot multiformat input
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done         # draft -> approved -> in-progress -> done (2026-10-30)
 created: 2026-10-30
 author: Alex Spataru
 ---
@@ -129,29 +129,29 @@ The Getting Started page's claim that non-numeric text "blocks parsing" was wron
 
 ## Acceptance Criteria
 
-- [ ] **AC1 — Corpus test.** The 35-stream corpus below runs as an automated unit test
+- [x] **AC1 — Corpus test.** The 35-stream corpus below runs as an automated unit test
       against the real parser: every stream yields the expected sequence of (title, value)
       pairs per line, text lines yield nothing, and the number of structure rebuilds after
       the first structure equals the expected count (4 across the corpus, each a real
       channel-set change). Covers R1 to R11.
-- [ ] **AC2 — Labels survive a late Connect.** With a device already printing
+- [x] **AC2 — Labels survive a late Connect.** With a device already printing
       `temp: 23.5, hum: 60` lines, pressing Connect shows two plots titled `temp` and `hum`
       with no header row ever sent. In-app observation.
-- [ ] **AC3 — Units render.** `temp:23.5°C;pressure:1013hPa` shows `°C` and `hPa` in the
+- [x] **AC3 — Units render.** `temp:23.5°C;pressure:1013hPa` shows `°C` and `hPa` in the
       data grid and on the plots, where units render today. In-app observation.
-- [ ] **AC4 — Debug line is inert.** Interleaving `WiFi reconnecting...` between data lines
+- [x] **AC4 — Debug line is inert.** Interleaving `WiFi reconnecting...` between data lines
       leaves the widget set unchanged (no rebuild, no flicker) and the line is visible in the
       console. In-app observation, plus the dashboard structure reported over the API server
       does not change across the line.
-- [ ] **AC5 — Save as Project round-trip.** For each format in the corpus, the project written
+- [x] **AC5 — Save as Project round-trip.** For each format in the corpus, the project written
       by Save as Project, loaded in Project File mode and fed the same lines through the
       project dry-run API, yields identical titles, units and values. `pytest` integration.
-- [ ] **AC6 — Hotpath gate.** `--benchmark-hotpath` passes at its default threshold after the
+- [x] **AC6 — Hotpath gate.** `--benchmark-hotpath` passes at its default threshold after the
       change. The comma-only path pays no per-line detection cost.
 - [x] **AC7 — Surfaces and gates.** Label, tooltip, start hint, both help pages, CLI help and
       assistant corpus carry the new contract; `term-verify`, `claim-verify` and
       `documentation-verify` pass. Covers R13 and R14.
-- [ ] **AC8 — Replay unchanged.** A recorded Quick Plot session and a CSV file replay with the
+- [x] **AC8 — Replay unchanged.** A recorded Quick Plot session and a CSV file replay with the
       same structure and values as before this change. Existing player tests stay green.
 
 ### Corpus for AC1

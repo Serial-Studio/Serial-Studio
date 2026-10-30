@@ -31,7 +31,7 @@ updated: 2026-10-30
 
 | Id | Child | Spec | Month | Status | Moves | Reading (origin → now → target) |
 |----|-------|------|-------|--------|-------|---------------------------------|
-| C1 | Ship-artifact proof | — | Nov wk 1–2 | not born | `ship` | 4 → 4 → 0 |
+| C1 | Ship-artifact proof | [0107](../0107-ship-artifact-proof/spec.md) | Nov wk 1–2 | in-progress, probe landing (2026-10-30) | `ship` | 4 → 4 → 0 |
 | C0 | Quality score + five censuses | — | Nov wk 1 | not born | all | lenient 0.0 → 0.1 → 100 |
 | C5 | AI-facing budget hard gate + overview | — | Nov wk 2 | not born | AC9 | one-hop 53,503 → 53,850 → below |
 | C2 | Archive + issue triage | — | Nov wk 2 | not born | `specs` | 15 → 15 → 0 |

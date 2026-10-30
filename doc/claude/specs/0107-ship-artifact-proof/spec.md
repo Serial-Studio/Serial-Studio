@@ -1,7 +1,7 @@
 ---
 spec: 0107-ship-artifact-proof
 title: Ship-artifact proof
-status: approved     # draft -> approved -> in-progress -> done | shelved
+status: in-progress  # approved 2026-10-30; plan and tasks approved 2026-10-30
 approved: 2026-10-30 # ship the self-test flags on every leg; install Rosetta when missing
 created: 2026-10-30
 author: Alex Spataru
