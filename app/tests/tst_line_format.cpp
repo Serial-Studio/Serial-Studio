@@ -126,12 +126,12 @@ void LineFormatTest::detectSingleLines_data()
   addDetectRow("23,5 60,2 1013", ' ', true, false, false, {}, {23.5, 60.2, 1013});
   addDetectRow("temp:23.5,hum:60", ',', false, true, false, th, {23.5, 60});
   addDetectRow("temp: 23.5, hum: 60", ',', false, true, false, th, {23.5, 60});
-  addDetectRow("temp=23.5;hum=60", ';', false, true, false, th, {23.5, 60});
-  addDetectRow("temp:23.5 hum:60", ' ', false, true, false, th, {23.5, 60});
-  addDetectRow("temp: 23.5 hum: 60", ' ', false, true, false, th, {23.5, 60});
+  addDetectRow("temp=23.5;hum=60", ';', true, true, false, th, {23.5, 60});
+  addDetectRow("temp:23.5 hum:60", ' ', true, true, false, th, {23.5, 60});
+  addDetectRow("temp: 23.5 hum: 60", ' ', true, true, false, th, {23.5, 60});
   addDetectRow("temp:23.5" + deg + "C;pressure:1013hPa",
                ';',
-               false,
+               true,
                true,
                false,
                {"temp", "pressure"},
@@ -171,7 +171,7 @@ void LineFormatTest::detectSingleLines_data()
                {"Temp Sensor", "Humidity"},
                {23.5, 60});
   addDetectRow("temp:23.5,status:OK", ',', false, true, false, {"temp", "status"}, {23.5, nan});
-  addDetectRow("uptime=1234", 0, false, true, false, {"uptime"}, {1234});
+  addDetectRow("uptime=1234", 0, true, true, false, {"uptime"}, {1234});
 }
 
 /**

@@ -87,6 +87,14 @@ inline constexpr std::array<SeparatorCandidate, 5> kSeparatorCandidates{
 }
 
 /**
+ * @brief Array, object or quote punctuation: never part of a number or a unit.
+ */
+[[nodiscard]] static bool isBracket(const char c) noexcept
+{
+  return c == '[' || c == ']' || c == '{' || c == '}' || c == '"' || c == '\'';
+}
+
+/**
  * @brief The two name delimiters of a named field.
  */
 [[nodiscard]] static bool isNameDelimiter(const char c) noexcept
@@ -111,8 +119,9 @@ inline constexpr std::array<SeparatorCandidate, 5> kSeparatorCandidates{
 }
 
 /**
- * @brief A unit is 1 to kMaxUnitBytes bytes with no digit, whitespace or field punctuation, so
- *        ":30:45", ",hum=60" and "x1F" are rejected while "hPa", "%" and UTF-8 degree signs pass.
+ * @brief A unit is 1 to kMaxUnitBytes bytes with no digit, whitespace, field punctuation or
+ *        bracket, so ":30:45", ",hum=60", "x1F" and the "]" of "[1,2]" are rejected while "hPa",
+ *        "%" and UTF-8 degree signs pass.
  */
 [[nodiscard]] static bool isUnitSuffix(QByteArrayView text) noexcept
 {
@@ -120,7 +129,7 @@ inline constexpr std::array<SeparatorCandidate, 5> kSeparatorCandidates{
     return false;
 
   for (const char c : text)
-    if (isDigit(c) || isLineSpace(c) || c == ',' || c == ';' || isNameDelimiter(c))
+    if (isDigit(c) || isLineSpace(c) || c == ',' || c == ';' || isNameDelimiter(c) || isBracket(c))
       return false;
 
   return true;
