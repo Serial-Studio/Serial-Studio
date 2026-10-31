@@ -90,6 +90,7 @@
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "DataModel/Scripting/JsWatchdogThread.h"
 #include "DataModel/Scripting/MacroRunner.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "IO/ConnectionManager.h"
@@ -486,8 +487,8 @@ void Misc::ModuleManager::onQuit()
 /**
  * @brief Joins every FrameConsumer worker while qApp is alive: SessionContext::shutdown() frees
  *        the core modules inside main(), so a worker still ticking at static destruction
- *        dereferences freed modules (Windows 0xC0000374). stopWorker() stays idempotent for the
- *        destructor's repeat call.
+ *        dereferences freed modules (Windows 0xC0000374). The script watchdog follows the host
+ *        that released the engines it scanned: its aboutToQuit stop never fires without exec().
  */
 void Misc::ModuleManager::stopFrameConsumerWorkers()
 {
@@ -496,6 +497,7 @@ void Misc::ModuleManager::stopFrameConsumerWorkers()
 
   IO::ConnectionManager::instance().stopStreamWorkers();
   IO::PipelineHost::instance().shutdown();
+  DataModel::JsWatchdogThread::instance().shutdown();
   CSV::Export::instance().stopWorker();
 #ifdef BUILD_COMMERCIAL
   Console::Export::instance().stopWorker();

@@ -21,6 +21,9 @@
 
 #include "IO/PipelineHost.h"
 
+#include <QDeadlineTimer>
+#include <QEvent>
+
 #include "Core/IO/IRawFrameTap.h"
 #include "Core/ModuleConstruction.h"
 #include "Core/SSAssert.h"
@@ -712,10 +715,35 @@ void IO::PipelineHost::shutdown()
       m_frameParser, &DataModel::FrameParser::prepareShutdown, Qt::QueuedConnection);
 
   m_thread->quit();
-  if (!m_thread->wait(kJoinTimeoutMs)) [[unlikely]] {
+  if (!joinServingGuiMarshals(kJoinTimeoutMs)) [[unlikely]] {
     m_abandoned = true;
     (void)m_thread.release();
     qWarning() << "[PipelineHost] processing thread did not stop within" << kJoinTimeoutMs
                << "ms (hung script?) -- abandoning it (R21)";
   }
+}
+
+/**
+ * @brief Joins the processing thread while delivering the blocking marshals it already posted at
+ *        qApp (runOnGuiThreadBlocking): a path that never ran the GUI event loop (the post-root
+ *        self-test, a failed UI load) otherwise parks the thread on a latch nobody serves until
+ *        the join times out. Only qApp's queued calls are delivered, never a general event pump.
+ */
+bool IO::PipelineHost::joinServingGuiMarshals(int timeoutMs)
+{
+  constexpr int kPollMs = 10;
+
+  SS_ASSERT(m_thread != nullptr, return true);
+  SS_ASSERT(QThread::currentThread() == qApp->thread(),
+            return m_thread->wait(QDeadlineTimer(timeoutMs)));
+
+  const int polls = timeoutMs / kPollMs;
+  for (int i = 0; i < polls; ++i) {
+    if (m_thread->wait(QDeadlineTimer(kPollMs)))
+      return true;
+
+    QCoreApplication::sendPostedEvents(qApp, QEvent::MetaCall);
+  }
+
+  return m_thread->wait(QDeadlineTimer(kPollMs));
 }

@@ -288,6 +288,7 @@ private:
 
   void routeFrames(int deviceId, FrameReader* reader);
   void retireReader(ReaderSlot& slot);
+  [[nodiscard]] bool joinServingGuiMarshals(int timeoutMs);
 
 private:
   // Structure snapshots are published on layout change only, never at frame or block rate
