@@ -23,6 +23,7 @@
 #include "Misc/ThemeManager.h"
 
 #include <QColor>
+#include <QGuiApplication>
 #include <QHash>
 #include <QWindow>
 #include <utility>
@@ -35,6 +36,22 @@
 //--------------------------------------------------------------------------------------------------
 
 static NativeWindow *s_nativeWindowInstance = nullptr;
+
+/**
+ * @brief The NSWindow behind a Qt window, or nil without a platform handle or off the Cocoa
+ * platform: the offscreen plugin (headless runs, the self-test) hands out plain counters as
+ * window ids, and sending one a message is a crash.
+ */
+static NSWindow *nsWindowOf(QWindow *win)
+{
+  if (!win || !win->handle())
+    return nil;
+
+  if (QGuiApplication::platformName() != QStringLiteral("cocoa"))
+    return nil;
+
+  return [reinterpret_cast<NSView *>(win->winId()) window];
+}
 
 /**
  * @brief Swizzled applicationShouldTerminate that defers to Qt and cancels native termination.
@@ -128,14 +145,7 @@ int NativeWindow::titlebarHeight(QObject *window)
   if (!win)
     return 0;
 
-  if (!win->handle())
-    return 32;
-
-  NSView *view = reinterpret_cast<NSView *>(win->winId());
-  if (!view)
-    return 32;
-
-  NSWindow *w = [view window];
+  NSWindow *w = nsWindowOf(win);
   if (!w)
     return 32;
 
@@ -246,14 +256,7 @@ static void applyMacOSWindowStyleToNSWindow(NSWindow *w, const QString &color)
  */
 static void applyMacOSWindowStyle(QWindow *win, const QString &color)
 {
-  if (!win)
-    return;
-
-  NSView *view = reinterpret_cast<NSView *>(win->winId());
-  if (!view)
-    return;
-
-  applyMacOSWindowStyleToNSWindow([view window], color);
+  applyMacOSWindowStyleToNSWindow(nsWindowOf(win), color);
 }
 
 /**
@@ -273,8 +276,7 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
   m_colors.insert(win, color);
   if (m_windows.contains(win))
   {
-    NSView *view = reinterpret_cast<NSView *>(win->winId());
-    applyMacOSWindowAppearance(view ? [view window] : nil, color);
+    applyMacOSWindowAppearance(nsWindowOf(win), color);
     return;
   }
 
@@ -289,8 +291,7 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
     m_colors.remove(w);
   });
 
-  NSView *view = reinterpret_cast<NSView *>(win->winId());
-  NSWindow *nsWin = view ? [view window] : nil;
+  NSWindow *nsWin = nsWindowOf(win);
   if (nsWin)
   {
     id token = [[NSNotificationCenter defaultCenter]
@@ -312,13 +313,7 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
 void NativeWindow::onThemeChanged()
 {
   for (QWindow *win : std::as_const(m_windows))
-  {
-    if (!win || !win->handle())
-      continue;
-
-    NSView *view = reinterpret_cast<NSView *>(win->winId());
-    applyMacOSWindowAppearance(view ? [view window] : nil, m_colors.value(win));
-  }
+    applyMacOSWindowAppearance(nsWindowOf(win), m_colors.value(win));
 }
 
 /**
