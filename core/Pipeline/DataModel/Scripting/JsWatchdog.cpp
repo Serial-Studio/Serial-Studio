@@ -55,6 +55,7 @@ static qint64 steadyNowNs()
  */
 DataModel::JsWatchdog::JsWatchdog(QJSEngine* engine, int budgetMs, QString tag)
   : m_engine(engine)
+  , m_thread(nullptr)
   , m_deadlineNs(0)
   , m_budgetMs(budgetMs)
   , m_tag(std::move(tag))
@@ -62,8 +63,8 @@ DataModel::JsWatchdog::JsWatchdog(QJSEngine* engine, int budgetMs, QString tag)
 {
   SS_ASSERT_LOG(engine != nullptr);
   SS_ASSERT(budgetMs > 0, m_budgetMs = kDefaultBudgetMs);
-  static auto& watchdogThread = JsWatchdogThread::instance();
-  watchdogThread.registerWatchdog(this);
+  m_thread = &JsWatchdogThread::instance();
+  m_thread->registerWatchdog(this);
 }
 
 /**
@@ -71,8 +72,8 @@ DataModel::JsWatchdog::JsWatchdog(QJSEngine* engine, int budgetMs, QString tag)
  */
 DataModel::JsWatchdog::~JsWatchdog()
 {
-  static auto& watchdogThread = JsWatchdogThread::instance();
-  watchdogThread.unregisterWatchdog(this);
+  SS_ASSERT(m_thread != nullptr, return);
+  m_thread->unregisterWatchdog(this);
 }
 
 //--------------------------------------------------------------------------------------------------

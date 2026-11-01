@@ -31,6 +31,7 @@ class QTimer;
 namespace DataModel {
 
 class JsWatchdog;
+class JsWatchdogThread;
 
 /**
  * @brief Timer-driven worker that interrupts expired watchdogs off the blocked thread.
@@ -39,7 +40,7 @@ class JsWatchdogWorker : public QObject {
   Q_OBJECT
 
 public:
-  explicit JsWatchdogWorker(QObject* parent = nullptr);
+  explicit JsWatchdogWorker(JsWatchdogThread* owner);
 
 public slots:
   void begin();
@@ -49,6 +50,7 @@ private slots:
   void onTick();
 
 private:
+  JsWatchdogThread* m_owner;
   QTimer* m_timer;
 };
 

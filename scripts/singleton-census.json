@@ -1,14 +1,14 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 804,
+  "total": 802,
   "files": 200,
   "buckets": {
     "root": 212,
     "accessor": 71,
     "ctor-capture": 62,
-    "deferred": 6,
-    "static-cache": 422,
+    "deferred": 7,
+    "static-cache": 419,
     "loose": 31
   },
   "cross_library_total": 0,
@@ -76,7 +76,6 @@
     "MirrorPublisher": 3,
     "ProcessLauncher": 3,
     "QCanBus": 3,
-    "JsWatchdogThread": 3,
     "QCoreApplication": 3,
     "ConnectionDiagnostics": 3,
     "ImageExport": 3,
@@ -102,6 +101,7 @@
     "BenchmarkRunner": 1,
     "Benchmark::BenchmarkRunner": 1,
     "CommandHandler": 1,
+    "JsWatchdogThread": 1,
     "FileSandbox": 1,
     "Assistant": 1,
     "WidgetRegistry": 1
@@ -1131,24 +1131,24 @@
       }
     },
     "core/Pipeline/DataModel/Scripting/JsWatchdog.cpp": {
-      "total": 2,
+      "total": 1,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
+        "deferred": 1,
+        "static-cache": 0,
         "loose": 0
       }
     },
     "core/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp": {
-      "total": 2,
+      "total": 1,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 0,
         "loose": 0
       }
     },

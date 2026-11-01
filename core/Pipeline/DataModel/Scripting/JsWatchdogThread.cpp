@@ -53,8 +53,11 @@ static qint64 watchdogSteadyNowNs()
 /**
  * @brief Builds the worker without a timer; the timer is created on its own thread.
  */
-DataModel::JsWatchdogWorker::JsWatchdogWorker(QObject* parent) : QObject(parent), m_timer(nullptr)
-{}
+DataModel::JsWatchdogWorker::JsWatchdogWorker(JsWatchdogThread* owner)
+  : QObject(nullptr), m_owner(owner), m_timer(nullptr)
+{
+  SS_ASSERT_LOG(owner != nullptr);
+}
 
 /**
  * @brief Creates and starts the poll timer on the worker thread.
@@ -90,8 +93,9 @@ void DataModel::JsWatchdogWorker::finish()
  */
 void DataModel::JsWatchdogWorker::onTick()
 {
-  static auto& watchdogThread = JsWatchdogThread::instance();
-  watchdogThread.interruptExpired();
+  SS_ASSERT(QThread::currentThread() == thread(), return);
+  SS_ASSERT(m_owner != nullptr, return);
+  m_owner->interruptExpired();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -186,7 +190,7 @@ void DataModel::JsWatchdogThread::ensureStarted()
   m_thread = new QThread();
   m_thread->setObjectName(QStringLiteral("JsWatchdog"));
 
-  m_worker = new JsWatchdogWorker();
+  m_worker = new JsWatchdogWorker(this);
   m_worker->moveToThread(m_thread);
 
   QObject::connect(m_thread, &QThread::started, m_worker, &JsWatchdogWorker::begin);

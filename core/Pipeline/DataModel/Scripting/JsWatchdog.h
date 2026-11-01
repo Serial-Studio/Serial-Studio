@@ -28,6 +28,8 @@
 
 namespace DataModel {
 
+class JsWatchdogThread;
+
 /**
  * @brief Runtime watchdog for QJSEngine calls, interrupted from a separate thread.
  */
@@ -58,6 +60,7 @@ private:
 
 private:
   QJSEngine* m_engine;
+  JsWatchdogThread* m_thread;
   std::atomic<qint64> m_deadlineNs;
   int m_budgetMs;
   QString m_tag;
