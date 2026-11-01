@@ -498,10 +498,8 @@ jobs:
     # Spec 0107: the file users download is launched as that file, through the post-root QML
     # suite, before it is uploaded. No libfuse2 on the runner, so the runtime extracts to a temp
     # dir and runs from there; the extracted-tree glibc smoke in the composite action stays.
-    # continue-on-error is the R9 probe landing; the hardening commit removes it
     #
     - name: '🧪 Prove the AppImage runs its self-test (spec 0107)'
-      continue-on-error: true
       timeout-minutes: 5
       env:
         QT_QPA_PLATFORM: offscreen
@@ -814,10 +812,8 @@ jobs:
     # Spec 0107: the file users download is launched as that file, through the post-root QML
     # suite, before it is uploaded. No libfuse2 on the runner, so the runtime extracts to a temp
     # dir and runs from there; the extracted-tree glibc smoke in the composite action stays.
-    # continue-on-error is the R9 probe landing; the hardening commit removes it
     #
     - name: '🧪 Prove the AppImage runs its self-test (spec 0107)'
-      continue-on-error: true
       timeout-minutes: 5
       env:
         QT_QPA_PLATFORM: offscreen
@@ -1457,13 +1453,12 @@ jobs:
     # Spec 0107: the stapled image is mounted and its app launched on both slices, natively and
     # under Rosetta 2, before upload. Rosetta is installed when the probe finds it missing; a
     # slice that cannot run fails the step, it never falls back to the native run alone.
-    # continue-on-error is the R9 probe landing; the hardening commit removes it
     #
     - name: '🧪 Prove the DMG runs its self-test on both slices (spec 0107)'
-      continue-on-error: true
       timeout-minutes: 10
       env:
         QT_QPA_PLATFORM: offscreen
+        QT_FORCE_STDERR_LOGGING: '1'
       run: |
         set -euo pipefail
         PRODUCT="${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg"
@@ -1758,17 +1753,15 @@ jobs:
     # Spec 0107: the installer users run, installed silently, launched from Program Files
     # through the post-root QML suite, then uninstalled; a directory left behind fails the step.
     # The MSI ships only the windows platform plugin, so the offscreen one is taken from the
-    # runner's Qt; QT_LOGGING_TO_CONSOLE keeps the [selftest] lines on stderr, where the
+    # runner's Qt; QT_FORCE_STDERR_LOGGING keeps the [selftest] lines on stderr, where the
     # redirect can read them, instead of the debugger channel.
-    # continue-on-error is the R9 probe landing; the hardening commit removes it
     #
     - name: '🧪 Prove the MSI installs, runs its self-test and uninstalls (spec 0107)'
-      continue-on-error: true
       timeout-minutes: 10
       env:
         QT_QPA_PLATFORM: offscreen
         QT_QPA_PLATFORM_PLUGIN_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64/${{env.QT_VERSION_WINDOWS}}/msvc2022_64/plugins/platforms
-        QT_LOGGING_TO_CONSOLE: '1'
+        QT_FORCE_STDERR_LOGGING: '1'
       run: |
         $msi = "$PWD\${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi"
         $dir = "$env:ProgramFiles\${{env.APPLICATION}}"
@@ -1777,7 +1770,7 @@ jobs:
         if ($install.ExitCode -ne 0) { Get-Content install.log -Tail 80; throw "install failed with $($install.ExitCode)" }
         if (-not (Test-Path $exe)) { Get-ChildItem -Recurse $dir -ErrorAction SilentlyContinue; throw "installed executable missing: $exe" }
         Write-Host "installed: $exe"
-        $p = Start-Process -FilePath $exe -ArgumentList '--headless','--selftest-suite','qml' `
+        $p = Start-Process -FilePath $exe -ArgumentList '--headless --selftest-suite qml' `
           -WorkingDirectory $PWD -PassThru -NoNewWindow `
           -RedirectStandardOutput selftest.out -RedirectStandardError selftest.err
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'self-test timed out' }

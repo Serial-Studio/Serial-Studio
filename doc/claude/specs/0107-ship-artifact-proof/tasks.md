@@ -33,7 +33,7 @@ updated: 2026-10-30
   umbrella's tracker row C1 pointing at 0107.
 - **Verify:** `python scripts/commit-shape.py --range HEAD~1..HEAD` reports no findings.
 - **Deps:** none
-- [ ] done
+- [x] done (commits `c34734612`, `99663f6b0`)
 
 ### T2 — Probe landing: the flags and the four steps, non-blocking
 
@@ -47,7 +47,7 @@ updated: 2026-10-30
   `python -m pytest scripts/tests/test_ci_workflow.py -q` (the existing gates still hold);
   `python scripts/commit-shape.py --range HEAD~1..HEAD` on the commit.
 - **Deps:** T1
-- [ ] done
+- [x] done (commit `1bd6bf60f`, run 41140237388)
 
 ### T3 — Read the probe run
 
@@ -59,7 +59,8 @@ updated: 2026-10-30
 - **Verify:** every proof step green in one run; added seconds per leg within R8's five
   minutes.
 - **Deps:** T2
-- [ ] done
+- [ ] done (read 2026-10-31: three legs green, macOS red on an app crash under the offscreen
+      platform; fix in `core/Ui/Platform/NativeWindow_macOS.mm` awaits a build and a green run)
 
 ### T4 — Shape test
 
@@ -74,7 +75,7 @@ updated: 2026-10-30
   workflow and fails on each of the three mutations (a dropped step, a `continue-on-error`,
   a step moved after its upload), tried by hand before the commit.
 - **Deps:** T3
-- [ ] done
+- [x] done (lands with T5; the three mutations each fail the suite, tried by hand 2026-10-31)
 
 ### T5 — Hardening commit
 

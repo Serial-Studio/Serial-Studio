@@ -112,8 +112,10 @@ those files, they have to carry something to run.
       its upload makes that test fail (R5, R7).
 - [ ] **AC3** — The macOS job log for the Rosetta run shows the process architecture as
       x86_64, not arm64 (R3).
-- [ ] **AC4** — The Windows job log shows the install directory present after install and
-      absent after uninstall (R4).
+- [x] **AC4** — The Windows job log shows the install directory present after install and
+      absent after uninstall (R4). Probe run: `installed: C:\Program Files\Serial Studio
+      Pro\bin\Serial-Studio-Pro.exe` and `uninstalled: C:\Program Files\Serial Studio Pro is
+      gone`.
 - [ ] **AC5** — Per-leg added wall-clock, read from the step durations of the AC1 run, is
       within the R8 budget; the numbers are recorded in this spec.
 - [ ] **AC6** — After the hardening commit, the step durations and conclusions of the first
@@ -176,5 +178,16 @@ those files, they have to carry something to run.
 - **Install Rosetta on the runner when it is missing, or fail?** Recommended install: it is a
   one-time cost per run inside the R8 budget, and failing would leave the Intel slice unproven
   until someone changes the runner image. **Decided 2026-10-30: install.**
-- **Probe run:** `<URL, recorded at R9>`; **hardening run:** `<URL, recorded at AC6>`;
-  **per-leg added seconds:** `<recorded at AC5>`.
+- **Probe run:** <https://github.com/Serial-Studio/Serial-Studio/actions/runs/41140237388>
+  (2026-10-30, commit `1bd6bf60f`). Linux x64 and arm64 passed the QML suite from the
+  AppImage, Windows installed, passed and uninstalled clean. Both macOS slices crashed in
+  `NativeWindow::addWindow`: under the offscreen platform a window id is a plain counter, and
+  the macOS styling code sent it an NSView message (SIGSEGV natively, an uncaught
+  `NSInvalidArgumentException` under Rosetta). Reproduced locally from the downloaded disk
+  image, mounted and copied alike; fixed in `NativeWindow_macOS.mm` before the hardening
+  commit. The macOS log also carried no self-test report, because Qt on macOS routes logging
+  to the unified log off a terminal; the hardening commit forces stderr logging on that step.
+- **Per-leg added seconds (probe, step durations):** Linux x64 11, Linux arm64 11, Windows
+  24, macOS 15 to the native crash (the Rosetta run never started; locally the x86_64 slice
+  took 73 s on a first run, within R8). AC5 is read again from the hardening run.
+- **Hardening run:** `<URL, recorded at AC6>`.

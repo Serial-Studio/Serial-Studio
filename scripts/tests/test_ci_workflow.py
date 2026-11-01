@@ -592,3 +592,99 @@ def test_the_lint_job_runs_the_clock_census_and_the_context_budget(ci):
     runs = " ".join(str(step.get("run", "")) for step in _steps(ci["lint"]))
     assert "python3 scripts/code-verify.py --clock-census --check" in runs
     assert "python3 scripts/claim-verify.py --context-budget --check" in runs
+
+
+# --------------------------------------------------------------------------------------------
+# Ship-artifact proof (spec 0107)
+# --------------------------------------------------------------------------------------------
+
+# Every 4.x universal DMG aborted on Intel Macs for months with CI green, because nothing in CI
+# launched the files it published (issue #392). Each package job now launches the artifact it
+# uploads, as that file, through the post-root QML suite: after the package exists, before its
+# upload, never soft. Per leg: the package suffix, a marker of the step the proof follows, and
+# the uploaded artifact name's suffix it precedes.
+PROOF_LEGS = {
+    "build-linux": (".AppImage", "actions/package-linux", "-Linux-x64.AppImage"),
+    "build-linux-arm64": (
+        ".AppImage",
+        "actions/package-linux",
+        "-Linux-arm64.AppImage",
+    ),
+    "build-macos": (".dmg", "stapler staple", "-macOS.dmg"),
+    "build-windows": (".msi", "cpack --verbose", "-Windows.msi"),
+}
+
+# The configures that produce the bytes inside the DMG and the MSI; without the option the
+# shipped binary answers "Unknown option 'selftest'" and the proof has nothing to launch.
+SELFTEST_CONFIGURE_JOBS = ("build-macos-arm64", "build-macos-intel", "build-windows")
+
+
+def _proof_steps(job, suffix):
+    return [
+        (i, step)
+        for i, step in enumerate(_steps(job))
+        if "--selftest-suite qml" in str(step.get("run", ""))
+        and suffix in str(step.get("run", ""))
+    ]
+
+
+def _step_matches(step, marker):
+    return marker in str(step.get("run", "")) or marker in str(step.get("uses", ""))
+
+
+@pytest.mark.parametrize("job", sorted(PROOF_LEGS))
+def test_every_package_leg_proves_the_artifact_it_uploads(ci, job):
+    """One hard, bounded proof step per leg, after the package step and before its upload."""
+    suffix, package_marker, upload_suffix = PROOF_LEGS[job]
+    steps = _steps(ci[job])
+    proofs = _proof_steps(ci[job], suffix)
+    assert (
+        len(proofs) == 1
+    ), f"{job} needs exactly one proof step launching the {suffix}"
+    index, proof = proofs[0]
+    assert "continue-on-error" not in proof, f"{job}: the proof step is soft"
+    assert proof.get("timeout-minutes"), f"{job}: the proof step has no timeout"
+    package = [i for i, step in enumerate(steps) if _step_matches(step, package_marker)]
+    assert (
+        package and package[-1] < index
+    ), f"{job}: the proof runs before the package exists"
+    uploads = [
+        i
+        for i, step in enumerate(steps)
+        if "upload-artifact" in str(step.get("uses", ""))
+        and str((step.get("with") or {}).get("name", "")).endswith(upload_suffix)
+    ]
+    assert uploads, f"{job}: no upload of the {upload_suffix} artifact"
+    assert index < uploads[0], f"{job}: the proof runs after the upload"
+
+
+def test_the_macos_proof_runs_both_slices(ci):
+    """The x86_64 slice executes under Rosetta on the same runner; a missing Rosetta is installed."""
+    ((_, proof),) = _proof_steps(ci["build-macos"], ".dmg")
+    run = str(proof["run"])
+    assert run.count("--selftest-suite qml") == 2, "native and translated runs"
+    assert "arch -x86_64" in run
+    assert "--install-rosetta" in run
+    assert "hdiutil attach" in run and "hdiutil detach" in run
+
+
+def test_the_windows_proof_installs_runs_and_uninstalls(ci):
+    """The MSI as a user meets it: silent install, the installed program, silent uninstall, gone."""
+    ((_, proof),) = _proof_steps(ci["build-windows"], ".msi")
+    run = str(proof["run"])
+    assert "msiexec" in run and "/i " in run and "/x " in run
+    assert "Test-Path $dir" in run, "a leftover install directory must fail the step"
+
+
+@pytest.mark.parametrize("job", SELFTEST_CONFIGURE_JOBS)
+def test_the_shipping_configures_expose_the_self_test(ci, job):
+    """The last cmake configure in each job is the one whose binary ships."""
+    configures = [
+        str(step.get("run", ""))
+        for step in _steps(ci[job])
+        if "-DBUILD_COMMERCIAL=ON" in str(step.get("run", ""))
+    ]
+    assert configures, f"{job} has no commercial configure"
+    assert (
+        "-DSS_INAPP_TESTS=ON" in configures[-1]
+    ), f"{job}: the shipping build lacks the flag"
