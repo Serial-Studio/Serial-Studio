@@ -31,7 +31,7 @@ updated: 2026-10-30
 
 | Id | Child | Spec | Month | Status | Moves | Reading (origin → now → target) |
 |----|-------|------|-------|--------|-------|---------------------------------|
-| C1 | Ship-artifact proof | [0107](../0107-ship-artifact-proof/spec.md) | Nov wk 1–2 | in-progress, probe landing (2026-10-30) | `ship` | 4 → 4 → 0 |
+| C1 | Ship-artifact proof | [0107](../0107-ship-artifact-proof/spec.md) | Nov wk 1–2 | hardened and gating (2026-11-01); its R8 budget decision on the macOS leg open | `ship` | 4 → 0 → 0 |
 | C0 | Quality score + five censuses | — | Nov wk 1 | not born | all | lenient 0.0 → 0.1 → 100 |
 | C5 | AI-facing budget hard gate + overview | — | Nov wk 2 | not born | AC9 | one-hop 53,503 → 53,850 → below |
 | C2 | Archive + issue triage | — | Nov wk 2 | not born | `specs` | 15 → 15 → 0 |
@@ -66,7 +66,8 @@ updated: 2026-10-30
 - **Verify:** The probe run's four steps are green in the Actions log (URL recorded in the
   child's spec).
 - **Deps:** T1
-- [ ] done
+- [x] done (0107 born `99663f6b0`, probed `1bd6bf60f`, run 41140237388; the macOS probe was red on
+      an app crash under offscreen, fixed before hardening)
 
 ### T3 — C0: quality score and the five censuses, implemented
 
@@ -97,7 +98,8 @@ updated: 2026-10-30
 - **Verify:** `python -m pytest scripts/tests/test_ci_workflow.py -q` passes; `ship` reads
   0; the next master run shows the four steps green and gating.
 - **Deps:** T2, T3
-- [ ] done
+- [ ] done (hardened and pinned in `fcc87f0bd`, run 41328800884 green on four legs; 0107's
+      `done` waits on its R8 decision for the macOS leg)
 
 ### T5 — AC7b: the published 4.2.1 Intel slice, proven once by hand
 

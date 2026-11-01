@@ -59,8 +59,10 @@ updated: 2026-10-30
 - **Verify:** every proof step green in one run; added seconds per leg within R8's five
   minutes.
 - **Deps:** T2
-- [ ] done (read 2026-10-31: three legs green, macOS red on an app crash under the offscreen
-      platform; fix in `core/Ui/Platform/NativeWindow_macOS.mm` awaits a build and a green run)
+- [ ] done (probe read 2026-10-31: three legs green, macOS red on the offscreen crash, fixed in
+      `6f88aea40`; hardening run 41328800884 green on all four legs 2026-11-01, AC3 and AC4
+      ticked, but the macOS leg reads 367 s against R8's five minutes; the box waits on the
+      R8 decision recorded in `spec.md`)
 
 ### T4 — Shape test
 
@@ -85,7 +87,7 @@ updated: 2026-10-30
   record the hardening run URL at AC6 once it is green.
 - **Verify:** the next master run shows the four steps green and gating; AC1, AC2, AC6 ticked.
 - **Deps:** T3, T4
-- [ ] done
+- [x] done (commit `fcc87f0bd`; run 41328800884 green and gating; AC1, AC2, AC6 ticked)
 
 ### T6 — Umbrella bookkeeping
 
@@ -96,7 +98,8 @@ updated: 2026-10-30
   this spec's status `done`.
 - **Verify:** `python scripts/claim-verify.py` passes; the 0104 tracker reads 0107 as done.
 - **Deps:** T5
-- [ ] done
+- [ ] done (AC7 and 0104's AC6 ticked 2026-11-01; the tracker row, `done` and the 0104 task
+      halves wait on AC5)
 
 ## Definition of Done
 

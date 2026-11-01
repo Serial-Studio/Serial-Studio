@@ -104,26 +104,32 @@ those files, they have to carry something to run.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — One CI run on master, URL recorded below, shows every proof step green:
+- [x] **AC1** — One CI run on master, URL recorded below, shows every proof step green:
       Linux x64, Linux arm64, macOS native, macOS under Rosetta, Windows install, run and
-      uninstall (R1–R4, R6).
+      uninstall (R1–R4, R6). Hardening run 41328800884 (2026-11-01): all four steps green.
 - [ ] **AC2** — `pytest scripts/tests/test_ci_workflow.py` passes and contains the pin from
       R7; editing the workflow to drop one proof step, mark it non-blocking or move it after
-      its upload makes that test fail (R5, R7).
-- [ ] **AC3** — The macOS job log for the Rosetta run shows the process architecture as
-      x86_64, not arm64 (R3).
+      its upload makes that test fail (R5, R7). Tried by hand 2026-10-31: each of the three
+      mutations fails the suite.
+- [x] **AC3** — The macOS job log for the Rosetta run shows the process architecture as
+      x86_64, not arm64 (R3). Hardening run: the group is headed `x86_64 under Rosetta 2
+      (x86_64)`, the parenthesis read from `arch -x86_64 uname -m`.
 - [x] **AC4** — The Windows job log shows the install directory present after install and
       absent after uninstall (R4). Probe run: `installed: C:\Program Files\Serial Studio
       Pro\bin\Serial-Studio-Pro.exe` and `uninstalled: C:\Program Files\Serial Studio Pro is
       gone`.
 - [ ] **AC5** — Per-leg added wall-clock, read from the step durations of the AC1 run, is
-      within the R8 budget; the numbers are recorded in this spec.
-- [ ] **AC6** — After the hardening commit, the step durations and conclusions of the first
+      within the R8 budget; the numbers are recorded in this spec. Hardening run: Linux x64
+      7 s, Linux arm64 6 s, Windows 20 s, macOS 367 s (mount 8, native run 18, x86_64 run
+      under Rosetta 334). The macOS leg exceeds the five-minute budget by 67 s; see the R8
+      question below. Not ticked until that is decided.
+- [x] **AC6** — After the hardening commit, the step durations and conclusions of the first
       fully gating run are green on all four legs, with no `continue-on-error` on any proof
-      step (R9).
+      step (R9). Run 41328800884, commit `fcc87f0bd`.
 - [ ] **AC7** — The `ship` dimension reads 0 (via `python scripts/quality-score.py --check`
       once spec C0 lands; by the plan's predicate counted by hand before that), and the
-      umbrella's AC6 box is ticked with this spec's number.
+      umbrella's AC6 box is ticked with this spec's number. Counted by hand 2026-11-01: four
+      legs, four gating steps, 0 missing; 0104 AC6 ticked.
 
 ## Constraints & Invariants
 
@@ -190,4 +196,14 @@ those files, they have to carry something to run.
 - **Per-leg added seconds (probe, step durations):** Linux x64 11, Linux arm64 11, Windows
   24, macOS 15 to the native crash (the Rosetta run never started; locally the x86_64 slice
   took 73 s on a first run, within R8). AC5 is read again from the hardening run.
-- **Hardening run:** `<URL, recorded at AC6>`.
+- **Hardening run:** <https://github.com/Serial-Studio/Serial-Studio/actions/runs/41328800884> (2026-11-01, commit `fcc87f0bd`). Four legs green and gating.
+  Per-leg step durations: Linux x64 7 s, Linux arm64 6 s, Windows 20 s, macOS 367 s, of
+  which the x86_64 run under Rosetta took 334 s (the native run 18 s, the mount 8 s).
+  Rosetta was already on the runner; the time is its translation of the whole x86_64 slice
+  on a cold cache, which every fresh runner pays again (73 s locally with a warm cache).
+- **R8 on the macOS leg (open):** the leg reads 367 s against a five-minute budget. The job
+  grew from 5 to 11 minutes, still a seventh of the Linux x64 job. Recommended: amend R8 to
+  ten minutes for the macOS leg, naming the cold Rosetta translation as the reason, and tick
+  AC5 on the next green run. The alternative, running the x86_64 slice before notarization
+  to overlap the two, tests bytes other than the uploaded ones and breaks the same-bytes
+  constraint. Maintainer decision; AC5 and this spec's `done` wait on it.

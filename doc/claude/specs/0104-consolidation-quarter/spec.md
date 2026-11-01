@@ -158,9 +158,9 @@ census reads 803, which replaces the audit's 802 (amended 2026-10-30).
       zero cross-library reaches (R7).
 - [ ] **AC5** — The ledger ratchet check passes with a baseline at or below 20 open rows, and
       `git log` over the quarter shows no upward re-seed of any ratchet baseline (R8).
-- [ ] **AC6** — Each of the four package jobs in CI contains a step that runs the uploaded
+- [x] **AC6** — Each of the four package jobs in CI contains a step that runs the uploaded
       artifact's self-test, pinned by the workflow test suite, and the macOS step runs both
-      slices (R2).
+      slices (R2). Spec 0107, commit `fcc87f0bd`, run 41328800884 (2026-11-01).
 - [x] **AC7a** — Release 4.2.1 is tagged and issue #392 is closed (done 2026-10-28 and
       2026-10-29).
 - [ ] **AC7b** — The published 4.2.1 macOS artifact's x86_64 slice passed a manual
