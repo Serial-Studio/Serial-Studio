@@ -236,11 +236,8 @@ Widgets.Pane {
         text: qsTr("Quick Plot (Auto-Detected Format)")
         ToolTip.delay: 500
         ToolTip.visible: hovered
-        ToolTip.text: qsTr("Plots one line per sample and detects the format from the first numeric "
-                           + "line: values separated by commas, semicolons, tabs or spaces "
-                           + "(12.5, 30.1, 0.98), named values (temp:23.5, hum:60), units after "
-                           + "a number (23.5\u00B0C), or a one-line JSON object "
-                           + "({\"t\":23.5,\"h\":60}).")
+        ToolTip.text: qsTr("Plots each line as a sample. Detects delimited values, name:value "
+                           + "pairs, units and one-line JSON automatically.")
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         checked: Cpp_AppState.operationMode === SerialStudio.QuickPlot
