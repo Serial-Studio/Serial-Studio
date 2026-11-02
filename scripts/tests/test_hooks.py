@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2020-2025 Alex Spataru
 # SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
-Behavior tests for the seven Claude Code hooks under .claude/hooks (spec 0101).
+Behavior tests for the eight Claude Code hooks under .claude/hooks (spec 0101).
 
 Each hook runs as a real subprocess with the event JSON on stdin, against a throwaway git
 project (CLAUDE_PROJECT_DIR, TMPDIR and cwd all point into pytest's tmp_path) so nothing
@@ -27,6 +27,7 @@ ALL_HOOKS = [
     "claim-check.py",
     "commit-sanitize-gate.py",
     "commit-shape-gate.py",
+    "large-read-gate.py",
     "protect-dirty-files.py",
     "syntax-on-save.py",
     "verify-on-save.py",
@@ -265,6 +266,84 @@ def test_dirty_guard_clean_file_silent(run_hook, project):
     run_hook("protect-dirty-files.py", START)
     _, out, _ = run_hook("protect-dirty-files.py", _guard_event("PreToolUse", clean))
     assert out == ""
+
+
+def _sized(project, name, lines):
+    """Write a file of `lines` lines into the tmp project."""
+    path = project / name
+    path.write_text("x\n" * lines, encoding="utf-8")
+    return path
+
+
+def _read_event(path, **extra):
+    """Build a Read tool event."""
+    return {"tool_name": "Read", "tool_input": {"file_path": str(path), **extra}}
+
+
+def _bash_event(project, command):
+    """Build a Bash tool event rooted in the tmp project."""
+    return {
+        "tool_name": "Bash",
+        "cwd": str(project),
+        "tool_input": {"command": command},
+    }
+
+
+def test_read_gate_denies_whole_read_over_budget(run_hook, project):
+    """A whole-file Read of 801 lines is denied; the reason names the file and the budget."""
+    big = _sized(project, "big.cpp", 801)
+    code, out, _ = run_hook("large-read-gate.py", _read_event(big))
+    assert code == 0
+    decision = _json(out)["hookSpecificOutput"]
+    assert decision["permissionDecision"] == "deny"
+    assert "big.cpp is 801 lines (gate: 800)" in decision["permissionDecisionReason"]
+
+
+def test_read_gate_allows_at_budget_and_sliced(run_hook, project):
+    """A file at the budget, and a sliced read of one over it, both pass silently."""
+    at_budget = _sized(project, "ok.cpp", 800)
+    _, out, _ = run_hook("large-read-gate.py", _read_event(at_budget))
+    assert out == ""
+    big = _sized(project, "big.cpp", 801)
+    _, out, _ = run_hook("large-read-gate.py", _read_event(big, offset=10, limit=40))
+    assert out == ""
+
+
+def test_read_gate_allows_read_in_full_hotpath_files(run_hook, project):
+    """The files CLAUDE.md orders read in full pass the gate by basename."""
+    hot = _sized(project, "FrameBuilder.cpp", 3000)
+    _, out, _ = run_hook("large-read-gate.py", _read_event(hot))
+    assert out == ""
+
+
+def test_read_gate_budget_env_override(run_hook, project):
+    """SS_READ_GATE_LINES retunes the budget."""
+    small = _sized(project, "small.cpp", 50)
+    _, out, _ = run_hook(
+        "large-read-gate.py",
+        _read_event(small),
+        env_overrides={"SS_READ_GATE_LINES": "10"},
+    )
+    assert _json(out)["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+
+def test_read_gate_bash_cat_denied_targeted_allowed(run_hook, project):
+    """`cat` of a big file is denied; piped, sliced and non-read commands pass."""
+    _sized(project, "big.cpp", 801)
+    _, out, _ = run_hook("large-read-gate.py", _bash_event(project, "cat big.cpp"))
+    assert _json(out)["hookSpecificOutput"]["permissionDecision"] == "deny"
+    _, out, _ = run_hook(
+        "large-read-gate.py", _bash_event(project, "cd x && cat -n big.cpp")
+    )
+    assert _json(out)["hookSpecificOutput"]["permissionDecision"] == "deny"
+    for command in (
+        "cat big.cpp | grep x",
+        "sed -n 1,40p big.cpp",
+        "head -n 20 big.cpp",
+        "git status",
+    ):
+        _, out, _ = run_hook("large-read-gate.py", _bash_event(project, command))
+        assert out == "", command
 
 
 def _stage(project, name, newer):
