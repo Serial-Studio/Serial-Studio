@@ -1891,6 +1891,24 @@ if(TARGET tst_command_capability_registry)
 endif()
 
 #
+# The assistant's safety tiers as the MCP tool hints (spec 0112 AC2): the same committed-snapshot
+# sweep over the generated table, so a command without a tier, a stale name, an over-long name or
+# a tool list that disagrees with the gate's control-script-only class fails CI by name.
+#
+ss_add_unit_test(tst_command_safety_table
+  SOURCES tst_command_safety_table.cpp
+          ${SS_CORE_SRC}/Api/API/CommandCapabilities.cpp
+          ${SS_CORE_SRC}/Api/API/CommandSafety.cpp
+          ${SS_CORE_SRC}/Api/API/CommandSafetyTable.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+if(TARGET tst_command_safety_table)
+  target_compile_definitions(tst_command_safety_table
+    PRIVATE SS_API_SCHEMA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../rcc/api/api-schema.json")
+endif()
+
+#
 # The gRPC handler's abortable marshal into the GUI thread (spec 0075 I5). PendingCall is
 # header-only and pulls in no gRPC symbol, so the suite builds in a tier configured without
 # ENABLE_GRPC and needs no production TU at all.
