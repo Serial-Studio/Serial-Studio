@@ -79,14 +79,6 @@ private:
   QVector<MCP::Resource> generateResources() const;
   QVector<MCP::Prompt> generatePrompts() const;
 
-  void tagIoSubmodule(MCP::Tool& tool, const QString& submodule, const QStringList& parts) const;
-  void tagToolFromCommandName(MCP::Tool& tool, const QStringList& parts) const;
-  void tagToolModule(MCP::Tool& tool,
-                     const QString& module,
-                     const QString& submodule,
-                     const QStringList& parts) const;
-  void tagToolCommand(MCP::Tool& tool, const QString& command) const;
-
 private:
   QHash<QString, ClientSession> m_sessions;
 };

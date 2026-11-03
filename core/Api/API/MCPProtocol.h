@@ -21,15 +21,34 @@
 
 #pragma once
 
+#include <algorithm>
+#include <array>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLatin1StringView>
 #include <QString>
+#include <QStringView>
 #include <QVariant>
 
 namespace API {
 namespace MCP {
-constexpr const char* kProtocolVersion = "2024-11-05";
+inline constexpr std::array<QLatin1StringView, 3> kSupportedProtocolVersions = {
+  QLatin1StringView("2024-11-05"),
+  QLatin1StringView("2025-03-26"),
+  QLatin1StringView("2025-06-18")};
+inline constexpr QLatin1StringView kLatestProtocolVersion = kSupportedProtocolVersions.back();
+
+/**
+ * @brief Whether the server can honor the revision a client offers in initialize; tool titles
+ *        are defined from 2025-06-18 and annotations from 2025-03-26, so the echo tells a client
+ *        which fields it may read.
+ */
+[[nodiscard]] inline bool isSupportedProtocolVersion(const QStringView version)
+{
+  return std::find(kSupportedProtocolVersions.begin(), kSupportedProtocolVersions.end(), version)
+      != kSupportedProtocolVersions.end();
+}
 
 namespace Method {
 constexpr const char* Initialize           = "initialize";
@@ -150,28 +169,38 @@ struct MCPResponse {
 };
 
 /**
- * @brief Represents an MCP tool definition.
+ * @brief What a client may assume about a tool before calling it (the MCP tool annotations).
+ */
+struct ToolAnnotations {
+  bool read_only;
+  bool destructive;
+  bool open_world;
+};
+
+/**
+ * @brief Represents an MCP tool definition; the object carries only keys the MCP tool schema
+ *        defines.
  */
 struct Tool {
   QString name;
+  QString title;
   QString description;
   QJsonObject inputSchema;
-  QString category;
-  QStringList tags;
+  ToolAnnotations annotations;
 
   QJsonObject toJson() const
   {
+    QJsonObject hints;
+    hints[QStringLiteral("readOnlyHint")]    = annotations.read_only;
+    hints[QStringLiteral("destructiveHint")] = annotations.destructive;
+    hints[QStringLiteral("openWorldHint")]   = annotations.open_world;
+
     QJsonObject json;
     json[QStringLiteral("name")]        = name;
+    json[QStringLiteral("title")]       = title;
     json[QStringLiteral("description")] = description;
     json[QStringLiteral("inputSchema")] = inputSchema;
-
-    if (!category.isEmpty())
-      json[QStringLiteral("category")] = category;
-
-    if (!tags.isEmpty())
-      json[QStringLiteral("tags")] = QJsonArray::fromStringList(tags);
-
+    json[QStringLiteral("annotations")] = hints;
     return json;
   }
 };

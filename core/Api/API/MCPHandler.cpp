@@ -25,6 +25,7 @@
 #include <QJsonDocument>
 
 #include "API/CommandRegistry.h"
+#include "API/CommandSafety.h"
 #include "API/HandlerContext.h"
 #include "API/Server.h"
 #include "Core/AppInfo.h"
@@ -226,7 +227,8 @@ API::MCP::MCPResponse API::MCPHandler::processRequest(const MCP::MCPRequest& req
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handle MCP initialize request
+ * @brief Handle MCP initialize request: the client's protocol revision is echoed when the server
+ *        can honor it, otherwise the latest revision the server knows is answered.
  */
 API::MCP::MCPResponse API::MCPHandler::handleInitialize(const MCP::MCPRequest& request,
                                                         const QString& sessionId)
@@ -238,8 +240,10 @@ API::MCP::MCPResponse API::MCPHandler::handleInitialize(const MCP::MCPRequest& r
   session.clientVersion = clientInfo.value(QStringLiteral("version")).toString();
   session.initialized   = true;
 
+  const auto offered = request.params.value(QStringLiteral("protocolVersion")).toString();
   QJsonObject result;
-  result[QStringLiteral("protocolVersion")] = MCP::kProtocolVersion;
+  result[QStringLiteral("protocolVersion")] =
+    MCP::isSupportedProtocolVersion(offered) ? offered : QString(MCP::kLatestProtocolVersion);
 
   QJsonObject serverInfo;
   serverInfo[QStringLiteral("name")]    = APP_NAME;
@@ -523,119 +527,9 @@ API::MCP::MCPResponse API::MCPHandler::handlePromptsGet(const MCP::MCPRequest& r
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Apply IO-specific category and tags to an io.* tool.
- */
-void API::MCPHandler::tagIoSubmodule(MCP::Tool& tool,
-                                     const QString& submodule,
-                                     const QStringList& parts) const
-{
-  if (submodule == QStringLiteral("manager")) {
-    tool.tags << QStringLiteral("connection") << QStringLiteral("device");
-    return;
-  }
-
-  if (submodule != QStringLiteral("driver") || parts.size() < 4)
-    return;
-
-  const auto& driver = parts[2];
-  tool.category      = QStringLiteral("io.") + driver;
-  tool.tags << driver << QStringLiteral("configuration");
-}
-
-/**
- * @brief Assigns category and tags to an MCP tool based on its dotted command name.
- */
-void API::MCPHandler::tagToolFromCommandName(MCP::Tool& tool, const QStringList& parts) const
-{
-  const auto& module    = parts[0];
-  const auto& submodule = parts.size() >= 3 ? parts[1] : QString();
-  const auto& command   = parts.last();
-
-  tagToolModule(tool, module, submodule, parts);
-  tagToolCommand(tool, command);
-}
-
-/**
- * @brief Assigns category and module-level tags based on the leading dotted part.
- */
-void API::MCPHandler::tagToolModule(MCP::Tool& tool,
-                                    const QString& module,
-                                    const QString& submodule,
-                                    const QStringList& parts) const
-{
-  if (module == QStringLiteral("io")) {
-    tool.category = QStringLiteral("io");
-    tagIoSubmodule(tool, submodule, parts);
-    return;
-  }
-
-  if (module == QStringLiteral("project")) {
-    tool.category = QStringLiteral("project");
-    tool.tags << QStringLiteral("project") << QStringLiteral("configuration");
-    return;
-  }
-
-  if (module == QStringLiteral("csv")) {
-    tool.category = QStringLiteral("export.csv");
-    tool.tags << QStringLiteral("export") << QStringLiteral("csv") << QStringLiteral("data");
-    return;
-  }
-
-  if (module == QStringLiteral("mdf4")) {
-    tool.category = QStringLiteral("export.mdf4");
-    tool.tags << QStringLiteral("export") << QStringLiteral("mdf4") << QStringLiteral("automotive");
-    return;
-  }
-
-  if (module == QStringLiteral("dashboard")) {
-    tool.category = QStringLiteral("dashboard");
-    tool.tags << QStringLiteral("visualization") << QStringLiteral("dashboard");
-    return;
-  }
-
-  if (module == QStringLiteral("console")) {
-    tool.category = QStringLiteral("console");
-    tool.tags << QStringLiteral("console") << QStringLiteral("debug");
-    return;
-  }
-
-  if (module == QStringLiteral("api")) {
-    tool.category = QStringLiteral("api");
-    tool.tags << QStringLiteral("api") << QStringLiteral("meta");
-  }
-}
-
-/**
- * @brief Adds an action-tag derived from the trailing command part (get/set/start/...).
- */
-void API::MCPHandler::tagToolCommand(MCP::Tool& tool, const QString& command) const
-{
-  if (command.startsWith(QStringLiteral("get"))) {
-    tool.tags << QStringLiteral("query");
-    return;
-  }
-
-  if (command.startsWith(QStringLiteral("set"))) {
-    tool.tags << QStringLiteral("configuration");
-    return;
-  }
-
-  if (command.contains(QStringLiteral("start"))) {
-    tool.tags << QStringLiteral("start");
-    return;
-  }
-
-  if (command.contains(QStringLiteral("stop"))) {
-    tool.tags << QStringLiteral("stop");
-    return;
-  }
-
-  if (command.contains(QStringLiteral("connect")))
-    tool.tags << QStringLiteral("connection");
-}
-
-/**
- * @brief Generate MCP tools from CommandRegistry
+ * @brief Generate MCP tools from CommandRegistry: every listed command with the title and the
+ *        hints its safety tier implies. Listing is discovery; the gate in handleToolsCall
+ *        authorizes.
  */
 QVector<API::MCP::Tool> API::MCPHandler::generateToolsFromRegistry() const
 {
@@ -645,17 +539,19 @@ QVector<API::MCP::Tool> API::MCPHandler::generateToolsFromRegistry() const
   const auto& commands  = registry.commands();
   for (auto it = commands.constBegin(); it != commands.constEnd(); ++it) {
     const auto& name = it.key();
-    MCP::Tool tool;
+    if (!CommandSafety::isListedTool(name))
+      continue;
+
+    const auto hints = CommandSafety::hintsFor(name);
+    MCP::Tool tool{};
     tool.name        = name;
+    tool.title       = CommandSafety::humanizeToolName(name);
     tool.description = it.value().description;
     tool.inputSchema = it.value().inputSchema.isEmpty()
                          ? QJsonObject{{QStringLiteral("type"), QStringLiteral("object")}}
                          : it.value().inputSchema;
-
-    const auto parts = name.split(QLatin1Char('.'));
-    if (parts.size() >= 2)
-      tagToolFromCommandName(tool, parts);
-
+    tool.annotations = MCP::ToolAnnotations{
+      .read_only = hints.read_only, .destructive = hints.destructive, .open_world = false};
     tools.append(tool);
   }
 
