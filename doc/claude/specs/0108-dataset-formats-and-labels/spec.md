@@ -82,14 +82,19 @@ only show it by moving that meaning into a second program.
    field), the number is kept. Label keys are integers; a non-integer value is rounded before
    lookup. A value with no label shows the number, and a table may hold one optional catch-all
    row whose text is shown instead.
-5. **R5 — Order of application.** Decoding (fixed point, bit field) happens before any transform
-   on the same dataset; notation and labels apply to the final value at presentation. A dataset
-   may combine a decoder, a transform and labels.
+5. **R5 — Order of application.** The decoder (fixed point, bit field, scale) applies to the
+   value that feeds the dataset: for a channel dataset the parsed value, with any transform
+   running on the decoded value; for a computed dataset, whose transform is its only source,
+   the transform's result. Notation and labels apply to the final value at presentation. A
+   dataset may combine a decoder, a transform and labels. (Amended 2026-11-03 during planning:
+   a computed dataset has no parsed value to decode first.)
 6. **R6 — Importers.** The DBC importer expresses a signal's value descriptions as labels, not as
-   script. The Modbus map importer expresses a single-bit register as a bit field, not as script.
-   The Modbus map importer expresses a register's scale and offset as a Scale format, not as
-   script. A regenerated CAN Bus example carries no transform code for `CurrentGear` and plots
-   it.
+   script, and a labelled signal is plotted like any other. A regenerated CAN Bus example carries
+   no label code for `CurrentGear`: its transform is the same data-table read every imported
+   dataset carries, and it plots. (Amended 2026-11-03 during planning: the Modbus map importer
+   already holds a register's scale, offset and bit position as one declarative line per
+   register in the generated parser, not in a dataset transform, so the two Modbus clauses are
+   withdrawn; the parser stays the declarative home of those numbers.)
 7. **R7 — No license.** Declarative formats are not Pro content: the connect gate of spec 0094
    keeps counting transforms and user Variables only. The manual never describes a format as
    requiring a license.
@@ -114,8 +119,9 @@ only show it by moving that meaning into a second program.
   still includes the dataset.
 - [ ] **AC3** — An integration test saves and reloads a project using every format and compares
   the round trip; a project without the keys round-trips byte-identical to today.
-- [ ] **AC4** — Importing the CAN Bus example's DBC yields labels and zero transform code for the
-  gear signal; importing a Modbus map with a coil yields a bit field and zero transform code.
+- [ ] **AC4** — Importing the CAN Bus example's DBC yields a label table for the gear signal, a
+  transform holding only the shared data-table read, and the signal enabled for plotting
+  (amended 2026-11-03 with R6).
 - [ ] **AC5** — A UART project with labels, a bit field and a fixed-point dataset, and no
   transform, connects with no license and no trial.
 - [ ] **AC6** — The hotpath gate (`--benchmark-hotpath`) reports no regression with decoders
