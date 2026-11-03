@@ -2236,6 +2236,7 @@ jobs:
       run: |
         python3 scripts/registry-verify.py
         python3 scripts/generate-command-strings.py --check
+        python3 scripts/generate-command-safety.py --check
         python3 scripts/generate-property-registry.py --check
         python3 scripts/generate-property-registry.py --check-snapshot --strict
         python3 scripts/generate-sdk.py --check
