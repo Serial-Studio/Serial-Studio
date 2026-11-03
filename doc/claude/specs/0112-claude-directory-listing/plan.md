@@ -34,25 +34,34 @@ bridge keeps its bounded-exit failure message and gains a unit test for it.
 
 Main repository:
 
+Amended during `/ss-tasks` (2026-11-03), three findings from the ground truth: the API-layer
+ctests compile their TUs directly rather than linking the library, so the listing policy
+lives in a hand-written `CommandSafety.cpp` beside a generated data TU instead of as
+`MCPHandler` statics; the JSON loader validates size limits only, so `assistantTools` needs
+no schema; `tests/unit/` has no catalog row and no CI caller today, so the bridge test gets
+a category row and an environment override to aim at a closed port.
+
 | File | Change |
 |------|--------|
 | `app/rcc/ai/command_safety.json` | Add the 61 untiered commands (table below); add `assistantTools`, the allow-list of assistant-only names (`fs.*`) that are tiered but are not API commands; extend `_comment` to say the file also feeds the MCP annotations. |
-| `scripts/generate-command-safety.py` | New generator: reads the JSON, writes `core/Api/API/CommandSafety.cpp` as a sorted constexpr array of `{name, tier, deviceGated}`; `--check` reports drift and exits non-zero. Mirrors `generate-command-strings.py`. |
-| `core/Api/API/CommandSafety.h` | Hand-written: `enum class Tier : quint8 { Safe, Confirm, AlwaysConfirm, Blocked }`, `struct Entry`, `[[nodiscard]] std::optional<Tier> tierOf(QStringView)`, `[[nodiscard]] bool isDeviceGated(QStringView)`, `[[nodiscard]] std::span<const Entry> entries()`. |
-| `core/Api/API/CommandSafety.cpp` | Generated. Never hand-edited (banner says so). |
-| `core/Api/CMakeLists.txt` | Add the two files beside `CommandCapabilities.*`. |
-| `core/Api/API/MCPProtocol.h` | `Tool` gains `title` and `annotations` (`readOnlyHint`, `destructiveHint`, `openWorldHint`), loses `category`/`tags`; `kProtocolVersion` becomes `kSupportedProtocolVersions` (`2024-11-05`, `2025-03-26`, `2025-06-18`) plus `kLatestProtocolVersion`. |
-| `core/Api/API/MCPHandler.h` / `.cpp` | `generateToolsFromRegistry()` attaches title and annotations from `CommandSafety` and skips omitted names; new `[[nodiscard]] static QString humanizeToolName(const QString&)` and `[[nodiscard]] static bool isListedTool(const QString&)`; `handleInitialize` echoes the client's revision when supported, else the latest; the five tagging functions go. |
+| `scripts/generate-command-safety.py` | New generator: reads the JSON, writes `core/Api/API/CommandSafetyTable.cpp` as a sorted constexpr array of `{name, tier, deviceGated}` plus the `assistantTools` array and the two accessors; `--check` reports drift and exits non-zero; refuses a duplicated, non-ASCII or over-64-character name. Mirrors `generate-command-strings.py`. |
+| `core/Api/API/CommandSafety.h` | Hand-written: `enum class Tier : quint8 { Safe, Confirm, AlwaysConfirm, Blocked }`, `struct Entry`, `struct ToolHints`, `[[nodiscard]] std::optional<Tier> tierOf(QStringView)`, `[[nodiscard]] bool isDeviceGated(QStringView)`, `[[nodiscard]] ToolHints hintsFor(QStringView)`, `[[nodiscard]] bool isListedTool(QStringView)`, `[[nodiscard]] QString humanizeToolName(QStringView)`, `[[nodiscard]] std::span<const Entry> entries()`, `[[nodiscard]] std::span<const QLatin1StringView> assistantTools()`. |
+| `core/Api/API/CommandSafety.cpp` | Hand-written: the lookups and the listing policy over `entries()` (`tierOf`, `isDeviceGated`, `hintsFor`, `isListedTool`, `humanizeToolName`). |
+| `core/Api/API/CommandSafetyTable.cpp` | Generated: `kEntries`, `kAssistantTools`, `entries()`, `assistantTools()`. Never hand-edited (banner says so). |
+| `core/Api/CMakeLists.txt` | Add the three files beside `CommandCapabilities.*`. |
+| `core/Api/API/MCPProtocol.h` | `Tool` gains `title` and `annotations` (`readOnlyHint`, `destructiveHint`, `openWorldHint`), loses `category`/`tags`; `kProtocolVersion` becomes `kSupportedProtocolVersions` (`2024-11-05`, `2025-03-26`, `2025-06-18`) plus `kLatestProtocolVersion` and `isSupportedProtocolVersion`. |
+| `core/Api/API/MCPHandler.h` / `.cpp` | `generateToolsFromRegistry()` skips names `CommandSafety::isListedTool` rejects and attaches `humanizeToolName` and `hintsFor`; `handleInitialize` echoes the client's revision when supported, else the latest; the five tagging functions go. |
 | `scripts/sanitize-commit.py` | Run the generator before `.code-report`, next to `generate-command-strings.py`. |
 | `.github/workflows/ci.yml` | Add `python3 scripts/generate-command-safety.py --check` to the generator-drift step (the block at lines 2238-2241). |
-| `app/tests/tst_command_safety_table.cpp` | New ctest unit, the `tst_command_capability_registry` mechanism: every `api-schema.json` name has exactly one tier; every table name is a schema name or an `assistantTools` name; no name exceeds 64 chars; the blocked tier and `ControlScriptOnly` names are exactly the set `isListedTool` rejects. |
+| `doc/claude/scripts.md` | A row for the generator and its place in the sanitize pipeline sentence. |
+| `app/tests/tst_command_safety_table.cpp` | New ctest unit, the `tst_command_capability_registry` mechanism (the three TUs compiled directly): every `api-schema.json` name has exactly one tier; every table name is a schema name or an `assistantTools` name; no name exceeds 64 chars; the blocked tier and `ControlScriptOnly` names are exactly the set `isListedTool` rejects; `hintsFor` per tier; twelve `humanizeToolName` cases. |
 | `app/tests/CMakeLists.txt` | Register the unit with `SS_API_SCHEMA_PATH`, as the capability test is registered (lines 1882-1890). |
-| `tests/integration/test_mcp.py` | New tests: annotations and titles against the JSON (AC1), omitted names absent from `tools/list` but still answered over raw JSON-RPC (AC3), tool key set within the MCP schema (AC4), negotiated revision equals the requested one when supported. |
-| `tests/unit/test_mcp_bridge.py` | New: spawns `examples/MCP Client/claude_desktop_bridge.py` with nothing on the port, asserts exit 1 within ten seconds and the fix named on the last stderr line (AC7). |
-| `examples/MCP Client/claude_desktop_bridge.py` | Keep the retry loop; make the final stderr line the one that names the Preferences fix; header note that the plugin repository ships the same file. |
+| `tests/integration/test_mcp.py` | New tests: annotations and titles against the JSON (AC1), omitted names absent from `tools/list` while a control-script-only name still answers with the gate's refusal (AC3; a licensing mutation is never called), tool key set within the MCP schema (AC4), negotiated revision equals the requested one when supported. |
+| `tests/unit/test_mcp_bridge.py` | New: spawns `examples/MCP Client/claude_desktop_bridge.py` against a closed port through the override, asserts exit 1 within ten seconds and the fix named on the last stderr line (AC7). |
+| `examples/MCP Client/claude_desktop_bridge.py` | Keep the retry loop; make the final stderr line the one that names the Preferences fix; a `SERIAL_STUDIO_API_PORT` environment override of the port; header note that the plugin repository ships the same file. |
 | `examples/MCP Client/README.md` | "Claude Desktop Integration" section leads with the directory plugin; manual config stays as the fallback. |
 | `doc/help/API-Reference.md` | MCP section: the directory plugin as the first install path, the annotation contract in one paragraph, the tool count claim refreshed. |
-| `tests/README.md` | Integration table row for the new `test_mcp.py` cases; unit table row for the bridge test. |
+| `tests/README.md` | A "Unit" category row for `tests/unit/` (none today); integration table row for the new `test_mcp.py` cases; file row for the bridge test. |
 | `doc/claude/architecture/ai.md` | "The Tier Model": the table now also feeds MCP annotations through the generated `API::CommandSafety`; document `assistantTools`. |
 | `doc/claude/common-mistakes.md` | Row 168 (an assistant command missing from the tier table) closes with `Codified: ctest:tst_command_safety_table`. |
 | `CLAUDE.md` | Subsystem Contracts, AI assistant row: the tier table is generated into `core/Api/API/CommandSafety.cpp`, never hand-edited. |
@@ -79,21 +88,27 @@ Plugin repository (`Serial-Studio/claude-plugin`, plugin at the root):
   Qt resource, no runtime file: the API library and every ctest unit that links it get the
   table by linking.
 - **Table → wire.** `MCPHandler::generateToolsFromRegistry()` walks
-  `API::CommandRegistry::commands()` as today. For each name it asks `isListedTool(name)`
-  (false for `Tier::Blocked` and for any name whose `CommandCapabilities::of` carries
-  `ControlScriptOnly`), then fills `Tool::title = humanizeToolName(name)` and
-  `Tool::annotations` from the tier: `Safe` → `readOnlyHint true, destructiveHint false`;
-  `Confirm` → `false, false`; `AlwaysConfirm`, `Blocked`, or `isDeviceGated` → `false, true`;
-  a name the table does not know → `false, false` (the assistant's Confirm fallthrough), which
-  the ctest unit makes unreachable in a shipped tree. `openWorldHint` is `false` on every tool
-  (the server talks to one local application). `Tool::toJson()` emits `title` and
-  `annotations` and nothing else beyond `name`, `description`, `inputSchema`.
-- **Title.** `humanizeToolName` splits on `.`, splits each segment on camelCase boundaries,
-  capitalizes, and joins segments with " / " (`project.dataset.setTransformCode` →
-  `Project / Dataset / Set Transform Code`), with a small acronym map (`UART`, `BLE`, `MQTT`,
-  `OPC UA`, `CSV`, `MDF4`, `EtherNet/IP` for `eip`, `IEC 104`, `S7`, `CAN`, `UI`, `API`,
-  `JSON`, `ID`, `TLS`, `HID`, `USB`, `TCP`, `UDP`, `FFT`, `3D`). Pure function of the name,
-  covered by the ctest unit on a dozen fixed names.
+  `API::CommandRegistry::commands()` as today. For each name it asks
+  `CommandSafety::isListedTool(name)` (false for `Tier::Blocked` and for any name whose
+  `CommandCapabilities::of` carries `ControlScriptOnly`), then fills
+  `Tool::title = humanizeToolName(name)` and `Tool::annotations` from `hintsFor(name)`:
+  `Safe` → `readOnlyHint true, destructiveHint false`; `Confirm` → `false, false`;
+  `AlwaysConfirm`, `Blocked`, or `isDeviceGated` → `false, true`; a name the table does not
+  know → `false, false` (the assistant's Confirm fallthrough), which the ctest unit makes
+  unreachable in a shipped tree. `openWorldHint` is `false` on every tool (the server talks
+  to one local application). `Tool::toJson()` emits `title` and `annotations` and nothing
+  else beyond `name`, `description`, `inputSchema`. The policy functions live in the
+  hand-written `CommandSafety.cpp`, not in the handler, so the ctest unit compiles them
+  without the API library.
+- **Title.** `humanizeToolName` splits on `.`, maps a whole lowercase segment through the
+  acronym table first (`api`, `ble`, `canbus`, `csv`, `eip` → `EtherNet/IP`, `hid`,
+  `iec104` → `IEC 104`, `io`, `mdf4`, `mqtt`, `opcua` → `OPC UA`, `s7`, `uart`, `ui`,
+  `usb`), otherwise splits the segment on camelCase boundaries, upper-cases the acronym
+  pieces (`Ansi`, `Csv`, `Db`, `Dtr`, `Fd`, `Fps`, `Http`, `Id`, `Iso`, `Json`, `Tcp`,
+  `Tls`, `Udp`, `Url`, `Uuid`, `Vt`), capitalizes the rest, and joins segments with " / "
+  (`project.dataset.setTransformCode` → `Project / Dataset / Set Transform Code`). The
+  piece list comes from a survey of the 452 live names. Pure function of the name, covered
+  by the ctest unit on a dozen fixed names.
 - **Revision negotiation.** `handleInitialize` reads `params.protocolVersion`; if it is one
   of the three supported strings it is echoed, otherwise `2025-06-18` is returned. Nothing
   else about the handshake changes; batch handling stays (harmless under every revision).
@@ -120,9 +135,10 @@ Plugin repository (`Serial-Studio/claude-plugin`, plugin at the root):
 ## Data model & persistence
 
 - No project-file, session-DB or `Frame.h` change.
-- `command_safety.json` gains one key, `assistantTools` (string array). Task phase confirms
-  whether `Misc::JsonValidator::parseAndValidate` validates this file against a schema and, if
-  so, adds the key there; the loader ignores unknown keys today (it reads five named arrays).
+- `command_safety.json` gains one key, `assistantTools` (string array). Confirmed during
+  `/ss-tasks`: `AI::CommandRegistry::load` passes `Misc::JsonValidator::parseAndValidate` a
+  `Limits` (size, depth, array length) and no schema, then reads five named arrays, so the
+  new key needs no declaration anywhere and the assistant ignores it.
 - `api-schema.json` is unchanged; it is the enumeration the ctest unit checks the table against.
 
 ## API / SDK surface
