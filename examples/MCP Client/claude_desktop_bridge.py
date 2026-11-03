@@ -24,7 +24,13 @@ Usage:
 
 Requirements:
   - Python 3.7 or later
-  - Serial Studio running with API server enabled (Settings → Enable API Server)
+  - Serial Studio running with API server enabled
+    (Preferences → General → API & Plugins → Enable API Server)
+
+Distribution:
+  The Serial Studio plugin for the Claude directory (Serial-Studio/claude-plugin)
+  ships this same file as bridge.py; keep the two byte-identical.
+  SERIAL_STUDIO_API_PORT overrides the port (the unit test aims it at a closed one).
 
 License:
   Dual-licensed under GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
@@ -41,15 +47,16 @@ for _stream in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
+import os
 import socket
 import threading
 import time
 
 # Configuration
 SERIAL_STUDIO_HOST = "localhost"
-SERIAL_STUDIO_PORT = 7777
+SERIAL_STUDIO_PORT = int(os.environ.get("SERIAL_STUDIO_API_PORT", "7777"))
 RECONNECT_DELAY = 2  # seconds
-MAX_RECONNECT_ATTEMPTS = 5
+GIVE_UP_AFTER = 6  # seconds before the last attempt; see connect_to_serial_studio
 
 
 def log(message):
@@ -130,41 +137,46 @@ def stdin_to_tcp(sock, should_stop):
         should_stop.set()
 
 
-def connect_to_serial_studio(max_attempts=MAX_RECONNECT_ATTEMPTS):
+def connect_to_serial_studio(give_up_after=GIVE_UP_AFTER):
     """
-    Connect to Serial Studio TCP server with retry logic
+    Connect to Serial Studio's TCP server, retrying until a deadline passes.
+
+    The bound is a deadline rather than an attempt count because Windows spends
+    about two seconds on every refused loopback connect; with the last attempt
+    starting before the deadline, the bridge gives up within ten seconds on
+    every platform (what an MCP client needs to show the cause instead of a
+    hung server).
 
     Args:
-        max_attempts: Maximum number of connection attempts
+        give_up_after: Seconds after which no new attempt starts
 
     Returns:
         socket.socket: Connected socket, or None on failure
     """
-    for attempt in range(1, max_attempts + 1):
+    deadline = time.monotonic() + give_up_after
+    attempt = 0
+    while True:
+        attempt += 1
+        log(
+            f"Connecting to Serial Studio at {SERIAL_STUDIO_HOST}:{SERIAL_STUDIO_PORT} (attempt {attempt})..."
+        )
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            log(
-                f"Connecting to Serial Studio at {SERIAL_STUDIO_HOST}:{SERIAL_STUDIO_PORT} (attempt {attempt}/{max_attempts})..."
-            )
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect((SERIAL_STUDIO_HOST, SERIAL_STUDIO_PORT))
             log("✓ Connected to Serial Studio")
             return sock
-
         except ConnectionRefusedError:
-            if attempt < max_attempts:
-                log(f"Connection refused, retrying in {RECONNECT_DELAY} seconds...")
-                time.sleep(RECONNECT_DELAY)
-            else:
-                log("✗ Failed to connect to Serial Studio")
-                log("  Make sure Serial Studio is running and API server is enabled")
-                log("  (Settings → Enable API Server)")
-
+            log("Connection refused")
         except Exception as e:
             log(f"✗ Connection error: {e}")
-            if attempt < max_attempts:
-                time.sleep(RECONNECT_DELAY)
+        sock.close()
 
-    return None
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            log("✗ Failed to connect to Serial Studio")
+            log("  Make sure Serial Studio is running and API server is enabled")
+            return None
+        time.sleep(min(RECONNECT_DELAY, remaining))
 
 
 def main():
@@ -174,6 +186,9 @@ def main():
     # Connect to Serial Studio
     sock = connect_to_serial_studio()
     if sock is None:
+        log(
+            "Enable the API server: Preferences → General → API & Plugins → Enable API Server"
+        )
         sys.exit(1)
 
     # Create stop event for graceful shutdown

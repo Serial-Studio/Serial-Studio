@@ -16,9 +16,37 @@ import json
 import socket
 import time
 import uuid
+from pathlib import Path
 from typing import Any, Optional
 
 import pytest
+
+# The assistant's tier table is the one home of per-command safety (spec 0112): the MCP
+# hints on the wire must agree with it, so the tests read it rather than a second list.
+SAFETY_TABLE = Path(__file__).parents[2] / "app" / "rcc" / "ai" / "command_safety.json"
+SAFETY_TIERS = ("safe", "confirm", "alwaysConfirm", "blocked", "deviceGated")
+
+# The blocked tier plus the control-script-only class: never in tools/list (spec 0112 R5).
+OMITTED_TOOLS = {
+    "licensing.activate",
+    "licensing.activateOffline",
+    "licensing.deactivate",
+    "licensing.enableTrial",
+    "licensing.setLicense",
+    "licensing.validate",
+    "system.exec",
+    "system.kill",
+    "system.runningProcesses",
+}
+
+# The keys the MCP tool schema defines; anything else on a tool object is a defect (R6).
+MCP_TOOL_KEYS = {"name", "title", "description", "inputSchema", "annotations"}
+
+
+def safety_tiers() -> dict[str, set[str]]:
+    data = json.loads(SAFETY_TABLE.read_text(encoding="utf-8"))
+    return {tier: set(data[tier]) for tier in SAFETY_TIERS}
+
 
 # ---------------------------------------------------------------------------
 # Low-level MCP client (speaks JSON-RPC 2.0, not the legacy API protocol)
@@ -148,11 +176,11 @@ class MCPClient:
     # MCP convenience helpers
     # ------------------------------------------------------------------
 
-    def initialize(self) -> dict:
+    def initialize(self, protocol_version: str = "2024-11-05") -> dict:
         return self.request(
             "initialize",
             {
-                "protocolVersion": "2024-11-05",
+                "protocolVersion": protocol_version,
                 "clientInfo": {"name": "pytest-mcp-client", "version": "1.0.0"},
                 "capabilities": {},
             },
@@ -232,6 +260,19 @@ class TestMCPLifecycle:
     def test_initialize_returns_protocol_version(self, fresh_mcp):
         result = fresh_mcp.initialize()
         assert "protocolVersion" in result
+
+    @pytest.mark.parametrize(
+        ("offered", "expected"),
+        [
+            ("2025-06-18", "2025-06-18"),
+            ("2024-11-05", "2024-11-05"),
+            ("1999-01-01", "2025-06-18"),
+        ],
+    )
+    def test_initialize_negotiates_protocol_version(self, fresh_mcp, offered, expected):
+        """A supported revision is echoed; an unknown one gets the latest the server knows."""
+        result = fresh_mcp.initialize(protocol_version=offered)
+        assert result["protocolVersion"] == expected
 
     def test_initialize_returns_server_info(self, fresh_mcp):
         result = fresh_mcp.initialize()
@@ -868,3 +909,75 @@ class TestMCPBatch:
         assert isinstance(responses, list)
         assert len(responses) == 1
         assert responses[0]["id"] == 3001
+
+
+# ---------------------------------------------------------------------------
+# 9. Tool annotations, omission and schema keys (spec 0112)
+# ---------------------------------------------------------------------------
+
+
+class TestToolAnnotations:
+    """AC1: every tool carries a title and the hints its safety tier implies."""
+
+    def test_each_tool_has_a_title_distinct_from_its_name(self, mcp):
+        for tool in mcp.tools_list():
+            title = tool.get("title")
+            assert (
+                isinstance(title, str) and title
+            ), f"Tool {tool['name']} missing title"
+            assert title != tool["name"], f"Tool {tool['name']} title equals its name"
+
+    def test_read_only_hint_marks_exactly_the_safe_tier(self, mcp):
+        tiers = safety_tiers()
+        for tool in mcp.tools_list():
+            hints = tool.get("annotations")
+            assert isinstance(hints, dict), f"Tool {tool['name']} missing annotations"
+            assert isinstance(hints.get("readOnlyHint"), bool), tool["name"]
+            assert hints["readOnlyHint"] == (tool["name"] in tiers["safe"]), tool[
+                "name"
+            ]
+
+    def test_destructive_hint_marks_the_always_confirm_device_and_blocked_tiers(
+        self, mcp
+    ):
+        tiers = safety_tiers()
+        destructive = tiers["alwaysConfirm"] | tiers["deviceGated"] | tiers["blocked"]
+        for tool in mcp.tools_list():
+            hints = tool["annotations"]
+            assert isinstance(hints.get("destructiveHint"), bool), tool["name"]
+            assert hints["destructiveHint"] == (tool["name"] in destructive), tool[
+                "name"
+            ]
+            assert hints.get("openWorldHint") is False, tool["name"]
+
+
+class TestOmittedTools:
+    """
+    AC3: the blocked tier and the control-script-only class are not listed, and a call
+    to one still meets the remote gate's existing refusal. Never call a licensing
+    mutation here: the gate lets those through, and they would act on the license.
+    """
+
+    def test_blocked_and_control_script_only_names_are_not_listed(self, mcp):
+        names = {t["name"] for t in mcp.tools_list()}
+        listed = OMITTED_TOOLS & names
+        assert not listed, f"Omitted tools present in tools/list: {listed}"
+
+    def test_licensing_reads_stay_listed(self, mcp):
+        names = {t["name"] for t in mcp.tools_list()}
+        assert "licensing.getStatus" in names
+
+    def test_control_script_only_call_meets_the_gate(self, mcp):
+        with pytest.raises(MCPError) as exc_info:
+            mcp.tools_call("system.runningProcesses")
+        assert exc_info.value.code != 0
+        assert exc_info.value.data["tool"] == "system.runningProcesses"
+
+
+class TestToolSchemaKeys:
+    """AC4: a tool object carries only keys the MCP tool schema defines."""
+
+    def test_tool_keys_within_the_mcp_schema(self, mcp):
+        for tool in mcp.tools_list():
+            extra = set(tool) - MCP_TOOL_KEYS
+            assert not extra, f"Tool {tool['name']} has non-schema keys: {extra}"
