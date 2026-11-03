@@ -378,7 +378,7 @@ updated: 2026-11-03
   in Claude Code and reaches the T17 state.
 - **Verify:** The three AC lines ticked in `spec.md` with the date.
 - **Deps:** T17
-- [ ] done
+- [ ] done (2026-11-03: repository created and pushed, listing submitted by the maintainer; macOS and Linux runs and the portal result file pending)
 
 ## Definition of Done
 
@@ -411,4 +411,4 @@ The whole-feature gate, checked once every task is complete.
   maintainer's work.
 - [x] The licensing-reach question from `plan.md` Risks is still open and still the
   maintainer's; this feature did not change it.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done` (2026-11-03, after the maintainer's submission; residuals listed in the spec).

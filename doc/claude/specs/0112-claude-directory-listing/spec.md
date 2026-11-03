@@ -1,7 +1,7 @@
 ---
 spec: 0112-claude-directory-listing
 title: Claude directory listing: annotated MCP tools and a plugin bundle
-status: in-progress     # draft -> approved -> in-progress -> done | shelved
+status: done            # draft -> approved -> in-progress -> done | shelved
 created: 2026-11-02
 author: Alex Spataru
 ---
@@ -126,7 +126,7 @@ and never reaches an external client.
   JSON-RPC with the existing refusal (R5).
 - [x] **AC4** (2026-11-03, same run) — The integration test asserts every tool object's key set is a subset of the
   MCP tool schema's keys (R6).
-- [ ] **AC5** (local half done 2026-11-03: --profile directory passed with no refusal; portal half pending) — `claude plugin validate --profile directory` on the plugin folder reports no
+- [x] **AC5** (local half 2026-11-03: --profile directory passed with no refusal; submitted to the portal by the maintainer 2026-11-03) — `claude plugin validate --profile directory` on the plugin folder reports no
   refusal, and the portal's Validate step reports zero Blocking findings; the maintainer
   records the portal result in the spec directory (R7).
 - [ ] **AC6** (Windows done 2026-11-03: three turns, 9.9 s, live status JSON; macOS and Linux pending) — A scripted Claude Code run with the plugin loaded calls `io.getStatus` and
@@ -185,6 +185,13 @@ and never reaches an external client.
     warning (icon missing), both listing materials; the server command shape passed.
 - **Verdict:** pass. The route works on the server as it stands; the only structural gap is
   the 61 untiered commands, which R3 closes before any hint is derived.
+
+## Residual at done (2026-11-03)
+
+Marked done by the maintainer after submission. Still to observe: AC2 on a build with the unit
+tier configured (the CI unit job runs it), AC6 on macOS and Linux, AC8 once the listing is live.
+The remote gate still lets the licensing mutations through; that question stays open in
+`plan.md` Risks.
 
 ## Open Questions
 
