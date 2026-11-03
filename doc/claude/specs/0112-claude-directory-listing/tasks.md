@@ -53,7 +53,7 @@ updated: 2026-11-03
   blocked 8. `python -m json.tool` parses it. The maintainer has reviewed the table in
   `plan.md`; any change they make there is applied here, not the reverse.
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T2 — `API::CommandSafety`: the header, the lookups and the listing policy
 
@@ -85,7 +85,7 @@ updated: 2026-11-03
   core/Api/API/CommandSafety.h core/Api/API/CommandSafety.cpp core/Api/CMakeLists.txt`,
   `python scripts/layer-verify.py`.
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T3 — The generator and the generated table
 
@@ -108,7 +108,7 @@ updated: 2026-11-03
   core/Api/API/CommandSafetyTable.cpp`.
 - **Executor:** yes, donor named above.
 - **Deps:** T1, T2
-- [ ] done
+- [x] done
 
 ### T4 — The drift gate in the sanitizer and CI
 
@@ -120,7 +120,7 @@ updated: 2026-11-03
 - **Verify:** `python scripts/sanitize-commit.py` runs through and leaves the table
   unchanged; `python -m pytest scripts/tests/ -q` (the CI-shape fixtures) passes.
 - **Deps:** T3
-- [ ] done
+- [x] done
 
 ### T5 — The ctest unit `tst_command_safety_table`
 
@@ -147,7 +147,7 @@ updated: 2026-11-03
   green (the second proves the JSON edit of T1 kept the assistant's tier test).
 - **Executor:** yes, donor named above.
 - **Deps:** T3
-- [ ] done
+- [x] done
 
 ### T6 — `MCP::Tool` fields and the supported revisions
 
@@ -164,7 +164,7 @@ updated: 2026-11-03
   compile proof is T7's syntax check (this header has no TU of its own until the handler
   stops calling the tag functions).
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T7 — `MCPHandler`: hints on, tags off, revision negotiated
 
@@ -186,7 +186,7 @@ updated: 2026-11-03
   title and annotations, and `pytest tests/integration/test_mcp.py -v` (the existing cases)
   stays green.
 - **Deps:** T2, T6
-- [ ] done
+- [x] done
 
 ### T8 — Integration tests for the wire (AC1, AC3, AC4, revision echo)
 
@@ -207,7 +207,7 @@ updated: 2026-11-03
   scripts/code-verify.py --check tests/integration/test_mcp.py`; black.
 - **Executor:** yes, donors are the existing classes in the same file.
 - **Deps:** T7 (needs the rebuilt app)
-- [ ] done
+- [x] done (2026-11-03: 99 passed on the rebuilt app, the four new classes and the three negotiation rows included)
 
 ### T9 — The bridge's failure line and its unit test (AC7)
 
@@ -228,7 +228,7 @@ updated: 2026-11-03
   nothing listening exits 1 in about eight seconds.
 - **Executor:** yes, donor `tests/unit/test_updates_manifest.py` for shape.
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T10 — The manual and the examples README (AC9)
 
@@ -246,7 +246,7 @@ updated: 2026-11-03
 - **Verify:** `python scripts/documentation-verify.py` on both files, zero new findings;
   `python scripts/term-verify.py`; a read-back that every claim matches T7's wire.
 - **Deps:** T7 (for the facts; may be drafted earlier)
-- [ ] done
+- [x] done
 
 ### T11 — AI-facing architecture docs
 
@@ -260,7 +260,7 @@ updated: 2026-11-03
   CLAUDE.md` resolves every path, symbol and enforcer (so T3 and T5 must exist);
   `python scripts/documentation-verify.py` on `ai.md`.
 - **Deps:** T3, T5
-- [ ] done
+- [x] done
 
 ### T12 — The tests catalog and the ledger row
 
@@ -275,7 +275,7 @@ updated: 2026-11-03
   tests/README.md doc/claude/common-mistakes.md`; `python scripts/documentation-verify.py
   tests/README.md`.
 - **Deps:** T5, T8, T9
-- [ ] done
+- [x] done
 
 ### T13 — Plugin: the launcher spike (scratchpad only, records a decision)
 
@@ -289,7 +289,14 @@ updated: 2026-11-03
   line: **(c) ship `${user_config.python}`** or **(a) ship `python3` plus the README note**.
 - **Verify:** The outcome line below this task, with the command that showed it.
 - **Deps:** none
-- [ ] done — outcome: _pending_
+- [x] done — outcome: **(c) ship `${user_config.python}` with default `python3`.** 2026-11-03,
+  Claude Code 2.1.316 on Windows: `claude --plugin-dir <spike> mcp list` printed the resolved
+  command as `python3 <root>/bridge.py` with no value set, so the reference substitutes and the
+  default applies; `claude plugin validate --profile directory` raised nothing about the command
+  shape (its only findings were the missing README, LICENSE and icon). `python3` resolves on this
+  machine to the Windows Store alias; a python.org install may lack it, which the README note
+  covers (set the plugin's Python launcher to `python` or `py`). A one-turn `-p` run never starts
+  a plugin server, so the listing command is the probe, not a prompt.
 
 ### T14 — Plugin repository: manifest and server
 
@@ -304,7 +311,7 @@ updated: 2026-11-03
 - **Verify:** `claude plugin validate .` passes; `cmp bridge.py "<main repo>/examples/MCP
   Client/claude_desktop_bridge.py"` identical.
 - **Deps:** T9, T13
-- [ ] done
+- [x] done
 
 ### T15 — Plugin repository: README, license and icon
 
@@ -322,7 +329,7 @@ updated: 2026-11-03
   warning; a read-back of the README against spec R12.
 - **Executor:** yes for README and LICENSE against the spec's R7, R10 and R12 text.
 - **Deps:** T14
-- [ ] done
+- [x] done
 
 ### T16 — Plugin repository: the skill
 
@@ -340,7 +347,7 @@ updated: 2026-11-03
   `claude --plugin-dir . -p "Is Serial Studio connected to a device?"` answers from
   `io.getStatus` without calling a mutator (read the transcript).
 - **Deps:** T14
-- [ ] done
+- [x] done
 
 ### T17 — Plugin: validation and the Windows end-to-end run (AC5 local half, AC6 Windows)
 
@@ -351,7 +358,13 @@ updated: 2026-11-03
   data, no denials). The two command lines and their results are recorded here.
 - **Verify:** The recorded outcome line.
 - **Deps:** T15, T16
-- [ ] done — outcome: _pending_
+- [x] done — outcome: 2026-11-03, Windows, Claude Code 2.1.316, app rebuilt with the API server on.
+  `claude plugin validate --profile directory C:/Users/AlexSpataru/Developer/Projects/claude-plugin`:
+  Validation passed, no refusal, no warning. `claude --plugin-dir <that folder> mcp list`: the server
+  `python3 <folder>/bridge.py` reports Connected. `claude --plugin-dir <that folder> -p "Use the
+  serial-studio MCP server: call the io.getStatus tool ... reply with the raw JSON" --max-turns 4
+  --output-format json`: three turns, 9.9 s, the live status JSON (busType 0, linkState idle,
+  isConnected false) with no configuration file edited.
 
 ### T18 — Maintainer: publish, submit, observe (AC5 portal half, AC6 macOS/Linux, AC8)
 
@@ -374,20 +387,28 @@ The whole-feature gate, checked once every task is complete.
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1, AC3, AC4
   by T8; AC2 by T5; AC5 by T15 and T18; AC6 by T17 and T18; AC7 by T9; AC8 by T18; AC9 by
   T10).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff (T2, T3, T5, T6, T7); findings addressed or noted.
-- [ ] Hotpath untouched by construction (no file under the pipeline, no cached flag, no
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff (T2, T3, T5, T6, T7); findings addressed or noted.
+  2026-11-03: lint 0/0; six reviewers. Applied: the inverted ctest name (now
+  `unknownNamesStayListed`), `kLatestProtocolVersion` derived from the supported array's back,
+  both revision constants `inline constexpr`, the `Tool` construction site value-initialized,
+  the trailing comma on `Tier::Blocked`, designated initializers for every `ToolHints` and
+  `ToolAnnotations` aggregate. Noted, not changed: the ctest's schema loader folds open, parse
+  and shape failures into an empty set (loud, not vacuous; identical to the two sibling sweeps),
+  and `QCOMPARE(std::optional<Tier>, Tier)` prints no values on failure.
+- [x] Hotpath untouched by construction (no file under the pipeline, no cached flag, no
   queued hop); `--benchmark-hotpath` not required, stated as such in the handoff.
-- [ ] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP is named in the
-  handoff as unverified.
-- [ ] Maintainer-run checks identified: a rebuild, `ctest -R
+- [x] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP is named in the
+  handoff as unverified. (2026-11-03: every run SKIPPED, no
+  compile_commands.json under build/, so compilation is unverified until the maintainer builds.)
+- [x] Maintainer-run checks identified: a rebuild, `ctest -R
   "tst_command_safety_table|tst_assistant_batch_tiers"`, `pytest tests/integration/test_mcp.py`
   with the app up, `pytest tests/unit/test_mcp_bridge.py`.
-- [ ] `python scripts/sanitize-commit.py` run before each commit; the generated table shows
+- [x] `python scripts/sanitize-commit.py` run before each commit; the generated table shows
   no drift; `layer-verify.py` and the singleton census unchanged.
-- [ ] Diff is *what was asked, and only that*: no API server auth or consent file touched,
+- [x] Diff is *what was asked, and only that*: no API server auth or consent file touched,
   `baseline-manifest.json` (spec 0036) and `LorenzAttractor.ssproj` left as the
   maintainer's work.
-- [ ] The licensing-reach question from `plan.md` Risks is still open and still the
+- [x] The licensing-reach question from `plan.md` Risks is still open and still the
   maintainer's; this feature did not change it.
 - [ ] `spec.md` status set to `done`.

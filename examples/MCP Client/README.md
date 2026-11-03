@@ -95,7 +95,23 @@ Serial Studio uses a **hybrid protocol** approach:
 
 ### 1. Tools
 
-Every Serial Studio API command is exposed as an MCP tool:
+Every Serial Studio API command is exposed as an MCP tool, except the licensing
+mutations and the process launcher, which the tool list omits. Each tool carries a
+`title` and the MCP annotations derived from the in-app assistant's safety tiers:
+`readOnlyHint` on reads and queries, `destructiveHint` on the delete, clear,
+open-replace, credential and device-control families, and neither on reversible
+settings. A hint describes the tool; every call still passes the remote gate and
+the consent prompts of the TCP API.
+
+```json
+{
+  "name": "io.getStatus",
+  "title": "IO / Get Status",
+  "description": "Get connection status",
+  "inputSchema": {"type": "object"},
+  "annotations": {"readOnlyHint": true, "destructiveHint": false, "openWorldHint": false}
+}
+```
 
 **I/O Management:**
 
@@ -211,6 +227,14 @@ nc localhost 7777
 
 ### Claude Desktop Integration
 
+**Claude Code and Cowork: the directory plugin.** Install the **Serial Studio**
+plugin (`serial-studio`) from the Claude directory. It runs this bridge from the
+plugin folder, lists the tools and bundles a skill that states the prerequisite,
+the read-first workflow and the consent prompts, so no configuration file is
+edited. Source: https://github.com/Serial-Studio/claude-plugin. Claude Desktop's
+chat does not load plugin servers; the manual configuration below is the route
+for it and for any other MCP host.
+
 **Complete Step-by-Step Guide to Connect Claude Desktop with Serial Studio**
 
 #### Step 1: Enable Serial Studio API Server
@@ -232,8 +256,9 @@ examples/MCP Client/claude_desktop_bridge.py
 This script connects Claude Desktop (stdio) to Serial Studio's TCP API (port 7777).
 
 **Features:**
-- Retries the initial connection to Serial Studio up to 5 times at startup (does not
-  reconnect mid-session; a dropped connection ends the bridge process)
+- Retries the initial connection to Serial Studio for six seconds at startup, then
+  exits with the fix on its last log line (does not reconnect mid-session; a dropped
+  connection ends the bridge process)
 - Proper error handling and logging
 - Graceful shutdown
 - Detailed status messages in Claude Desktop logs
@@ -480,11 +505,14 @@ MCP connections use the same security as the legacy API:
 
 ## Specification Compliance
 
-Serial Studio implements **MCP 2024-11-05**:
+Serial Studio answers protocol revisions **2024-11-05**, **2025-03-26** and
+**2025-06-18**: `initialize` echoes the revision the client offers when it is one
+of these and answers 2025-06-18 to any other. Supported methods:
 
 - ✅ JSON-RPC 2.0 protocol
 - ✅ `initialize` handshake
 - ✅ `tools/list` and `tools/call`
+- ✅ Tool `title` and `annotations` (`readOnlyHint`, `destructiveHint`, `openWorldHint`)
 - ✅ `resources/list`, `resources/read`
 - ✅ `resources/subscribe`, `resources/unsubscribe`
 - ✅ `prompts/list`, `prompts/get`

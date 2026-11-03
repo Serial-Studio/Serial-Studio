@@ -28,6 +28,16 @@ not a tier:
 
 `CommandRegistry::safetyOf()` checks the device gate first, then the tag map, and an **unlisted
 name falls through to `Confirm`** — treat that fallthrough as a registration bug, not a feature.
+Since spec 0112 the same file is the source of the MCP tool hints: `scripts/generate-command-safety.py`
+projects it into the constexpr table `core/Api/API/CommandSafetyTable.cpp` (never hand-edited;
+`--check` gates drift in `sanitize-commit.py` and CI), and `API::CommandSafety::hintsFor` maps
+`Safe` to `readOnlyHint`, `AlwaysConfirm`, `Blocked` and the device-gated set to `destructiveHint`,
+`Confirm` to neither; `isListedTool` drops the blocked tier and the control-script-only class from
+`tools/list`. The `assistantTools` key names the six `fs.*` sandbox verbs that carry a tier but are
+not API commands, so the sweep can exempt them. The assistant still parses the JSON at runtime; the
+drift gate is what keeps the two readers of one file in agreement. Enforced:
+ctest:tst_command_safety_table (every `api-schema.json` name has exactly one tier, no name over 64
+characters, the omitted set equals blocked plus control-script-only).
 Two rules follow from the table and are worth naming before editing it: every registered command
 belongs to exactly one tier, and a device action is never silent — `Assistant::setAllowDeviceControl`
 says so in the consent modal ("Every device action still requires your explicit per-call approval

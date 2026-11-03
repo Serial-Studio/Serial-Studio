@@ -45,6 +45,7 @@ pytest tests/integration/test_csv_export.py::test_csv_export_basic -v
 | Performance | `tests/performance/`  | Yes                    | Throughput benchmarks                        |
 | Scripts     | `tests/scripts/`      | No (Node.js only)      | Unit tests for JS frame-parser scripts, plus source-level C++ regressions |
 | Tooling     | `scripts/tests/`      | No                     | Fixture-driven tests for `code-verify.py` and the CI workflows |
+| Unit        | `tests/unit/`         | No                     | Pure-Python checks of committed artifacts and the MCP bridge; not in `testpaths`, run by path |
 | C++ units   | `app/tests/`          | No (ctest, not pytest) | Qt Test suites over selected production TUs  |
 | Fuzz        | `app/tests/fuzz/`     | No (ctest or libFuzzer)| Untrusted-bytes entry points + checked-in corpora |
 
@@ -80,7 +81,7 @@ The `gui` tier (`test_ui_automation.py`) drives the live window through the `ui.
 | `test_driver_api_comprehensive.py`   | Every driver command: UART, Network, BLE, Modbus, CAN Bus, Audio |
 | `test_new_driver_api.py`             | HID, raw USB, and Process driver commands; bus-type enumeration |
 | `test_api_drivers.py`                | Driver switching, UART/Network/BLE basics, console/export status |
-| `test_mcp.py`                        | MCP JSON-RPC 2.0: lifecycle, tools list, read/write calls, resources, prompts |
+| `test_mcp.py`                        | MCP JSON-RPC 2.0: lifecycle, protocol revision negotiation, tools list with titles and annotations checked against `command_safety.json`, the omitted tools, tool-object keys, read/write calls, resources, prompts |
 | `test_licensing.py`                  | License status shape, set/activate/deactivate, concurrent connections |
 | `test_image_view.py`                 | ImageView widget: autodetect, manual mode, corrupted data |
 | `test_performance_concepts.py`       | Data rate vs. render rate decoupling, FPS range limits |
@@ -213,6 +214,22 @@ pytest tests/scripts/test_frame_parsers.py::TestNmea0183 -v
 # Run C++ regression checks
 pytest tests/scripts/test_cpp_regressions.py -v
 ```
+
+## Unit tests (`tests/unit/`)
+
+Pure-Python checks of committed artifacts and standalone scripts: no app, no Node.js, no Qt.
+`tests/pytest.ini` does not list the directory in `testpaths`, so run it by path:
+
+```bash
+pytest tests/unit/ -v
+```
+
+| File | What it covers |
+|------|----------------|
+| `test_updates_manifest.py` | The repo-root `updates.json` appcast: one endpoint per shipped package type plus the legacy per-OS keys, URLs agreeing with each key |
+| `test_mirror_protocol.py` | The spec-0040 mirror wire contract against the recorded fixtures in `tests/fixtures/mirror/` |
+| `test_alarm_sounds.py` | The bundled sound theme under `app/rcc/sounds`: WAV format, duration caps, IEC 60601-1-8 pulse counts |
+| `test_mcp_bridge.py` | The Claude bridge from the MCP Client example against a closed port (through `SERIAL_STUDIO_API_PORT`): exit 1 within ten seconds, the Preferences fix on the last stderr line (spec 0112 AC7) |
 
 ## C++ unit tests (`app/tests/`)
 
@@ -493,7 +510,7 @@ tests/
 │   ├── test_driver_api_comprehensive.py# Every driver command (UART, Network, BLE, Modbus …)
 │   ├── test_new_driver_api.py          # HID, raw USB, Process driver APIs
 │   ├── test_api_drivers.py             # Driver switching and console/export basics
-│   ├── test_mcp.py                     # MCP JSON-RPC 2.0 protocol (tools, resources, prompts)
+│   ├── test_mcp.py                     # MCP JSON-RPC 2.0 protocol (tools with hints, resources)
 │   ├── test_licensing.py               # License status, set/activate/deactivate
 │   ├── test_image_view.py              # ImageView widget modes and corrupted data handling
 │   ├── test_performance_concepts.py    # Data rate vs. render rate decoupling
@@ -521,6 +538,12 @@ tests/
 │   ├── test_diagnostics_static.py      # Spec-0035 registration drift
 │   ├── test_proto_ledger_static.py     # Spec-0037 gRPC field-number ledger
 │   └── test_cpp_regressions.py         # Logic-only C++ regression checks
+│
+├── unit/                               # Pure-Python checks of committed artifacts
+│   ├── test_updates_manifest.py        # updates.json appcast shape (spec 0001)
+│   ├── test_mirror_protocol.py         # Spec-0040 mirror wire contract vs fixtures
+│   ├── test_alarm_sounds.py            # Spec-0087 sound theme: WAV format, pulse counts
+│   └── test_mcp_bridge.py              # Spec-0112 bridge failure path: exit 1, fix last
 │
 ├── fixtures/                           # Checked-in inputs the suites read
 │   ├── projects/legacy/*.ssproj        # One hand-written document per loader migration

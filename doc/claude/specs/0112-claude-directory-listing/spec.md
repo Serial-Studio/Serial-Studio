@@ -1,7 +1,7 @@
 ---
 spec: 0112-claude-directory-listing
 title: Claude directory listing: annotated MCP tools and a plugin bundle
-status: approved     # draft -> approved -> in-progress -> done | shelved
+status: in-progress     # draft -> approved -> in-progress -> done | shelved
 created: 2026-11-02
 author: Alex Spataru
 ---
@@ -113,7 +113,7 @@ and never reaches an external client.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — An integration test against the running app lists the tools and asserts, for
+- [x] **AC1** (2026-11-03, pytest test_mcp.py, 99 passed on the rebuilt app) — An integration test against the running app lists the tools and asserts, for
   every tool: a non-empty `title`, a boolean `readOnlyHint`, and `readOnlyHint == true`
   exactly for the commands in the table's auto-run tier, `destructiveHint == true` exactly
   for the always-confirm, device-gated and blocked tiers (R1, R2).
@@ -121,23 +121,23 @@ and never reaches an external client.
   registered command has no tier entry, when a tier entry names an unregistered command, or
   when a command name exceeds 64 characters (R3, R4). It passes on the tree at handoff, which
   means the 61 gaps are closed.
-- [ ] **AC3** — The integration test asserts that no tool named like a licensing mutation or
+- [x] **AC3** (2026-11-03, same run) — The integration test asserts that no tool named like a licensing mutation or
   the process launcher appears in the tool list, while the same names still answer over raw
   JSON-RPC with the existing refusal (R5).
-- [ ] **AC4** — The integration test asserts every tool object's key set is a subset of the
+- [x] **AC4** (2026-11-03, same run) — The integration test asserts every tool object's key set is a subset of the
   MCP tool schema's keys (R6).
-- [ ] **AC5** — `claude plugin validate --profile directory` on the plugin folder reports no
+- [ ] **AC5** (local half done 2026-11-03: --profile directory passed with no refusal; portal half pending) — `claude plugin validate --profile directory` on the plugin folder reports no
   refusal, and the portal's Validate step reports zero Blocking findings; the maintainer
   records the portal result in the spec directory (R7).
-- [ ] **AC6** — A scripted Claude Code run with the plugin loaded calls `io.getStatus` and
+- [ ] **AC6** (Windows done 2026-11-03: three turns, 9.9 s, live status JSON; macOS and Linux pending) — A scripted Claude Code run with the plugin loaded calls `io.getStatus` and
   gets the live status JSON back, on each of Windows, macOS and Linux (R8). The 2026-11-02
   Windows run is the baseline: six turns, live data, no config edits.
-- [ ] **AC7** — A test runnable without the app spawns the bridge with nothing listening on
+- [x] **AC7** (2026-11-03, pytest tests/unit/test_mcp_bridge.py, exit 1 in about six seconds) — A test runnable without the app spawns the bridge with nothing listening on
   the port and asserts a non-zero exit within ten seconds whose final stderr line names the
   Preferences fix (R9).
 - [ ] **AC8** — The listing is live in the directory as "Serial Studio" and installing it from
   the directory in Claude Code reaches the connected state of AC6; maintainer observation (R7).
-- [ ] **AC9** — The manual's API Reference page and the examples README pass the docs
+- [x] **AC9** (2026-11-03, documentation-verify and term-verify clean) — The manual's API Reference page and the examples README pass the docs
   linter and name the directory listing first (R11).
 
 ## Constraints & Invariants

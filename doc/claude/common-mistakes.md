@@ -165,5 +165,3 @@ data loss first. Each stays prose until its `Debt:` turns into an `Enforced:` ma
    intrinsic headers.
 4. **A hand-edited generated file.** `sanitize-commit.py` regenerates and so masks the edit locally.
    Debt: a CI check that regeneration leaves the tree unchanged.
-5. **An assistant command missing from `command_safety.json`** (falls through to Confirm). Debt: a
-   test that every registered command sits in exactly one tier.

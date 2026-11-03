@@ -7290,7 +7290,9 @@ Serial Studio includes a built-in **MCP (Model Context Protocol) server** that e
 
 ### How It Works
 
-The MCP handler wraps the Serial Studio TCP API (port 7777) in an MCP-compliant interface. Any MCP-capable AI client can discover and call all 300+ API commands as tools.
+The MCP handler wraps the Serial Studio TCP API (port 7777) in an MCP-compliant interface. Any MCP-capable client can discover and call more than 440 API commands as tools. The same socket serves both protocols: a JSON-RPC 2.0 message is answered as MCP, a `{"command": ...}` envelope as the TCP API.
+
+Each tool carries a `title` and the MCP annotations that follow the in-app assistant's safety tiers: `readOnlyHint` on reads and queries, `destructiveHint` on the delete, clear, open-replace, credential and device-control families, and neither on reversible project or application settings. The licensing mutations and the process launcher are not listed. A hint describes a tool; it never authorizes a call, because every call passes the same remote gate and consent prompts as the TCP API. The server answers protocol revisions 2024-11-05, 2025-03-26 and 2025-06-18, echoing the revision the client offers in `initialize` and answering 2025-06-18 to any other.
 
 ### Use Cases
 
@@ -7302,8 +7304,9 @@ The MCP handler wraps the Serial Studio TCP API (port 7777) in an MCP-compliant 
 ### Getting Started with MCP
 
 1. Enable the API Server in Serial Studio (Preferences → General → API & Plugins → Enable API Server).
-2. Configure your MCP client (Claude Desktop, a custom MCP host, etc.) to connect to the Serial Studio MCP endpoint.
-3. The AI model can now call any API command as an MCP tool.
+2. **Claude Code or Cowork:** install the **Serial Studio** plugin (`serial-studio`) from the Claude directory. The plugin starts the bridge, lists the tools and bundles a skill that states the prerequisite, the read-first workflow and the consent prompts; no configuration file is edited. Its source is https://github.com/Serial-Studio/claude-plugin.
+3. **Claude Desktop or another MCP host:** point the host at the bridge script `examples/MCP Client/claude_desktop_bridge.py`, as the MCP Client example README describes, or connect a TCP-capable MCP client to port 7777 directly.
+4. The model can now call any listed API command as an MCP tool. When Serial Studio is not running or the API server is off, the bridge exits within ten seconds and its last log line names the Preferences setting to enable.
 
 See the **[MCP Client example](https://github.com/Serial-Studio/Serial-Studio/tree/master/examples/MCP%20Client)** in the examples directory for a complete working client implementation.
 
@@ -7387,7 +7390,7 @@ Found a bug or have a suggestion?
 
 For security issues, please contact privately rather than creating a public issue.
 
-**Total Commands: 300+** — the registry grows with every release; enumerate the live surface with `api.getCommands`.
+**Total Commands: 450+** — the registry grows with every release; enumerate the live surface with `api.getCommands`.
 
 **Made with ❤️ by the Serial Studio team**
 
