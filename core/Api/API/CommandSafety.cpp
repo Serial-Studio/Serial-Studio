@@ -28,7 +28,7 @@
 
 #include "API/CommandCapabilities.h"
 
-using namespace API::CommandSafety;
+namespace API::CommandSafety {
 
 //--------------------------------------------------------------------------------------------------
 // Title vocabulary: a dotted segment or a camelCase piece that does not read as a capitalized word
@@ -188,7 +188,7 @@ static QString humanizeSegment(const QStringView segment)
 /**
  * @brief The command's tier, or nothing when the table does not list it.
  */
-std::optional<Tier> API::CommandSafety::tierOf(const QStringView command) noexcept
+std::optional<Tier> tierOf(const QStringView command) noexcept
 {
   if (const auto* entry = findEntry(command))
     return entry->tier;
@@ -199,7 +199,7 @@ std::optional<Tier> API::CommandSafety::tierOf(const QStringView command) noexce
 /**
  * @brief Whether the "Allow device control" toggle gates the command.
  */
-bool API::CommandSafety::isDeviceGated(const QStringView command) noexcept
+bool isDeviceGated(const QStringView command) noexcept
 {
   const auto* entry = findEntry(command);
   return entry && entry->device_gated;
@@ -210,7 +210,7 @@ bool API::CommandSafety::isDeviceGated(const QStringView command) noexcept
  *        AlwaysConfirm, Blocked or a device-gated name is destructive. An unlisted name is the
  *        assistant's Confirm fallthrough, a plain mutation.
  */
-ToolHints API::CommandSafety::hintsFor(const QStringView command) noexcept
+ToolHints hintsFor(const QStringView command) noexcept
 {
   const auto* entry = findEntry(command);
   if (!entry)
@@ -237,7 +237,7 @@ ToolHints API::CommandSafety::hintsFor(const QStringView command) noexcept
  *        remote gate refuses on classification alone (the control-script-only class). Listing
  *        is discovery; a call still goes through the gate.
  */
-bool API::CommandSafety::isListedTool(const QStringView command)
+bool isListedTool(const QStringView command)
 {
   if (tierOf(command) == Tier::Blocked)
     return false;
@@ -250,7 +250,7 @@ bool API::CommandSafety::isListedTool(const QStringView command)
  * @brief The dotted name as a title: segments joined with " / ", each one spelled from the
  *        vocabulary or split on its camelCase boundaries.
  */
-QString API::CommandSafety::humanizeToolName(const QStringView command)
+QString humanizeToolName(const QStringView command)
 {
   QStringList segments;
   for (const auto segment : command.split(QLatin1Char('.'), Qt::SkipEmptyParts))
@@ -258,3 +258,4 @@ QString API::CommandSafety::humanizeToolName(const QStringView command)
 
   return segments.join(QStringLiteral(" / "));
 }
+}  // namespace API::CommandSafety

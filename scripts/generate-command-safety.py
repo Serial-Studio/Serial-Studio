@@ -60,11 +60,11 @@ HEADER = """/*
 
 // AUTO-GENERATED from app/rcc/ai/command_safety.json; regenerate, never edit.
 
-#include "API/CommandSafety.h"
-
 #include <array>
 
-using namespace API::CommandSafety;
+#include "API/CommandSafety.h"
+
+namespace API::CommandSafety {{
 
 // clang-format off
 static constexpr std::array<Entry, {rows}> kEntries = {{{{
@@ -81,7 +81,7 @@ FOOTER = """}};
 /**
  * @brief Every tiered name with its tier and device-gate flag, sorted by byte order.
  */
-std::span<const Entry> API::CommandSafety::entries() noexcept
+std::span<const Entry> entries() noexcept
 {
   return std::span<const Entry>(kEntries);
 }
@@ -89,10 +89,11 @@ std::span<const Entry> API::CommandSafety::entries() noexcept
 /**
  * @brief The assistant-only sandbox verbs that carry a tier but are not API commands.
  */
-std::span<const QLatin1StringView> API::CommandSafety::assistantTools() noexcept
+std::span<const QLatin1StringView> assistantTools() noexcept
 {
   return std::span<const QLatin1StringView>(kAssistantTools);
 }
+}  // namespace API::CommandSafety
 """
 
 

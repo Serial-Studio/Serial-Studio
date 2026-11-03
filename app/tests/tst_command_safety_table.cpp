@@ -134,7 +134,8 @@ void TstCommandSafetyTable::tableIsSortedAndUnique()
   QVERIFY(!table.empty());
   QVERIFY(std::adjacent_find(table.begin(),
                              table.end(),
-                             [](const Entry& a, const Entry& b) { return !(a.name < b.name); })
+                             [](const API::CommandSafety::Entry& a,
+                                const API::CommandSafety::Entry& b) { return !(a.name < b.name); })
           == table.end());
 }
 
