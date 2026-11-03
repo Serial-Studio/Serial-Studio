@@ -54,6 +54,8 @@ qt_add_library(
   API/PathPolicy.cpp
   API/SealedPolicy.cpp
   API/CommandCapabilities.cpp
+  API/CommandSafety.cpp
+  API/CommandSafetyTable.cpp
   API/LaunchConsent.cpp
   API/ProcessLauncher.cpp
   API/TerminalBridge.cpp
@@ -111,6 +113,7 @@ qt_add_library(
   API/PathPolicy.h
   API/SealedPolicy.h
   API/CommandCapabilities.h
+  API/CommandSafety.h
   API/LaunchConsent.h
   API/ProcessLauncher.h
   API/TerminalBridge.h

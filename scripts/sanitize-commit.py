@@ -437,6 +437,11 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     run_python_step(
+        "Regenerating the command safety table",
+        root / "scripts" / "generate-command-safety.py",
+    )
+
+    run_python_step(
         "Regenerating the property registry, gRPC ledger and typed proto",
         root / "scripts" / "generate-property-registry.py",
     )
