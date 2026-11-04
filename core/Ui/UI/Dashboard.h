@@ -34,6 +34,7 @@
 #include <utility>
 
 #include "Core/DataModel/DataBlock.h"
+#include "Core/DataModel/ValueFormat.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/CachedFlag.h"
 #include "DataModel/IDashboardControl.h"
@@ -271,6 +272,22 @@ public:
   [[nodiscard]] Q_INVOKABLE bool frameValid() const { return m_lastFrame.groups.size() > 0; }
 
   [[nodiscard]] Q_INVOKABLE QString formatValue(double val, double min, double max) const;
+
+  [[nodiscard]] Q_INVOKABLE QString formatNumber(double value, int uniqueId) const
+  {
+    const auto it = m_datasets.constFind(uniqueId);
+    if (it == m_datasets.cend())
+      return DataModel::ValueFormat::autoNumber(value, 0, 0);
+
+    return DataModel::ValueFormat::formatNumber(value, it.value());
+  }
+
+  [[nodiscard]] Q_INVOKABLE QString labelFor(int uniqueId, double value) const
+  {
+    const auto it = m_datasets.constFind(uniqueId);
+    return it == m_datasets.cend() ? QString()
+                                   : DataModel::ValueFormat::labelFor(it.value(), value);
+  }
 
   [[nodiscard]] Q_INVOKABLE int relativeIndex(const int widgetIndex) const
   {
@@ -608,65 +625,7 @@ private:
 
 inline QString FMT_VAL(double val, double min, double max)
 {
-  auto decPoints = [](double v) {
-    double abs = std::abs(v);
-    if (DSP::isZero(abs))
-      return 2;
-
-    if (abs >= 1e6)
-      return 0;
-
-    if (abs >= 1e5)
-      return 0;
-
-    if (abs >= 1e4)
-      return 0;
-
-    if (abs >= 1e3)
-      return 1;
-
-    if (abs >= 1e2)
-      return 2;
-
-    if (abs >= 1e1)
-      return 2;
-
-    if (abs >= 1.0)
-      return 3;
-
-    if (abs >= 1e-1)
-      return 4;
-
-    if (abs >= 1e-2)
-      return 5;
-
-    if (abs >= 1e-3)
-      return 6;
-
-    if (abs >= 1e-4)
-      return 7;
-
-    if (abs >= 1e-5)
-      return 8;
-
-    if (abs >= 1e-6)
-      return 9;
-
-    return 10;
-  };
-
-  if (DSP::isZero(min) && DSP::isZero(max))
-    return QString::number(val, 'f', decPoints(val));
-
-  else {
-    const int p = std::max(decPoints(min), decPoints(max));
-    return QString::number(val, 'f', p);
-  }
-}
-
-inline QString FMT_VAL(double val, const DataModel::Dataset& dataset)
-{
-  return FMT_VAL(val, dataset.pltMin, dataset.pltMax);
+  return DataModel::ValueFormat::autoNumber(val, min, max);
 }
 
 inline const DataModel::Group& GET_GROUP(const SerialStudio::DashboardWidget type, int index)

@@ -163,7 +163,8 @@ has no per-frame cost, and a package never touches an application object to read
 |----------|------|-------------|
 | `title` | string | Display title of the dataset or group, including a user's rename. |
 | `value` | double | Numeric value of the dataset (the first dataset for a group). |
-| `text` | string | The same value formatted the way the dashboard formats it, units included. |
+| `text` | string | The same value formatted the way the dashboard formats it: the dataset's label when one matches, otherwise the number with its units. |
+| `label` | string | The dataset's value label for the current value, or empty when the dataset has no label for it. `value` keeps the number. |
 | `stringValue` | string | The raw value as text. |
 | `units` | string | Declared units. |
 | `isNumeric` | bool | Whether the current value parsed as a number. |
@@ -178,7 +179,7 @@ has no per-frame cost, and a package never touches an application object to read
 | `config` | map | Current values of the declared settings. |
 | `paused` | bool | Writable; freezes the values the model publishes. |
 
-The `datasets` model exposes one row per dataset with the roles `title`, `text`, `value`,
+The `datasets` model exposes one row per dataset with the roles `title`, `text`, `label`, `value`,
 `numericValue`, `isNumeric`, `units`, `minValue`, `maxValue`, `decimalPoints`, `displayFormat`,
 `uniqueId`, `index`, `alarmsDefined`, `alarmSeverity`, and `widgets` (the other dashboard widgets
 showing the same dataset, as `{ windowId, icon, title }` maps).

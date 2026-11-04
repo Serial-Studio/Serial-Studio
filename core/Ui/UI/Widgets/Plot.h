@@ -82,6 +82,9 @@ class Plot : public QQuickItem {
   Q_PROPERTY(QString yLabel
              READ yLabel
              CONSTANT)
+  Q_PROPERTY(int datasetUniqueId
+             READ datasetUniqueId
+             CONSTANT)
   Q_PROPERTY(QString xLabel
              READ xLabel
              CONSTANT)
@@ -167,6 +170,7 @@ public:
   [[nodiscard]] SerialStudio::InterpolationMode interpolationMode() const noexcept;
   [[nodiscard]] const QString& yLabel() const noexcept;
   [[nodiscard]] const QString& xLabel() const noexcept;
+  [[nodiscard]] int datasetUniqueId() const noexcept;
   [[nodiscard]] bool timeAxis() const noexcept;
   [[nodiscard]] bool xyPlot() const noexcept;
   [[nodiscard]] bool logX() const noexcept;
@@ -226,6 +230,7 @@ private:
 private:
   UI::Dashboard& m_dashboard;
   int m_index;
+  int m_datasetUniqueId;
   int m_dataW;
   int m_dataH;
   int m_xStepIndex;

@@ -38,6 +38,7 @@
 Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDataset)
   : QQuickItem(parent)
   , m_index(index)
+  , m_uniqueId(-1)
   , m_displayTickCount(5)
   , m_decimalPoints(-1)
   , m_hasData(false)
@@ -56,6 +57,7 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   if (autoInitFromBarDataset && VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
 
+    m_uniqueId         = dataset.uniqueId;
     m_title            = dataset.title;
     m_units            = dataset.units;
     m_displayFormat    = dataset.displayFormat;
@@ -169,6 +171,15 @@ const QString& Widgets::Bar::activeBandLabel() const noexcept
 }
 
 /**
+ * @brief Returns the caption that replaces the padded number (spec 0108): the value's label or
+ *        its Hexadecimal / Binary notation; empty when the caption shows its own number.
+ */
+const QString& Widgets::Bar::displayText() const noexcept
+{
+  return m_displayText;
+}
+
+/**
  * @brief Returns the precomputed alarm-band list as a QML-accessible QVariantList.
  */
 const QVariantList& Widgets::Bar::alarmBands() const noexcept
@@ -261,6 +272,14 @@ int Widgets::Bar::decimalPoints() const noexcept
 }
 
 /**
+ * @brief Returns the dataset's uniqueId, which the shared formatter resolves the dataset by.
+ */
+int Widgets::Bar::uniqueId() const noexcept
+{
+  return m_uniqueId;
+}
+
+/**
  * @brief Returns the current numeric value of the dataset.
  */
 double Widgets::Bar::value() const noexcept
@@ -346,6 +365,7 @@ void Widgets::Bar::resetData()
   m_maxSeen         = 0.0;
   m_activeBandIndex = -1;
   m_lastBandHint    = -1;
+  m_displayText.clear();
 
   Q_EMIT updated();
 }
@@ -394,10 +414,12 @@ void Widgets::Bar::applySample(const DataModel::Dataset& dataset)
   m_validData                 = valid;
   m_sampleMs                  = dataset.displaySampleMs;
   if (valid) {
-    m_value = dataset.numericValue;
+    m_value       = dataset.numericValue;
+    m_displayText = DataModel::ValueFormat::captionText(dataset);
     recomputeActiveBand(m_value);
   } else {
     m_activeBandIndex = -1;
+    m_displayText.clear();
   }
 
   if ((changed || extremes_changed) && isEnabled())

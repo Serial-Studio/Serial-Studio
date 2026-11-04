@@ -56,8 +56,8 @@ There is ONE publication payload and ONE ingestion path. `DataModel::DataBlock` 
 carries N samples of M datasets: per-dataset `values` (float64), optional `text` + per-sample
 `numeric` flags, optional `rawValues`/`rawText` (the pre-transform twin MDF4's "(raw)" channels,
 the session `blocks` table and spec-0044's parse-vs-transform classification all need; carried
-only for datasets with a transform or computed datasets since spec 0085, every consumer reading
-the final value when `hasRaw` is false), and a
+only for datasets with a transform, computed datasets (spec 0085) and datasets with a value
+decoder (spec 0108), every consumer reading the final value when `hasRaw` is false), and a
 timebase that is either a uniform grid (`dt != 0`) or explicit per-sample offsets (`dt == 0`).
 
 - **Parsing is unchanged and still per frame.** Delimiter scanning is inherently sequential; spec
@@ -92,9 +92,9 @@ usually belongs in one of them rather than in the facade:
   block: the pooled block slots (`kBlockPoolSlots` 64), the per-source open entries (a flat
   vector that is never erased, so open/flush allocate nothing in steady state, spec 0085), the
   `kFrameBlockSampleCap` (64) and flush-epoch rules, and `flushAll()`. At bind it sets a column's
-  `hasRaw` from `dataset_carries_raw()` (`DataBlock.h`, the ONE rule: transform or computed
-  dataset), and the builder's writers mirror the raw twin through `mirror_raw_value()` under the
-  same rule. It reaches the facade only
+  `hasRaw` from `dataset_carries_raw()` (`DataBlock.h`, the ONE rule: transform, computed or
+  decoded dataset), and the builder's writers mirror the raw twin through `mirror_raw_value()`
+  under the same rule. It reaches the facade only
   through the four-hook `BlockStagerHost` interface (`noteStagingPoolExhausted`,
   `publishStagedBlock`, `announceStructure`, `stagingFlushEpoch`) — which is what lets
   `tst_frame_builder_staging` drive it against a stub host with none of FrameBuilder's link set.
@@ -161,6 +161,23 @@ construction. A second splitter anywhere on that path makes the two diverge.
 - **Tests.** `tst_line_format` (grammar and scanner), `tst_quickplot_format_state` (the 35-stream
   corpus, 4 rebuilds), `tst_quickplot_roundtrip` (saved project equals live parse),
   `tst_quickplot_project` (which template Save as Project emits).
+
+### Value Decoders in the Value Tail (spec 0108)
+
+A dataset's `format` (fixed point, bit field, scale) is decoded on the pipeline thread by
+`DataModel::decode_dataset_in_place()` (`core/Core/DataModel/ValueDecoder.h`, header-only,
+allocation-free: the decoded number is re-rendered with `std::to_chars` into a stack buffer and
+`assign_utf8_in_place`). Every value tail of `FrameBuilder` calls it with an "at this stage" flag:
+a channel dataset decodes after the numeric parse, `mirror_raw_value()` and the raw capture, and
+BEFORE its transform; a computed dataset decodes the transform's result. So the raw twin stays the
+wire value and `dataset_carries_raw()` gains its third case instead of a second rule. A text token
+is left alone. The stream lane cannot see a dataset, so `IO::StreamChannelConfig` carries a
+detached `DataModel::ValueDecoderSpec` (copied in `StreamConfigBuilder.cpp`) and
+`StreamProcessor` decodes each block's samples before the block or per-sample transform. A dataset
+without a decoder pays one `format != 0` compare. Labels and the hexadecimal / binary notation are
+NOT here: they are presentation, resolved on the GUI thread by `DataModel::ValueFormat`, so no
+block, export or Historian row ever carries a label. Benchmark row `native(numeric, decoded)` is
+ungated and prints the decoder's cost beside `native(numeric)`.
 
 ### The Session Boundary (spec 0075 A2)
 

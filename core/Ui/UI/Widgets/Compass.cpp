@@ -97,6 +97,15 @@ const QString& Widgets::Compass::cardinal() const noexcept
 }
 
 /**
+ * @brief Returns the caption that replaces the heading number (spec 0108): the value's label or
+ *        its Hexadecimal / Binary notation; empty when the caption shows its own number.
+ */
+const QString& Widgets::Compass::displayText() const noexcept
+{
+  return m_displayText;
+}
+
+/**
  * @brief Returns the dataset title associated with the widget.
  */
 const QString& Widgets::Compass::title() const noexcept
@@ -170,11 +179,13 @@ void Widgets::Compass::updateData()
     v += 360.0;
 
   const auto card = cardinalDirection(v);
-  if (!changed && v == m_value && card == m_cardinal)
+  auto text       = DataModel::ValueFormat::captionText(dataset);
+  if (!changed && v == m_value && card == m_cardinal && text == m_displayText)
     return;
 
-  m_value    = v;
-  m_cardinal = card;
+  m_value       = v;
+  m_cardinal    = card;
+  m_displayText = std::move(text);
   Q_EMIT updated();
 }
 
@@ -224,6 +235,7 @@ void Widgets::Compass::resetData()
   m_sampleMs  = 0;
   m_value     = 0.0;
   m_cardinal  = cardinalDirection(0.0);
+  m_displayText.clear();
   Q_EMIT updated();
 }
 

@@ -72,6 +72,9 @@ class Bar : public QQuickItem {
   Q_PROPERTY(QString activeBandLabel
              READ activeBandLabel
              NOTIFY updated)
+  Q_PROPERTY(QString displayText
+             READ displayText
+             NOTIFY updated)
   Q_PROPERTY(QVariantList alarmBands
              READ alarmBands
              CONSTANT)
@@ -117,6 +120,9 @@ class Bar : public QQuickItem {
   Q_PROPERTY(int decimalPoints
              READ decimalPoints
              CONSTANT)
+  Q_PROPERTY(int uniqueId
+             READ uniqueId
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -133,12 +139,14 @@ public:
   [[nodiscard]] bool alarmTriggered() const noexcept;
   [[nodiscard]] int activeBandSeverity() const noexcept;
   [[nodiscard]] const QString& activeBandLabel() const noexcept;
+  [[nodiscard]] const QString& displayText() const noexcept;
   [[nodiscard]] const QVariantList& alarmBands() const noexcept;
   [[nodiscard]] int displayTickCount() const noexcept;
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
   [[nodiscard]] const QString& displayFormat() const noexcept;
   [[nodiscard]] int decimalPoints() const noexcept;
+  [[nodiscard]] int uniqueId() const noexcept;
 
   [[nodiscard]] bool extremesValid() const noexcept;
   [[nodiscard]] double minSeen() const noexcept;
@@ -179,11 +187,13 @@ protected:
   bool refreshExtremes(const DataModel::Dataset& dataset);
 
   int m_index;
+  int m_uniqueId;
   int m_displayTickCount;
   int m_decimalPoints;
   QString m_title;
   QString m_units;
   QString m_displayFormat;
+  QString m_displayText;
 
   bool m_hasData;
   bool m_validData;

@@ -44,6 +44,9 @@ class Compass : public QQuickItem {
   Q_PROPERTY(QString cardinal
              READ cardinal
              NOTIFY updated)
+  Q_PROPERTY(QString displayText
+             READ displayText
+             NOTIFY updated)
   Q_PROPERTY(QString title
              READ title
              CONSTANT)
@@ -68,6 +71,7 @@ public:
   [[nodiscard]] bool alarmTriggered() const noexcept;
   [[nodiscard]] double value() const noexcept;
   [[nodiscard]] const QString& cardinal() const noexcept;
+  [[nodiscard]] const QString& displayText() const noexcept;
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
   [[nodiscard]] const QString& displayFormat() const noexcept;
@@ -92,6 +96,7 @@ private:
   QString m_title;
   QString m_units;
   QString m_displayFormat;
+  QString m_displayText;
   QString m_cardinal;
 
   UI::Dashboard& m_dashboard;

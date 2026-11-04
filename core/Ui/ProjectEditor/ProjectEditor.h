@@ -226,6 +226,7 @@ signals:
                                   int datasetId,
                                   double nyquist,
                                   QVariantList currentMarkers);
+  void openValueLabelsEditor(int uniqueId, QVariantList rows, QString defaultText);
 
 private:
   friend class EditorCommit;
@@ -512,6 +513,17 @@ public slots:
   void commitFrequencyMarkers(int groupId, int datasetId, const QVariantList& markers);
   void changeDatasetOptionForSelection(int option, bool checked);
 
+  void openValueLabelsEditorForSelection()
+  {
+    Q_EMIT openValueLabelsEditor(
+      m_selectedDataset.uniqueId, m_commit.valueLabelRows(), m_selectedDataset.labelsDefault);
+  }
+
+  void commitValueLabels(int uniqueId, const QVariantList& rows, const QString& defaultText)
+  {
+    m_commit.commitValueLabels(uniqueId, rows, defaultText);
+  }
+
   Q_INVOKABLE [[nodiscard]] bool moveCurrentGroup(int direction);
   Q_INVOKABLE [[nodiscard]] bool moveCurrentDataset(int direction);
   Q_INVOKABLE [[nodiscard]] bool moveCurrentAction(int direction);
@@ -529,6 +541,7 @@ private:
   void addGeneralColorRow(CustomModel* model, const DataModel::Dataset& dataset);
   void addDatasetAliasRow(CustomModel* model, const DataModel::Dataset& dataset);
   void addDatasetRangeRows(CustomModel* model, const DataModel::Dataset& dataset);
+  void addFormatSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addPlotSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addFFTSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addWidgetSection(CustomModel* model, const DataModel::Dataset& dataset);
@@ -536,6 +549,7 @@ private:
 
   void buildFftGeneralRows(CustomModel* model, const DataModel::Dataset& dataset);
   void buildFftRangeRows(CustomModel* model, const DataModel::Dataset& dataset);
+  void buildFormatFieldRows(CustomModel* model, const DataModel::Dataset& dataset);
 
   void buildWidgetRangeRows(CustomModel* model,
                             const DataModel::Dataset& dataset,

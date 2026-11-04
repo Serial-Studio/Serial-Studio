@@ -65,6 +65,7 @@ The `gui` tier (`test_ui_automation.py`) drives the live window through the `ui.
 | `test_project_editor.py`             | Add, delete, and duplicate groups, datasets, and actions via the API |
 | `test_project_import_export.py`      | `project.exportJson`, `project.loadFromJSON`, round-trip fidelity |
 | `test_project_undo.py`               | Undo/redo history: randomized round-trips, atomic batch/cascade undo, save-point modified flag, multi-field dataset patch as one step |
+| `test_dataset_formats.py`            | Spec 0108 value formats and labels: fixed point, bit field and scale decode one streamed frame, a label rides beside the kept number in `dashboard.getData`, export round trip, a format-free project gains no key, `project.dataset.setLabels` refuses a non-integer value |
 | `test_property_registry.py`          | Spec 0036 property registry: corpus round-trip against checked-in baselines (capture with `SS_CAPTURE_BASELINES=1` on the pre-change build), the two declared defect fixes, lossless read-then-write-back, every enum domain set by value |
 | `test_project_save.py`               | File save and reload, widget settings persistence, layout storage |
 | `test_api_surfaces.py`               | Spec 0037 generated surfaces: MCP `tools/list` typed properties + enum domains on `project.dataset.update`, `tools/list` payload size, SDK options-bag field sweep, typed-proto parity (set `SS_EXPORTED_PROTO`; needs a commercial build with `ENABLE_GRPC=ON`) |
@@ -496,6 +497,7 @@ tests/
 │   ├── test_project_configuration.py   # Operation modes, JS parsers, project creation
 │   ├── test_project_editor.py          # Add, delete, and duplicate groups, datasets, actions
 │   ├── test_project_import_export.py   # project.exportJson, project.loadFromJSON, roundtrip
+│   ├── test_dataset_formats.py         # Spec 0108 decoders, labels, export round trip
 │   ├── test_project_save.py            # File save/reload, widget settings, layout persistence
 │   ├── test_problem_center.py          # problems.* diagnostics: project, link, script findings
 │   ├── test_widget_extensions.py       # Widget extension findings, scope rules, no Pro bypass

@@ -766,6 +766,8 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_displayFormats.insert(QStringLiteral("2d"), tr("2 decimals"));
   m_displayFormats.insert(QStringLiteral("3d"), tr("3 decimals"));
   m_displayFormats.insert(QStringLiteral("sci"), tr("Scientific"));
+  m_displayFormats.insert(QStringLiteral("hex"), tr("Hexadecimal"));
+  m_displayFormats.insert(QStringLiteral("bin"), tr("Binary"));
 
   m_eolSequences.clear();
   m_eolSequences.insert(QLatin1String(""), tr("None"));

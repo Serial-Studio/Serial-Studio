@@ -25,6 +25,16 @@ Transforms are useful when:
 
 Transforms are optional. Datasets without one display the raw parsed value unchanged.
 
+### When a format is enough
+
+A linear scale and offset, a fixed-point or bit-field decode, a hexadecimal or binary display, and value-to-text labels need no script: set them on the dataset page under **Value Format**, **Label Format**, and **Labels** (see [Project Editor](Project-Editor.md#step-4-add-datasets)). Formats and labels are not Pro content, so a project that uses them without a transform connects with no license.
+
+A dataset can combine a format, a transform, and labels. They apply in this order:
+
+1. The format decodes the parsed value, and the transform receives the decoded number.
+2. On a computed dataset, whose transform is its only source, the format decodes the transform's result instead.
+3. Labels and the hexadecimal or binary notation apply last, to the text on screen only. The number every plot, alarm, and export reads is the one the first two steps produced.
+
 A transform can also read and write [Variables](Variables.md) tables: constants defined at project time, and computed variables that hold their value across frames. That's how you pass a calibration value into several channels, have one transform compute a value that another consumes, or keep state for an integrator, filter, or latch. See [Variables](Variables.md) for the full reference.
 
 ## The `transform()` function

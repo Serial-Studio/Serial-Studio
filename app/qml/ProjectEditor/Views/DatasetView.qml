@@ -126,6 +126,32 @@ Widgets.Pane {
       }
     }
 
+    //
+    // Lazy-loaded value labels editor dialog. Activated via Cpp_JSON_ProjectEditor signal.
+    //
+    Loader {
+      id: valueLabelsDialog
+
+      active: false
+      asynchronous: false
+      source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml"
+
+      onLoaded: valueLabelsDialog.item.closing.connect(() => valueLabelsDialog.active = false)
+
+      function show(uniqueId, rows, defaultText) {
+        valueLabelsDialog.active = true
+        if (valueLabelsDialog.item)
+          valueLabelsDialog.item.showDialog(uniqueId, rows, defaultText)
+      }
+    }
+
+    Connections {
+      target: Cpp_JSON_ProjectEditor
+      function onOpenValueLabelsEditor(uniqueId, rows, defaultText) {
+        valueLabelsDialog.show(uniqueId, rows, defaultText)
+      }
+    }
+
     ColumnLayout {
       spacing: 0
       anchors.fill: parent
@@ -376,6 +402,17 @@ Widgets.Pane {
               onClicked: Cpp_JSON_ProjectEditor.openFrequencyMarkersEditorForSelection()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "fft", 24)
               ToolTip.text: qsTr("Pin labeled frequencies or bands on the FFT plot and waterfall, with optional warning and alarm levels.")
+            }
+
+            Widgets.ToolbarButton {
+              iconSize: 24
+              toolbarButton: false
+              text: qsTr("Labels")
+              objectName: "datasetView.labels"
+              Layout.alignment: Qt.AlignVCenter
+              onClicked: Cpp_JSON_ProjectEditor.openValueLabelsEditorForSelection()
+              icon.source: Cpp_Misc_IconRegistry.icon("editor", "dataset-values", 24)
+              ToolTip.text: qsTr("Show text in place of chosen values, such as a state name for a code. Plots and alarms keep the number.")
             }
 
             Widgets.ToolbarButton {

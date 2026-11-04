@@ -59,28 +59,9 @@
 [[nodiscard]] static bool volatileFieldsDiffer(const Widgets::ExtensionRow& a,
                                                const Widgets::ExtensionRow& b)
 {
-  return a.title != b.title || a.text != b.text || a.value != b.value || a.isNumeric != b.isNumeric
-      || a.alarmSeverity != b.alarmSeverity || DSP::notEqual(a.numericValue, b.numericValue);
-}
-
-/**
- * @brief Formats a dataset value for display; empty until the first sample arrives.
- */
-[[nodiscard]] static QString formatDatasetValue(const DataModel::Dataset& dataset)
-{
-  if (dataset.value.isEmpty())
-    return QString();
-
-  if (!dataset.isNumeric)
-    return dataset.value;
-
-  QString value = (dataset.decimalPoints < 0)
-                  ? FMT_VAL(dataset.numericValue, dataset)
-                  : QString::number(dataset.numericValue, 'f', dataset.decimalPoints);
-  if (!dataset.units.isEmpty())
-    value += QStringLiteral(" ") + dataset.units;
-
-  return value;
+  return a.title != b.title || a.text != b.text || a.label != b.label || a.value != b.value
+      || a.isNumeric != b.isNumeric || a.alarmSeverity != b.alarmSeverity
+      || DSP::notEqual(a.numericValue, b.numericValue);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,6 +124,8 @@ QVariant Widgets::ExtensionRowsModel::data(const QModelIndex& index, int role) c
       return row.alarmSeverity;
     case WidgetsRole:
       return row.widgets;
+    case LabelRole:
+      return row.label;
     default:
       return {};
   }
@@ -169,6 +152,7 @@ QHash<int, QByteArray> Widgets::ExtensionRowsModel::roleNames() const
     {AlarmsDefinedRole, "alarmsDefined"},
     {AlarmSeverityRole, "alarmSeverity"},
     {      WidgetsRole,       "widgets"},
+    {        LabelRole,         "label"},
   };
   return kNames;
 }
@@ -197,9 +181,10 @@ bool Widgets::ExtensionRowsModel::updateRow(int row, const ExtensionRow& fresh)
     return false;
 
   static const QVector<int> kRoles = {
-    TitleRole, TextRole, ValueRole, IsNumericRole, NumericValueRole, AlarmSeverityRole};
+    TitleRole, TextRole, LabelRole, ValueRole, IsNumericRole, NumericValueRole, AlarmSeverityRole};
 
   entry.text          = fresh.text;
+  entry.label         = fresh.label;
   entry.title         = fresh.title;
   entry.value         = fresh.value;
   entry.isNumeric     = fresh.isNumeric;
@@ -397,6 +382,14 @@ double Widgets::ExtensionData::maxValue() const noexcept
 const QString& Widgets::ExtensionData::text() const noexcept
 {
   return m_lead.text;
+}
+
+/**
+ * @brief Returns the lead dataset's value label (spec 0108), or empty when none matches.
+ */
+const QString& Widgets::ExtensionData::label() const noexcept
+{
+  return m_lead.label;
 }
 
 /**
@@ -674,7 +667,10 @@ Widgets::ExtensionRow Widgets::ExtensionData::buildVolatileRow(
   row.displayFormat = dataset.displayFormat;
   row.alarmsDefined = !dataset.alarmBands.empty();
   row.alarmSeverity = activeAlarmSeverity(dataset);
-  row.text          = formatDatasetValue(dataset);
+  row.text          = DataModel::ValueFormat::formatValue(dataset);
+  if (dataset.isNumeric)
+    row.label = DataModel::ValueFormat::labelFor(dataset, dataset.numericValue);
+
   return row;
 }
 

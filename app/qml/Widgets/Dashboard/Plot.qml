@@ -588,6 +588,7 @@ Item {
     logX: root.model.logX
     logY: root.model.logY
     curveColors: [root.color]
+    labelUniqueId: root.model.datasetUniqueId
     xLabel: root.model.xLabel
     yLabel: root.model.yLabel
     timeAxis: root.model.timeAxis

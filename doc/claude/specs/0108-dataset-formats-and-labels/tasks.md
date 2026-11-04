@@ -52,7 +52,10 @@ updated: 2026-11-03
   scripts/code-verify.py --check` on both files; `python scripts/registry-verify.py` reports
   the new struct fields as undeclared until T2 lands (expected, noted in chat).
 - **Deps:** none
-- [ ] done
+- [x] done
+  - `Keys::Label` ("label") already existed (alarm-band and marker labels) and is reused for
+    the runtime field. Frame.h is now 1512 lines: a `cxx-tu-too-long` advisory, the aggregate
+    `--tu-census --check` still under its baseline.
 
 ### T2 — The registry manifest and its hooks
 
@@ -79,7 +82,17 @@ updated: 2026-11-03
 - **Verify:** `python scripts/registry-verify.py` passes the manifest against `schema.json`;
   `python scripts/code-verify.py --check` on the three files.
 - **Deps:** T1
-- [ ] done
+- [x] done
+  - What the generator forced, beyond the three files: `valueFormats` is `parallelValues` (the
+    int domain kind; `staticMap` keys on strings). The validators live in
+    `PropertyValidators.h/.cpp` beside `isValidAlarmDeadband` (the ProjectModel-free home), plus
+    `formatKindDomain` for `format`. The two cross-field ones run once after every field of an
+    API update applied (`DATASET_VALIDATORS` in the generator), so field order in one request
+    never matters; the editor path clamps only and the decoder clamps every declaration.
+    `schema.json` gained `readLabels` (postRead) and `whenNonEmpty` (runtime persist).
+    `formIdOrder` and `displayFormats` append, so no enumerator or stored index moves. The
+    section is `addFormatSection` + `buildFormatFieldRows` (declared in `ProjectEditor.h`,
+    called from `EditorForms.cpp` and `EditorMultiSelect.cpp`).
 
 ### T3 — Label hooks and the generator run
 
@@ -101,7 +114,12 @@ updated: 2026-11-03
   only appended lines; `python scripts/syntax-check.py` on `Frame.cpp` and
   `DatasetSerialization.cpp`.
 - **Deps:** T2
-- [ ] done
+- [x] done
+  - The reader drops a non-integer key as plan.md says (this task said round); rows are
+    `{"value", "text"}` (`Keys::LabelText`). `labels` uses the hook-driven `map` shape, so the API
+    applier reads through the same hook. `proto-fields.json` and the typed proto did not move:
+    they derive from `api-schema.json`, so the append lands when T26 dumps the snapshot and
+    re-runs the generator.
 
 ### T4 — The decoder and the raw-twin rule
 
@@ -122,7 +140,7 @@ updated: 2026-11-03
   scripts/syntax-check.py core/Core/DataModel/Frame.cpp` (the header's first includer);
   `python scripts/layer-verify.py`.
 - **Deps:** T1
-- [ ] done
+- [x] done
 
 ### T5 — ctest `tst_value_decoder` (AC1)
 
@@ -138,7 +156,10 @@ updated: 2026-11-03
   tst_value_decoder`.
 - **Executor:** yes, donor named.
 - **Deps:** T4
-- [ ] done
+- [x] done
+  - The worktree database has no `app/tests` entries, so `syntax-check.py` SKIPs; checked instead
+    with `PropertyValidators.cpp`'s entry plus the QtTest headers and an empty `.moc` stub: clean.
+    Doubles compare bit for bit (`std::bit_cast`), not through the fuzzy QCOMPARE. Not run.
 
 ### T6 — The decoder in `FrameBuilder`'s three value tails
 
@@ -158,7 +179,7 @@ updated: 2026-11-03
   three tails against the invariants above; after the rebuild, `pytest
   tests/integration/test_frame_parsing.py` unchanged and T22's AC2 case green.
 - **Deps:** T4
-- [ ] done
+- [x] done
 
 ### T7 — The decoder on the stream lane
 
@@ -170,7 +191,10 @@ updated: 2026-11-03
   scripts/code-verify.py --check`; after the rebuild, the stream phase of
   `--benchmark-hotpath` runs (maintainer).
 - **Deps:** T4
-- [ ] done
+- [x] done
+  (Main session 2026-11-03: `StreamChannelConfig` carries no dataset, so the decoder rides as
+  `DataModel::ValueDecoderSpec` in `core/Core/IO/StreamConfig.h`, copied in `StreamConfigBuilder.cpp`;
+  expression channels decode their input too, and a timed-out transform falls back to decoded samples.)
 
 ### T8 — The decoded benchmark row (AC6)
 
@@ -183,7 +207,9 @@ updated: 2026-11-03
   `python scripts/code-verify.py --check`; the maintainer runs `--benchmark-hotpath` and the
   row's number is recorded in `spec.md` under AC6.
 - **Deps:** T6
-- [ ] done
+- [x] done
+  (Main session 2026-11-03: the row prints on its own line after the gated report, so `HotpathReport` and
+  `kReportCount` stay untouched; the maintainer's run records the number under AC6.)
 
 ### T9 — `DataModel::ValueFormat`, the one presentation formatter
 
@@ -201,7 +227,13 @@ updated: 2026-11-03
 - **Verify:** `python scripts/syntax-check.py core/Core/DataModel/ValueFormat.cpp`; `python
   scripts/code-verify.py --check`; `python scripts/layer-verify.py`.
 - **Deps:** T1
-- [ ] done
+- [x] done
+  - Kept for the spec's "every existing project behaves exactly as today": every dataset stores
+    `displayFormat` "0d" by default, so `formatValue` (grid, captions, extension rows) honours
+    the label, then `decimalPoints`, then Hexadecimal/Binary, then the automatic format over the
+    plot range, exactly today's grid; the decimal Label Format choices keep reaching ticks only,
+    through `formatNumber` (the JS tick semantics, Auto over the widget range). `autoNumber` is
+    FMT_VAL's range algorithm, moved here (Core cannot reach `DSP::isZero`).
 
 ### T10 — ctest `tst_value_format`
 
@@ -215,7 +247,9 @@ updated: 2026-11-03
   scripts/code-verify.py --check`; after the build, `ctest -R tst_value_format`.
 - **Executor:** yes, donor named.
 - **Deps:** T9
-- [ ] done
+- [x] done
+  - Checked like T5 (donor entry, QtTest headers, `.moc` stub): clean; not run. The `QString::number`
+    expectations (`'e'`, `'f'`, rounding) were confirmed against real Qt through PySide6's C locale.
 
 ### T11 — Dashboard helpers and the Data Grid
 
@@ -229,7 +263,10 @@ updated: 2026-11-03
 - **Verify:** `python scripts/syntax-check.py` on both `.cpp`; `python scripts/code-verify.py
   --check` on the three; read-back that no other caller of `FMT_VAL` changed meaning.
 - **Deps:** T9
-- [ ] done
+- [x] done
+  - `FMT_VAL` delegates to `ValueFormat::autoNumber` (its own algorithm, moved), not to
+    `formatNumber`, so no caller changed meaning. The two `Q_INVOKABLE`s are inline in
+    `Dashboard.h` so `Dashboard.cpp` (already past 1500 lines) does not grow.
 
 ### T12 — Extension rows, bar panel, LED panel
 
@@ -245,7 +282,11 @@ updated: 2026-11-03
   scripts/code-verify.py --check` on all four.
 - **Executor:** yes, donor T11.
 - **Deps:** T11
-- [ ] done
+- [x] done
+  - The bar panel keeps its span-driven decimals and takes only the label; the LED shows the
+    value label in the existing right-hand status slot (band label otherwise), because `titles`
+    is a CONSTANT property and the title would jump. `FMT_VAL(val, dataset)` had no caller left
+    and is gone.
 
 ### T13 — Alarm messages, the `label` runtime field, the plot tooltip
 
@@ -261,7 +302,13 @@ updated: 2026-11-03
 - **Verify:** `python scripts/syntax-check.py` on the two `.cpp`; `python
   scripts/code-verify.py --check` on all three (QML rules included).
 - **Deps:** T11
-- [ ] done
+- [x] done
+  (Main session 2026-11-03: the plot had no dataset id to look a label up by, so `Widgets::Plot` gains a
+  `datasetUniqueId` CONSTANT property, `PlotWidget.qml` a `labelUniqueId` and `Plot.qml` binds it; the
+  alarm message quotes the label (units dropped) and otherwise the full number, as before.)
+  (Main-session review, 2026-11-03: a catch-all-only table also labels; `apply_block_sample` sets the
+  `label` runtime field so the TCP API frame carries it (R9); Label Format is enabled for every
+  dataset so Hexadecimal and Binary reach Data Grid values from the editor (R1), manual updated.)
 
 ### T14 — `displayText` on the analog widget models
 
@@ -275,7 +322,11 @@ updated: 2026-11-03
   scripts/code-verify.py --check` on all six.
 - **Executor:** yes, donor the first model done.
 - **Deps:** T9
-- [ ] done
+- [x] done
+  - `displayText` is a caption override (`ValueFormat::captionText`, added to T9's file with a
+    `tst_value_format` case): the label, or the Hexadecimal/Binary text, else empty so the QML
+    keeps its padded widget-range caption exactly as today. Gauge and Meter inherit it from
+    `Bar::applySample`, so `Gauge.h/.cpp` needed no edit.
 
 ### T15 — QML captions and ticks
 
@@ -290,7 +341,13 @@ updated: 2026-11-03
   check on a gauge with `hex` and a labelled bar.
 - **Executor:** yes.
 - **Deps:** T11, T14
-- [ ] done
+- [x] done
+  - `VisualRange.qml` does not exist in the tree. `formatValue` in `ValueFormat.js` is now one call to
+    `Cpp_UI_Dashboard.formatNumber(val, model.uniqueId)`, so the `Bar` model gained a CONSTANT
+    `uniqueId` (set in the `Bar`, `Gauge` and `Meter` constructors). Captions take `displayText`
+    inside the shared padded-text helpers (and Compass's own), so no QML layout changed.
+    Compass keeps its 0..360 decimal caption, since its `displayFormat` defaults to "0d" too.
+    qmllint was run standalone without import paths: no new findings beyond the existing noise.
 
 ### T16 — The notation entries in the editor's duplicate list
 
@@ -301,7 +358,11 @@ updated: 2026-11-03
 - **Verify:** `python scripts/syntax-check.py` on both; `python scripts/code-verify.py
   --check`; a read-back that the two lists and the manifest agree in order.
 - **Deps:** T3
-- [ ] done
+- [x] done
+  - `m_displayFormats` is a QMap used only for its `size()` by the two guards
+    (`EditorCommit.cpp:1019`, `EditorMultiSelect.cpp:406`), so the guards widen by themselves and
+    `EditorCommit.cpp` is untouched; key order is meaningless there. `ProjectEditor.cpp` is now
+    1502 lines (a `cxx-tu-too-long` advisory).
 
 ### T17 — The labels dialog
 
@@ -317,7 +378,13 @@ updated: 2026-11-03
   dialog, adds two rows and the catch-all, applies, and sees the rows persist on reopen.
 - **Executor:** yes, donors named.
 - **Deps:** T3
-- [ ] done
+- [x] done
+  - `EditorForms.cpp` is at 1487 lines, so the open path follows the channel-sounds precedent:
+    `EditorCommit::valueLabelRows()` builds the rows and two inline `ProjectEditor.h` slots
+    (`openValueLabelsEditorForSelection`, `commitValueLabels`) emit and forward. The signal
+    and the commit carry the dataset's `uniqueId` (the spec 0099 retarget rule the alarm-band
+    and marker dialogs follow). The dialog is registered in `app/CMakeLists.txt`; the ribbon
+    button and every new control carry an `objectName`.
 
 ### T18 — `commitValueLabels`
 
@@ -331,7 +398,10 @@ updated: 2026-11-03
   `python scripts/code-verify.py --check` (the `undo-scope-missing` rule); the maintainer's
   undo after an Apply restores the previous table.
 - **Deps:** T17
-- [ ] done
+- [x] done
+  - The rows pass through `readDatasetLabels` (one rule for files, editor and API). No separate
+    `setNextUndoHint`: `updateDataset` opens its own "Edit Dataset" `ProjectUndoScope` and its
+    `setModified(true)` commits it, exactly as the `commitFrequencyMarkers` donor relies on.
 
 ### T19 — API verbs, gRPC label, the pro-content unit
 
@@ -348,7 +418,15 @@ updated: 2026-11-03
   --check`; the registry sweeps `tst_command_capability_registry`, `tst_sealed_policy_registry`
   and `tst_command_safety_table` pass after the build.
 - **Deps:** T3
-- [ ] done
+- [x] done
+  - Both verbs are classified plain (`CommandCapabilities.cpp`), allowed (`SealedPolicy.cpp`)
+    and Safe / Confirm (`command_safety.json`, `CommandSafetyTable.cpp` regenerated), beside the
+    alarm-band verbs. `setLabels` refuses a non-integer value, then reads the rows through
+    `readDatasetLabels`. The handler file joined `_REGISTRY_KEY_ALLOWED` in `code-verify.py`
+    (it is the sub-entity verbs file; adding `Labels` tripped the four-key cluster rule).
+    gRPC computes the label with `ValueFormat::labelFor`, because its frames come from block
+    templates, never the dashboard copy. `ConversionUtils.cpp` is `ENABLE_GRPC`-only and has no
+    compile entry: syntax-check SKIP, unverified.
 
 ### T20 — DBC importer: labels instead of the Lua chunk (AC4)
 
@@ -364,7 +442,13 @@ updated: 2026-11-03
 - **Verify:** `python scripts/syntax-check.py core/Pipeline/DataModel/Importers/DBCImporter.cpp`;
   `python scripts/code-verify.py --check`; `pytest tests/scripts/test_cpp_regressions.py -v`.
 - **Deps:** T3
-- [ ] done
+- [x] done
+  - The pytest tier cannot run C++, so R23 pins the source shape instead (labels from
+    `valueLabelsFor`, the shared table read, no early return before `dataset.plt =`) plus
+    the example's CurrentGear against the DBC's VAL_ line. Green; the one failure in the
+    file (`test_macos_native_window_validates_qwindow_before_winid`) touches nothing here.
+    The unlisted-value text "Unknown (n)" is gone: an unlisted value now shows its number. A
+    fresh import also gives CurrentGear the policy of any 0..255 signal (a gauge).
 
 ### T21 — The CAN Bus example and its baseline (AC7)
 
@@ -377,7 +461,10 @@ updated: 2026-11-03
 - **Verify:** `pytest tests/integration/test_property_registry.py -v` green with the app
   up; the maintainer opens the example and sees "Reverse" in the grid and the gear curve.
 - **Deps:** T3, T20
-- [ ] done
+- [x] done
+  - Project edit only (labels, plain table read, `graph` true; the widget stays none). The
+    baseline recapture needs a running app: maintainer step, `SS_CAPTURE_BASELINES=1 pytest
+    tests/integration/test_property_registry.py`, which replaces `ecu_simulator.f3a00921.json`.
 
 ### T22 — Integration tests (AC2, AC3, AC5)
 
@@ -394,7 +481,11 @@ updated: 2026-11-03
   black.
 - **Executor:** yes, donor named.
 - **Deps:** T6, T13, T19
-- [ ] done
+- [x] done
+  - Collected and black-clean; not run (no app up). No API exposes the pro-content summary, so
+    AC5's half asserts the formats-only project connects (vacuous on a licensed build; the
+    `tst_pro_content` case carries it). `isNumeric` is never serialized, so the numeric check
+    reads `numericValue`. A fourth test pins `setLabels` refusing a non-integer value.
 
 ### T23 — The manual: editor and transforms pages
 
@@ -408,7 +499,10 @@ updated: 2026-11-03
   scripts/term-verify.py`.
 - **Executor:** yes, with the manifest as the fact source.
 - **Deps:** T3, T17
-- [ ] done
+- [x] done
+  - The Label Format row is enabled only for Bar, Gauge and Meter datasets (`enabledWhen
+    widgetRangeApplicable`, unchanged), so the page says so: in the editor Hexadecimal and
+    Binary are reachable only on those datasets; the API sets them on any.
 
 ### T24 — API reference, extension docs, assistant corpus
 
@@ -421,7 +515,8 @@ updated: 2026-11-03
   scripts/registry-verify.py` (the corpus field lint) clean.
 - **Executor:** yes.
 - **Deps:** T19
-- [ ] done
+- [x] done
+  - `app/rcc/ai/search_index.json` is rebuilt by `sanitize-commit.py`, not here.
 
 ### T25 — AI-facing architecture docs and the ledger
 
@@ -435,7 +530,10 @@ updated: 2026-11-03
 - **Verify:** `python scripts/claim-verify.py --no-report` on the three; `python
   scripts/documentation-verify.py`; `python scripts/ledger-verify.py --check`.
 - **Deps:** T6, T9, T16
-- [ ] done
+- [x] done
+  - A `Codified: not yet` row grows the open-row ratchet (`ledger-verify --check` fails, 51 to
+    52), so the row ships codified instead: R24 in `tests/scripts/test_cpp_regressions.py`
+    compares the QMap's keys with the manifest domain. claim-verify and ledger-verify clean.
 
 ### T26 — Maintainer: build, snapshot, benchmark, observations
 

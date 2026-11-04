@@ -60,6 +60,18 @@ static const PropertyHooks::StaticOptionEntry kDisplayFormatsEntries[] = {
   {"2d", "2 decimals"},
   {"3d", "3 decimals"},
   {"sci", "Scientific"},
+  {"hex", "Hexadecimal"},
+  {"bin", "Binary"},
+};
+
+/**
+ * @brief Entry table backing the valueFormats choice domain.
+ */
+static const PropertyHooks::IntOptionEntry kValueFormatsEntries[] = {
+  {0, "None"},
+  {1, "Fixed point"},
+  {2, "Bit field"},
+  {3, "Scale"},
 };
 
 /**
@@ -134,8 +146,20 @@ const PropertyHooks::ExtensibleMapOptions& Registry::datasetWidgetsOptions()
  */
 const PropertyHooks::StaticMapOptions& Registry::displayFormatsOptions()
 {
-  static const PropertyHooks::StaticMapOptions source(&kDisplayFormatsEntries[0], 6,
+  static const PropertyHooks::StaticMapOptions source(&kDisplayFormatsEntries[0], 8,
                                                       "ProjectEditor");
+  return source;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the shared option source for the valueFormats domain.
+ */
+const PropertyHooks::ParallelValueOptions& Registry::valueFormatsOptions()
+{
+  static const PropertyHooks::ParallelValueOptions source(&kValueFormatsEntries[0], 4,
+                                                          "ProjectEditor", 0);
   return source;
 }
 
@@ -358,6 +382,153 @@ void DataModel::ProjectEditor::addDatasetRangeRows(CustomModel* model, const Dat
   item_plt_max->setData(tr("Upper bound of the dataset value range; widgets and FFT fall back to "
                            "it when their own range is left unset"), ParameterDescription);
   model->appendRow(item_plt_max);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Appends the Value Format section rows to the dataset form model.
+ */
+void DataModel::ProjectEditor::addFormatSection(CustomModel* model, const Dataset& dataset)
+{
+  auto& registry = Core::services().iconRegistry;
+  auto* header = new QStandardItem();
+  header->setData(SectionHeader, WidgetType);
+  header->setData(tr("Value Format"), PlaceholderValue);
+  header->setData(registry.icon(QStringLiteral("editor"),
+                                QStringLiteral("data-conversion"), 16),
+                  ParameterIcon);
+  model->appendRow(header);
+
+  const auto val_format =
+    Registry::valueFormatsOptions().indexForValue(m_projectModelRef, dataset.format);
+  auto* item_format = new QStandardItem();
+  item_format->setEditable(true);
+  item_format->setData(true, Active);
+  item_format->setData(ComboBox, WidgetType);
+  item_format->setData(val_format, EditableValue);
+  item_format->setData(kDatasetView_Format, ParameterType);
+  item_format->setData(Registry::valueFormatsOptions().labels(m_projectModelRef), ComboBoxData);
+  item_format->setData(tr("Format"), ParameterName);
+  item_format->setData(tr("Decodes the raw value before any transform: fixed point, a bit field "
+                          "or a linear scale"), ParameterDescription);
+  model->appendRow(item_format);
+
+  if (PropertyHooks::formatHasWidth(dataset, m_projectModelRef)) {
+    auto* item_format_width = new QStandardItem();
+    item_format_width->setEditable(true);
+    item_format_width->setData(true, Active);
+    item_format_width->setData(IntField, WidgetType);
+    item_format_width->setData(dataset.formatWidth, EditableValue);
+    item_format_width->setData(kDatasetView_FormatWidth, ParameterType);
+    item_format_width->setData(16, PlaceholderValue);
+    item_format_width->setData(1, MinValue);
+    item_format_width->setData(64, MaxValue);
+    item_format_width->setData(tr("Integer Width (bits)"), ParameterName);
+    item_format_width->setData(tr("Width of the raw integer in bits (1-64); integers wider than "
+                                  "53 bits lose precision"), ParameterDescription);
+    model->appendRow(item_format_width);
+  }
+
+  if (PropertyHooks::formatHasWidth(dataset, m_projectModelRef)) {
+    auto* item_format_signed = new QStandardItem();
+    item_format_signed->setEditable(true);
+    item_format_signed->setData(true, Active);
+    item_format_signed->setData(CheckBox, WidgetType);
+    item_format_signed->setData(dataset.formatSigned, EditableValue);
+    item_format_signed->setData(kDatasetView_FormatSigned, ParameterType);
+    item_format_signed->setData(tr("Signed"), ParameterName);
+    item_format_signed->setData(tr("Read the raw integer as two's complement at the declared "
+                                   "width"), ParameterDescription);
+    model->appendRow(item_format_signed);
+  }
+
+  if (PropertyHooks::formatIsFixed(dataset, m_projectModelRef)) {
+    auto* item_format_fraction_bits = new QStandardItem();
+    item_format_fraction_bits->setEditable(true);
+    item_format_fraction_bits->setData(true, Active);
+    item_format_fraction_bits->setData(IntField, WidgetType);
+    item_format_fraction_bits->setData(dataset.formatFractionBits, EditableValue);
+    item_format_fraction_bits->setData(kDatasetView_FormatFractionBits, ParameterType);
+    item_format_fraction_bits->setData(0, PlaceholderValue);
+    item_format_fraction_bits->setData(0, MinValue);
+    item_format_fraction_bits->setData(63, MaxValue);
+    item_format_fraction_bits->setData(tr("Fraction Bits"), ParameterName);
+    item_format_fraction_bits->setData(tr("Fraction bits of the fixed-point value: the raw "
+                                          "integer is divided by 2^N (Q15 = 15)"),
+                                       ParameterDescription);
+    model->appendRow(item_format_fraction_bits);
+  }
+
+  buildFormatFieldRows(model, dataset);
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Appends the buildFormatFieldRows rows of the dataset form model.
+ */
+void DataModel::ProjectEditor::buildFormatFieldRows(CustomModel* model, const Dataset& dataset)
+{
+  if (PropertyHooks::formatIsBits(dataset, m_projectModelRef)) {
+    auto* item_format_bit_offset = new QStandardItem();
+    item_format_bit_offset->setEditable(true);
+    item_format_bit_offset->setData(true, Active);
+    item_format_bit_offset->setData(IntField, WidgetType);
+    item_format_bit_offset->setData(dataset.formatBitOffset, EditableValue);
+    item_format_bit_offset->setData(kDatasetView_FormatBitOffset, ParameterType);
+    item_format_bit_offset->setData(0, PlaceholderValue);
+    item_format_bit_offset->setData(0, MinValue);
+    item_format_bit_offset->setData(63, MaxValue);
+    item_format_bit_offset->setData(tr("Bit Offset"), ParameterName);
+    item_format_bit_offset->setData(tr("Position of the field's lowest bit, counted from the "
+                                       "least significant bit (0)"), ParameterDescription);
+    model->appendRow(item_format_bit_offset);
+  }
+
+  if (PropertyHooks::formatIsBits(dataset, m_projectModelRef)) {
+    auto* item_format_bit_width = new QStandardItem();
+    item_format_bit_width->setEditable(true);
+    item_format_bit_width->setData(true, Active);
+    item_format_bit_width->setData(IntField, WidgetType);
+    item_format_bit_width->setData(dataset.formatBitWidth, EditableValue);
+    item_format_bit_width->setData(kDatasetView_FormatBitWidth, ParameterType);
+    item_format_bit_width->setData(1, PlaceholderValue);
+    item_format_bit_width->setData(1, MinValue);
+    item_format_bit_width->setData(64, MaxValue);
+    item_format_bit_width->setData(tr("Bit Count"), ParameterName);
+    item_format_bit_width->setData(tr("Number of bits in the field (1 = a single flag bit)"),
+                                   ParameterDescription);
+    model->appendRow(item_format_bit_width);
+  }
+
+  if (PropertyHooks::formatIsScale(dataset, m_projectModelRef)) {
+    auto* item_format_scale = new QStandardItem();
+    item_format_scale->setEditable(true);
+    item_format_scale->setData(true, Active);
+    item_format_scale->setData(FloatField, WidgetType);
+    item_format_scale->setData(dataset.formatScale, EditableValue);
+    item_format_scale->setData(kDatasetView_FormatScale, ParameterType);
+    item_format_scale->setData(1, PlaceholderValue);
+    item_format_scale->setData(tr("Scale"), ParameterName);
+    item_format_scale->setData(tr("Multiplier of the linear decoder: value = raw * scale + offset"),
+                               ParameterDescription);
+    model->appendRow(item_format_scale);
+  }
+
+  if (PropertyHooks::formatIsScale(dataset, m_projectModelRef)) {
+    auto* item_format_offset = new QStandardItem();
+    item_format_offset->setEditable(true);
+    item_format_offset->setData(true, Active);
+    item_format_offset->setData(FloatField, WidgetType);
+    item_format_offset->setData(dataset.formatOffset, EditableValue);
+    item_format_offset->setData(kDatasetView_FormatOffset, ParameterType);
+    item_format_offset->setData(0, PlaceholderValue);
+    item_format_offset->setData(tr("Offset"), ParameterName);
+    item_format_offset->setData(tr("Added after the scale: value = raw * scale + offset"),
+                                ParameterDescription);
+    model->appendRow(item_format_offset);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -669,16 +840,17 @@ void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
   const auto val_display_format =
     Registry::displayFormatsOptions().indexForValue(m_projectModelRef, dataset.displayFormat);
   auto* item_display_format = new QStandardItem();
-  item_display_format->setEditable(rangeEnabled);
-  item_display_format->setData(rangeEnabled, Active);
+  item_display_format->setEditable(true);
+  item_display_format->setData(true, Active);
   item_display_format->setData(ComboBox, WidgetType);
   item_display_format->setData(val_display_format, EditableValue);
   item_display_format->setData(kDatasetView_DisplayFormat, ParameterType);
   item_display_format->setData(Registry::displayFormatsOptions().labels(m_projectModelRef),
                                ComboBoxData);
   item_display_format->setData(tr("Label Format"), ParameterName);
-  item_display_format->setData(tr("Decimal places or notation used on tick labels and the value "
-                                  "display"), ParameterDescription);
+  item_display_format->setData(tr("Decimal places on analog widget ticks and captions; "
+                                  "Hexadecimal and Binary apply wherever the value is shown as "
+                                  "text"), ParameterDescription);
   model->appendRow(item_display_format);
 
   auto* item_decimal_points = new QStandardItem();
@@ -893,6 +1065,9 @@ static bool applyDatasetChoiceEdit(int formId,
       d.displayFormat =
         Registry::displayFormatsOptions().valueForIndex(pm, value.toInt()).toString();
       return true;
+    case kDatasetView_Format:
+      d.format = Registry::valueFormatsOptions().valueForIndex(pm, value.toInt()).toInt();
+      return true;
     default:
       return false;
   }
@@ -945,6 +1120,24 @@ static bool applyDatasetNumberEdit(int formId, const QVariant& value, DataModel:
     case kDatasetView_LED_High:
       d.ledHigh = SerialStudio::toDouble(value);
       return true;
+    case kDatasetView_FormatWidth:
+      d.formatWidth = qBound(1, value.toInt(), 64);
+      return true;
+    case kDatasetView_FormatFractionBits:
+      d.formatFractionBits = qBound(0, value.toInt(), 63);
+      return true;
+    case kDatasetView_FormatBitOffset:
+      d.formatBitOffset = qBound(0, value.toInt(), 63);
+      return true;
+    case kDatasetView_FormatBitWidth:
+      d.formatBitWidth = qBound(1, value.toInt(), 64);
+      return true;
+    case kDatasetView_FormatScale:
+      d.formatScale = SerialStudio::toDouble(value);
+      return true;
+    case kDatasetView_FormatOffset:
+      d.formatOffset = SerialStudio::toDouble(value);
+      return true;
     default:
       return false;
   }
@@ -994,6 +1187,9 @@ static bool applyDatasetFlagEdit(int formId, const QVariant& value, DataModel::D
     case kDatasetView_LED:
       d.led = value.toBool();
       return true;
+    case kDatasetView_FormatSigned:
+      d.formatSigned = value.toBool();
+      return true;
     default:
       return false;
   }
@@ -1024,6 +1220,8 @@ static RebuildHint datasetCommitHook(int formId, DataModel::Dataset& d)
     case kDatasetView_ExtremeHold:
       return PropertyHooks::onReshape(d);
     case kDatasetView_LED:
+      return PropertyHooks::onReshape(d);
+    case kDatasetView_Format:
       return PropertyHooks::onReshape(d);
     default:
       return RebuildHint::None;
@@ -1063,6 +1261,20 @@ static bool datasetRowVisible(int formId,
   switch (formId) {
     case kDatasetView_HideOnDashboard:
       return PropertyHooks::insidePainterGroup(d, pm);
+    case kDatasetView_FormatWidth:
+      return PropertyHooks::formatHasWidth(d, pm);
+    case kDatasetView_FormatSigned:
+      return PropertyHooks::formatHasWidth(d, pm);
+    case kDatasetView_FormatFractionBits:
+      return PropertyHooks::formatIsFixed(d, pm);
+    case kDatasetView_FormatBitOffset:
+      return PropertyHooks::formatIsBits(d, pm);
+    case kDatasetView_FormatBitWidth:
+      return PropertyHooks::formatIsBits(d, pm);
+    case kDatasetView_FormatScale:
+      return PropertyHooks::formatIsScale(d, pm);
+    case kDatasetView_FormatOffset:
+      return PropertyHooks::formatIsScale(d, pm);
     case kDatasetView_WaterfallYAxis:
       return PropertyHooks::waterfallEnabled(d, pm);
     case kDatasetView_SuppressAlarms:
@@ -1110,6 +1322,22 @@ QVariant Registry::datasetFormValue(int formId,
       return d.pltMin;
     case kDatasetView_PltMax:
       return d.pltMax;
+    case kDatasetView_Format:
+      return Registry::valueFormatsOptions().indexForValue(pm, d.format);
+    case kDatasetView_FormatWidth:
+      return d.formatWidth;
+    case kDatasetView_FormatSigned:
+      return d.formatSigned;
+    case kDatasetView_FormatFractionBits:
+      return d.formatFractionBits;
+    case kDatasetView_FormatBitOffset:
+      return d.formatBitOffset;
+    case kDatasetView_FormatBitWidth:
+      return d.formatBitWidth;
+    case kDatasetView_FormatScale:
+      return d.formatScale;
+    case kDatasetView_FormatOffset:
+      return d.formatOffset;
     case kDatasetView_Plot:
       return Registry::plotOptions().indexForPair(d.plt, d.log);
     case kDatasetView_xAxis:

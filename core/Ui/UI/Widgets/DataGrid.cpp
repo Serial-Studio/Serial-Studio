@@ -293,21 +293,10 @@ void Widgets::DataGrid::rebuildRows()
 }
 
 /**
- * @brief Formats a dataset value for display; returns empty when no sample has arrived.
+ * @brief Formats a dataset value for display through the one presentation formatter: its label
+ *        when one matches, else the number with its units; empty when no sample has arrived.
  */
 QString Widgets::DataGrid::formatValue(const DataModel::Dataset& dataset) const
 {
-  if (dataset.value.isEmpty())
-    return QString();
-
-  if (!dataset.isNumeric)
-    return dataset.value;
-
-  QString value = (dataset.decimalPoints < 0)
-                  ? FMT_VAL(dataset.numericValue, dataset)
-                  : QString::number(dataset.numericValue, 'f', dataset.decimalPoints);
-  if (!dataset.units.isEmpty())
-    value += QStringLiteral(" ") + dataset.units;
-
-  return value;
+  return DataModel::ValueFormat::formatValue(dataset);
 }

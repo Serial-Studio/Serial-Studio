@@ -297,6 +297,17 @@ Datasets map to individual data fields in your device's output.
 - **Widget.** Per-dataset visualization: Bar, Gauge, Compass, Meter, or None. All four render on the dashboard as a two-page swipe view — page 0 is the analog visualization and page 1 is a large monospace digital readout. The active page is saved per widget in the project file.
 - **Minimum Value / Maximum Value.** The dataset's base value range. Both default to 0. Widgets and FFT fall back to this range when their own min/max is left unset.
 
+**Value Format**
+
+- **Format.** Decodes the parsed value before the transform runs: **None** (the default), **Fixed point**, **Bit field**, or **Scale**. The transform, plots, alarms, and exports all receive the decoded number; a text value is left as received. On a computed dataset, whose transform is its only source, the format applies to the transform's result instead.
+- **Integer Width (bits).** Fixed point and Bit field only. Width of the raw integer, 1 to 64 (default 16): the value is rounded to an integer and cut to this many bits. Integers wider than 53 bits lose precision, because the value travels as a double.
+- **Signed.** Fixed point and Bit field only. Reads the raw integer as two's complement at the declared width.
+- **Fraction Bits.** Fixed point only. The decoded value is the raw integer divided by 2^N, for N from 0 up to one less than the Integer Width. A Q15 sample is width 16, Signed, 15 fraction bits: the raw word 16384 (0x4000) reads 0.5 and 32768 (0x8000) reads -1.
+- **Bit Offset / Bit Count.** Bit field only. Cuts **Bit Count** bits starting at **Bit Offset** (0 is the least significant bit) out of the raw integer; the field is never sign-extended. Bit 3 of a status word is offset 3, count 1, which reads 0 or 1 and suits an LED. Several datasets can share one Frame Index and cut different fields of the same word.
+- **Scale / Offset.** Scale only. The decoded value is `raw * Scale + Offset` (defaults 1 and 0), with no integer reinterpretation.
+
+Formats and labels (below) are not Pro content: a project that uses them without a transform connects with no license.
+
 **Plot Settings**
 
 - **Enable Plot Widget.** Yes/No selector (not a checkbox); **Yes** plots this dataset as a time series.
@@ -323,8 +334,13 @@ Datasets map to individual data fields in your device's output.
 
 - **Alarm Bands** (dataset toolbar, next to **Transform**). Opens a dialog to define colored value ranges with severity tiers for Bar, Gauge, Meter, and LED datasets and for any dataset in a Bar Panel group. The button is disabled for every other dataset, and for a dataset with **Hide on Dashboard** on outside a Bar Panel, because bands there are ignored (see [Alarm bands](Widget-Reference.md#alarm-bands)). With several datasets selected, the button applies one set of bands to the selected datasets that qualify and leaves the rest unchanged. Each band has a min/max range, a severity (Info / OK / Warning / Critical), an optional color override and label, and a blink toggle for LED panels. Opening the dialog for an LED dataset with no bands pre-fills one band from the **LED On Threshold** so existing setups migrate in place. To keep a dataset's bands on screen without alerting, turn on **Suppress Alarms** under **Widget Settings**.
 
+**Labels**
+
+- **Labels** (dataset toolbar, next to **Transform**). Opens a two-column table of integer values and the text shown for each, plus an **Any other** row whose text stands in for every unlisted value (left empty, an unlisted value shows its number). The value is rounded to the nearest integer before the lookup. On **Apply**, a row with empty text or a value already listed is dropped. Wherever the value appears as text, the label replaces it: the Data Grid, the Bar, Gauge, Meter, and Compass caption, the Bar Panel caption, the LED Panel status text, the plot tooltip, alarm notifications, and widget extensions. Everything that reads the number keeps it: plot curves, needles and fills, alarm bands, FFT, exports, and the Historian.
+
 **Widget Settings**
 
+- **Label Format.** Editable for every dataset. Notation of a Bar, Gauge, or Meter scale and value box: Auto, Integer (0 decimals), 1 to 3 decimals, Scientific, Hexadecimal, or Binary. Hexadecimal and Binary also replace the number in the widget caption, the Data Grid, and widget extensions: a `0x` or `0b` prefix and upper-case hex digits, two's complement zero-padded to the Integer Width when a Fixed point or Bit field format declares one, minimal digits with a minus sign otherwise. A non-integer value is rounded first, and **Decimal Points**, when set, overrides the Label Format.
 - **Minimum Value (optional) / Maximum Value (optional).** Range for Bar, Gauge, and Meter displays; falls back to the General section's Minimum Value / Maximum Value when left unset.
 - **Suppress Alarms.** Shown while the dataset has alarm bands that a widget draws. Keeps the bands on the widget but stops the dataset's band notifications, alarm points, and sounds. With several datasets selected, the row follows the first one, and a change applies to every selected dataset.
 - **Alarms only while visible.** Shown under the same condition, beside Suppress Alarms. The dataset's bands notify, raise alarm points, and sound only while a widget showing it is on screen: the active tab of a dashboard window that is not minimized, the widget neither minimized nor closed, or an open pop-out. Revealing it while the value sits in a band counts as entering the band; hiding it removes the point. Suppress Alarms wins when both are on. Multi-selection behaves as for Suppress Alarms.

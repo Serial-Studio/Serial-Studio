@@ -1016,6 +1016,7 @@ void EditorForms::buildDatasetModel(const DataModel::Dataset& dataset)
   m_editor.m_datasetModel    = new CustomModel(&m_editor);
 
   m_editor.addGeneralSection(m_editor.m_datasetModel, dataset);
+  m_editor.addFormatSection(m_editor.m_datasetModel, dataset);
   m_editor.addPlotSection(m_editor.m_datasetModel, dataset);
   m_editor.addFFTSection(m_editor.m_datasetModel, dataset);
   m_editor.addWidgetSection(m_editor.m_datasetModel, dataset);

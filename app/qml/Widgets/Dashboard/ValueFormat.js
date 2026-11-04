@@ -26,31 +26,15 @@
 //
 
 //
-// Formats a value. A dataset decimalPoints >= 0 wins (fixed places); otherwise the
-// displayFormat is honored ("auto", "0d".."3d", "sci", printf-style "%.Nf" / "%.Ne"),
-// and anything else falls back to the dashboard's range-driven formatter.
+// Formats a value through the one C++ formatter (DataModel::ValueFormat::formatNumber, spec
+// 0108): decimalPoints >= 0 wins, then the Label Format ("auto", "0d".."3d", "sci",
+// Hexadecimal, Binary, printf-style "%.Nf" / "%.Ne").
 //
 function formatValue(model, val) {
   if (!isFinite(val))
     return "—"
 
-  if (model.decimalPoints >= 0)
-    return val.toFixed(Math.min(12, Math.floor(model.decimalPoints)))
-
-  const fmt = model.displayFormat
-  if (!fmt || fmt === "" || fmt === "auto")
-    return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
-
-  if (fmt === "0d") return Math.round(val).toString()
-  if (fmt === "1d") return val.toFixed(1)
-  if (fmt === "2d") return val.toFixed(2)
-  if (fmt === "3d") return val.toFixed(3)
-  if (fmt === "sci") return val.toExponential(2)
-  const fm = fmt.match(/^%[\d\.]*\.(\d+)f$/)
-  if (fm) return val.toFixed(Math.min(12, parseInt(fm[1], 10)))
-  const fe = fmt.match(/^%[\d\.]*\.(\d+)e$/)
-  if (fe) return val.toExponential(Math.min(12, parseInt(fe[1], 10)))
-  return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
+  return Cpp_UI_Dashboard.formatNumber(val, model.uniqueId)
 }
 
 //
@@ -97,11 +81,15 @@ function referenceWidth(min, max) {
 }
 
 //
-// Left-padded for stable digital-box width (matches VisualRange). A dataset decimalPoints
-// >= 0 forces fixed places; otherwise precision is range-driven. One formatValue round-trip
-// per sample: the two range ends come from the memo above.
+// Left-padded for stable digital-box width. The model's displayText (a value label or the
+// Hexadecimal / Binary notation) replaces the number outright. A dataset decimalPoints >= 0
+// forces fixed places; otherwise precision is range-driven. One formatValue round-trip per
+// sample: the two range ends come from the memo above.
 //
 function getPaddedText(model, val) {
+  if (model.displayText.length > 0)
+    return model.displayText
+
   if (model.decimalPoints >= 0)
     return getPaddedFormattedText(model, val)
 
@@ -113,9 +101,12 @@ function getPaddedText(model, val) {
 }
 
 //
-// Padded text honoring the dataset displayFormat.
+// Padded text honoring the dataset displayFormat; the model's displayText replaces it.
 //
 function getPaddedFormattedText(model, val) {
+  if (model.displayText.length > 0)
+    return model.displayText
+
   const a = formatValue(model, model.minValue)
   const b = formatValue(model, model.maxValue)
   const v = formatValue(model, val)

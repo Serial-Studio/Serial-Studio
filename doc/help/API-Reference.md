@@ -2105,7 +2105,7 @@ python test_api.py send project.dashboard.setWidgetFreezeTitle -p widgetType=9 -
 - Only affects freeze mode; normal-mode chrome and titles are unchanged
 
 #### 🟢 `dashboard.getData`
-Get the dashboard widget counts and the latest frame data.
+Get the dashboard widget counts and the latest frame data. A dataset whose current value matches one of its value labels carries `label` (the label text) beside `value` and `numericValue`, which keep the number.
 
 **Parameters:** None
 
@@ -2799,8 +2799,24 @@ Patch any subset of dataset fields by group id and dataset id. Changing `transfo
   holds until the value leaves it by more than this, and a step into a more severe band is never
   delayed (0 = none)
 - `displayTickCount` (int, optional, clamped to `>= 0`)
-- `displayFormat` (string, optional)
+- `displayFormat` (string, optional): `""` (auto), `"0d"` to `"3d"`, `"sci"`, `"hex"` or
+  `"bin"`. Hexadecimal and binary render the rounded value with a `0x` / `0b` prefix, two's
+  complement at `formatWidth` when a fixed-point or bit-field format declares one
 - `decimalPoints` (int, optional, clamped to `-1..15`)
+- `format` (int, optional): Value decoder applied before the transform: `0` none, `1` fixed
+  point, `2` bit field, `3` scale. Any other value is refused. On a computed dataset it decodes
+  the transform's result
+- `formatWidth` (int, optional, clamped to `1..64`), `formatSigned` (bool, optional): Raw
+  integer width and two's complement, for fixed point and bit field
+- `formatFractionBits` (int, optional, clamped to `0..63`): Fixed point divides the raw integer
+  by `2^N`; refused unless below `formatWidth`
+- `formatBitOffset` (int, optional, clamped to `0..63`), `formatBitWidth` (int, optional,
+  clamped to `1..64`): Bit field; refused when `formatBitOffset + formatBitWidth` exceeds
+  `formatWidth`
+- `formatScale`, `formatOffset` (number, optional): Scale computes `raw * formatScale +
+  formatOffset`
+- `labels` (array, optional), `labelsDefault` (string, optional): Value labels, as in
+  `project.dataset.setLabels`. Formats and labels are not Pro content
 - `log` (bool, optional)
 - `overviewDisplay` (bool, optional), `hideOnDashboard` (bool, optional)
 - `transformCode` (string, optional): Per-dataset value transform source
@@ -2977,6 +2993,51 @@ Compile and run a value-transform script against sample values, without touching
 }
 ```
 Returns an error response (not `ok:false`) if the script fails to compile or does not define `transform(value)`.
+
+#### 🟢 `project.dataset.getLabels`
+Get a dataset's value labels.
+
+**Parameters:**
+- `groupId` (int): Owning group id
+- `datasetId` (int): Dataset id within the group
+
+**Returns:**
+```json
+{
+  "groupId": 3,
+  "datasetId": 0,
+  "labels": [
+    {"value": 0, "text": "Park/Neutral"},
+    {"value": 255, "text": "Reverse"}
+  ],
+  "labelsDefault": "",
+  "count": 2
+}
+```
+`labels` is sorted by `value`. `labelsDefault` is the text shown for a value no row lists; empty shows the number.
+
+#### 🟢 `project.dataset.setLabels`
+Atomically replace a dataset's value labels.
+
+**Parameters:**
+- `groupId` (int): Owning group id
+- `datasetId` (int): Dataset id within the group
+- `labels` (array): Full replacement list. Each entry:
+  - `value` (int): The integer the rounded dataset value is matched against. A non-integer `value` fails the whole call with `INVALID_PARAM`
+  - `text` (string): Text shown in place of the number; entries with empty text are dropped
+- `labelsDefault` (string, optional): Catch-all text for unlisted values
+
+Entries with empty text and repeats of a value already listed (the first one wins) are dropped and counted in `droppedInvalid`. Wherever the value is shown as text, a matching label replaces it; plots, alarms, exports and every numeric field keep the number. Labels are not Pro content. Pass an empty array to clear all labels.
+
+**Returns:**
+```json
+{
+  "groupId": 3,
+  "datasetId": 0,
+  "count": 8,
+  "updated": true
+}
+```
 
 #### 🟢 `project.dataset.getAlarmBands`
 Get a dataset's coloured alarm bands.

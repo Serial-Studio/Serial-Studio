@@ -48,6 +48,7 @@ struct ExtensionRow {
   double maxValue     = 0;
   QString title;
   QString text;
+  QString label;
   QString value;
   QString units;
   QString displayFormat;
@@ -80,6 +81,7 @@ public:
     AlarmsDefinedRole,
     AlarmSeverityRole,
     WidgetsRole,
+    LabelRole,
   };
 
   explicit ExtensionRowsModel(QObject* parent = nullptr);
@@ -149,6 +151,9 @@ class ExtensionData : public QQuickItem {
   Q_PROPERTY(QString text
              READ text
              NOTIFY updated)
+  Q_PROPERTY(QString label
+             READ label
+             NOTIFY updated)
   Q_PROPERTY(QString title
              READ title
              NOTIFY updated)
@@ -198,6 +203,7 @@ public:
   [[nodiscard]] double minValue() const noexcept;
   [[nodiscard]] double maxValue() const noexcept;
   [[nodiscard]] const QString& text() const noexcept;
+  [[nodiscard]] const QString& label() const noexcept;
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
   [[nodiscard]] const QString& stringValue() const noexcept;

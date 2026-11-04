@@ -346,7 +346,12 @@ Item {
     if (root.plot.logY)
       return root.engineeringFormat(Math.pow(10, worldY), 0)
 
-    return worldY.toFixed(root.plot.yPrecision)
+    const text = worldY.toFixed(root.plot.yPrecision)
+    if (root.plot.labelUniqueId < 0)
+      return text
+
+    const label = Cpp_UI_Dashboard.labelFor(root.plot.labelUniqueId, worldY)
+    return label.length > 0 ? text + " (" + label + ")" : text
   }
 
   function displayDeltaX() {

@@ -44,6 +44,7 @@ Item {
   property alias yAxis: _axisY
   property real triggerLevel: 0
   property bool sweepMode: false
+  property int labelUniqueId: -1
   property alias zoom: _axisX.zoom
   property alias yLabel: _yLabel.text
   property bool triggerEditing: false

@@ -351,9 +351,12 @@ bool Widgets::BarPanel::refreshRow(int index, const DataModel::Dataset& dataset)
       severity = row.bands[static_cast<size_t>(band)].severity;
     }
 
-    text = QString::number(dataset.numericValue, 'f', row.decimals);
-    if (!dataset.units.isEmpty())
-      text += QChar(' ') + dataset.units;
+    text = DataModel::ValueFormat::labelFor(dataset, dataset.numericValue);
+    if (text.isEmpty()) {
+      text = QString::number(dataset.numericValue, 'f', row.decimals);
+      if (!dataset.units.isEmpty())
+        text += QChar(' ') + dataset.units;
+    }
   } else if (dataset.displaySampleMs > 0) {
     severity = row.bands.empty() ? -1 : 2;
     if (!dataset.value.isEmpty())

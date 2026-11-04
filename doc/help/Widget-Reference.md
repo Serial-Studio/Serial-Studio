@@ -323,7 +323,7 @@ Every dataset in a project file supports these visualization-related fields:
 | `widgetMin`        | double | 0       | Widget (bar/gauge/meter) minimum. C++ field `wgtMin`. |
 | `widgetMax`        | double | 0       | Widget (bar/gauge/meter) maximum. C++ field `wgtMax`. |
 | `displayTickCount` | int    | 5       | Major-tick count on the dial scale (0 = auto-fit to widget size). Editor label "Tick Count". |
-| `displayFormat`    | string | `"0d"`  | Decimal places or notation used on tick labels and the value display. Editor label "Label Format". |
+| `displayFormat`    | string | `"0d"`  | Decimal places on analog widget ticks and captions; Hexadecimal and Binary apply wherever the value is shown as text. Editor label "Label Format". |
 | `decimalPoints`    | int    | -1      | Fixed decimal places for the value display; overrides `displayFormat` (-1 = auto). Editor label "Decimal Points". |
 | `extremeHold`      | bool   | false   | Shows tick marks at the lowest and highest values observed since the last data reset. Editor label "Hold Min/Max Markers". |
 | `ledHigh`          | double | 80      | LED activation threshold (used only when `alarmBands` is empty). |

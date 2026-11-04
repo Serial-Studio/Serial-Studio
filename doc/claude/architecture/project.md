@@ -206,6 +206,21 @@ and row, validator, enablement predicate, and API field name plus typed schema.
   `EditorMultiSelect::datasetEditValues()` walks `kDatasetProperties` and asks the generated
   `Registry::datasetFormValue()` for each row's value; a row whose `visibleWhen` predicate is
   false yields an invalid `QVariant` and is skipped, exactly as the row builders omit it.
+- **Value formats and labels (spec 0108).** The eight `format*` properties are ordinary
+  registry rows; their ProjectModel-free validators sit in `core/Core/DataModel/PropertyValidators.cpp`
+  (linkable from the unit tier). The two cross-field ones (`formatFractionFitsWidth`,
+  `formatBitsFitWidth`) are listed in the generator's `DATASET_VALIDATORS`, which runs them ONCE
+  after every field of an API update applied, so field order inside one request never matters.
+  `labels` is the second hook-driven (`shape: map`) sub-entity after `transformParams`: the
+  generated reader, the API applier, the editor's `commitValueLabels` and
+  `project.dataset.setLabels` all go through `readDatasetLabels()` (integer keys, first row of a
+  key wins, sorted for the binary search). `label` is a runtime field written `whenNonEmpty`.
+  Turning a dataset into text is `DataModel::ValueFormat` (`core/Core/DataModel/ValueFormat.h`)
+  and nothing else: `formatValue` (Data Grid, extension rows), `captionText` (analog captions,
+  empty keeps the widget's own padded number), `formatNumber` (the tick labels, behind
+  `ValueFormat.js`) and `labelFor`. Every dataset stores `displayFormat` "0d" by default, so the
+  decimal Label Format choices reach only the analog widget's scale and value box;
+  a second formatter is how the grid once ignored `displayFormat` entirely.
 - **Undo is unchanged by the derivation.** `applyDatasetFormEdit()` only mutates the struct;
   `EditorCommit::commitDatasetFormEdit()` is the single choke point that calls
   `setNextUndoHint()` + `ProjectModel::updateDataset()`, taking the coalesce key and the
@@ -312,8 +327,9 @@ Summary-first projects. Every group is a
 DataGrid (DBC still detects GPS / accelerometer / gyroscope groups), analog datasets carry
 plot + bar/gauge/meter toggles disclosed on demand via the data grid's pop-out buttons,
 boolean signals are LEDs with an explicit `[0.5, 1]` Ok alarm band (no reliance on the
-runtime `ledHigh` synthesis), DBC `VAL_` value tables become Lua transforms returning the
-label text (only when factor = 1 / offset = 0), and `displayFormat` decimals derive from
+runtime `ledHigh` synthesis), DBC `VAL_` value tables become the dataset's `labels` (only
+when factor = 1 / offset = 0; spec 0108 retired the Lua label chunk, so the signal keeps the
+numeric table read and the widget/plot policy of any other), and `displayFormat` decimals derive from
 the scaling factor. Generated bar/gauge/meter datasets get the analog display policy
 (`ImporterCommon.h::applyAnalogDisplayPolicy`): integer-aligned tick counts (0-10 → 11
 ticks, 0-150 → 7) and integer labels once the range spans more than one unit. Both

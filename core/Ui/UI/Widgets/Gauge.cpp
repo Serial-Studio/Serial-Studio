@@ -36,6 +36,7 @@ Widgets::Gauge::Gauge(const int index, QQuickItem* parent) : Bar(index, parent, 
   if (VALIDATE_WIDGET(SerialStudio::DashboardGauge, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardGauge, m_index);
 
+    m_uniqueId         = dataset.uniqueId;
     m_title            = dataset.title;
     m_units            = dataset.units;
     m_displayFormat    = dataset.displayFormat;

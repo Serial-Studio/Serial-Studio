@@ -216,6 +216,20 @@ void Widgets::LEDPanel::refreshDisplayState(int index)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns one LED's status text: the dataset's value label when one matches (spec 0108),
+ *        else the active band's label. The band itself still follows the number.
+ */
+[[nodiscard]] static QString ledStatusText(const DataModel::Dataset& dataset,
+                                           const QString& bandLabel)
+{
+  if (!dataset.isNumeric)
+    return bandLabel;
+
+  auto label = DataModel::ValueFormat::labelFor(dataset, dataset.numericValue);
+  return label.isEmpty() ? bandLabel : label;
+}
+
+/**
  * @brief Updates the LED panel data from the Dashboard.
  */
 void Widgets::LEDPanel::updateData()
@@ -237,6 +251,13 @@ void Widgets::LEDPanel::updateData()
         led.activeBand = idx;
         refreshDisplayState(static_cast<int>(i));
         changed = true;
+      }
+
+      const QString bandLabel = idx >= 0 ? led.bands[static_cast<size_t>(idx)].label : QString();
+      auto status             = ledStatusText(group.datasets[i], bandLabel);
+      if (status != m_labels[static_cast<int>(i)]) {
+        m_labels[static_cast<int>(i)] = std::move(status);
+        changed                       = true;
       }
     }
 

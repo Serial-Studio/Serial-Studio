@@ -336,14 +336,17 @@ void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
 
   tracker.lastFireMs[band.severity] = now;
 
-  const QString unit = tracker.units.isEmpty() ? QString() : QStringLiteral(" ") + tracker.units;
+  const QString named = m_dashboard->labelFor(tracker.uniqueId, value);
+  const QString shown = named.isEmpty() ? QString::number(value) : named;
+  const QString unit =
+    (!named.isEmpty() || tracker.units.isEmpty()) ? QString() : QStringLiteral(" ") + tracker.units;
   const QString name = tracker.title.isEmpty() ? tr("Alarm") : tracker.title;
   const QString tier = band.severity >= 3 ? tr("critical") : tr("warning");
   const QString lbl  = band.label.isEmpty() ? tier : band.label;
 
   const QString subtitle =
     tr("Value %1%2 entered the %3 band (%4–%5).")
-      .arg(QString::number(value), unit, lbl, QString::number(band.min), QString::number(band.max));
+      .arg(shown, unit, lbl, QString::number(band.min), QString::number(band.max));
 
   const auto level = band.severity >= 3 ? DataModel::NotificationCenter::Critical
                                         : DataModel::NotificationCenter::Warning;

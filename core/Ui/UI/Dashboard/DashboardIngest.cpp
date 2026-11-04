@@ -26,6 +26,7 @@
 #include <limits>
 #include <utility>
 
+#include "Core/DataModel/ValueFormat.h"
 #include "Core/SSAssert.h"
 #include "UI/Dashboard/TimeRingSizing.h"
 
@@ -291,6 +292,9 @@ bool UI::DashboardIngest::applyBlockValues(const DataModel::DataBlock& block,
       ptr->isNumeric       = numeric;
       ptr->numericValue    = column.values[slot];
       ptr->displaySampleMs = receivedMs;
+      if (!ptr->labels.empty() || !ptr->labelsDefault.isEmpty()) [[unlikely]]
+        ptr->label =
+          numeric ? DataModel::ValueFormat::labelFor(*ptr, ptr->numericValue) : QString();
     }
 
     if (!column.hasText) {

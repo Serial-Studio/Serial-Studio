@@ -86,9 +86,13 @@ InstrumentBase {
              Cpp_UI_Dashboard.formatValue(360, 0, 360).length)
 
   //
-  // Left-padded for stable digital-box width (matches VisualRange), one round-trip per sample
+  // Left-padded for stable digital-box width, one round-trip per sample; the model's
+  // displayText (a value label or the Hexadecimal / Binary notation) replaces the number
   //
   function getPaddedText(val) {
+    if (root.model.displayText.length > 0)
+      return root.model.displayText
+
     if (root.model.decimalPoints >= 0) {
       const dp = root.model.decimalPoints
       const lo = (0).toFixed(dp)

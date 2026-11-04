@@ -41,6 +41,7 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   : QQuickItem(parent)
   , m_dashboard(UI::Dashboard::instance())
   , m_index(index)
+  , m_datasetUniqueId(-1)
   , m_dataW(0)
   , m_dataH(0)
   , m_xStepIndex(AutoScale::kNoStep)
@@ -62,8 +63,9 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
     const auto& yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
 
-    m_minY = qMin(yDataset.pltMin, yDataset.pltMax);
-    m_maxY = qMax(yDataset.pltMin, yDataset.pltMax);
+    m_datasetUniqueId = yDataset.uniqueId;
+    m_minY            = qMin(yDataset.pltMin, yDataset.pltMax);
+    m_maxY            = qMax(yDataset.pltMin, yDataset.pltMax);
 
     resolveXAxis(yDataset);
     m_logX = yDataset.pltLogX && !m_timeAxis;
@@ -224,6 +226,15 @@ SerialStudio::InterpolationMode Widgets::Plot::interpolationMode() const noexcep
 const QString& Widgets::Plot::yLabel() const noexcept
 {
   return m_yLabel;
+}
+
+/**
+ * @brief The plotted dataset's uniqueId (-1 when unresolved), so the cursor readout can quote the
+ *        dataset's value label (spec 0108 R4).
+ */
+int Widgets::Plot::datasetUniqueId() const noexcept
+{
+  return m_datasetUniqueId;
 }
 
 /**

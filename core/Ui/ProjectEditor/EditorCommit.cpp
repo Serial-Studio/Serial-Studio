@@ -1003,6 +1003,58 @@ void EditorCommit::commitFrequencyMarkers(int groupId, int datasetId, const QVar
 }
 
 /**
+ * @brief The selected dataset's value labels as ValueLabelsEditor rows (spec 0108).
+ */
+QVariantList EditorCommit::valueLabelRows() const
+{
+  const auto& labels = m_editor.m_selectedDataset.labels;
+
+  QVariantList rows;
+  rows.reserve(static_cast<qsizetype>(labels.size()));
+  for (const auto& label : labels) {
+    QVariantMap row;
+    row.insert(Keys::Value, label.value);
+    row.insert(Keys::LabelText, label.text);
+    rows.append(row);
+  }
+
+  return rows;
+}
+
+/**
+ * @brief Commits the ValueLabelsEditor result (spec 0108) into the dataset the dialog was opened
+ *        for, resolved by its uniqueId. The rows pass through the project reader's own rule
+ *        (integer keys, first row of a key wins, sorted), so the editor and a loaded file agree.
+ */
+void EditorCommit::commitValueLabels(int uniqueId,
+                                     const QVariantList& rows,
+                                     const QString& defaultText)
+{
+  const auto& selected = m_editor.m_selectedDataset;
+
+  DataModel::Dataset ds;
+  if (!resolveDialogDataset(uniqueId, selected.groupId, selected.datasetId, ds))
+    return;
+
+  const bool isSelected = ds.groupId == selected.groupId && ds.datasetId == selected.datasetId;
+  if (isSelected)
+    ds = selected;
+
+  QJsonObject payload;
+  payload.insert(Keys::Labels, QJsonArray::fromVariantList(rows));
+  DataModel::readDatasetLabels(ds, payload);
+  ds.labelsDefault = defaultText.simplified();
+
+  m_model.updateDataset(ds.groupId, ds.datasetId, ds, false);
+  if (isSelected) {
+    m_editor.m_selectedDataset = ds;
+    m_editor.m_forms.buildDatasetModel(ds);
+  } else {
+    m_model.setSelectedDataset(m_editor.m_selectedDataset);
+  }
+}
+
+/**
  * @brief Rejects a dataset form edit before it reaches the registry: an out-of-range combo index
  *        (which would otherwise fall back to the domain's first entry) or a duplicate alias.
  */
