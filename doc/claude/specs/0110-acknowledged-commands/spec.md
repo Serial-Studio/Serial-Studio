@@ -3,6 +3,7 @@ spec: 0110-acknowledged-commands
 title: Acknowledged Commands
 status: approved     # approved 2026-11-02: reply datasets, per-control integer token, no notification
 approved: 2026-11-02
+amended: 2026-11-03
 created: 2026-11-02
 author: Alex Spataru
 ---
@@ -12,6 +13,13 @@ author: Alex Spataru
 > **Phase 1 of 4 — the WHAT and the WHY.** No implementation detail; no file paths, no
 > class names, no signal wiring (that is `plan.md`). Gate: do not start `/ss-plan` until
 > a human marks this `approved`.
+
+> **Amended 2026-11-03 (maintainer, at plan approval).** R2: one token counter per reply-token
+> dataset instead of per control, because two controls answering on one reply line could hold
+> the same token and one reply would settle both. R6 and the non-goals: there is no transmit
+> error log; a refusal goes through the control's transmit-error indicator and stays on the
+> control until the next send. Two spec 0080 defects found while planning are folded in as R10
+> and R11 with AC7 and AC8, and R9 and the last goal exempt them. Each is marked inline.
 
 ## Problem / Motivation
 
@@ -39,7 +47,8 @@ refused.
   an example that does.
 - A late or stale reply never acknowledges a newer command.
 - A remote client can learn the outcome of a command it caused.
-- Controls without a reply configured behave exactly as today, spec 0080 included.
+- Controls without a reply configured behave exactly as today, spec 0080 included, except where
+  R10 and R11 repair what spec 0080 promised and did not deliver.
 
 ## Non-Goals
 
@@ -49,8 +58,8 @@ refused.
   the reported state means the equipment is there. A control may use both.
 - No change to the transmit function's contract beyond making a correlation token available.
 - No acknowledgement for raw sends from the console or the API's raw write.
-- No notification on refusal. The control and the transmit error log carry it; the annunciator
-  is for alarms.
+- No notification on refusal. The control and its transmit-error indicator carry it; the
+  annunciator is for alarms. *(Amended 2026-11-03: there is no transmit error log.)*
 - No device-side library of its own. The firmware library of spec 0111 is the reference client
   for the reply convention; this spec defines the convention and the app side.
 
@@ -61,8 +70,12 @@ refused.
    correlation token and a result code, and optionally a message. The Project Editor offers the
    project's datasets for each role rather than free-typed identifiers.
 2. **R2 — Correlation.** Every send carries a token the transmit function can include in the
-   payload: a small integer per control that increments on every send and resets on connect. A reply counts only when its token matches the control's most recent send; a reply
-   carrying an older token is ignored.
+   payload: a small integer that increments on every send and resets on connect. The count is
+   kept per reply-token dataset, so controls that share one reply line draw from one counter and
+   never hold the same token at once; controls without a reply source share a counter of their
+   own. A reply counts only when its token matches the control's most recent send; a reply
+   carrying an older token is ignored. *(Amended 2026-11-03: a per-control counter let one reply
+   settle two controls that answered on the same line.)*
 3. **R3 — Outcomes.** Within the control's timeout, a reply with a zero result code shows the
    command as acknowledged; a non-zero code shows it as refused and displays the message, or
    the code when there is none; no matching reply shows it as unanswered. The three states are
@@ -72,16 +85,24 @@ refused.
    source and a state source shows acknowledged until the state source confirms.
 5. **R5 — Timeout.** The timeout is per control and reuses the outstanding window of spec 0080,
    so one number governs both.
-6. **R6 — Where refusals go.** A refusal is also recorded where transmit errors are shown, so an
-   operator who looked away still finds it, and it is observable over the API as the control's
-   last outcome.
+6. **R6 — Where refusals go.** A refusal is also reported through the control's transmit-error
+   indicator, and the control keeps showing it until the next send, so an operator who looked
+   away still finds it; it is observable over the API as the control's last outcome.
+   *(Amended 2026-11-03: the transmit-error indicator lasts four seconds and no log exists, so
+   the persistence lives on the control.)*
 7. **R7 — Remote outcome.** A client that drives a control through the API or the driving
    surface can read that control's outcome for the send it caused, including the message.
 8. **R8 — Convention and example.** The manual documents one reply convention for text frames,
    and a UART example sketch is included with it: the sketch echoes the token and answers with a code
    and a short reason for an out-of-range request.
-9. **R9 — Compatibility.** A control with no reply source behaves exactly as before this spec; a
-   project saved without the properties loads unchanged.
+9. **R9 — Compatibility.** A control with no reply source behaves exactly as before this spec,
+   apart from R10 and R11; a project saved without the properties loads unchanged.
+10. **R10 — The waiting state ends on time.** A control's outstanding window (spec 0080) ends
+    when its time is up even if the device has gone silent; today it ends only when a frame
+    arrives, so a silent device leaves the control waiting forever. *(Added 2026-11-03.)*
+11. **R11 — Confirmation ends the wait.** The outstanding window ends early when the state source
+    reports the state that was requested, as spec 0080 R12 required and the implementation never
+    did. *(Added 2026-11-03.)*
 
 ## Acceptance Criteria
 
@@ -100,6 +121,10 @@ refused.
   control.
 - [ ] **AC6** — The hotpath gate (`--benchmark-hotpath`) reports no regression; reply datasets
   are ordinary datasets on the acquisition pipeline.
+- [ ] **AC7** — An integration test acts on a state-bound control, stops the device sending
+  entirely, and reads the control no longer waiting within the window plus one second.
+- [ ] **AC8** — A unit test opens the window, reports the requested state, and confirms the
+  control stops waiting before the window ends; a report of any other state leaves it waiting.
 
 ## Constraints & Invariants
 
