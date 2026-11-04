@@ -1,0 +1,1 @@
+#ss1{"title":"TinyGPS","groups":[{"title":"GPS Map","widget":"gps","datasets":[{"title":"Latitude","units":"°","widget":"lat"},{"title":"Longitude","units":"°","widget":"lon"},{"title":"Altitude","units":"m","widget":"alt"}]}]}

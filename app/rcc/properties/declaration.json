@@ -1,0 +1,70 @@
+{
+  "spec": "0111",
+  "notes": [
+    "The device-declaration envelope (spec 0111). Dataset keys come from dataset.json's wire entries; this file names the frame, group, source and control keys, which are the project file's own keys spelled as Keys:: constant names. It defines no new property.",
+    "scripts/generate-property-registry.py turns this file and dataset.json into DeclarationVocabulary.h and the three firmware vocabularies; scripts/registry-verify.py checks every name resolves.",
+    "Never on the wire: code (painter, transforms, parser scripts, transmit functions), file paths, URLs and connection settings."
+  ],
+  "prefix": "#ss",
+  "wireVersion": 1,
+  "request": "#ss?",
+  "command": "#ss!",
+  "libraryVersion": "1.0.0",
+  "caps": {
+    "lineBytes": 16384,
+    "stringBytes": 64,
+    "groups": 64,
+    "datasets": 512,
+    "controls": 64,
+    "subEntityItems": {
+      "alarmBands": 16,
+      "fftMarkers": 16,
+      "labels": 256
+    }
+  },
+  "envelope": {
+    "frame": [
+      "Title",
+      "Groups",
+      "Sources"
+    ],
+    "group": [
+      "Title",
+      "Widget",
+      "Datasets",
+      "GroupType",
+      "OutputWidgets",
+      "OutputColumns"
+    ],
+    "source": [
+      "FrameStart",
+      "FrameEnd",
+      "FrameDetection",
+      "ChecksumAlgorithm",
+      "DecoderMethod",
+      "HexadecimalDelimiters",
+      "FrameParserTemplate",
+      "FrameParserParams"
+    ],
+    "control": [
+      "Title",
+      "OutputType",
+      "OutputMinValue",
+      "OutputMaxValue",
+      "OutputStepSize",
+      "OutputInitialValue",
+      "OutputOnLabel",
+      "OutputOffLabel",
+      "OutputCheckable"
+    ]
+  },
+  "groupWidgets": [
+    "datagrid",
+    "multiplot",
+    "accelerometer",
+    "gyro",
+    "gps",
+    "plot3d",
+    "barpanel"
+  ]
+}

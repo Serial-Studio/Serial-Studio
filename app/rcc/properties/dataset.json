@@ -820,6 +820,9 @@
   "properties": [
     {
       "id": "Title",
+      "wire": {
+        "include": true
+      },
       "field": "title",
       "jsonKey": "Title",
       "formId": "kDatasetView_Title",
@@ -848,6 +851,9 @@
     },
     {
       "id": "Virtual",
+      "wire": {
+        "exclude": "A computed dataset has no frame position and needs a transform, and code never rides the wire."
+      },
       "field": "virtual_",
       "jsonKey": "Virtual",
       "formId": "kDatasetView_Virtual",
@@ -871,6 +877,9 @@
     },
     {
       "id": "HideOnDashboard",
+      "wire": {
+        "include": true
+      },
       "field": "hideOnDashboard",
       "jsonKey": "HideOnDashboard",
       "formId": "kDatasetView_HideOnDashboard",
@@ -896,6 +905,9 @@
     },
     {
       "id": "Index",
+      "wire": {
+        "include": true
+      },
       "field": "index",
       "jsonKey": "Index",
       "formId": "kDatasetView_Index",
@@ -925,6 +937,9 @@
     },
     {
       "id": "Units",
+      "wire": {
+        "include": true
+      },
       "field": "units",
       "jsonKey": "Units",
       "formId": "kDatasetView_Units",
@@ -950,6 +965,9 @@
     },
     {
       "id": "Alias",
+      "wire": {
+        "include": true
+      },
       "field": "alias",
       "jsonKey": "Alias",
       "formId": "kDatasetView_Alias",
@@ -978,6 +996,9 @@
     },
     {
       "id": "Color",
+      "wire": {
+        "include": true
+      },
       "field": "color",
       "jsonKey": "Color",
       "formId": "kDatasetView_Color",
@@ -1005,6 +1026,9 @@
     },
     {
       "id": "PltMin",
+      "wire": {
+        "include": true
+      },
       "field": "pltMin",
       "jsonKey": "PltMin",
       "formId": "kDatasetView_PltMin",
@@ -1039,6 +1063,9 @@
     },
     {
       "id": "PltMax",
+      "wire": {
+        "include": true
+      },
       "field": "pltMax",
       "jsonKey": "PltMax",
       "formId": "kDatasetView_PltMax",
@@ -1073,6 +1100,9 @@
     },
     {
       "id": "Plt",
+      "wire": {
+        "include": true
+      },
       "field": "plt",
       "jsonKey": "Graph",
       "formId": "kDatasetView_Plot",
@@ -1104,6 +1134,9 @@
     },
     {
       "id": "Log",
+      "wire": {
+        "include": true
+      },
       "field": "log",
       "jsonKey": "Log",
       "type": "bool",
@@ -1123,6 +1156,9 @@
     },
     {
       "id": "XAxis",
+      "wire": {
+        "exclude": "Names another dataset's runtime unique id, which a device cannot know."
+      },
       "field": "xAxisId",
       "jsonKey": "XAxis",
       "formId": "kDatasetView_xAxis",
@@ -1152,6 +1188,9 @@
     },
     {
       "id": "PltLogX",
+      "wire": {
+        "include": true
+      },
       "field": "pltLogX",
       "jsonKey": "PltLogX",
       "formId": "kDatasetView_Plt_LogX",
@@ -1176,6 +1215,9 @@
     },
     {
       "id": "PltLogY",
+      "wire": {
+        "include": true
+      },
       "field": "pltLogY",
       "jsonKey": "PltLogY",
       "formId": "kDatasetView_Plt_LogY",
@@ -1200,6 +1242,9 @@
     },
     {
       "id": "Fft",
+      "wire": {
+        "include": true
+      },
       "field": "fft",
       "jsonKey": "FFT",
       "formId": "kDatasetView_FFT",
@@ -1226,6 +1271,9 @@
     },
     {
       "id": "Waterfall",
+      "wire": {
+        "include": true
+      },
       "field": "waterfall",
       "jsonKey": "Waterfall",
       "formId": "kDatasetView_Waterfall",
@@ -1253,6 +1301,9 @@
     },
     {
       "id": "FftBallistics",
+      "wire": {
+        "include": true
+      },
       "field": "fftBallistics",
       "jsonKey": "FFTBallistics",
       "formId": "kDatasetView_FFT_Ballistics",
@@ -1277,6 +1328,9 @@
     },
     {
       "id": "FftBallisticsRelease",
+      "wire": {
+        "include": true
+      },
       "field": "fftBallisticsRelease",
       "jsonKey": "FFTBallisticsRelease",
       "formId": "kDatasetView_FFT_BallisticsRelease",
@@ -1312,6 +1366,9 @@
     },
     {
       "id": "WaterfallYAxis",
+      "wire": {
+        "exclude": "Names another dataset's runtime unique id, which a device cannot know."
+      },
       "field": "waterfallYAxis",
       "jsonKey": "WaterfallYAxis",
       "formId": "kDatasetView_WaterfallYAxis",
@@ -1337,6 +1394,9 @@
     },
     {
       "id": "FftSamples",
+      "wire": {
+        "include": true
+      },
       "field": "fftSamples",
       "jsonKey": "FFTSamples",
       "formId": "kDatasetView_FFT_Samples",
@@ -1362,6 +1422,9 @@
     },
     {
       "id": "FftWindow",
+      "wire": {
+        "include": true
+      },
       "field": "fftWindow",
       "jsonKey": "FFTWindow",
       "formId": "kDatasetView_FFT_Window",
@@ -1389,6 +1452,9 @@
     },
     {
       "id": "FftSamplingRate",
+      "wire": {
+        "include": true
+      },
       "field": "fftSamplingRate",
       "jsonKey": "FFTSamplingRate",
       "formId": "kDatasetView_FFT_SamplingRate",
@@ -1414,6 +1480,9 @@
     },
     {
       "id": "FftLogX",
+      "wire": {
+        "include": true
+      },
       "field": "fftLogX",
       "jsonKey": "FFTLogX",
       "formId": "kDatasetView_FFT_LogX",
@@ -1438,6 +1507,9 @@
     },
     {
       "id": "FftMin",
+      "wire": {
+        "include": true
+      },
       "field": "fftMin",
       "jsonKey": "FFTMin",
       "formId": "kDatasetView_FFTMin",
@@ -1470,6 +1542,9 @@
     },
     {
       "id": "FftMax",
+      "wire": {
+        "include": true
+      },
       "field": "fftMax",
       "jsonKey": "FFTMax",
       "formId": "kDatasetView_FFTMax",
@@ -1502,6 +1577,9 @@
     },
     {
       "id": "Widget",
+      "wire": {
+        "include": true
+      },
       "field": "widget",
       "jsonKey": "Widget",
       "formId": "kDatasetView_Widget",
@@ -1531,6 +1609,9 @@
     },
     {
       "id": "DisplayTickCount",
+      "wire": {
+        "include": true
+      },
       "field": "displayTickCount",
       "jsonKey": "DisplayTickCount",
       "formId": "kDatasetView_DisplayTickCount",
@@ -1563,6 +1644,9 @@
     },
     {
       "id": "DisplayFormat",
+      "wire": {
+        "include": true
+      },
       "field": "displayFormat",
       "jsonKey": "DisplayFormat",
       "formId": "kDatasetView_DisplayFormat",
@@ -1586,6 +1670,9 @@
     },
     {
       "id": "DecimalPoints",
+      "wire": {
+        "include": true
+      },
       "field": "decimalPoints",
       "jsonKey": "DecimalPoints",
       "formId": "kDatasetView_DecimalPoints",
@@ -1621,6 +1708,9 @@
     },
     {
       "id": "WgtMin",
+      "wire": {
+        "include": true
+      },
       "field": "wgtMin",
       "jsonKey": "WgtMin",
       "formId": "kDatasetView_WgtMin",
@@ -1656,6 +1746,9 @@
     },
     {
       "id": "WgtMax",
+      "wire": {
+        "include": true
+      },
       "field": "wgtMax",
       "jsonKey": "WgtMax",
       "formId": "kDatasetView_WgtMax",
@@ -1691,6 +1784,9 @@
     },
     {
       "id": "ExtremeHold",
+      "wire": {
+        "include": true
+      },
       "field": "extremeHold",
       "jsonKey": "ExtremeHold",
       "formId": "kDatasetView_ExtremeHold",
@@ -1716,6 +1812,9 @@
     },
     {
       "id": "SuppressAlarms",
+      "wire": {
+        "include": true
+      },
       "field": "suppressAlarms",
       "jsonKey": "SuppressAlarms",
       "formId": "kDatasetView_SuppressAlarms",
@@ -1741,6 +1840,9 @@
     },
     {
       "id": "AlarmsWhileVisible",
+      "wire": {
+        "include": true
+      },
       "field": "alarmsWhileVisible",
       "jsonKey": "AlarmsWhileVisible",
       "formId": "kDatasetView_AlarmsWhileVisible",
@@ -1766,6 +1868,9 @@
     },
     {
       "id": "AlarmDeadband",
+      "wire": {
+        "include": true
+      },
       "field": "alarmDeadband",
       "jsonKey": "AlarmDeadband",
       "formId": "kDatasetView_AlarmDeadband",
@@ -1795,6 +1900,9 @@
     },
     {
       "id": "Led",
+      "wire": {
+        "include": true
+      },
       "field": "led",
       "jsonKey": "LED",
       "formId": "kDatasetView_LED",
@@ -1821,6 +1929,9 @@
     },
     {
       "id": "LedHigh",
+      "wire": {
+        "include": true
+      },
       "field": "ledHigh",
       "jsonKey": "LedHigh",
       "formId": "kDatasetView_LED_High",
@@ -1848,6 +1959,9 @@
     },
     {
       "id": "OverviewDisplay",
+      "wire": {
+        "include": true
+      },
       "field": "overviewDisplay",
       "jsonKey": "Overview",
       "formId": "kDatasetView_Overview",
@@ -1872,6 +1986,9 @@
     },
     {
       "id": "TransformCode",
+      "wire": {
+        "exclude": "Code; a declaration never carries a transform (spec 0111 R10)."
+      },
       "field": "transformCode",
       "jsonKey": "TransformCode",
       "formId": "kDatasetView_TransformCode",
@@ -1892,6 +2009,9 @@
     },
     {
       "id": "TransformLanguage",
+      "wire": {
+        "exclude": "Belongs to the transform code, which never rides the wire."
+      },
       "field": "transformLanguage",
       "jsonKey": "TransformLanguage",
       "type": "int",
@@ -1913,6 +2033,9 @@
     },
     {
       "id": "Format",
+      "wire": {
+        "include": true
+      },
       "field": "format",
       "jsonKey": "Format",
       "formId": "kDatasetView_Format",
@@ -1940,6 +2063,9 @@
     },
     {
       "id": "FormatWidth",
+      "wire": {
+        "include": true
+      },
       "field": "formatWidth",
       "jsonKey": "FormatWidth",
       "formId": "kDatasetView_FormatWidth",
@@ -1977,6 +2103,9 @@
     },
     {
       "id": "FormatSigned",
+      "wire": {
+        "include": true
+      },
       "field": "formatSigned",
       "jsonKey": "FormatSigned",
       "formId": "kDatasetView_FormatSigned",
@@ -2000,6 +2129,9 @@
     },
     {
       "id": "FormatFractionBits",
+      "wire": {
+        "include": true
+      },
       "field": "formatFractionBits",
       "jsonKey": "FormatFractionBits",
       "formId": "kDatasetView_FormatFractionBits",
@@ -2038,6 +2170,9 @@
     },
     {
       "id": "FormatBitOffset",
+      "wire": {
+        "include": true
+      },
       "field": "formatBitOffset",
       "jsonKey": "FormatBitOffset",
       "formId": "kDatasetView_FormatBitOffset",
@@ -2076,6 +2211,9 @@
     },
     {
       "id": "FormatBitWidth",
+      "wire": {
+        "include": true
+      },
       "field": "formatBitWidth",
       "jsonKey": "FormatBitWidth",
       "formId": "kDatasetView_FormatBitWidth",
@@ -2115,6 +2253,9 @@
     },
     {
       "id": "FormatScale",
+      "wire": {
+        "include": true
+      },
       "field": "formatScale",
       "jsonKey": "FormatScale",
       "formId": "kDatasetView_FormatScale",
@@ -2140,6 +2281,9 @@
     },
     {
       "id": "FormatOffset",
+      "wire": {
+        "include": true
+      },
       "field": "formatOffset",
       "jsonKey": "FormatOffset",
       "formId": "kDatasetView_FormatOffset",
@@ -2164,6 +2308,9 @@
     },
     {
       "id": "LabelsDefault",
+      "wire": {
+        "include": true
+      },
       "field": "labelsDefault",
       "jsonKey": "LabelsDefault",
       "type": "string",
@@ -2186,6 +2333,9 @@
     },
     {
       "id": "GroupId",
+      "wire": {
+        "exclude": "Structure; the app assigns it from the group's position in the declaration."
+      },
       "field": "groupId",
       "jsonKey": "GroupId",
       "type": "int",
@@ -2201,6 +2351,9 @@
     },
     {
       "id": "DatasetId",
+      "wire": {
+        "exclude": "Structure; the app assigns it from the dataset's position in its group."
+      },
       "field": "datasetId",
       "jsonKey": "DatasetId",
       "type": "int",
@@ -2216,6 +2369,9 @@
     },
     {
       "id": "UniqueId",
+      "wire": {
+        "exclude": "Structure; the app assigns runtime and project unique ids."
+      },
       "field": "uniqueId",
       "jsonKey": "UniqueId",
       "type": "int",
@@ -2229,6 +2385,9 @@
     },
     {
       "id": "SourceId",
+      "wire": {
+        "exclude": "Structure; a declared dataset belongs to the device that declared it."
+      },
       "field": "sourceId",
       "jsonKey": "DatasetSourceId",
       "type": "int",
@@ -2247,6 +2406,9 @@
     },
     {
       "id": "Enabled",
+      "wire": {
+        "exclude": "Structure; every declared dataset is enabled, and disabling one is an editor choice."
+      },
       "field": "enabled",
       "jsonKey": "Disabled",
       "type": "bool",
@@ -2322,6 +2484,17 @@
   "subEntities": [
     {
       "field": "alarmBands",
+      "wire": {
+        "include": true,
+        "keys": [
+          "Min",
+          "Max",
+          "Severity",
+          "Blink",
+          "Color",
+          "Label"
+        ]
+      },
       "jsonKey": "AlarmBands",
       "readHook": "readAlarmBands",
       "writeHook": "writeAlarmBands",
@@ -2352,6 +2525,17 @@
     },
     {
       "field": "fftMarkers",
+      "wire": {
+        "include": true,
+        "keys": [
+          "Frequency",
+          "EndFrequency",
+          "WarningDb",
+          "AlarmDb",
+          "Color",
+          "Label"
+        ]
+      },
       "jsonKey": "FFTMarkers",
       "readHook": "readFrequencyMarkers",
       "writeHook": "writeFrequencyMarkers",
@@ -2360,6 +2544,9 @@
     },
     {
       "field": "transformParams",
+      "wire": {
+        "exclude": "Parameters of transform code, which never rides the wire."
+      },
       "jsonKey": "TransformParams",
       "shape": "map",
       "readHook": "readTransformParams",
@@ -2369,6 +2556,13 @@
     },
     {
       "field": "labels",
+      "wire": {
+        "include": true,
+        "keys": [
+          "Value",
+          "LabelText"
+        ]
+      },
       "jsonKey": "Labels",
       "shape": "map",
       "readHook": "readLabels",

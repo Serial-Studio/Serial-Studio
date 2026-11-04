@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
 import subprocess
@@ -1040,6 +1041,195 @@ def check_form_id_order(errors: list[str], manifest: dict) -> None:
         )
 
 
+DECLARATION_MANIFEST = RCC / "properties" / "declaration.json"
+SERIALSTUDIO_CPP = ROOT / "core" / "Core" / "SerialStudio.cpp"
+GOLDEN_DECLARATIONS = ROOT / "firmware" / "tests" / "golden"
+
+# Keys that carry code, a file path, a URL or a connection: never on the device wire (spec 0111
+# R10), whatever a manifest says.
+WIRE_FORBIDDEN_KEYS = {
+    "ControlScriptCode",
+    "FrameParserCode",
+    "FrameParserLanguage",
+    "PainterCode",
+    "Sound",
+    "SourceConn",
+    "TransformCode",
+    "TransformLanguage",
+    "TransformLibrary",
+    "TransformLibraryJs",
+    "TransformParams",
+    "TransmitFunction",
+    "WebViewUrl",
+}
+
+# Group widgets that run code, load a URL or need image framing.
+WIRE_FORBIDDEN_WIDGETS = {"image", "painter", "webview"}
+
+
+def check_wire_entry(
+    errors: list[str], owner: str, wire: dict, sub_entity: bool, keys: set[str]
+) -> None:
+    """One wire entry: exactly one of include/exclude, a reason, and inner keys that resolve."""
+    include, exclude = wire.get("include"), wire.get("exclude")
+    if (include is None) == (exclude is None):
+        fail(
+            errors,
+            f"dataset.json: {owner}.wire needs exactly one of include or exclude",
+        )
+    elif include is not None and include is not True:
+        fail(
+            errors,
+            f"dataset.json: {owner}.wire.include must be true; exclude with a reason",
+        )
+    elif exclude is not None and not exclude.strip():
+        fail(errors, f"dataset.json: {owner}.wire.exclude needs a reason")
+
+    inner = wire.get("keys", [])
+    if inner and not (sub_entity and include):
+        fail(
+            errors, f"dataset.json: {owner}.wire.keys belongs to an included sub-entity"
+        )
+    if sub_entity and include and not inner:
+        fail(errors, f"dataset.json: {owner}.wire lists no inner keys")
+    for name in inner:
+        if name not in keys:
+            fail(errors, f"dataset.json: {owner}.wire.keys names unknown Keys::{name}")
+        if name in WIRE_FORBIDDEN_KEYS:
+            fail(
+                errors, f"dataset.json: {owner}.wire.keys puts Keys::{name} on the wire"
+            )
+
+
+def group_widget_ids() -> set[str]:
+    """The ids SerialStudio::groupWidgetId spells, the group widgets a project can name."""
+    text = (
+        SERIALSTUDIO_CPP.read_text(encoding="utf-8")
+        if SERIALSTUDIO_CPP.exists()
+        else ""
+    )
+    body = function_body(text, "SerialStudio::groupWidgetId") or ""
+    return set(re.findall(r'QStringLiteral\("([^"]+)"\)', body))
+
+
+def wire_tables(manifest: dict, declaration: dict) -> dict:
+    """The allowed JSON keys per declaration scope, through the generator's one projection."""
+    spec = importlib.util.spec_from_file_location("ss_registry_gen", REGISTRY_GENERATOR)
+    generator = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(generator)
+    wire = generator.wire_projection(manifest, declaration)
+    spell = generator.KEY_LITERALS
+
+    tables = {s: {spell[k] for k in wire["envelope"][s]} for s in wire["envelope"]}
+    tables["dataset"] = {spell[k] for k in wire["dataset"]}
+    tables["sub"] = {}
+    for sub in wire["subEntities"]:
+        tables["dataset"].add(spell[sub["jsonKey"]])
+        tables["sub"][spell[sub["jsonKey"]]] = {spell[k] for k in sub["keys"]}
+    return tables
+
+
+def golden_line_keys(line: str, tables: dict) -> list[str]:
+    """Return every key path of one golden declaration line that the wire tables do not allow."""
+    match = re.fullmatch(r"#ss\d+(\{.*\})", line)
+    try:
+        doc = json.loads(match.group(1)) if match else None
+    except json.JSONDecodeError:
+        doc = None
+    if not isinstance(doc, dict):
+        return ["<not a #ss<version>{...} line>"]
+
+    bad: list[str] = []
+
+    def walk(items, scope: str, where: str) -> None:
+        for index, item in enumerate(items if isinstance(items, list) else []):
+            here = f"{where}[{index}]"
+            if not isinstance(item, dict):
+                bad.append(here)
+                continue
+            bad.extend(f"{here}.{k}" for k in item if k not in tables[scope])
+            for sub, inner in tables["sub"].items():
+                for e, entry in enumerate(
+                    item.get(sub, []) if scope == "dataset" else []
+                ):
+                    bad.extend(
+                        f"{here}.{sub}[{e}].{k}" for k in entry if k not in inner
+                    )
+            if scope == "group":
+                walk(item.get("datasets"), "dataset", f"{here}.datasets")
+                walk(item.get("outputWidgets"), "control", f"{here}.outputWidgets")
+
+    bad.extend(k for k in doc if k not in tables["frame"])
+    walk(doc.get("groups"), "group", "groups")
+    walk(doc.get("sources"), "source", "sources")
+    return bad
+
+
+def check_wire_vocabulary(
+    errors: list[str],
+    manifest: dict,
+    declaration: dict,
+    keys: set[str],
+    widgets: set[str],
+    golden: Path,
+) -> None:
+    """Spec 0111 AC9: every property states its wire status, the envelope names real Keys::
+    constants and widgets, nothing forbidden rides the wire, and the golden lines use only the
+    generated vocabulary."""
+    for prop in manifest["properties"]:
+        check_wire_entry(
+            errors, f"property {prop['id']}", prop.get("wire", {}), False, keys
+        )
+        if (
+            prop.get("wire", {}).get("include")
+            and prop["jsonKey"] in WIRE_FORBIDDEN_KEYS
+        ):
+            fail(
+                errors,
+                f"dataset.json: property {prop['id']} puts code or a path on the wire",
+            )
+    caps = declaration.get("caps", {}).get("subEntityItems", {})
+    for sub in manifest["subEntities"]:
+        wire = sub.get("wire", {})
+        check_wire_entry(errors, sub["field"], wire, True, keys)
+        if wire.get("include") and sub["field"] not in caps:
+            fail(
+                errors,
+                f"declaration.json: caps.subEntityItems has no {sub['field']} cap",
+            )
+
+    for scope, names in declaration.get("envelope", {}).items():
+        for name in names:
+            if name not in keys:
+                fail(
+                    errors,
+                    f"declaration.json: envelope.{scope} names unknown Keys::{name}",
+                )
+            if name in WIRE_FORBIDDEN_KEYS:
+                fail(
+                    errors,
+                    f"declaration.json: envelope.{scope} puts Keys::{name} on the wire",
+                )
+    for widget in declaration.get("groupWidgets", []):
+        if widget not in widgets or widget in WIRE_FORBIDDEN_WIDGETS:
+            fail(
+                errors,
+                f"declaration.json: group widget '{widget}' is not allowed on the wire",
+            )
+    if errors:
+        return
+
+    tables = wire_tables(manifest, declaration)
+    for path in sorted(golden.glob("*.decl")) if golden.is_dir() else []:
+        lines = path.read_text(encoding="utf-8").splitlines()
+        for number, line in enumerate((l for l in lines if l.strip()), start=1):
+            for bad in golden_line_keys(line, tables):
+                fail(
+                    errors,
+                    f"{path.name}:{number}: '{bad}' is not in the wire vocabulary",
+                )
+
+
 def check_property_manifests(errors: list[str]) -> None:
     """Spec-0036 manifest lint: shape, key/hook/widget resolution, struct coverage."""
     if not DATASET_MANIFEST.exists() or not PROPERTY_SCHEMA.exists():
@@ -1098,6 +1288,23 @@ def check_property_manifests(errors: list[str]) -> None:
     check_manifest_hooks(errors, manifest)
     check_manifest_form(errors, manifest)
     check_form_id_order(errors, manifest)
+
+    try:
+        declaration = json.loads(DECLARATION_MANIFEST.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        fail(errors, f"declaration.json is missing or invalid: {error}")
+        return
+
+    wire_errors: list[str] = []
+    check_wire_vocabulary(
+        wire_errors,
+        manifest,
+        declaration,
+        keys,
+        group_widget_ids(),
+        GOLDEN_DECLARATIONS,
+    )
+    errors.extend(wire_errors)
 
 
 # ---------------------------------------------------------------------------------------------------

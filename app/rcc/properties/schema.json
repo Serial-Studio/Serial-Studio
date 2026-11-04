@@ -320,7 +320,8 @@
         "required": [
           "field",
           "readHook",
-          "writeHook"
+          "writeHook",
+          "wire"
         ],
         "additionalProperties": false,
         "properties": {
@@ -329,6 +330,9 @@
           },
           "jsonKey": {
             "type": "string"
+          },
+          "wire": {
+            "$ref": "#/definitions/wire"
           },
           "readHook": {
             "type": "string"
@@ -418,6 +422,25 @@
         }
       }
     },
+    "wire": {
+      "type": "object",
+      "description": "Device-declaration status (spec 0111): {\"include\": true} puts the key on the wire, a sub-entity adds its inner keys as Keys:: constant names; {\"exclude\": \"<reason>\"} keeps it off and says why. Exactly one of include or exclude; registry-verify enforces it.",
+      "additionalProperties": false,
+      "properties": {
+        "include": {
+          "type": "boolean"
+        },
+        "exclude": {
+          "type": "string"
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "property": {
       "type": "object",
       "required": [
@@ -426,13 +449,17 @@
         "type",
         "default",
         "scope",
-        "persist"
+        "persist",
+        "wire"
       ],
       "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string",
           "description": "Stable registry id (PascalCase)."
+        },
+        "wire": {
+          "$ref": "#/definitions/wire"
         },
         "field": {
           "type": "string",

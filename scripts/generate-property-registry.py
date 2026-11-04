@@ -18,6 +18,14 @@ Spec 0037 adds the downstream API surfaces, generated from the committed API sna
     app/rcc/api/proto-fields.json         append-only gRPC field-number ledger
     doc/grpc/serialstudio-typed.proto     client-facing typed proto (codegen input)
 
+Spec 0111 adds the device-declaration vocabulary, read from each property's "wire" entry
+plus app/rcc/properties/declaration.json (the frame, group, source and control keys):
+
+    core/Pipeline/DataModel/Generated/DeclarationVocabulary.h   allow-lists, caps, sanitizer
+    firmware/c/ss_vocabulary.h, firmware/arduino/src/ss_vocabulary.h   C99 key macros
+    firmware/python/serialstudio/_vocabulary.py                 Python constants
+    firmware/arduino/library.properties                         Arduino library metadata
+
 and a buildless projection check (--check-snapshot) that compares the dataset verbs'
 typed schema in the committed snapshot against the manifest. The snapshot itself can
 only be refreshed from a build, so that check warns locally and fails in CI.
@@ -285,21 +293,25 @@ def key(prop: dict) -> str:
     return f"Keys::{prop['jsonKey']}"
 
 
-def key_constants() -> dict[str, str]:
-    """Map every Keys:: literal to its constant name so emitted code never hard-codes a key."""
+def key_declarations() -> list[tuple[str, str]]:
+    """Every Keys:: constant as (name, literal), in declaration order."""
     header = (ROOT / "core" / "Core" / "DataModel" / "FrameKeys.h").read_text(
         encoding="utf-8"
     ) + (ROOT / "core" / "Core" / "DataModel" / "Frame.h").read_text(encoding="utf-8")
+    return re.findall(r"inline constexpr KeyView (\w+)\(\"([^\"]*)\"\)", header)
+
+
+def key_constants() -> dict[str, str]:
+    """Map every Keys:: literal to its constant name so emitted code never hard-codes a key."""
     found: dict[str, str] = {}
-    for name, value in re.findall(
-        r"inline constexpr KeyView (\w+)\(\"([^\"]*)\"\)", header
-    ):
+    for name, value in key_declarations():
         found.setdefault(value, name)
 
     return found
 
 
 KEYS = key_constants()
+KEY_LITERALS = dict(key_declarations())
 
 
 def json_name(name: str) -> str:
@@ -2230,6 +2242,442 @@ def check_snapshot(manifest: dict, strict: bool) -> int:
 
 
 # --------------------------------------------------------------------------------------------------
+# Device declaration vocabulary (spec 0111)
+# --------------------------------------------------------------------------------------------------
+
+DECLARATION = ROOT / "app" / "rcc" / "properties" / "declaration.json"
+OUT_DECLARATION = (
+    ROOT / "core" / "Pipeline" / "DataModel" / "Generated" / "DeclarationVocabulary.h"
+)
+FIRMWARE = ROOT / "firmware"
+OUT_FIRMWARE_C = (
+    FIRMWARE / "c" / "ss_vocabulary.h",
+    FIRMWARE / "arduino" / "src" / "ss_vocabulary.h",
+)
+OUT_FIRMWARE_PY = FIRMWARE / "python" / "serialstudio" / "_vocabulary.py"
+OUT_ARDUINO_PROPERTIES = FIRMWARE / "arduino" / "library.properties"
+
+DECLARATION_BANNER = (
+    "AUTO-GENERATED from app/rcc/properties/dataset.json and declaration.json;",
+    "never edit by hand. Regenerate with: python3 scripts/generate-property-registry.py",
+)
+
+# The firmware files are MIT (REUSE.toml), not this script; the markers keep REUSE from reading
+# the notice below as this file's own license.
+# REUSE-IgnoreStart
+MIT_NOTICE = (
+    "Serial Studio device library",
+    "https://serial-studio.com/",
+    "",
+    "Copyright (C) 2020-2026 Alex Spataru",
+    "",
+    "SPDX-License-Identifier: MIT",
+)
+# REUSE-IgnoreEnd
+
+
+def load_declaration() -> dict:
+    return json.loads(DECLARATION.read_text(encoding="utf-8"))
+
+
+def wire_projection(manifest: dict, declaration: dict) -> dict:
+    """Return everything a device declaration may carry, as Keys:: constant names.
+
+    The single definition of "what rides the wire": the app header, the three firmware
+    vocabularies and registry-verify's golden-line check all read this, so the wire, the
+    libraries and the editor cannot drift (spec 0111 R1, AC9).
+    """
+    dataset: list[str] = []
+    legacy: list[str] = []
+    for prop in manifest["properties"]:
+        if not prop["wire"].get("include"):
+            continue
+        dataset.append(prop["jsonKey"])
+        legacy += [k for k in prop.get("legacyKeys", []) if k not in legacy]
+
+    caps = declaration["caps"]
+    subs = [
+        {
+            "jsonKey": sub["jsonKey"],
+            "keys": list(sub["wire"].get("keys", [])),
+            "cap": caps["subEntityItems"][sub["field"]],
+        }
+        for sub in manifest["subEntities"]
+        if sub["wire"].get("include")
+    ]
+
+    widgets = manifest["optionSources"]["datasetWidgets"]["entries"]
+    return {
+        "dataset": dataset + [k for k in legacy if k not in dataset],
+        "subEntities": subs,
+        "envelope": declaration["envelope"],
+        "caps": caps,
+        "groupWidgets": list(declaration["groupWidgets"]),
+        "datasetWidgets": [e["value"] for e in widgets if e.get("value")],
+    }
+
+
+def wire_literals(wire: dict) -> list[str]:
+    """Every JSON key a declaration may spell, once each, in vocabulary order."""
+    names = list(wire["dataset"])
+    for sub in wire["subEntities"]:
+        names += [sub["jsonKey"]] + sub["keys"]
+    for scope in ("frame", "group", "source", "control"):
+        names += wire["envelope"][scope]
+
+    out: list[str] = []
+    for name in names:
+        if KEY_LITERALS[name] not in out:
+            out.append(KEY_LITERALS[name])
+    return out
+
+
+def macro_name(text: str) -> str:
+    """plotMin -> PLOT_MIN, the spelling of a wire key in the C and Python vocabularies."""
+    return re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", text).upper()
+
+
+def packed_rows(items: list[str], indent: str = "  ") -> list[str]:
+    """Pack comma-terminated items into lines that fit inside MAX_COLS."""
+    rows: list[str] = []
+    current = ""
+    for item in items:
+        candidate = f"{current} {item}," if current else f"{indent}{item},"
+        if len(candidate) > MAX_COLS and current:
+            rows.append(current)
+            candidate = f"{indent}{item},"
+        current = candidate
+    if current:
+        rows.append(current)
+    return rows
+
+
+def key_table(name: str, brief: str, keys: list[str]) -> list[str]:
+    lines = [""] + doxygen(brief)
+    lines.append(f"inline constexpr Keys::KeyView {name}[] = {{")
+    lines += packed_rows([f"Keys::{k}" for k in keys])
+    return lines + ["};"]
+
+
+def cpp_default(prop: dict) -> str:
+    default = prop["default"]
+    if prop["type"] == "string":
+        return f'QStringLiteral("{escaped(default)}")' if default else "QString()"
+    return literal(default)
+
+
+def domain_tables(manifest: dict) -> tuple[list[str], dict[str, str]]:
+    """Emit the static option domains of the wire-included choice properties."""
+    lines: list[str] = []
+    tables: dict[str, str] = {}
+    for prop in manifest["properties"]:
+        source = manifest["optionSources"].get(prop.get("options", ""), {})
+        if not prop["wire"].get("include"):
+            continue
+        if source.get("kind") not in ("staticMap", "parallelValues"):
+            continue
+
+        name = f"k{prop['id']}Domain"
+        values = [entry["value"] for entry in source["entries"]]
+        if prop["type"] == "string":
+            items = [f'QLatin1StringView("{escaped(v)}")' for v in values]
+            kind = "QLatin1StringView"
+        else:
+            items = [literal(v) for v in values]
+            kind = "int"
+        lines += [""] + doxygen(f"Values the {prop['id']} property may take.")
+        lines.append(f"inline constexpr {kind} {name}[] = {{")
+        lines += packed_rows(items) + ["};"]
+        tables[prop["id"]] = name
+    return lines, tables
+
+
+def sanitize_body(manifest: dict, tables: dict[str, str]) -> list[str]:
+    """API clamps, finite numbers, option domains, then the single- and cross-field validators."""
+    body: list[str] = []
+    cross: list[str] = []
+    for prop in manifest["properties"]:
+        if not prop["wire"].get("include"):
+            continue
+
+        name, default = field(prop), cpp_default(prop)
+        clamp = prop.get("clamp", {}).get("api", {})
+        if prop["type"] == "int" and "min" in clamp and "max" in clamp:
+            body.append(f"  {name} = qBound({clamp['min']}, {name}, {clamp['max']});")
+        elif prop["type"] == "int" and "min" in clamp:
+            body.append(f"  {name} = qMax({clamp['min']}, {name});")
+        elif prop["type"] == "double":
+            body.append(f"  {name} = std::isfinite({name}) ? {name} : {default};")
+
+        check = ""
+        validate = prop.get("validate", "")
+        if prop["id"] in tables:
+            check = f"!inWireDomain({name}, {tables[prop['id']]})"
+        elif validate in DATASET_VALIDATORS:
+            cross += [
+                f"  if (!PropertyHooks::{DATASET_VALIDATORS[validate]}(d))",
+                f"    {name} = {default};",
+                "",
+            ]
+        elif validate and validate != "aliasUnique":
+            check = f"!PropertyHooks::{validator_function(validate)}({name})"
+
+        if check:
+            body += [f"  if ({check})", f"    {name} = {default};", ""]
+
+    return body + cross
+
+
+def render_declaration_header(manifest: dict, wire: dict, declaration: dict) -> str:
+    caps = wire["caps"]
+    lines: list[str] = [LICENSE.rstrip(), ""]
+    lines += [f"// {text}" for text in DECLARATION_BANNER]
+    lines += [
+        "",
+        "#pragma once",
+        "",
+        "#include <algorithm>",
+        "#include <cmath>",
+        "#include <iterator>",
+        "#include <QLatin1StringView>",
+        "#include <QString>",
+        "",
+        '#include "Core/DataModel/Frame.h"',
+        '#include "Core/DataModel/FrameKeys.h"',
+        '#include "Core/DataModel/PropertyValidators.h"',
+        "",
+        "// clang-format off",
+        "",
+        "namespace DataModel::Declaration {",
+        "",
+    ]
+    lines += doxygen(
+        "Line prefixes (spec 0111): a declaration is the prefix, the wire version digits and "
+        "one compact JSON object; the app sends the request and the command lines."
+    )
+    lines += [
+        f'inline constexpr QLatin1StringView kPrefix("{declaration["prefix"]}");',
+        f'inline constexpr QLatin1StringView kRequest("{declaration["request"]}");',
+        f'inline constexpr QLatin1StringView kCommand("{declaration["command"]}");',
+        "",
+    ]
+    lines += doxygen(
+        "The wire version this build reads and the library version it ships."
+    )
+    lines += [
+        f"inline constexpr int kWireVersion = {declaration['wireVersion']};",
+        "inline constexpr QLatin1StringView "
+        f'kLibraryVersion("{declaration["libraryVersion"]}");',
+        "",
+    ]
+    lines += doxygen("Caps applied before any reader runs (spec 0111 R10).")
+    lines += [
+        f"inline constexpr qsizetype kMaxLineBytes = {caps['lineBytes']};",
+        f"inline constexpr qsizetype kMaxStringBytes = {caps['stringBytes']};",
+        f"inline constexpr int kMaxGroups = {caps['groups']};",
+        f"inline constexpr int kMaxDatasets = {caps['datasets']};",
+        f"inline constexpr int kMaxControls = {caps['controls']};",
+    ]
+
+    lines += key_table(
+        "kDatasetKeys",
+        "Dataset keys a declaration may carry: every wire-included property, then the legacy "
+        "range keys its reader falls back to.",
+        wire["dataset"],
+    )
+    for sub in wire["subEntities"]:
+        lines += key_table(
+            f"k{sub['jsonKey']}Keys",
+            f"Inner keys of one declared {KEY_LITERALS[sub['jsonKey']]} entry.",
+            sub["keys"],
+        )
+
+    lines += [""] + doxygen(
+        "One nested collection a declared dataset may carry: its key, its inner keys and the "
+        "most entries one dataset may declare."
+    )
+    lines += [
+        "struct SubEntityWire {",
+        "  Keys::KeyView key;",
+        "  const Keys::KeyView* inner;",
+        "  qsizetype innerCount;",
+        "  int maxItems;",
+        "};",
+        "",
+    ]
+    lines += doxygen("Every wire-included sub-entity, in manifest order.")
+    lines.append("inline constexpr SubEntityWire kSubEntities[] = {")
+    for sub in wire["subEntities"]:
+        table = f"k{sub['jsonKey']}Keys"
+        lines.append(
+            f"  {{Keys::{sub['jsonKey']}, {table}, {len(sub['keys'])}, {sub['cap']}}},"
+        )
+    lines.append("};")
+
+    for scope in ("frame", "group", "source", "control"):
+        lines += key_table(
+            f"k{scope.capitalize()}Keys",
+            f"Keys a declared {scope} object may carry (declaration.json).",
+            wire["envelope"][scope],
+        )
+
+    lines += [""] + doxygen(
+        "Group widgets a declaration may name; code, URL and image widgets never ride the wire."
+    )
+    lines.append("inline constexpr QLatin1StringView kGroupWidgets[] = {")
+    lines += packed_rows([f'QLatin1StringView("{w}")' for w in wire["groupWidgets"]])
+    lines.append("};")
+
+    tables_text, tables = domain_tables(manifest)
+    lines += tables_text
+    lines += [""] + doxygen("True when value is one of domain's entries.")
+    lines += [
+        "template<typename Value, typename Entry, size_t N>",
+        "[[nodiscard]] inline bool inWireDomain(const Value& value, const Entry (&domain)[N])",
+        "{",
+        "  return std::find(std::begin(domain), std::end(domain), value) != std::end(domain);",
+        "}",
+        "",
+    ]
+    lines += doxygen(
+        "Bounds a declared dataset as the API bounds an update (spec 0111 R10): a value "
+        "outside its clamp, domain or validator falls back to the registry default."
+    )
+    lines += ["inline void sanitizeDatasetWire(Dataset& d)", "{"]
+    lines += sanitize_body(manifest, tables)
+    while lines[-1] == "":
+        lines.pop()
+    lines += [
+        "}",
+        "",
+        "}  // namespace DataModel::Declaration",
+        "",
+        "// clang-format on",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def comment_block(open_: str, prefix: str, close: str, text: tuple) -> list[str]:
+    body = [f"{prefix}{line}".rstrip() for line in text]
+    return ([open_] if open_ else []) + body + ([close] if close else [])
+
+
+def render_firmware_c(wire: dict, declaration: dict) -> str:
+    caps = wire["caps"]
+    major, minor, patch = declaration["libraryVersion"].split(".")
+    lines = comment_block("/*", " * ", " */", MIT_NOTICE) + [""]
+    lines += comment_block("/*", " * ", " */", DECLARATION_BANNER)
+    lines += ["", "#ifndef SS_VOCABULARY_H", "#define SS_VOCABULARY_H", ""]
+    lines += [
+        f'#define SS_PREFIX "{declaration["prefix"]}"',
+        f'#define SS_REQUEST "{declaration["request"]}"',
+        f'#define SS_COMMAND "{declaration["command"]}"',
+        f"#define SS_WIRE_VERSION {declaration['wireVersion']}",
+        f'#define SS_LIBRARY_VERSION "{declaration["libraryVersion"]}"',
+        f"#define SS_LIBRARY_VERSION_MAJOR {major}",
+        f"#define SS_LIBRARY_VERSION_MINOR {minor}",
+        f"#define SS_LIBRARY_VERSION_PATCH {patch}",
+        "",
+        f"#define SS_MAX_LINE_BYTES {caps['lineBytes']}",
+        f"#define SS_MAX_STRING_BYTES {caps['stringBytes']}",
+        f"#define SS_MAX_GROUPS {caps['groups']}",
+        f"#define SS_MAX_DATASETS {caps['datasets']}",
+        f"#define SS_MAX_CONTROLS {caps['controls']}",
+    ]
+    lines += [
+        f"#define SS_MAX_{macro_name(KEY_LITERALS[s['jsonKey']])} {s['cap']}"
+        for s in wire["subEntities"]
+    ]
+    lines.append("")
+    lines += [f'#define SS_KEY_{macro_name(k)} "{k}"' for k in wire_literals(wire)]
+    lines.append("")
+    lines += [
+        f'#define SS_GROUP_WIDGET_{macro_name(w)} "{w}"' for w in wire["groupWidgets"]
+    ]
+    lines.append("")
+    lines += [
+        f'#define SS_DATASET_WIDGET_{macro_name(w)} "{w}"'
+        for w in wire["datasetWidgets"]
+    ]
+    return "\n".join(lines + ["", "#endif", ""])
+
+
+def python_tuple(name: str, items: list[str]) -> list[str]:
+    return [f"{name} = ("] + [f'    "{item}",' for item in items] + [")", ""]
+
+
+def render_firmware_python(wire: dict, declaration: dict) -> str:
+    caps = wire["caps"]
+    literals = KEY_LITERALS
+    lines = comment_block("", "# ", "", MIT_NOTICE) + ["#"]
+    lines += comment_block("", "# ", "", DECLARATION_BANNER)
+    lines += [
+        "",
+        '"""Wire vocabulary of the Serial Studio device declaration."""',
+        "",
+        f'__version__ = "{declaration["libraryVersion"]}"',
+        "",
+        f'PREFIX = "{declaration["prefix"]}"',
+        f'REQUEST = "{declaration["request"]}"',
+        f'COMMAND = "{declaration["command"]}"',
+        f"WIRE_VERSION = {declaration['wireVersion']}",
+        "",
+        f"MAX_LINE_BYTES = {caps['lineBytes']}",
+        f"MAX_STRING_BYTES = {caps['stringBytes']}",
+        f"MAX_GROUPS = {caps['groups']}",
+        f"MAX_DATASETS = {caps['datasets']}",
+        f"MAX_CONTROLS = {caps['controls']}",
+        "",
+    ]
+    lines += [f'KEY_{macro_name(k)} = "{k}"' for k in wire_literals(wire)] + [""]
+    lines += python_tuple("DATASET_KEYS", [literals[k] for k in wire["dataset"]])
+    for scope in ("frame", "group", "source", "control"):
+        keys = [literals[k] for k in wire["envelope"][scope]]
+        lines += python_tuple(f"{scope.upper()}_KEYS", keys)
+
+    lines.append("SUB_ENTITY_KEYS = {")
+    for sub in wire["subEntities"]:
+        inner = ", ".join(f'"{literals[k]}"' for k in sub["keys"])
+        lines.append(f'    "{literals[sub["jsonKey"]]}": ({inner}),')
+    lines += ["}", "", "SUB_ENTITY_CAPS = {"]
+    for sub in wire["subEntities"]:
+        lines.append(f'    "{literals[sub["jsonKey"]]}": {sub["cap"]},')
+    lines += ["}", ""]
+    lines += python_tuple("GROUP_WIDGETS", wire["groupWidgets"])
+    lines += python_tuple("DATASET_WIDGETS", wire["datasetWidgets"])
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def render_arduino_properties(declaration: dict) -> str:
+    lines = comment_block("", "# ", "", DECLARATION_BANNER)
+    lines += [
+        "name=SerialStudio",
+        f"version={declaration['libraryVersion']}",
+        "author=Alex Spataru",
+        "maintainer=Alex Spataru",
+        "sentence=Declare a Serial Studio dashboard from a sketch and stream its frames.",
+        "paragraph=Channels, units and widgets are declared where the sketch prints them.",
+        "category=Communication",
+        "url=https://serial-studio.com/",
+        "architectures=*",
+        "includes=SerialStudio.h",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def render_declaration(manifest: dict) -> dict[Path, str]:
+    declaration = load_declaration()
+    wire = wire_projection(manifest, declaration)
+    c_header = render_firmware_c(wire, declaration)
+    rendered = {OUT_DECLARATION: render_declaration_header(manifest, wire, declaration)}
+    rendered.update({path: c_header for path in OUT_FIRMWARE_C})
+    rendered[OUT_FIRMWARE_PY] = render_firmware_python(wire, declaration)
+    rendered[OUT_ARDUINO_PROPERTIES] = render_arduino_properties(declaration)
+    return rendered
+
+
+# --------------------------------------------------------------------------------------------------
 # Entry point
 # --------------------------------------------------------------------------------------------------
 
@@ -2241,6 +2689,7 @@ def render_all(manifest: dict) -> dict[Path, str]:
         OUT_FORM: render_form(manifest),
         OUT_API: render_api(manifest),
     }
+    rendered.update(render_declaration(manifest))
 
     for path, content in rendered.items():
         for number, line in enumerate(content.splitlines(), start=1):
@@ -2250,7 +2699,7 @@ def render_all(manifest: dict) -> dict[Path, str]:
                     f"{MAX_COLS} columns ({len(line)})"
                 )
 
-            if line.lstrip().startswith(")"):
+            if path.suffix in (".h", ".cpp") and line.lstrip().startswith(")"):
                 raise SystemExit(
                     f"generate-property-registry: {path.name}:{number} starts with a stray "
                     "closing paren -- a wrapper emitted unbalanced text"

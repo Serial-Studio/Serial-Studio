@@ -3840,6 +3840,7 @@ _API_GENERATED = {
     "core/Core/DataModel/Generated/DatasetSerialization.cpp": "never edit by hand",
     "core/Ui/ProjectEditor/Generated/DatasetForm.cpp": "never edit by hand",
     "core/Api/API/Generated/DatasetApiFields.cpp": "never edit by hand",
+    "core/Pipeline/DataModel/Generated/DeclarationVocabulary.h": "never edit by hand",
 }
 
 _LEDGER_REL = "app/rcc/api/proto-fields.json"

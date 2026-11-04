@@ -1,0 +1,1 @@
+#ss1{"title":"Clean","groups":[{"title":"Probe","widget":"datagrid","datasets":[{"title":"Level","units":"cm","graph":true,"alarmBands":[{"min":90,"max":100,"severity":2}]}]}]}

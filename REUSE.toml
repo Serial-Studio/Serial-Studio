@@ -184,6 +184,14 @@ path = ["lib/QSimpleUpdater/**"]
 SPDX-FileCopyrightText = "2014-2025 Alex Spataru <alex@serial-studio.com>"
 SPDX-License-Identifier = "MIT"
 
+# The device library is embedded in user firmware, closed commercial firmware included, so it is
+# MIT rather than the app's dual license (spec 0111).
+
+[[annotations]]
+path = ["firmware/**"]
+SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
+SPDX-License-Identifier = "MIT"
+
 [[annotations]]
 path = ["lib/open62541/open62541.c", "lib/open62541/open62541.h", "lib/open62541/LICENSE"]
 SPDX-FileCopyrightText = "2014-2026 The open62541 authors"
