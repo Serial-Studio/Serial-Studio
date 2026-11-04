@@ -720,6 +720,23 @@ API::MirrorPublisher& API::Server::mirrorPublisher()
 }
 
 /**
+ * @brief Releases a remote connection's broadcast hold once its token is accepted. Queued to the
+ *        worker ahead of the handshake reply, so the client's first frame follows that reply.
+ */
+void API::Server::clientAuthenticated(QTcpSocket* socket, const ConnectionState& state)
+{
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT(state.authenticated, return);
+
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(worker,
+                            "setSocketAuthenticated",
+                            Qt::QueuedConnection,
+                            Q_ARG(QTcpSocket*, socket),
+                            Q_ARG(QString, state.sessionId));
+}
+
+/**
  * @brief Turns this connection's per-frame broadcast on or off, mirroring the decision into the
  *        worker thread with the session id carried and verified.
  */
@@ -1082,7 +1099,8 @@ void API::Server::acceptConnection()
                             "addSocket",
                             Qt::QueuedConnection,
                             Q_ARG(QTcpSocket*, socket),
-                            Q_ARG(QString, state.sessionId));
+                            Q_ARG(QString, state.sessionId),
+                            Q_ARG(bool, state.authenticated));
 }
 
 /**

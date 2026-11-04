@@ -94,6 +94,12 @@ public:
     responses.append(response);
   }
 
+  void clientAuthenticated(QTcpSocket* socket, const API::ConnectionState& state) override
+  {
+    Q_UNUSED(socket);
+    Q_UNUSED(state);
+  }
+
   void closeSocket(QTcpSocket* socket, API::ConnectionState& state) override
   {
     Q_UNUSED(socket);

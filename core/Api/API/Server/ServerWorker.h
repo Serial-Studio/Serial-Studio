@@ -65,12 +65,13 @@ public slots:
   void removeSocket(QTcpSocket* socket);
   void writeRawData(const QByteArray& data);
   void broadcastEvent(const QJsonObject& event);
-  void addSocket(QTcpSocket* socket, const QString& sessionId);
+  void addSocket(QTcpSocket* socket, const QString& sessionId, bool authenticated);
   void disconnectSocket(QTcpSocket* socket, const QString& sessionId);
   void writeToSocket(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void writeMirrorPayload(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void writeStreamBlock(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void setTemplateFrame(int sourceId, const DataModel::Frame& frame);
+  void setSocketAuthenticated(QTcpSocket* socket, const QString& sessionId);
   void setSocketStreamFrames(QTcpSocket* socket, const QString& sessionId, const bool enabled);
 
 protected:
@@ -88,6 +89,7 @@ private slots:
 private:
   void releaseStreamAck(QTcpSocket* socket);
   [[nodiscard]] bool underWriteCap(QTcpSocket* socket);
+  [[nodiscard]] bool receivesBroadcasts(QTcpSocket* socket) const;
   [[nodiscard]] bool dropBackloggedClient(QTcpSocket* socket, const QString& sessionId);
 
 private:
@@ -98,6 +100,9 @@ private:
 
   // Sockets whose client opted out of the per-frame broadcast; empty for every ordinary client
   QSet<QTcpSocket*> m_mutedSockets;
+
+  // Remote sockets that have not presented the token yet: replies only, no broadcast of any kind
+  QSet<QTcpSocket*> m_unauthenticatedSockets;
 
   // Sockets already reported as over-cap; per socket so a later client's stall is not swallowed
   QSet<QTcpSocket*> m_warnedSockets;

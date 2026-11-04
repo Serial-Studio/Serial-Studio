@@ -424,6 +424,7 @@ bool API::ClientReception::handleAuthHandshake(QTcpSocket* socket, ConnectionSta
   }
 
   state.authenticated = true;
+  m_host.clientAuthenticated(socket, state);
   qInfo() << "[API] Client authenticated:" << state.peerAddress << ":" << state.peerPort;
 
   QJsonObject result;

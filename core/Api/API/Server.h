@@ -163,6 +163,7 @@ private:
 
   void sendResponse(QTcpSocket* socket, const QByteArray& response) override;
   void closeSocket(QTcpSocket* socket, ConnectionState& state) override;
+  void clientAuthenticated(QTcpSocket* socket, const ConnectionState& state) override;
   void disconnectClient(QTcpSocket* socket,
                         ConnectionState& state,
                         const QString& errorCode,

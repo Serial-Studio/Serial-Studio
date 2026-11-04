@@ -61,6 +61,9 @@ public:
   // Re-resolves one connection by (socket, sessionId); null once the entry is gone (spec 0075 I1)
   [[nodiscard]] virtual ConnectionState* stateFor(QTcpSocket* socket, const QString& sessionId) = 0;
 
+  // Lifts the broadcast hold a remote connection is under until its token is accepted
+  virtual void clientAuthenticated(QTcpSocket* socket, const ConnectionState& state) = 0;
+
   virtual void sendResponse(QTcpSocket* socket, const QByteArray& response) = 0;
   virtual void closeSocket(QTcpSocket* socket, ConnectionState& state)      = 0;
   virtual void disconnectClient(QTcpSocket* socket,

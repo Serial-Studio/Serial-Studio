@@ -172,17 +172,18 @@ void API::ServerWorker::closeResources()
   m_streamAcks.clear();
   m_mutedSockets.clear();
   m_warnedSockets.clear();
+  m_unauthenticatedSockets.clear();
 
   Q_EMIT clientCountChanged(0);
 }
 
 /**
  * @brief Adds a socket to the worker thread, keyed to its immutable session id (socket pointers
- *        get reused across connect cycles, so every queued hop carries it). Bytes that landed
- *        before this queued adoption ran are drained here: the notifier can buffer them and
- *        emit readyRead with zero receivers, and it never re-fires for buffered data.
+ *        get reused across connect cycles, so every queued hop carries it). An unauthenticated
+ *        socket is held out of every broadcast until setSocketAuthenticated(). Bytes that landed
+ *        before this queued adoption ran are drained here (the notifier never re-fires for them).
  */
-void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId)
+void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId, bool authenticated)
 {
   SS_ASSERT(socket != nullptr, return);
   SS_ASSERT_LOG(!sessionId.isEmpty());
@@ -192,6 +193,11 @@ void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId)
   m_streamAcks.remove(socket);
   m_mutedSockets.remove(socket);
   m_warnedSockets.remove(socket);
+  if (authenticated)
+    m_unauthenticatedSockets.remove(socket);
+  else
+    m_unauthenticatedSockets.insert(socket);
+
   connect(socket, &QTcpSocket::errorOccurred, this, &ServerWorker::onSocketError);
   connect(socket, &QTcpSocket::readyRead, this, &ServerWorker::onSocketReadyRead);
   connect(socket, &QTcpSocket::bytesWritten, this, &ServerWorker::onSocketBytesWritten);
@@ -220,6 +226,7 @@ void API::ServerWorker::removeSocket(QTcpSocket* socket)
   m_sockets.remove(socket);
   m_mutedSockets.remove(socket);
   m_warnedSockets.remove(socket);
+  m_unauthenticatedSockets.remove(socket);
 
   Q_EMIT socketRemoved(socket, sessionId);
   releaseStreamAck(socket);
@@ -245,7 +252,7 @@ void API::ServerWorker::writeRawData(const QByteArray& data)
 
   for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
     auto* socket = *it;
-    if (socket && socket->isWritable() && underWriteCap(socket))
+    if (socket && socket->isWritable() && receivesBroadcasts(socket) && underWriteCap(socket))
       socket->write(json);
   }
 }
@@ -266,7 +273,7 @@ void API::ServerWorker::broadcastEvent(const QJsonObject& event)
 
   for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
     auto* socket = *it;
-    if (socket && socket->isWritable() && underWriteCap(socket))
+    if (socket && socket->isWritable() && receivesBroadcasts(socket) && underWriteCap(socket))
       socket->write(json);
   }
 }
@@ -405,6 +412,34 @@ void API::ServerWorker::disconnectSocket(QTcpSocket* socket, const QString& sess
 }
 
 /**
+ * @brief Releases @p socket's broadcast hold once its client presented the token; dropped when the
+ *        session id no longer matches, so a reused pointer never unmutes an unrelated client.
+ */
+void API::ServerWorker::setSocketAuthenticated(QTcpSocket* socket, const QString& sessionId)
+{
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT_LOG(!sessionId.isEmpty());
+
+  if (m_sockets.value(socket) != sessionId)
+    return;
+
+  m_unauthenticatedSockets.remove(socket);
+}
+
+/**
+ * @brief Whether @p socket may receive the frame, raw-byte and lifecycle broadcasts: every
+ *        authenticated client. Checked before the write cap, so a held socket is never counted
+ *        as a dropped broadcast.
+ */
+bool API::ServerWorker::receivesBroadcasts(QTcpSocket* socket) const
+{
+  SS_ASSERT(socket != nullptr, return false);
+  SS_ASSERT_LOG(QThread::currentThread() == thread());
+
+  return !m_unauthenticatedSockets.contains(socket);
+}
+
+/**
  * @brief Turns the per-frame broadcast off (or back on) for one socket, dropped when the session
  *        id no longer matches so a reused pointer can never mute an unrelated client. Mirror
  *        viewers are the only callers: a client that never subscribes stays on the stream.
@@ -449,7 +484,8 @@ void API::ServerWorker::processItems(const std::vector<DataModel::DataBlockPtr>&
   targets.reserve(m_sockets.size());
   for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
     auto* socket = *it;
-    if (socket && socket->isWritable() && !m_mutedSockets.contains(socket) && underWriteCap(socket))
+    if (socket && socket->isWritable() && receivesBroadcasts(socket)
+        && !m_mutedSockets.contains(socket) && underWriteCap(socket))
       targets.append(socket);
   }
 

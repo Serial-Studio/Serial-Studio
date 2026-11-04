@@ -104,6 +104,13 @@ public:
     responses.append(response);
   }
 
+  void clientAuthenticated(QTcpSocket* socket, const API::ConnectionState& state) override
+  {
+    Q_UNUSED(socket);
+    Q_UNUSED(state);
+    ++authenticatedNotices;
+  }
+
   void closeSocket(QTcpSocket* socket, API::ConnectionState& state) override
   {
     Q_UNUSED(socket);
@@ -125,6 +132,7 @@ public:
   bool consent                    = true;
   bool connected                  = true;
   int closes                      = 0;
+  int authenticatedNotices        = 0;
   API::ConnectionState* lastState = nullptr;
   QByteArray expectedToken;
   QList<QByteArray> responses;
@@ -696,6 +704,7 @@ void TstServerAuth::authHandshakeRejectsBadToken()
     reception.consumeBytes(&socket, state.sessionId, attempt);
 
   QVERIFY(!state.authenticated);
+  QCOMPARE(host.authenticatedNotices, 0);
   QCOMPARE(state.authAttempts, kMaxAuthAttempts);
   QCOMPARE(host.responses.size(), qsizetype(kMaxAuthAttempts - 1));
   QCOMPARE(host.disconnectCodes.size(), qsizetype(1));
@@ -724,6 +733,7 @@ void TstServerAuth::authHandshakeAcceptsAndReplaysPipeline()
                       "{\"type\":\"command\",\"command\":\"api.getCommands\"}\n"));
 
   QVERIFY(state.authenticated);
+  QCOMPARE(host.authenticatedNotices, 1);
   QVERIFY(state.buffer.isEmpty());
   QCOMPARE(host.disconnectCodes.size(), qsizetype(0));
   QCOMPARE(host.dispatchedCommands.size(), qsizetype(1));

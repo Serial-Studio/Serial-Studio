@@ -220,7 +220,7 @@ On success the server replies, and the connection stays authenticated for its li
 {"type":"response","success":true,"result":{"authenticated":true}}
 ```
 
-Any command sent before authenticating is rejected with an `EXECUTION_ERROR` ("Authentication required"), and the connection is closed after a few failed attempts. Loopback clients skip this step entirely.
+Any command sent before authenticating is rejected with an `EXECUTION_ERROR` ("Authentication required"), and the connection is closed after a few failed attempts. Until the handshake succeeds, the connection also receives no frame, raw-data or connection-event broadcasts; they start with the first broadcast after the success reply. Loopback clients skip this step entirely.
 
 **Example (Python)**
 

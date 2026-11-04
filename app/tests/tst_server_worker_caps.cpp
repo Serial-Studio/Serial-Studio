@@ -46,6 +46,8 @@ private slots:
   void mirrorPushesAreSkippedOverTheCap();
   void responsesDropTheClientOverTheCap();
 
+  void unauthenticatedSocketReceivesRepliesOnly();
+
 private:
   void fillBacklogPastTheCap();
 
@@ -79,7 +81,7 @@ void TstServerWorkerCaps::init()
 
   m_queue  = new moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>(16);
   m_worker = new API::ServerWorker(m_queue, &m_enabled, &m_queueSize);
-  m_worker->addSocket(m_serverSide, QStringLiteral("s1"));
+  m_worker->addSocket(m_serverSide, QStringLiteral("s1"), true);
 }
 
 /**
@@ -199,6 +201,42 @@ void TstServerWorkerCaps::responsesDropTheClientOverTheCap()
   QCOMPARE(m_worker->backlogDisconnects(), quint64(1));
   QCOMPARE(m_worker->droppedBroadcasts(), quint64(0));
   QVERIFY(m_serverSide->state() != QAbstractSocket::ConnectedState);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Authentication hold
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief A remote socket that has not presented the token gets replies (the handshake answer) but
+ *        no raw-byte or lifecycle broadcast, and is not counted as a drop; once authenticated it
+ *        receives both. A stale session id never lifts the hold.
+ */
+void TstServerWorkerCaps::unauthenticatedSocketReceivesRepliesOnly()
+{
+  m_worker->addSocket(m_serverSide, QStringLiteral("s1"), false);
+
+  QJsonObject event;
+  event.insert(QStringLiteral("event"), QStringLiteral("connected"));
+  const qint64 held = m_serverSide->bytesToWrite();
+  m_worker->writeRawData(QByteArrayLiteral("telemetry"));
+  m_worker->broadcastEvent(event);
+  QCOMPARE(m_serverSide->bytesToWrite(), held);
+  QCOMPARE(m_worker->droppedBroadcasts(), quint64(0));
+
+  const QByteArray reply = QByteArrayLiteral("{\"type\":\"response\",\"success\":false}\n");
+  m_worker->writeToSocket(m_serverSide, QStringLiteral("s1"), reply);
+  QCOMPARE(m_serverSide->bytesToWrite() - held, qint64(reply.size()));
+
+  const qint64 afterReply = m_serverSide->bytesToWrite();
+  m_worker->setSocketAuthenticated(m_serverSide, QStringLiteral("stale"));
+  m_worker->broadcastEvent(event);
+  QCOMPARE(m_serverSide->bytesToWrite(), afterReply);
+
+  m_worker->setSocketAuthenticated(m_serverSide, QStringLiteral("s1"));
+  m_worker->writeRawData(QByteArrayLiteral("telemetry"));
+  m_worker->broadcastEvent(event);
+  QVERIFY(m_serverSide->bytesToWrite() > afterReply);
 }
 
 QTEST_GUILESS_MAIN(TstServerWorkerCaps)
