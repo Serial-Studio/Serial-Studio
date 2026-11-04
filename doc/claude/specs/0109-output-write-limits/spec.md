@@ -3,6 +3,7 @@ spec: 0109-output-write-limits
 title: Output Control Write Limits
 status: approved     # approved 2026-11-02: refuse with the range shown, Step quantisation off by default
 approved: 2026-11-02
+amended: 2026-11-03
 created: 2026-11-02
 author: Alex Spataru
 ---
@@ -12,6 +13,12 @@ author: Alex Spataru
 > **Phase 1 of 4 — the WHAT and the WHY.** No implementation detail; no file paths, no
 > class names, no signal wiring (that is `plan.md`). Gate: do not start `/ss-plan` until
 > a human marks this `approved`.
+
+> **Amended 2026-11-03 (maintainer, at plan approval).** R1: the slider and knob gain decimals
+> and units, because the spec assumed they had them and they do not. R2: the UI and API call
+> this "out of range", so "refused" stays spec 0110's device outcome. R4: the wheel acts only
+> on a focused control, and a Number field's arrows edit its text. R8: the bundled templates
+> the manual prints change with the manual. Each is marked inline.
 
 ## Problem / Motivation
 
@@ -31,7 +38,8 @@ is the last place a wrong number can be stopped, and today it does not try.
 
 - Every numeric output control enforces its range before the transmit script runs, on every way
   a value can enter it.
-- A text field can be declared numeric, with the same Min, Max, Step and decimals a slider has.
+- A text field can be declared numeric, with the same Min, Max, Step, decimals and units as a
+  slider, which gains decimals and units of its own.
 - A refused value tells the operator what the allowed range is, without a modal and without a
   transmit.
 - Step is honoured by keyboard and wheel increments, so an operator can nudge a setpoint without
@@ -55,17 +63,23 @@ is the last place a wrong number can be stopped, and today it does not try.
 
 1. **R1 — Numeric text field.** A text field has an input kind: Text, which behaves exactly as
    today, or Number, which parses the typed value as a number and carries Min, Max, Step,
-   decimals and units. A Number field whose input is not a number refuses it.
+   decimals and units. A Number field whose input is not a number refuses it. The slider and
+   knob carry decimals and units too, defaulting to what they show today. *(Amended 2026-11-03:
+   neither had a decimals or units field.)*
 2. **R2 — Refusal.** A Number field value outside Min to Max is refused: nothing is transmitted,
    the field keeps the typed text for correction, and a message beside the control names the
-   allowed range. The message clears on the next accepted value.
+   allowed range. The message clears on the next accepted value. The editor, manual and API
+   name this state "out of range". *(Amended 2026-11-03: "refused" is spec 0110's device
+   outcome, and one word for two concepts breaks spec 0100.)*
 3. **R3 — Enforcement point.** The range is enforced before the transmit script, so a script
    never receives an out-of-range number from any control. This holds for pointer input,
    keyboard input, the driving surface of spec 0101 and any future way a value enters a control.
 4. **R4 — Step.** Arrow keys and the mouse wheel move a slider, knob or Number field by one Step;
-   with a modifier, by ten. A Number field has a Quantise to Step option, off by default; when
-   it is on and Step is greater than zero, a typed value is quantised to Step before the range
-   check.
+   with Shift, by ten. The wheel acts only on the control that has focus, and a Number field's
+   arrows edit its text, which Enter then sends. A Number field has a Quantize to Step option,
+   off by default; when it is on and Step is greater than zero, a typed value is quantized to
+   Step, counted from Min, before the range check. *(Amended 2026-11-03: a wheel over an
+   unfocused slider turns a page scroll into an actuation.)*
 5. **R5 — Preview.** The Project Editor preview exercises the limits: an out-of-range value
    shows the refusal the dashboard would show, and never produces bytes.
 6. **R6 — Description.** The API surface that describes an output control reports its kind, Min,
@@ -73,7 +87,8 @@ is the last place a wrong number can be stopped, and today it does not try.
 7. **R7 — Compatibility.** A project saved before this spec loads with every text field as Text
    and every other control unchanged.
 8. **R8 — Manual.** The output controls page documents the numeric text field and the refusal,
-   and its transmit examples stop clamping in script where the control now does it.
+   and its transmit examples stop clamping in script where the control now does it. The bundled
+   templates it prints change with it. *(Amended 2026-11-03: the manual shows them verbatim.)*
 
 ## Acceptance Criteria
 
