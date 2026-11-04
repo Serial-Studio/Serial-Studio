@@ -138,6 +138,8 @@ public:
   [[nodiscard]] DataModel::DataTableStore& tableStore() noexcept;
   [[nodiscard]] const LatestFrameInfo* latestFrame(int sourceId) const noexcept;
 
+  [[nodiscard]] bool quickPlotDeclared() const noexcept { return m_quickPlot.declared(); }
+
   using ParseLoad      = DataModel::ParseBudget::Load;
   using ShortFrameStat = DataModel::ShortFrameWatch::Stat;
 

@@ -429,20 +429,22 @@ bool DataModel::ProjectModel::saveQuickPlotAsProject()
     return false;
 
   LineFormat format;
+  QString declaredTitle;
   std::vector<Group> groups;
   auto& frameBuilder = modules.frameBuilder;
   frameBuilder.invokeOnBuilderThreadBlocking([&] {
     groups = frameBuilder.quickPlotFrame().groups;
     format = frameBuilder.quickPlotFormat();
+    if (frameBuilder.quickPlotDeclared())
+      declaredTitle = frameBuilder.quickPlotFrame().title;
   });
   if (groups.empty())
     return false;
 
-  const auto driver = m_bus.latest<Core::Bus::ActiveUiDriverSettings>();
-  const int busType = driver ? driver->busType : static_cast<int>(SerialStudio::BusType::UART);
-
-  const auto project =
-    QuickPlotProject::build(groups, busType, driver ? driver->settings : QJsonObject(), format);
+  const auto driver   = m_bus.latest<Core::Bus::ActiveUiDriverSettings>();
+  const int busType   = driver ? driver->busType : static_cast<int>(SerialStudio::BusType::UART);
+  const auto settings = driver ? driver->settings : QJsonObject();
+  const auto project  = QuickPlotProject::build(groups, busType, settings, format, declaredTitle);
   if (project.isEmpty())
     return false;
 

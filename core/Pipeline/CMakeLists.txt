@@ -132,6 +132,7 @@ qt_add_library(
   DataModel/Project/ProjectWorkspaceRefs.cpp
   DataModel/Project/ProjectFixedLayouts.cpp
   DataModel/Project/QuickPlotProject.cpp
+  DataModel/Project/DeviceDeclaration.cpp
   DataModel/Project/ProjectTables.cpp
   DataModel/Project/ProjectSources.cpp
   DataModel/Project/ProjectEntities.cpp
@@ -251,6 +252,7 @@ qt_add_library(
   DataModel/Project/ProjectHistory.h
   DataModel/Project/PropertyHooks.h
   DataModel/Generated/DatasetRegistry.h
+  DataModel/Generated/DeclarationVocabulary.h
   DataModel/Project/ProjectPersistence.h
   DataModel/Project/ProjectPresentation.h
   DataModel/Project/ProjectLoader.h
@@ -262,6 +264,7 @@ qt_add_library(
   DataModel/Project/ProjectWorkspaceRefs.h
   DataModel/Project/ProjectFixedLayouts.h
   DataModel/Project/QuickPlotProject.h
+  DataModel/Project/DeviceDeclaration.h
   DataModel/Project/ProjectTables.h
   DataModel/Project/ProjectSources.h
   DataModel/Project/ProjectEntities.h

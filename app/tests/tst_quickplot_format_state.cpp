@@ -376,6 +376,8 @@ private slots:
   void resetForgetsEverything();
   void registryCapsAtMaxLineFields();
   void doublyWrappedLineTokenizesOnce();
+  void declaredRegistryMapsPositionalLines();
+  void declaredRegistryMapsNamedLines();
 
 private:
   DataModel::LineFields m_fields;
@@ -498,6 +500,70 @@ void QuickPlotFormatStateTest::doublyWrappedLineTokenizesOnce()
   QCOMPARE(st.observe(QByteArrayView("/* /* 1 2 */ */"), m_fields), Outcome::Rebuild);
   QVERIFY(st.established());
   QCOMPARE(st.channels().size(), size_t(4));
+}
+
+/**
+ * @brief The registry a device declared (spec 0111): titles as names, positions in frame order.
+ */
+[[nodiscard]] static std::vector<DataModel::QuickPlotChannel> declaredChannels()
+{
+  std::vector<DataModel::QuickPlotChannel> channels(3);
+  const char* names[] = {"Temp", "Hum", "Pressure"};
+  for (int i = 0; i < 3; ++i) {
+    channels[static_cast<size_t>(i)].name     = names[i];
+    channels[static_cast<size_t>(i)].position = i;
+  }
+
+  return channels;
+}
+
+/**
+ * @brief A positional stream over a declared registry applies without rebuilding; a short line
+ *        leaves the last channel with no field and a long line's extra field maps nowhere.
+ */
+void QuickPlotFormatStateTest::declaredRegistryMapsPositionalLines()
+{
+  DataModel::QuickPlotFormatState st;
+  st.pinDeclared(declaredChannels());
+  QVERIFY(st.declared());
+  QVERIFY(!st.established());
+  QCOMPARE(st.channelTitle(1), QStringLiteral("Hum"));
+
+  QCOMPARE(st.observe(QByteArrayView("1.5,2.5,3.5,4.5"), m_fields), Outcome::Apply);
+  QVERIFY(st.established());
+  QCOMPARE(st.indexOf(m_fields.items[2], 2), 2);
+  QCOMPARE(st.indexOf(m_fields.items[3], 3), -1);
+
+  QCOMPARE(st.observe(QByteArrayView("9,8"), m_fields), Outcome::Apply);
+  QCOMPARE(m_fields.count, qsizetype(2));
+  QCOMPARE(st.indexOf(m_fields.items[0], 0), 0);
+  QCOMPARE(st.indexOf(m_fields.items[1], 1), 1);
+  QCOMPARE(st.channels().size(), size_t(3));
+  QCOMPARE(st.observe(QByteArrayView("status OK"), m_fields), Outcome::Text);
+}
+
+/**
+ * @brief A named stream maps by title in any order, an undeclared name is ignored, nothing grows,
+ *        and reset forgets the declaration.
+ */
+void QuickPlotFormatStateTest::declaredRegistryMapsNamedLines()
+{
+  DataModel::QuickPlotFormatState st;
+  st.pinDeclared(declaredChannels());
+  const QByteArrayView line("Pressure:1013,Temp:21.5,Wind:3");
+  QCOMPARE(st.observe(line, m_fields), Outcome::Apply);
+  QVERIFY(st.format().named);
+  QCOMPARE(st.indexOf(m_fields.items[0], 0), 2);
+  QCOMPARE(st.indexOf(m_fields.items[1], 1), 0);
+  QCOMPARE(st.indexOf(m_fields.items[2], 2), -1);
+
+  QCOMPARE(st.observe(QByteArrayView("Hum:40"), m_fields), Outcome::Apply);
+  QCOMPARE(st.indexOf(m_fields.items[0], 0), 1);
+  QCOMPARE(st.channels().size(), size_t(3));
+
+  st.reset();
+  QVERIFY(!st.declared());
+  QVERIFY(st.channels().empty());
 }
 
 QTEST_APPLESS_MAIN(QuickPlotFormatStateTest)

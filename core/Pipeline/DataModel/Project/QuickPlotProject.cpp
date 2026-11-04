@@ -21,7 +21,6 @@
 
 #include "DataModel/Project/QuickPlotProject.h"
 
-#include <algorithm>
 #include <QJsonArray>
 #include <QObject>
 #include <QStringList>
@@ -29,11 +28,13 @@
 #include "Core/DataModel/FrameKeys.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
+#include "DataModel/Generated/DeclarationVocabulary.h"
 
 /**
- * @brief Upper bound on the groups a Quick Plot structure carries (data grid plus multi-plot).
+ * @brief Upper bound on the groups a Quick Plot structure carries: a device declaration's cap,
+ *        which also covers the detected data grid plus multi-plot.
  */
-static constexpr size_t kMaxQuickPlotGroups = 8;
+static constexpr size_t kMaxQuickPlotGroups = DataModel::Declaration::kMaxGroups;
 
 /**
  * @brief True when the "delimited" comma source reproduces the stream: unwrapped positional comma
@@ -78,30 +79,30 @@ static constexpr size_t kMaxQuickPlotGroups = 8;
 }
 
 /**
- * @brief The keyed parser's field order: the data grid's dataset titles by frame index, so a wire
- *        name or JSON path maps back to the channel it created and a positional slot keeps its
- * place.
+ * @brief The keyed parser's field order: one title per frame index across every group, from the
+ *        first dataset at that index, so a wire name or JSON path maps back to its channel, a
+ *        positional slot keeps its place and a declared channel shown twice is listed once.
  */
-[[nodiscard]] static QString fieldList(const DataModel::Group& datagrid)
+[[nodiscard]] static QString fieldList(const std::vector<DataModel::Group>& groups)
 {
-  SS_ASSERT(!datagrid.datasets.empty(), return QString());
-  SS_ASSERT(datagrid.datasets.size() <= static_cast<size_t>(DataModel::kMaxLineFields),
-            return QString());
-
-  std::vector<const DataModel::Dataset*> ordered;
-  ordered.reserve(datagrid.datasets.size());
-  for (const auto& dataset : datagrid.datasets)
-    ordered.push_back(&dataset);
-
-  std::sort(ordered.begin(), ordered.end(), [](const auto* a, const auto* b) {
-    return a->index < b->index;
-  });
+  SS_ASSERT(!groups.empty(), return QString());
 
   QStringList names;
-  names.reserve(static_cast<int>(ordered.size()));
-  for (const auto* dataset : ordered)
-    names.append(dataset->title);
+  for (const auto& group : groups) {
+    for (const auto& dataset : group.datasets) {
+      const bool inRange = dataset.index >= 1 && dataset.index <= DataModel::kMaxLineFields;
+      SS_ASSERT_LOG(inRange);
+      if (!inRange || (dataset.index <= names.size() && !names.at(dataset.index - 1).isEmpty()))
+        continue;
 
+      while (names.size() < dataset.index)
+        names.append(QString());
+
+      names[dataset.index - 1] = dataset.title;
+    }
+  }
+
+  SS_ASSERT(names.size() <= DataModel::kMaxLineFields, return QString());
   return names.join(QLatin1Char(','));
 }
 
@@ -118,20 +119,21 @@ static constexpr size_t kMaxQuickPlotGroups = 8;
   params[QStringLiteral("format")]    = json ? QStringLiteral("json") : QStringLiteral("delimited");
   params[QStringLiteral("separator")] = separatorName(format.separator);
   params[QStringLiteral("decimalComma")] = format.decimalComma;
-  params[QStringLiteral("fields")]       = format.named ? fieldList(groups.front()) : QString();
+  params[QStringLiteral("fields")]       = format.named ? fieldList(groups) : QString();
   return params;
 }
 
 /**
- * @brief The device Quick Plot reads from, expressed as a project source: newline-terminated
- *        plain text parsed by the Built-In template that reproduces the detected format, the
- *        "delimited" comma split for a plain comma stream and "line_values" otherwise (spec 0106
- *        R12). Trimming absorbs the CR of CRLF lines; a project source has one end delimiter.
+ * @brief The device Quick Plot reads from, as a project source: newline-terminated plain text
+ *        parsed by the Built-In template that reproduces the detected format, "delimited" for a
+ *        plain comma stream and "line_values" otherwise (spec 0106 R12). A declared session always
+ *        takes line_values, which skips declaration lines as the live lane does (spec 0111 R9).
  */
 [[nodiscard]] static DataModel::Source quickPlotSource(const int busType,
                                                        const QJsonObject& connectionSettings,
                                                        const DataModel::LineFormat& format,
-                                                       const std::vector<DataModel::Group>& groups)
+                                                       const std::vector<DataModel::Group>& groups,
+                                                       const bool declared)
 {
   DataModel::Source source;
   source.sourceId            = 0;
@@ -142,7 +144,7 @@ static constexpr size_t kMaxQuickPlotGroups = 8;
   source.decoderMethod       = static_cast<int>(SerialStudio::PlainText);
   source.frameParserLanguage = static_cast<int>(SerialStudio::Native);
   source.connectionSettings  = connectionSettings;
-  if (plainCommaStream(format, groups)) {
+  if (!declared && plainCommaStream(format, groups)) {
     source.frameParserTemplate = QStringLiteral("delimited");
     source.frameParserParams   = QJsonObject{
       { QStringLiteral("separator"), QStringLiteral(",")},
@@ -159,17 +161,25 @@ static constexpr size_t kMaxQuickPlotGroups = 8;
 }
 
 /**
- * @brief Rebuilds one Quick Plot group as a project group: every dataset setting carries over
- *        (titles, indices, plots, and the FFT rate, size and ranges Quick Plot derives for audio),
- *        while live values and runtime ids are dropped so the loader assigns fresh project ids.
+ * @brief Rebuilds one Quick Plot group as a project group: every group and dataset setting carries
+ *        over (titles, indices, plots, output controls, and the FFT settings Quick Plot derives for
+ *        audio), live values and runtime ids are dropped, and a detected session logs every dataset
+ *        while a declared one keeps the device's choice.
  */
-[[nodiscard]] static DataModel::Group projectGroup(const DataModel::Group& live, const int groupId)
+[[nodiscard]] static DataModel::Group projectGroup(const DataModel::Group& live,
+                                                   const int groupId,
+                                                   const bool declared)
 {
   DataModel::Group group;
-  group.groupId  = groupId;
-  group.title    = live.title;
-  group.widget   = live.widget;
-  group.sourceId = 0;
+  group.groupId       = groupId;
+  group.title         = live.title;
+  group.widget        = live.widget;
+  group.sourceId      = 0;
+  group.groupType     = live.groupType;
+  group.columns       = live.columns;
+  group.outputWidgets = live.outputWidgets;
+  for (auto& widget : group.outputWidgets)
+    widget.groupId = groupId;
 
   int datasetId = 0;
   for (const auto& liveDataset : live.datasets) {
@@ -180,7 +190,7 @@ static constexpr size_t kMaxQuickPlotGroups = 8;
     dataset.uniqueId           = -1;
     dataset.xAxisId            = DataModel::kXAxisTime;
     dataset.waterfallYAxis     = 0;
-    dataset.log                = true;
+    dataset.log                = declared ? liveDataset.log : true;
     dataset.isNumeric          = false;
     dataset.numericValue       = 0;
     dataset.rawNumericValue    = 0;
@@ -196,26 +206,30 @@ static constexpr size_t kMaxQuickPlotGroups = 8;
 /**
  * @brief Assembles the project document for @p quickPlotGroups on a @p busType device that
  *        reconnects with @p connectionSettings and parses with the @p format the live lane
- * detected.
+ *        detected; a non-empty @p declaredTitle names a device-declared session's project.
  */
 QJsonObject DataModel::QuickPlotProject::build(const std::vector<Group>& quickPlotGroups,
                                                const int busType,
                                                const QJsonObject& connectionSettings,
-                                               const LineFormat& format)
+                                               const LineFormat& format,
+                                               const QString& declaredTitle)
 {
   SS_ASSERT(!quickPlotGroups.empty(), return QJsonObject());
   SS_ASSERT(quickPlotGroups.size() <= kMaxQuickPlotGroups, return QJsonObject());
 
+  const bool declared = !declaredTitle.isEmpty();
   QJsonArray groups;
   int groupId = 0;
   for (const auto& live : quickPlotGroups)
-    groups.append(DataModel::serialize(projectGroup(live, groupId++)));
+    groups.append(DataModel::serialize(projectGroup(live, groupId++, declared)));
+
+  const auto source =
+    quickPlotSource(busType, connectionSettings, format, quickPlotGroups, declared);
 
   QJsonObject project;
-  project[Keys::Title]   = QObject::tr("Quick Plot Project");
-  project[Keys::Actions] = QJsonArray();
-  project[Keys::Sources] = QJsonArray{
-    DataModel::serialize(quickPlotSource(busType, connectionSettings, format, quickPlotGroups))};
+  project[Keys::Title]               = declared ? declaredTitle : QObject::tr("Quick Plot Project");
+  project[Keys::Actions]             = QJsonArray();
+  project[Keys::Sources]             = QJsonArray{DataModel::serialize(source)};
   project[Keys::Groups]              = groups;
   project[Keys::CustomizeWorkspaces] = false;
   return project;

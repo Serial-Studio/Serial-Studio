@@ -64,7 +64,9 @@ updated: 2026-11-03
 - **Verify:** `python3 -m json.tool` on both files; registry-verify fails until T2 (expected).
 - **Executor:** Main (vocabulary decision).
 - **Deps:** none
-- [ ] done
+- [x] done
+  - Caps also bound fftMarkers (16) through `caps.subEntityItems`, keyed by sub-entity field so
+    the gate can demand a cap for every included sub-entity.
 
 ### T2 — `wire` on every dataset property and sub-entity
 
@@ -80,7 +82,9 @@ updated: 2026-11-03
 - **Verify:** `python scripts/registry-verify.py` validates the manifest against the schema.
 - **Executor:** Main (each exclusion is a security or semantics call).
 - **Deps:** T1
-- [ ] done
+- [x] done
+  - 0108 had landed: its format properties, `labels` (keys `Value`, `LabelText`) and
+    `labelsDefault` are included. Sub-entity `keys` name `Keys::` constants, like `jsonKey`.
 
 ### T3 — Generator: wire projection and the app header
 
@@ -100,7 +104,9 @@ updated: 2026-11-03
   `core/Pipeline/DataModel/Project/QuickPlotProject.cpp`'s compile entry).
 - **Executor:** Sonnet; donor `render_registry` / `emit_api_schema` in the same script.
 - **Deps:** T2
-- [ ] done
+- [x] done
+  - The sanitizer also resets non-finite doubles and runs the single- and cross-field property
+    validators (alias uniqueness excepted), each failure falling back to the registry default.
 
 ### T4 — Generator: the library vocabularies
 
@@ -116,7 +122,7 @@ updated: 2026-11-03
   Python file; `grep -c` that the two C copies are identical.
 - **Executor:** Sonnet; donor T3's renderer.
 - **Deps:** T3
-- [ ] done
+- [x] done
 
 ### T5 — MIT licensing for `firmware/`
 
@@ -126,7 +132,9 @@ updated: 2026-11-03
 - **Verify:** `reuse lint` clean.
 - **Executor:** Haiku.
 - **Deps:** T4
-- [ ] done
+- [x] done
+  - The generator's MIT notice sits inside `REUSE-IgnoreStart/End`, so REUSE does not read it as
+    the script's own license.
 
 ### T6 — The registry gate
 
@@ -141,7 +149,10 @@ updated: 2026-11-03
 - **Verify:** `python scripts/registry-verify.py` clean.
 - **Executor:** Sonnet; donor `check_manifest_keys` (`:861`).
 - **Deps:** T4
-- [ ] done
+- [x] done
+  - Also refuses code, path, URL and connection keys (`WIRE_FORBIDDEN_KEYS`) and the `image`,
+    `painter` and `webview` widgets whatever a manifest says, and reads the golden lines through
+    the generator's own `wire_projection`.
 
 ### T7 — Gate fixtures (AC9)
 
@@ -152,7 +163,10 @@ updated: 2026-11-03
 - **Verify:** `pytest scripts/tests/test_registry_verify_wire.py -v`.
 - **Executor:** Sonnet; donor `scripts/tests/test_layer_verify.py`.
 - **Deps:** T6
-- [ ] done
+- [x] done
+  - The fixtures live in `scripts/tests/wire-fixtures/` (the `hook-fixtures` precedent):
+    `fixtures/<dir>` is reserved for code-verify rule kinds and `test_no_stale_fixture_directories`
+    fails on any other name.
 
 ## M2 — Declared Quick Plot session (text) and Save as Project (needs M1)
 
@@ -169,7 +183,11 @@ updated: 2026-11-03
 - **Verify:** `registry-verify.py` now checks their keys (T6); each line is under 1 KB.
 - **Executor:** Main (the encoding rule is the inertness guarantee).
 - **Deps:** T6
-- [ ] done
+- [x] done
+  - **Rule widened:** `:` and `=` join the escaped set (written `:`, `=`; hex is
+    lowercase). Under the space separator an unescaped title like `"a x=5 b"` yields the named
+    numeric field `x=5`, which the plan's three-character rule let through. `controls.frames` was
+    added so labels and alarm bands take part in the round trip. Lines: 229 to 957 bytes.
 
 ### T9 — `DeviceDeclaration`: parse and validate
 
@@ -191,7 +209,12 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py` on the .cpp; `code-verify.py --check` on both.
 - **Executor:** Main (R10 safety boundary).
 - **Deps:** T3, T8
-- [ ] done
+- [x] done
+  - A missing frame title refuses the line; an index may also name the next position explicitly;
+    an unknown or unfit group widget becomes `datagrid`. `isDeclarationLine` is inline in the
+    header (first byte, then the prefix) for T15/T16. Integrator: `core/Pipeline/CMakeLists.txt`
+    gains `DataModel/Project/DeviceDeclaration.cpp`, `DataModel/Project/DeviceDeclaration.h` and
+    `DataModel/Generated/DeclarationVocabulary.h` (layer-verify reports them core-unowned).
 
 ### T10 — `DeclarationState` and `wireProjection`
 
@@ -204,7 +227,9 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `code-verify.py --check`.
 - **Executor:** Sonnet; donor T9's file.
 - **Deps:** T9
-- [ ] done
+- [x] done
+  - The hold is a fourth outcome, `Held`; a held line is not parsed until it is re-offered after
+    the second. `declaredChannels(declaration)` lives here so the live lane and the tests share it.
 
 ### T11 — ctest `tst_device_declaration` (AC2)
 
@@ -219,7 +244,10 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; maintainer build, then `ctest -R tst_device_declaration`.
 - **Executor:** Sonnet; donor `app/tests/tst_quickplot_format_state.cpp`.
 - **Deps:** T10
-- [ ] done
+- [x] done
+  - Syntax-checked only; not built or run. Integrator: register with `LineFormat.cpp`,
+    `JsonLeafScanner.cpp`, `QuickPlotFormatState.cpp`, `DeviceDeclaration.cpp`, LIBS `Qt6::Core
+    SerialStudio::Core`, and `SS_DECLARATION_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/tests/golden"`.
 
 ### T12 — ctest `tst_declaration_inert` (AC8 unit half)
 
@@ -232,7 +260,10 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `ctest -R tst_declaration_inert`.
 - **Executor:** Sonnet; donor `app/tests/tst_line_format.cpp`.
 - **Deps:** T8
-- [ ] done
+- [x] done
+  - Syntax-checked only; the same grammar was simulated in Python against every golden line and
+    counter-case. Integrator: `LineFormat.cpp`, `JsonLeafScanner.cpp`, LIBS `Qt6::Core
+    SerialStudio::Core`, and the `SS_DECLARATION_GOLDEN_DIR` define.
 
 ### T13 — `QuickPlotFormatState::pinDeclared`
 
@@ -250,7 +281,9 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `ctest -R tst_quickplot_format_state`.
 - **Executor:** Main.
 - **Deps:** T10
-- [ ] done
+- [x] done
+  - Establishing a declared registry (and the one re-evaluation) returns `Apply`, not `Rebuild`:
+    the structure was built when the declaration was accepted. Test cases added; not run.
 
 ### T14 — `QuickPlotBuilder::declare` and the declared build
 
@@ -262,7 +295,11 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `code-verify.py --check`.
 - **Executor:** Main.
 - **Deps:** T13
-- [ ] done
+- [x] done
+  - `declare(line, timestamp)` returns the outcome and writes the one `qInfo` per accepted,
+    refused or held content itself, so T15 adds no logging (FrameBuilder.cpp sits at its census
+    baseline of 2901 with no headroom). `reset()`, `pinPositional()` and the replay pin also reset
+    the declaration, so an identical line declares again after a reconnect.
 
 ### T15 — The prefix branch in `parseQuickPlotFrame`
 
@@ -305,7 +342,11 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py` on both .cpp files; `ctest -R tst_quickplot_project` still passes.
 - **Executor:** Sonnet; donor the same file.
 - **Deps:** T14
-- [ ] done
+- [x] done
+  - `build()` takes `declaredTitle` (empty means detected); a declared dataset keeps its `log`.
+    The declared state reaches the hop through a one-line inline `FrameBuilder::quickPlotDeclared()`
+    in `FrameBuilder.h` (no .cpp change, no census cost). The save dialog's default file name
+    stays "Quick Plot Project": device text never forms a path.
 
 ### T18 — ctest `tst_declared_roundtrip` (AC1 save half, R9)
 
@@ -318,7 +359,11 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `ctest -R tst_declared_roundtrip`.
 - **Executor:** Sonnet; donor `app/tests/tst_quickplot_roundtrip.cpp`.
 - **Deps:** T16, T17
-- [ ] done
+- [x] done
+  - Written and syntax-checked; its boot-declaration assertion fails until T16 lands. Compares
+    only the channels a line carried (the keyed parser latches a missing name, the live lane
+    shows no sample). Integrator: the `tst_quickplot_roundtrip` sources plus
+    `DeviceDeclaration.cpp`, and the `SS_DECLARATION_GOLDEN_DIR` define.
 
 ## M3 — Libraries (needs M1; the T8 golden lines are the contract)
 

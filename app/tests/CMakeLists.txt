@@ -432,6 +432,49 @@ ss_add_unit_test(tst_quickplot_roundtrip
 )
 
 #
+# Device declarations (spec 0111): parse and validate (AC2), the inertness of a declaration line to
+# 0106's detector and a pre-0111 app (AC8), and the declared session's Save as Project round trip.
+#
+ss_add_unit_test(tst_device_declaration
+  SOURCES tst_device_declaration.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/QuickPlotFormatState.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/DeviceDeclaration.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+target_compile_definitions(tst_device_declaration PRIVATE
+  SS_DECLARATION_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/tests/golden")
+
+ss_add_unit_test(tst_declaration_inert
+  SOURCES tst_declaration_inert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+target_compile_definitions(tst_declaration_inert PRIVATE
+  SS_DECLARATION_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/tests/golden")
+
+ss_add_unit_test(tst_declared_roundtrip
+  SOURCES tst_declared_roundtrip.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/QuickPlotFormatState.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/QuickPlotProject.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/DeviceDeclaration.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+target_compile_definitions(tst_declared_roundtrip PRIVATE
+  SS_DECLARATION_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/tests/golden")
+
+#
 # Group widget requirements (spec 0100 R15/R16): the one rule the group editor warning and the
 # Problem Center finding share, matched to the tags the dashboard widgets bind by.
 #

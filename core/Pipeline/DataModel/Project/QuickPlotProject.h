@@ -29,15 +29,16 @@
 
 /**
  * @brief Turns a live Quick Plot structure into an editable project (spec 0100 R8/R9): one device
- *        with Quick Plot's framing and the free Built-In template that reproduces the detected line
- *        format (spec 0106 R12), and Quick Plot's own groups rebuilt as plain project groups. Pure
- *        and free of Pro content, so it is unit-testable and the result connects in every edition.
+ *        with Quick Plot's framing and the free Built-In template that reproduces the detected
+ *        line format (spec 0106 R12), and Quick Plot's groups rebuilt as project groups. A
+ * non-empty declared title marks a device-declared session (spec 0111 R9). Pure, so unit-testable.
  */
 namespace DataModel::QuickPlotProject {
 
 [[nodiscard]] QJsonObject build(const std::vector<Group>& quickPlotGroups,
                                 int busType,
                                 const QJsonObject& connectionSettings,
-                                const LineFormat& format);
+                                const LineFormat& format,
+                                const QString& declaredTitle = QString());
 
 }  // namespace DataModel::QuickPlotProject

@@ -56,8 +56,8 @@ struct QuickPlotChannel {
 /**
  * @brief Pipeline-thread state of the Quick Plot lane (spec 0106): the format established from the
  *        first qualifying line, the channel registry keyed by name or position, the header
- *        candidate, and the one re-evaluation that runs when the fixed format yields no number.
- *        No Qt object and no bus reach; replay and audio pin a positional format, never detect.
+ *        candidate, and the one re-evaluation that runs when the fixed format yields no number. No
+ *        Qt object or bus reach; replay and audio pin a format, a declaration pins the registry.
  */
 class QuickPlotFormatState {
 public:
@@ -68,6 +68,8 @@ public:
   QuickPlotFormatState& operator=(const QuickPlotFormatState&) = delete;
 
   [[nodiscard]] bool pinned() const noexcept { return m_pinned; }
+
+  [[nodiscard]] bool declared() const noexcept { return m_declared; }
 
   [[nodiscard]] bool established() const noexcept { return m_established; }
 
@@ -84,6 +86,7 @@ public:
 
   void reset();
   void pinPositional(int count);
+  void pinDeclared(const std::vector<QuickPlotChannel>& channels);
   [[nodiscard]] QuickPlotLineOutcome observe(QByteArrayView line, LineFields& fields);
   [[nodiscard]] QuickPlotLineOutcome observeTokenized(const LineFields& fields);
 
@@ -99,6 +102,7 @@ private:
 
 private:
   bool m_pinned;
+  bool m_declared;
   bool m_established;
   LineFormat m_format;
   QByteArray m_headerCandidate;

@@ -33,18 +33,20 @@
  * @brief Starts unestablished; the per-position lookup cache is sized once so indexOf never
  *        allocates.
  */
-DataModel::QuickPlotFormatState::QuickPlotFormatState() : m_pinned(false), m_established(false)
+DataModel::QuickPlotFormatState::QuickPlotFormatState()
+  : m_pinned(false), m_declared(false), m_established(false)
 {
   m_lastIndex.assign(static_cast<size_t>(kMaxLineFields), -1);
 }
 
 /**
- * @brief Forgets the format, the registry, the header state and the replay pin; the next line
- *        detects again. Called on connect and on an operation-mode change.
+ * @brief Forgets the format, the registry, the header state, the replay pin and a declared
+ *        registry; the next line detects again. Called on connect and on an operation-mode change.
  */
 void DataModel::QuickPlotFormatState::reset()
 {
   m_pinned      = false;
+  m_declared    = false;
   m_established = false;
   m_format      = LineFormat();
   m_headerCandidate.clear();
@@ -73,13 +75,31 @@ void DataModel::QuickPlotFormatState::pinPositional(const int count)
   m_established = count > 0;
 }
 
+/**
+ * @brief Pins the registry a device declared (spec 0111 R5): every channel carries its title as
+ *        its name and its frame position, so positional and named lines both map onto it. The
+ *        first data line still detects the format through the shared tokenizer, but no line grows
+ *        or replaces the registry until the next reset or pin, and a missing field is no sample.
+ */
+void DataModel::QuickPlotFormatState::pinDeclared(const std::vector<QuickPlotChannel>& channels)
+{
+  SS_ASSERT(!channels.empty(), return);
+  SS_ASSERT(channels.size() <= static_cast<size_t>(kMaxLineFields), return);
+
+  reset();
+  m_channels = channels;
+  rebuildPositionIndex();
+  m_declared = true;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Observation
 //--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Live lane entry: detects until established, then tokenizes under the fixed format. A
- *        pinned state never detects and is tokenized under its pin.
+ *        pinned state never detects and is tokenized under its pin; a declared registry already
+ *        has its structure, so establishing it applies instead of rebuilding.
  */
 DataModel::QuickPlotLineOutcome DataModel::QuickPlotFormatState::observe(QByteArrayView line,
                                                                          LineFields& fields)
@@ -97,7 +117,10 @@ DataModel::QuickPlotLineOutcome DataModel::QuickPlotFormatState::observe(QByteAr
 
   establish(fields);
   acceptHeader(line, fields);
-  return m_established ? QuickPlotLineOutcome::Rebuild : QuickPlotLineOutcome::Text;
+  if (!m_established)
+    return QuickPlotLineOutcome::Text;
+
+  return m_declared ? QuickPlotLineOutcome::Apply : QuickPlotLineOutcome::Rebuild;
 }
 
 /**
@@ -138,7 +161,7 @@ DataModel::QuickPlotLineOutcome DataModel::QuickPlotFormatState::classify(QByteA
 
     m_format = fresh;
     establish(fields);
-    return QuickPlotLineOutcome::Rebuild;
+    return m_declared ? QuickPlotLineOutcome::Apply : QuickPlotLineOutcome::Rebuild;
   }
 
   return grow(fields) ? QuickPlotLineOutcome::Rebuild : QuickPlotLineOutcome::Apply;
@@ -217,12 +240,14 @@ int DataModel::QuickPlotFormatState::indexOf(const LineField& field,
  * @brief Grows the registry for fields it does not know. A plain positional stream keeps today's
  *        contract and re-establishes on any field-count change; a named or mixed stream only
  *        appends, so a missing name never shifts the others, and stops at kMaxLineFields channels
- *        so a stream whose names never repeat cannot grow the dashboard without bound.
+ *        so endless new names cannot grow the dashboard. A declared registry never grows.
  */
 bool DataModel::QuickPlotFormatState::grow(const LineFields& fields)
 {
   SS_ASSERT(fields.count >= 0, return false);
   SS_ASSERT(kMaxLineFields >= fields.count, return false);
+  if (m_declared)
+    return false;
 
   const bool positional = positionalOnly() && !m_format.named;
   if (positional) {
@@ -258,12 +283,17 @@ bool DataModel::QuickPlotFormatState::grow(const LineFields& fields)
 }
 
 /**
- * @brief Replaces the registry with one channel per field of the establishing line.
+ * @brief Replaces the registry with one channel per field of the establishing line; a declared
+ *        registry is kept and only the detected format becomes fixed.
  */
 void DataModel::QuickPlotFormatState::establish(const LineFields& fields)
 {
   SS_ASSERT(fields.count > 0, return);
   SS_ASSERT(kMaxLineFields >= fields.count, return);
+  if (m_declared) {
+    m_established = true;
+    return;
+  }
 
   clearRegistry();
   for (qsizetype i = 0; i < fields.count; ++i)

@@ -96,21 +96,46 @@ void DataModel::QuickPlotBuilder::setHeaders(const QStringList& headers)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Forgets the detected format and the channel registry; the next line detects again.
+ * @brief Forgets the detected format, the channel registry and the device declaration; the next
+ *        line detects again and the app's request brings a declaration back.
  */
 void DataModel::QuickPlotBuilder::reset()
 {
   m_state.reset();
+  m_declaration.reset();
 }
 
 /**
- * @brief Pins the positional comma format with @p count channels (replay rows and the audio lane).
+ * @brief Pins the positional comma format with @p count channels (replay rows and the audio lane);
+ *        neither carries a declaration.
  */
 void DataModel::QuickPlotBuilder::pinPositional(const int count)
 {
   SS_ASSERT(count >= 0, return);
   SS_ASSERT(kMaxLineFields >= count, return);
   m_state.pinPositional(count);
+  m_declaration.reset();
+}
+
+/**
+ * @brief Offers one prefixed line to the declaration state (spec 0111 R2/R4), logs every accepted,
+ *        refused or held content once to the console, and on Rebuild pins the declared registry.
+ *        The frame is untouched: the caller invalidates the frame pool and runs build().
+ */
+DataModel::DeclarationOutcome DataModel::QuickPlotBuilder::declare(
+  QByteArrayView line, const DeclarationState::TimePoint timestamp)
+{
+  SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return DeclarationOutcome::Unchanged);
+  SS_ASSERT(isDeclarationLine(line), return DeclarationOutcome::Unchanged);
+
+  const auto outcome = m_declaration.offer(line, timestamp);
+  if (outcome != DeclarationOutcome::Unchanged)
+    qInfo().noquote() << "[QuickPlot]" << m_declaration.message();
+
+  if (outcome == DeclarationOutcome::Rebuild)
+    m_state.pinDeclared(declaredChannels(m_declaration.current()));
+
+  return outcome;
 }
 
 /**
@@ -130,8 +155,10 @@ DataModel::QuickPlotLineOutcome DataModel::QuickPlotBuilder::observe(QByteArrayV
 DataModel::QuickPlotLineOutcome DataModel::QuickPlotBuilder::observeReplayRow(QByteArrayView row)
 {
   SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return QuickPlotLineOutcome::Text);
-  if (!m_state.pinned())
+  if (!m_state.pinned()) {
     m_state.pinPositional(0);
+    m_declaration.reset();
+  }
 
   qsizetype end = row.size();
   for (; end > 0 && (row.at(end - 1) == '\n' || row.at(end - 1) == '\r'); --end)
@@ -186,13 +213,18 @@ DataModel::Source DataModel::QuickPlotBuilder::makeSource() const
 }
 
 /**
- * @brief Rebuilds the Quick Plot frame structure from the channel registry. The caller invalidates
- *        the frame pool first: a rebuilt structure must never share a generation with the slots
- *        staged from the old one.
+ * @brief Rebuilds the Quick Plot frame structure from the channel registry, or from the device's
+ *        declaration when one is pinned. The caller invalidates the frame pool first: a rebuilt
+ *        structure must never share a generation with the slots staged from the old one.
  */
 void DataModel::QuickPlotBuilder::build()
 {
   SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return);
+  if (m_state.declared()) {
+    buildDeclared();
+    return;
+  }
+
   const auto& channels = m_state.channels();
   SS_ASSERT(!channels.empty(), return);
   const int count = static_cast<int>(channels.size());
@@ -251,6 +283,38 @@ void DataModel::QuickPlotBuilder::build()
     }
 
     m_frame.groups.push_back(multiplot);
+  }
+
+  finalize_frame(m_frame);
+}
+
+/**
+ * @brief The declared structure (spec 0111 R2): the device's title and groups as declared, with
+ *        runtime ids assigned the way build() assigns them and no automatic grid or multi-plot.
+ */
+void DataModel::QuickPlotBuilder::buildDeclared()
+{
+  const auto& declaration = m_declaration.current();
+  SS_ASSERT(declaration.valid, return);
+  SS_ASSERT(!declaration.groups.empty(), return);
+
+  clear_frame(m_frame);
+  m_frame.title  = declaration.title;
+  m_frame.groups = declaration.groups;
+  m_frame.sources.push_back(makeSource());
+  for (size_t g = 0; g < m_frame.groups.size(); ++g) {
+    auto& group    = m_frame.groups[g];
+    const int id   = static_cast<int>(g);
+    group.groupId  = id;
+    group.sourceId = 0;
+    group.uniqueId = runtime_group_unique_id(id);
+    for (size_t d = 0; d < group.datasets.size(); ++d) {
+      auto& dataset     = group.datasets[d];
+      dataset.groupId   = id;
+      dataset.sourceId  = 0;
+      dataset.datasetId = static_cast<int>(d);
+      dataset.uniqueId  = dataset_unique_id(0, id, static_cast<int>(d));
+    }
   }
 
   finalize_frame(m_frame);

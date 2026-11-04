@@ -31,14 +31,15 @@
 #include "Core/DataModel/Frame.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/FrameBuilder/QuickPlotFormatState.h"
+#include "DataModel/Project/DeviceDeclaration.h"
 
 namespace DataModel {
 
 /**
- * @brief Owns the synthetic Quick Plot frame, the format state that titles its channels, and the
- *        per-line field scratch. Structure is rebuilt only on a Rebuild outcome, an audio layout
- *        announcement or a header registration, never per frame; applyFields writes one line's
- *        values in place and the frame builder stages the result through frame().
+ * @brief Owns the synthetic Quick Plot frame, the format state that titles its channels, the
+ *        device declaration it may be built from (spec 0111) and the per-line field scratch.
+ *        Structure is rebuilt only on a Rebuild outcome, an audio layout or a header registration,
+ *        never per frame; applyFields writes one line's values in place.
  */
 class QuickPlotBuilder {
   Q_DECLARE_TR_FUNCTIONS(DataModel::QuickPlotBuilder)
@@ -56,9 +57,15 @@ public:
 
   [[nodiscard]] const LineFormat& format() const noexcept { return m_state.format(); }
 
+  [[nodiscard]] bool declared() const noexcept { return m_state.declared(); }
+
+  [[nodiscard]] const DeclarationState& declaration() const noexcept { return m_declaration; }
+
   [[nodiscard]] qsizetype tokenSpans(const QByteArrayView*& spans) noexcept;
   [[nodiscard]] QuickPlotLineOutcome observeReplayRow(QByteArrayView row);
   [[nodiscard]] QuickPlotLineOutcome observe(QByteArrayView line);
+  [[nodiscard]] DeclarationOutcome declare(QByteArrayView line,
+                                           DeclarationState::TimePoint timestamp);
 
   void setHeaders(const QStringList& headers);
   void buildAudio(const QStringList& channels);
@@ -72,6 +79,7 @@ private:
   [[nodiscard]] QString channelTitle(int index) const;
   void applyField(DataModel::Dataset& dataset, int fieldIndex);
   void mapFieldsToChannels() noexcept;
+  void buildDeclared();
 
 private:
   const SerialStudio::OperationMode& m_operationMode;
@@ -81,6 +89,7 @@ private:
   DataModel::Frame m_frame;
   LineFields m_fields;
   QuickPlotFormatState m_state;
+  DeclarationState m_declaration;
   std::array<int, kMaxLineFields> m_fieldOfChannel;
   std::array<QByteArrayView, kMaxLineFields> m_tokenSpans;
 };
