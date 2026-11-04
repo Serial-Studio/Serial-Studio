@@ -2739,3 +2739,174 @@ jobs:
       opcua_sim: false
       marker_expr: "not destructive and not dos and not audio and not requires_broker and not requires_opcua_sim"
       timeout_method: thread
+
+#---------------------------------------------------------------------------------------------------
+# Device library (spec 0111): the C99 file, the Arduino header, the Python module
+#---------------------------------------------------------------------------------------------------
+
+  firmware:
+    runs-on: ubuntu-24.04
+    name: '📟 Firmware Library'
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      ARDUINO_CLI_VERSION: "1.5.1"
+      ARDUINO_CLI_SHA256: "28a8e119c498a25607821c36cb2dc49e8463941b261a0d99091baa7bc692dd2b"
+      ARDUINO_AVR_CORE: "arduino:avr@1.8.6"
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+    - name: '🐍 Set up Python'
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+      with:
+        python-version: '3.11'
+
+    #
+    # The C file is C99 with no dependencies; the host driver prints each golden sketch so the
+    # bytes can be compared with firmware/tests/golden
+    #
+    - name: '🔧 Build the C library and its host driver'
+      run: |
+        mkdir -p firmware/tests/build
+        cc -std=c99 -Wall -Wextra -Werror -pedantic -Ifirmware/c \
+          firmware/c/serialstudio.c firmware/tests/host/c_golden.c \
+          -o firmware/tests/build/c_golden
+
+    #
+    # The Arduino header against a host stub of Stream, F() and PROGMEM: the same state machine
+    # compiled by a desktop toolchain, so the golden bytes can be compared
+    #
+    - name: '🔧 Build the Arduino header host driver'
+      run: |
+        mkdir -p firmware/tests/build
+        c++ -std=c++11 -Wall -Wextra -Werror -Ifirmware/tests/host -Ifirmware/arduino/src \
+          firmware/tests/host/arduino_golden.cpp -o firmware/tests/build/arduino_golden
+
+    - name: '🧪 Python unit tests'
+      run: python3 -m unittest discover firmware/python/tests
+
+    #
+    # Python, C and Arduino each reproduce the golden declaration and frame bytes exactly
+    #
+    - name: '🧪 Golden bytes, all three libraries'
+      run: |
+        python3 firmware/tests/check_golden.py
+        for half in c arduino; do
+          test -x "firmware/tests/build/${half}_golden" || { echo "missing ${half} half"; exit 1; }
+        done
+
+    #
+    # Pinned arduino-cli (version and checksum): compiles the Minimal example for an Uno and fails
+    # when its globals use more than half of the 2048 bytes of RAM
+    #
+    - name: '🔧 Install arduino-cli'
+      run: |
+        curl -fsSL -o arduino-cli.tar.gz \
+          "https://downloads.arduino.cc/arduino-cli/arduino-cli_${ARDUINO_CLI_VERSION}_Linux_64bit.tar.gz"
+        echo "${ARDUINO_CLI_SHA256}  arduino-cli.tar.gz" | sha256sum -c -
+        mkdir -p "${RUNNER_TEMP}/arduino-cli"
+        tar -xzf arduino-cli.tar.gz -C "${RUNNER_TEMP}/arduino-cli"
+        echo "${RUNNER_TEMP}/arduino-cli" >> "$GITHUB_PATH"
+
+    - name: '📟 Compile Minimal for an Uno and check the RAM'
+      run: |
+        arduino-cli core update-index
+        arduino-cli core install "${ARDUINO_AVR_CORE}"
+        arduino-cli compile --fqbn arduino:avr:uno --warnings all \
+          --library firmware/arduino firmware/arduino/examples/Minimal | tee compile.txt
+        python3 - <<'PY'
+        import re
+        text = open("compile.txt", encoding="utf-8").read()
+        match = re.search(r"Global variables use (\d+) bytes", text)
+        assert match, "no RAM report in the arduino-cli output"
+        used = int(match.group(1))
+        print("Minimal uses", used, "of 2048 bytes of RAM")
+        assert used <= 1024, "the Minimal example must use at most half of an Uno's RAM"
+        PY
+
+  publish-firmware:
+    runs-on: ubuntu-24.04
+    name: '📦 Publish Firmware Library'
+    needs: firmware
+    timeout-minutes: 15
+    #
+    # Tags only, and only once the repository variable FIRMWARE_PUBLISH is 'true' (set after the
+    # PyPI trusted publisher and the Arduino mirror exist). Each target is skipped when this
+    # library version is already there, so a release that did not bump the version publishes
+    # nothing and cannot fail on a duplicate upload
+    #
+    if: startsWith(github.ref, 'refs/tags/') && vars.FIRMWARE_PUBLISH == 'true'
+    concurrency:
+      group: firmware-publish
+      cancel-in-progress: false
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      ARDUINO_MIRROR_REPO: ${{ vars.ARDUINO_MIRROR_REPO }}
+      ARDUINO_MIRROR_TOKEN: ${{ secrets.ARDUINO_MIRROR_TOKEN }}
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+    - name: '🐍 Set up Python'
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+      with:
+        python-version: '3.11'
+
+    - name: '🔎 Find what is not published yet'
+      id: state
+      run: |
+        version="$(sed -n 's/^version=//p' firmware/arduino/library.properties)"
+        echo "version=${version}" >> "$GITHUB_OUTPUT"
+        if curl -fsS -o /dev/null "https://pypi.org/pypi/serialstudio/${version}/json"; then
+          echo "pypi=skip" >> "$GITHUB_OUTPUT"
+        else
+          echo "pypi=publish" >> "$GITHUB_OUTPUT"
+        fi
+        if [ -z "${ARDUINO_MIRROR_REPO}" ] || [ -z "${ARDUINO_MIRROR_TOKEN}" ]; then
+          echo "mirror=skip" >> "$GITHUB_OUTPUT"
+        elif git -c "http.extraheader=Authorization: basic $(printf 'x-access-token:%s' "${ARDUINO_MIRROR_TOKEN}" | base64 | tr -d '\n')" \
+          ls-remote --exit-code --tags "https://github.com/${ARDUINO_MIRROR_REPO}.git" \
+          "refs/tags/v${version}" > /dev/null; then
+          echo "mirror=skip" >> "$GITHUB_OUTPUT"
+        else
+          echo "mirror=publish" >> "$GITHUB_OUTPUT"
+        fi
+
+    #
+    # Pure Python, built with the setuptools that setup-python ships; no unpinned download
+    #
+    - name: '📦 Build the wheel'
+      if: steps.state.outputs.pypi == 'publish'
+      run: python3 -m pip wheel --no-deps --no-build-isolation --wheel-dir dist firmware/python
+
+    - name: '🚀 Publish to PyPI'
+      if: steps.state.outputs.pypi == 'publish'
+      uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+
+    #
+    # The Arduino Library Manager needs library.properties at a repository root, so the library
+    # folder is copied to a mirror repository and tagged with the library version
+    #
+    - name: '🚀 Push the Arduino mirror'
+      if: steps.state.outputs.mirror == 'publish'
+      env:
+        LIBRARY_VERSION: ${{ steps.state.outputs.version }}
+      run: |
+        auth="$(printf 'x-access-token:%s' "${ARDUINO_MIRROR_TOKEN}" | base64 | tr -d '\n')"
+        git config --global http.https://github.com/.extraheader "Authorization: basic ${auth}"
+        git clone "https://github.com/${ARDUINO_MIRROR_REPO}.git" mirror
+        find mirror -mindepth 1 -maxdepth 1 -not -name .git -exec rm -rf {} +
+        cp -R firmware/arduino/. mirror/
+        cp firmware/LICENSE mirror/LICENSE
+        cd mirror
+        git config user.name "Serial Studio CI"
+        git config user.email "ci@serial-studio.com"
+        git add -A
+        git commit -m "Serial Studio library ${LIBRARY_VERSION}"
+        git tag "v${LIBRARY_VERSION}"
+        git push origin HEAD "v${LIBRARY_VERSION}"
