@@ -90,7 +90,13 @@ typedef enum {
   kSourceView_FrameStartSequence,
   kSourceView_FrameEndSequence,
   kSourceView_FrameDecoder,
-  kSourceView_ChecksumFunction
+  kSourceView_ChecksumFunction,
+  kSourceView_FrameLength,
+  kSourceView_FrameHeaderMask,
+  kSourceView_FrameHeaderValue,
+  kSourceView_FrameBodyMask,
+  kSourceView_FrameBodyValue,
+  kSourceView_ConnectionSequence
 } SourceItem;
 
 /**

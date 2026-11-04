@@ -203,7 +203,8 @@ the framing config in this order:
 1. Is `frameDetection` matching what the device sends? For COBS /
    protobuf / fixed-size binary, you almost always want
    `frameDetection: 2` (NoDelimiters), where the driver chunk IS the
-   frame.
+   frame, or `frameDetection: 4` (FixedLength) with `frameLength` when
+   every frame has the same size.
 2. If `frameDetection` is 0/1/3, are `frameStart` / `frameEnd`
    correct? When `hexadecimalDelimiters: true`, they're parsed as
    hex bytes (`"0A"` -> `\n`); otherwise they're escape-resolved

@@ -82,17 +82,80 @@ The UART driver wraps Qt's `QSerialPort`. Settings exposed in the Setup Panel ma
 | **Flow Control** | None / RTS/CTS / XON/XOFF | None |
 | **Auto Reconnect** | Rescans ports once per second and reconnects when the last-used device re-enumerates | off |
 | **Send DTR Signal** | Asserts the DTR line on connect (some boards reset on DTR toggle, e.g. Arduino) | on |
+| **Hold RTS** | Asserts the RTS line on connect and holds it for the whole connection. Not applicable under RTS/CTS flow control, where the port driver owns RTS | off |
+| **Connection Sequence** | Steps run on every open before any byte reaches the dashboard; see [Connection Sequence](#connection-sequence) | no steps |
 
 On Linux and macOS the **Serial Port** field is editable: type a device path missing from the list (for example `/dev/ttyAMA0`) and press Enter to register it. On macOS each adapter is listed once, as its `cu.*` device; the `tty.*` duplicates are hidden.
 
 `QSerialPort` uses Qt's event loop for non-blocking reads; incoming bytes are handed off to the acquisition pipeline thread, where the FrameReader assembles them into frames. See [Threading and Timing Guarantees](Threading-and-Timing.md) for the rationale.
 
-The same settings are scriptable through the `io.uart.*` commands of the [JSON-RPC API](API-Reference.md): `setDevice` (by path), `setPortIndex`, `setBaudRate`, `setParity`, `setDataBits`, `setStopBits`, `setFlowControl`, `setDtrEnabled`, and `setAutoReconnect`, plus the read-only `listPorts`, `listBaudRates`, and `getConfig`. `setBaudRate` takes the rate itself (`baudRate`, bits per second); the other line settings take a zero-based index into the option list in the same order as the Setup Panel (`parityIndex` 2 = Odd, `stopBitsIndex` 1 = 1.5, `flowControlIndex` 1 = RTS/CTS). When the in-app AI issues these commands, they sit behind the **Allow device control** toggle.
+The same settings are scriptable through the `io.uart.*` commands of the [JSON-RPC API](API-Reference.md): `setDevice` (by path), `setPortIndex`, `setBaudRate`, `setParity`, `setDataBits`, `setStopBits`, `setFlowControl`, `setDtrEnabled`, `setRtsEnabled`, `setAutoReconnect`, and `setSequence`, plus the read-only `listPorts`, `listBaudRates`, `getConfig`, and `getSequence`. `setBaudRate` takes the rate itself (`baudRate`, bits per second); the other line settings take a zero-based index into the option list in the same order as the Setup Panel (`parityIndex` 2 = Odd, `stopBitsIndex` 1 = 1.5, `flowControlIndex` 1 = RTS/CTS).
+
+Four more commands act on a connected port instead of the settings: `sendBreak` (`durationMs`, 1 to 10000), `setLiveBaudRate` (`baudRate`), `getLineStates` (returns `cts`, `dsr`, `dcd`, `ri`, `rts` and `dtr`), and `runSequence`. Each takes an optional `sourceId` naming the Device in a multi-source project; without it they act on source 0. `setLiveBaudRate` changes only the running rate: the saved **Baud Rate** stays as it was, and the next connection opens at it again. When the in-app AI issues a command that changes the port or a line, it sits behind the **Allow device control** toggle.
 
 For step-by-step setup, see the [Protocol Setup Guides, Serial/UART section](Protocol-Setup-Guides.md).
 
+## Connection Sequence
+
+Some devices must be brought up before they stream data. A bus adapter resets on a BREAK and answers with an identification byte, a GPS module is switched to a binary protocol and a faster baud by a configuration message, a modem wants an attention exchange. The **Connection Sequence** of a UART source performs that bring-up from Serial Studio itself, with no script and no vendor program.
+
+The sequence is an ordered list of steps. Edit it with the **Connection Sequence…** button in the Setup Panel, or with the **Connection Sequence** row of a UART source in the Project Editor; both open the same editor. A project saves the sequence with its source, and the Setup Panel's sequence persists with the other serial settings. A project saved without one connects as it always did.
+
+The sequence runs every time the port opens: from the Connect button, from `io.connect`, from the command line, and on an automatic reconnect. While it runs the Device is connecting, not connected. The dashboard receives no frames, **Auto-Execute on Connect** actions have not fired, the [Control Loop](Control-Loop.md) has not started, and writes from the API or the console are refused. The Device reports connected once the last step succeeds.
+
+| Step | Parameters | What it does |
+|------|------------|--------------|
+| **Send BREAK** | Duration, 1 to 10000 ms | Holds the line in BREAK, then releases it. Bytes the device sends meanwhile are discarded, and the input buffer is cleared on release. |
+| **Wait** | Duration, 0 to 600000 ms | Pauses. |
+| **Set Line** | DTR or RTS, high or low | Drives a modem line. RTS is refused under RTS/CTS flow control. |
+| **Send Data** | Data, Hex, line ending, checksum | Writes the data (text with `\r`/`\n` escapes, or hex bytes), then the line ending, then the checksum over both, in the order an action uses. |
+| **Expect Reply** | Patterns, timeout, Optional | Waits until the bytes received match one of the patterns. |
+| **Discard Input** | none | Drops whatever the port has received so far. |
+| **Set Baud Rate** | Rate | Changes the running rate. The saved **Baud Rate** is untouched, so every reconnection starts from it again. |
+| **Set Flow Control** | None, RTS/CTS or XON/XOFF | Changes the running flow-control mode. |
+
+An **Expect Reply** pattern is a list of hex bytes. `??` matches any byte and a single `?` matches one hex digit, so `5?` accepts `50` to `5F`. Separate several acceptable replies with `|`: `55 | 5D ??` succeeds on either. The step looks at everything received since the previous matched reply (up to 4 KiB) and consumes through the match. A step marked **Optional** that times out leaves a console note and the sequence carries on.
+
+The **Time Budget** (10000 ms by default, at most 600000 ms) bounds the whole sequence. The editor refuses a budget smaller than the BREAK and Wait steps add up to.
+
+### Example: a bus adapter that resets on BREAK
+
+The adapter powers up at 9600 baud, resets on a BREAK of at least 10 ms and answers with `55` or `5D` followed by a version byte. Two `15` bytes switch it to 115200 baud, and it streams only with RTS/CTS flow control on. With the Setup Panel at 9600 baud:
+
+1. **Send BREAK**, 55 ms.
+2. **Expect Reply** `55 | 5D ??` within 100 ms.
+3. **Send Data** `15 15`, **Hex** checked.
+4. **Wait** 20 ms.
+5. **Set Baud Rate** 115200.
+6. **Set Flow Control** RTS/CTS.
+
+### When a step fails
+
+A step that fails ends the sequence and the connection attempt: an **Expect Reply** that times out, a write the port refuses, the port disappearing, or the budget running out. The console and the log name the step by position and kind and quote what the device sent:
+
+```
+Connection Sequence failed at step 2 (Expect Reply): no reply matched within 100 ms; received: 5A 00
+```
+
+There is no modal dialog. With **Auto Reconnect** on, a port that disappears mid-sequence is retried like any dropped port; a device that answers wrongly is not.
+
+### In the console
+
+Each step adds a line prefixed `[Connection Sequence]` that names it, and a final line reports the outcome. The bytes the device sends during the sequence appear as received data, and the bytes the sequence sends appear like console echo when **Echo** is on. None of them reach the frame parser, the dashboard or a recording.
+
+### Running it again
+
+`io.uart.runSequence` re-runs the sequence on a connected port, for a device that was power-cycled while the port stayed open. The Device stays connected, frames pause until the run ends, and the outcome is written to the console; a failure also raises a notification. A Control Loop can issue the same command, along with `io.uart.sendBreak`.
+
+### Limits
+
+- The sequence opens at one baud rate. A device that powers up at a different rate in some units needs a second project, or a Control Loop that changes the saved rate and reconnects.
+- Some USB serial adapters emit a fixed-length BREAK whatever duration is requested. The step reports success when the port accepts the request; it cannot measure what the adapter put on the wire.
+- The steps have no branching or loops. Logic belongs in a [Control Loop](Control-Loop.md).
+
 ## Common pitfalls
 
+- **The connection fails with "Connection Sequence failed at step ...".** The device did not answer as the sequence expects. Read the quoted reply in the console. `received: nothing` points at power or wiring; bytes that match no pattern point at the wrong opening baud rate.
 - **The Arduino resets every time you connect.** The DTR line is toggling. Boards with a USB-CDC bootloader (Uno, Nano, ESP8266 with the auto-reset circuit) treat a DTR pulse as "reset and enter bootloader". Disable **Send DTR Signal** in the Setup Panel, or use a CH340/FTDI-style adapter that lets you control DTR independently.
 - **Garbled output that looks almost right.** Baud-rate mismatch. If roughly half the bytes look correct and the rest are random, the rate is off by a factor of two (115200 configured, 57600 on the wire, or vice versa).
 - **The port opens but nothing comes through.** TX and RX may be swapped. Some adapters label pins from the host's point of view, some from the device's. The fix is usually to swap them physically.

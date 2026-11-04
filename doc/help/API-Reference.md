@@ -788,10 +788,10 @@ those carry the 🔵 badge inside the section.
 
 When a command is invoked through the AI Assistant rather than a raw TCP/JSON client, it is additionally gated by a five-tier safety system (Safe, Confirm, Always confirm, Device-gated, Blocked); see [The safety tiers](AI-Assistant.md#the-safety-tiers). A batch (`project.batch`, `assistant.project.bulkApply`) takes the strictest tier among its operations: a blocked operation refuses the whole batch before anything runs, an always-confirm operation needs a click even with auto-approve on, a batch inside a batch is refused, and the approval card lists every operation.
 
-**GPL Build (273 commands):**
+**GPL Build (280 commands):**
 - API introspection: 1 command
 - I/O Manager: 8 commands
-- UART Driver: 12 commands
+- UART Driver: 19 commands
 - Network Driver: 17 commands
 - Bluetooth LE Driver: 12 commands
 - CSV Export: 4 commands
@@ -1027,9 +1027,14 @@ Get the latest raw frame received from the device, including channel tokens not 
 - `mirrorAgeMs` is how long ago the copy served here was refreshed; `ageMs - mirrorAgeMs` is the bus silence the host saw, so a slow GUI cannot read as a silent link
 - Capture runs only while a control loop is running or the API server is enabled; `hasData: false` means no data or no active consumer
 
-### UART Driver Commands (12)
+### UART Driver Commands (19)
 
-Serial port configuration:
+Serial port configuration, line control and the Connection Sequence. The settings commands act on
+the serial port settings of the Setup Panel. The four live-control commands (`sendBreak`,
+`setLiveBaudRate`, `getLineStates`, `runSequence`) act on a connected port instead: they take an
+optional `sourceId` naming the Device in a multi-source project, default 0, and answer
+`EXECUTION_ERROR` when that source is not a connected serial port. See
+[Drivers: UART](Drivers-UART.md#connection-sequence) for the Connection Sequence itself.
 
 #### 🟢 `io.uart.getConfig`
 Get current UART configuration.
@@ -1051,11 +1056,17 @@ Get current UART configuration.
   "flowControlIndex": 0,
   "flowControlName": "None",
   "dtrEnabled": true,
+  "rtsEnabled": false,
   "autoReconnect": false,
   "isOpen": false,
-  "configurationOk": true
+  "configurationOk": true,
+  "liveBaudRate": 115200,
+  "sequenceStepCount": 3
 }
 ```
+
+`liveBaudRate` is the rate source 0's port runs at while connected, which a Connection Sequence or
+`io.uart.setLiveBaudRate` may have changed; `baudRate` is the saved rate every connection opens at.
 
 #### 🟢 `io.uart.listPorts`
 Get list of available serial ports.
@@ -1191,6 +1202,137 @@ Set auto-reconnect behavior.
 **Example:**
 ```bash
 python test_api.py send io.uart.setAutoReconnect -p autoReconnect=true
+```
+
+#### 🟢 `io.uart.setRtsEnabled`
+Enable or disable Hold RTS: RTS is asserted when the port opens and held for the connection. Not
+applicable under RTS/CTS flow control, where the port driver owns RTS.
+
+**Parameters:**
+- `rtsEnabled` (bool): true to hold RTS, false to leave it to the port's default
+
+**Example:**
+```bash
+python test_api.py send io.uart.setRtsEnabled -p rtsEnabled=true
+```
+
+#### 🟢 `io.uart.sendBreak`
+Send BREAK: hold a connected line in BREAK for `durationMs`, then release it. Bytes the device
+sends meanwhile are discarded. Refused while a BREAK or a Connection Sequence already owns the
+line.
+
+**Parameters:**
+- `durationMs` (int): BREAK duration in milliseconds (1-10000)
+- `sourceId` (int, optional): Device to act on (default 0)
+
+**Returns:**
+```json
+{"durationMs": 55, "sourceId": 0}
+```
+
+**Example:**
+```bash
+python test_api.py send io.uart.sendBreak -p durationMs=55
+```
+
+#### 🟢 `io.uart.setLiveBaudRate`
+Change the baud rate of a connected port without closing it. The saved rate is unchanged, so the
+next connection opens at it again. Refused while a Connection Sequence runs.
+
+**Parameters:**
+- `baudRate` (int): Baud rate in bits per second (1-15000000)
+- `sourceId` (int, optional): Device to act on (default 0)
+
+**Returns:**
+```json
+{"liveBaudRate": 115200, "baudRate": 9600}
+```
+
+**Example:**
+```bash
+python test_api.py send io.uart.setLiveBaudRate -p baudRate=115200
+```
+
+#### 🟢 `io.uart.getLineStates`
+Read the modem lines of a connected port.
+
+**Parameters:**
+- `sourceId` (int, optional): Device to read (default 0)
+
+**Returns:**
+```json
+{"cts": true, "dsr": false, "dcd": false, "ri": false, "rts": true, "dtr": true, "sourceId": 0}
+```
+
+**Example:**
+```bash
+python test_api.py send io.uart.getLineStates
+```
+
+#### 🟢 `io.uart.runSequence`
+Re-run the Connection Sequence on a connected port, for a device power-cycled while the port
+stayed open. The reply comes back at once; the Device stays connected, frames pause until the run
+ends, and the outcome is written to the console (a failure also raises a notification). Refused
+when no sequence is set or a BREAK or a sequence is already running.
+
+**Parameters:**
+- `sourceId` (int, optional): Device to act on (default 0)
+
+**Returns:**
+```json
+{"started": true}
+```
+
+**Example:**
+```bash
+python test_api.py send io.uart.runSequence
+```
+
+#### 🟢 `io.uart.getSequence`
+Get the Connection Sequence of the serial port settings.
+
+**Parameters:** None
+
+**Returns:**
+```json
+{
+  "sequence": {
+    "budgetMs": 10000,
+    "steps": [
+      {"kind": "break", "ms": 55},
+      {"kind": "expect", "patterns": ["55", "5D ??"], "timeoutMs": 100, "optional": false},
+      {"kind": "send", "data": "15 15", "hex": true, "eol": "", "checksum": ""},
+      {"kind": "baud", "rate": 115200}
+    ]
+  },
+  "stepCount": 4,
+  "valid": true
+}
+```
+
+Step kinds and their fields: `break` (`ms`), `wait` (`ms`), `line` (`line`: `dtr` or `rts`,
+`high`), `send` (`data`, `hex`, `eol` as escape text, `checksum` name), `expect` (`patterns`,
+`timeoutMs`, `optional`), `discard`, `baud` (`rate`) and `flow` (`mode`: `none`, `rtscts` or
+`xonxoff`).
+
+#### 🟢 `io.uart.setSequence`
+Replace the Connection Sequence of the serial port settings; it runs on every open, before data
+flows. A sequence that does not validate is refused with `INVALID_PARAM`, a message naming the
+step, and the step's zero-based index in the error data (`-1` for the whole sequence). An empty
+`steps` array clears the sequence. A project source's sequence is set with
+`project.source.setProperty` and the key `connectionSequence` instead.
+
+**Parameters:**
+- `sequence` (object): `{budgetMs, steps}` in the shape `getSequence` returns
+
+**Returns:**
+```json
+{"stepCount": 4}
+```
+
+**Example:**
+```bash
+python test_api.py send io.uart.setSequence -p '{"sequence": {"budgetMs": 10000, "steps": [{"kind": "break", "ms": 55}, {"kind": "expect", "patterns": ["55"], "timeoutMs": 100}]}}'
 ```
 
 ### Network Driver Commands (17)
@@ -3578,7 +3720,7 @@ Get the project-wide frame parser configuration (delimiters, checksum, operation
   "frameDetection": 0
 }
 ```
-`startSequence`/`endSequence` are the primary (first) delimiters; `startSequences`/`endSequences` list every configured delimiter. `operationMode` is 0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot. `frameDetection` is 0-3 (End Delimiter Only, Start and End Delimiter, No Delimiters, Start Delimiter Only).
+`startSequence`/`endSequence` are the primary (first) delimiters; `startSequences`/`endSequences` list every configured delimiter. `operationMode` is 0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot. `frameDetection` is 0-4 (End Delimiter Only, Start and End Delimiter, No Delimiters, Start Delimiter Only, Fixed Length).
 
 #### 🟢 `project.frameParser.update`
 Configure frame parser delimiters, checksum, frame detection, and operation mode.
@@ -3588,7 +3730,9 @@ Configure frame parser delimiters, checksum, frame detection, and operation mode
 - `startSequence` (string, optional): Frame start delimiter
 - `endSequence` (string, optional): Frame end delimiter
 - `checksumAlgorithm` (string, optional): Checksum algorithm name
-- `frameDetection` (int, optional): Frame detection mode (0-3)
+- `frameDetection` (int, optional): Frame detection mode (0-4; 4 is Fixed Length)
+- `frameLength` (int, optional): Fixed Length only, bytes per frame (1 to 524288)
+- `frameHeaderMask`, `frameHeaderValue`, `frameBodyMask`, `frameBodyValue` (int, optional): Fixed Length only, bytes 0-255 for the Header Rule and Body Rule; a mask of 0 disables its rule
 - `operationMode` (int, optional): Operation mode (0-2)
 
 **Returns:**
@@ -3739,7 +3883,8 @@ Compile and execute frame parser code against raw stream bytes, driving the full
 - `inputBytes` (string, optional): Raw stream bytes as UTF-8 text. Lossy for binary payloads.
 - `inputBytesHex` (string, optional): Raw stream bytes as a space-tolerant hex string. Binary-safe. One of `inputBytes` / `inputBytesHex` is required and must decode to a non-empty byte array.
 - `decoderMethod` (int, optional): 0=PlainText (default), 1=Hexadecimal, 2=Base64, 3=Binary. Binary is the only mode safe for non-text protocols (COBS, Modbus, custom binary).
-- `frameDetection` (int, optional): 0=EndDelimiterOnly (default), 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly.
+- `frameDetection` (int, optional): 0=EndDelimiterOnly (default), 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly, 4=FixedLength.
+- `frameLength`, `frameHeaderMask`, `frameHeaderValue`, `frameBodyMask`, `frameBodyValue` (int, optional): Fixed Length settings, as in `project.frameParser.update`.
 - `frameStart` (string, optional): Start delimiter. Hex when `hexadecimalDelimiters` is true.
 - `frameEnd` (string, optional): End delimiter. Hex when `hexadecimalDelimiters` is true.
 - `hexadecimalDelimiters` (bool, optional): Parse `frameStart`/`frameEnd` as hex bytes. Default: false.
@@ -4660,7 +4805,8 @@ Patch source fields. Pass only what changes.
 
 **Parameters:**
 - `sourceId` (int): Source ID
-- `title`, `busType`, `frameStart`, `frameEnd`, `checksumAlgorithm`, `frameDetection`,
+- `title`, `busType`, `frameStart`, `frameEnd`, `checksumAlgorithm`, `frameDetection` (0-4),
+  `frameLength`, `frameHeaderMask`, `frameHeaderValue`, `frameBodyMask`, `frameBodyValue`,
   `decoderMethod`, `hexadecimalDelimiters` (optional): the fields to change
 
 ### Data Table Commands (13)

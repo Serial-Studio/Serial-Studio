@@ -79,9 +79,11 @@ The `gui` tier (`test_ui_automation.py`) drives the live window through the `ui.
 | `test_window_layout.py`              | Active group, window states, auto/manual layout, widget settings persistence |
 | `test_batch_api.py`                  | Batch command processing, size limits, ordering, partial failure |
 | `test_2d_array_parsing.py`           | Multi-frame expansion from 2D-array JS parsers, BLE use cases |
+| `test_fixed_length_frames.py`        | Fixed Length framing over TCP: header and body rules, resync after a stray byte, Quick Plot ignoring the mode, zero-length repair |
 | `test_driver_api_comprehensive.py`   | Every driver command: UART, Network, BLE, Modbus, CAN Bus, Audio |
 | `test_new_driver_api.py`             | HID, raw USB, and Process driver commands; bus-type enumeration |
-| `test_api_drivers.py`                | Driver switching, UART/Network/BLE basics, console/export status |
+| `test_api_drivers.py`                | Driver switching, UART/Network/BLE basics (Hold RTS and the spec-0103 `getConfig` fields), console/export status |
+| `test_uart_sequence.py`              | Spec 0103 Connection Sequence over a socat pty the test drives as the device: connecting until the reply, no handshake frame or CSV row, a silent device failing within the budget, a live baud change, a project round trip (needs `socat`; skips on Windows) |
 | `test_mcp.py`                        | MCP JSON-RPC 2.0: lifecycle, protocol revision negotiation, tools list with titles and annotations checked against `command_safety.json`, the omitted tools, tool-object keys, read/write calls, resources, prompts, session hygiene (replies only while a device streams, push verbs refused) and the `isError` failure shape |
 | `test_licensing.py`                  | License status shape, set/activate/deactivate, concurrent connections |
 | `test_image_view.py`                 | ImageView widget: autodetect, manual mode, corrupted data |
@@ -512,6 +514,7 @@ tests/
 │   ├── test_driver_api_comprehensive.py# Every driver command (UART, Network, BLE, Modbus …)
 │   ├── test_new_driver_api.py          # HID, raw USB, Process driver APIs
 │   ├── test_api_drivers.py             # Driver switching and console/export basics
+│   ├── test_uart_sequence.py           # UART Connection Sequence over a socat pty pair
 │   ├── test_mcp.py                     # MCP JSON-RPC 2.0 protocol (tools with hints, resources, session hygiene, isError shape)
 │   ├── test_licensing.py               # License status, set/activate/deactivate
 │   ├── test_image_view.py              # ImageView widget modes and corrupted data handling

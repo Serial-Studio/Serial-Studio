@@ -50,7 +50,8 @@ updated: 2026-10-26
   and the out-of-range probe moves from 4 to 5.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; `tst_enum_labels` at B1.
 - **Deps:** none
-- [ ] done
+- [x] done
+  - Status: syntax-check SKIP on the test file (no compile entry); source files OK; ctest at B1.
 
 ### T2 — Source fields, keys and the settings reader
 
@@ -64,7 +65,8 @@ updated: 2026-10-26
   `_PROJECT_KEY_LITERALS`. A project from before this spec reads zeros and behaves as today.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; T3's tests.
 - **Deps:** T1
-- [ ] done
+- [x] done
+  - Status: syntax-check ok, code-verify clean.
 
 ### T3 — Serialization tests for the new fields
 
@@ -73,7 +75,8 @@ updated: 2026-10-26
   read as zero; `read_fixed_frame_settings` masks the value and leaves a legacy object alone.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; both ctests at B1.
 - **Deps:** T2
-- [ ] done
+- [x] done
+  - Status: syntax-check SKIP on the test file (no compile entry); source files OK; ctest at B1.
 
 ### T4 — FrameConfig and the shared repair
 
@@ -87,7 +90,8 @@ updated: 2026-10-26
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; read back that the two existing
   repair branches are unchanged.
 - **Deps:** T2
-- [ ] done
+- [x] done
+  - Status: syntax-check ok, code-verify clean.
 
 ### T5 — AppState uses the shared repair
 
@@ -98,7 +102,8 @@ updated: 2026-10-26
   `frameDetectionChanged` and published on the bus; no new signal is added.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; read back the three mode paths.
 - **Deps:** T4
-- [ ] done
+- [x] done
+  - Status: syntax-check ok, code-verify clean.
 
 ### T6 — Masked-byte scan on the circular buffer
 
@@ -110,7 +115,9 @@ updated: 2026-10-26
   covers a hit before, across and after the wrap point, `from` past the end, and an empty buffer.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; `tst_circular_buffer` at B1.
 - **Deps:** none
-- [ ] done
+- [x] done
+  (Main session 2026-11-03: `findMaskedByte` landed in `CircularBuffer.h`; the `tst_circular_buffer`
+  case is handed to the Group 1 executor with T9.)
 
 ### T7 — FrameReader: the Fixed Length extractor
 
@@ -127,7 +134,9 @@ updated: 2026-10-26
   no new signal hop; the NoDelimiters fast lane and the three delimiter readers are untouched.
 - **Verify:** `code-verify.py --check` (hotpath rules are blockers), `syntax-check.py`; T9.
 - **Deps:** T1, T6
-- [ ] done
+- [x] done
+  (Main session 2026-11-03: the body rule checks the payload only, offsets [1, N - checksum length),
+  because checksum bytes are arbitrary and would trip a high-bit rule; plan said [1, N).)
 
 ### T8 — Reader configurators carry the new settings
 
@@ -141,7 +150,9 @@ updated: 2026-10-26
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; grep that every
   `setFrameDetectionMode(` call site also sets the fixed-length settings.
 - **Deps:** T4, T7
-- [ ] done
+- [x] done
+  (Main session 2026-11-03: `Verifier.cpp` does build through `FrameConfigBuilder::build` but sets the
+  reader itself, so it needed the same two setters; every `setFrameDetectionMode(` site now sets them.)
 
 ### T9 — Reader unit tests (AC9, AC10 repair)
 
@@ -153,7 +164,8 @@ updated: 2026-10-26
   deltas; and a `FrameConfigBuilder` case where length 0 repairs to NoDelimiters.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; `tst_frame_reader_modes` at B1.
 - **Deps:** T7, T8
-- [ ] done
+- [x] done
+  - Status: syntax-check SKIP on the test file (no compile entry), code-verify clean; also added the T6 findMaskedByte cases to tst_circular_buffer.cpp (same SKIP). Body-rule cases follow the payload-only behaviour. ctest at B1.
 
 **Build point B1** — ctest tier for T1 to T9; `--benchmark-hotpath --min-fps 256000` (AC11),
 then once more with a Fixed Length project loaded to read the parse tiers.
@@ -169,7 +181,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   `kSourceView_FrameBodyValue` and `kSourceView_ConnectionSequence` at the end of the enum.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`, `term-verify.py`.
 - **Deps:** T1
-- [ ] done
+- [x] done
+  - Status: syntax-check ok; ProjectEditor.cpp is now 1502 lines (was 1500), cxx-tu-too-long advisory under the census ratchet. ProjectEditor.h needed no edit (the lists are typed).
 
 ### T11 — Source form rows and their commits
 
@@ -184,7 +197,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`, `term-verify.py`; read back the
   `showStart` / `showEnd` logic for the four old modes.
 - **Deps:** T10
-- [ ] done
+- [x] done
+  - Status: syntax-check ok on both; EditorForms.cpp grew to ~1560 lines (cxx-tu-too-long advisory, census ratchet). Handler declared in EditorCommit.h. Old modes: showStart/showEnd logic untouched, FixedLength returns early before the hex row.
 
 ### T12 — Frame-parser test model and dialog
 
@@ -197,7 +211,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   4; confirm by reading lines 65 to 68 and 262 to 331 and note it in the done line.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`, `term-verify.py`.
 - **Deps:** T8, T10
-- [ ] done
+- [x] done
+  - Status: syntax-check ok. QML read (lines 65-68, 262-331): index 4 gives no delimiter needed, so FrameParserTest.qml is unchanged.
 
 ### T13 — API handlers accept the mode and its settings
 
@@ -213,7 +228,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; `tests/integration/test_api_surfaces.py`
   at B3.
 - **Deps:** T2, T8
-- [ ] done
+- [x] done
+  - Status: syntax-check ok on all three. Shared validator DataModel::patch_fixed_frame_fields added to Frame.h/.cpp (declaration + one function) so the three handlers validate identically; source 0 goes through updateSource so AppState re-derives. Dry run needs frameLength when frameDetection is 4 (InvalidParam otherwise). source.list echoes frameLength; getConfig/frameParser.getConfig echo all five.
 
 ### T14 — Assistant surfaces (delegable)
 
@@ -226,7 +242,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   the plan's reconnaissance.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`, `term-verify.py`.
 - **Deps:** T13
-- [ ] done
+- [x] done
+  - Status: syntax-check ok on all three. ContextBuilder.cpp needed no edit: it names no frame-detection modes (only the dryRun example frameDetection:2).
 
 ### T15 — Python test helpers (delegable)
 
@@ -236,7 +253,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
 - **Verify:** `python -m pyflakes` or an import of both modules; the existing
   `tests/scripts/` suite still passes.
 - **Deps:** T13
-- [ ] done
+- [x] done
+  - Status: imports OK, generator emits the keys; tests/scripts has 2 failures unrelated to this task (test_cpp_regressions macOS window, test_modbus_lua_parser missing fixture two_units.csv in the worktree).
 
 ### T16 — Integration test: fixed-length frames over TCP
 
@@ -247,7 +265,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   ignoring the mode, and the zero-length repair reported in the parser config. One README row.
 - **Verify:** `pytest tests/integration/test_fixed_length_frames.py -v` at B3 (maintainer).
 - **Deps:** T13, T15
-- [ ] done
+- [x] done
+  - Status: not run (needs the app, B3). Collects cleanly (ast parse); markers integration, network, project.
 
 ### T17 — Manual pages for Fixed Length (delegable)
 
@@ -259,7 +278,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   says "Device" and "Control Loop".
 - **Verify:** `documentation-verify.py` and `term-verify.py` on the six files.
 - **Deps:** T13
-- [ ] done
+- [x] done
+  - Status: documentation-verify 0 findings, term-verify clean.
 
 ### T18 — Assistant skills and architecture notes for Fixed Length (delegable)
 
@@ -271,7 +291,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   `sanitize-commit.py` at B3, not by hand.
 - **Verify:** `documentation-verify.py`, `term-verify.py`, `claim-verify.py` on dataflow.md.
 - **Deps:** T7
-- [ ] done
+- [x] done
+  - Status: documentation/term-verify clean on the new text (dataflow.md keeps baseline findings). claim-verify errors on findMaskedByte / readFixedLengthFrames until T6/T7 land; re-run then.
 
 ### Group 2 — Sequence model, runner and driver
 
@@ -287,7 +308,9 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   the console lines. Qt-Core only, no I/O. Registered in the Core source list.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; T20.
 - **Deps:** none
-- [ ] done
+- [x] done
+  - Status: syntax-check ok, code-verify clean. Patterns also take a '?' nibble ("5?"), the
+    plan's own example; an unknown kind is kept as `Kind::Unknown` so `validate()` names it.
 
 ### T20 — Model unit test
 
@@ -298,7 +321,9 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   offsets. Registered with `ss_add_unit_test(tst_connection_sequence SOURCES ... ${SS_CORE_SRC}/Core/IO/ConnectionSequence.cpp LIBS Qt6::Core SerialStudio::Core)`.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; the ctest at B2.
 - **Deps:** T19
-- [ ] done
+- [x] done
+  - Status: code-verify clean; tests are not in the worktree's compile database, so the suite was
+    syntax-checked by borrowing `UART.cpp`'s entry plus the QtTest headers (ok). Runs at B2.
 
 ### T21 — Port seam and the sequence runner
 
@@ -315,7 +340,12 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   silent, the budget is the engine's `TimeoutTask`, no retry policy of its own.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; T22.
 - **Deps:** T19
-- [ ] done
+- [x] done
+  - Status: code-verify clean; the UART/ subdirectory has no compile entry, so the runner was
+    syntax-checked by borrowing `UART.cpp`'s entry (ok). Step tasks are file-local in
+    `SequenceRunner.cpp` (the `ConnectionDiagnostics` `ProbeTask` pattern); each step is preceded
+    by an instant announce task so `stepStarted` lands before its bytes; an optional expect's skip
+    is reported through an extra `stepNote(index, text)` signal.
 
 ### T22 — Runner unit test with a fake port and a virtual clock
 
@@ -330,7 +360,10 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   `Qt6::SerialPort` and `SerialStudio::Core`.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; the ctest at B2.
 - **Deps:** T21
-- [ ] done
+- [x] done
+  - Status: code-verify clean; syntax-checked through a borrowed `UART.cpp` entry plus QtTest
+    (ok). Registered with the runner TU and `SerialStudio::Core` only: TaskTree and RetryPolicy
+    already live in that archive, and recompiling TaskTree.cpp beside it would moc it twice.
 
 ### T23 — Sent-bytes echo path
 
@@ -343,7 +376,9 @@ then once more with a Fixed Length project loaded to read the parse tiers.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; `layer-verify.py` (Core header
   unchanged in its includes).
 - **Deps:** none
-- [ ] done
+- [x] done
+  - Status: syntax-check ok (DeviceManager.cpp; HAL_Driver.h through it), code-verify clean,
+    layer-verify clean.
 
 ### T24 — Router fan-out for driver-internal sends
 
@@ -356,7 +391,11 @@ then once more with a Fixed Length project loaded to read the parse tiers.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; read back `wireDevice` so the
   disconnect path mirrors the connect.
 - **Deps:** T23
-- [ ] done
+- [x] done
+  - Status: syntax-check ok, code-verify clean. `ConnectionManager.cpp` sat at 1499 lines against
+    the 1500-line TU cap, so the Direct connection lives in `DeviceIoRouter::watchSentBytes(dm,
+    context)` and `wireDevice` gains the one line that calls it (file now exactly 1500). Both
+    ends are GUI-thread objects; the connection dies with the device or the manager.
 
 ### T25 — Step notes on the bus and in the console
 
@@ -369,7 +408,10 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   never on the frame path.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`, `term-verify.py`.
 - **Deps:** none
-- [ ] done
+- [x] done
+  - Status: syntax-check ok, code-verify clean, term-verify clean; `--bus-census` reports
+    `LinkSequenceNote` with one publisher and one subscriber. The subscription sits beside
+    `m_terminalModeWatch` in `setupExternalConnections()`, where that one is made.
 
 ### T26 — UART line control: Hold RTS, BREAK, live baud, line states
 
@@ -387,7 +429,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`, `term-verify.py`; TU length stays
   under the ratchet (`code-verify.py --tu-census`).
 - **Deps:** T19
-- [ ] done
+- [x] done
+  - Status: see T28 (same files, verified together).
 
 ### T27 — Pure policy predicates and their test
 
@@ -397,7 +440,10 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   logs and reports; both pinned without a port.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; `tst_uart_policy` at B2.
 - **Deps:** none
-- [ ] done
+- [x] done
+  - Status: code-verify clean; `tst_uart_policy` syntax-checked through a borrowed entry (ok).
+    `sequenceFailureText` takes the reply already rendered as hex text, so the suite keeps its
+    header-only link set.
 
 ### T28 — UART driver: the connect-time sequence and the re-run
 
@@ -425,7 +471,16 @@ then once more with a Fixed Length project loaded to read the parse tiers.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`, `term-verify.py`,
   `--tu-census`; read back every former `isOpen()` call site in the file.
 - **Deps:** T21, T23, T25, T26, T27
-- [ ] done
+- [x] done
+  - Status: syntax-check ok, code-verify clean. TU cap: the glue pushed `UART.cpp` to 1535, so the
+    adapter is its own pair `UART/UartSequencePort.{h,cpp}` (not a private class in UART.cpp) and
+    the two existing buffer-sizing statics moved into it as static helpers shared by `open()` and
+    the live baud change (`UART.cpp` now 1470). `ConnectionManager::deviceIdForDriver` moved to
+    public so the note carries its source id; the two `ConnectionManager::instance()` reaches in
+    `UART.cpp` became one file-static accessor (singleton census 802 -> 801). Added
+    `UART::applyConnectionSettings`: a non-empty pre-0103 source without `rts` or
+    `connectionSequence` resets both, so a Setup Panel sequence never runs on a project's device.
+    The runner's start is queued so the verdict always arrives after `notePendingDial`.
 
 **Build point B2** — the tree builds; `tst_connection_sequence`, `tst_sequence_runner`,
 `tst_uart_policy` run; the maintainer can configure a sequence through the API (T29 not yet
@@ -448,7 +503,11 @@ registered, so through `project.source.setProperty`) and watch a bring-up in the
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; function-length rule (split the
   registration as `registerLineSettings` does).
 - **Deps:** T28
-- [ ] done
+- [x] done
+  - Status: syntax-check ok, code-verify clean. Registration split into `registerLineControl`
+    (the four live commands, optional `sourceId`) and `registerSequenceCommands`. `getConfig`'s
+    `liveBaudRate` reads source 0's live driver when one exists (the UI driver has no port).
+    The commands are unclassified until T30 lands; the registry ctests fail until then.
 
 ### T30 — Classifications and the assistant tiers
 
@@ -465,7 +524,10 @@ registered, so through `project.source.setProperty`) and watch a bring-up in the
   assistant with device control off, reachable from a Control Loop.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; the three registry ctests at B3.
 - **Deps:** T29
-- [ ] done
+- [x] done
+  (Main session 2026-11-03, named to the maintainer: `setSequence` adds WritesDevice for a Send, BREAK or
+  baud step, not Send alone, matching the direct sendBreak/setLiveBaudRate; parsed by
+  `IO::ConnectionSequence::fromJson`, the handler's own reader.)
 
 **Build point B3** — build; `SerialStudio --dump-api-schema app/rcc/api/api-schema.json`;
 `python scripts/sanitize-commit.py` regenerates `SerialStudio.js`, `SerialStudio.lua`,
@@ -489,7 +551,10 @@ registered, so through `project.source.setProperty`) and watch a bring-up in the
   `setRtsEnabled` and the new `getConfig` fields (AC1's API half). README rows for both.
 - **Verify:** `pytest tests/integration/test_uart_sequence.py -v` at B4 (maintainer).
 - **Deps:** T29, T30
-- [ ] done
+- [x] done
+  - Status: py_compile ok, `pytest --collect-only` collects 5 cases; not run (needs a B4 build).
+    BREAK is left out of the pty test (a pty holds no line condition); the console-naming check
+    reads the console export, which exists only in commercial builds, and is skipped otherwise.
 
 ### T32 — API reference and Control Loop manual pages (delegable)
 
@@ -501,7 +566,9 @@ registered, so through `project.source.setProperty`) and watch a bring-up in the
   group line in the discovery skill.
 - **Verify:** `documentation-verify.py`, `term-verify.py`.
 - **Deps:** T29
-- [ ] done
+- [x] done
+  - Status: documentation-verify, term-verify and claim-verify clean. The GPL and UART command
+    counts in the API reference moved from 273/12 to 280/19.
 
 ### Group 4 — UI and documentation
 
@@ -516,7 +583,10 @@ registered, so through `project.source.setProperty`) and watch a bring-up in the
 - **Verify:** `code-verify.py --check` (QML rules, including the object-name rules of spec
   0101), `term-verify.py`; visual check at B4.
 - **Deps:** T28, T34
-- [ ] done
+- [x] done
+  - Status: code-verify clean, term-verify clean, qmllint clean apart from the unqualified
+    `Cpp_*` globals and Loader.item members (the DatasetView dialog-host pattern). The disabled
+    checkbox gets no hover, so the RTS/CTS tooltip hangs off the row's label.
 
 ### T34 — The Connection Sequence editor dialog
 
@@ -532,7 +602,11 @@ registered, so through `project.source.setProperty`) and watch a bring-up in the
 - **Verify:** `code-verify.py --check`, `term-verify.py`; `qt-qml-review` on the file; visual
   check at B4.
 - **Deps:** T28
-- [ ] done
+- [x] done
+  - Status: code-verify clean, term-verify clean, qmllint as above; a `SmartDialog` is a window,
+    not a Popup, so it takes no PopupEnter/PopupExit (the AlarmBandsEditor donor has none either).
+    The dialog emits `applied(json)` and each host commits; validation goes through
+    `Cpp_IO_Serial.validateConnectionSequence` in both hosts. `qt-qml-review` not run.
 
 ### T35 — Project Editor host for the dialog
 
@@ -546,7 +620,13 @@ registered, so through `project.source.setProperty`) and watch a bring-up in the
   invariant: the commit opens its `ProjectUndoScope` and calls `setModified(true)`.
 - **Verify:** `code-verify.py --check`, `syntax-check.py`, `term-verify.py`.
 - **Deps:** T10, T28, T34
-- [ ] done
+- [x] done
+  - Status: syntax-check ok, code-verify clean. The open goes through the Button row's click
+    sentinel (`EditorCommit::openConnectionSequenceEditor`, emitting the new
+    `ProjectEditor::openConnectionSequenceEditor(sourceId, json)` signal), so ProjectEditor gains
+    only the `commitConnectionSequence` forwarder; `SourceView.qml` hosts the Loader. Both
+    `EditorForms.cpp` (1560 before this task) and `ProjectEditor.cpp` (1502) were already past
+    the 1500-line TU cap; this task adds ~25 and ~8 lines to them.
 
 ### T36 — Reduce-motion and object-name sweep of the new QML (delegable)
 
@@ -557,7 +637,9 @@ registered, so through `project.source.setProperty`) and watch a bring-up in the
   what the sweep finds.
 - **Verify:** `code-verify.py --check` on both files (the two QML rules of spec 0101).
 - **Deps:** T33, T34
-- [ ] done
+- [x] done
+  - Status: no animation in either file; every interactive control carries a literal
+    `objectName`; no `%n` meets `.arg()`. code-verify clean on both.
 
 **Build point B4** — build; `pytest tests/integration/test_uart_sequence.py
 tests/integration/test_fixed_length_frames.py tests/integration/test_api_drivers.py -v`;
@@ -574,7 +656,9 @@ the button, the API, the CLI and after a power cycle, AC10 in the frame-parser t
   commands and the `sourceId` note. Prose says "Device" and "Control Loop".
 - **Verify:** `documentation-verify.py`, `term-verify.py`.
 - **Deps:** T29
-- [ ] done
+- [x] done
+  - Status: documentation-verify clean, term-verify clean, second-order pass done. The
+    "Allow device control" sentence follows the plan's tiers, so it holds once T30 lands.
 
 ### T38 — Architecture notes and the mistakes row
 
@@ -589,7 +673,11 @@ the button, the API, the CLI and after a power cycle, AC10 in the frame-parser t
   that the code exists), `documentation-verify.py`; `claim-verify.py --context-budget --check`
   for the CLAUDE.md growth.
 - **Deps:** T28
-- [ ] done
+- [x] done
+  - Status: claim-verify clean on the three files. io.md's `isConnecting()` census and the
+    task-tree consumer list were stale after this spec and are updated too. `--context-budget
+    --check` fails, but it already failed at HEAD (5202 words against a 5128 baseline); the clause
+    adds 19 words. Needs the main session's call (re-baseline or trim).
 
 ### T39 — Hotpath re-read against the rules
 

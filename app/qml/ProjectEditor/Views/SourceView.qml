@@ -68,6 +68,40 @@ Widgets.Pane {
       bottomMargin: -10
     }
 
+    //
+    // Lazy-loaded Connection Sequence editor, opened by the UART source form's button row
+    //
+    Loader {
+      id: sequenceDialog
+
+      property int sourceId: -1
+
+      active: false
+      asynchronous: false
+      source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml"
+
+      onLoaded: {
+        sequenceDialog.item.closing.connect(() => sequenceDialog.active = false)
+        sequenceDialog.item.applied.connect((json) => {
+          Cpp_JSON_ProjectEditor.commitConnectionSequence(sequenceDialog.sourceId, json)
+        })
+      }
+
+      function show(id, json) {
+        sequenceDialog.sourceId = id
+        sequenceDialog.active = true
+        if (sequenceDialog.item)
+          sequenceDialog.item.showDialog(json)
+      }
+    }
+
+    Connections {
+      target: Cpp_JSON_ProjectEditor
+      function onOpenConnectionSequenceEditor(sourceId, json) {
+        sequenceDialog.show(sourceId, json)
+      }
+    }
+
     ColumnLayout {
       spacing: 0
       anchors.fill: parent

@@ -27,6 +27,7 @@
 #include <QDirIterator>
 #include <QFileInfo>
 #include <QHash>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QSet>
 #include <QTimer>
@@ -35,6 +36,7 @@
 
 #include "Core/Checksum.h"
 #include "Core/DataModel/FrameKeys.h"
+#include "Core/IO/FrameConfig.h"
 #include "Core/IO/HAL_Driver.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
@@ -201,6 +203,44 @@ void EditorCommit::handleSourcePropertyChange(QStandardItem* item)
 }
 
 /**
+ * @brief Opens the Connection Sequence dialog for the selected UART source with the sequence its
+ *        editing driver holds; the form's button row sends its click sentinel here.
+ */
+void EditorCommit::openConnectionSequenceEditor()
+{
+  const int sourceId  = m_editor.m_selectedSource.sourceId;
+  IO::HAL_Driver* drv = m_editor.m_connectionManager.driverForEditing(sourceId);
+  if (!drv)
+    return;
+
+  QJsonObject sequence;
+  for (const auto& prop : drv->driverProperties())
+    if (prop.key == QLatin1String("connectionSequence"))
+      sequence = prop.value.toJsonObject();
+
+  const auto json = QString::fromUtf8(QJsonDocument(sequence).toJson(QJsonDocument::Compact));
+  Q_EMIT m_editor.openConnectionSequenceEditor(sourceId, json);
+}
+
+/**
+ * @brief Stores the dialog's sequence on the source's editing driver and captures it into the
+ *        project, whose capture opens the undo scope and marks the project modified; the form is
+ *        rebuilt so the button shows the new step count.
+ */
+void EditorCommit::commitConnectionSequence(int sourceId, const QString& json)
+{
+  IO::HAL_Driver* drv = m_editor.m_connectionManager.driverForEditing(sourceId);
+  if (!drv)
+    return;
+
+  drv->setDriverProperty(QStringLiteral("connectionSequence"), json);
+  m_model.captureSourceSettings(sourceId);
+
+  if (sourceId == m_editor.m_selectedSource.sourceId)
+    m_editor.m_forms.buildSourceModel(m_editor.m_selectedSource);
+}
+
+/**
  * @brief Dispatches source form edits to ProjectModel or the live driver.
  */
 void EditorCommit::onSourceItemChanged(QStandardItem* item)
@@ -225,6 +265,11 @@ void EditorCommit::onSourceItemChanged(QStandardItem* item)
     return;
   }
 
+  if (id == kSourceView_ConnectionSequence) {
+    openConnectionSequenceEditor();
+    return;
+  }
+
   DataModel::Source updated = m_editor.m_selectedSource;
   switch (static_cast<SourceItem>(id)) {
     case kSourceView_FrameDetection:
@@ -234,6 +279,13 @@ void EditorCommit::onSourceItemChanged(QStandardItem* item)
     case kSourceView_FrameStartSequence:
     case kSourceView_FrameEndSequence:
       handleSourceFrameStartEndChange(item, updated);
+      break;
+    case kSourceView_FrameLength:
+    case kSourceView_FrameHeaderMask:
+    case kSourceView_FrameHeaderValue:
+    case kSourceView_FrameBodyMask:
+    case kSourceView_FrameBodyValue:
+      handleSourceFixedFrameChange(item, updated);
       break;
     case kSourceView_FrameDecoder:
     case kSourceView_ChecksumFunction:
@@ -266,6 +318,65 @@ void EditorCommit::handleSourceFrameDetectionChange(QStandardItem* item, DataMod
   m_editor.m_selectedSource = updated;
 
   m_editor.m_forms.buildSourceModel(m_editor.m_selectedSource);
+}
+
+/**
+ * @brief Applies a Fixed Length edit (length or one-byte rule), keeping each rule value inside its
+ *        mask and rebuilding the form when the masking changed what the user typed.
+ */
+void EditorCommit::handleSourceFixedFrameChange(QStandardItem* item, DataModel::Source& updated)
+{
+  const int id  = item->data(ParameterType).toInt();
+  const int sid = m_editor.m_selectedSource.sourceId;
+
+  int entered = 0;
+  if (id == kSourceView_FrameLength) {
+    entered = qBound(1, item->data(EditableValue).toInt(), IO::kMaxFixedFrameLength);
+  } else {
+    const auto bytes = QByteArray::fromHex(
+      item->data(EditableValue).toString().remove(QLatin1Char(' ')).toLatin1());
+    if (bytes.size() != 1)
+      return;
+
+    entered = static_cast<quint8>(bytes.at(0));
+  }
+
+  switch (id) {
+    case kSourceView_FrameLength:
+      updated.frameLength = entered;
+      break;
+    case kSourceView_FrameHeaderMask:
+      updated.frameHeaderMask = entered;
+      break;
+    case kSourceView_FrameHeaderValue:
+      updated.frameHeaderValue = entered;
+      break;
+    case kSourceView_FrameBodyMask:
+      updated.frameBodyMask = entered;
+      break;
+    default:
+      updated.frameBodyValue = entered;
+      break;
+  }
+
+  updated.frameHeaderValue &= updated.frameHeaderMask;
+  updated.frameBodyValue &= updated.frameBodyMask;
+
+  const auto& before = m_editor.m_selectedSource;
+  const bool relayout =
+    (id == kSourceView_FrameHeaderMask && updated.frameHeaderValue != before.frameHeaderValue)
+    || (id == kSourceView_FrameBodyMask && updated.frameBodyValue != before.frameBodyValue)
+    || (id == kSourceView_FrameHeaderValue && updated.frameHeaderValue != entered)
+    || (id == kSourceView_FrameBodyValue && updated.frameBodyValue != entered);
+
+  m_model.setNextUndoHint(
+    tr("Edit Device"),
+    QStringLiteral("source-frame:%1:%2").arg(QString::number(sid), QString::number(id)));
+  m_model.updateSource(sid, updated, false);
+  m_editor.m_selectedSource = updated;
+
+  if (relayout)
+    m_editor.m_forms.buildSourceModel(m_editor.m_selectedSource);
 }
 
 /**

@@ -402,6 +402,9 @@ refuses a non-integer `value` instead of dropping the row.
 2 = NoDelimiters          driver chunk = frame; for COBS / protobuf /
                            fixed-size or self-framing binary
 3 = StartDelimiterOnly    sync word at the head; next sync ends the frame
+4 = FixedLength           exactly `frameLength` bytes; optional header rule
+                           (`frameHeaderMask`/`frameHeaderValue`) and body rule
+                           (`frameBodyMask`/`frameBodyValue`), mask 0 = off
 ```
 
 When the required delimiter for the chosen mode is empty, extraction

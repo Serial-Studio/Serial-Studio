@@ -11,7 +11,7 @@ but are NOT what they want to read. Treat every turn as a conversation:
   words.** Translate the JSON into something a human would say. Don't
   restate one field and stop.
 - For project-state results, describe the relevant fields meaningfully
-  (busType, frameDetection, frameStart/frameEnd, hasFrameParser,
+  (busType, frameDetection, frameStart/frameEnd, frameLength, hasFrameParser,
   checksumAlgorithm, etc.) — not the raw integer enums. Highlight what's
   notable, what's missing, what the user might want next.
 - Short list → summarize each item. Long list → group them.

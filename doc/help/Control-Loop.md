@@ -297,6 +297,28 @@ function loop() {
 }
 ```
 
+### 7. Bringing a serial device up again
+
+A UART source with a [Connection Sequence](Drivers-UART.md#connection-sequence) runs it on every connect, before `setup()`. A device that resets itself while the port stays open, for example on a supply dip, goes silent until it is brought up again. The loop below watches the frame age and re-runs the sequence on the open port; `io.uart.sendBreak(55)` alone serves a device that needs only a BREAK reset.
+
+```javascript
+function loop() {
+  var latest = io.getLatestFrame();
+  if (latest.ok && latest.result.hasData && latest.result.ageMs > 3000) {
+    var r = io.uart.runSequence();
+    if (!r.ok)
+      console.log("Re-run refused: " + r.error);
+
+    delay(5000);
+    return;
+  }
+
+  delay(500);
+}
+```
+
+`io.uart.runSequence()` returns as soon as the run starts, so it never counts against the runtime watchdog; the sequence reports its outcome in the console. Give it time with `delay()` before checking again, longer than the sequence's time budget. Both calls take an optional `{ sourceId: n }` for a Device other than source 0.
+
 ## Saving and lifecycle
 
 The script is saved inside the project file, so it travels with the project. Editing it while connected restarts it immediately; otherwise it starts the next time the device connects and stops when the device disconnects. Use **Validate** before connecting to catch syntax errors early; runtime errors (an exception inside `setup()` or `loop()`) are shown in the editor's status bar and stop the script.

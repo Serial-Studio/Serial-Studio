@@ -158,8 +158,10 @@ and "shows garbage". Knowing the matrix below saves an iteration.
 | 1 | StartAndEndDelimiter | Everything between start and end delimiters; outside bytes are dropped. | Framed text protocols like `/* ... */`, `<...>`. |
 | 2 | NoDelimiters | The whole captured chunk (the driver's chunk boundary IS the frame boundary). | Fixed-size binary, COBS (parser splits on `0x00`), protobuf over UDP, length-prefixed binary. |
 | 3 | StartDelimiterOnly | Between this start marker and the next one. | Protocols that lead with a sync word but have no terminator. |
+| 4 | FixedLength | Exactly `frameLength` bytes (checksum included). Optional header rule (`frameHeaderMask` / `frameHeaderValue`) picks the first byte, body rule (`frameBodyMask` / `frameBodyValue`) must hold for every other byte; a mask of 0 disables a rule. | Fixed-size binary records with no delimiter, where a bit pattern in the first byte lets the reader re-align after a lost byte. |
 
 When `frameDetection` requires a delimiter that's empty or missing,
+or FixedLength has a `frameLength` outside 1 to 524288,
 extraction silently downgrades to NoDelimiters. That's usually NOT
 what the user wants: if you set `frameStart: ""` you almost always
 need to flip detection mode too.

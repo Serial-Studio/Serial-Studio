@@ -113,6 +113,12 @@ blindly; pick by the device class the user is asking about:
 | `io.s7.*`        | Siemens S7 (load `industrial_plc` skill)    |
 | `io.uart.*`      | UART / serial port (most projects start here)|
 
+`io.uart.*` also carries line control and the Connection Sequence (the bring-up steps a
+serial source runs on every open): `setRtsEnabled`, `getSequence` / `setSequence` on the
+port settings, and `sendBreak`, `setLiveBaudRate`, `getLineStates`, `runSequence` on a
+connected port (optional `sourceId`, default 0). The commands that touch the port or a line
+are device-gated; `getLineStates` and `getSequence` are safe reads.
+
 Top-level `io.*` itself has bus-management and tail/peek commands; use
 `meta.listCommands{prefix:"io."}` (no trailing subscope) to see them.
 

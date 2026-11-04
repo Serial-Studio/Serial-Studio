@@ -57,6 +57,7 @@ public:
   void onProjectItemChanged(QStandardItem* item);
   void onDatasetItemChanged(QStandardItem* item);
   void commitAlarmBands(int groupId, int datasetId, const QVariantList& bands);
+  void commitConnectionSequence(int sourceId, const QString& json);
   void commitChannelSounds(const QVariantList& rows);
   [[nodiscard]] QVariantList channelSoundRows() const;
   void setProjectSoundSequence(const QString& letter);
@@ -91,9 +92,11 @@ private:
   void syncDatasetItemCache(int groupId, int datasetId);
   void handleSourceBusTypeChange(QStandardItem* item);
   void handleSourcePropertyChange(QStandardItem* item);
+  void openConnectionSequenceEditor();
   void applyGroupBarPanelStyleEdit(int styleIdx, int groupId);
   void applyGroupLogAxisEdit(bool xAxis, bool enabled, int groupId);
   void commitAlarmBandsForSelection(const std::vector<DataModel::AlarmBand>& bands);
+  void handleSourceFixedFrameChange(QStandardItem* item, DataModel::Source& updated);
   void handleSourceFrameStartEndChange(QStandardItem* item, DataModel::Source& updated);
   void handleSourceFrameDetectionChange(QStandardItem* item, DataModel::Source& updated);
   void handleSourceDecoderChecksumChange(QStandardItem* item, DataModel::Source& updated);

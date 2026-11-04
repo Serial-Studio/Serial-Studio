@@ -35,7 +35,7 @@ flowchart LR
 
 > **Note.** All modes work with any device: Serial, TCP/UDP, BLE, and all Pro drivers (MQTT, Modbus, CAN Bus, Audio, USB, HID, Process I/O).
 >
-> **Frame detection options (Project File mode only):** End Only, Start+End, Start Only, No Delimiters.
+> **Frame detection options (Project File mode only):** End Only, Start+End, Start Only, No Delimiters, Fixed Length.
 
 ## Console Only mode
 
@@ -135,7 +135,7 @@ Pick the "Parse via Project File" option under Operation Mode in the Setup panel
 
 ### How it works
 
-- **Frame detection.** Configurable per source. Four detection methods are available.
+- **Frame detection.** Configurable per source. Five detection methods are available.
 - **Data format.** Configurable. Incoming bytes can be decoded as plain text (UTF-8), hexadecimal, Base64, or raw binary.
 - **Dashboard definition.** A `.ssproj` JSON file on the host defines all groups, datasets, widgets, alarms, FFT settings, and actions.
 - **Device data.** The device sends only raw values (CSV text, binary packets, and so on). Serial Studio maps each value to the corresponding dataset by index.
@@ -154,8 +154,11 @@ Frame detection determines how Serial Studio finds the boundaries of each data f
 | **Start and End Delimiter** | 1         | A frame begins at the start delimiter and ends at the end delimiter. Use this for protocols that wrap data in markers (for example `$DATA...;\n`). |
 | **No Delimiters**           | 2         | All incoming data is passed directly to the frame parser script without delimiter-based splitting. Use this for length-prefixed or fixed-size binary protocols where the parser itself figures out frame boundaries. |
 | **Start Delimiter Only**    | 3         | A frame begins at one occurrence of the start delimiter and ends when the next occurrence is found. The second occurrence becomes the start of the next frame. A frame is only released once that next start marker arrives, so the most recent frame sits buffered and unreleased until then; for a slow or paused sender (a 1 Hz source, for example), the dashboard runs one frame behind. |
+| **Fixed Length**            | 4         | Every frame is exactly **Frame Length** bytes, checksum included. The **Header Rule** (a mask and a value) selects the first byte of a frame: a byte starts a frame when `(byte & mask) == value`, and bytes before it are discarded. The **Body Rule** applies the same test to every other byte of the frame; a frame that fails it is dropped and the search for the next header resumes at the offending byte. A mask of `00` turns a rule off. With no Header Rule the stream is assumed to be aligned and is cut every N bytes. If a checksum is set and fails, the reader drops one byte and searches for the next header (with a Header Rule), or the whole frame (without one). |
 
-Delimiters can be specified as plain text or hexadecimal byte sequences (toggle "Hexadecimal Delimiters" in the Project Editor).
+Delimiters can be specified as plain text or hexadecimal byte sequences (toggle "Hexadecimal Delimiters" in the Project Editor). Fixed Length uses no delimiters, so the Project Editor hides the delimiter fields for it.
+
+For example, a 5-byte frame whose first byte always has bit 7 set and whose other bytes never do uses Frame Length `5`, Header Rule mask `80` value `80`, and Body Rule mask `80` value `00`. If a byte is lost on the wire, the reader skips forward to the next byte with bit 7 set instead of staying misaligned. The length is limited to 524288 bytes; a source with a length outside 1 to 524288 falls back to No Delimiters.
 
 ### Decoder methods
 

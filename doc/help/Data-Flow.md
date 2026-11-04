@@ -31,12 +31,13 @@ A 1 MB input buffer sits between the driver and the frame reader. It absorbs bur
 
 ## Stage 3: frame reader
 
-The frame reader scans the input buffer for frame boundaries and extracts complete frames. Four detection modes are available:
+The frame reader scans the input buffer for frame boundaries and extracts complete frames. Five detection modes are available:
 
 - **End Delimiter Only.** Find the end marker and extract everything before it.
 - **Start + End Delimiter.** Find the start marker, then the end marker, and extract what's between them.
 - **Start Delimiter Only.** Frame boundaries fall between consecutive start markers.
 - **No Delimiters.** Pass all data through. Use this with a frame parser script (Lua or JavaScript) for length-prefixed or self-delimiting protocols.
+- **Fixed Length.** Cut the stream into frames of exactly N bytes. An optional Header Rule picks the byte that starts a frame, so the reader re-aligns after garbage or a lost byte, and an optional Body Rule drops a frame whose other bytes break the rule.
 
 After extraction, the frame reader can optionally validate a checksum. Nine algorithms are registered: `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, and `Adler-32`. Valid frames move to the next stage.
 

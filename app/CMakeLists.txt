@@ -388,6 +388,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/GroupTemplateMenu.qml
   qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml
   qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml
+  qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml
   qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml
   qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml
   qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml

@@ -72,7 +72,7 @@ One complete unit of data from the device, delimited by the frame-detection sett
 
 ## Frame detection / Delimiters
 
-How Serial Studio decides where one frame ends and the next begins: End Delimiter Only, Start Delimiter Only, Start + End Delimiter, or No Delimiters. For line-based CSV, the end delimiter is a newline.
+How Serial Studio decides where one frame ends and the next begins: End Delimiter Only, Start Delimiter Only, Start + End Delimiter, No Delimiters, or Fixed Length (every frame is the same number of bytes). For line-based CSV, the end delimiter is a newline.
 
 ## Frame index
 

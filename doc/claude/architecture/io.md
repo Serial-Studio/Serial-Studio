@@ -146,15 +146,16 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   member) and `concludeConnectRequest()` survives only to
   settle the wait cursor and to make `toggleConnection()` treat an in-flight request as
   "connected" so the button aborts instead of stacking a second attempt.
-- **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`). Eleven
+- **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`). Twelve
   classes override it: `Network` (`m_dialPending`, now true for TCP as well as WebSocket and
   HTTP; only UDP settles synchronously), `Iec104` (`m_dial.active()`), `Modbus`, `MQTT`,
-  `OpcUa`, `S7`, `EthernetIp`, `CANBus`, `BluetoothLE`, `Process`, and the ctest double
+  `OpcUa`, `S7`, `EthernetIp`, `CANBus`, `BluetoothLE`, `Process`, `UART` (only while a
+  connect-time Connection Sequence runs), and the ctest double
   <!-- claim-verify off -->
   `Test::FakeDriver` (`app/tests/support/`).
   <!-- claim-verify on -->
-  UART, USB, Audio and HID do not override it: their opens settle inside the
-  call. (`OpcUaSession::isConnecting()` exists too but is not an override — the session is not a
+  USB, Audio and HID do not override it: their opens settle inside the call, as UART's does
+  when its source has no Connection Sequence. (`OpcUaSession::isConnecting()` exists too but is not an override — the session is not a
   `HAL_Driver`.) `toggleConnection()` aborts when any device reports an in-flight dial, and
   `ConnectionManager::isConnecting` (NOTIFY `connectingChanged`, published by the same
   idempotent snapshot) drives the toolbar button's "Connecting…" label. Modbus mirrors
@@ -209,6 +210,21 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   for TCP. Read the verdict from `io.getStatus` / `linkState()` instead. Any future
   sync-to-async conversion owes the same correction to the docs, the AI corpus and
   `tests/integration/test_connection_verdicts.py`.
+- **A UART source with a Connection Sequence opens asynchronously (spec 0103).** `open()` opens
+  the port as before, then hands it to an `IO::Drivers::SequenceRunner` (an `Async::` tree:
+  step tasks in a `SequentialGroup` under a `TimeoutTask` budget, timers from the driver's
+  `Async::SystemClock`) whose start is QUEUED, so the verdict always lands after
+  `notePendingDial`. Until the verdict `isOpen()` is false and `isConnecting()` true, which is
+  what keeps the connected edge (sinks, Auto-Execute actions, the Control Loop) behind the
+  handshake; internal port checks read the private `portOpen()` instead. `onReadyRead` feeds the
+  runner and `publishConsoleData`, never `dataReceived`, and `write()` returns 0. The runner's
+  `finished` is the ONE verdict: `reportOpenFinished(true)` plus `configurationChanged()`, or a
+  logged failure naming the step and `reportOpenFinished(false, text)`. `close()` cancels the
+  runner silently (a disconnect is not a failed step) and retires it with `deleteLater()`,
+  because the failure verdict re-enters `close()` from inside the runner's own emission. The
+  on-demand re-run (`UART::runSequence`) keeps `isOpen()` true, so no session boundary fires,
+  and gates bytes and writes the same way. Steps act on the port through
+  `UartSequencePort`, never the persisting setters, so a baud step never rewrites the saved rate.
 - **Every async dial failure must still reach `ConnectionManager::disconnectDevice(this)`** —
   BLE (`onControllerError`), Modbus (`failDial`), MQTT (dial-window `onErrorChanged`) all do —
   so a pending verdict settles and "connecting" always resolves; the earlier design stranded
@@ -530,7 +546,9 @@ it needs `QObject::sender()` (`onDriverOpenFinished` resolves which driver repor
   `IO::IRawByteTap` array the composition root bound (console, API servers, historian, MQTT
   publisher, gRPC; spec 0077) and to the `IO::IIngestBinder` for injected payloads, and the
   outbound write path with its reply capture. ConnectionManager's byte path is this class; it
-  names no sink type.
+  names no sink type. Bytes a driver writes on its own (a Connection Sequence step) echo through
+  `HAL_Driver::publishSentData` -> `DeviceManager::rawDataSent` -> `watchSentBytes()` (a Direct
+  GUI-thread hop at command rate) -> the taps' `onSentBytes`, like a routed write.
 - **`DeviceTableQuery` (`m_query`)** — every read over the live device table: open counts,
   `linkState()`, the configuration verdict and the id lookups the connect fan-outs iterate.
   Read-only by construction, so nothing here can mutate a device or emit a signal. The 1 Hz
@@ -585,9 +603,10 @@ The engine outlived the connection flows and is still built and unit-tested
 `awaitSignal()` / `invoke()` builders), `RetryPolicy.{h,cpp}`, and `AsyncClock.h` (the timer
 indirection the unit tests drive with a virtual clock).
 
-Two consumers remain: `MQTT::Publisher` (its reconnect flow, runner built in
-`PublisherWorker::bootstrap()` on the worker thread) and the spec-0035 diagnostics probes
-(`Misc::ConnectionDiagnostics` + `Misc/Diagnostics/NetworkChecks`). No IO driver uses it.
+Three consumers remain: `MQTT::Publisher` (its reconnect flow, runner built in
+`PublisherWorker::bootstrap()` on the worker thread), the spec-0035 diagnostics probes
+(`Misc::ConnectionDiagnostics` + `Misc/Diagnostics/NetworkChecks`), and the UART Connection
+Sequence runner (`IO::Drivers::SequenceRunner`, spec 0103), the one IO driver that uses it.
 
 - **Thread-affine, never thread-safe.** A tree lives on the thread that created its
   `TaskRunner` (asserted in the ctor); no mutex, no new thread, no cross-thread hop.

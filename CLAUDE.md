@@ -310,8 +310,9 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   workers (use `monotonicFrameNs(...)` as the safety net only). Enforced: code-verify:--clock-census.
 - **Driver opens are synchronous calls; most drivers dial asynchronously behind them.** An async
   dial's verdict has ONE owner, `HAL_Driver::openFinished(ok, reason)`, emitted exactly once per
-  attempt; a driver that reports only success wedges the connect button. Doctrine:
-  [doc/claude/architecture/io.md](doc/claude/architecture/io.md) "Opening a Link".
+  attempt; a driver that reports only success wedges the connect button. UART joins them only
+  when its source has a Connection Sequence (spec 0103): `isOpen()` stays false until the verdict.
+  Doctrine: [doc/claude/architecture/io.md](doc/claude/architecture/io.md) "Opening a Link".
 - **Diagnostics are pulled, never pushed (specs 0033/0035).** Pipeline counters are plain
   `quint64` increments polled on the 1 Hz tick, never a per-frame signal, allocation or lock; a
   recreated `FrameReader` zeroes them, so consumers work on deltas. Detail: dataflow.md

@@ -723,10 +723,12 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_frameDetectionMethods.clear();
   m_frameDetectionMethodsValues.clear();
   m_frameDetectionMethods << tr("End Delimiter Only") << tr("Start Delimiter Only")
-                          << tr("Start + End Delimiter") << tr("No Delimiters");
+                          << tr("Start + End Delimiter") << tr("No Delimiters")
+                          << tr("Fixed Length");
   m_frameDetectionMethodsValues << SerialStudio::EndDelimiterOnly
                                 << SerialStudio::StartDelimiterOnly
-                                << SerialStudio::StartAndEndDelimiter << SerialStudio::NoDelimiters;
+                                << SerialStudio::StartAndEndDelimiter << SerialStudio::NoDelimiters
+                                << SerialStudio::FixedLength;
 
 #ifdef BUILD_COMMERCIAL
   m_imgDetectionModes.clear();
@@ -1145,6 +1147,14 @@ void DataModel::ProjectEditor::commitAlarmBands(int groupId,
                                                 const QVariantList& bands)
 {
   m_commit.commitAlarmBands(groupId, datasetId, bands);
+}
+
+/**
+ * @brief Forwards to EditorCommit.
+ */
+void DataModel::ProjectEditor::commitConnectionSequence(int sourceId, const QString& json)
+{
+  m_commit.commitConnectionSequence(sourceId, json);
 }
 
 /**

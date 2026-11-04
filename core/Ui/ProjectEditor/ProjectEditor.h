@@ -222,6 +222,7 @@ signals:
   void openAlarmBandsEditor(
     int groupId, int datasetId, double rangeMin, double rangeMax, QVariantList currentBands);
   void openChannelSoundsEditor(QVariantList rows);
+  void openConnectionSequenceEditor(int sourceId, const QString& json);
   void openFrequencyMarkersEditor(int groupId,
                                   int datasetId,
                                   double nyquist,
@@ -506,6 +507,7 @@ public slots:
   void setSuppressViewChange(bool suppress) noexcept;
   void openAlarmBandsEditorForSelection();
   void commitAlarmBands(int groupId, int datasetId, const QVariantList& bands);
+  void commitConnectionSequence(int sourceId, const QString& json);
   void openChannelSoundsEditorForProject();
   void commitChannelSounds(const QVariantList& rows);
   void setProjectSoundSequence(const QString& letter);
