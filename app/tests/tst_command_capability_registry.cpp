@@ -189,6 +189,21 @@ void TstCommandCapabilityRegistry::argumentRefinements_data()
     {QStringLiteral("settings"), QJsonObject{{QStringLiteral("baudRate"), 9600}}}
   };
 
+  const auto sequenceOf = [](const char* kind) {
+    const QJsonObject step{
+      {QStringLiteral("kind"), QString::fromLatin1(kind)}
+    };
+    return QJsonObject{
+      {QStringLiteral("sequence"), QJsonObject{{QStringLiteral("steps"), QJsonArray{step}}}}
+    };
+  };
+  QTest::newRow("uart.setSequence send")
+    << QStringLiteral("io.uart.setSequence") << sequenceOf("send") << sequenceOf("wait");
+  QTest::newRow("uart.setSequence break")
+    << QStringLiteral("io.uart.setSequence") << sequenceOf("break") << sequenceOf("line");
+  QTest::newRow("uart.setSequence baud")
+    << QStringLiteral("io.uart.setSequence") << sequenceOf("baud") << sequenceOf("expect");
+
 #ifdef BUILD_COMMERCIAL
   const int process = static_cast<int>(SerialStudio::BusType::Process);
   QTest::newRow("io.setBusType") << QStringLiteral("io.setBusType")

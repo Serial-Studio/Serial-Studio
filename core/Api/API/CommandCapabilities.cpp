@@ -25,6 +25,7 @@
 #include <iterator>
 
 #include "Core/DataModel/FrameKeys.h"
+#include "Core/IO/ConnectionSequence.h"
 #include "Core/SerialStudio.h"
 
 using namespace API::CommandCapabilities;
@@ -53,6 +54,10 @@ static constexpr Entry kCapable[] = {
   {QLatin1StringView("io.process.setMode"), ChoosesProgram, NoCapability},
   {QLatin1StringView("io.process.setWorkingDir"), ChoosesProgram, NoCapability},
   {QLatin1StringView("io.setBusType"), NoCapability, ChoosesProgram},
+  {QLatin1StringView("io.uart.runSequence"), WritesDevice, NoCapability},
+  {QLatin1StringView("io.uart.sendBreak"), WritesDevice, NoCapability},
+  {QLatin1StringView("io.uart.setLiveBaudRate"), WritesDevice, NoCapability},
+  {QLatin1StringView("io.uart.setSequence"), NoCapability, WritesDevice},
   {QLatin1StringView("io.writeData"), WritesDevice, NoCapability},
   {QLatin1StringView("project.action.duplicate"), WritesDevice, NoCapability},
   {QLatin1StringView("project.action.update"), NoCapability, WritesDevice},
@@ -299,6 +304,8 @@ static constexpr QLatin1StringView kPlain[] = {
   QLatin1StringView("io.s7.setProperty"),
   QLatin1StringView("io.setPaused"),
   QLatin1StringView("io.uart.getConfig"),
+  QLatin1StringView("io.uart.getLineStates"),
+  QLatin1StringView("io.uart.getSequence"),
   QLatin1StringView("io.uart.listBaudRates"),
   QLatin1StringView("io.uart.listPorts"),
   QLatin1StringView("io.uart.setAutoReconnect"),
@@ -309,6 +316,7 @@ static constexpr QLatin1StringView kPlain[] = {
   QLatin1StringView("io.uart.setFlowControl"),
   QLatin1StringView("io.uart.setParity"),
   QLatin1StringView("io.uart.setPortIndex"),
+  QLatin1StringView("io.uart.setRtsEnabled"),
   QLatin1StringView("io.uart.setStopBits"),
   QLatin1StringView("io.usb.getConfig"),
   QLatin1StringView("io.usb.listDevices"),
@@ -570,6 +578,22 @@ static bool selectsProcessBus(const QJsonObject& params)
 }
 
 /**
+ * @brief Whether a stored Connection Sequence acts on the device (spec 0103): a Send, BREAK or baud
+ *        step runs on every open with no further prompt, the deferred form of io.writeData,
+ *        sendBreak and setLiveBaudRate. Parsed by the handler's own reader so the two never differ.
+ */
+static bool sequenceWritesDevice(const QJsonObject& params)
+{
+  const auto sequence =
+    IO::ConnectionSequence::fromJson(params.value(QStringLiteral("sequence")).toObject());
+
+  using Kind = IO::SequenceStep::Kind;
+  return std::any_of(sequence.steps.begin(), sequence.steps.end(), [](const auto& step) {
+    return step.kind == Kind::Send || step.kind == Kind::Break || step.kind == Kind::SetBaud;
+  });
+}
+
+/**
  * @brief Whether an action update changes the bytes, target or arming of an action:
  *        auto-execute and timers write later with no further prompt.
  */
@@ -643,6 +667,9 @@ bool API::CommandCapabilities::argumentsAddCapabilities(const QStringView comman
 
   if (command == u"project.action.update")
     return actionUpdateWritesDevice(params);
+
+  if (command == u"io.uart.setSequence")
+    return sequenceWritesDevice(params);
 
   if (command == u"project.source.setProperty")
     return isProgramKey(params.value(QStringLiteral("key")).toString());
