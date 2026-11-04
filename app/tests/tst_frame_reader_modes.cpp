@@ -105,10 +105,10 @@ static void configureProject(IO::FrameReader& reader,
  */
 static void configureFixed(IO::FrameReader& reader,
                            int length,
-                           quint8 headerMask  = 0,
-                           quint8 headerValue = 0,
-                           quint8 bodyMask    = 0,
-                           quint8 bodyValue   = 0,
+                           quint8 headerMask       = 0,
+                           quint8 headerValue      = 0,
+                           quint8 bodyMask         = 0,
+                           quint8 bodyValue        = 0,
                            const QString& checksum = QString())
 {
   reader.setOperationMode(SerialStudio::ProjectFile);
@@ -856,9 +856,8 @@ void TstFrameReaderModes::fixedLengthBadChecksumWithHeaderRuleResyncs()
   IO::FrameReader reader;
   configureFixed(reader, 5, 0x80, 0x80, 0, 0, QStringLiteral("CRC-16"));
 
-  reader.processData(
-    capture(bad + corruptTrailer(IO::checksum(QStringLiteral("CRC-16"), bad)) + good
-            + IO::checksum(QStringLiteral("CRC-16"), good)));
+  reader.processData(capture(bad + corruptTrailer(IO::checksum(QStringLiteral("CRC-16"), bad))
+                             + good + IO::checksum(QStringLiteral("CRC-16"), good)));
 
   QCOMPARE(drainFrames(reader), QList<QByteArray>({good}));
   QCOMPARE(reader.checksumErrorCount(), quint64(1));
@@ -875,9 +874,8 @@ void TstFrameReaderModes::fixedLengthBadChecksumWithoutHeaderRuleDropsTheFrame()
 
   const QByteArray bad  = QByteArray("bad");
   const QByteArray good = QByteArray("ok!");
-  reader.processData(
-    capture(bad + corruptTrailer(IO::checksum(QStringLiteral("CRC-16"), bad)) + good
-            + IO::checksum(QStringLiteral("CRC-16"), good)));
+  reader.processData(capture(bad + corruptTrailer(IO::checksum(QStringLiteral("CRC-16"), bad))
+                             + good + IO::checksum(QStringLiteral("CRC-16"), good)));
 
   QCOMPARE(drainFrames(reader), QList<QByteArray>({good}));
   QCOMPARE(reader.checksumErrorCount(), quint64(1));

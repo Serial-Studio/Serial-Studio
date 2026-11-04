@@ -5,12 +5,16 @@
   "note": "sha256 of the on-disk project corpus before any registry change. Not a substitute for the live project.open + project.exportJson baseline (T1); it only proves the input files were unchanged when the maintainer runs the capture.",
   "projects": [
     {
+      "path": "examples/Acknowledged Commands/AcknowledgedCommands.ssproj",
+      "sha256": "d9cb7bc11e3f47055a45a12f7fd3d1fdaaa636111c3a54a4d72f7014119910c6"
+    },
+    {
       "path": "examples/BLE Battery/BLE Battery Level.ssproj",
       "sha256": "b2dffc145bf73d0a10d6406002cbe84d1eb1d4e7fd8593bb8022a5d4dea35390"
     },
     {
       "path": "examples/CAN Bus Example/ecu_simulator.ssproj",
-      "sha256": "428a2285cd64e8e149ad1c69d8a06d81ee9e528c6cd86287ddddb7ca8b421a31"
+      "sha256": "9875716f4409df74ff4743ce20f7014643de7a7b37df5e0a477e86d9b70f74c3"
     },
     {
       "path": "examples/Camera Telemetry/Camera Telemetry.ssproj",

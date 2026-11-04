@@ -143,7 +143,9 @@ def test_reply_ids_round_trip(api_client, clean_state):
     _bind_reply(api_client)
 
     ids = _dataset_ids(api_client)
-    got = api_client.command("project.outputWidget.get", {"groupId": GROUP, "widgetId": 0})
+    got = api_client.command(
+        "project.outputWidget.get", {"groupId": GROUP, "widgetId": 0}
+    )
     assert got["replyTokenDatasetId"] == ids[1]
     assert got["replyCodeDatasetId"] == ids[2]
     assert got["replyMessageDatasetId"] == ids[3]
@@ -152,7 +154,9 @@ def test_reply_ids_round_trip(api_client, clean_state):
     exported = _exported(api_client)
     api_client.load_project_from_json(exported)
     time.sleep(0.3)
-    again = api_client.command("project.outputWidget.get", {"groupId": GROUP, "widgetId": 0})
+    again = api_client.command(
+        "project.outputWidget.get", {"groupId": GROUP, "widgetId": 0}
+    )
     assert again["replyTokenDatasetId"] == ids[1]
     assert again["replyCodeDatasetId"] == ids[2]
 
@@ -164,7 +168,9 @@ def test_widget_saved_before_the_spec_is_unbound(api_client, clean_state):
     api_client.load_project_from_json(_project([_widget(BUTTON, "Blink", BLINK_FN)]))
     time.sleep(0.3)
 
-    got = api_client.command("project.outputWidget.get", {"groupId": GROUP, "widgetId": 0})
+    got = api_client.command(
+        "project.outputWidget.get", {"groupId": GROUP, "widgetId": 0}
+    )
     for key in REPLY_KEYS:
         assert key not in got, f"unbound widget reports {key}"
 
@@ -253,7 +259,8 @@ def _open_dashboard(api_client, device, widgets, control_suffix, bind):
     assert device.wait_for_connection(LINK_TIMEOUT), "the device saw no client"
     device.send_frame(_frame(0, 0, 0, "none"))
     assert _wait_until(
-        lambda: _element(api_client, f"{CELL}.{control_suffix}") is not None, LINK_TIMEOUT
+        lambda: _element(api_client, f"{CELL}.{control_suffix}") is not None,
+        LINK_TIMEOUT,
     ), "the control never appeared on the dashboard"
     device.clear_received()
 
@@ -262,7 +269,9 @@ def _press(client, device, suffix):
     """Click the control and return the token the command carried, if any."""
     before = _state(client).get("token", 0)
     _drive(client, "ui.automation.click", {"window": MAIN, "id": f"{CELL}.{suffix}"})
-    assert _wait_until(lambda: device.received() != b"", 3.0), "nothing reached the device"
+    assert _wait_until(
+        lambda: device.received() != b"", 3.0
+    ), "nothing reached the device"
     match = re.search(rb"(\d+)\n$", device.received())
     assert match, f"no token in {device.received()!r}"
     token = int(match.group(1))
@@ -325,7 +334,9 @@ def test_unanswered_while_frames_flow(api_client, button_dashboard):
     device = button_dashboard
     token = _press(api_client, device, "button")
 
-    _stream(device, _frame(0, token - 1 if token > 1 else 32767, 0, "stale"), seconds=1.6)
+    _stream(
+        device, _frame(0, token - 1 if token > 1 else 32767, 0, "stale"), seconds=1.6
+    )
     assert _state(api_client).get("outcome") == "unanswered"
 
 
@@ -390,7 +401,9 @@ def test_refused_toggle_returns_to_the_reported_state(api_client, toggle_with_bo
 
 @pytest.mark.integration
 @pytest.mark.gui
-def test_state_only_wait_ends_when_the_device_goes_silent(api_client, clean_state, capturing_device):
+def test_state_only_wait_ends_when_the_device_goes_silent(
+    api_client, clean_state, capturing_device
+):
     """AC7: a state-only toggle stops waiting within its window with no frame to prompt it."""
     widget = _widget(TOGGLE, "Fan", TOGGLE_FN)
 

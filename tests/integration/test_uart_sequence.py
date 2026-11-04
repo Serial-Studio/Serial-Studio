@@ -224,11 +224,17 @@ def test_connects_only_after_the_device_answers(api_client, uart_session):
 
         time.sleep(0.5)
         status = _status(api_client)
-        assert status.get("isConnected") is False, f"connected before the reply: {status}"
+        assert (
+            status.get("isConnected") is False
+        ), f"connected before the reply: {status}"
         assert status.get("linkState") == "connecting", status
-        assert _frame_sequence(api_client) == before, "a frame arrived during the handshake"
+        assert (
+            _frame_sequence(api_client) == before
+        ), "a frame arrived during the handshake"
 
-        _wait_for(lambda: _status(api_client).get("isConnected"), 8.0, "connect after reply")
+        _wait_for(
+            lambda: _status(api_client).get("isConnected"), 8.0, "connect after reply"
+        )
         assert device.answered.is_set()
 
         _wait_for(
@@ -247,7 +253,9 @@ def test_connects_only_after_the_device_answers(api_client, uart_session):
 
     csv = _newest_since("CSV", ".csv", started)
     if csv is not None:
-        assert "31337" not in csv.read_text(errors="replace"), f"handshake bytes in {csv}"
+        assert "31337" not in csv.read_text(
+            errors="replace"
+        ), f"handshake bytes in {csv}"
 
 
 def test_unanswered_sequence_fails_within_the_budget(api_client, uart_session):
@@ -312,7 +320,9 @@ def test_live_baud_change_keeps_the_connection(api_client, uart_session):
 
         before = _frame_sequence(api_client)
         _wait_for(
-            lambda: _frame_sequence(api_client) > before, 5.0, "frames after the baud change"
+            lambda: _frame_sequence(api_client) > before,
+            5.0,
+            "frames after the baud change",
         )
         assert api_client.command("io.uart.getConfig")["baudRate"] == 9600
     finally:

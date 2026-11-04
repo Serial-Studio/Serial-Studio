@@ -208,8 +208,11 @@ void TstProContent::formatsAndLabelsAreFree()
     dataset.formatScale        = 0.5;
     dataset.formatOffset       = -40;
     dataset.displayFormat      = kind % 2 ? QStringLiteral("hex") : QStringLiteral("bin");
-    dataset.labels             = {{0, QStringLiteral("Off")}, {1, QStringLiteral("On")}};
-    dataset.labelsDefault      = QStringLiteral("Fault");
+    dataset.labels             = {
+      {0, QStringLiteral("Off")},
+      {1,  QStringLiteral("On")}
+    };
+    dataset.labelsDefault = QStringLiteral("Fault");
     group.datasets.push_back(dataset);
   }
 

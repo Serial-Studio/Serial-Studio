@@ -1,14 +1,14 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 802,
-  "files": 200,
+  "total": 801,
+  "files": 201,
   "buckets": {
     "root": 212,
     "accessor": 71,
     "ctor-capture": 62,
     "deferred": 7,
-    "static-cache": 419,
+    "static-cache": 418,
     "loose": 31
   },
   "cross_library_total": 0,
@@ -22,9 +22,9 @@
     "Console::Handler": 25,
     "IO::PipelineHost": 23,
     "API::Server": 19,
+    "IO::ConnectionManager": 19,
     "DataModel::FrameBuilder": 19,
     "Sessions::Export": 19,
-    "IO::ConnectionManager": 18,
     "DataModel::NotificationCenter": 17,
     "CSV::Export": 15,
     "MDF4::Export": 15,
@@ -36,7 +36,6 @@
     "UI::UISessionRegistry": 14,
     "Misc::CommonFonts": 13,
     "CSV::Player": 12,
-    "ConnectionManager": 12,
     "API::CommandRegistry": 11,
     "MDF4::Player": 11,
     "Sessions::Player": 11,
@@ -44,6 +43,7 @@
     "DataModel::ControlScript": 11,
     "AI::CommandRegistry": 11,
     "Misc::CrashTracker": 10,
+    "ConnectionManager": 10,
     "API::GRPC::GRPCServer": 9,
     "MachineID": 9,
     "Misc::BackupManager": 8,
@@ -867,13 +867,13 @@
       }
     },
     "core/Devices/IO/Drivers/UART.cpp": {
-      "total": 2,
+      "total": 1,
       "buckets": {
         "root": 0,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 2,
+        "static-cache": 1,
         "loose": 0
       }
     },
@@ -1834,6 +1834,17 @@
         "loose": 0
       }
     },
+    "core/Ui/ProjectEditor/EditorVocabulary.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
     "core/Ui/ProjectEditor/EditorWiring.cpp": {
       "total": 1,
       "buckets": {
@@ -1923,13 +1934,13 @@
       }
     },
     "core/Ui/ProjectEditor/ProjectEditor.cpp": {
-      "total": 2,
+      "total": 1,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 1,
+        "static-cache": 0,
         "loose": 0
       }
     },

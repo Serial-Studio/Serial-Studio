@@ -59,7 +59,13 @@ def _project(frame_length: int = 5) -> dict:
                 "title": "Values",
                 "widget": "datagrid",
                 "datasets": [
-                    {"title": f"V{i}", "graph": True, "units": "", "value": "0", "index": i + 1}
+                    {
+                        "title": f"V{i}",
+                        "graph": True,
+                        "units": "",
+                        "value": "0",
+                        "index": i + 1,
+                    }
                     for i in range(4)
                 ],
             }
@@ -109,13 +115,22 @@ def _connect(api_client, device_simulator, project: dict) -> None:
 @pytest.mark.network
 @pytest.mark.project
 class TestFixedLengthFrames:
-    def test_frames_are_cut_at_the_length(self, api_client, device_simulator, clean_state):
+    def test_frames_are_cut_at_the_length(
+        self, api_client, device_simulator, clean_state
+    ):
         """Back-to-back frames in one write each become a dashboard update."""
         _connect(api_client, device_simulator, _project())
 
-        device_simulator.send_frame(_frame(1, 10, 11, 12, 13) + _frame(2, 20, 21, 22, 23))
+        device_simulator.send_frame(
+            _frame(1, 10, 11, 12, 13) + _frame(2, 20, 21, 22, 23)
+        )
 
-        assert _wait_for(api_client, [20.0, 21.0, 22.0, 23.0]) == [20.0, 21.0, 22.0, 23.0]
+        assert _wait_for(api_client, [20.0, 21.0, 22.0, 23.0]) == [
+            20.0,
+            21.0,
+            22.0,
+            23.0,
+        ]
 
     def test_frame_split_across_writes(self, api_client, device_simulator, clean_state):
         """A frame arriving in two TCP writes is held until its last byte lands."""
@@ -126,9 +141,16 @@ class TestFixedLengthFrames:
         time.sleep(0.2)
         device_simulator.send_frame(frame[2:])
 
-        assert _wait_for(api_client, [30.0, 31.0, 32.0, 33.0]) == [30.0, 31.0, 32.0, 33.0]
+        assert _wait_for(api_client, [30.0, 31.0, 32.0, 33.0]) == [
+            30.0,
+            31.0,
+            32.0,
+            33.0,
+        ]
 
-    def test_resync_after_an_injected_byte(self, api_client, device_simulator, clean_state):
+    def test_resync_after_an_injected_byte(
+        self, api_client, device_simulator, clean_state
+    ):
         """One stray byte shifts the stream; the header rule re-aligns on the next frame."""
         _connect(api_client, device_simulator, _project())
 
@@ -138,9 +160,16 @@ class TestFixedLengthFrames:
         device_simulator.send_frame(bytes([0x05]))
         device_simulator.send_frame(_frame(2, 50, 51, 52, 53))
 
-        assert _wait_for(api_client, [50.0, 51.0, 52.0, 53.0]) == [50.0, 51.0, 52.0, 53.0]
+        assert _wait_for(api_client, [50.0, 51.0, 52.0, 53.0]) == [
+            50.0,
+            51.0,
+            52.0,
+            53.0,
+        ]
 
-    def test_quick_plot_ignores_the_mode(self, api_client, device_simulator, clean_state):
+    def test_quick_plot_ignores_the_mode(
+        self, api_client, device_simulator, clean_state
+    ):
         """Quick Plot keeps its line splitter whatever the project's detection mode is."""
         api_client.load_project_from_json(_project())
         time.sleep(0.2)
@@ -157,7 +186,12 @@ class TestFixedLengthFrames:
         while time.time() < end and not values:
             data = api_client.get_dashboard_data()
             groups = data.get("frame", {}).get("groups", [])
-            values = [d.get("value") for g in groups for d in g.get("datasets", []) if d.get("value")]
+            values = [
+                d.get("value")
+                for g in groups
+                for d in g.get("datasets", [])
+                if d.get("value")
+            ]
             time.sleep(0.05)
 
         assert values, "Quick Plot produced no values from a newline-terminated line"

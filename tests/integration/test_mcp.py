@@ -1026,7 +1026,9 @@ class TestSessionHygiene:
             time.sleep(0.3)
             api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
             api_client.connect_device()
-            assert api_client.wait_for_connection(timeout=10.0), "device never connected"
+            assert api_client.wait_for_connection(
+                timeout=10.0
+            ), "device never connected"
             assert device_simulator.wait_for_connection(timeout=10.0)
 
             mcp_lines: list[bytes] = []
@@ -1036,7 +1038,9 @@ class TestSessionHygiene:
                     [b"1,2,3\n"] * FRAMES_PER_SECOND,
                     interval_seconds=1.0 / FRAMES_PER_SECOND,
                 )
-                mcp_client._send({"jsonrpc": "2.0", "id": mcp_client._next_id(), "method": "ping"})
+                mcp_client._send(
+                    {"jsonrpc": "2.0", "id": mcp_client._next_id(), "method": "ping"}
+                )
                 mcp_lines += _drain(mcp_client._sock, 0.2)
                 plain_lines += _drain(plain, 0.2)
             api_client.disconnect_device()

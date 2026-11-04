@@ -73,8 +73,12 @@ def test_static_script_is_reached_only_through_admission():
 
     outside = text.replace(send, "").replace(flush, "")
     calls = [m for m in re.finditer(r"\bdeliverValue\(", outside)]
-    definition = [m for m in calls if outside[max(0, m.start() - 2) : m.start()] == "::"]
-    assert len(calls) == len(definition), "deliverValue is called outside sendValue/flush"
+    definition = [
+        m for m in calls if outside[max(0, m.start() - 2) : m.start()] == "::"
+    ]
+    assert len(calls) == len(
+        definition
+    ), "deliverValue is called outside sendValue/flush"
 
     admit = send.find("admit")
     pacing = min(
@@ -127,7 +131,9 @@ def _project(output_widgets):
             {
                 "title": "Data",
                 "widget": "datagrid",
-                "datasets": [{"title": "Sensor1", "value": "%1", "index": 1, "widget": ""}],
+                "datasets": [
+                    {"title": "Sensor1", "value": "%1", "index": 1, "widget": ""}
+                ],
             },
             {
                 "title": "Output Panel",
@@ -170,7 +176,9 @@ def test_describe_reports_kind_range_step_and_units(api_client, clean_state):
     api_client.load_project_from_json(_project([_number_field()]))
     time.sleep(0.3)
 
-    described = api_client.command("project.outputWidget.get", {"groupId": 1, "widgetId": 0})
+    described = api_client.command(
+        "project.outputWidget.get", {"groupId": 1, "widgetId": 0}
+    )
     assert described["type"] == TEXT_FIELD
     assert described["inputKind"] == 1
     assert described["minValue"] == 0
@@ -297,11 +305,13 @@ def number_field_dashboard(api_client, clean_state, capturing_device):
         pass
 
     api_client.connect_device()
-    assert capturing_device.wait_for_connection(LINK_TIMEOUT), "the device saw no client"
+    assert capturing_device.wait_for_connection(
+        LINK_TIMEOUT
+    ), "the device saw no client"
     capturing_device.send_frame(b"/*42*/\n")
-    assert _wait_until(lambda: _listed(api_client, f"{CELL}.input"), LINK_TIMEOUT), (
-        "the Number field never appeared on the dashboard"
-    )
+    assert _wait_until(
+        lambda: _listed(api_client, f"{CELL}.input"), LINK_TIMEOUT
+    ), "the Number field never appeared on the dashboard"
     capturing_device.clear_received()
     yield capturing_device
 
@@ -339,7 +349,9 @@ def test_out_of_range_is_refused_and_in_range_is_quantised(
         {"window": MAIN, "target": f"{CELL}.input", "keys": "Ctrl+A"},
     )
     _type_and_send(api_client, "43")
-    assert _wait_until(lambda: device.received() != b"", 2.0), "the in-range value was lost"
+    assert _wait_until(
+        lambda: device.received() != b"", 2.0
+    ), "the in-range value was lost"
     time.sleep(CAPTURE_WINDOW)
     assert device.received() == b"SP 45\n"
     assert not _listed(api_client, f"{CELL}.outOfRange"), "the message did not clear"

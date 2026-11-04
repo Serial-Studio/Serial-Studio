@@ -469,9 +469,8 @@ void TstClientReception::firstMcpMessageEntersTheSessionOnce()
 
   QTcpSocket legacy;
   host.connections.insert(&legacy, authenticatedState(QStringLiteral("17")));
-  reception.consumeBytes(&legacy,
-                         QStringLiteral("17"),
-                         QByteArrayLiteral("{\"type\":\"command\",\"command\":\"a\"}\n"));
+  reception.consumeBytes(
+    &legacy, QStringLiteral("17"), QByteArrayLiteral("{\"type\":\"command\",\"command\":\"a\"}\n"));
 
   QCOMPARE(host.mcpEntries, 1);
   QVERIFY(!host.connections.value(&legacy).mcpSession);

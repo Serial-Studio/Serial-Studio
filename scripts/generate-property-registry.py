@@ -1508,7 +1508,9 @@ def emit_dataset_validations(manifest: dict, exposed: list[dict]) -> list[str]:
             f"consumed.contains({json_name(n)})" for n in api_names(prop, manifest)
         )
         lines += emit_statement("  ", f"if ({present} && !PropertyHooks::{check}(d))")
-        lines += wrapped_call("    return QStringLiteral(", prop["apiError"], ");", False)
+        lines += wrapped_call(
+            "    return QStringLiteral(", prop["apiError"], ");", False
+        )
         lines.append("")
     return lines
 
