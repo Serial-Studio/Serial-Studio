@@ -1,8 +1,9 @@
 ---
 spec: 0111-device-declaration-library
 title: Device Declarations and the Firmware Library
-status: approved     # approved 2026-11-02: main repo + CI publish, MIT, Quick Plot-only request, full scope incl. binary
+status: approved     # approved 2026-11-02: main repo + CI publish, MIT, Quick Plot-only request, full scope incl. binary; amended 2026-11-03 (plan amendments 1-9)
 approved: 2026-11-02
+amended: 2026-11-03
 created: 2026-11-02
 author: Alex Spataru
 ---
@@ -12,6 +13,15 @@ author: Alex Spataru
 > **Phase 1 of 4 — the WHAT and the WHY.** No implementation detail; no file paths, no
 > class names, no signal wiring (that is `plan.md`). Gate: do not start `/ss-plan` until
 > a human marks this `approved`.
+
+> **Amended 2026-11-03 during planning** (maintainer approved, plan amendments 1-9): AC8 and
+> R11 name the first release with spec 0106; an adopt opens an unsaved project instead of an
+> undoable load (R3); binary frames use a new packed-struct Built-In template and a
+> session-scoped framing (R14); `index` may reuse a frame position (R1); groups, controls and
+> framing take their keys from a declaration manifest because no group registry exists; the
+> numeric text field and control units wait for spec 0109 (R7); AC1's save half is a unit
+> test; AC5 uses spec 0109's control names; the Arduino release goes through a mirror
+> repository (R13).
 
 ## Problem / Motivation
 
@@ -41,15 +51,16 @@ tool for the second week.
 - A firmware library for Arduino, plain C (ESP-IDF, Zephyr, anything with a UART) and Python
   emits the declaration and the frames, so a sketch declares a channel in the line where it
   already prints it.
-- The declaration vocabulary is the dataset and group property registry, formats and labels of
-  spec 0108 included. There is nothing to learn that the Project Editor does not already show,
-  and nothing on the wire the editor cannot edit afterwards.
+- The declaration vocabulary is the dataset property registry, formats and labels of spec 0108
+  included, plus the project file's existing keys for groups, controls and framing. There is
+  nothing to learn that the Project Editor does not already show, and nothing on the wire the
+  editor cannot edit afterwards.
 - The generated project is a real project: saveable, editable, and identical to what the Project
   Editor would produce for the same choices.
 - A device may declare the controls it accepts, and the library parses the resulting commands
   for the sketch, with spec 0110 supplying the reply.
-- A device that does not declare anything is a Quick Plot stream exactly as today, and a
-  pre-spec app treats a declaration as a harmless text line.
+- A device that does not declare anything is a Quick Plot stream exactly as today, and an app
+  that has spec 0106 but not this spec treats a declaration as a harmless text line.
 - A device that sends packed binary frames declares their layout the same way, so a binary
   device gets the same first-connect dashboard as a text one.
 
@@ -67,15 +78,21 @@ tool for the second week.
 1. **R1 — The declaration.** A device may send a declaration that names the project title,
    its groups with their widget, and its datasets with any property the dataset registry holds
    for a dataset: title, units, widget, range, plot and FFT flags, LED threshold, alarm bands,
-   format and labels (spec 0108). Dataset order in the declaration is frame order. A property
-   that is not in the registry does not exist on the wire.
+   format and labels (spec 0108). Dataset order in the declaration is frame order: a dataset
+   takes the next frame position, unless it names an `index`, which reuses that position so two
+   groups can show the same channel. A dataset property that is not in the registry does not
+   exist on the wire; group, control and framing keys are the project file's existing keys,
+   listed in one declaration manifest. (Amended 2026-11-03: shared channels, and no group
+   registry exists.)
 2. **R2 — Self-building dashboard.** In Quick Plot, a valid declaration replaces detection: the
    live dashboard is built from it, and Save as Project writes the project it describes. No
    operation-mode switch is involved (spec 0100): the declared dashboard is a Quick Plot session
    whose structure came from the device instead of from the stream.
 3. **R3 — Never over a user's project.** In Project File mode a declaration never rebuilds the
    loaded project. If it differs from the loaded project the app says so once, with the choice
-   to adopt it or keep the project; adopting is an ordinary project load the user can undo.
+   to adopt it or keep the project. Adopting opens the declared project as a new, unsaved
+   project; the loaded project's file stays untouched on disk, so reopening it reverses the
+   choice. (Amended 2026-11-03: a project load clears the undo history.)
 4. **R4 — Re-declaration.** A device that sends its declaration again (reset, reconnect, a
    request from the app) with identical content changes nothing. A changed declaration rebuilds
    the Quick Plot dashboard as a structure change does today. Every declaration is visible in
@@ -88,11 +105,12 @@ tool for the second week.
    request off. Console Only and Project File mode never send it. A device that declared at boot, before the app was
    listening, is therefore still discovered, including after the device resets.
 7. **R7 — Declared controls.** A device may declare the controls it accepts: button, toggle,
-   slider, knob and numeric text field with title, range, step and units (spec 0109's fields).
-   The generated project holds an Output Panel using one documented command format, and the
-   library parses that format and hands the sketch the control's name and value. Commands are
-   in the first version; once spec 0110 lands, the library echoes the token and replies with the
-   sketch's result.
+   slider and knob with title, range and step. Once spec 0109 lands, the numeric text field
+   and units follow with 0109's fields. The generated project holds an Output Panel using one
+   documented command format, and the library parses that format and hands the sketch the
+   control's name and value. Commands are in the first version; once spec 0110 lands, the
+   library echoes the token and replies with the sketch's result. (Amended 2026-11-03: the
+   numeric text field and control units do not exist before spec 0109.)
 8. **R8 — The library.** A sketch declares with one call per group and per channel and sends
    with one call per frame. The Arduino header allocates nothing at runtime, keeps declaration
    text in flash, has no dependency beyond the core, and the MPU6050 example fits a classic Uno
@@ -108,51 +126,68 @@ tool for the second week.
     from one over UART.
 11. **R11 — Versioning.** The declaration carries a version. The app accepts the versions it
     knows and ignores an unknown one with a console message. The line is shaped so that spec
-    0106's detector and a pre-spec app treat it as a text line that never establishes a format.
+    0106's detector, and any release that carries spec 0106, treat it as a text line that never
+    establishes a format. Releases before spec 0106 (v4.2.1 and earlier) rebuild on any text
+    line and are out of reach; the library's README names the minimum app version. (Amended
+    2026-11-03.)
 12. **R12 — Examples and manual.** The MPU6050 and TinyGPS examples gain declared variants of
     their sketches, the Getting Started page leads with the declaration for firmware authors, one
     manual page documents the wire format and the library calls, the assistant's corpus knows it,
     and the terminology gate passes.
 13. **R13 — Distribution.** The library lives in this repository in its own directory, so the
     wire format, the registry and the library change in one commit, and CI publishes it on
-    release the way its users install libraries: the Arduino Library Manager and PyPI, with the C
-    file as a plain download. The examples pin the version they were written against.
-14. **R14 — Binary frames.** A declaration may carry the Built-In parser's binary layout for the
-    datasets it declares (framing, field types, widths and byte order), and the library emits
-    packed frames that match it. The declaration itself is always a text line, and R2 to R11
-    hold for a binary device exactly as for a text one.
+    release the way its users install libraries: the Arduino Library Manager (through a mirror
+    repository, because the Library Manager requires a library at a repository root) and PyPI,
+    with the C file as a plain download. The examples pin the version they were written
+    against. (Amended 2026-11-03: the mirror repository.)
+14. **R14 — Binary frames.** A declaration may carry a binary layout for the datasets it
+    declares: the project format's framing (delimiters, checksum) and a new packed-struct
+    Built-In template (field types, widths and byte order), and the library emits packed frames
+    that match it. The declaration itself is always a text line, and R2 to R11 hold for a binary
+    device as for a text one. Inside a binary session the app finds a re-declaration through its
+    raw-byte watch rather than the line parser, and the first frames after a declaration may be
+    dropped while framing switches. Binary frames ship after the text-line milestones.
+    (Amended 2026-11-03: no Built-In template decoded mixed-type packed structs, and Quick Plot
+    framed only on line ends.)
 
 ## Acceptance Criteria
 
 - [ ] **AC1** — An integration test drives the Python library over a loopback network Device,
   reads the dashboard structure back over the API and finds the declared groups, widgets,
-  titles, units and ranges; Save as Project then yields a project that parses the same stream
-  identically.
+  titles, units and ranges. A unit test builds the Save as Project document from the same
+  declaration and frames and finds that it parses the stream, boot declaration included, to
+  the live values. (Amended 2026-11-03: Save as Project runs through a file dialog the API
+  cannot drive.)
 - [ ] **AC2** — A unit test feeds a malformed, an oversized and an unknown-version declaration
   and observes no rebuild; feeds the same declaration twice and observes one build; feeds a
   changed one and observes a second build.
 - [ ] **AC3** — An integration test loads a project, sends a differing declaration and observes
-  a notification with no change to the loaded project; adopting it loads the declared project.
+  a notification with no change to the loaded project; adopting it opens the declared project
+  as an unsaved project.
 - [ ] **AC4** — An integration test disconnects and reconnects with the Python library declaring
   only at start-up, and finds the dashboard built after the reconnect through the app's request.
-- [ ] **AC5** — An integration test declares a slider, drives it through the driving surface and
-  observes the Python library's callback receiving the control's name and the value.
+- [ ] **AC5** — An integration test declares a slider, drives it through the driving surface by
+  the control names spec 0109 introduces, and observes the Python library's callback receiving
+  the control's name and the value.
 - [ ] **AC6** — Maintainer observation: the declared MPU6050 sketch on an Uno builds the same
   three-group dashboard the example project file produces, and the compiler's RAM report stays
   under half the Uno's RAM.
 - [ ] **AC7** — The hotpath gate (`--benchmark-hotpath`) reports no regression; the declaration
   is handled on the text-line path and frames are unchanged.
-- [ ] **AC8** — A declaration line sent to the current release shows in the console and leaves
-  the Quick Plot dashboard unchanged.
+- [ ] **AC8** — A declaration line sent to the first release carrying spec 0106 shows in the
+  console and leaves the Quick Plot dashboard unchanged, and a unit test proves every reference
+  declaration yields no number under each of spec 0106's line formats. (Amended 2026-11-03:
+  v4.2.1 predates spec 0106.)
 - [ ] **AC9** — The registry gate fails when a property is added to the wire format without
-  being in the dataset registry, or added to the registry without a wire form.
+  being in the dataset registry, when one is added to the registry without a wire form, or
+  when the declaration manifest names a key the project format does not have.
 - [ ] **AC10** — An integration test declares a binary layout through the Python library, sends
   packed frames, and reads back the same titles, units and values the text variant produced.
 
 ## Constraints & Invariants
 
 - One vocabulary. The wire format, the library's calls and the Project Editor are three views of
-  the dataset and group property registry, generated from it where generation exists today. A
+  the dataset property registry and the project file's existing keys, generated from them. A
   second schema language is the failure mode this spec exists to avoid, and the registry gate
   of AC9 enforces it.
 - No code on the wire, ever. Output controls in a generated project use an app-side template
@@ -191,6 +226,9 @@ tool for the second week.
   not a follow-up.
 
 ## Open Questions
+
+None open. Planning (2026-11-03) raised nine amendments, folded in above with dated notes, and
+eight design questions settled in `plan.md`.
 
 None at the gate. The draft's six questions (where the library lives, its license, the
 connect-time request, alarm bands and LED thresholds, declared controls before spec 0110, binary
