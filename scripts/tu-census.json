@@ -2,16 +2,16 @@
   "rule": "cxx-tu-too-long",
   "regenerate": "python scripts/code-verify.py --tu-census --accept",
   "threshold": 1500,
-  "excess": 2617,
+  "excess": 2602,
   "files": 11,
-  "worst": 2901,
+  "worst": 2886,
   "buckets": {
     "critical": 0,
     "god": 1,
     "oversized": 10
   },
   "per_file": {
-    "core/Pipeline/DataModel/FrameBuilder.cpp": 2901,
+    "core/Pipeline/DataModel/FrameBuilder.cpp": 2886,
     "core/Ui/UI/Widgets/Terminal.cpp": 1997,
     "core/Ui/UI/Dashboard.cpp": 1783,
     "core/Devices/IO/Drivers/OpcUa.cpp": 1623,

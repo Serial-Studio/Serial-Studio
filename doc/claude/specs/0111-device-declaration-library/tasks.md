@@ -184,7 +184,7 @@ updated: 2026-11-03
 - **Executor:** Main (the encoding rule is the inertness guarantee).
 - **Deps:** T6
 - [x] done
-  - **Rule widened:** `:` and `=` join the escaped set (written `:`, `=`; hex is
+  - **Rule widened:** `:` and `=` join the escaped set (written `\u003a`, `\u003d`; hex is
     lowercase). Under the space separator an unescaped title like `"a x=5 b"` yields the named
     numeric field `x=5`, which the plan's three-character rule let through. `controls.frames` was
     added so labels and alarm bands take part in the round trip. Lines: 229 to 957 bytes.
@@ -313,7 +313,10 @@ updated: 2026-11-03
   baseline.
 - **Executor:** Main (hotpath; invoke `ss-hotpath` first).
 - **Deps:** T14
-- [ ] done
+- [x] done
+  - The branch is 9 lines after the `BuilderSupport` extraction (`capturedFrameStep`,
+    `frameIsTableFed`, `buildEnabledGroups` out of FrameBuilder.cpp) freed census headroom; the
+    live lane also decodes a declared format in `QuickPlotBuilder::applyField` (R9).
 
 ### T16 — `line_values` ignores declaration lines
 
@@ -325,7 +328,7 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `code-verify.py --check`.
 - **Executor:** Main (span lane).
 - **Deps:** T8
-- [ ] done
+- [x] done
 
 ### T17 — Save as Project for a declared session
 
@@ -386,7 +389,8 @@ updated: 2026-11-03
   import serialstudio"`.
 - **Executor:** Sonnet; donor `tests/utils/device_simulator.py` (socket style) and the T8 lines.
 - **Deps:** T4, T8
-- [ ] done
+- [x] done
+  - Declare-in-loop in memory; `group()`, `control_group()`, `channel(name, value=None, places=2, **props)`, `control()`, `send()`, `feed()`/`poll()`, `TcpServer`. snake_case keywords map to the wire's camelCase and `range=(lo, hi)` expands to `widgetMin/Max` + `plotMin/Max`. A pass latches whether it declares, so a `#ss?` mid-pass cannot corrupt a frame. `graph` defaults to true and is emitted last; `graph=False` omits it (the golden Gear/Speed/Temperature datasets).
 
 ### T20 — Python tests and the golden runner
 
@@ -403,7 +407,8 @@ updated: 2026-11-03
   firmware/tests/check_golden.py`.
 - **Executor:** Sonnet.
 - **Deps:** T19
-- [ ] done
+- [x] done
+  - 15 cases pass; the sketches live in `firmware/tests/golden_sketches.py` (shared by the runner and the tests). Python half byte-exact on all four goldens; the C and Arduino halves run when `firmware/tests/build/{c,arduino}_golden` exist (CI builds them).
 
 ### T21 — Arduino header
 
@@ -415,7 +420,8 @@ updated: 2026-11-03
 - **Verify:** `check_golden.py` through the host shim (T23, in CI).
 - **Executor:** Sonnet; donor the T19 module's state machine.
 - **Deps:** T19
-- [ ] done
+- [x] done
+  - Not compiled locally (host shim is CI-only). `range(lo, hi)` is `widgetMin/Max` + `plotMin/Max`; `graph(false)` omits the key. Control setters are named after their keys (`outputMin`, not `min`, which is an Arduino macro). Unchecked in the header: label and band counts (the app enforces the caps).
 
 ### T22 — C99 library
 
@@ -426,7 +432,8 @@ updated: 2026-11-03
   CI (T44).
 - **Executor:** Sonnet; donor T21.
 - **Deps:** T21, T22b
-- [ ] done
+- [x] done
+  - `syntax-check.py` ok on `serialstudio.c` and `.h` (C99, -Wall -Wextra -pedantic). Output is staged in a 64-byte buffer; `ss_feed()` dispatches lines immediately. Golden bytes unverified locally (host driver is CI).
 
 ### T22b — `syntax-check.py` covers `firmware/c`
 
@@ -438,7 +445,8 @@ updated: 2026-11-03
   (passes); `pytest scripts/tests/test_hooks.py` still passes.
 - **Executor:** Sonnet; donor the script's own new-TU donor-entry path.
 - **Deps:** none
-- [ ] done
+- [x] done
+  - Verified on a scratch file with a missing semicolon (fails) and the real file (passes); `pytest scripts/tests/test_hooks.py` passes.
 
 ### T23 — Host shims for C and Arduino
 
@@ -449,7 +457,8 @@ updated: 2026-11-03
 - **Verify:** CI job T44.
 - **Executor:** Sonnet.
 - **Deps:** T22
-- [ ] done
+- [x] done
+  - Not compiled locally; CI job `firmware` builds both. The drivers mirror `golden_sketches.py` call for call.
 
 ### T24 — Library README
 
@@ -459,7 +468,8 @@ updated: 2026-11-03
 - **Verify:** `python scripts/documentation-verify.py --no-report firmware/README.md`.
 - **Executor:** Sonnet.
 - **Deps:** T21
-- [ ] done
+- [x] done
+  - `documentation-verify.py`: 0 findings. The minimum app version is named as "the first release that carries Device Declarations"; put the number in once the release is known.
 
 ### T25 — Format and labels sugar (after 0108 lands)
 
@@ -470,7 +480,8 @@ updated: 2026-11-03
 - **Verify:** `check_golden.py`; `registry-verify.py`.
 - **Executor:** Sonnet.
 - **Deps:** T23, **spec 0108 landed**
-- [ ] done
+- [x] done
+  - Python `format=` takes `none|fixed|bits|scale` or the int; Arduino `format(SS_FORMAT_*)` and `formatWidth` ... `formatOffset`; C `ss_format*` macros and `SS_FORMAT_*`. `labels` and `labelsDefault` already existed. New golden pair `formats` (fixed point, bit field with labels, scale). Python half byte-exact; `registry-verify` clean; C and Arduino halves unproven until CI.
 
 ### T26 — Integration: the declared dashboard (AC1)
 
@@ -481,7 +492,8 @@ updated: 2026-11-03
 - **Verify:** `pytest tests/integration/test_device_declaration.py -v` (maintainer, app up).
 - **Executor:** Sonnet; donor `tests/integration/test_quick_plot_formats.py`.
 - **Deps:** T15, T20
-- [ ] done
+- [x] done
+  - Written; `pytest --collect-only` collects it. Not run (app down). The test asserts group `widget` and dataset `units`/`widget` keys of `dashboard.getData`; if the frame names them differently, adjust. It relies on the app's `#ss?` request, since the sketch declares before the app connects.
 
 ## M4 — Request on connect, Project File watch, adopt (needs M2)
 
@@ -498,7 +510,11 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `code-verify.py --check`.
 - **Executor:** Main (signal wiring).
 - **Deps:** T15
-- [ ] done
+- [x] done
+  - The link subscription is `Qt::QueuedConnection`, so the write runs after the whole connect
+    publish whatever the subscription order: the builder's reset is posted first even for a driver
+    that reads on its own thread. Mode comes from the retained `OperationModeChanged` topic.
+    Syntax-checked; inert until T29 binds it.
 
 ### T28 — `DeclarationWatch`: Project File tap, notice, adopt
 
@@ -516,7 +532,14 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `code-verify.py --check`.
 - **Executor:** Main.
 - **Deps:** T27
-- [ ] done
+- [x] done
+  - Source 0 only. A candidate starts at any `#` (a binary frame puts no newline before it), so a
+    prefix split across chunks still matches. The comparison ignores the title, because Save as
+    Project renames a project after its file. The notice goes out as a bus `NotificationRaised`
+    (no reach into the center), keyed on file path plus declared content, capped at 64 per
+    session. `adopt()` calls `askSave()` first and parses with the default positional comma
+    format (the libraries' frames); the watch re-compares on `groupsChanged`/`groupDataChanged`,
+    so an adopt or a matching edit clears the offer.
 
 ### T29 — Ownership and the composition root
 
@@ -530,7 +553,12 @@ updated: 2026-11-03
   `--tu-census` (`ProjectModel.cpp` has 90 lines of headroom, `ModuleManager.cpp` 25).
 - **Executor:** Main (composition root).
 - **Deps:** T28
-- [ ] done
+- [x] done
+  - The watch is the last value member, built from `*this` and the ctor's `bus`; ProjectModel's
+    `setupExternalConnections()` starts its subscriptions. The tap reaches it through
+    `pipelineModules()` (bound inside `instantiateCoreModules()`, before `bindInterfaces()`), and
+    the registry shares one local with `Cpp_JSON_ProjectModel`, so the singleton census stays at
+    801. The raw-tap list is now exactly `kMaxRawTaps` (6) in a commercial gRPC build.
 
 ### T30 — Setup: the toggle and the adopt button
 
@@ -541,7 +569,10 @@ updated: 2026-11-03
 - **Verify:** `code-verify.py --check`; `qt-qml-review` on the hunk.
 - **Executor:** Sonnet; donor `Setup.qml:312-331`.
 - **Deps:** T29
-- [ ] done
+- [x] done
+  - `code-verify` and `term-verify` clean; `qt-qml-review` not run (self-reviewed). The toggle sits
+    under the Quick Plot radio, the button under Select Project File. `Cpp_JSON_DeclarationWatch`
+    is undefined until T29 registers it.
 
 ### T31 — The API verbs
 
@@ -556,7 +587,10 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `code-verify.py --check`; `--singleton-census`.
 - **Executor:** Sonnet; donor `ProjectPainterCommands.cpp`.
 - **Deps:** T29
-- [ ] done
+- [x] done
+  - `get` also reports `quickPlot` (`declared`, `title`, `groups`) through one blocking builder hop
+    in Quick Plot mode, where the pipeline holds the declaration. Syntax-check fails only on
+    `ProjectModel::declarationWatch()`, the accessor T29 adds; re-run after T29.
 
 ### T32 — Consent tables for the two new commands
 
@@ -573,7 +607,12 @@ updated: 2026-11-03
   "tst_command_capability_registry|tst_sealed_policy_registry|tst_command_safety_table"`.
 - **Executor:** Main (protected surface; own commit).
 - **Deps:** T31 (the names must be registered before the sweep classifies them)
-- [ ] done
+- [x] done
+  - **Tier tightened to `alwaysConfirm`** (the plan said `confirm`): adopt disconnects and replaces
+    the in-memory project, the open-replace family `command_safety.json` keeps beside
+    `project.open`, `project.loadJson` and `project.new`; under `confirm` an auto-approving
+    assistant could adopt without a click. `kDenied` is swept, not searched, so adopt sits in its
+    `project.*` run; the two sorted tables (`kCapable`, `kPlain`, `kAllowed`) stay byte-sorted.
 
 ### T33 — Integration: Project File notice and reconnect (AC3, AC4)
 
@@ -587,7 +626,11 @@ updated: 2026-11-03
 - **Verify:** pytest (maintainer).
 - **Executor:** Sonnet; donor T26.
 - **Deps:** T30, T32
-- [ ] done
+- [x] done
+  - Written and collected; not run, and red until T29 binds the watch. AC3 makes the device
+    re-declare after connect (`declare_due = True`), because Project File mode never asks. AC4
+    counts the `#ss?` lines the library received and checks `project.declaration.get`'s
+    `quickPlot.declared`, which a reconnect clears.
 
 ## M5 — Declared controls: button, toggle, slider, knob (needs M2, M3; names from 0109)
 
@@ -601,7 +644,11 @@ updated: 2026-11-03
 - **Verify:** `code-verify.py --check`; `registry-verify.py`.
 - **Executor:** Haiku; donor `simple_command.js` and its `templates.json` entry.
 - **Deps:** T9
-- [ ] done
+- [x] done
+  - Written with T58's token already in: `transmit(value, token)` appends `@<token>` when one is
+    passed, so `transmit(128)` is still `#ss!Speed=128\n` (checked under node). `const` is safe
+    because every transmit script runs inside the probe's function scope. Integrator:
+    `app/rcc/rcc.qrc` gains `<file>scripts/output/serial_studio_command.js</file>`.
 
 ### T35 — `DeclaredControls`
 
@@ -615,7 +662,14 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `code-verify.py --check`.
 - **Executor:** Main (device text inside generated JS).
 - **Deps:** T34
-- [ ] done
+- [x] done
+  - The control filter (allow-list, cap, raw-title check before `read()` simplifies it) sits in
+    `DeviceDeclaration.cpp` beside the other filters, so the hook is about 40 lines rather than
+    three; `DeclaredControls` holds `validName`, `transmitFunction` and `attach` (the 64-control
+    cap across the declaration, the template binding). An invalid name refuses the whole line.
+    The template is read once from `:/scripts/output/serial_studio_command.js`, and a missing or
+    altered template refuses the controls. Integrator: `core/Pipeline/CMakeLists.txt` gains
+    `DataModel/Project/DeclaredControls.cpp` and `.h`.
 
 ### T36 — Control unit cases
 
@@ -627,7 +681,14 @@ updated: 2026-11-03
 - **Verify:** `ctest -R "tst_device_declaration|tst_declared_roundtrip"`.
 - **Executor:** Sonnet.
 - **Deps:** T35
-- [ ] done
+- [x] done
+  - Syntax-checked only; not built or run. `goldenControlsDropsOutputGroup` became
+    `goldenControlsBuildOutputGroup`; `tst_device_declaration` now runs under
+    `QTEST_GUILESS_MAIN` for `QJSEngine`. Integrator: `qt_add_resources(SS_TEST_DECLARED_CONTROLS_RCC
+    ${CMAKE_CURRENT_SOURCE_DIR}/support/declared-controls.qrc)`; both suites gain
+    `${SS_CORE_SRC}/Pipeline/DataModel/Project/DeclaredControls.cpp` and
+    `target_sources(<suite> PRIVATE ${SS_TEST_DECLARED_CONTROLS_RCC})`;
+    `tst_device_declaration` gains `Qt6::Qml` in LIBS.
 
 ### T37 — Output control names (only if 0109 has not landed)
 
@@ -639,7 +700,10 @@ updated: 2026-11-03
 - **Verify:** `code-verify.py --check` (`qml-objectname-literal`).
 - **Executor:** Haiku.
 - **Deps:** T35; **provisional on 0109**
-- [ ] done
+- [x] done
+  - No-op: 0109 is in. `DashboardOutputPanel.qml:63` names the cell
+    `dashboard.output.<groupId>.<widgetId>`, and the slider, knob, toggle and button add their
+    suffixes.
 
 ### T38 — Integration: the slider round trip (AC5)
 
@@ -650,7 +714,10 @@ updated: 2026-11-03
 - **Verify:** pytest (maintainer).
 - **Executor:** Sonnet; donor `tests/integration/test_ui_automation.py`.
 - **Deps:** T36, T37 or 0109's names
-- [ ] done
+- [x] done
+  - Written and collected, not run. `Up` on `dashboard.output.1.0.slider` takes the slider from 0
+    to 1, and the callback gets `("Speed", 1)` (the `@<token>` is stripped). Skips without
+    `licensing.getStatus` or a visible window.
 
 ## M6 — Examples, manual, corpus, terminology (needs M2 to M5)
 
@@ -664,7 +731,8 @@ updated: 2026-11-03
 - **Verify:** `documentation-verify.py` on the READMEs; `term-verify.py`.
 - **Executor:** Sonnet; donor the existing `.ino` files.
 - **Deps:** T21
-- [ ] done
+- [x] done
+  - Both sketches reproduce the example groups through the library (MPU6050: three groups, TinyGPS: GPS Map) and pin `SS_LIBRARY_VERSION_MAJOR != 1` (the macro exists). Not compiled (Adafruit/TinyGPS libraries absent). `examples.json` descriptions gain one sentence; no new entries, since the sketches live in subfolders of existing examples.
 
 ### T40 — The manual page
 
@@ -676,7 +744,8 @@ updated: 2026-11-03
   `trial-parity` lint.
 - **Executor:** Sonnet, reviewed in the main session.
 - **Deps:** T33, T36
-- [ ] done
+- [x] done
+  - `Device-Declarations.md` registered in help.json (Connectivity). Binary framing left for T55. Library replies (T59) not documented. Minimum app version is stated as 'first release including declarations; up to 4.2.1 cannot use it' because no version number exists yet.
 
 ### T41 — Getting Started and neighbouring pages
 
@@ -687,7 +756,8 @@ updated: 2026-11-03
 - **Verify:** as T40.
 - **Executor:** Sonnet (`ss-docs`).
 - **Deps:** T40
-- [ ] done
+- [x] done
+  - Getting-Started leads with the declaration section before Quick Plot; Operation-Modes Quick Plot bullet; Output-Controls template section, template list and See Also.
 
 ### T42 — Assistant corpus and terminology
 
@@ -699,7 +769,8 @@ updated: 2026-11-03
 - **Verify:** `term-verify.py`; `registry-verify.py` (corpus field-name lint).
 - **Executor:** Haiku.
 - **Deps:** T40
-- [ ] done
+- [x] done
+  - project_basics.md section, search_index.json rebuilt, term rule scoped to `(dashboard|firmware|sketch|declaration) (manifest|descriptor)`; a global ban would flag Extensions manifest.json, HID/USB descriptors and the Built-In JSON descriptor in Glossary/Frame-Parser.
 
 ### T43 — AI-facing architecture docs
 
@@ -711,7 +782,11 @@ updated: 2026-11-03
 - **Verify:** `claim-verify.py`; `doc-verify` (documentation-verify) on dataflow.md.
 - **Executor:** Main.
 - **Deps:** T29
-- [ ] done
+- [x] done
+  - dataflow.md "Device Declarations" and one CLAUDE.md row. The context budget already failed on
+    master (5202 words against the 5128 baseline, from 0112); the row makes it 5258, after moving
+    this branch's 0103 UART sentence out to io.md, which already covers it. Re-seeding or an
+    extraction is the maintainer's call.
 
 ## M7 — CI checks and publishing (needs M3)
 
@@ -729,7 +804,8 @@ updated: 2026-11-03
 - **Verify:** `pytest scripts/tests/test_ci_workflow.py -v`.
 - **Executor:** Sonnet; donor the `lint` job (`ci.yml:2086`).
 - **Deps:** T23
-- [ ] done
+- [x] done
+  - `test_ci_workflow.py` passes (78). arduino-cli 1.5.1 with the checksum read from the release; core `arduino:avr@1.8.6`; RAM gate is globals <= 1024 B. Both host builds use `-Werror` and are unproven until the first CI run.
 
 ### T45 — CI job `publish-firmware`
 
@@ -743,7 +819,8 @@ updated: 2026-11-03
 - **Verify:** `pytest scripts/tests/test_ci_workflow.py -v`; review in the main session.
 - **Executor:** Main (secrets and permissions).
 - **Deps:** T44
-- [ ] done
+- [x] done
+  - Actions pinned: `pypa/gh-action-pypi-publish` v1.14.2. Needs repo variable `ARDUINO_MIRROR_REPO` and secret `ARDUINO_MIRROR_TOKEN`, environment `pypi`; both targets skip when the version already exists. The wheel is built with `pip wheel --no-build-isolation` (setuptools from setup-python); `build` is not in the hashed lock.
 
 ### T46 — Maintainer: accounts and secrets
 
@@ -773,7 +850,14 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `code-verify.py --check`.
 - **Executor:** Sonnet; donor `BinaryRaw.cpp`.
 - **Deps:** T15
-- [ ] done
+- [x] done
+  - `decodePackedStruct(const QByteArray&, ...)`: both callers hold a `QByteArray`, and the
+    support readers take one. An f32 field reads as its shortest decimal (1.2f is 1.2), so the
+    live lane and the saved project's text parse agree. The template is appended last in
+    `binaryNativeTemplates()`, and `tst_cframe_parser`'s binary count goes from 13 to 14.
+    Integrator: `core/Pipeline/CMakeLists.txt` gains `BinaryPackedStruct.cpp` and `.h`, and
+    `tst_cframe_parser` and `tst_opcua_wire` (both compile `BinaryTemplates.cpp`) gain
+    `BinaryPackedStruct.cpp`.
 
 ### T48 — ctest `tst_packed_struct`
 
@@ -782,7 +866,11 @@ updated: 2026-11-03
 - **Verify:** `ctest -R tst_packed_struct`.
 - **Executor:** Sonnet; donor `app/tests/tst_cframe_parser.cpp`.
 - **Deps:** T47
-- [ ] done
+- [x] done
+  - Syntax-checked; not built. Vectors packed with Python `struct`. Integrator:
+    `ss_add_unit_test(tst_packed_struct SOURCES tst_packed_struct.cpp` plus
+    `NativeTemplates/BinaryPackedStruct.cpp`, `NativeTemplate.cpp` and
+    `NativeTemplateSupport.cpp`, `LIBS Qt6::Core SerialStudio::Core)`.
 
 ### T49 — The binary block in the declaration
 
@@ -793,7 +881,17 @@ updated: 2026-11-03
 - **Verify:** `generate-property-registry.py --check`; `ctest -R tst_device_declaration`.
 - **Executor:** Main.
 - **Deps:** T48
-- [ ] done
+- [x] done
+  - `declaration.json` already lists the source keys; the `packed_struct` id is a literal in
+    `readSource` (no generator slot for template ids, see the report). A sources block must be
+    one object with the Binary decoder, `packed_struct`, one field per channel, Start Delimiter
+    Only (or Start and End) with 1 to 8 byte delimiters, and a known or empty checksum. Anything
+    else refuses the line; `frameParserParams` keeps only `fields` and `endianness`.
+    `DeviceDeclaration` gains `binary` and `source`. Golden `mpu6050_bin.decl` (938 B, inert under
+    the 0106 simulation) plus `mpu6050_bin.frames`: hex lines, each a full wire frame (`AA55`,
+    seven little-endian f32, CRC-16 big-endian over the payload). Integrator: every suite that
+    compiles `DeviceDeclaration.cpp` also needs `BinaryPackedStruct.cpp`, `NativeTemplate.cpp`
+    and `NativeTemplateSupport.cpp`.
 
 ### T50 — Declared framing in AppState, the binary lane
 
@@ -811,7 +909,16 @@ updated: 2026-11-03
   `bus-on-hotpath`.
 - **Executor:** Main (hotpath and pipeline config).
 - **Deps:** T49
-- [ ] done
+- [x] done
+  - `QuickPlotBuilder` publishes `DeclaredFraming` from `declare()` (on Rebuild) and from
+    `forgetDeclaration()` (the connect, mode and replay resets). Both are edges, never per frame.
+    The builder's binary flag is lane-local, not a cached hotpath flag. AppState ignores an
+    activation unless the link is up in Quick Plot, so one queued just before a disconnect cannot
+    outlive the session; it also clears on disconnect and in `setOperationMode`.
+    `parseQuickPlotFrame` gains one bool test; `applyPacked` decodes into a fixed member array and
+    writes the dataset strings in place, then `decode_dataset_in_place`. `AppState.h` gains three
+    members. Census: `FrameBuilder.cpp` 2886 lines (baseline 2901); bus census 31 topics, 0
+    defects. Syntax-checked; not built.
 
 ### T51 — Re-declaration inside a binary session
 
@@ -823,7 +930,11 @@ updated: 2026-11-03
 - **Verify:** `syntax-check.py`; `--tu-census`.
 - **Executor:** Main.
 - **Deps:** T50
-- [ ] done
+- [x] done
+  - The line lane and `submitDeclarationLine` share one private `declareQuickPlot` tail. The watch
+    follows `DeclaredFraming`, scans source 0's bytes in a Quick Plot binary session, and posts
+    each new prefixed line with the chunk timestamp (`invokeOnBuilderThread`). The builder's
+    `DeclarationState` still dedupes and holds.
 
 ### T52 — Save as Project for a binary session
 
@@ -834,7 +945,12 @@ updated: 2026-11-03
 - **Verify:** `ctest -R tst_declared_roundtrip`.
 - **Executor:** Sonnet.
 - **Deps:** T50
-- [ ] done
+- [x] done
+  - `QuickPlotProject::build` takes the declared `Source`. A `packed_struct` source keeps its
+    framing and decoder, and the Quick Plot frame's own source carries it (`makeSource`). Adopt
+    passes it. `binaryRoundTrip` checks the CRC of each golden frame and that the saved parser,
+    the live decode and the text golden agree. **Blocked on the main session:**
+    `ProjectModel::saveQuickPlotAsProject` must pass the frame's source (lines in the report).
 
 ### T53 — Python packed emitter
 
@@ -845,7 +961,8 @@ updated: 2026-11-03
 - **Verify:** `python3 -m unittest discover firmware/python/tests`; `check_golden.py`.
 - **Executor:** Sonnet.
 - **Deps:** T49
-- [ ] done
+- [x] done
+  - `Device.binary(fields, endianness, start, checksum)`; `mpu6050_bin` matches the app's golden byte for byte (CRC-16 over the payload only, big-endian). Six unit tests added; golden hex lines are the runner's form.
 
 ### T54 — Arduino and C packed emitters
 
@@ -855,7 +972,8 @@ updated: 2026-11-03
 - **Verify:** CI job T44.
 - **Executor:** Sonnet; donor T53.
 - **Deps:** T53
-- [ ] done
+- [x] done
+  - C `ss_set_binary` and Arduino `binary()` (streaming CRC, no table); both host drivers print the hex line. Not compiled here; `serialstudio.c` syntax-checks. The Arduino `f64` widens a 32-bit AVR `double` by hand.
 
 ### T55 — Integration and manual for binary (AC10)
 
@@ -866,7 +984,11 @@ updated: 2026-11-03
 - **Verify:** pytest (maintainer); `documentation-verify.py`.
 - **Executor:** Sonnet.
 - **Deps:** T51, T52, T54
-- [ ] done
+- [x] done
+  - `test_declared_binary` written and collected (text vs packed MPU6050, titles, units, values), not run. Manual: a "Binary frames" section, `documentation-verify` clean.
+  - Blocked, 2026-11-03: T53 and T54 (no `binary()` emitter in the library yet), and the manual
+    page does not exist until T40. App side ready: golden `mpu6050_bin.decl` and `.frames`, and
+    T52's `binaryRoundTrip` already proves the values equal the text variant.
 
 ## M9 — Numeric text field and units (after 0109 lands)
 
@@ -880,7 +1002,12 @@ updated: 2026-11-03
 - **Verify:** `generate-property-registry.py --check`; `ctest -R tst_device_declaration`.
 - **Executor:** Main.
 - **Deps:** T36, **spec 0109 landed**
-- [ ] done
+- [x] done
+  - App code done: `attach` forces `inputKind = Number` on every declared text field, so the panel's
+    `admitOutputValue` bounds it to Min..Max. **Needs the integrator:** `declaration.json` is
+    integrator-owned, so `envelope.control` still lacks `"OutputInputKind", "OutputDecimals",
+    "OutputUnits", "OutputQuantize"`. Add them, then run `generate-property-registry.py`. Until
+    then `textFieldIsANumberField` fails on its units check (the key is dropped as unknown).
 
 ### T57 — Library side
 
@@ -889,7 +1016,8 @@ updated: 2026-11-03
 - **Verify:** `check_golden.py`; `registry-verify.py`.
 - **Executor:** Sonnet.
 - **Deps:** T56
-- [ ] done
+- [x] done
+  - Python kwargs `units=`, `decimals=`, `quantize=` and kind `"text"`; C `SS_CONTROL_TEXT` and `ss_output_units/decimals`; Arduino `outputUnits/outputDecimals/quantizeToStep`. Golden `textfield` (the app forces the Number kind, so `inputKind` is not sent).
 
 ## M10 — Token echo and replies (after 0110 lands)
 
@@ -905,7 +1033,16 @@ updated: 2026-11-03
 - **Verify:** `ctest -R "tst_device_declaration|tst_declared_roundtrip"`.
 - **Executor:** Main.
 - **Deps:** T36, **spec 0110 landed**
-- [ ] done
+- [x] done
+  - `appendReplies` runs after the groups, for a text declaration with controls only. A packed
+    struct has no text field for the message, so a binary declaration's controls stay unbound. It
+    adds a "Control Replies" group (no widget) with "Reply Token", "Reply Code" and "Reply
+    Message", hidden, at positions channels+1..+3, and `channels` grows by 3. The bound ids are
+    `dataset_unique_id(0, group, 0..2)`: the formula both `buildDeclared` and the project loader
+    use for the positional `-1` ids `projectGroup` writes. Save as Project keeps the bindings with
+    no remap. The library side (T59) must append token, code, message to every frame of a
+    declaration with controls. A v1 library that does not will show each send as unanswered.
+    Syntax-checked; not built.
 
 ### T59 — Library side and integration
 
@@ -916,7 +1053,8 @@ updated: 2026-11-03
 - **Verify:** `check_golden.py`; pytest (maintainer).
 - **Executor:** Sonnet.
 - **Deps:** T58
-- [ ] done
+- [x] done
+  - The callback returns the code (Python also `(code, message)`; C/Arduino `ss_reply_message()`/`replyMessage()`). Reply fields (token, code, message) are appended to text frames from the first tokened command on, not before, so the existing control goldens stay unchanged. `test_declared_reply` written and collected, not run; golden `textfield` carries the replies.
 
 ## Close-out
 
@@ -951,17 +1089,30 @@ updated: 2026-11-03
   - AC8 by T12 and T60;
   - AC9 by T6 and T7;
   - AC10 by T48 and T55.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files; hotpath rules are
+- [x] `python scripts/code-verify.py --check` is clean on all changed files; hotpath rules are
   blockers on T15, T16, T50 and T51.
 - [ ] `qt-cpp-review` run on the C++ diff of every milestone; `qt-qml-review` run on T30 and
   T37.
+  - 2026-11-03: qt-cpp-review (six agents) over the whole 0111 C++ diff; `qt-qml-review` not run.
+    Fixed from it: the Project File scan copied each '#' line before the prefix test (GUI-thread
+    amplification); device titles in chained `.arg()`; the Quick Plot lanes decoded without
+    `mirror_raw_value` (recorders got zeros); echoed `#ss?`/`#ss!` lines logged as refused; a
+    comma title split the saved field list; a held declaration outlived its device; dataset
+    edits never re-compared; adopt opened a modal from an API call (now refused, or
+    `discardChanges`); the plan's Keep had no surface (`keep()`, Setup button,
+    `project.declaration.keep`); the watch parses through `DeclarationState`; `kMaxRawTaps` 6 to
+    8. Left for a runtime check: the binary framing switch window (a line fragment of exactly the
+    packed length decodes once), a missed connect edge leaving the builder in binary mode, and the
+    packed lane's text round trip (no benchmark row).
 - [ ] `ss-hotpath` invoked before T13 to T16 and T50; `--benchmark-hotpath` not regressed.
-- [ ] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP named in the
+- [x] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP named in the
   handoff as unverified.
-- [ ] Relevant `pytest` targets identified for the maintainer: `tests/integration/test_device_declaration.py`,
+  - It now also covers the firmware host drivers and the Arduino header with the CI job's flags;
+    the test TUs were checked through a donor compile entry.
+- [x] Relevant `pytest` targets identified for the maintainer: `tests/integration/test_device_declaration.py`,
   `test_quick_plot_formats.py`, `test_ui_automation.py`; runnable here: `scripts/tests/
   test_registry_verify_wire.py`, `test_ci_workflow.py`, the firmware Python tests.
-- [ ] `python scripts/sanitize-commit.py` run before each commit; `generate-property-registry.py
+- [x] `python scripts/sanitize-commit.py` run before each commit; `generate-property-registry.py
   --check`, `registry-verify.py`, `reuse lint`, `term-verify.py` clean.
 - [ ] The diff is *what was asked, and only that*: no generated file hand-edited, the protected
   surfaces (T15, T16, T29, T32, T35, T45, T50) named in chat before their edits, and no file

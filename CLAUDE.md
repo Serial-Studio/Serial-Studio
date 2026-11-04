@@ -310,9 +310,8 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   workers (use `monotonicFrameNs(...)` as the safety net only). Enforced: code-verify:--clock-census.
 - **Driver opens are synchronous calls; most drivers dial asynchronously behind them.** An async
   dial's verdict has ONE owner, `HAL_Driver::openFinished(ok, reason)`, emitted exactly once per
-  attempt; a driver that reports only success wedges the connect button. UART joins them only
-  when its source has a Connection Sequence (spec 0103): `isOpen()` stays false until the verdict.
-  Doctrine: [doc/claude/architecture/io.md](doc/claude/architecture/io.md) "Opening a Link".
+  attempt; a driver that reports only success wedges the connect button. Doctrine:
+  [doc/claude/architecture/io.md](doc/claude/architecture/io.md) "Opening a Link".
 - **Diagnostics are pulled, never pushed (specs 0033/0035).** Pipeline counters are plain
   `quint64` increments polled on the 1 Hz tick, never a per-frame signal, allocation or lock; a
   recreated `FrameReader` zeroes them, so consumers work on deltas. Detail: dataflow.md
@@ -382,6 +381,7 @@ The hazard column names what breaks silently; the doc holds the rule.
 | Anything under `core/` or a source that could move there (spec 0076) | [directory-map.md](doc/claude/directory-map.md) "core/" | A library never includes `app/src`; a moved `Q_OBJECT` header listed in both a library and the executable mocs twice; every `.h`/`.cpp` pair lives in one target; a relative include must resolve in exactly one root; an upward include beyond `scripts/layer-baseline.json` fails CI; the bus is never on the per-frame path. |
 | The driving surface (spec 0101): `core/Ui/UI/Automation/`, `AutomationHandler`, an `objectName` under `app/qml`, or the `DrivesUi` consent | [automation.md](doc/claude/architecture/automation.md) | A control is addressed by its `objectName` and nothing else: a translated or theme-derived name breaks every client, an unnamed control is invisible, and click/key sit behind a consent no other consent unlocks. Roles lean on Qt internal class names pinned by `tst_ui_automation`; re-verify per Qt bump. |
 | Quick Plot parsing: `LineFormat`, `QuickPlotFormatState`, `QuickPlotBuilder`, `line_values`, Save as Project (spec 0106) | [dataflow.md](doc/claude/architecture/dataflow.md) "The Quick Plot Lane" | ONE tokenizer serves the live lane and the saved project; a second splitter diverges them. Detection runs once per connect, never during replay or audio; missing or text fields are NaN, skipped by every ring. |
+| A `#ss` declaration, `declaration.json`, a `wire` flag or `firmware/` (spec 0111) | [dataflow.md](doc/claude/architecture/dataflow.md) "Device Declarations" | Keys are generated into the app and three libraries; a hand-typed key list drifts silently. The prefix test runs before 0106 detection, or a declaration establishes a format. |
 
 ## Code Style — Essentials
 

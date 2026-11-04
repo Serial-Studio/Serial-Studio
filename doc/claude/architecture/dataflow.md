@@ -162,6 +162,44 @@ construction. A second splitter anywhere on that path makes the two diverge.
   corpus, 4 rebuilds), `tst_quickplot_roundtrip` (saved project equals live parse),
   `tst_quickplot_project` (which template Save as Project emits).
 
+### Device Declarations (spec 0111)
+
+A device may describe its own dashboard in one `#ss1{...}` line: compact project JSON whose
+strings escape every character that could start a number, so under any 0106 separator no token of
+it parses as a value.
+
+- **Prefix before detect.** `parseQuickPlotFrame` tests `DataModel::isDeclarationLine` (one
+  first-byte compare) BEFORE `observe`, live only (`!m_playerOpen`). `line_values` returns no
+  frame for the same lines, so the saved project ignores the boot declaration exactly as the live
+  lane does. A declaration that reached the detector would establish a format or a header.
+- **The declared pin.** `QuickPlotBuilder::declare` parses once per content
+  (`DeclarationState` keeps the last line); on `Rebuild` it calls `QuickPlotFormatState::pinDeclared`,
+  and the caller rebuilds through `invalidateFramePool()` + `build()` like every other lane rebuild.
+  A pinned state never detects. `reset()`, `pinPositional()` and the replay pin call
+  `forgetDeclaration()`, so an identical line declares again after a reconnect. A live session
+  decodes declared formats in `applyField`, as the saved project's parse would.
+- **Binary sessions.** A declared `packed_struct` source publishes `Core::Bus::DeclaredFraming`
+  (declaration rate, from the pipeline thread). `AppState::applyDeclaredFraming` honors it only in
+  Quick Plot with the link up and re-announces the frame config, so the reader is recreated on the
+  usual path. Frames then go to `QuickPlotBuilder::applyPacked`, and a re-declaration that the
+  binary reader cannot frame is posted by the watch through `FrameBuilder::submitDeclarationLine`
+  (fire-and-forget, never a blocking hop).
+- **Project File mode.** `DataModel::DeclarationWatch` (a `ProjectModel` sub-object, a raw-byte
+  tap, GUI thread, chunk rate) compares the prefix in place before copying a byte, so `#` frames
+  cost one search each. It parses through its own `DeclarationState` (once per content, the same
+  one-second hold), compares `wireProjection` with the loaded project on a coalescing timer, and
+  offers a differing one as a new unsaved project (`adopt`) or dismisses it per project and
+  content (`keep`). A disconnect forgets it, since the next link may be another device; the
+  loaded file is never touched, and the watch is inert in a sealed session.
+- **One vocabulary.** `app/rcc/properties/declaration.json` plus the `wire` flag on every
+  `dataset.json` property generate `DataModel/Generated/DeclarationVocabulary.h` and the three
+  library vocabularies under `firmware/` (`generate-property-registry.py`). A hand-typed key list
+  in the app or a library drifts silently: the device declares a key the app drops.
+- **Tests.** `tst_device_declaration` (parse, caps, controls), `tst_declaration_inert` (no
+  0106 detector or pre-0111 app takes a declaration as data), `tst_declared_roundtrip` (saved
+  project equals live values), `tst_packed_struct`; the golden pairs in `firmware/tests/golden`
+  are shared with `firmware/tests/check_golden.py`.
+
 ### Value Decoders in the Value Tail (spec 0108)
 
 A dataset's `format` (fixed point, bit field, scale) is decoded on the pipeline thread by

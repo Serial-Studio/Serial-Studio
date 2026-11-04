@@ -155,7 +155,8 @@ Line numbers are the 2026-11-03 tree.
 
 - **The line.** `#ss1{...}` is compact JSON: no whitespace outside strings, numbers only as
   object members, never bare in an array. Inside a string, a space, `,` or `;` that comes right
-  before `[0-9+.-]` is written `\u00XX`. Under every 0106 separator (`LineFormat.cpp:466-531`), each
+  before `[0-9+.-]` is written `\u00XX`, and every `:` and `=` is (amended at T8: under the
+  space separator an unescaped `"a x=5 b"` yields the named numeric field `x=5`). Under every 0106 separator (`LineFormat.cpp:466-531`), each
   token therefore starts with `#`, `"`, `[` or `{`, or is glued to a closing quote, so it never
   parses as a number (`parseLineField` `:252-279`, `isUnitSuffix` `:126-136`). The line is a 0106
   text line and never establishes a format. The MPU6050 declaration is 796 bytes (the premise
