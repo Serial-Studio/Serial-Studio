@@ -128,6 +128,22 @@ switch waits until the link drops, so the running session keeps its
 mode. Check `dashboard.getStatus` for the current mode, and call
 `dashboard.setOperationMode{mode: 0}` when the switch must happen now.
 
+## Device declarations
+
+A device running the SerialStudio firmware library can declare its own
+dashboard: one line starting `#ss` plus a wire-version digit (`#ss1{...}`),
+sent at power-up and whenever the app's `#ss?` request arrives. In Quick Plot
+it replaces format detection and builds the groups and datasets; Save as
+Project writes them out. The keys inside it are project keys (a dataset's
+`title`, `units`, `widget`, `plotMin`, ...), so a declared dashboard is edited
+with the same `project.*` commands as any other. In Project File mode a
+differing declaration only raises a notification; the user decides with the
+Use Device Dashboard button (`project.declaration.adopt`, always confirmed,
+refused with unsaved changes unless `discardChanges` is true) or Keep Project
+(`project.declaration.keep`), and `project.declaration.get` reports the last
+declaration. Call it a
+declaration, never a manifest or a descriptor.
+
 ## The checkpoint loop
 
 Successful mutating AI tool calls schedule a debounced checkpoint (~1s),

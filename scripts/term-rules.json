@@ -14,7 +14,8 @@
     { "pattern": "\\blevel indicators?\\b", "flags": "i", "use": "Bar" },
     { "pattern": "\\bBar/Level\\b", "flags": "", "use": "Bar" },
     { "pattern": "\\bNative (frame )?(parser|template)s?\\b", "flags": "i", "use": "Built-In parser" },
-    { "pattern": "\\bregister access\\b", "flags": "i", "use": "Variable access" }
+    { "pattern": "\\bregister access\\b", "flags": "i", "use": "Variable access" },
+    { "pattern": "\\b(dashboard|firmware|sketch|declaration) (manifest|descriptor)s?\\b", "flags": "i", "use": "Device declaration (spec 0111; \"descriptor\" stays for Built-In templates, USB and HID)" }
   ],
   "allow_paths": [
     "doc/help/API-Reference.md",

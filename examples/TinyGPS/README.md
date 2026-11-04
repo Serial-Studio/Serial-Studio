@@ -69,6 +69,14 @@ Once Serial Studio is configured:
 - The bundled `TinyGPS.ssproj` configures a UART source at 115200 baud (matching the Arduino sketch). Pick the Arduino's serial port and connect.
 - You'll see the real-time GPS position on the map widget. Altitude can be logged to a CSV file for later analysis.
 
+### 4. Declared variant (`TinyGPS_Declared/TinyGPS_Declared.ino`)
+
+The `TinyGPS_Declared` sketch sends the same position without the frame delimiters and without a project file. It uses the SerialStudio library from `firmware/arduino` in this repository (see [Device Declarations](../../doc/help/Device-Declarations.md)) to declare the GPS Map group with its latitude, longitude and altitude datasets.
+
+To use it, install the SerialStudio and TinyGPS libraries, upload the sketch, set **Operation Mode** to Quick Plot and connect at 115200 baud. The map builds itself on connect. Use **Save as Project** to keep it as a project file.
+
+The sketch pins the library major version with `#if SS_LIBRARY_VERSION_MAJOR != 1`. The declaration needs a Serial Studio release that includes Device Declarations.
+
 ### Troubleshooting
 
 - **No data on the map.** Make sure the GPS module has a clear view of the sky to get a satellite fix. Check that the correct port and baud rate are selected in Serial Studio.

@@ -192,6 +192,12 @@
   "file": "Auto-Generating-Projects.md"
  },
  {
+  "id": "device-declarations",
+  "title": "Device Declarations",
+  "section": "Connectivity",
+  "file": "Device-Declarations.md"
+ },
+ {
   "id": "mqtt-topics",
   "title": "MQTT Topics & Semantics (Pro)",
   "section": "Connectivity",

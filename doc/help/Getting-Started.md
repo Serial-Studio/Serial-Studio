@@ -102,6 +102,34 @@ Frame delimiters, the decoder, and the frame parser belong to a project and are 
 
 You can resize the Device Setup panel by dragging its left edge to give the Dashboard more space.
 
+## Your first connection: a device that declares its dashboard
+
+If you write the firmware, the shortest path is to let the device describe its own dashboard. The SerialStudio device library (Arduino, C and Python, in the `firmware/` directory of the Serial Studio repository) sends one declaration line with the channel names, units, ranges and widgets, and Serial Studio builds the dashboard from it on connect.
+
+```cpp
+#include <SerialStudio.h>
+
+SerialStudio studio(Serial, F("Minimal"));
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  studio.poll();
+
+  studio.group(F("Analog"));
+  studio.channel(F("A0"), analogRead(A0)).units(F("counts")).range(0, 1023);
+  studio.send();
+
+  delay(50);
+}
+```
+
+Set **Operation Mode** to **Quick Plot (Auto-Detected Format)**, pick the port and baud rate (`115200`), and click **Connect**. The dashboard shows the declared groups and widgets, and **Save as Project** keeps it as a project file. The wire format, the library calls and the Pro controls are in [Device Declarations](Device-Declarations.md).
+
+A device that prints plain values needs no library; the next section covers it.
+
 ## Your first connection: Quick Plot mode
 
 This is the fastest way to get data on screen. The example uses an Arduino, but the approach works with any device that prints numbers, one line per sample, over a serial port.

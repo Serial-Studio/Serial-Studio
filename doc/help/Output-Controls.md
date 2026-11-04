@@ -157,7 +157,7 @@ The return value must be a string. For binary protocols, build a byte-string wit
 
 ### Built-in Templates
 
-The code editor includes a set of ready-to-use templates: Simple command, JSON command, Binary packet, PWM control, PID setpoint, Relay toggle, AT command, Modbus write, CAN Bus frame, G-Code command, GRBL command, NMEA sentence, SCPI command, SLCAN command, and Default template. Select one from the template dropdown and customize it for your device.
+The code editor includes a set of ready-to-use templates: Simple command, JSON command, Serial Studio library command, Binary packet, PWM control, PID setpoint, Relay toggle, AT command, Modbus write, CAN Bus frame, G-Code command, GRBL command, NMEA sentence, SCPI command, SLCAN command, and Default template. Select one from the template dropdown and customize it for your device.
 
 #### Simple Command
 
@@ -175,6 +175,22 @@ function transmit(value) {
     return "OFF\r\n";
 
   return "SET " + value + "\r\n";
+}
+```
+
+#### Serial Studio Library Command
+
+Sends `#ss!<control>=<value>` followed by a newline, the command format the SerialStudio device library parses. A [device declaration](Device-Declarations.md) that declares controls generates an Output Panel whose controls use this template, with `CONTROL` set to the declared control's name. The library hands the sketch the name and the value. When a reply token is passed, `@<token>` follows the value.
+
+```javascript
+const CONTROL = "control";
+
+function transmit(value, token) {
+  const command = "#ss!" + CONTROL + "=" + value;
+  if (token === undefined || token === null)
+    return command + "\n";
+
+  return command + "@" + token + "\n";
 }
 ```
 
@@ -690,3 +706,4 @@ function transmit(value) {
 - [Widget Reference](Widget-Reference.md): all input and visualization widget types.
 - [Frame Parser Scripting](Frame-Parser.md): Lua and JavaScript parser reference.
 - [Devices](Devices.md): configuring device connections.
+- [Device Declarations](Device-Declarations.md): controls declared by the device's firmware.

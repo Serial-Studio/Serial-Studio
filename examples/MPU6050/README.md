@@ -75,6 +75,14 @@ Once Serial Studio is configured:
 - Connect to the Arduino by picking the correct serial port and setting the baud rate to 115200 (matching the Arduino sketch).
 - You'll see real-time motion data on the g-meter, attitude indicator, and other widgets. Temperature can also be logged to CSV.
 
+### 4. Declared variant (`MPU6050_Declared/MPU6050_Declared.ino`)
+
+The `MPU6050_Declared` sketch sends the same readings without the frame delimiters and without a project file. It uses the SerialStudio library from `firmware/arduino` in this repository (see [Device Declarations](../../doc/help/Device-Declarations.md)) to declare the Accelerometer, Gyroscope and Temperature groups, their units and their widgets in the lines that print the values.
+
+To use it, install the SerialStudio library, upload the sketch, set **Operation Mode** to Quick Plot and connect at 115200 baud. The dashboard builds itself on connect. Use **Save as Project** to keep it as a project file.
+
+The sketch pins the library major version with `#if SS_LIBRARY_VERSION_MAJOR != 1`, so a future incompatible release stops the build instead of changing the wire format. The declaration needs a Serial Studio release that includes Device Declarations.
+
 ### Troubleshooting
 
 - **No data shown.** Make sure the correct port and baud rate are selected in Serial Studio, and that the MPU6050 is wired correctly.

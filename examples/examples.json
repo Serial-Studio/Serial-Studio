@@ -245,7 +245,7 @@
   {
     "id": "MPU6050",
     "title": "MPU6050 Accelerometer & Gyroscope",
-    "description": "Visualizes motion and orientation data from an MPU6050 sensor connected to Arduino with real-time display on attitude indicators.",
+    "description": "Visualizes motion and orientation data from an MPU6050 sensor connected to Arduino with real-time display on attitude indicators. Includes a declared sketch that builds the dashboard without a project file.",
     "category": "Sensors & Hardware",
     "difficulty": "Beginner",
     "hasProjectFile": true,
@@ -356,7 +356,7 @@
   {
     "id": "TinyGPS",
     "title": "TinyGPS Location Tracker",
-    "description": "Visualizes GPS location data from a GY-NEO6MV2 GPS module connected to Arduino with real-time map display of latitude, longitude, and altitude.",
+    "description": "Visualizes GPS location data from a GY-NEO6MV2 GPS module connected to Arduino with real-time map display of latitude, longitude, and altitude. Includes a declared sketch that builds the dashboard without a project file.",
     "category": "Sensors & Hardware",
     "difficulty": "Beginner",
     "hasProjectFile": true,
