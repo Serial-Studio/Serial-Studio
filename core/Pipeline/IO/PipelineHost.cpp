@@ -244,6 +244,8 @@ void IO::PipelineHost::attach(int deviceId, HAL_Driver* driver, const FrameConfi
   reader->setFinishSequences(config.finishSequences);
   reader->setOperationMode(config.operationMode);
   reader->setFrameDetectionMode(config.frameDetection);
+  reader->setFixedLength(config.fixedFrameLength);
+  reader->setByteRules(config.headerMask, config.headerValue, config.bodyMask, config.bodyValue);
 
   ReaderSlot slot;
   slot.driver = driver;

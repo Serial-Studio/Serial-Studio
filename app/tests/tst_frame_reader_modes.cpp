@@ -28,6 +28,7 @@
 #include <QTest>
 
 #include "Core/Checksum.h"
+#include "Core/IO/FrameConfigBuilder.h"
 #include "IO/FrameReader.h"
 
 // Companion to tst_frame_delimiters: that suite pins delimiter scanning and the CRC-16 end
@@ -99,6 +100,41 @@ static void configureProject(IO::FrameReader& reader,
 }
 
 /**
+ * @brief Configures a Fixed Length ProjectFile reader; the checksum goes last for the same reason
+ *        as in configureProject().
+ */
+static void configureFixed(IO::FrameReader& reader,
+                           int length,
+                           quint8 headerMask  = 0,
+                           quint8 headerValue = 0,
+                           quint8 bodyMask    = 0,
+                           quint8 bodyValue   = 0,
+                           const QString& checksum = QString())
+{
+  reader.setOperationMode(SerialStudio::ProjectFile);
+  reader.setFrameDetectionMode(SerialStudio::FixedLength);
+  reader.setFixedLength(length);
+  reader.setByteRules(headerMask, headerValue, bodyMask, bodyValue);
+  reader.setChecksum(checksum);
+}
+
+/**
+ * @brief A 3-byte payload (high bit set only on the first byte) whose CRC-16 trailer has the
+ *        high bit @p wantHighBit on its second byte, found by varying the last payload byte.
+ */
+static QByteArray payloadWithTrailer(bool wantHighBit)
+{
+  for (int last = 1; last < 0x80; ++last) {
+    const QByteArray payload = QByteArray("\x81\x11", 2) + char(last);
+    const auto trailer       = IO::checksum(QStringLiteral("CRC-16"), payload);
+    if (((static_cast<quint8>(trailer.at(1)) & 0x80) != 0) == wantHighBit)
+      return payload;
+  }
+
+  return QByteArray();
+}
+
+/**
  * @brief Produces a trailer that is guaranteed to differ from the real one without ever spelling a
  *        delimiter byte, so a corrupted frame is rejected by the checksum and not by the scan.
  */
@@ -156,6 +192,20 @@ private slots:
   void frameTimestampsFollowSuccessiveProcessDataCalls();
 
   void heapFallbackKeepsFramesIntactWhenThePoolIsExhausted();
+
+  void fixedLengthCutsTheStreamAtTheLength();
+  void fixedLengthFrameSplitAcrossChunksWaits();
+  void fixedLengthOfOneYieldsEveryByte();
+  void fixedLengthHeaderRuleSkipsLeadingGarbage();
+  void fixedLengthBodyRuleViolationResyncsToTheNextHeader();
+  void fixedLengthChecksumIsAcceptedAndStripped();
+  void fixedLengthChecksumByteIsExemptFromTheBodyRule();
+  void fixedLengthBadChecksumWithHeaderRuleResyncs();
+  void fixedLengthBadChecksumWithoutHeaderRuleDropsTheFrame();
+  void fixedLengthIncompleteChecksumWaitsForMoreBytes();
+  void fixedLengthChecksumWiderThanTheFrameIsDiscarded();
+  void fixedLengthTimestampComesFromTheChunkHoldingTheLastByte();
+  void fixedLengthWithoutALengthRepairsToNoDelimiters();
 };
 
 /**
@@ -674,6 +724,237 @@ void TstFrameReaderModes::heapFallbackKeepsFramesIntactWhenThePoolIsExhausted()
 
   for (int i = 0; i < kFrames; ++i)
     QCOMPARE(frames.at(i), QByteArray::number(i).rightJustified(4, '0'));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Fixed Length (spec 0103)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief With no rules the stream is assumed aligned and is cut every N bytes; the remainder
+ *        waits for its frame to complete.
+ */
+void TstFrameReaderModes::fixedLengthCutsTheStreamAtTheLength()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 4);
+
+  reader.processData(capture(QByteArray("abcdefghij")));
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({QByteArray("abcd"), QByteArray("efgh")}));
+
+  reader.processData(capture(QByteArray("kl")));
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({QByteArray("ijkl")}));
+  QCOMPARE(reader.framesExtracted(), quint64(3));
+  QCOMPARE(reader.checksumErrorCount(), quint64(0));
+}
+
+/**
+ * @brief A frame arriving in two chunks is held until its last byte lands.
+ */
+void TstFrameReaderModes::fixedLengthFrameSplitAcrossChunksWaits()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 5);
+
+  reader.processData(capture(QByteArray("ab")));
+  QVERIFY(drainFrames(reader).isEmpty());
+
+  reader.processData(capture(QByteArray("cde")));
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({QByteArray("abcde")}));
+}
+
+/**
+ * @brief The smallest legal frame is one byte.
+ */
+void TstFrameReaderModes::fixedLengthOfOneYieldsEveryByte()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 1);
+
+  reader.processData(capture(QByteArray("abc")));
+  QCOMPARE(drainFrames(reader),
+           QList<QByteArray>({QByteArray("a"), QByteArray("b"), QByteArray("c")}));
+}
+
+/**
+ * @brief Bytes before the first one satisfying the header rule are dropped, so a stream that
+ *        starts mid-frame locks on.
+ */
+void TstFrameReaderModes::fixedLengthHeaderRuleSkipsLeadingGarbage()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 3, 0x80, 0x80);
+
+  const QByteArray a = QByteArray("\x81\x11\x12", 3);
+  const QByteArray b = QByteArray("\x83\x21\x22", 3);
+  reader.processData(capture(QByteArray("\x01\x02", 2) + a + b));
+
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({a, b}));
+}
+
+/**
+ * @brief A body byte that breaks the rule discards the partial frame up to it; the offender may
+ *        itself be the next header.
+ */
+void TstFrameReaderModes::fixedLengthBodyRuleViolationResyncsToTheNextHeader()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 3, 0x80, 0x80, 0x80, 0x00);
+
+  const QByteArray good = QByteArray("\x90\x01\x02", 3);
+  reader.processData(capture(QByteArray("\x81\x11", 2) + good));
+
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({good}));
+}
+
+/**
+ * @brief The checksum bytes are part of the frame length but not of the published frame.
+ */
+void TstFrameReaderModes::fixedLengthChecksumIsAcceptedAndStripped()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 5, 0, 0, 0, 0, QStringLiteral("CRC-16"));
+
+  const QByteArray p1 = QByteArray("abc");
+  const QByteArray p2 = QByteArray("xyz");
+  reader.processData(capture(p1 + IO::checksum(QStringLiteral("CRC-16"), p1) + p2
+                             + IO::checksum(QStringLiteral("CRC-16"), p2)));
+
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({p1, p2}));
+  QCOMPARE(reader.framesExtracted(), quint64(2));
+  QCOMPARE(reader.checksumErrorCount(), quint64(0));
+}
+
+/**
+ * @brief The body rule covers the payload only: a checksum byte with the high bit set must not
+ *        reject a frame under a "high bit clear" body rule.
+ */
+void TstFrameReaderModes::fixedLengthChecksumByteIsExemptFromTheBodyRule()
+{
+  const QByteArray payload = payloadWithTrailer(true);
+  QVERIFY(!payload.isEmpty());
+
+  IO::FrameReader reader;
+  configureFixed(reader, 5, 0x80, 0x80, 0x80, 0x00, QStringLiteral("CRC-16"));
+
+  reader.processData(capture(payload + IO::checksum(QStringLiteral("CRC-16"), payload)));
+
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({payload}));
+  QCOMPARE(reader.checksumErrorCount(), quint64(0));
+}
+
+/**
+ * @brief With a header rule a bad checksum drops one byte, so the search for the next header
+ *        restarts inside the rejected frame and the following good frame still lands.
+ */
+void TstFrameReaderModes::fixedLengthBadChecksumWithHeaderRuleResyncs()
+{
+  const QByteArray bad  = payloadWithTrailer(false);
+  const QByteArray good = payloadWithTrailer(false);
+  QVERIFY(!bad.isEmpty());
+
+  IO::FrameReader reader;
+  configureFixed(reader, 5, 0x80, 0x80, 0, 0, QStringLiteral("CRC-16"));
+
+  reader.processData(
+    capture(bad + corruptTrailer(IO::checksum(QStringLiteral("CRC-16"), bad)) + good
+            + IO::checksum(QStringLiteral("CRC-16"), good)));
+
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({good}));
+  QCOMPARE(reader.checksumErrorCount(), quint64(1));
+  QCOMPARE(reader.framesExtracted(), quint64(1));
+}
+
+/**
+ * @brief Without a header rule the stream is trusted to be aligned: a bad frame is dropped whole.
+ */
+void TstFrameReaderModes::fixedLengthBadChecksumWithoutHeaderRuleDropsTheFrame()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 5, 0, 0, 0, 0, QStringLiteral("CRC-16"));
+
+  const QByteArray bad  = QByteArray("bad");
+  const QByteArray good = QByteArray("ok!");
+  reader.processData(
+    capture(bad + corruptTrailer(IO::checksum(QStringLiteral("CRC-16"), bad)) + good
+            + IO::checksum(QStringLiteral("CRC-16"), good)));
+
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({good}));
+  QCOMPARE(reader.checksumErrorCount(), quint64(1));
+}
+
+/**
+ * @brief A frame whose trailer has not fully arrived is held, not rejected.
+ */
+void TstFrameReaderModes::fixedLengthIncompleteChecksumWaitsForMoreBytes()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 5, 0, 0, 0, 0, QStringLiteral("CRC-16"));
+
+  const QByteArray payload = QByteArray("abc");
+  const QByteArray trailer = IO::checksum(QStringLiteral("CRC-16"), payload);
+
+  reader.processData(capture(payload + trailer.left(1)));
+  QVERIFY(drainFrames(reader).isEmpty());
+  QCOMPARE(reader.checksumErrorCount(), quint64(0));
+
+  reader.processData(capture(trailer.mid(1)));
+  QCOMPARE(drainFrames(reader), QList<QByteArray>({payload}));
+}
+
+/**
+ * @brief A length that cannot hold the checksum discards the buffered bytes instead of waiting.
+ */
+void TstFrameReaderModes::fixedLengthChecksumWiderThanTheFrameIsDiscarded()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 2, 0, 0, 0, 0, QStringLiteral("CRC-16"));
+
+  reader.processData(capture(QByteArray("abcdef")));
+  QVERIFY(drainFrames(reader).isEmpty());
+  QCOMPARE(reader.framesExtracted(), quint64(0));
+}
+
+/**
+ * @brief A frame split over two chunks takes the stamp of the chunk holding its last byte.
+ */
+void TstFrameReaderModes::fixedLengthTimestampComesFromTheChunkHoldingTheLastByte()
+{
+  IO::FrameReader reader;
+  configureFixed(reader, 4);
+
+  const auto first  = SteadyClock::now() - std::chrono::seconds(5);
+  const auto second = first + std::chrono::milliseconds(1);
+
+  reader.processData(capture(QByteArray("ab"), first));
+  reader.processData(capture(QByteArray("cd"), second));
+
+  const auto captures = drainCaptures(reader);
+  QCOMPARE(captures.size(), qsizetype(1));
+  QCOMPARE(captures[0]->data, QByteArray("abcd"));
+  QVERIFY(captures[0]->timestamp == second);
+}
+
+/**
+ * @brief A Fixed Length configuration with no usable length is repaired to NoDelimiters before it
+ *        reaches a reader; a usable one is left alone, and the other modes are unaffected.
+ */
+void TstFrameReaderModes::fixedLengthWithoutALengthRepairsToNoDelimiters()
+{
+  IO::FrameConfig cfg;
+  cfg.frameDetection = SerialStudio::FixedLength;
+
+  cfg.fixedFrameLength = 0;
+  QCOMPARE(IO::FrameConfigBuilder::repairedDetection(cfg), SerialStudio::NoDelimiters);
+
+  cfg.fixedFrameLength = IO::kMaxFixedFrameLength + 1;
+  QCOMPARE(IO::FrameConfigBuilder::repairedDetection(cfg), SerialStudio::NoDelimiters);
+
+  cfg.fixedFrameLength = 8;
+  QCOMPARE(IO::FrameConfigBuilder::repairedDetection(cfg), SerialStudio::FixedLength);
+
+  cfg.frameDetection = SerialStudio::NoDelimiters;
+  QCOMPARE(IO::FrameConfigBuilder::repairedDetection(cfg), SerialStudio::NoDelimiters);
 }
 
 QTEST_GUILESS_MAIN(TstFrameReaderModes)

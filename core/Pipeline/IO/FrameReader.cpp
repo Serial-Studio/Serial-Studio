@@ -42,6 +42,11 @@
 IO::FrameReader::FrameReader(QObject* parent)
   : QObject(parent)
   , m_checksumLength(0)
+  , m_bodyMask(0)
+  , m_bodyValue(0)
+  , m_headerMask(0)
+  , m_headerValue(0)
+  , m_fixedFrameLength(0)
   , m_finishAnchors{}
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
@@ -159,6 +164,9 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
             break;
           case SerialStudio::StartAndEndDelimiter:
             readStartEndDelimitedFrames();
+            break;
+          case SerialStudio::FixedLength:
+            readFixedLengthFrames();
             break;
           default:
             break;
@@ -314,7 +322,32 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 }
 
 /**
- * @brief Sets the frame detection mode (start/end/start+end/no delimiters).
+ * @brief Sets the Fixed Length frame size in bytes, checksum included. FrameConfigBuilder already
+ *        repaired an unusable length to No Delimiters, so a non-positive one only parks the mode.
+ */
+void IO::FrameReader::setFixedLength(int length)
+{
+  m_fixedFrameLength = std::max(0, length);
+}
+
+/**
+ * @brief Sets the Fixed Length byte rules: the first byte of a frame satisfies (b & headerMask) ==
+ *        headerValue and every later payload byte (b & bodyMask) == bodyValue. A zero mask turns
+ *        its rule off; values are normalised to their masks so the scans compare exactly.
+ */
+void IO::FrameReader::setByteRules(quint8 headerMask,
+                                   quint8 headerValue,
+                                   quint8 bodyMask,
+                                   quint8 bodyValue)
+{
+  m_headerMask  = headerMask;
+  m_headerValue = headerValue & headerMask;
+  m_bodyMask    = bodyMask;
+  m_bodyValue   = bodyValue & bodyMask;
+}
+
+/**
+ * @brief Sets the frame detection mode (start/end/start+end/no delimiters/fixed length).
  */
 void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection mode)
 {
@@ -584,6 +617,105 @@ void IO::FrameReader::readStartEndDelimitedFrames()
 
   if (iterations >= kMaxFramesPerCall) [[unlikely]]
     qWarning() << "[FrameReader] Loop iteration limit reached in readStartEndDelimitedFrames";
+}
+
+/**
+ * @brief Extracts Fixed Length frames (spec 0103): the header rule aligns each candidate, the body
+ *        rule rejects one at its first offending byte (which may be the next header), and a
+ *        checksum error steps one byte when a header rule can resync, else a whole frame.
+ */
+void IO::FrameReader::readFixedLengthFrames()
+{
+  SS_ASSERT(m_circularBuffer.capacity() > m_fixedFrameLength, return);
+  SS_ASSERT_HOTPATH(m_frameDetectionMode == SerialStudio::FixedLength);
+
+  if (m_fixedFrameLength <= m_checksumLength) [[unlikely]] {
+    consumeBytes(m_circularBuffer.size());
+    return;
+  }
+
+  const qsizetype length  = m_fixedFrameLength;
+  const qsizetype payload = length - m_checksumLength;
+
+  constexpr int kMaxFramesPerCall = 32768;
+  int iterations                  = 0;
+  while (iterations < kMaxFramesPerCall) {
+    ++iterations;
+
+    if (!alignFixedLengthFrame(length))
+      break;
+
+    CapturedDataPtr ptr;
+    CapturedData* cd = claimCapturedSlot(ptr);
+    m_circularBuffer.peekRangeInto(0, payload, cd->data);
+    SS_ASSERT_HOTPATH(cd->data.size() == payload);
+
+    const qsizetype violation = bodyRuleViolation(cd->data);
+    if (violation > 0) {
+      consumeBytes(violation);
+      continue;
+    }
+
+    const auto result = checksum(cd->data, payload);
+    if (result == ValidationStatus::ChecksumIncomplete) [[unlikely]]
+      break;
+
+    if (result == ValidationStatus::FrameOk)
+      enqueueCaptured(std::move(ptr), cd, length);
+    else
+      consumeBytes(m_headerMask != 0 ? 1 : length);
+  }
+
+  if (iterations >= kMaxFramesPerCall) [[unlikely]]
+    qWarning() << "[FrameReader] Loop iteration limit reached in readFixedLengthFrames";
+}
+
+/**
+ * @brief Brings the next Fixed Length candidate to offset 0. With a header rule, the bytes before
+ *        the first byte that can start a frame are dropped, and all of them when none can.
+ *        Returns whether a whole frame is buffered at offset 0.
+ */
+bool IO::FrameReader::alignFixedLengthFrame(qsizetype length)
+{
+  SS_ASSERT_HOTPATH(length > 0);
+  SS_ASSERT_HOTPATH(m_frameDetectionMode == SerialStudio::FixedLength);
+
+  if (m_circularBuffer.size() < length)
+    return false;
+
+  if (m_headerMask == 0)
+    return true;
+
+  const int header = m_circularBuffer.findMaskedByte(m_headerMask, m_headerValue);
+  SS_ASSERT(header < m_circularBuffer.size(), return false);
+  if (header < 0) {
+    consumeBytes(m_circularBuffer.size());
+    return false;
+  }
+
+  consumeBytes(header);
+  return m_circularBuffer.size() >= length;
+}
+
+/**
+ * @brief First offset after the header byte that breaks the body rule, or 0 when @p frame passes.
+ *        Only the payload is checked: the checksum bytes are arbitrary by construction.
+ */
+qsizetype IO::FrameReader::bodyRuleViolation(const QByteArray& frame) const noexcept
+{
+  SS_ASSERT_HOTPATH(!frame.isEmpty());
+  SS_ASSERT_HOTPATH((m_bodyValue & m_bodyMask) == m_bodyValue);
+
+  if (m_bodyMask == 0)
+    return 0;
+
+  const char* bytes   = frame.constData();
+  const qsizetype end = frame.size();
+  for (qsizetype i = 1; i < end; ++i)
+    if ((static_cast<quint8>(bytes[i]) & m_bodyMask) != m_bodyValue)
+      return i;
+
+  return 0;
 }
 
 //--------------------------------------------------------------------------------------------------

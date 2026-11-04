@@ -423,6 +423,11 @@ API::CommandResponse API::Handlers::AssistantHandler::scriptApply(const QString&
   setParams.remove(QStringLiteral("inputBytesHex"));
   setParams.remove(Keys::DecoderMethod);
   setParams.remove(Keys::FrameDetection);
+  setParams.remove(Keys::FrameLength);
+  setParams.remove(Keys::FrameHeaderMask);
+  setParams.remove(Keys::FrameHeaderValue);
+  setParams.remove(Keys::FrameBodyMask);
+  setParams.remove(Keys::FrameBodyValue);
   setParams.remove(Keys::FrameStart);
   setParams.remove(Keys::FrameEnd);
   setParams.remove(Keys::HexadecimalDelimiters);
@@ -1128,7 +1133,8 @@ void API::Handlers::AssistantHandler::registerEditCommands()
                    "sampleFrame / sampleFrames for end_to_end, plus for frame_parser the "
                    "pipeline inputs inputBytesHex / decoderMethod / frameDetection / "
                    "frameStart / frameEnd / hexadecimalDelimiters / checksumAlgorithm / "
-                   "operationMode)."),
+                   "operationMode, and for frameDetection 4 the frameLength and "
+                   "frameHeader/Body Mask/Value bytes)."),
     API::makeSchema(
       {
         {QStringLiteral("kind"),

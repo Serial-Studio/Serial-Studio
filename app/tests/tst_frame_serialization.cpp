@@ -67,6 +67,8 @@ private slots:
   void sourceFallsBackToLegacyChecksumAndDecoderKeys();
   void sourceDefaultsAMissingFrameEnd();
   void sourceRejectsAnEmptyObject();
+  void sourceRoundTripsTheFixedLengthSettings();
+  void sourceWithoutFixedLengthSettingsReadsZeros();
 
   void registerDefRoundTripsNumericAndStringDefaults();
   void registerDefSystemTypeDegradesToConstant();
@@ -464,6 +466,12 @@ void TstFrameSerialization::sourceRoundTripsEveryField()
   s.frameParserCode       = QStringLiteral("function parse(f) { return [f] }");
   s.frameParserTemplate   = QStringLiteral("csv");
   s.frameParserParams     = params;
+  s.frameDetection        = SerialStudio::FixedLength;
+  s.frameLength           = 12;
+  s.frameHeaderMask       = 0x80;
+  s.frameHeaderValue      = 0x80;
+  s.frameBodyMask         = 0x80;
+  s.frameBodyValue        = 0;
 
   const auto restored = fromJson<Source>(toJson(s));
   QVERIFY(restored.has_value());
@@ -481,6 +489,49 @@ void TstFrameSerialization::sourceRoundTripsEveryField()
   QCOMPARE(restored->frameParserCode, s.frameParserCode);
   QCOMPARE(restored->frameParserTemplate, s.frameParserTemplate);
   QCOMPARE(restored->frameParserParams, s.frameParserParams);
+  QCOMPARE(restored->frameLength, s.frameLength);
+  QCOMPARE(restored->frameHeaderMask, s.frameHeaderMask);
+  QCOMPARE(restored->frameHeaderValue, s.frameHeaderValue);
+  QCOMPARE(restored->frameBodyMask, s.frameBodyMask);
+  QCOMPARE(restored->frameBodyValue, s.frameBodyValue);
+}
+
+/**
+ * @brief The five Fixed Length keys are written for the mode, and omitted for a source that
+ *        never used them.
+ */
+void TstFrameSerialization::sourceRoundTripsTheFixedLengthSettings()
+{
+  Source s;
+  s.sourceId       = 1;
+  s.frameDetection = SerialStudio::FixedLength;
+  s.frameLength    = 5;
+
+  const auto json = toJson(s);
+  QVERIFY(json.contains(Keys::FrameLength));
+  QCOMPARE(json.value(Keys::FrameLength).toInt(), 5);
+
+  Source plain;
+  plain.sourceId = 2;
+  QVERIFY(!toJson(plain).contains(Keys::FrameLength));
+  QVERIFY(!toJson(plain).contains(Keys::FrameHeaderMask));
+}
+
+/**
+ * @brief A project saved before the mode existed reads the five fields as zero.
+ */
+void TstFrameSerialization::sourceWithoutFixedLengthSettingsReadsZeros()
+{
+  QJsonObject json;
+  json.insert(Keys::SourceId, 0);
+
+  const auto restored = fromJson<Source>(json);
+  QVERIFY(restored.has_value());
+  QCOMPARE(restored->frameLength, 0);
+  QCOMPARE(restored->frameHeaderMask, 0);
+  QCOMPARE(restored->frameHeaderValue, 0);
+  QCOMPARE(restored->frameBodyMask, 0);
+  QCOMPARE(restored->frameBodyValue, 0);
 }
 
 /**

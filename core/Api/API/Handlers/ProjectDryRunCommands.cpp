@@ -152,7 +152,22 @@ void API::Handlers::ProjectDryRunCommands::registerFrameParserDryRunCommands()
        {QString(Keys::FrameDetection),
         QStringLiteral("integer"),
         QStringLiteral("0=EndDelimiterOnly (default), 1=StartAndEndDelimiter, 2=NoDelimiters, "
-                       "3=StartDelimiterOnly.")},
+                       "3=StartDelimiterOnly, 4=FixedLength (needs frameLength).")},
+       {QString(Keys::FrameLength),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: bytes per frame, checksum included (1 to 524288).")},
+       {QString(Keys::FrameHeaderMask),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: mask for the first byte, 0-255 (0 = no rule).")},
+       {QString(Keys::FrameHeaderValue),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: value the masked first byte must equal, 0-255.")},
+       {QString(Keys::FrameBodyMask),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: mask for the payload bytes after the first, 0-255.")},
+       {QString(Keys::FrameBodyValue),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: value the masked payload bytes must equal, 0-255.")},
        {QString(Keys::FrameStart),
         QStringLiteral("string"),
         QStringLiteral("Start delimiter. Hex when hexadecimalDelimiters is true. Default: "
@@ -397,6 +412,29 @@ static QJsonObject dryRunSerializeFrame(const DataModel::PipelineFrame& frame)
   return obj;
 }
 
+/**
+ * @brief Copies the Fixed Length params into @p spec; returns an error text, or empty when valid.
+ */
+[[nodiscard]] static QString applyFixedFrameParams(const QJsonObject& params,
+                                                   DataModel::PipelineSpec& spec)
+{
+  DataModel::Source fixed;
+  QString error;
+  bool touched = false;
+  if (!DataModel::patch_fixed_frame_fields(fixed, params, error, touched))
+    return error;
+
+  if (spec.frameDetection == SerialStudio::FixedLength && fixed.frameLength < 1)
+    return QStringLiteral("frameDetection 4 (FixedLength) needs frameLength");
+
+  spec.fixedFrameLength = fixed.frameLength;
+  spec.headerMask       = static_cast<quint8>(fixed.frameHeaderMask);
+  spec.headerValue      = static_cast<quint8>(fixed.frameHeaderValue);
+  spec.bodyMask         = static_cast<quint8>(fixed.frameBodyMask);
+  spec.bodyValue        = static_cast<quint8>(fixed.frameBodyValue);
+  return QString();
+}
+
 }  // namespace API::Handlers
 
 /**
@@ -442,6 +480,10 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::frameParserDryRun(
   spec.decoderMethod = static_cast<SerialStudio::DecoderMethod>(
     params.value(Keys::DecoderMethod).toInt(int(SerialStudio::PlainText)));
   spec.checksumAlgorithm = params.value(Keys::ChecksumAlgorithm).toString();
+
+  const QString fixedError = applyFixedFrameParams(params, spec);
+  if (!fixedError.isEmpty())
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, fixedError);
 
   const bool hexDelims = params.value(Keys::HexadecimalDelimiters).toBool(false);
   const auto start     = dryRunDelimiter(params, QString(Keys::FrameStart), hexDelims);

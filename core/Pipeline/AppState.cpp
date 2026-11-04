@@ -26,6 +26,7 @@
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/DataModel/Frame.h"
+#include "Core/IO/FrameConfigBuilder.h"
 #include "Core/ModuleConstruction.h"
 #include "Core/Runtime.h"
 #include "Core/SSAssert.h"
@@ -331,15 +332,15 @@ IO::FrameConfig AppState::deriveFrameConfig() const
   cfg.startSequences  = startSeq.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{startSeq};
   cfg.finishSequences = finishSeq.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{finishSeq};
 
-  if ((cfg.frameDetection == SerialStudio::StartDelimiterOnly
-       || cfg.frameDetection == SerialStudio::StartAndEndDelimiter)
-      && cfg.startSequences.isEmpty()) [[unlikely]]
-    cfg.frameDetection =
-      cfg.finishSequences.isEmpty() ? SerialStudio::NoDelimiters : SerialStudio::EndDelimiterOnly;
+  DataModel::FixedFrameSettings fixed;
+  DataModel::read_fixed_frame_settings(fixed, DataModel::serialize(sources[0]));
+  cfg.fixedFrameLength = fixed.length;
+  cfg.headerMask       = fixed.headerMask;
+  cfg.headerValue      = fixed.headerValue;
+  cfg.bodyMask         = fixed.bodyMask;
+  cfg.bodyValue        = fixed.bodyValue;
 
-  if (cfg.frameDetection == SerialStudio::EndDelimiterOnly && cfg.finishSequences.isEmpty())
-    [[unlikely]]
-    cfg.frameDetection = SerialStudio::NoDelimiters;
+  cfg.frameDetection = IO::FrameConfigBuilder::repairedDetection(cfg);
 
   return cfg;
 }

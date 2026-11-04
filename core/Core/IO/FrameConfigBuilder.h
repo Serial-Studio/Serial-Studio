@@ -30,6 +30,12 @@ struct ProjectStructureSnapshot;
 
 namespace IO::FrameConfigBuilder {
 
+/**
+ * @brief Repairs a frame-detection mode whose settings the source does not carry (delimiters,
+ *        or a usable Fixed Length), so a reader never waits for a frame that cannot arrive.
+ */
+[[nodiscard]] SerialStudio::FrameDetection repairedDetection(const FrameConfig& cfg);
+
 [[nodiscard]] FrameConfig build(const Core::Bus::ProjectStructureSnapshot& project,
                                 SerialStudio::OperationMode mode,
                                 const FrameConfig& source0Config,

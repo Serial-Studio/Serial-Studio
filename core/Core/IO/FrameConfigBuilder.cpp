@@ -21,17 +21,26 @@
 
 #include "Core/IO/FrameConfigBuilder.h"
 
+#include <QDebug>
+
 #include "Core/Bus/Messages.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/SSAssert.h"
 
 /**
- * @brief Repairs a frame-detection mode whose delimiters the source does not carry, so a reader
- *        never waits for a delimiter that cannot arrive.
+ * @brief Repairs a frame-detection mode whose settings the source does not carry, so a reader
+ *        never waits for a delimiter or a frame length that cannot arrive.
  */
-[[nodiscard]] static SerialStudio::FrameDetection repairedDetection(const IO::FrameConfig& cfg)
+SerialStudio::FrameDetection IO::FrameConfigBuilder::repairedDetection(const FrameConfig& cfg)
 {
   auto detection = cfg.frameDetection;
+  if (detection == SerialStudio::FixedLength
+      && (cfg.fixedFrameLength < 1 || cfg.fixedFrameLength > kMaxFixedFrameLength)) [[unlikely]] {
+    qWarning() << "Fixed Length framing needs a length from 1 to" << kMaxFixedFrameLength
+               << "bytes, got" << cfg.fixedFrameLength << "- reading the raw stream instead";
+    return SerialStudio::NoDelimiters;
+  }
+
   if ((detection == SerialStudio::StartDelimiterOnly
        || detection == SerialStudio::StartAndEndDelimiter)
       && cfg.startSequences.isEmpty()) [[unlikely]]
@@ -75,7 +84,16 @@ IO::FrameConfig IO::FrameConfigBuilder::build(const Core::Bus::ProjectStructureS
     cfg.finishSequences   = end.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{end};
     cfg.checksumAlgorithm = checksum;
     cfg.frameDetection    = static_cast<SerialStudio::FrameDetection>(src.frameDetection);
-    cfg.frameDetection    = repairedDetection(cfg);
+
+    DataModel::FixedFrameSettings fixed;
+    DataModel::read_fixed_frame_settings(fixed, DataModel::serialize(src));
+    cfg.fixedFrameLength = fixed.length;
+    cfg.headerMask       = fixed.headerMask;
+    cfg.headerValue      = fixed.headerValue;
+    cfg.bodyMask         = fixed.bodyMask;
+    cfg.bodyValue        = fixed.bodyValue;
+
+    cfg.frameDetection = repairedDetection(cfg);
     return cfg;
   }
 

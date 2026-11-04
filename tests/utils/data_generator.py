@@ -680,6 +680,11 @@ end
         detection_mode: int = 0,
         title: str = "Test Project",
         checksum_algorithm: str = "None",
+        frame_length: int = None,
+        frame_header_mask: int = None,
+        frame_header_value: int = None,
+        frame_body_mask: int = None,
+        frame_body_value: int = None,
     ) -> dict:
         """
         Generate a complete project JSON configuration with custom frame delimiters.
@@ -689,17 +694,34 @@ end
         Args:
             start: Frame start delimiter
             end: Frame end delimiter
-            detection_mode: Frame detection mode (0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly)
+            detection_mode: Frame detection mode (0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly, 4=FixedLength)
             title: Project title
             checksum_algorithm: Checksum algorithm name
+            frame_length: FixedLength only, bytes per frame
+            frame_header_mask: FixedLength only, mask for the first byte
+            frame_header_value: FixedLength only, value the masked first byte must equal
+            frame_body_mask: FixedLength only, mask for the bytes after the first
+            frame_body_value: FixedLength only, value the masked body bytes must equal
 
         Returns:
             Project configuration dict suitable for load_project_from_json()
         """
+        fixed = {
+            key: value
+            for key, value in (
+                ("frameLength", frame_length),
+                ("frameHeaderMask", frame_header_mask),
+                ("frameHeaderValue", frame_header_value),
+                ("frameBodyMask", frame_body_mask),
+                ("frameBodyValue", frame_body_value),
+            )
+            if value is not None
+        }
         return {
             "title": title,
             "sources": [
                 {
+                    **fixed,
                     "sourceId": 0,
                     "title": "Device A",
                     "busType": 0,

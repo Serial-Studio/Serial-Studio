@@ -28,6 +28,7 @@
 
 #include "Core/AppInfo.h"
 #include "Core/DataModel/FrameSupport.h"
+#include "Core/IO/FrameConfig.h"
 #include "Core/DataModel/PropertyValidators.h"
 #include "Core/SerialStudio.h"
 
@@ -95,6 +96,68 @@ void DataModel::read_io_settings(QByteArray& frameStart,
     frameEnd   = SerialStudio::resolveEscapeSequences(fEndStr).toUtf8();
     frameStart = SerialStudio::resolveEscapeSequences(fStartStr).toUtf8();
   }
+}
+
+/**
+ * @brief Reads the Fixed Length framing settings, clamping each byte and masking each value.
+ */
+void DataModel::read_fixed_frame_settings(FixedFrameSettings& out, const QJsonObject& obj)
+{
+  auto byteOf = [&obj](Keys::KeyView key) {
+    return static_cast<quint8>(qBound(0, ss_jsr(obj, key, 0).toInt(), 255));
+  };
+
+  out.length      = ss_jsr(obj, Keys::FrameLength, 0).toInt();
+  out.headerMask  = byteOf(Keys::FrameHeaderMask);
+  out.headerValue = byteOf(Keys::FrameHeaderValue) & out.headerMask;
+  out.bodyMask    = byteOf(Keys::FrameBodyMask);
+  out.bodyValue   = byteOf(Keys::FrameBodyValue) & out.bodyMask;
+}
+
+/**
+ * @brief Validates and applies the Fixed Length keys of an API params object to a Source.
+ */
+bool DataModel::patch_fixed_frame_fields(Source& source,
+                                         const QJsonObject& params,
+                                         QString& error,
+                                         bool& touched)
+{
+  struct Field {
+    Keys::KeyView key;
+    int* target;
+    int max;
+  };
+
+  const Field fields[] = {
+    {Keys::FrameLength,      &source.frameLength,      IO::kMaxFixedFrameLength},
+    {Keys::FrameHeaderMask,  &source.frameHeaderMask,  255                     },
+    {Keys::FrameHeaderValue, &source.frameHeaderValue, 255                     },
+    {Keys::FrameBodyMask,    &source.frameBodyMask,    255                     },
+    {Keys::FrameBodyValue,   &source.frameBodyValue,   255                     },
+  };
+
+  touched = false;
+  for (const auto& field : fields) {
+    if (!params.contains(field.key))
+      continue;
+
+    const int min   = (field.key == Keys::FrameLength) ? 1 : 0;
+    const auto json = params.value(field.key);
+    if (!json.isDouble() || json.toInt(-1) < min || json.toInt(-1) > field.max) {
+      error = QStringLiteral("%1 must be an integer from %2 to %3")
+                .arg(QString(field.key))
+                .arg(min)
+                .arg(field.max);
+      return false;
+    }
+
+    *field.target = json.toInt();
+    touched       = true;
+  }
+
+  source.frameHeaderValue &= source.frameHeaderMask;
+  source.frameBodyValue &= source.frameBodyMask;
+  return true;
 }
 
 //--------------------------------------------------------------------------------------------------

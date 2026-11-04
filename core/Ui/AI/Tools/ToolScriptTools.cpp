@@ -108,6 +108,11 @@ static QString frameParserDryRunCommand(const QJsonObject& args, QJsonObject& dr
       Keys::KeyView("inputBytesHex"),
       Keys::DecoderMethod,
       Keys::FrameDetection,
+      Keys::FrameLength,
+      Keys::FrameHeaderMask,
+      Keys::FrameHeaderValue,
+      Keys::FrameBodyMask,
+      Keys::FrameBodyValue,
       Keys::FrameStart,
       Keys::FrameEnd,
       Keys::HexadecimalDelimiters,
@@ -304,6 +309,14 @@ static QJsonObject frameConfigArgsFor(const QJsonObject& args)
 
   if (args.contains(Keys::FrameDetection))
     config[Keys::FrameDetection] = args.value(Keys::FrameDetection).toInt();
+
+  for (const auto& key : {Keys::FrameLength,
+                          Keys::FrameHeaderMask,
+                          Keys::FrameHeaderValue,
+                          Keys::FrameBodyMask,
+                          Keys::FrameBodyValue})
+    if (args.contains(key))
+      config[key] = args.value(key).toInt();
 
   if (args.contains(Keys::DecoderMethod))
     config[Keys::DecoderMethod] = args.value(Keys::DecoderMethod).toInt();

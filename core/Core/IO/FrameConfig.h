@@ -30,6 +30,12 @@
 namespace IO {
 
 /**
+ * @brief Largest Fixed Length frame: half the FrameReader's 1 MiB circular buffer, so a whole
+ *        frame always fits with room for the next chunk.
+ */
+inline constexpr int kMaxFixedFrameLength = 512 * 1024;
+
+/**
  * @brief Plain aggregate carrying all FrameReader configuration parameters.
  */
 struct FrameConfig {
@@ -38,6 +44,11 @@ struct FrameConfig {
   QString checksumAlgorithm;
   SerialStudio::OperationMode operationMode   = SerialStudio::QuickPlot;
   SerialStudio::FrameDetection frameDetection = SerialStudio::EndDelimiterOnly;
+  int fixedFrameLength                        = 0;
+  quint8 headerMask                           = 0;
+  quint8 headerValue                          = 0;
+  quint8 bodyMask                             = 0;
+  quint8 bodyValue                            = 0;
 };
 
 }  // namespace IO

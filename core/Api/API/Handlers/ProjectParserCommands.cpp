@@ -315,8 +315,9 @@ void API::Handlers::ProjectParserCommands::registerConfigCommands()
   registry.registerCommand(
     QStringLiteral("project.frameParser.update"),
     QStringLiteral("Configure frame extraction settings on a source (params: startSequence, "
-                   "endSequence, checksumAlgorithm, frameDetection, decoderMethod, "
-                   "hexadecimalDelimiters, operationMode). This is the persist path for "
+                   "endSequence, checksumAlgorithm, frameDetection (0-4, 4=FixedLength), "
+                   "frameLength, frameHeaderMask, frameHeaderValue, frameBodyMask, "
+                   "frameBodyValue, decoderMethod, hexadecimalDelimiters, operationMode). This is the persist path for "
                    "delimiters -- parser code alone (setCode) never changes them."),
     makeSchema(
       {
@@ -335,7 +336,22 @@ void API::Handlers::ProjectParserCommands::registerConfigCommands()
         QStringLiteral("Checksum algorithm name")},
        {QString(Keys::FrameDetection),
         QStringLiteral("integer"),
-        QStringLiteral("Frame detection mode (0-3)")},
+        QStringLiteral("Frame detection mode (0-4; 4=FixedLength)")},
+       {QString(Keys::FrameLength),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: bytes per frame, checksum included (1 to 524288)")},
+       {QString(Keys::FrameHeaderMask),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: mask for the first byte, 0-255 (0 = no rule)")},
+       {QString(Keys::FrameHeaderValue),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: value the masked first byte must equal, 0-255")},
+       {QString(Keys::FrameBodyMask),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: mask for the payload bytes after the first, 0-255")},
+       {QString(Keys::FrameBodyValue),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: value the masked payload bytes must equal, 0-255")},
        {QString(Keys::DecoderMethod),
         QStringLiteral("integer"),
         QStringLiteral("Decoder method (0=PlainText, 1=Hex, 2=Base64, 3=Binary)")},
@@ -681,7 +697,7 @@ static bool configurePrimarySourceFrame(const QJsonObject& params)
 
   if (params.contains(Keys::FrameDetection)) {
     const int detectionIdx = params.value(Keys::FrameDetection).toInt();
-    if (detectionIdx >= 0 && detectionIdx <= 3) {
+    if (detectionIdx >= 0 && detectionIdx <= SerialStudio::FixedLength) {
       model.setFrameDetection(static_cast<SerialStudio::FrameDetection>(detectionIdx));
       updated = true;
     }
@@ -701,6 +717,26 @@ static bool configurePrimarySourceFrame(const QJsonObject& params)
   }
 
   return updated;
+}
+
+/**
+ * @brief Applies the Fixed Length params to source 0 through updateSource, which republishes the
+ *        frame config; the params were validated by the caller.
+ */
+static bool configurePrimaryFixedFrame(const QJsonObject& params)
+{
+  auto& model = DataModel::pipelineModules().projectModel;
+  if (model.sources().empty())
+    return false;
+
+  DataModel::Source src = model.sources()[0];
+  QString error;
+  bool touched = false;
+  if (!DataModel::patch_fixed_frame_fields(src, params, error, touched) || !touched)
+    return false;
+
+  model.updateSource(0, src);
+  return true;
 }
 
 /**
@@ -730,11 +766,18 @@ static bool configureSecondarySourceFrame(const QJsonObject& params, int sourceI
 
   if (params.contains(Keys::FrameDetection)) {
     const int detectionIdx = params.value(Keys::FrameDetection).toInt();
-    if (detectionIdx >= 0 && detectionIdx <= 3) {
+    if (detectionIdx >= 0 && detectionIdx <= SerialStudio::FixedLength) {
       src.frameDetection = detectionIdx;
       updated            = true;
     }
   }
+
+  bool fixedTouched = false;
+  QString fixedError;
+  if (!DataModel::patch_fixed_frame_fields(src, params, fixedError, fixedTouched))
+    return false;
+
+  updated = updated || fixedTouched;
 
   if (params.contains(Keys::DecoderMethod)) {
     const int decoderIdx = params.value(Keys::DecoderMethod).toInt();
@@ -781,9 +824,17 @@ API::CommandResponse API::Handlers::ProjectParserCommands::frameParserConfigure(
     }
   }
 
-  if (sourceId == 0)
-    updated = configurePrimarySourceFrame(params) || updated;
-  else
+  DataModel::Source probe;
+  QString fixedError;
+  bool fixedTouched = false;
+  if (!DataModel::patch_fixed_frame_fields(probe, params, fixedError, fixedTouched))
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, fixedError);
+
+  if (sourceId == 0) {
+    const bool basic = configurePrimarySourceFrame(params);
+    const bool fixed = configurePrimaryFixedFrame(params);
+    updated          = basic || fixed || updated;
+  } else
     updated = configureSecondarySourceFrame(params, sourceId) || updated;
 
   if (updated && sourceId == 0)
@@ -826,6 +877,11 @@ API::CommandResponse API::Handlers::ProjectParserCommands::frameParserGetConfig(
   result[Keys::ChecksumAlgorithm]          = cfg.checksumAlgorithm;
   result[QStringLiteral("operationMode")]  = static_cast<int>(cfg.operationMode);
   result[Keys::FrameDetection]             = static_cast<int>(cfg.frameDetection);
+  result[Keys::FrameLength]                = cfg.fixedFrameLength;
+  result[Keys::FrameHeaderMask]            = cfg.headerMask;
+  result[Keys::FrameHeaderValue]           = cfg.headerValue;
+  result[Keys::FrameBodyMask]              = cfg.bodyMask;
+  result[Keys::FrameBodyValue]             = cfg.bodyValue;
 
   return CommandResponse::makeSuccess(id, result);
 }

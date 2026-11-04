@@ -68,6 +68,8 @@ static void configureAndFeed(IO::FrameReader& reader,
 {
   reader.setOperationMode(spec.operationMode);
   reader.setFrameDetectionMode(spec.frameDetection);
+  reader.setFixedLength(spec.fixedFrameLength);
+  reader.setByteRules(spec.headerMask, spec.headerValue, spec.bodyMask, spec.bodyValue);
   reader.setStartSequences(spec.startSequences);
   reader.setFinishSequences(spec.finishSequences);
   reader.setChecksum(spec.checksumAlgorithm);

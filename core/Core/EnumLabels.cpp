@@ -115,6 +115,8 @@ QString API::EnumLabels::frameDetectionSlug(int value)
       return QStringLiteral("no-delimiters");
     case SerialStudio::StartDelimiterOnly:
       return QStringLiteral("start-delimiter");
+    case SerialStudio::FixedLength:
+      return QStringLiteral("fixed-length");
   }
   return QStringLiteral("unknown");
 }
@@ -133,6 +135,8 @@ QString API::EnumLabels::frameDetectionLabel(int value)
       return QStringLiteral("No delimiters (raw byte stream)");
     case SerialStudio::StartDelimiterOnly:
       return QStringLiteral("Start delimiter only");
+    case SerialStudio::FixedLength:
+      return QStringLiteral("Fixed Length");
   }
   return QStringLiteral("Unknown");
 }

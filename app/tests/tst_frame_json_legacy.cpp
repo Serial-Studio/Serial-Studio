@@ -74,6 +74,9 @@ private slots:
   void ioSettingsDropAnEscapeSequenceOnTheHexBranch();
   void ioSettingsPreferTheCanonicalChecksumKey();
 
+  void fixedFrameSettingsMaskTheRuleValues();
+  void fixedFrameSettingsLeaveALegacyObjectAtZero();
+
   void tableFolderPathWalksTheParentChain();
   void tableFolderPathShortCircuitsAtTheTopLevel();
   void tableFolderPathStopsAtAnUnknownParent();
@@ -312,6 +315,48 @@ void TstFrameJsonLegacy::ioSettingsPreferTheCanonicalChecksumKey()
   blanked.insert(Keys::ChecksumAlgorithm, QString());
   read_io_settings(start, end, checksum, blanked);
   QVERIFY(checksum.isEmpty());
+}
+
+//--------------------------------------------------------------------------------------------------
+// read_fixed_frame_settings()
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief A rule value with bits outside its mask is masked, and a byte past 255 is clamped.
+ */
+void TstFrameJsonLegacy::fixedFrameSettingsMaskTheRuleValues()
+{
+  QJsonObject json;
+  json.insert(Keys::FrameLength, 8);
+  json.insert(Keys::FrameHeaderMask, 0xF0);
+  json.insert(Keys::FrameHeaderValue, 0xA5);
+  json.insert(Keys::FrameBodyMask, 0x80);
+  json.insert(Keys::FrameBodyValue, 1000);
+
+  FixedFrameSettings out;
+  read_fixed_frame_settings(out, json);
+  QCOMPARE(out.length, 8);
+  QCOMPARE(out.headerMask, quint8(0xF0));
+  QCOMPARE(out.headerValue, quint8(0xA0));
+  QCOMPARE(out.bodyMask, quint8(0x80));
+  QCOMPARE(out.bodyValue, quint8(0x80));
+}
+
+/**
+ * @brief An object from before the mode existed reads as no length and no rules.
+ */
+void TstFrameJsonLegacy::fixedFrameSettingsLeaveALegacyObjectAtZero()
+{
+  QJsonObject legacy;
+  legacy.insert(Keys::FrameDetection, 2);
+
+  FixedFrameSettings out;
+  read_fixed_frame_settings(out, legacy);
+  QCOMPARE(out.length, 0);
+  QCOMPARE(out.headerMask, quint8(0));
+  QCOMPARE(out.headerValue, quint8(0));
+  QCOMPARE(out.bodyMask, quint8(0));
+  QCOMPARE(out.bodyValue, quint8(0));
 }
 
 //--------------------------------------------------------------------------------------------------

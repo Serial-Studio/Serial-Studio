@@ -247,6 +247,8 @@ void TstEnumLabels::frameDetectionFullSweep_data()
   QTest::newRow("StartDelimiterOnly")
     << static_cast<int>(SerialStudio::StartDelimiterOnly) << QStringLiteral("start-delimiter")
     << QStringLiteral("Start delimiter only");
+  QTest::newRow("FixedLength") << static_cast<int>(SerialStudio::FixedLength)
+                               << QStringLiteral("fixed-length") << QStringLiteral("Fixed Length");
 }
 
 /**
@@ -267,7 +269,7 @@ void TstEnumLabels::frameDetectionOutOfRange_data()
   QTest::addColumn<int>("value");
 
   QTest::newRow("negative") << -1;
-  QTest::newRow("just-past-last") << 4;
+  QTest::newRow("just-past-last") << 5;
   QTest::newRow("far-out-of-range") << 100;
 }
 

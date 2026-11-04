@@ -85,6 +85,11 @@ private slots:
   void findFirstOfPatternsHandlesEightPatterns();
   void findFirstOfPatternsAcrossTheWrap();
   void findFirstOfPatternsReportsNoMatch();
+
+  void findMaskedByteFindsAHitOnEitherSideOfTheWrap_data();
+  void findMaskedByteFindsAHitOnEitherSideOfTheWrap();
+  void findMaskedByteHonoursFromAndReportsNoMatch();
+  void findMaskedByteOnAnEmptyBufferReportsNoMatch();
 };
 
 /**
@@ -597,6 +602,68 @@ void TstCircularBuffer::findFirstOfPatternsReportsNoMatch()
   const auto tooLong = buffer.findFirstOfPatterns({QByteArray(24, 'q')});
   QCOMPARE(tooLong.position, -1);
   QCOMPARE(tooLong.patternIndex, -1);
+}
+
+void TstCircularBuffer::findMaskedByteFindsAHitOnEitherSideOfTheWrap_data()
+{
+  QTest::addColumn<int>("offset");
+  QTest::addColumn<int>("hitAt");
+
+  QTest::newRow("linear lane") << 0 << 6;
+  QTest::newRow("hit before the wrap point") << 28 << 2;
+  QTest::newRow("hit on the last byte before it") << 28 << 3;
+  QTest::newRow("hit on the first byte after it") << 28 << 4;
+  QTest::newRow("hit after the wrap point") << 28 << 8;
+}
+
+/**
+ * @brief The masked scan reports the logical offset of the first byte with (b & mask) == value,
+ *        whichever of the ring's two segments holds it.
+ */
+void TstCircularBuffer::findMaskedByteFindsAHitOnEitherSideOfTheWrap()
+{
+  QFETCH(int, offset);
+  QFETCH(int, hitAt);
+
+  QByteArray content(10, '\x01');
+  content[hitAt] = char(0x85);
+
+  IO::CircularBuffer<QByteArray, char> buffer(kScanCapacity);
+  primeAtOffset(buffer, offset, content);
+
+  QCOMPARE(buffer.findMaskedByte(0x80, 0x80), hitAt);
+  QCOMPARE(buffer.findMaskedByte(0x85, 0x85), hitAt);
+}
+
+/**
+ * @brief `from` skips earlier hits, including one past the end of the data, and a value no byte
+ *        satisfies reports -1.
+ */
+void TstCircularBuffer::findMaskedByteHonoursFromAndReportsNoMatch()
+{
+  QByteArray content(10, '\x01');
+  content[1] = char(0x80);
+  content[7] = char(0x80);
+
+  IO::CircularBuffer<QByteArray, char> buffer(kScanCapacity);
+  primeAtOffset(buffer, 28, content);
+
+  QCOMPARE(buffer.findMaskedByte(0x80, 0x80, 0), 1);
+  QCOMPARE(buffer.findMaskedByte(0x80, 0x80, 2), 7);
+  QCOMPARE(buffer.findMaskedByte(0x80, 0x80, 8), -1);
+  QCOMPARE(buffer.findMaskedByte(0x80, 0x80, 10), -1);
+  QCOMPARE(buffer.findMaskedByte(0x80, 0x80, 500), -1);
+  QCOMPARE(buffer.findMaskedByte(0x40, 0x40), -1);
+}
+
+/**
+ * @brief An empty buffer holds no byte, whatever the rule.
+ */
+void TstCircularBuffer::findMaskedByteOnAnEmptyBufferReportsNoMatch()
+{
+  IO::CircularBuffer<QByteArray, char> buffer(kScanCapacity);
+  QCOMPARE(buffer.findMaskedByte(0x80, 0x80), -1);
+  QCOMPARE(buffer.findMaskedByte(0x00, 0x00), -1);
 }
 
 QTEST_APPLESS_MAIN(TstCircularBuffer)

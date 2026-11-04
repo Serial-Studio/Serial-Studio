@@ -82,8 +82,10 @@ public:
 public slots:
   void processData(const IO::CapturedDataPtr& data);
 
+  void setFixedLength(int length);
   void setChecksum(const QString& checksum);
   void setStartSequences(const QList<QByteArray>& starts);
+  void setByteRules(quint8 headerMask, quint8 headerValue, quint8 bodyMask, quint8 bodyValue);
   void setFinishSequences(const QList<QByteArray>& finishes);
   void setOperationMode(const SerialStudio::OperationMode mode);
   void setFrameDetectionMode(const SerialStudio::FrameDetection mode);
@@ -101,8 +103,11 @@ private:
   void consumeBytes(qsizetype size);
 
   void readEndDelimitedFrames();
+  void readFixedLengthFrames();
   void readStartDelimitedFrames();
   void readStartEndDelimitedFrames();
+  [[nodiscard]] bool alignFixedLengthFrame(qsizetype length);
+  [[nodiscard]] qsizetype bodyRuleViolation(const QByteArray& frame) const noexcept;
 
   [[nodiscard]] IO::CapturedData* claimCapturedSlot(IO::CapturedDataPtr& ptr);
   void enqueueCaptured(IO::CapturedDataPtr&& ptr, IO::CapturedData* cd, qsizetype frameEndPos);
@@ -117,6 +122,12 @@ private:
   ChecksumFunc m_checksumFunc;
   QByteArray m_receivedChecksum;
   qsizetype m_checksumLength;
+
+  quint8 m_bodyMask;
+  quint8 m_bodyValue;
+  quint8 m_headerMask;
+  quint8 m_headerValue;
+  qsizetype m_fixedFrameLength;
 
   QVector<QByteArray> m_startSequences;
   QVector<QByteArray> m_finishSequences;

@@ -611,6 +611,8 @@ IO::FrameReader& Sessions::Verifier::readerForDevice(int deviceId)
   auto reader = std::make_unique<IO::FrameReader>();
   reader->setOperationMode(config.operationMode);
   reader->setFrameDetectionMode(config.frameDetection);
+  reader->setFixedLength(config.fixedFrameLength);
+  reader->setByteRules(config.headerMask, config.headerValue, config.bodyMask, config.bodyValue);
   reader->setStartSequences(config.startSequences);
   reader->setFinishSequences(config.finishSequences);
   reader->setChecksum(config.checksumAlgorithm);

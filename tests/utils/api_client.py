@@ -441,6 +441,11 @@ class SerialStudioClient:
         checksum_algorithm: str = None,
         operation_mode: int = None,
         frame_detection: int = None,
+        frame_length: int = None,
+        frame_header_mask: int = None,
+        frame_header_value: int = None,
+        frame_body_mask: int = None,
+        frame_body_value: int = None,
     ) -> dict:
         """
         Configure frame parser settings.
@@ -450,7 +455,12 @@ class SerialStudioClient:
             end_sequence: Frame end delimiter (e.g., "\\r\\n", "*/", ";")
             checksum_algorithm: Checksum name (e.g., "None", "CRC-16", "CRC-32", "Adler-32")
             operation_mode: Operation mode (0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot)
-            frame_detection: Frame detection mode (0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly)
+            frame_detection: Frame detection mode (0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly, 4=FixedLength)
+            frame_length: FixedLength only, bytes per frame (1 to 524288)
+            frame_header_mask: FixedLength only, mask for the first byte (0 = no rule)
+            frame_header_value: FixedLength only, value the masked first byte must equal
+            frame_body_mask: FixedLength only, mask for every byte after the first (0 = no rule)
+            frame_body_value: FixedLength only, value the masked body bytes must equal
 
         Returns:
             Result dict
@@ -468,6 +478,15 @@ class SerialStudioClient:
             params["operationMode"] = operation_mode
         if frame_detection is not None:
             params["frameDetection"] = frame_detection
+        for key, value in (
+            ("frameLength", frame_length),
+            ("frameHeaderMask", frame_header_mask),
+            ("frameHeaderValue", frame_header_value),
+            ("frameBodyMask", frame_body_mask),
+            ("frameBodyValue", frame_body_value),
+        ):
+            if value is not None:
+                params[key] = value
         if not params:
             return {}
 
@@ -635,8 +654,9 @@ class SerialStudioClient:
 
     def source_update(self, source_id: int, **kwargs) -> None:
         """Update source fields. Accepted kwargs: title, busType, frameStart,
-        frameEnd, checksumAlgorithm, frameDetection, decoderMethod,
-        hexadecimalDelimiters (Commercial only for multi-source projects).
+        frameEnd, checksumAlgorithm, frameDetection (0-4), frameLength,
+        frameHeaderMask, frameHeaderValue, frameBodyMask, frameBodyValue,
+        decoderMethod, hexadecimalDelimiters (Commercial only for multi-source projects).
         """
         params = {"sourceId": source_id}
         params.update(kwargs)

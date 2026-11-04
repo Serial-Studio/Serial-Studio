@@ -71,7 +71,8 @@ void API::Handlers::SourceHandler::registerCommands()
     QStringLiteral("project.source.update"),
     QStringLiteral("Patch source fields by id (Commercial). Required: sourceId. Optional "
                    "fields: title, busType, frameStart, frameEnd, checksumAlgorithm, "
-                   "frameDetection, decoderMethod, hexadecimalDelimiters."),
+                   "frameDetection, frameLength, frameHeaderMask, frameHeaderValue, "
+                   "frameBodyMask, frameBodyValue, decoderMethod, hexadecimalDelimiters."),
     makeSchema(
       {
         {QString(Keys::SourceId),
@@ -96,8 +97,23 @@ void API::Handlers::SourceHandler::registerCommands()
         QStringLiteral("Checksum algorithm name (none, crc8, crc16, crc32, ...)")},
        {QString(Keys::FrameDetection),
         QStringLiteral("integer"),
-        QStringLiteral("Frame detection enum (0=EndDelimiter, 1=StartAndEndDelimiter, "
-                       "2=NoDelimiters)")},
+        QStringLiteral("Frame detection enum (0=EndDelimiterOnly, 1=StartAndEndDelimiter, "
+                       "2=NoDelimiters, 3=StartDelimiterOnly, 4=FixedLength)")},
+       {QString(Keys::FrameLength),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: bytes per frame, checksum included (1 to 524288)")},
+       {QString(Keys::FrameHeaderMask),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: mask for the first byte of a frame, 0-255 (0 = no rule)")},
+       {QString(Keys::FrameHeaderValue),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: value the masked first byte must equal, 0-255")},
+       {QString(Keys::FrameBodyMask),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: mask for the payload bytes after the first, 0-255 (0 = no rule)")},
+       {QString(Keys::FrameBodyValue),
+        QStringLiteral("integer"),
+        QStringLiteral("FixedLength: value the masked payload bytes must equal, 0-255")},
        {QString(Keys::DecoderMethod),
         QStringLiteral("integer"),
         QStringLiteral("Decoder method enum (0=PlainText, 1=Hex, 2=Base64)")},
@@ -203,6 +219,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
     obj[Keys::FrameEnd]                 = src.frameEnd;
     obj[Keys::ChecksumAlgorithm]        = src.checksumAlgorithm;
     obj[Keys::FrameDetection]           = src.frameDetection;
+    obj[Keys::FrameLength]              = src.frameLength;
     obj[QStringLiteral("frameDetectionLabel")] =
       EnumLabels::frameDetectionLabel(src.frameDetection);
     obj[Keys::DecoderMethod]                  = src.decoderMethod;
@@ -343,6 +360,11 @@ API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& i
 
   if (params.contains(Keys::FrameDetection))
     updated.frameDetection = params[Keys::FrameDetection].toInt(updated.frameDetection);
+
+  QString fixedError;
+  bool fixedTouched = false;
+  if (!DataModel::patch_fixed_frame_fields(updated, params, fixedError, fixedTouched))
+    return CommandResponse::makeError(id, QStringLiteral("INVALID_PARAM"), fixedError);
 
   if (params.contains(Keys::DecoderMethod))
     updated.decoderMethod = params[Keys::DecoderMethod].toInt(updated.decoderMethod);

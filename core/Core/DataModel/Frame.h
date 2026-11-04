@@ -40,6 +40,7 @@
 #include "Core/DataModel/FrameKeys.h"
 #include "Core/DSPSimd.h"
 #include "Core/HotpathOptimization.h"
+#include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
 
 namespace WorkspaceIds {
@@ -455,6 +456,11 @@ struct alignas(8) Source {
   QString frameParserTemplate;         ///< Native parser template id (Native language only)
   QJsonObject frameParserParams;       ///< Native parser template params (Native language only)
   QString streamLane;                  ///< Stream-lane override: ""/auto (driver), "on", "off"
+  int frameLength      = 0;            ///< Fixed Length: bytes per frame
+  int frameHeaderMask  = 0;            ///< Fixed Length: header rule mask (0 = no header rule)
+  int frameHeaderValue = 0;            ///< Fixed Length: header rule value (already masked)
+  int frameBodyMask    = 0;            ///< Fixed Length: body rule mask (0 = no body rule)
+  int frameBodyValue   = 0;            ///< Fixed Length: body rule value (already masked)
 };
 
 static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
@@ -505,6 +511,16 @@ struct TableDef {
   obj.insert(Keys::DecoderMethod, s.decoderMethod);
 
   obj.insert(Keys::HexadecimalDelimiters, s.hexadecimalDelimiters);
+  if (s.frameDetection == SerialStudio::FixedLength || s.frameLength != 0
+      || s.frameHeaderMask != 0 || s.frameHeaderValue != 0 || s.frameBodyMask != 0
+      || s.frameBodyValue != 0) {
+    obj.insert(Keys::FrameLength, s.frameLength);
+    obj.insert(Keys::FrameHeaderMask, s.frameHeaderMask);
+    obj.insert(Keys::FrameHeaderValue, s.frameHeaderValue);
+    obj.insert(Keys::FrameBodyMask, s.frameBodyMask);
+    obj.insert(Keys::FrameBodyValue, s.frameBodyValue);
+  }
+
   if (!s.connectionSettings.isEmpty())
     obj.insert(Keys::SourceConn, s.connectionSettings);
 
@@ -997,6 +1013,33 @@ void read_io_settings(QByteArray& frameStart,
                       QString& checksum,
                       const QJsonObject& obj);
 
+/**
+ * @brief The Fixed Length framing settings of a source: frame size and the two byte rules.
+ */
+struct FixedFrameSettings {
+  int length = 0;
+  quint8 headerMask  = 0;
+  quint8 headerValue = 0;
+  quint8 bodyMask    = 0;
+  quint8 bodyValue   = 0;
+};
+
+/**
+ * @brief Reads the Fixed Length settings from a source JSON object, masking each rule value so
+ *        a stored bit outside its mask cannot make the rule unsatisfiable.
+ */
+void read_fixed_frame_settings(FixedFrameSettings& out, const QJsonObject& obj);
+
+/**
+ * @brief Applies the Fixed Length keys present in an API @p params object to @p source (length
+ *        1..kMaxFixedFrameLength, bytes 0..255, rule values masked). Returns false with @p error
+ *        set on a bad value; @p touched reports whether any of the five keys was present.
+ */
+[[nodiscard]] bool patch_fixed_frame_fields(Source& source,
+                                            const QJsonObject& params,
+                                            QString& error,
+                                            bool& touched);
+
 //--------------------------------------------------------------------------------------------------
 // Data -> JSON serialization
 //--------------------------------------------------------------------------------------------------
@@ -1181,6 +1224,11 @@ void read_io_settings(QByteArray& frameStart,
   s.frameParserTemplate   = ss_jsr(obj, Keys::FrameParserTemplate, "").toString();
   s.frameParserParams     = ss_jsr(obj, Keys::FrameParserParams, QJsonObject()).toJsonObject();
   s.streamLane            = ss_jsr(obj, Keys::SourceStreamLane, "").toString();
+  s.frameLength           = ss_jsr(obj, Keys::FrameLength, 0).toInt();
+  s.frameHeaderMask       = ss_jsr(obj, Keys::FrameHeaderMask, 0).toInt();
+  s.frameHeaderValue      = ss_jsr(obj, Keys::FrameHeaderValue, 0).toInt();
+  s.frameBodyMask         = ss_jsr(obj, Keys::FrameBodyMask, 0).toInt();
+  s.frameBodyValue        = ss_jsr(obj, Keys::FrameBodyValue, 0).toInt();
 
   if (obj.contains(Keys::ChecksumAlgorithm))
     s.checksumAlgorithm = obj.value(Keys::ChecksumAlgorithm).toString();

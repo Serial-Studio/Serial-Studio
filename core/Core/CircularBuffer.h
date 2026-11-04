@@ -115,6 +115,8 @@ public:
   [[nodiscard]] MultiMatchResult findFirstOfPatterns(const QVector<T>& patterns,
                                                      const PatternAnchors& anchors) const;
 
+  [[nodiscard]] int findMaskedByte(quint8 mask, quint8 value, int from = 0) const;
+
   [[nodiscard]] qsizetype overflowCount() const noexcept
   {
     return m_overflowCount.load(std::memory_order_relaxed);
@@ -741,4 +743,32 @@ typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer
   }
 
   return scan([this, head, mask](qsizetype k) { return m_buffer[(head + k) & mask]; });
+}
+
+/**
+ * @brief First logical offset at or after @p from whose byte satisfies (b & mask) == value, or -1
+ *        (spec 0103 Fixed Length header rule). A predicate scan has no memchr form, so it walks
+ *        the ring's two linear segments directly: no copy, no allocation, no lock.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::findMaskedByte(quint8 mask, quint8 value, int from) const
+{
+  SS_ASSERT_HOTPATH(from >= 0);
+  SS_ASSERT_HOTPATH((value & mask) == value);
+
+  const qsizetype current_size = size();
+  if (from >= current_size) [[unlikely]]
+    return -1;
+
+  const qsizetype head     = m_head.load(std::memory_order_acquire);
+  const qsizetype firstLen = std::min(current_size, m_capacity - head);
+  for (qsizetype i = from; i < firstLen; ++i)
+    if ((static_cast<quint8>(m_buffer[head + i]) & mask) == value)
+      return static_cast<int>(i);
+
+  for (qsizetype i = std::max<qsizetype>(from, firstLen); i < current_size; ++i)
+    if ((static_cast<quint8>(m_buffer[i - firstLen]) & mask) == value)
+      return static_cast<int>(i);
+
+  return -1;
 }

@@ -48,6 +48,11 @@ struct PipelineSpec {
   QList<QByteArray> finishSequences;
   QString checksumAlgorithm;
   SerialStudio::DecoderMethod decoderMethod = SerialStudio::PlainText;
+  int fixedFrameLength                      = 0;
+  quint8 headerMask                         = 0;
+  quint8 headerValue                        = 0;
+  quint8 bodyMask                           = 0;
+  quint8 bodyValue                          = 0;
 };
 
 /**

@@ -55,6 +55,7 @@ static const QList<SerialStudio::FrameDetection> kDetectionValues = {
   SerialStudio::StartAndEndDelimiter,
   SerialStudio::StartDelimiterOnly,
   SerialStudio::NoDelimiters,
+  SerialStudio::FixedLength,
 };
 
 /**
@@ -276,7 +277,8 @@ QStringList DataModel::FrameParserModel::detectionOptions() const
   return {tr("End delimiter only"),
           tr("Start + end delimiters"),
           tr("Start delimiter only"),
-          tr("No delimiters (whole chunk)")};
+          tr("No delimiters (whole chunk)"),
+          tr("Fixed length")};
 }
 
 /**
@@ -474,6 +476,9 @@ bool DataModel::FrameParserModel::inputContainsDelimiters(const QString& input, 
                         || detection == SerialStudio::StartDelimiterOnly;
   const bool needs_end =
     detection == SerialStudio::EndDelimiterOnly || detection == SerialStudio::StartAndEndDelimiter;
+  if (detection == SerialStudio::FixedLength)
+    return bytes.size() >= src.frameLength;
+
   SS_ASSERT(needs_start || needs_end, return true);
 
   const auto start = delimiterBytes(src.frameStart, src.hexadecimalDelimiters);
@@ -511,6 +516,14 @@ void DataModel::FrameParserModel::dryRun(const QString& input, bool hex)
   spec.frameDetection    = static_cast<SerialStudio::FrameDetection>(src.frameDetection);
   spec.decoderMethod     = static_cast<SerialStudio::DecoderMethod>(src.decoderMethod);
   spec.checksumAlgorithm = src.checksumAlgorithm;
+
+  DataModel::FixedFrameSettings fixed;
+  DataModel::read_fixed_frame_settings(fixed, DataModel::serialize(src));
+  spec.fixedFrameLength = fixed.length;
+  spec.headerMask       = fixed.headerMask;
+  spec.headerValue      = fixed.headerValue;
+  spec.bodyMask         = fixed.bodyMask;
+  spec.bodyValue        = fixed.bodyValue;
 
   const auto start = delimiterBytes(src.frameStart, src.hexadecimalDelimiters);
   const auto end   = delimiterBytes(src.frameEnd, src.hexadecimalDelimiters);

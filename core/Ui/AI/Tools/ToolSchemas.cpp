@@ -246,7 +246,16 @@ static QJsonObject scriptPropsBag()
   props[Keys::FrameDetection] =
     makeProperty(QStringLiteral("integer"),
                  QStringLiteral("[frame_parser] 0=EndDelimiterOnly, 1=StartAndEnd, "
-                                "2=NoDelimiters, 3=StartDelimiterOnly."));
+                                "2=NoDelimiters, 3=StartDelimiterOnly, 4=FixedLength (needs "
+                                "frameLength; optional frameHeaderMask / frameHeaderValue / "
+                                "frameBodyMask / frameBodyValue bytes)."));
+  for (const auto& key : {Keys::FrameLength,
+                          Keys::FrameHeaderMask,
+                          Keys::FrameHeaderValue,
+                          Keys::FrameBodyMask,
+                          Keys::FrameBodyValue})
+    props[key] = makeProperty(QStringLiteral("integer"),
+                              QStringLiteral("[frame_parser] FixedLength framing setting."));
   props[Keys::FrameStart] =
     makeProperty(QStringLiteral("string"), QStringLiteral("[frame_parser] Start delimiter."));
   props[Keys::FrameEnd] =
