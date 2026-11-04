@@ -78,8 +78,7 @@ Item {
       color: Cpp_ThemeManager.colors["placeholder_text"]
       font: Cpp_Misc_CommonFonts.customUiFont(1, false)
       horizontalAlignment: Text.AlignHCenter
-      text: qsTr("This build of Serial Studio was compiled without Qt WebEngine, "
-                 + "so web pages cannot be displayed.")
+      text: qsTr("This version of Serial Studio can't display web pages.")
     }
   }
 }

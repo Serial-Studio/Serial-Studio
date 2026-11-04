@@ -583,10 +583,9 @@ Widgets.Pane {
             Layout.fillWidth: true
             color: Cpp_ThemeManager.colors["text"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
-            text: qsTr("Re-runs the archived raw data through the current build and compares "
-                       + "it against the recorded values. This proves the archive is "
-                       + "reproducible; it is not a determinism guarantee, a safety function, "
-                       + "or a calibration authority.")
+            text: qsTr("Replays the recorded raw data through this version of Serial Studio and "
+                       + "checks that it produces the same values, so you know the recording can "
+                       + "be reproduced later.")
           }
         }*/
 
@@ -635,9 +634,9 @@ Widgets.Pane {
                 visible: !root.regression.verdict
                 color: Cpp_ThemeManager.colors["text"]
                 font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
-                text: qsTr("Compares this session's decoded values against the project currently "
-                           + "open in the editor. The result reflects a transient candidate and "
-                           + "is not stored with the session.")
+                text: qsTr("Shows how the project open in the editor would decode this recording, "
+                           + "and where its values differ from the recorded ones. Nothing is "
+                           + "saved to the recording.")
               }
 
               Label {

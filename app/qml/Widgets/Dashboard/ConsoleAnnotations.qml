@@ -391,8 +391,8 @@ Item {
               font: Cpp_Misc_CommonFonts.customUiFont(0.8, false)
               text: {
                 if (root.annotationCount <= 0)
-                  return qsTr("Each bar is a byte range the decoder labelled, one lane per "
-                              + "decoder row: oldest on the left, newest on the right.")
+                  return qsTr("Each bar is a part of the data that the annotation script named. "
+                              + "Each row has its own lane, with the oldest data on the left.")
 
                 const range = qsTr("Labelled bytes %1 to %2, oldest on the left.")
                 .arg(root.formatNumber(root.model.labelledStart))
@@ -1101,9 +1101,9 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["text"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
-            text: qsTr("Annotations label ranges of the incoming byte stream: a small script "
-                       + "names each range, and this panel draws them as lanes, lists them, "
-                       + "and extracts their bytes.")
+            text: qsTr("Annotations name the parts of incoming data, such as a header or a "
+                       + "checksum. A short script finds each part, and this panel draws them, "
+                       + "lists them, and lets you copy their bytes.")
           }
 
           Widgets.IconButton {

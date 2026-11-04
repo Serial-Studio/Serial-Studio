@@ -1463,13 +1463,8 @@ QString AI::Conversation::probeDetail() const
   if (!m_probe.degraded())
     return {};
 
-  if (m_probe.lastFailure() == SentinelProbe::Outcome::Missing)
-    return tr("The model stopped reproducing its context-integrity line. Long "
-              "conversations degrade silently; recent replies may be less reliable.");
-
-  return tr("The model altered its context-integrity line (drifted segment: %1). Long "
-            "conversations degrade silently; recent replies may be less reliable.")
-    .arg(m_probe.driftedSegment());
+  return tr("This conversation is long enough that the assistant may be losing track of earlier "
+            "details, so recent replies may be less reliable. Consider starting a new chat.");
 }
 
 //--------------------------------------------------------------------------------------------------

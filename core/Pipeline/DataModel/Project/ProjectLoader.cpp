@@ -741,9 +741,9 @@ bool DataModel::ProjectLoader::loadFromJsonDocument(const QJsonDocument& documen
   if (olderSchema && !sourcePath.isEmpty()) {
     const QString title = ProjectModel::tr("Project upgraded from an earlier file format");
     const QString body =
-      ProjectModel::tr("This project was saved with schema version %1; the current version "
-                       "is %2. Defaults have been applied to any new fields. Save the "
-                       "project to lock in the upgrade.")
+      ProjectModel::tr("This project was saved by an older version of Serial Studio (file format "
+                       "%1, now %2). New settings use their defaults. Save the project to keep "
+                       "the update.")
         .arg(loadedSchema)
         .arg(DataModel::kSchemaVersion);
     QTimer::singleShot(0, &m_model, [title, body] {

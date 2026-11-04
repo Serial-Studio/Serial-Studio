@@ -193,9 +193,9 @@ ToolButton {
       onToggled: Cpp_AI_Assistant.autoApproveEdits = checked
       ToolTip.delay: 400
       ToolTip.visible: hovered
-      ToolTip.text: qsTr("Reversible project edits run without asking. Edits are "
-                       + "checkpointed to your backups folder; the project file on "
-                       + "disk changes only when you save.")
+      ToolTip.text: qsTr("Reversible project edits run without asking. A backup copy goes to your "
+                         + "backups folder, and the project file on disk changes only when you "
+                         + "save.")
     }
 
     MenuItem {

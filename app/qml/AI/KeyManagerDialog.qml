@@ -77,10 +77,9 @@ Widgets.SmartDialog {
               + "code completion, Pixtral handles vision, and the Ministral "
               + "models are tuned for edge / low-latency use.")
     } else if (idx === 7) {
-      return qsTr("Local model server. Works with any OpenAI-compatible "
-              + "endpoint -- Ollama, llama.cpp's llama-server, LM Studio, "
-              + "or vLLM. Nothing leaves your machine. The model list is "
-              + "queried live from the server.")
+      return qsTr("Local model server. Works with any OpenAI-compatible endpoint, such as Ollama, "
+                  + "llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. "
+                  + "The model list is read live from the server.")
     }
     return ""
   }
@@ -203,7 +202,7 @@ Widgets.SmartDialog {
               font: Cpp_Misc_CommonFonts.monoFont
               echoMode: providerCard.revealed ? TextInput.Normal : TextInput.Password
               placeholderText: root.hasKey
-                               ? qsTr("A key is on file -- paste a new one to replace it")
+                               ? qsTr("A key is saved. Paste a new one to replace it.")
                                : qsTr("Paste your API key here")
             }
 

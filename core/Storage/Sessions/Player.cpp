@@ -641,8 +641,8 @@ void Sessions::Player::applyBundledViewState(const QString& viewState, const QSt
     tr("Sessions"),
     QString(),
     tr("Recording uses an older copy of the project"),
-    tr("The dashboard shown is the one embedded in the recording; the project on disk has "
-       "changed since. Close the session to return to the current project."));
+    tr("This dashboard comes from the recording, and the project file has changed since it was "
+       "recorded. Close the recording to return to the current project."));
 }
 
 /**

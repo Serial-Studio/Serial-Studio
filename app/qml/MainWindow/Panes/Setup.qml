@@ -236,8 +236,9 @@ Widgets.Pane {
         text: qsTr("Quick Plot (Auto-Detected Format)")
         ToolTip.delay: 500
         ToolTip.visible: hovered
-        ToolTip.text: qsTr("Plots each line as a sample. Detects delimited values, name:value "
-                           + "pairs, units and one-line JSON automatically.")
+        ToolTip.text: qsTr("Plots every line the device sends. Values separated by commas, tabs, "
+                           + "or spaces, name and value pairs, units, and one-line JSON are "
+                           + "detected automatically.")
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         checked: Cpp_AppState.operationMode === SerialStudio.QuickPlot

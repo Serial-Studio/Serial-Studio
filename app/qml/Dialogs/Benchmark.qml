@@ -180,9 +180,8 @@ Widgets.SmartDialog {
               wrapMode: Text.WordWrap
               color: Cpp_ThemeManager.colors["text"]
               font: Cpp_Misc_CommonFonts.uiFont
-              text: qsTr("Each phase runs flat-out on the main thread, so the window stops " +
-                         "responding until it finishes. Your current project is reloaded " +
-                         "automatically when the benchmark ends.")
+              text: qsTr("The window stops responding while the benchmark runs. Your project "
+                         + "reloads automatically when it finishes.")
             }
           }
         }
@@ -589,10 +588,10 @@ Widgets.SmartDialog {
       wrapMode: Text.WordWrap
       color: Cpp_ThemeManager.colors["text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
-      text: qsTr("Pass/Fail applies to the data-pipeline and parser stages (data pipeline " +
-                 "and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric " +
-                 "256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). " +
-                 "The export and dashboard stages are informational.")
+      text: qsTr("A stage passes when it keeps up with the speed a fast device needs: about a "
+                 + "million frames per second for the data pipeline and the built-in parsers, "
+                 + "down to 64 thousand for JavaScript with mixed data. The export and dashboard "
+                 + "rows are for information only.")
     }
 
     //

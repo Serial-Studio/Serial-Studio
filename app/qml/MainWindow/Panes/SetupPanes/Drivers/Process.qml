@@ -342,8 +342,8 @@ Item {
           Layout.fillWidth: true
           wrapMode: Label.WordWrap
           font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
-          text: qsTr("Launch a child process and capture its stdout, or "
-                   + "connect to a named pipe written by an existing process.")
+          text: qsTr("Start a program and read its output, or connect to a named pipe that "
+                     + "another program writes to.")
         }
 
         Label {

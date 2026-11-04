@@ -427,8 +427,8 @@ Widgets.Pane {
             text: Cpp_JSON_ProjectModel.customizeWorkspaces
                   ? qsTr("No workspaces. Add one with the toolbar above, "
                          + "or reset to the auto layout.")
-                  : qsTr("Project has no eligible groups -- add a group "
-                         + "with widgets to populate workspaces.")
+                  : qsTr("This project has no groups to show yet. Add a group with widgets to "
+                         + "fill the workspaces.")
           }
 
           Widgets.PushButton {

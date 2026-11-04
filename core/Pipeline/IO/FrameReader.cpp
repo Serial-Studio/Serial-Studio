@@ -429,8 +429,8 @@ void IO::FrameReader::noteDroppedFrame()
     Q_ARG(QString, QStringLiteral("FrameReader")),
     Q_ARG(QString, tr("Frames dropped")),
     Q_ARG(QString,
-          tr("Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) "
-             "have been dropped. Reduce the data rate or disable a heavy consumer.")
+          tr("Data is arriving faster than Serial Studio can process it, and %1 frame(s) were "
+             "dropped. Lower the data rate, or close widgets and recordings you don't need.")
             .arg(m_droppedFrames)));
 }
 

@@ -143,9 +143,8 @@ Item {
       wrapMode: Text.WordWrap
       color: Cpp_ThemeManager.colors["text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
-      text: qsTr("Off by default — Qt and QML emit warnings frequently "
-                 + "and enabling this can drown out real alarms. Critical "
-                 + "messages are always routed regardless of this setting.")
+      text: qsTr("Off by default, because Serial Studio logs many minor warnings that would bury "
+                 + "real alarms. Critical messages are always sent to notifications.")
     }
 
     Item { Layout.fillHeight: true }

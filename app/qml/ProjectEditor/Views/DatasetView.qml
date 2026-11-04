@@ -195,9 +195,9 @@ Widgets.Pane {
           anchors.left: parent.left
           anchors.right: parent.right
           anchors.verticalCenter: parent.verticalCenter
-          text: qsTr("Computed dataset: its value comes from its transform, not from the frame, "
-                     + "so it has no frame index. A transform that never reads value makes a "
-                     + "dataset computed.")
+          text: qsTr("This is a computed dataset: its transform calculates the value, so it does "
+                     + "not read a position in the frame. A dataset becomes computed when its "
+                     + "transform does not use the incoming value.")
         }
       }
 

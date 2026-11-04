@@ -1271,9 +1271,8 @@ bool Misc::ExtensionManager::ensureApiServerForLaunch(const QString& id, bool us
   if (server.enabled())
     return true;
 
-  const auto msg = usesGrpc ? tr("This plugin uses gRPC for high-performance data streaming. "
-                                 "The API server needs to be enabled.\n\n"
-                                 "Would you like to enable it now?")
+  const auto msg = usesGrpc ? tr("This plugin receives its data through the API server, which is "
+                                 "turned off.\n\nTurn on the API server now?")
                             : tr("Plugins need the API server to communicate with Serial Studio. "
                                  "Would you like to enable it now?");
 

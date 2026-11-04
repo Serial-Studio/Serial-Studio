@@ -713,8 +713,8 @@ void DataModel::ProjectPersistence::resolveDiskFileChange()
     nc.postWarning(
       QStringLiteral("ProjectModel"),
       ProjectModel::tr("Project file changed on disk"),
-      ProjectModel::tr("%1 was modified by another program. The in-memory project was kept; "
-                       "reopen the file to load the external changes.")
+      ProjectModel::tr("%1 was changed by another program. Serial Studio kept the version it has "
+                       "open; reopen the file to load the other program's changes.")
         .arg(m_model.jsonFileName()));
     return;
   }
@@ -774,8 +774,8 @@ void DataModel::ProjectPersistence::restoreDetachedDocument(const QString& path)
   static auto& nc = DataModel::NotificationCenter::instance();
   nc.postWarning(QStringLiteral("ProjectModel"),
                  ProjectModel::tr("Project file could not be reloaded"),
-                 ProjectModel::tr("%1 could not be read back: it is unreadable or no longer "
-                                  "valid JSON. Your in-memory project was kept; save it to "
-                                  "overwrite the file on disk.")
+                 ProjectModel::tr("%1 can no longer be read and may be damaged. Serial Studio "
+                                  "kept the version it has open. Save the project to write it "
+                                  "back to disk.")
                    .arg(m_model.jsonFileName()));
 }

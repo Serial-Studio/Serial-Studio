@@ -252,8 +252,9 @@ Widgets.Pane {
 
                   ToolTip.delay: 700
                   ToolTip.visible: hovered
-                  ToolTip.text: qsTr("Run a dataset's transform only when one of its inputs changes. "
-                                     + "Speeds up large table-driven projects; off by default.")
+                  ToolTip.text: qsTr("Runs a dataset's transform only when one of its inputs "
+                                     + "changes. Speeds up large projects that use Variables. Off "
+                                     + "by default.")
 
                   onToggled: Cpp_JSON_ProjectModel.changeDrivenTransforms = checked
                 }
@@ -272,9 +273,9 @@ Widgets.Pane {
 
                   ToolTip.delay: 700
                   ToolTip.visible: hovered
-                  ToolTip.text: qsTr("Run Lua scripts with the JIT compiler for maximum "
-                                     + "throughput. Disables the runaway-script watchdog; "
-                                     + "off by default.")
+                  ToolTip.text: qsTr("Runs Lua scripts faster. A script stuck in an endless loop "
+                                     + "can no longer be stopped, which can freeze Serial Studio. "
+                                     + "Off by default.")
 
                   onToggled: {
                     Cpp_JSON_ProjectModel.requestLuaFastMode(checked)
@@ -300,20 +301,21 @@ Widgets.Pane {
 
                   Layout.fillWidth: true
                   model: [qsTr("App preference"),
-                          qsTr("A-4 - Automatic reset, no lock-in"),
-                          qsTr("A - Automatic reset, lock-in until acknowledged"),
-                          qsTr("M-4 - Manual reset, no lock-in"),
-                          qsTr("M - Manual reset, lock-in until acknowledged"),
-                          qsTr("R-4 - Ringback, no lock-in"),
-                          qsTr("R - Ringback, lock-in until acknowledged")]
+                          qsTr("Automatic reset, no lock-in (A-4)"),
+                          qsTr("Automatic reset, lock-in until acknowledged (A)"),
+                          qsTr("Manual reset, no lock-in (M-4)"),
+                          qsTr("Manual reset, lock-in until acknowledged (M)"),
+                          qsTr("Ringback, no lock-in (R-4)"),
+                          qsTr("Ringback, lock-in until acknowledged (R)")]
                   currentIndex: Math.max(0, codes.indexOf(letter))
                   onActivated: Cpp_JSON_ProjectEditor.setProjectSoundSequence(codes[currentIndex])
 
                   ToolTip.delay: 700
                   ToolTip.visible: hovered
-                  ToolTip.text: qsTr("How alarms latch and reset (ISA-18.1). A = automatic reset, "
-                                     + "M = manual reset, R = ringback; -4 means the alarm does "
-                                     + "not stay latched after it clears.")
+                  ToolTip.text: qsTr("What an alarm does after it clears. Automatic reset ends it "
+                                     + "by itself, manual reset waits for someone to reset it, "
+                                     + "and ringback sounds a short tone when it clears. Lock-in "
+                                     + "keeps it showing until it is acknowledged.")
                 }
 
                 Label {

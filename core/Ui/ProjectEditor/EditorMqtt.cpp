@@ -178,9 +178,8 @@ void EditorMqtt::buildMqttPublishingSection(const MQTT::Publisher& pub, bool ena
   freqItem->setData(pub.publishFrequency(), EditableValue);
   freqItem->setData(kMqttPublisher_PublishFrequency, ParameterType);
   freqItem->setData(tr("Publish Rate (Hz)"), ParameterName);
-  freqItem->setData(tr("How many times per second to publish (1-30 Hz). Higher rates increase "
-                       "broker load; dashboard data is rate-limited so a slow broker never blocks "
-                       "frame parsing."),
+  freqItem->setData(tr("How many times per second to publish, from 1 to 30. Higher rates put more "
+                       "load on the broker. A slow broker never slows down the dashboard."),
                     ParameterDescription);
   m_editor.m_mqttPublisherModel->appendRow(freqItem);
 

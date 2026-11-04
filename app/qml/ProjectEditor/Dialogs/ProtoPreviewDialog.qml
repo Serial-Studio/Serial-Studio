@@ -172,9 +172,9 @@ Window {
         color: palette.text
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
-        text: qsTr("Browse the messages below, then create the project. Every message " +
-                   "becomes a dashboard group; matching-type channel blocks get a MultiPlot " +
-                   "and mixed-type messages get a DataGrid.")
+        text: qsTr("Browse the messages below, then create the project. Each message becomes a "
+                   + "dashboard group: a message of similar numeric channels gets a Multi-Plot, "
+                   + "and any other message gets a Data Grid.")
       }
 
       Item {

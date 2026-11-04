@@ -596,7 +596,7 @@ void DataModel::ProjectFolders::confirmDeleteWorkspaceFolder(int folderId)
   const int choice = Core::Prompt::showMessageBox(
     ProjectModel::tr("Delete folder \"%1\"?").arg(name),
     ProjectModel::tr(
-      "The folder is removed; its workspaces and sub-folders move up to the parent."),
+      "The folder is deleted, and its workspaces and sub-folders move up one level."),
     Core::Prompt::Warning,
     ProjectModel::tr("Delete Folder"),
     Core::Prompt::Yes | Core::Prompt::Cancel,
@@ -807,7 +807,7 @@ void DataModel::ProjectFolders::confirmDeleteGroupFolder(int folderId)
 
   const int choice = Core::Prompt::showMessageBox(
     ProjectModel::tr("Delete folder \"%1\"?").arg(name),
-    ProjectModel::tr("The folder is removed; its groups and sub-folders move up to the parent."),
+    ProjectModel::tr("The folder is deleted, and its groups and sub-folders move up one level."),
     Core::Prompt::Warning,
     ProjectModel::tr("Delete Folder"),
     Core::Prompt::Yes | Core::Prompt::Cancel,
@@ -1055,8 +1055,8 @@ void DataModel::ProjectFolders::confirmDeleteTableFolder(int folderId)
 
   const int choice = Core::Prompt::showMessageBox(
     ProjectModel::tr("Delete folder \"%1\"?").arg(name),
-    ProjectModel::tr("The folder is removed; its tables and sub-folders move up to the parent. The "
-                     "accessor path of those tables changes accordingly."),
+    ProjectModel::tr("The folder is deleted, and its Variables tables and sub-folders move up one "
+                     "level. Scripts that read those tables by path need the new path."),
     Core::Prompt::Warning,
     ProjectModel::tr("Delete Folder"),
     Core::Prompt::Yes | Core::Prompt::Cancel,

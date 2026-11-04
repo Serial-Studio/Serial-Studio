@@ -344,9 +344,8 @@ Item {
       wrapMode: Text.WordWrap
       color: Cpp_ThemeManager.colors["text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
-      text: qsTr("Performance hints raise process priority and opt out of OS "
-                 + "power throttling. Changes take effect the next time Serial "
-                 + "Studio starts.")
+      text: qsTr("Runs Serial Studio at a higher priority and keeps the system from slowing it "
+                 + "down to save power. Takes effect the next time Serial Studio starts.")
     }
 
     Item {

@@ -263,10 +263,9 @@ SS_COLD void DataModel::FrameBuilder::notePoolExhausted()
       Q_ARG(QString, QStringLiteral("FrameBuilder")),
       Q_ARG(QString, tr("Block pool exhausted")),
       Q_ARG(QString,
-            tr("A downstream consumer (dashboard, CSV/MDF4 export, historian, or API "
-               "subscriber) is not draining fast enough, so data is being dropped from the "
-               "display and from any active recording. Disable a heavy consumer or reduce "
-               "the data rate.")));
+            tr("Serial Studio can't keep up with the data: the dashboard, a recording, or an API "
+               "client is too slow, so some data is missing from the display and from recordings. "
+               "Close a heavy widget, stop a recording, or lower the data rate.")));
   }
 }
 
@@ -2296,8 +2295,8 @@ void DataModel::FrameBuilder::endDatasetPass(bool armedJsWatchdog)
       nc.postWarning(
         QStringLiteral("FrameBuilder"),
         tr("JavaScript transform exceeded budget"),
-        tr("A dataset transform took longer than %1 ms; remaining datasets in the frame fell "
-           "back to raw values until the next frame. Profile or simplify the transform code.")
+        tr("A dataset transform took longer than %1 ms, so the rest of this frame shows raw "
+           "values. Simplify the transform so it keeps up.")
           .arg(kTransformWatchdogMs));
     }
   }

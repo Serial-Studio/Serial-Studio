@@ -101,8 +101,8 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             Layout.maximumWidth: title.implicitWidth
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            text: qsTr("Serial Studio is free & open-source software supported by volunteers. " +
-                       "Consider donating or obtaining a Pro license to support development efforts :)")
+            text: qsTr("Serial Studio is free and open-source software supported by volunteers. "
+                       + "Consider donating or getting a Pro license to support its development.")
           }
 
           Item {

@@ -153,9 +153,9 @@ Widgets.SmartDialog {
       Layout.fillWidth: true
       wrapMode: Text.WordWrap
       color: Cpp_ThemeManager.colors["text"]
-      text: qsTr("A Critical notification on a channel plays its Warning file, a Warning "
-                 + "notification its Caution file, an Info notification its Advisory file. "
-                 + "Empty cells use the sounds from Preferences.")
+      text: qsTr("Choose the sounds this channel plays. A Critical notification plays the Warning "
+                 + "sound, a Warning notification the Caution sound, and an Info notification the "
+                 + "Advisory sound. Empty cells use the sounds from Preferences.")
     }
 
     RowLayout {

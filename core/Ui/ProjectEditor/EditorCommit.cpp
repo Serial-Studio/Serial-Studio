@@ -836,8 +836,8 @@ bool EditorCommit::validateSelectedDatasetAlias(const QString& newAlias)
     if (allDigits)
       Core::Prompt::showMessageBox(
         tr("Alias \"%1\" contains only digits").arg(candidate),
-        tr("Scripts must quote it as a string, e.g. getDataset(\"%1\"); a numeric argument is "
-           "read as a uniqueId, not this alias.")
+        tr("Scripts must pass it in quotes, for example getDataset(\"%1\"). Without quotes, the "
+           "number is read as a dataset ID instead of this alias.")
           .arg(candidate),
         Core::Prompt::Information,
         tr("Numeric Alias"));

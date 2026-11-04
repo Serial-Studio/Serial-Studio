@@ -296,8 +296,8 @@ Item {
       Layout.maximumWidth: root.width - 64
       horizontalAlignment: Label.AlignHCenter
       font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
-      text: qsTr("We'll update Serial Studio to work with this operating " +
-                 "system as soon as Qt officially supports it")
+      text: qsTr("Bluetooth LE is not supported on this operating system yet. Support will come "
+                 + "in a future update.")
     }
   }
 }

@@ -406,8 +406,9 @@ Widgets.SmartDialog {
           Layout.preferredWidth: root.labelColumn + root.controlColumn
           color: Cpp_ThemeManager.colors["text"]
           font: Cpp_Misc_CommonFonts.customUiFont(0.8)
-          text: qsTr("Leave timebase empty to use the plot's time range; lower it to zoom in "
-                     + "on a fast signal. Holdoff ignores new triggers for a moment after each.")
+          text: qsTr("Leave Timebase empty to use the plot's time range, or lower it to zoom in "
+                     + "on a fast signal. Holdoff waits a moment after each trigger before "
+                     + "another one can fire.")
         }
       }
     }

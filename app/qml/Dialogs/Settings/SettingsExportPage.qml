@@ -133,9 +133,9 @@ Item {
       wrapMode: Text.WordWrap
       color: Cpp_ThemeManager.colors["text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
-      text: qsTr("0 writes one row per received frame. A positive value logs one "
-                 + "snapshot row of every channel at that interval, which keeps file "
-                 + "size bounded for multi-source or high-rate projects.")
+      text: qsTr("Set to 0 to write a row for every frame received. Any other value writes one "
+                 + "row with every channel at that interval, which keeps files small for fast or "
+                 + "multi-device projects.")
     }
 
     Item {

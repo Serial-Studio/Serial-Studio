@@ -949,8 +949,8 @@ Item {
 
       ToolTip.delay: 700
       ToolTip.visible: _thinningHover.hovered
-      ToolTip.text: qsTr("Data is arriving faster than scripts can process it; some frames " +
-                         "are being thinned. See the problem center for details.")
+      ToolTip.text: qsTr("Data is arriving faster than the scripts can process it, so some frames "
+                         + "are being skipped. See the Problem Center for details.")
 
       HoverHandler {
         id: _thinningHover

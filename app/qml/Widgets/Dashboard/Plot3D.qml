@@ -365,8 +365,8 @@ Item {
       width: Math.min(parent.width - 32, 320)
       color: Cpp_ThemeManager.colors["widget_text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.9)
-      text: qsTr("Not available over a remote attach. This widget needs the remote's raw sample "
-               + "stream, which the dashboard mirror does not carry.")
+      text: qsTr("Not available on a Remote Dashboard. This widget needs every raw sample, and a "
+                 + "Remote Dashboard receives only the displayed values.")
     }
   }
 }
