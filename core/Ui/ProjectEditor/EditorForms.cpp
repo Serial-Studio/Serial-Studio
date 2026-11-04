@@ -44,6 +44,7 @@
 #include "DataModel/WidgetResolution.h"
 #include "IO/ConnectionManager.h"
 #include "ProjectEditor/EditorForms/OutputStateRows.h"
+#include "ProjectEditor/EditorForms/OutputValueRows.h"
 #include "ProjectEditor/Editors/DatasetTransformEditor.h"
 #include "ProjectEditor/ProjectEditor.h"
 #include "ProjectEditor/ProjectEditorIcons.h"
@@ -1401,50 +1402,11 @@ void EditorForms::buildOutputWidgetTransmitRow(const DataModel::OutputWidget& wi
 }
 
 /**
- * @brief Appends min/max/step rows for slider and knob output widgets.
+ * @brief Appends the Value Range rows (Input kind, Min, Max, Step, Decimals, Units, Quantize).
  */
 void EditorForms::buildOutputWidgetValueRows(const DataModel::OutputWidget& widget)
 {
-  const bool isNumeric = widget.type == DataModel::OutputWidgetType::Slider
-                      || widget.type == DataModel::OutputWidgetType::Knob;
-  if (!isNumeric)
-    return;
-
-  auto& registry = Core::services().iconRegistry;
-  auto* rangeHdr = new QStandardItem();
-  rangeHdr->setData(true, Active);
-  rangeHdr->setData(SectionHeader, WidgetType);
-  rangeHdr->setData(tr("Value Range"), PlaceholderValue);
-  rangeHdr->setData(registry.icon(QStringLiteral("editor"), QStringLiteral("output-range"), 16),
-                    ParameterIcon);
-  m_editor.m_outputWidgetModel->appendRow(rangeHdr);
-
-  auto* minItem = new QStandardItem();
-  minItem->setEditable(true);
-  minItem->setData(true, Active);
-  minItem->setData(FloatField, WidgetType);
-  minItem->setData(widget.minValue, EditableValue);
-  minItem->setData(kOutputWidget_MinValue, ParameterType);
-  minItem->setData(tr("Minimum Value"), ParameterName);
-  m_editor.m_outputWidgetModel->appendRow(minItem);
-
-  auto* maxItem = new QStandardItem();
-  maxItem->setEditable(true);
-  maxItem->setData(true, Active);
-  maxItem->setData(FloatField, WidgetType);
-  maxItem->setData(widget.maxValue, EditableValue);
-  maxItem->setData(kOutputWidget_MaxValue, ParameterType);
-  maxItem->setData(tr("Maximum Value"), ParameterName);
-  m_editor.m_outputWidgetModel->appendRow(maxItem);
-
-  auto* stepItem = new QStandardItem();
-  stepItem->setEditable(true);
-  stepItem->setData(true, Active);
-  stepItem->setData(FloatField, WidgetType);
-  stepItem->setData(widget.stepSize, EditableValue);
-  stepItem->setData(kOutputWidget_StepSize, ParameterType);
-  stepItem->setData(tr("Step Size"), ParameterName);
-  m_editor.m_outputWidgetModel->appendRow(stepItem);
+  appendOutputValueRows(m_editor.m_outputWidgetModel, widget);
 }
 
 /**

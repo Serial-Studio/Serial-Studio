@@ -177,6 +177,12 @@ inline constexpr KeyView OutputStateVariable("stateVariable");
 inline constexpr KeyView OutputStateOnValue("stateOnValue");
 inline constexpr KeyView OutputStateConfirmMs("stateConfirmMs");
 
+// Output widget write limits (spec 0109): absent means a Text field with automatic decimals
+inline constexpr KeyView OutputInputKind("inputKind");
+inline constexpr KeyView OutputDecimals("outputDecimals");
+inline constexpr KeyView OutputUnits("outputUnits");
+inline constexpr KeyView OutputQuantize("quantizeToStep");
+
 // Group keys
 inline constexpr KeyView GroupId("groupId");
 inline constexpr KeyView GroupType("groupType");

@@ -28,6 +28,7 @@ class DeviceSimulator:
         host: str = "127.0.0.1",
         port: int = 9000,
         protocol: str = "tcp",
+        capture: bool = False,
     ):
         """
         Initialize device simulator.
@@ -36,6 +37,9 @@ class DeviceSimulator:
             host: Host to bind to (127.0.0.1 for localhost)
             port: Port to listen on
             protocol: "tcp" or "udp"
+            capture: Keep the bytes the app writes to the TCP client (read them
+                with received()). Off by default: the watcher then only peeks,
+                which every existing test relies on.
         """
         self.host = host
         self.port = port
@@ -46,6 +50,9 @@ class DeviceSimulator:
         self._running = False
         self._client_socket: Optional[socket.socket] = None
         self._client_lock = threading.Lock()
+        self._capture = capture
+        self._received = bytearray()
+        self._received_lock = threading.Lock()
 
     def start(self) -> None:
         """Start the simulator server."""
@@ -163,11 +170,19 @@ class DeviceSimulator:
                     if not readable:
                         continue
                     try:
-                        data = client.recv(1, socket.MSG_PEEK)
+                        if self._capture:
+                            data = client.recv(4096)
+                            if data:
+                                with self._received_lock:
+                                    self._received.extend(data)
+                        else:
+                            data = client.recv(1, socket.MSG_PEEK)
                         if not data:
                             break
                     except Exception:
                         break
+                    if self._capture:
+                        continue
                     # The app wrote back (deviceWrite/ACK); we never consume, so
                     # the socket stays readable forever. Sleep instead of spinning
                     # a full core -- the GIL contention is what widens the probe
@@ -180,6 +195,16 @@ class DeviceSimulator:
 
         t = threading.Thread(target=_watch, daemon=True)
         t.start()
+
+    def received(self) -> bytes:
+        """Bytes the app wrote to the client since start or the last clear (capture=True)."""
+        with self._received_lock:
+            return bytes(self._received)
+
+    def clear_received(self) -> None:
+        """Forget the captured bytes."""
+        with self._received_lock:
+            self._received.clear()
 
     def send_frame(self, frame: bytes) -> None:
         """

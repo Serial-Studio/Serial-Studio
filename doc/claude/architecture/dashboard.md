@@ -585,6 +585,11 @@ injected into the engine. Gated on a valid commercial token (`isValid()` +
 `SS_LICENSE_GUARD()`; the 2026-07 tier removal made trial = Pro, enum now
 `None=0, Trial=2, Pro=3, Enterprise=4`, display-only).
 
+Write limits (spec 0109): a numeric control's Min to Max is admitted ONCE, in `Base::sendValue`
+after the license gates, through the pure `DataModel::admitOutputValue`; a refusal sets
+`rangeMessage` and runs no script. A per-control clamp is a defect (the slider's geometry clamp
+excepted), because a new control kind inherits the check by calling `sendValue`.
+
 ## Dashboard Freeze Mode (Pro) — spec 0007
 
 One stored flag, one derived flag, one input gate — keep the three roles separate:

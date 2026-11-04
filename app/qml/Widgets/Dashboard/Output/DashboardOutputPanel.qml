@@ -60,6 +60,8 @@ Item {
       delegate: Rectangle {
         id: cell
 
+        objectName: owData ? "dashboard.output." + owData.groupId + "." + owData.widgetId : ""
+
         property var geo: root.model ? root.model.geometry[index] : null
 
         x: geo ? geo.x : 0
@@ -170,6 +172,7 @@ Item {
             model: cell.owModel
             widget: cell.owData
             color: cell.accentColor
+            idPrefix: cell.objectName
           }
         }
 
@@ -190,6 +193,7 @@ Item {
             model: cell.owModel
             widget: cell.owData
             color: cell.accentColor
+            idPrefix: cell.objectName
           }
         }
 
@@ -200,6 +204,7 @@ Item {
             model: cell.owModel
             widget: cell.owData
             color: cell.accentColor
+            idPrefix: cell.objectName
           }
         }
 

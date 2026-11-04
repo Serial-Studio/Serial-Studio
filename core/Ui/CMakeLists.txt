@@ -314,6 +314,7 @@ target_sources(
   ProjectEditor/EditorTree.cpp
   ProjectEditor/EditorForms.cpp
   ProjectEditor/EditorForms/OutputStateRows.cpp
+  ProjectEditor/EditorForms/OutputValueRows.cpp
   ProjectEditor/EditorCommit.cpp
   ProjectEditor/EditorSummaries.cpp
   ProjectEditor/EditorMultiSelect.cpp
@@ -339,6 +340,7 @@ target_sources(
   ProjectEditor/EditorTree.h
   ProjectEditor/EditorForms.h
   ProjectEditor/EditorForms/OutputStateRows.h
+  ProjectEditor/EditorForms/OutputValueRows.h
   ProjectEditor/EditorCommit.h
   ProjectEditor/EditorSummaries.h
   ProjectEditor/EditorMultiSelect.h

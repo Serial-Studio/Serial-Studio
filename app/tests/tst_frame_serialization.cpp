@@ -61,6 +61,7 @@ private slots:
 
   void outputWidgetRoundTripsEveryField();
   void outputWidgetWithoutATitleIsRejected();
+  void outputWidgetDefaultsOmitTheWriteLimitKeys();
   void outputWidgetIdentityIsAssignedByTheGroupReader();
 
   void sourceRoundTripsEveryField();
@@ -395,9 +396,17 @@ void TstFrameSerialization::outputWidgetRoundTripsEveryField()
   w.onLabel          = QStringLiteral("Open");
   w.offLabel         = QStringLiteral("Closed");
   w.transmitFunction = QStringLiteral("return String(value)");
+  w.inputKind        = OutputInputKind::Number;
+  w.decimals         = 3;
+  w.units            = QStringLiteral("rpm");
+  w.quantize         = true;
 
   const auto restored = fromJson<OutputWidget>(toJson(w));
   QVERIFY(restored.has_value());
+  QCOMPARE(restored->inputKind, OutputInputKind::Number);
+  QCOMPARE(restored->decimals, 3);
+  QCOMPARE(restored->units, QStringLiteral("rpm"));
+  QVERIFY(restored->quantize);
   QCOMPARE(restored->sourceId, w.sourceId);
   QCOMPARE(restored->txEncoding, w.txEncoding);
   QCOMPARE(restored->type, w.type);
@@ -414,6 +423,29 @@ void TstFrameSerialization::outputWidgetRoundTripsEveryField()
   QCOMPARE(restored->onLabel, w.onLabel);
   QCOMPARE(restored->offLabel, w.offLabel);
   QCOMPARE(restored->transmitFunction, w.transmitFunction);
+}
+
+/**
+ * @brief A widget left at the write-limit defaults serialises none of the four keys, so a project
+ *        saved before spec 0109 reads back and saves byte-identical.
+ */
+void TstFrameSerialization::outputWidgetDefaultsOmitTheWriteLimitKeys()
+{
+  OutputWidget w;
+  w.title = QStringLiteral("Throttle");
+
+  const QJsonObject json = toJson(w);
+  QVERIFY(!json.contains(Keys::OutputInputKind));
+  QVERIFY(!json.contains(Keys::OutputDecimals));
+  QVERIFY(!json.contains(Keys::OutputUnits));
+  QVERIFY(!json.contains(Keys::OutputQuantize));
+
+  const auto restored = fromJson<OutputWidget>(json);
+  QVERIFY(restored.has_value());
+  QCOMPARE(restored->inputKind, OutputInputKind::Text);
+  QCOMPARE(restored->decimals, -1);
+  QVERIFY(restored->units.isEmpty());
+  QVERIFY(!restored->quantize);
 }
 
 void TstFrameSerialization::outputWidgetWithoutATitleIsRejected()

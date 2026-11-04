@@ -178,6 +178,15 @@ enum class OutputStateSource : quint8 {
 };
 
 /**
+ * @brief How a text field reads what the operator typed (spec 0109). Text hands the string to the
+ *        transmit script untouched; Number parses it and enforces Min to Max first.
+ */
+enum class OutputInputKind : quint8 {
+  Text   = 0,
+  Number = 1,
+};
+
+/**
  * @brief Represents an interactive output widget that sends data to the device.
  */
 struct alignas(8) OutputWidget {
@@ -206,6 +215,11 @@ struct alignas(8) OutputWidget {
   QString stateTable;                    ///< Data table holding the state variable
   QString stateVariable;                 ///< Variable within stateTable
   QString stateOnValue;                  ///< Empty -> any non-zero value means on
+
+  OutputInputKind inputKind = OutputInputKind::Text;  ///< Text field: Text or Number (spec 0109)
+  int decimals              = -1;  ///< Displayed decimals, -1 = automatic from Step
+  QString units;                   ///< Suffix shown beside the value, e.g. "%"
+  bool quantize = false;           ///< Number field: snap a typed value to Step from Min
 };
 
 static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned OutputWidget struct");
@@ -213,55 +227,7 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
 /**
  * @brief Serializes an OutputWidget to a QJsonObject.
  */
-[[nodiscard]] inline QJsonObject serialize(const OutputWidget& w)
-{
-  QJsonObject obj;
-  obj.insert(Keys::Icon, w.icon);
-  obj.insert(Keys::Title, w.title);
-  obj.insert(Keys::SourceId, w.sourceId);
-  obj.insert(Keys::OutputType, static_cast<int>(w.type));
-  obj.insert(Keys::OutputMinValue, w.minValue);
-  obj.insert(Keys::OutputMaxValue, w.maxValue);
-  obj.insert(Keys::OutputStepSize, w.stepSize);
-  obj.insert(Keys::OutputInitialValue, w.initialValue);
-  if (!w.onLabel.isEmpty())
-    obj.insert(Keys::OutputOnLabel, w.onLabel);
-
-  if (!w.offLabel.isEmpty())
-    obj.insert(Keys::OutputOffLabel, w.offLabel);
-
-  if (w.monoIcon)
-    obj.insert(Keys::OutputMonoIcon, true);
-
-  if (w.checkable)
-    obj.insert(Keys::OutputCheckable, true);
-
-  if (!w.color.isEmpty())
-    obj.insert(Keys::OutputColor, w.color);
-
-  if (w.size != OutputWidgetSize::Normal)
-    obj.insert(Keys::OutputSize, static_cast<int>(w.size));
-
-  obj.insert(Keys::TransmitFunction, w.transmitFunction);
-  obj.insert(Keys::OutputTxEncoding, w.txEncoding);
-
-  if (w.stateSource != OutputStateSource::None) {
-    obj.insert(Keys::OutputStateSource, static_cast<int>(w.stateSource));
-    obj.insert(Keys::OutputStateConfirmMs, w.stateConfirmMs);
-    if (!w.stateOnValue.isEmpty())
-      obj.insert(Keys::OutputStateOnValue, w.stateOnValue);
-
-    if (w.stateSource == OutputStateSource::Dataset)
-      obj.insert(Keys::OutputStateDatasetId, w.stateDatasetId);
-
-    else {
-      obj.insert(Keys::OutputStateTable, w.stateTable);
-      obj.insert(Keys::OutputStateVariable, w.stateVariable);
-    }
-  }
-
-  return obj;
-}
+[[nodiscard]] QJsonObject serialize(const OutputWidget& w);
 
 /**
  * @brief Deserializes an OutputWidget from a QJsonObject (Frame.cpp: uses SerialStudio::toDouble).
@@ -275,6 +241,30 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
  *        a negative source id or an inverted min/max reached the widgets through the other.
  */
 void normalize(OutputWidget& w);
+
+/**
+ * @brief Verdict of admitOutputValue (spec 0109).
+ */
+enum class OutputAdmission : quint8 {
+  Accepted   = 0,
+  NotANumber = 1,
+  OutOfRange = 2,
+};
+
+/**
+ * @brief True when the control carries a numeric value bounded by Min to Max: a slider, a knob or
+ *        a text field whose input kind is Number.
+ */
+[[nodiscard]] bool outputIsNumeric(const OutputWidget& w);
+
+/**
+ * @brief Pure admission rule for a numeric control: parses @p value, rejects a non-finite one,
+ *        quantizes to Step from Min when enabled, then checks Min to Max. @p out receives the
+ *        admitted double on Accepted.
+ */
+[[nodiscard]] OutputAdmission admitOutputValue(const OutputWidget& w,
+                                               const QVariant& value,
+                                               double& out);
 
 /**
  * @brief Severity tier for an alarm band; drives default colour and notification policy.

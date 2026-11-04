@@ -1388,6 +1388,19 @@ void EditorCommit::applyOutputWidgetField(QStandardItem* item, DataModel::Output
     case kOutputWidget_InitialValue:
       widget.initialValue = SerialStudio::toDouble(value);
       break;
+    case kOutputWidget_InputKind:
+      widget.inputKind = static_cast<DataModel::OutputInputKind>(
+        qBound(0, value.toInt(), static_cast<int>(DataModel::OutputInputKind::Number)));
+      break;
+    case kOutputWidget_Decimals:
+      widget.decimals = qBound(-1, value.toInt(), 9);
+      break;
+    case kOutputWidget_Units:
+      widget.units = value.toString().simplified();
+      break;
+    case kOutputWidget_Quantize:
+      widget.quantize = value.toBool();
+      break;
     case kOutputWidget_TransmitFunction:
       widget.transmitFunction = value.toString();
       break;
@@ -1417,7 +1430,8 @@ void EditorCommit::onOutputWidgetItemChanged(QStandardItem* item)
     }
   } else {
     applyOutputWidgetField(item, m_editor.m_selectedOutputWidget);
-    if (param == kOutputWidget_Checkable || param == kOutputWidget_StateSource)
+    if (param == kOutputWidget_Checkable || param == kOutputWidget_StateSource
+        || param == kOutputWidget_InputKind)
       m_editor.m_forms.buildOutputWidgetModel(m_editor.m_selectedOutputWidget);
   }
 

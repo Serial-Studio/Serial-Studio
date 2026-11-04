@@ -303,6 +303,58 @@ void DataModel::normalize(OutputWidget& w)
   w.stateSource  = static_cast<OutputStateSource>(
     qBound(0, static_cast<int>(w.stateSource), static_cast<int>(OutputStateSource::Table)));
   w.stateConfirmMs = qBound(0, w.stateConfirmMs, kMaxOutputStateConfirmMs);
+  w.inputKind      = static_cast<OutputInputKind>(
+    qBound(0, static_cast<int>(w.inputKind), static_cast<int>(OutputInputKind::Number)));
+  w.decimals = qBound(-1, w.decimals, 9);
+  w.units    = w.units.simplified();
+}
+
+/**
+ * @brief True when the control carries a number bounded by Min to Max (spec 0109): a slider, a
+ *        knob, or a text field whose input kind is Number.
+ */
+bool DataModel::outputIsNumeric(const OutputWidget& w)
+{
+  if (w.type == OutputWidgetType::Slider || w.type == OutputWidgetType::Knob)
+    return true;
+
+  return w.type == OutputWidgetType::TextField && w.inputKind == OutputInputKind::Number;
+}
+
+/**
+ * @brief The one admission rule every numeric control's value passes before its transmit script
+ *        (spec 0109 R3): a number is taken as is and text is parsed; a non-finite result is not a
+ *        number; Quantize snaps to Step counted from Min; anything outside Min to Max is refused.
+ */
+DataModel::OutputAdmission DataModel::admitOutputValue(const OutputWidget& w,
+                                                       const QVariant& value,
+                                                       double& out)
+{
+  SS_ASSERT_LOG(w.minValue <= w.maxValue);
+  SS_ASSERT_LOG(std::isfinite(w.minValue) && std::isfinite(w.maxValue));
+
+  bool ok           = false;
+  const auto typeId = value.metaType().id();
+  double v          = 0;
+  if (typeId == QMetaType::QString)
+    v = SerialStudio::toDouble(value.toString().trimmed(), &ok);
+  else if (typeId != QMetaType::Bool)
+    v = SerialStudio::toDouble(value, &ok);
+
+  if (!ok || !std::isfinite(v))
+    return OutputAdmission::NotANumber;
+
+  if (w.quantize && w.stepSize > 0) {
+    v = w.minValue + std::round((v - w.minValue) / w.stepSize) * w.stepSize;
+    if (v > w.maxValue && v - w.maxValue <= w.stepSize * 1e-9)
+      v = w.maxValue;
+  }
+
+  if (v < w.minValue || v > w.maxValue)
+    return OutputAdmission::OutOfRange;
+
+  out = v;
+  return OutputAdmission::Accepted;
 }
 
 /**
@@ -336,9 +388,78 @@ bool DataModel::read(OutputWidget& w, const QJsonObject& obj)
   w.stateVariable  = ss_jsr(obj, Keys::OutputStateVariable, "").toString().simplified();
   w.stateOnValue   = ss_jsr(obj, Keys::OutputStateOnValue, "").toString();
   w.stateConfirmMs = ss_jsr(obj, Keys::OutputStateConfirmMs, 3000).toInt();
+  w.inputKind      = static_cast<OutputInputKind>(ss_jsr(obj, Keys::OutputInputKind, 0).toInt());
+  w.decimals       = ss_jsr(obj, Keys::OutputDecimals, -1).toInt();
+  w.units          = ss_jsr(obj, Keys::OutputUnits, "").toString();
+  w.quantize       = ss_jsr(obj, Keys::OutputQuantize, false).toBool();
 
   normalize(w);
   return !w.title.isEmpty();
+}
+
+/**
+ * @brief Serializes an OutputWidget to a QJsonObject.
+ */
+QJsonObject DataModel::serialize(const OutputWidget& w)
+{
+  QJsonObject obj;
+  obj.insert(Keys::Icon, w.icon);
+  obj.insert(Keys::Title, w.title);
+  obj.insert(Keys::SourceId, w.sourceId);
+  obj.insert(Keys::OutputType, static_cast<int>(w.type));
+  obj.insert(Keys::OutputMinValue, w.minValue);
+  obj.insert(Keys::OutputMaxValue, w.maxValue);
+  obj.insert(Keys::OutputStepSize, w.stepSize);
+  obj.insert(Keys::OutputInitialValue, w.initialValue);
+  if (!w.onLabel.isEmpty())
+    obj.insert(Keys::OutputOnLabel, w.onLabel);
+
+  if (!w.offLabel.isEmpty())
+    obj.insert(Keys::OutputOffLabel, w.offLabel);
+
+  if (w.monoIcon)
+    obj.insert(Keys::OutputMonoIcon, true);
+
+  if (w.checkable)
+    obj.insert(Keys::OutputCheckable, true);
+
+  if (!w.color.isEmpty())
+    obj.insert(Keys::OutputColor, w.color);
+
+  if (w.size != OutputWidgetSize::Normal)
+    obj.insert(Keys::OutputSize, static_cast<int>(w.size));
+
+  obj.insert(Keys::TransmitFunction, w.transmitFunction);
+  obj.insert(Keys::OutputTxEncoding, w.txEncoding);
+
+  if (w.stateSource != OutputStateSource::None) {
+    obj.insert(Keys::OutputStateSource, static_cast<int>(w.stateSource));
+    obj.insert(Keys::OutputStateConfirmMs, w.stateConfirmMs);
+    if (!w.stateOnValue.isEmpty())
+      obj.insert(Keys::OutputStateOnValue, w.stateOnValue);
+
+    if (w.stateSource == OutputStateSource::Dataset)
+      obj.insert(Keys::OutputStateDatasetId, w.stateDatasetId);
+
+    else {
+      obj.insert(Keys::OutputStateTable, w.stateTable);
+      obj.insert(Keys::OutputStateVariable, w.stateVariable);
+    }
+  }
+
+  if (w.inputKind != OutputInputKind::Text)
+    obj.insert(Keys::OutputInputKind, static_cast<int>(w.inputKind));
+
+  if (w.decimals >= 0)
+    obj.insert(Keys::OutputDecimals, w.decimals);
+
+  if (!w.units.isEmpty())
+    obj.insert(Keys::OutputUnits, w.units);
+
+  if (w.quantize)
+    obj.insert(Keys::OutputQuantize, true);
+
+  return obj;
 }
 
 /**

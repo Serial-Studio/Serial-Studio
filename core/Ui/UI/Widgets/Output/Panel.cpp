@@ -17,7 +17,6 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/PipelineModules.h"
 #include "IO/ConnectionManager.h"
-#include "Misc/IconEngine.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/Output/Button.h"
 #include "UI/Widgets/Output/PanelLayout.h"
@@ -85,22 +84,7 @@ Widgets::Output::Panel::Panel(int index, QQuickItem* parent)
   m_outputWidgets = group.outputWidgets;
 
   for (const auto& ow : m_outputWidgets) {
-    QVariantMap map;
-    map[QStringLiteral("icon")] =
-      ow.icon.isEmpty() ? QString() : Misc::IconEngine::resolveActionIconSource(ow.icon);
-    map[QStringLiteral("title")]        = ow.title;
-    map[QStringLiteral("type")]         = static_cast<int>(ow.type);
-    map[QStringLiteral("minValue")]     = ow.minValue;
-    map[QStringLiteral("maxValue")]     = ow.maxValue;
-    map[QStringLiteral("stepSize")]     = ow.stepSize;
-    map[QStringLiteral("initialValue")] = ow.initialValue;
-    map[QStringLiteral("monoIcon")]     = ow.monoIcon;
-    map[QStringLiteral("checkable")]    = ow.checkable;
-    map[QStringLiteral("color")]        = ow.color;
-    map[QStringLiteral("sizeScale")]    = DataModel::outputSizeScale(ow.size);
-    map[QStringLiteral("onLabel")]      = ow.onLabel;
-    map[QStringLiteral("offLabel")]     = ow.offLabel;
-    m_widgets.append(map);
+    m_widgets.append(Base::presentation(ow));
 
     const auto target = liveTransmitTarget(ow.sourceId);
 

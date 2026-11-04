@@ -91,7 +91,11 @@ void API::Handlers::ProjectOutputWidgetCommands::registerCommands()
                    "checkable, color, size, on/offLabel, min/max/step/initialValue, "
                    "transmitFunction, and the state binding (stateSource with its "
                    "stateDatasetId or stateTable/stateVariable, stateOnValue, "
-                   "stateConfirmMs) when one is set. Use BEFORE "
+                   "stateConfirmMs) when one is set. Also returns inputKind "
+                   "(0=text, 1=number; a text field only), decimals (-1 = automatic), "
+                   "units and quantize: a slider, a knob and a number field refuse a "
+                   "value outside minValue to maxValue as out of range, so read these "
+                   "before driving a control. Use BEFORE "
                    "rewriting the transmitFunction so you preserve the user's "
                    "current ranges and labels."),
     makeSchema({
@@ -256,6 +260,10 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetGet
   result[QStringLiteral("maxValue")]         = w.maxValue;
   result[QStringLiteral("stepSize")]         = w.stepSize;
   result[QStringLiteral("initialValue")]     = w.initialValue;
+  result[Keys::OutputInputKind]              = static_cast<int>(w.inputKind);
+  result[QStringLiteral("decimals")]         = w.decimals;
+  result[QStringLiteral("units")]            = w.units;
+  result[QStringLiteral("quantize")]         = w.quantize;
   result[Keys::SourceId]                     = w.sourceId;
   result[QStringLiteral("txEncoding")]       = w.txEncoding;
   result[QStringLiteral("transmitFunction")] = w.transmitFunction;

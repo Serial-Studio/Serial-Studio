@@ -61,12 +61,14 @@ Sends a numeric value from a draggable slider.
 
 | Property | Default | Description |
 |----------|---------|-------------|
-| Min Value | 0 | Lower bound of the slider range |
-| Max Value | 100 | Upper bound of the slider range |
-| Step Size | 1 | Increment between discrete positions |
+| Min | 0 | Lower bound of the slider range |
+| Max | 100 | Upper bound of the slider range |
+| Step | 1 | Increment between discrete positions |
+| Decimals | Automatic | Decimals shown for the value; automatic shows two when Step is below 1, otherwise none |
+| Units | (empty) | Suffix shown after the value, such as `%` or `rpm` |
 | Initial Value | 0 | Starting position |
 
-The value passed to `transmit()` is a number clamped to [Min, Max]. Transmissions occur continuously while dragging, rate-limited to 50 ms intervals.
+The value passed to `transmit()` is a number inside [Min, Max]. Transmissions occur continuously while dragging, rate-limited to 50 ms intervals. With the slider focused, the arrow keys and the mouse wheel move it by one Step, or ten with Shift held; see [Limits](#limits).
 
 ### Toggle
 
@@ -80,17 +82,41 @@ Passes `1` to `transmit()` when switched on, `0` when switched off.
 
 ### Text Field
 
-Accepts arbitrary typed input and sends it as a string.
+Accepts typed input and sends it. The **Input** property selects how the typed text is read.
 
-| Property | Value |
-|----------|-------|
-| Value passed to `transmit()` | The typed string |
-| Interaction | Press Enter or click Send |
-| Use cases | AT commands, debug console, custom queries |
+| Property | Text | Number |
+|----------|------|--------|
+| Value passed to `transmit()` | The typed string | The typed number |
+| Interaction | Press Enter or click Send | Press Enter or click Send |
+| Range | None | Min to Max, checked before `transmit()` runs |
+| Use cases | AT commands, debug console, custom queries | Setpoints, duty cycles, servo angles |
+
+A Number field adds the same numeric properties as a slider:
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| Min | 0 | Lowest value the field accepts |
+| Max | 100 | Highest value the field accepts |
+| Step | 1 | Increment for the arrow keys and the mouse wheel |
+| Decimals | Automatic | Decimals shown when the field displays a value |
+| Units | (empty) | Suffix shown beside the field |
+| Quantize to Step | off | Snap a typed value to the nearest Step, counted from Min, before the range check |
+
+A value outside Min to Max, or text that is not a number, is out of range: nothing is transmitted, the field keeps what was typed, and a message under the field names the allowed range. The message clears on the next accepted value. After a send the field shows the value that was accepted.
+
+With the field focused, Up and Down edit its text by one Step (ten with Shift) and the mouse wheel does the same; Enter then sends. A Text field is unchanged by any of this and still clears after sending.
 
 ### Knob
 
-Rotary dial for continuous setpoint adjustment. Same numeric properties as Slider (Min, Max, Step, Initial Value) but displayed as a circular dial.
+Rotary dial for continuous setpoint adjustment. Same numeric properties as Slider (Min, Max, Step, Decimals, Units, Initial Value) but displayed as a circular dial.
+
+## Limits
+
+Min and Max are enforced by the control, before the transmit function runs. A slider, a knob and a Number text field never hand `transmit()` a value outside that range, whether it came from the pointer, the keyboard or an API client driving the dashboard, so the function needs no range check of its own. The slider and knob cannot be moved past either end; a Number field refuses the value and says so.
+
+Step also moves a control from the keyboard. With a slider, knob or Number field focused, the arrow keys and the mouse wheel move the value by one Step, or by ten with Shift held. The wheel acts only on the focused control, so scrolling a panel never moves a setpoint.
+
+The limits are part of the project, and `project.outputWidget.get` reports them (`inputKind`, `minValue`, `maxValue`, `stepSize`, `units`) so a remote client knows the range before it drives a control. The console and the API's raw write are not controls and stay unrestricted. The limits guard against a typing mistake; they do not check what the device accepts.
 
 ## Creating Output Controls
 
@@ -120,8 +146,8 @@ function transmit(value) {
   // value is:
   //   1           for Button clicks
   //   0 or 1      for Toggle state changes and latching Buttons
-  //   number       for Slider and Knob
-  //   "string"    for TextField input
+  //   number       for Slider, Knob and a Number TextField
+  //   "string"    for a Text TextField
 
   return "CMD " + value + "\r\n";
 }
@@ -186,27 +212,24 @@ function transmit(value) {
 
 #### PWM Control
 
-Sends a duty cycle value (0-255) for motor speed, LED brightness, or heater control.
+Sends a duty cycle value (0-255) for motor speed, LED brightness, or heater control. Set the control's Max to 255; the control holds the range.
 
 ```javascript
 var CHANNEL = 0;
 
 function transmit(value) {
-  var duty = Math.round(Math.max(0, Math.min(255, value)));
+  var duty = Math.round(value);
   return "PWM " + CHANNEL + " " + duty + "\r\n";
 }
 ```
 
 #### PID Setpoint
 
-Sends a floating-point setpoint with 2 decimal places for PID controllers.
+Sends a floating-point setpoint with 2 decimal places for PID controllers. The control's Min and Max hold the range.
 
 ```javascript
-var SP_MIN = 0.0;
-var SP_MAX = 100.0;
-
 function transmit(value) {
-  var sp = Math.max(SP_MIN, Math.min(SP_MAX, Number(value)));
+  var sp = Number(value);
   return "SP " + sp.toFixed(2) + "\r\n";
 }
 ```

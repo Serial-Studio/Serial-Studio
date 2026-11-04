@@ -12,7 +12,6 @@
 #include <utility>
 
 #include "Core/SSAssert.h"
-#include "Misc/IconEngine.h"
 #include "UI/Widgets/Output/Button.h"
 #include "UI/Widgets/Output/Slider.h"
 #include "UI/Widgets/Output/TextField.h"
@@ -214,21 +213,7 @@ void Widgets::Output::Preview::rebuildModel()
   if (replaced)
     replaced->deleteLater();
 
-  m_widget = QVariantMap();
-  m_widget[QStringLiteral("icon")] =
-    m_config.icon.isEmpty() ? QString() : Misc::IconEngine::resolveActionIconSource(m_config.icon);
-  m_widget[QStringLiteral("title")]        = m_config.title;
-  m_widget[QStringLiteral("type")]         = static_cast<int>(m_config.type);
-  m_widget[QStringLiteral("minValue")]     = m_config.minValue;
-  m_widget[QStringLiteral("maxValue")]     = m_config.maxValue;
-  m_widget[QStringLiteral("stepSize")]     = m_config.stepSize;
-  m_widget[QStringLiteral("initialValue")] = m_config.initialValue;
-  m_widget[QStringLiteral("monoIcon")]     = m_config.monoIcon;
-  m_widget[QStringLiteral("checkable")]    = m_config.checkable;
-  m_widget[QStringLiteral("color")]        = m_config.color;
-  m_widget[QStringLiteral("sizeScale")]    = DataModel::outputSizeScale(m_config.size);
-  m_widget[QStringLiteral("onLabel")]      = m_config.onLabel;
-  m_widget[QStringLiteral("offLabel")]     = m_config.offLabel;
+  m_widget = Base::presentation(m_config);
 
   Q_EMIT previewChanged();
 }

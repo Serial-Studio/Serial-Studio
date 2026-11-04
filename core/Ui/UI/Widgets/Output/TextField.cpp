@@ -31,11 +31,13 @@ Widgets::Output::TextField::TextField(const DataModel::OutputWidget& config,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Called from QML when the user presses Enter or clicks Send.
+ * @brief Called from QML when the user presses Enter or clicks Send. Returns false when the control
+ *        refused the value as out of range, so QML keeps the typed text for correction.
  */
-void Widgets::Output::TextField::sendText(const QString& text)
+bool Widgets::Output::TextField::sendText(const QString& text)
 {
   sendValue(text);
+  return rangeMessage().isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------

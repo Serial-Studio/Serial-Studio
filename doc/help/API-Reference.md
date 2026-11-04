@@ -3522,13 +3522,19 @@ Read the configuration of an output widget by id. Use this before rewriting
   "maxValue": 100,
   "stepSize": 1,
   "initialValue": 0,
+  "inputKind": 0,
+  "decimals": -1,
+  "units": "",
+  "quantize": false,
   "sourceId": 0,
   "txEncoding": 0,
   "transmitFunction": "function transmit(value) { return value ? [0x01] : [0x00]; }",
   "stateSource": 0
 }
 ```
-A widget bound to feedback also reports `stateConfirmMs`, `stateOnValue`, and
+`inputKind` is 0 for a Text field and 1 for a Number field; `decimals` is -1 for automatic.
+A slider, a knob and a Number field refuse a value outside `minValue` to `maxValue` as out of
+range before `transmit(value)` runs. A widget bound to feedback also reports `stateConfirmMs`, `stateOnValue`, and
 either `stateDatasetId` (`stateSource` 1) or `stateTable` and `stateVariable`
 (`stateSource` 2).
 
@@ -3561,6 +3567,12 @@ Patch any subset of output-widget fields by id.
 - `maxValue` (double, optional): Maximum allowed value
 - `stepSize` (double, optional): Value increment step
 - `initialValue` (double, optional): Initial widget value
+- `inputKind` (int, optional): Text field input, 0 = text, 1 = number. A
+  Number field enforces `minValue` to `maxValue` before `transmit(value)`
+- `decimals` (int, optional): Decimals shown for the value, -1 = automatic
+- `units` (string, optional): Suffix shown beside the value
+- `quantize` (bool, optional): Number field only: snap a typed value to
+  `stepSize`, counted from `minValue`, before the range check
 - `stateSource` (int, optional): Where the control reads the state it
   displays (0 = none, 1 = a dataset, 2 = a variable)
 - `stateDatasetId` (int, optional): Unique id of the dataset driving the

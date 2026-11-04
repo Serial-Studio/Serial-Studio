@@ -2485,6 +2485,16 @@ ss_add_unit_test(tst_output_state_binding
           SerialStudio::Core
 )
 
+# The write-limit admission rule (spec 0109) is a pure function in Frame.cpp, so the Core library
+# alone links it.
+#
+ss_add_unit_test(tst_output_write_limits
+  SOURCES tst_output_write_limits.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          SerialStudio::Core
+)
+
 ss_add_unit_test(tst_transmit_script_check
   SOURCES tst_transmit_script_check.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/TransmitScriptCheck.cpp

@@ -23,8 +23,12 @@ function transmit(value) {
 | Button (0)    | the number `1` on each press; `1` (on) / `0` (off) when `checkable` |
 | Slider (1)    | the current numeric value (after step rounding) |
 | Toggle (2)    | the number `1` (on) or `0` (off)      |
-| TextField (3) | the submitted string                  |
+| TextField (3) | the submitted string, or a number when `inputKind` is 1 (Number) |
 | Knob (4)      | the current numeric value (like slider) |
+
+A slider, a knob and a Number text field enforce `minValue`..`maxValue` before
+`transmit()` runs, so `value` is always inside the range and the function needs
+no clamp of its own.
 
 Return either:
 

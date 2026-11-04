@@ -38,7 +38,7 @@ public:
   [[nodiscard]] QString reportedText() const;
 
 public slots:
-  void sendText(const QString& text);
+  [[nodiscard]] bool sendText(const QString& text);
 
 protected:
   void applyStateVerdict(const StateBinding::Verdict& verdict) override;

@@ -121,7 +121,11 @@ typedef enum {
   kOutputWidget_StateSource,
   kOutputWidget_StateTarget,
   kOutputWidget_StateOnValue,
-  kOutputWidget_StateConfirmMs
+  kOutputWidget_StateConfirmMs,
+  kOutputWidget_InputKind,
+  kOutputWidget_Decimals,
+  kOutputWidget_Units,
+  kOutputWidget_Quantize
 } OutputWidgetItem;
 
 /**

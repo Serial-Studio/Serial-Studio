@@ -21,6 +21,7 @@
 #include "DataModel/Scripting/TransmitScriptCheck.h"
 #include "DataModel/Scripting/TransmitScriptEnvironment.h"
 #include "DataModel/TextCodec.h"
+#include "Misc/IconEngine.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
@@ -41,9 +42,14 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config,
   , m_maxValue(config.maxValue)
   , m_stepSize(config.stepSize)
   , m_title(config.title)
+  , m_units(config.units)
   , m_onLabel(config.onLabel)
   , m_offLabel(config.offLabel)
   , m_txEncoding(static_cast<SerialStudio::TextEncoding>(config.txEncoding))
+  , m_numeric(DataModel::outputIsNumeric(config))
+  , m_decimals(config.decimals)
+  , m_admittedValue(config.initialValue)
+  , m_admission(config)
   , m_hasFn(false)
   , m_watchdog(&m_jsEngine, kTransmitWatchdogMs, QStringLiteral("transmit"))
   , m_hasPending(false)
@@ -134,6 +140,56 @@ const QString& Widgets::Output::Base::title() const noexcept
 const QString& Widgets::Output::Base::units() const noexcept
 {
   return m_units;
+}
+
+/**
+ * @brief Whether the control carries a number bounded by Min to Max (spec 0109).
+ */
+bool Widgets::Output::Base::numeric() const noexcept
+{
+  return m_numeric;
+}
+
+/**
+ * @brief Displayed decimals; -1 means automatic from Step.
+ */
+int Widgets::Output::Base::decimals() const noexcept
+{
+  return m_decimals;
+}
+
+/**
+ * @brief The refusal shown beside the control, empty once a value is accepted.
+ */
+const QString& Widgets::Output::Base::rangeMessage() const noexcept
+{
+  return m_rangeMessage;
+}
+
+/**
+ * @brief The last value admitted, after Quantize, so a field shows what was actually sent.
+ */
+double Widgets::Output::Base::admittedValue() const noexcept
+{
+  return m_admittedValue;
+}
+
+/**
+ * @brief @p from moved by @p steps Steps, kept inside Min to Max (arrow keys, wheel; spec 0109 R4).
+ */
+double Widgets::Output::Base::stepped(double from, int steps) const
+{
+  SS_ASSERT_LOG(m_minValue <= m_maxValue);
+  return qBound(m_minValue, from + steps * m_stepSize, m_maxValue);
+}
+
+/**
+ * @brief @p value with the control's decimals, or automatic ones (two below a Step of 1).
+ */
+QString Widgets::Output::Base::formatted(double value) const
+{
+  const int places = m_decimals >= 0 ? m_decimals : (m_stepSize < 1 ? 2 : 0);
+  return QString::number(value, 'f', places);
 }
 
 /**
@@ -348,16 +404,63 @@ void Widgets::Output::Base::sendValue(const QVariant& value)
     return;
   }
 
+  QVariant admitted = value;
+  if (!admit(admitted))
+    return;
+
   const auto interval = static_cast<qint64>(m_target.minIntervalMs);
   const auto elapsed  = m_rateLimiter.elapsed();
   if (interval > 0 && elapsed < interval) {
-    m_pendingValue = value;
+    m_pendingValue = admitted;
     m_hasPending   = true;
     m_flushTimer.start(static_cast<int>(interval - elapsed));
     return;
   }
 
-  deliverValue(value);
+  deliverValue(admitted);
+}
+
+/**
+ * @brief The admission step every value takes after the license gates and before pacing (spec
+ *        0109 R3): a numeric control's value is replaced by its admitted double, or refused with
+ *        the message beside the control, in which case nothing is held, run or written.
+ */
+bool Widgets::Output::Base::admit(QVariant& value)
+{
+  if (!m_numeric)
+    return true;
+
+  double admitted    = 0;
+  const auto verdict = DataModel::admitOutputValue(m_admission, value, admitted);
+  if (verdict != DataModel::OutputAdmission::Accepted) {
+    const auto suffix = m_units.isEmpty() ? QString() : QStringLiteral(" ") + m_units;
+    const auto text   = verdict == DataModel::OutputAdmission::NotANumber
+                        ? tr("Enter a number from %1 to %2%3")
+                        : tr("Allowed range: %1 to %2%3");
+    setRangeMessage(text.arg(formatted(m_minValue), formatted(m_maxValue), suffix));
+    return false;
+  }
+
+  value = admitted;
+  setRangeMessage(QString());
+  if (m_admittedValue != admitted) {
+    m_admittedValue = admitted;
+    Q_EMIT admittedValueChanged();
+  }
+
+  return true;
+}
+
+/**
+ * @brief Sets the refusal text, notifying only on a change.
+ */
+void Widgets::Output::Base::setRangeMessage(const QString& message)
+{
+  if (m_rangeMessage == message)
+    return;
+
+  m_rangeMessage = message;
+  Q_EMIT rangeMessageChanged();
 }
 
 /**
@@ -430,4 +533,37 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
   }
 
   return data;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Presentation
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The map QML reads to draw one control, shared by the dashboard panel and the editor
+ *        preview so the two cannot drift apart.
+ */
+QVariantMap Widgets::Output::Base::presentation(const DataModel::OutputWidget& config)
+{
+  QVariantMap map;
+  map[QStringLiteral("icon")] =
+    config.icon.isEmpty() ? QString() : Misc::IconEngine::resolveActionIconSource(config.icon);
+  map[QStringLiteral("title")]        = config.title;
+  map[QStringLiteral("type")]         = static_cast<int>(config.type);
+  map[QStringLiteral("minValue")]     = config.minValue;
+  map[QStringLiteral("maxValue")]     = config.maxValue;
+  map[QStringLiteral("stepSize")]     = config.stepSize;
+  map[QStringLiteral("initialValue")] = config.initialValue;
+  map[QStringLiteral("monoIcon")]     = config.monoIcon;
+  map[QStringLiteral("checkable")]    = config.checkable;
+  map[QStringLiteral("color")]        = config.color;
+  map[QStringLiteral("sizeScale")]    = DataModel::outputSizeScale(config.size);
+  map[QStringLiteral("onLabel")]      = config.onLabel;
+  map[QStringLiteral("offLabel")]     = config.offLabel;
+  map[QStringLiteral("groupId")]      = config.groupId;
+  map[QStringLiteral("widgetId")]     = config.widgetId;
+  map[QStringLiteral("inputKind")]    = static_cast<int>(config.inputKind);
+  map[QStringLiteral("decimals")]     = config.decimals;
+  map[QStringLiteral("units")]        = config.units;
+  return map;
 }

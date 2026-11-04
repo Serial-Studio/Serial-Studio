@@ -258,6 +258,10 @@ QHash<int, QVariant> EditorMultiSelect::outputWidgetEditValues(
   out.insert(kOutputWidget_StepSize, widget.stepSize);
   out.insert(kOutputWidget_InitialValue, widget.initialValue);
   out.insert(kOutputWidget_TxEncoding, widget.txEncoding);
+  out.insert(kOutputWidget_InputKind, static_cast<int>(widget.inputKind));
+  out.insert(kOutputWidget_Decimals, widget.decimals);
+  out.insert(kOutputWidget_Units, widget.units);
+  out.insert(kOutputWidget_Quantize, widget.quantize);
   return out;
 }
 

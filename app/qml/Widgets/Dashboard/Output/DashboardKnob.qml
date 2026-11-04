@@ -19,6 +19,8 @@ Item {
   required property var model
   required property var widget
 
+  property string idPrefix: ""
+
   readonly property real from: root.widget ? (root.widget.minValue || 0) : 0
   readonly property real to: root.widget ? (root.widget.maxValue || 100) : 100
   readonly property real step: root.widget ? (root.widget.stepSize || 1) : 1
@@ -34,6 +36,31 @@ Item {
                                        && root.model.currentValue !== undefined
                                        ? root.model.currentValue
                                        : root.from
+
+  //
+  // Moves the held value by whole Steps through the model, which clamps to Min and Max. Writing
+  // the model rather than control.value keeps the control's binding to desiredValue alive.
+  //
+  function nudge(steps) {
+    if (root.model)
+      root.model.currentValue = root.model.stepped(root.model.currentValue, steps)
+  }
+
+  function keySteps(event) {
+    const factor = (event.modifiers & Qt.ShiftModifier) ? 10 : 1
+    if (event.key === Qt.Key_Up || event.key === Qt.Key_Right)
+      return factor
+
+    if (event.key === Qt.Key_Down || event.key === Qt.Key_Left)
+      return -factor
+
+    return 0
+  }
+
+  readonly property string valueText: root.model
+                                      ? (root.model.formatted(root.desiredValue)
+                                         + (root.model.units ? " " + root.model.units : ""))
+                                      : ""
 
   ColumnLayout {
     spacing: 4
@@ -58,6 +85,23 @@ Item {
       Layout.maximumWidth: height
       Layout.alignment: Qt.AlignHCenter
       opacity: root.unknown ? 0.45 : 1.0
+
+      objectName: root.idPrefix.length > 0 ? root.idPrefix + ".knob" : ""
+
+      Keys.onPressed: (event) => {
+        const steps = root.keySteps(event)
+        if (steps === 0)
+          return
+
+        root.nudge(steps)
+        event.accepted = true
+      }
+
+      WheelHandler {
+        enabled: control.activeFocus
+        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+        onWheel: (event) => root.nudge(event.angleDelta.y > 0 ? 1 : -1)
+      }
 
       palette.dark: root.color
       palette.highlight: root.color
@@ -95,8 +139,8 @@ Item {
 
     Label {
       color: root.color
+      text: root.valueText
       Layout.alignment: Qt.AlignHCenter
-      text: control.value.toFixed(root.step < 1 ? 2 : 0)
       font: Cpp_Misc_CommonFonts.customMonoFont(0.8, true)
     }
   }

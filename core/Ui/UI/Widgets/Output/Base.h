@@ -17,6 +17,7 @@
 #include <QQuickItem>
 #include <QTimer>
 #include <QVariant>
+#include <QVariantMap>
 
 #include "Core/DataModel/Frame.h"
 #include "Core/SerialStudio.h"
@@ -51,6 +52,18 @@ class Base : public QQuickItem {
   Q_PROPERTY(QString units
              READ units
              CONSTANT)
+  Q_PROPERTY(bool numeric
+             READ numeric
+             CONSTANT)
+  Q_PROPERTY(int decimals
+             READ decimals
+             CONSTANT)
+  Q_PROPERTY(QString rangeMessage
+             READ rangeMessage
+             NOTIFY rangeMessageChanged)
+  Q_PROPERTY(double admittedValue
+             READ admittedValue
+             NOTIFY admittedValueChanged)
   Q_PROPERTY(QString onLabel
              READ onLabel
              CONSTANT)
@@ -82,6 +95,8 @@ class Base : public QQuickItem {
 
 signals:
   void stateChanged();
+  void rangeMessageChanged();
+  void admittedValueChanged();
   void transmitError(const QString& error);
 
 public:
@@ -94,6 +109,12 @@ public:
   [[nodiscard]] double stepSize() const noexcept;
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& units() const noexcept;
+  [[nodiscard]] bool numeric() const noexcept;
+  [[nodiscard]] int decimals() const noexcept;
+  [[nodiscard]] const QString& rangeMessage() const noexcept;
+  [[nodiscard]] double admittedValue() const noexcept;
+  [[nodiscard]] Q_INVOKABLE double stepped(double from, int steps) const;
+  [[nodiscard]] Q_INVOKABLE QString formatted(double value) const;
   [[nodiscard]] const QString& onLabel() const noexcept;
   [[nodiscard]] const QString& offLabel() const noexcept;
   [[nodiscard]] bool hasTransmitFunction() const noexcept;
@@ -105,6 +126,8 @@ public:
   [[nodiscard]] QString stateText() const;
 
   [[nodiscard]] StateBinding& stateBinding() noexcept;
+
+  [[nodiscard]] static QVariantMap presentation(const DataModel::OutputWidget& config);
 
 public slots:
   void sendValue(const QVariant& value);
@@ -124,6 +147,8 @@ private slots:
   void flushPendingValue();
 
 private:
+  [[nodiscard]] bool admit(QVariant& value);
+  void setRangeMessage(const QString& message);
   void deliverValue(const QVariant& value);
   [[nodiscard]] bool verdictDiffers(const StateBinding::Verdict& other) const noexcept;
 
@@ -137,6 +162,12 @@ private:
   QString m_onLabel;
   QString m_offLabel;
   SerialStudio::TextEncoding m_txEncoding;
+
+  bool m_numeric;
+  int m_decimals;
+  double m_admittedValue;
+  QString m_rangeMessage;
+  DataModel::OutputWidget m_admission;
 
   QJSEngine m_jsEngine;
   QJSValue m_transmitFn;

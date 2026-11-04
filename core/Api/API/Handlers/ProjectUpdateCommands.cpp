@@ -237,6 +237,19 @@ static void applyOutputWidgetFields(DataModel::OutputWidget& w,
   if (take(QStringLiteral("initialValue")))
     w.initialValue = SerialStudio::toDouble(params.value(QStringLiteral("initialValue")));
 
+  if (take(Keys::OutputInputKind))
+    w.inputKind =
+      static_cast<DataModel::OutputInputKind>(params.value(Keys::OutputInputKind).toInt());
+
+  if (take(QStringLiteral("decimals")))
+    w.decimals = params.value(QStringLiteral("decimals")).toInt();
+
+  if (take(QStringLiteral("units")))
+    w.units = params.value(QStringLiteral("units")).toString();
+
+  if (take(QStringLiteral("quantize")))
+    w.quantize = params.value(QStringLiteral("quantize")).toBool();
+
   applyOutputStateFields(w, params, consumed);
   DataModel::normalize(w);
 }
@@ -353,7 +366,8 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
                    "of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, "
                    "checkable, color, size, onLabel, offLabel, minValue, maxValue, "
                    "stepSize, initialValue, stateSource, stateDatasetId, stateTable, "
-                   "stateVariable, stateOnValue, stateConfirmMs). A checkable button "
+                   "stateVariable, stateOnValue, stateConfirmMs, inputKind, decimals, "
+                   "units, quantize). A checkable button "
                    "latches and transmits 1 (on) / 0 (off) like a toggle, instead of "
                    "pulsing a single value on click; color is a hex fill override (empty "
                    "= group accent) and size is 0=small, 1=normal, 2=large, 3=extra "
@@ -361,7 +375,12 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
                    "1=dataset via stateDatasetId, 2=variable via stateTable/"
                    "stateVariable); stateOnValue is the value that reads as on (empty = "
                    "any non-zero) and stateConfirmMs how long a request stays "
-                   "outstanding. The transmitFunction is "
+                   "outstanding. inputKind is 0=text, 1=number for a text field; a "
+                   "number field, slider and knob enforce minValue to maxValue before "
+                   "transmit() runs and refuse a value outside it as out of range, so a "
+                   "transmitFunction needs no range clamp. decimals (-1 = automatic) and "
+                   "units are display only; quantize snaps a typed number field value to "
+                   "stepSize counted from minValue. The transmitFunction is "
                    "**JavaScript only** -- runs in QJSEngine to convert UI state into "
                    "device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} "
                    "before authoring** for the function signature (transmit(value) "

@@ -21,7 +21,8 @@ Output widgets live in a group's output panel. Each has a `type`:
 - **1 = Slider**: a value in `[minValue, maxValue]` with `stepSize` and
   `initialValue`. Sends on drag-end.
 - **2 = Toggle**: boolean. Sends one of two payloads depending on state.
-- **3 = TextField**: free-form string input + Send button.
+- **3 = TextField**: string input + Send button. With `inputKind` 1 (Number)
+  it reads the text as a number and enforces `minValue`..`maxValue` first.
 - **4 = Knob**: rotary equivalent of slider; same numeric range fields.
 
 ## Anatomy
@@ -42,7 +43,14 @@ Each widget has:
 - `onLabel`, `offLabel`: captions for a latching button or a toggle
 - `minValue`, `maxValue`, `stepSize`, `initialValue`: numeric range
   (sliders, knobs); `initialValue != 0` starts a latching button on
+- `inputKind` (text field: 0 text, 1 number), `decimals` (-1 automatic),
+  `units`, `quantize` (number field: snap to `stepSize` from `minValue`)
 - `transmitFunction`: JS source that returns the bytes to send
+
+Sliders, knobs and Number text fields enforce `minValue`..`maxValue` before
+`transmit()` runs; a value outside it is out of range and never reaches the
+script, so do not write a range clamp in the function. Read the range with
+`project.outputWidget.get` before driving a control.
 
 ## The transmit function
 
