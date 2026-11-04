@@ -32,6 +32,7 @@
 #include "Core/SerialStudio.h"
 #include "DataModel/FrameBuilder/QuickPlotFormatState.h"
 #include "DataModel/Project/DeviceDeclaration.h"
+#include "DataModel/Scripting/NativeTemplates/BinaryPackedStruct.h"
 
 namespace DataModel {
 
@@ -59,13 +60,14 @@ public:
 
   [[nodiscard]] bool declared() const noexcept { return m_state.declared(); }
 
-  [[nodiscard]] const DeclarationState& declaration() const noexcept { return m_declaration; }
+  [[nodiscard]] bool binary() const noexcept { return m_framingActive; }
 
   [[nodiscard]] qsizetype tokenSpans(const QByteArrayView*& spans) noexcept;
   [[nodiscard]] QuickPlotLineOutcome observeReplayRow(QByteArrayView row);
   [[nodiscard]] QuickPlotLineOutcome observe(QByteArrayView line);
   [[nodiscard]] DeclarationOutcome declare(QByteArrayView line,
                                            DeclarationState::TimePoint timestamp);
+  [[nodiscard]] bool applyPacked(const QByteArray& frame);
 
   void setHeaders(const QStringList& headers);
   void buildAudio(const QStringList& channels);
@@ -79,11 +81,16 @@ private:
   [[nodiscard]] QString channelTitle(int index) const;
   void applyField(DataModel::Dataset& dataset, int fieldIndex);
   void mapFieldsToChannels() noexcept;
+  void publishFraming(bool active);
+  void forgetDeclaration();
   void buildDeclared();
 
 private:
   const SerialStudio::OperationMode& m_operationMode;
   bool m_hasHeader;
+  bool m_framingActive;
+  PackedLayout m_layout;
+  std::array<double, kMaxPackedFields> m_packed;
   QStringList m_channelNames;
   QByteArray m_replayScratch;
   DataModel::Frame m_frame;

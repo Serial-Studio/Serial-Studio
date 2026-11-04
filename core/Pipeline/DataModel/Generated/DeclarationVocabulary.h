@@ -47,6 +47,11 @@ inline constexpr QLatin1StringView kRequest("#ss?");
 inline constexpr QLatin1StringView kCommand("#ss!");
 
 /**
+ * @brief The Built-In template a binary declaration's frames parse with (R14).
+ */
+inline constexpr QLatin1StringView kBinaryTemplate("packed_struct");
+
+/**
  * @brief The wire version this build reads and the library version it ships.
  */
 inline constexpr int kWireVersion = 1;
@@ -148,6 +153,7 @@ inline constexpr Keys::KeyView kSourceKeys[] = {
 inline constexpr Keys::KeyView kControlKeys[] = {
   Keys::Title, Keys::OutputType, Keys::OutputMinValue, Keys::OutputMaxValue, Keys::OutputStepSize,
   Keys::OutputInitialValue, Keys::OutputOnLabel, Keys::OutputOffLabel, Keys::OutputCheckable,
+  Keys::OutputInputKind, Keys::OutputDecimals, Keys::OutputUnits, Keys::OutputQuantize,
 };
 
 /**

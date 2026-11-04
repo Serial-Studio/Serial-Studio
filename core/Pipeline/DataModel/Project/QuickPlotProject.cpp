@@ -79,9 +79,10 @@ static constexpr size_t kMaxQuickPlotGroups = DataModel::Declaration::kMaxGroups
 }
 
 /**
- * @brief The keyed parser's field order: one title per frame index across every group, from the
- *        first dataset at that index, so a wire name or JSON path maps back to its channel, a
- *        positional slot keeps its place and a declared channel shown twice is listed once.
+ * @brief The keyed parser's field order: one title per frame index, from the first dataset at
+ *        that index, so a wire name maps back to its channel and a positional slot keeps its
+ *        place. A comma in a declared title becomes ';' (never a wire-name byte): the title keeps
+ *        its one slot and, as live, matches no wire name.
  */
 [[nodiscard]] static QString fieldList(const std::vector<DataModel::Group>& groups)
 {
@@ -98,7 +99,7 @@ static constexpr size_t kMaxQuickPlotGroups = DataModel::Declaration::kMaxGroups
       while (names.size() < dataset.index)
         names.append(QString());
 
-      names[dataset.index - 1] = dataset.title;
+      names[dataset.index - 1] = QString(dataset.title).replace(QLatin1Char(','), QLatin1Char(';'));
     }
   }
 
@@ -124,16 +125,34 @@ static constexpr size_t kMaxQuickPlotGroups = DataModel::Declaration::kMaxGroups
 }
 
 /**
+ * @brief The declared binary framing and packed_struct decoder (spec 0111 R14) on @p source.
+ */
+static void applyBinaryFraming(DataModel::Source& source, const DataModel::Source& declared)
+{
+  SS_ASSERT(declared.decoderMethod == SerialStudio::Binary, return);
+  SS_ASSERT(!declared.frameStart.isEmpty(), return);
+  source.frameStart            = declared.frameStart;
+  source.frameEnd              = declared.frameEnd;
+  source.frameDetection        = declared.frameDetection;
+  source.checksumAlgorithm     = declared.checksumAlgorithm;
+  source.hexadecimalDelimiters = declared.hexadecimalDelimiters;
+  source.decoderMethod         = declared.decoderMethod;
+  source.frameParserTemplate   = declared.frameParserTemplate;
+  source.frameParserParams     = declared.frameParserParams;
+}
+
+/**
  * @brief The device Quick Plot reads from, as a project source: newline-terminated plain text
- *        parsed by the Built-In template that reproduces the detected format, "delimited" for a
- *        plain comma stream and "line_values" otherwise (spec 0106 R12). A declared session always
- *        takes line_values, which skips declaration lines as the live lane does (spec 0111 R9).
+ *        parsed by "delimited" for a plain comma stream and "line_values" otherwise (spec 0106
+ *        R12). A declared session takes line_values, which skips declaration lines as the live
+ *        lane does (spec 0111 R9), unless it declared a packed_struct source, kept as is (R14).
  */
 [[nodiscard]] static DataModel::Source quickPlotSource(const int busType,
                                                        const QJsonObject& connectionSettings,
                                                        const DataModel::LineFormat& format,
                                                        const std::vector<DataModel::Group>& groups,
-                                                       const bool declared)
+                                                       const bool declared,
+                                                       const DataModel::Source& declaredSource)
 {
   DataModel::Source source;
   source.sourceId            = 0;
@@ -144,6 +163,11 @@ static constexpr size_t kMaxQuickPlotGroups = DataModel::Declaration::kMaxGroups
   source.decoderMethod       = static_cast<int>(SerialStudio::PlainText);
   source.frameParserLanguage = static_cast<int>(SerialStudio::Native);
   source.connectionSettings  = connectionSettings;
+  if (declared && declaredSource.frameParserTemplate == DataModel::Declaration::kBinaryTemplate) {
+    applyBinaryFraming(source, declaredSource);
+    return source;
+  }
+
   if (!declared && plainCommaStream(format, groups)) {
     source.frameParserTemplate = QStringLiteral("delimited");
     source.frameParserParams   = QJsonObject{
@@ -212,7 +236,8 @@ QJsonObject DataModel::QuickPlotProject::build(const std::vector<Group>& quickPl
                                                const int busType,
                                                const QJsonObject& connectionSettings,
                                                const LineFormat& format,
-                                               const QString& declaredTitle)
+                                               const QString& declaredTitle,
+                                               const Source& declaredSource)
 {
   SS_ASSERT(!quickPlotGroups.empty(), return QJsonObject());
   SS_ASSERT(quickPlotGroups.size() <= kMaxQuickPlotGroups, return QJsonObject());
@@ -224,7 +249,7 @@ QJsonObject DataModel::QuickPlotProject::build(const std::vector<Group>& quickPl
     groups.append(DataModel::serialize(projectGroup(live, groupId++, declared)));
 
   const auto source =
-    quickPlotSource(busType, connectionSettings, format, quickPlotGroups, declared);
+    quickPlotSource(busType, connectionSettings, format, quickPlotGroups, declared, declaredSource);
 
   QJsonObject project;
   project[Keys::Title]               = declared ? declaredTitle : QObject::tr("Quick Plot Project");

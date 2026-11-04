@@ -165,6 +165,15 @@ struct FrameConfigChanged final {
 };
 
 /**
+ * @brief The reader framing a Quick Plot device declared for its binary frames (spec 0111 R14),
+ *        or inactive to return to line framing. Retained; published at declaration rate only.
+ */
+struct DeclaredFraming final {
+  bool active;
+  IO::FrameConfig config;
+};
+
+/**
  * @brief One replay player (0 CSV, 1 MDF4, 2 Historian) opened or closed a file.
  */
 struct ReplayPlayerStateChanged final {

@@ -31,6 +31,7 @@
 #include "API/Handlers/ProjectBatchCommands.h"
 #include "API/Handlers/ProjectDatasetCommands.h"
 #include "API/Handlers/ProjectDatasetFieldCommands.h"
+#include "API/Handlers/ProjectDeclarationCommands.h"
 #include "API/Handlers/ProjectDiscoveryCommands.h"
 #include "API/Handlers/ProjectDryRunCommands.h"
 #include "API/Handlers/ProjectFileCommands.h"
@@ -92,6 +93,7 @@ private:
   ProjectDryRunCommands m_dryRun;
   ProjectListCommands m_list;
   ProjectDiscoveryCommands m_discovery;
+  ProjectDeclarationCommands m_declaration;
 };
 
 }  // namespace Handlers

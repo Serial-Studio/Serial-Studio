@@ -31,6 +31,7 @@
 #include <utility>
 
 #include "Core/SSAssert.h"
+#include "DataModel/Project/DeviceDeclaration.h"
 #include "DataModel/Scripting/LineFormat.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplateSupport.h"
 
@@ -154,6 +155,9 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseUtf8(const QByteArray& frame) override
   {
+    if (DataModel::isDeclarationLine(frame))
+      return {};
+
     const qsizetype count = DataModel::tokenizeLine(frame, m_format, m_fields);
     SS_ASSERT(DataModel::kMaxLineFields >= count, return {});
     if (count <= 0)
@@ -179,6 +183,9 @@ public:
     SS_ASSERT(maxSpans > 0, return -1);
     if (m_format.decimalComma)
       return -1;
+
+    if (DataModel::isDeclarationLine(frame))
+      return 0;
 
     const qsizetype count = DataModel::tokenizeLine(frame, m_format, m_fields);
     if (count <= 0)
@@ -237,6 +244,9 @@ public:
    */
   [[nodiscard]] QList<QStringList> parseUtf8(const QByteArray& frame) override
   {
+    if (DataModel::isDeclarationLine(frame))
+      return {};
+
     const qsizetype count = DataModel::tokenizeLine(frame, m_format, m_fields);
     SS_ASSERT(DataModel::kMaxLineFields >= count, return latchedFrame());
     for (qsizetype i = 0; i < count; ++i) {

@@ -313,6 +313,30 @@
     }
   },
   {
+    "file": "serial_studio_command",
+    "name": "Serial Studio library command",
+    "translations": {
+      "en_US": "Serial Studio library command",
+      "es_MX": "Comando de la biblioteca Serial Studio",
+      "de_DE": "Serial-Studio-Bibliotheksbefehl",
+      "fr_FR": "Commande de la bibliothèque Serial Studio",
+      "it_IT": "Comando della libreria Serial Studio",
+      "ja_JP": "Serial Studio ライブラリコマンド",
+      "ko_KR": "Serial Studio 라이브러리 명령",
+      "pl_PL": "Polecenie biblioteki Serial Studio",
+      "pt_BR": "Comando da biblioteca Serial Studio",
+      "ru_RU": "Команда библиотеки Serial Studio",
+      "tr_TR": "Serial Studio kitaplık komutu",
+      "zh_CN": "Serial Studio 库命令",
+      "cs_CZ": "Příkaz knihovny Serial Studio",
+      "uk_UA": "Команда бібліотеки Serial Studio",
+      "hi_IN": "Serial Studio लाइब्रेरी कमांड",
+      "nl_NL": "Serial Studio-bibliotheekcommando",
+      "ro_RO": "Comandă bibliotecă Serial Studio",
+      "sv_SE": "Serial Studio-bibliotekskommando"
+    }
+  },
+  {
     "file": "simple_command",
     "name": "Simple command",
     "translations": {

@@ -229,6 +229,8 @@ public slots:
   void syncFromProjectModel();
 
   void registerQuickPlotHeaders(const QStringList& headers);
+  void submitDeclarationLine(const QByteArray& line,
+                             const DataModel::DeclarationState::TimePoint& timestamp);
 
   void hotpathRxFrame(const IO::CapturedDataPtr& data);
   void hotpathRxSourceFrame(int sourceId, const IO::CapturedDataPtr& data);
@@ -416,6 +418,7 @@ private:
   void parseProjectFrame(const IO::CapturedDataPtr& data);
   void parseProjectFrame(int sourceId, const IO::CapturedDataPtr& data);
   void parseQuickPlotFrame(const IO::CapturedDataPtr& data);
+  void declareQuickPlot(QByteArrayView line, const DataModel::DeclarationState::TimePoint& ts);
   void publishReplayValues(int sourceId,
                            const DataModel::Frame& src,
                            const DataModel::TimestampedFrame::SteadyTimePoint& ts);

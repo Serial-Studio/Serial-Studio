@@ -31,7 +31,8 @@
  * @brief Turns a live Quick Plot structure into an editable project (spec 0100 R8/R9): one device
  *        with Quick Plot's framing and the free Built-In template that reproduces the detected
  *        line format (spec 0106 R12), and Quick Plot's groups rebuilt as project groups. A
- * non-empty declared title marks a device-declared session (spec 0111 R9). Pure, so unit-testable.
+ *        non-empty declared title marks a device-declared session (spec 0111 R9), and a declared
+ *        packed_struct source keeps its binary framing (R14). Pure, so unit-testable.
  */
 namespace DataModel::QuickPlotProject {
 
@@ -39,6 +40,7 @@ namespace DataModel::QuickPlotProject {
                                 int busType,
                                 const QJsonObject& connectionSettings,
                                 const LineFormat& format,
-                                const QString& declaredTitle = QString());
+                                const QString& declaredTitle = QString(),
+                                const Source& declaredSource = Source());
 
 }  // namespace DataModel::QuickPlotProject

@@ -26,11 +26,15 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonParseError>
+#include <utility>
 
+#include "Core/Checksum.h"
 #include "Core/DataModel/FrameKeys.h"
 #include "Core/DataModel/FrameSupport.h"
 #include "Core/SSAssert.h"
+#include "DataModel/Project/DeclaredControls.h"
 #include "DataModel/Scripting/LineFormat.h"
+#include "DataModel/Scripting/NativeTemplates/BinaryPackedStruct.h"
 
 namespace Declaration = DataModel::Declaration;
 
@@ -46,6 +50,11 @@ static_assert(Declaration::kMaxDatasets <= DataModel::kMaxLineFields,
  */
 static constexpr qsizetype kMaxVersionDigits = 4;
 static constexpr qsizetype kMaxListedKeys    = 8;
+
+/**
+ * @brief Longest frame delimiter a binary declaration may name, in bytes (spec 0111 R14).
+ */
+static constexpr qsizetype kMaxDelimiterBytes = 8;
 
 /**
  * @brief Shortest time between two rebuilds from changed declarations (spec 0111 R10).
@@ -160,8 +169,8 @@ template<size_t N>
   SS_ASSERT(sub.maxItems > 0, return false);
   const auto array = value.toArray();
   if (!value.isArray() || array.size() > sub.maxItems) {
-    reason =
-      QStringLiteral("%1 must be an array of at most %2 entries").arg(sub.key).arg(sub.maxItems);
+    reason = QStringLiteral("%1 must be an array of at most %2 entries")
+               .arg(sub.key, QString::number(sub.maxItems));
     return false;
   }
 
@@ -275,17 +284,55 @@ template<size_t N>
 }
 
 /**
+ * @brief Limits a declared control group (spec 0111 R7) to the control keys and the count cap. A
+ *        control whose title is not a valid command name refuses the line: the name is the one
+ *        piece of device text that enters a transmit function.
+ */
+[[nodiscard]] static bool filterControls(QJsonObject& group,
+                                         DataModel::DeviceDeclaration& out,
+                                         QStringList& dropped)
+{
+  SS_ASSERT(Declaration::kMaxControls > 0, return false);
+  SS_ASSERT(std::size(Declaration::kControlKeys) > 0, return false);
+  const auto name = group.value(Keys::Title).toString().simplified();
+  const auto raw  = group.value(Keys::OutputWidgets).toArray();
+  if (!group.value(Keys::OutputWidgets).isArray() || raw.isEmpty()
+      || raw.size() > Declaration::kMaxControls) {
+    out.reason = QStringLiteral("control group \"%1\" needs an array of 1 to %2 controls")
+                   .arg(name, QString::number(Declaration::kMaxControls));
+    return false;
+  }
+
+  QJsonArray controls;
+  for (const auto& item : raw) {
+    const auto control = allowed(item.toObject(), Declaration::kControlKeys, dropped);
+    if (!item.isObject() || !stringsFit(control)
+        || !DataModel::DeclaredControls::validName(control.value(Keys::Title).toString())) {
+      out.reason = QStringLiteral("control group \"%1\" has a control without a valid name "
+                                  "(1 to 32 of A-Z, a-z, 0-9, space, _ . -)")
+                     .arg(name);
+      return false;
+    }
+
+    controls.append(control);
+  }
+
+  group.remove(Keys::Widget);
+  group.remove(Keys::Datasets);
+  group.insert(Keys::OutputWidgets, controls);
+  group.insert(Keys::GroupType, static_cast<int>(DataModel::GroupType::Output));
+  return true;
+}
+
+/**
  * @brief Filters one group object and its datasets to the wire, applying the count and string caps
- *        before the project reader sees it. Sets @p skip for an output group, which version 1 drops
- *        with a note until declared controls land (spec 0111 M5).
+ *        before the project reader sees it; an output group goes through filterControls.
  */
 [[nodiscard]] static bool filterGroup(const QJsonValue& value,
                                       QJsonObject& group,
-                                      bool& skip,
                                       DataModel::DeviceDeclaration& out,
                                       QStringList& dropped)
 {
-  SS_ASSERT(!skip, skip = false);
   SS_ASSERT(std::size(Declaration::kGroupKeys) > 0, return false);
   group           = allowed(value.toObject(), Declaration::kGroupKeys, dropped);
   const auto name = group.value(Keys::Title).toString().simplified();
@@ -294,18 +341,13 @@ template<size_t N>
     return false;
   }
 
-  if (group.value(Keys::GroupType).toInt() != 0 || group.contains(Keys::OutputWidgets)) {
-    out.notes.append(
-      QStringLiteral("group \"%1\" ignored: declared controls need a newer app").arg(name));
-    skip = true;
-    return true;
-  }
+  if (group.value(Keys::GroupType).toInt() != 0 || group.contains(Keys::OutputWidgets))
+    return filterControls(group, out, dropped);
 
   const auto raw = group.value(Keys::Datasets).toArray();
   if (!group.value(Keys::Datasets).isArray() || raw.size() > Declaration::kMaxDatasets) {
     out.reason = QStringLiteral("group \"%1\" needs an array of at most %2 datasets")
-                   .arg(name)
-                   .arg(Declaration::kMaxDatasets);
+                   .arg(name, QString::number(Declaration::kMaxDatasets));
     return false;
   }
 
@@ -351,9 +393,7 @@ template<size_t N>
     ++next;
   } else if (dataset.index > next) {
     reason = QStringLiteral("dataset \"%1\" names index %2, past the next frame position %3")
-               .arg(dataset.title)
-               .arg(dataset.index)
-               .arg(next + 1);
+               .arg(dataset.title, QString::number(dataset.index), QString::number(next + 1));
     return false;
   }
 
@@ -382,6 +422,14 @@ template<size_t N>
   if (!DataModel::read(group, filtered)) {
     out.reason = QStringLiteral("group %1 has no title").arg(groupId + 1);
     return false;
+  }
+
+  if (group.groupType == DataModel::GroupType::Output) {
+    if (!DataModel::DeclaredControls::attach(group, out))
+      return false;
+
+    out.groups.push_back(std::move(group));
+    return true;
   }
 
   if (group.datasets.empty()) {
@@ -414,11 +462,77 @@ template<size_t N>
 {
   SS_ASSERT(!out.reason.isEmpty(), out.reason = QStringLiteral("refused"));
   out.valid    = false;
+  out.binary   = false;
   out.channels = 0;
+  out.source   = DataModel::Source();
   out.groups.clear();
   out.notes.clear();
   SS_ASSERT(out.groups.empty(), return out);
   return out;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Binary layout
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reads the binary layout of sources[0] (spec 0111 R14): framing keys and the packed_struct
+ *        template only, never a connection. The decoder must be Binary, the checksum a known
+ *        algorithm, the start delimiter (and an end one, if framed by both) 1 to 8 bytes, and the
+ *        layout one field per declared frame position.
+ */
+[[nodiscard]] static bool readSource(const QJsonValue& value,
+                                     DataModel::DeviceDeclaration& out,
+                                     QStringList& dropped)
+{
+  SS_ASSERT(out.channels > 0, return false);
+  SS_ASSERT(std::size(Declaration::kSourceKeys) > 0, return false);
+  const auto list = value.toArray();
+  const auto obj  = allowed(list.at(0).toObject(), Declaration::kSourceKeys, dropped);
+  if (!value.isArray() || list.size() != 1 || !list.at(0).isObject() || !stringsFit(obj)) {
+    out.reason = QStringLiteral("sources must hold one source object with short strings");
+    return false;
+  }
+
+  DataModel::Source source;
+  QByteArray start, end;
+  QString checksum, error;
+  DataModel::PackedLayout layout;
+  const auto params = obj.value(Keys::FrameParserParams).toObject();
+  const auto fields = params.value(QStringLiteral("fields")).toString();
+  const auto endian = params.value(QStringLiteral("endianness")).toString(QStringLiteral("little"));
+  DataModel::read_io_settings(start, end, checksum, obj);
+  if (!DataModel::read(source, obj) || source.decoderMethod != SerialStudio::Binary
+      || source.frameParserTemplate != Declaration::kBinaryTemplate
+      || !DataModel::parsePackedLayout(fields, endian, layout, error)
+      || layout.count != out.channels) {
+    out.reason = QStringLiteral("a binary source needs the Binary decoder and a packed_struct "
+                                "layout with one field per channel (%1)")
+                   .arg(error.isEmpty() ? QString::number(out.channels) : error);
+    return false;
+  }
+
+  const bool both  = source.frameDetection == SerialStudio::StartAndEndDelimiter;
+  const bool sized = !start.isEmpty() && start.size() <= kMaxDelimiterBytes
+                  && (!both || (!end.isEmpty() && end.size() <= kMaxDelimiterBytes));
+  if (!sized || (!both && source.frameDetection != SerialStudio::StartDelimiterOnly)
+      || !(checksum.isEmpty() || IO::availableChecksums().contains(checksum))) {
+    out.reason = QStringLiteral("a binary source is framed by a 1 to %1 byte start delimiter "
+                                "and checks a known checksum")
+                   .arg(kMaxDelimiterBytes);
+    return false;
+  }
+
+  source.sourceId = 0;
+  source.title.clear();
+  source.frameParserLanguage = static_cast<int>(SerialStudio::Native);
+  source.frameParserParams   = QJsonObject{
+    {    QStringLiteral("fields"), fields},
+    {QStringLiteral("endianness"), endian}
+  };
+  out.source = std::move(source);
+  out.binary = true;
+  return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -449,15 +563,11 @@ DataModel::DeviceDeclaration DataModel::parseDeclaration(QByteArrayView line)
     return refused(out);
   }
 
-  if (top.contains(Keys::Sources))
-    out.notes.append(QStringLiteral("binary layouts (sources) need a newer app and were ignored"));
-
   int next     = 0;
   int datasets = 0;
   for (const auto& item : list) {
-    bool skip = false;
     QJsonObject group;
-    if (!filterGroup(item, group, skip, out, dropped))
+    if (!filterGroup(item, group, out, dropped))
       return refused(out);
 
     datasets += static_cast<int>(group.value(Keys::Datasets).toArray().size());
@@ -466,12 +576,9 @@ DataModel::DeviceDeclaration DataModel::parseDeclaration(QByteArrayView line)
       return refused(out);
     }
 
-    if (!skip && !readGroup(group, static_cast<int>(out.groups.size()), next, out))
+    if (!readGroup(group, static_cast<int>(out.groups.size()), next, out))
       return refused(out);
   }
-
-  if (!dropped.isEmpty())
-    out.notes.append(QStringLiteral("ignored keys: %1").arg(dropped.join(QStringLiteral(", "))));
 
   if (next <= 0) {
     out.reason = QStringLiteral("the declaration has no dataset");
@@ -479,7 +586,16 @@ DataModel::DeviceDeclaration DataModel::parseDeclaration(QByteArrayView line)
   }
 
   out.channels = next;
-  out.valid    = true;
+  if (top.contains(Keys::Sources) && !readSource(top.value(Keys::Sources), out, dropped))
+    return refused(out);
+
+  if (!out.binary && !DataModel::DeclaredControls::appendReplies(out))
+    return refused(out);
+
+  if (!dropped.isEmpty())
+    out.notes.append(QStringLiteral("ignored keys: %1").arg(dropped.join(QStringLiteral(", "))));
+
+  out.valid = true;
   return out;
 }
 
@@ -571,6 +687,7 @@ DataModel::DeclarationState::DeclarationState() : m_rebuilt(false) {}
 void DataModel::DeclarationState::reset()
 {
   m_rebuilt = false;
+  m_reason.clear();
   m_message.clear();
   m_heldLine.clear();
   m_acceptedLine.clear();
@@ -606,8 +723,9 @@ DataModel::DeclarationOutcome DataModel::DeclarationState::offer(QByteArrayView 
   m_heldLine.clear();
   auto parsed = parseDeclaration(text);
   if (!parsed.valid) {
+    m_reason       = parsed.reason;
     m_rejectedLine = text.toByteArray();
-    m_message      = QStringLiteral("Device declaration ignored: %1").arg(parsed.reason);
+    m_message      = QStringLiteral("Device declaration ignored: %1").arg(m_reason);
     return DeclarationOutcome::Rejected;
   }
 
@@ -616,12 +734,13 @@ DataModel::DeclarationOutcome DataModel::DeclarationState::offer(QByteArrayView 
     datasets += static_cast<int>(group.datasets.size());
 
   m_message = QStringLiteral("Device declared \"%1\": %2 groups, %3 datasets")
-                .arg(parsed.title)
-                .arg(static_cast<int>(parsed.groups.size()))
-                .arg(datasets);
+                .arg(parsed.title,
+                     QString::number(static_cast<int>(parsed.groups.size())),
+                     QString::number(datasets));
   if (!parsed.notes.isEmpty())
     m_message += QStringLiteral(" (%1)").arg(parsed.notes.join(QStringLiteral("; ")));
 
+  m_reason.clear();
   m_acceptedLine = text.toByteArray();
   m_rejectedLine.clear();
   m_current     = std::move(parsed);

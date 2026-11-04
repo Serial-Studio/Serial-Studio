@@ -26,6 +26,7 @@
 #include "DataModel/Scripting/NativeTemplates/BinaryMessagePack.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryModbus.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryNmea2000.h"
+#include "DataModel/Scripting/NativeTemplates/BinaryPackedStruct.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryRaw.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryRtcm.h"
 #include "DataModel/Scripting/NativeTemplates/BinarySirf.h"
@@ -57,7 +58,8 @@ QList<const DataModel::INativeTemplate*> DataModel::binaryNativeTemplates()
                                                     &nmea2000Template(),
                                                     &rtcmTemplate(),
                                                     &modbusTemplate(),
-                                                    &messagePackTemplate()};
+                                                    &messagePackTemplate(),
+                                                    &packedStructTemplate()};
   list                                          += wireLatchNativeTemplates();
   return list;
 }

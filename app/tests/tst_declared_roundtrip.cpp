@@ -19,18 +19,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
+#include <array>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QTest>
 #include <vector>
 
+#include "Core/Checksum.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/DataModel/FrameKeys.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/FrameBuilder/QuickPlotFormatState.h"
 #include "DataModel/Project/DeviceDeclaration.h"
 #include "DataModel/Project/QuickPlotProject.h"
+#include "DataModel/Scripting/NativeTemplates/BinaryPackedStruct.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "DataModel/Scripting/NativeTemplates/TextLineValues.h"
 
@@ -114,6 +117,9 @@ private slots:
   void roundTrip();
   void projectKeepsTheDeclaredStructure_data();
   void projectKeepsTheDeclaredStructure();
+  void outputGroupSurvivesSave();
+  void binaryRoundTrip();
+  void commaTitleKeepsItsSlot();
 
 private:
   DataModel::LineFields m_fields;
@@ -133,7 +139,7 @@ void DeclaredRoundTripTest::initTestCase()
 void DeclaredRoundTripTest::roundTrip_data()
 {
   QTest::addColumn<QString>("name");
-  for (const char* name : {"mpu6050", "tinygps", "hexadc", "controls"})
+  for (const char* name : {"mpu6050", "tinygps", "hexadc", "controls", "formats", "textfield"})
     QTest::newRow(name) << QString::fromLatin1(name);
 }
 
@@ -217,6 +223,127 @@ void DeclaredRoundTripTest::projectKeepsTheDeclaredStructure()
 
   QCOMPARE(DataModel::wireProjection(parsed.title, groups),
            DataModel::wireProjection(parsed.title, parsed.groups));
+}
+
+/**
+ * @brief The declared output group reads back from the saved project as an output group whose
+ *        controls keep their kind, range and the app's command transmit function (spec 0111 R7).
+ */
+void DeclaredRoundTripTest::outputGroupSurvivesSave()
+{
+  const auto parsed =
+    DataModel::parseDeclaration(fixtureLines(QStringLiteral("controls.decl")).first());
+  QVERIFY2(parsed.valid, qPrintable(parsed.reason));
+  QCOMPARE(parsed.groups.size(), size_t(3));
+
+  const auto project = DataModel::QuickPlotProject::build(
+    parsed.groups, 0, QJsonObject(), DataModel::LineFormat(), parsed.title);
+  const auto array = project.value(Keys::Groups).toArray();
+  QCOMPARE(array.size(), 3);
+
+  DataModel::Group replies;
+  replies.groupId = 2;
+  QVERIFY(DataModel::read(replies, array.at(2).toObject()));
+  QCOMPARE(replies.datasets.size(), size_t(3));
+  QCOMPARE(replies.datasets[0].uniqueId, -1);
+  QVERIFY(replies.datasets[2].hideOnDashboard);
+
+  DataModel::Group panel;
+  panel.groupId = 1;
+  QVERIFY(DataModel::read(panel, array.at(1).toObject()));
+  QCOMPARE(panel.groupType, DataModel::GroupType::Output);
+  QCOMPARE(panel.outputWidgets.size(), parsed.groups[1].outputWidgets.size());
+  for (size_t i = 0; i < panel.outputWidgets.size(); ++i) {
+    const auto& saved    = panel.outputWidgets[i];
+    const auto& declared = parsed.groups[1].outputWidgets[i];
+    QCOMPARE(saved.type, declared.type);
+    QCOMPARE(saved.title, declared.title);
+    QCOMPARE(saved.maxValue, declared.maxValue);
+    QCOMPARE(saved.transmitFunction, declared.transmitFunction);
+    QVERIFY(!saved.transmitFunction.isEmpty());
+    QCOMPARE(saved.replyTokenDatasetId, DataModel::dataset_unique_id(0, 2, 0));
+    QCOMPARE(saved.replyMessageDatasetId, DataModel::dataset_unique_id(0, 2, 2));
+  }
+}
+
+/**
+ * @brief The binary MPU6050 declaration saves a project with its framing and packed_struct
+ *        decoder, and that parser reads every golden wire frame to the live lane's numbers, which
+ *        are the text variant's values (spec 0111 R9/R14, AC10 unit half).
+ */
+void DeclaredRoundTripTest::binaryRoundTrip()
+{
+  const auto parsed =
+    DataModel::parseDeclaration(fixtureLines(QStringLiteral("mpu6050_bin.decl")).first());
+  QVERIFY2(parsed.valid, qPrintable(parsed.reason));
+  QVERIFY(parsed.binary);
+
+  const auto project = DataModel::QuickPlotProject::build(
+    parsed.groups, 0, QJsonObject(), DataModel::LineFormat(), parsed.title, parsed.source);
+  const auto source = project.value(Keys::Sources).toArray().first().toObject();
+  QCOMPARE(source.value(Keys::FrameParserTemplate).toString(), QStringLiteral("packed_struct"));
+  QCOMPARE(source.value(Keys::FrameDetection).toInt(),
+           static_cast<int>(SerialStudio::StartDelimiterOnly));
+  QCOMPARE(source.value(Keys::DecoderMethod).toInt(), static_cast<int>(SerialStudio::Binary));
+  QCOMPARE(source.value(Keys::ChecksumAlgorithm).toString(), QStringLiteral("CRC-16"));
+  QCOMPARE(source.value(Keys::FrameStart).toString(), QStringLiteral("AA55"));
+
+  QString error;
+  DataModel::PackedLayout layout;
+  const auto params = source.value(Keys::FrameParserParams).toObject();
+  const auto parser = DataModel::packedStructTemplate().makeParser(params, error);
+  QVERIFY2(parser, qPrintable(error));
+  QVERIFY(DataModel::parsePackedLayout(params.value(QStringLiteral("fields")).toString(),
+                                       params.value(QStringLiteral("endianness")).toString(),
+                                       layout,
+                                       error));
+
+  const auto frames = fixtureLines(QStringLiteral("mpu6050_bin.frames"));
+  const auto text   = fixtureLines(QStringLiteral("mpu6050.frames"));
+  QCOMPARE(frames.size(), text.size());
+  for (qsizetype l = 0; l < frames.size(); ++l) {
+    const auto wire    = QByteArray::fromHex(frames.at(l));
+    const auto payload = wire.sliced(2, wire.size() - 4);
+    QCOMPARE(wire.first(2), QByteArray::fromHex("aa55"));
+    QCOMPARE(IO::checksum(QStringLiteral("CRC-16"), payload), wire.last(2));
+
+    std::array<double, DataModel::kMaxPackedFields> live{};
+    QCOMPARE(DataModel::decodePackedStruct(payload, layout, live.data(), live.size()), 7);
+
+    const auto rows   = parser->parseBinary(payload);
+    const auto fields = text.at(l).split(',');
+    QCOMPARE(rows.size(), 1);
+    QCOMPARE(rows.first().size(), 7);
+    for (int c = 0; c < 7; ++c) {
+      QCOMPARE(SerialStudio::toDouble(rows.first().at(c)), live[static_cast<size_t>(c)]);
+      QCOMPARE(live[static_cast<size_t>(c)], SerialStudio::toDouble(fields.at(c)));
+    }
+  }
+}
+
+/**
+ * @brief A comma in a declared title never splits the saved field list: in a named stream the
+ *        channel after it still reads its own name, as it does live (R9).
+ */
+void DeclaredRoundTripTest::commaTitleKeepsItsSlot()
+{
+  const auto parsed = DataModel::parseDeclaration(QByteArrayLiteral(
+    R"(#ss1{"title":"Rig","groups":[{"title":"Air","datasets":[{"title":"Temp, Inside"},)"
+    R"({"title":"Hum"}]}]})"));
+  QVERIFY2(parsed.valid, qPrintable(parsed.reason));
+
+  DataModel::LineFormat format;
+  format.named = true;
+  const auto project =
+    DataModel::QuickPlotProject::build(parsed.groups, 0, QJsonObject(), format, parsed.title);
+  QString error;
+  auto parser = savedParser(project, error);
+  QVERIFY2(parser, qPrintable(error));
+
+  const auto rows = parser->parseText(QStringLiteral("Hum:42"));
+  QCOMPARE(rows.size(), 1);
+  QCOMPARE(rows.first().size(), 2);
+  QCOMPARE(SerialStudio::toDouble(rows.first().at(1)), 42.0);
 }
 
 QTEST_APPLESS_MAIN(DeclaredRoundTripTest)

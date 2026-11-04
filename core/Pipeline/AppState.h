@@ -99,6 +99,7 @@ private slots:
 private:
   void publishState();
   void applyPendingMode();
+  void applyDeclaredFraming(bool active, const IO::FrameConfig& config);
 
   [[nodiscard]] IO::FrameConfig deriveFrameConfig() const;
 
@@ -114,4 +115,7 @@ private:
   bool m_hasPendingMode;
   SerialStudio::OperationMode m_pendingMode;
   Core::Bus::Subscription m_linkState;
+  bool m_hasDeclaredFraming;
+  IO::FrameConfig m_declaredFraming;
+  Core::Bus::Subscription m_declaredFramingState;
 };

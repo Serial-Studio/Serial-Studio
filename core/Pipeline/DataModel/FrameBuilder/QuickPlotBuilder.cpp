@@ -28,6 +28,8 @@
 
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
+#include "Core/DataModel/DataBlock.h"
+#include "Core/DataModel/ValueDecoder.h"
 #include "Core/HotpathOptimization.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
@@ -68,8 +70,9 @@ static constexpr double kNoSample = std::numeric_limits<double>::quiet_NaN();
  *        read the same value the parse lanes do instead of a second copy that could drift.
  */
 DataModel::QuickPlotBuilder::QuickPlotBuilder(const SerialStudio::OperationMode& operationMode)
-  : m_operationMode(operationMode), m_hasHeader(false)
+  : m_operationMode(operationMode), m_hasHeader(false), m_framingActive(false)
 {
+  m_packed.fill(0.0);
   m_fieldOfChannel.fill(-1);
 }
 
@@ -102,7 +105,7 @@ void DataModel::QuickPlotBuilder::setHeaders(const QStringList& headers)
 void DataModel::QuickPlotBuilder::reset()
 {
   m_state.reset();
-  m_declaration.reset();
+  forgetDeclaration();
 }
 
 /**
@@ -114,7 +117,43 @@ void DataModel::QuickPlotBuilder::pinPositional(const int count)
   SS_ASSERT(count >= 0, return);
   SS_ASSERT(kMaxLineFields >= count, return);
   m_state.pinPositional(count);
+  forgetDeclaration();
+}
+
+/**
+ * @brief Forgets the declaration and, when it had switched the reader to binary framing, hands the
+ *        line framing back (spec 0111 R14). Runs at the connect, mode and replay edges only.
+ */
+void DataModel::QuickPlotBuilder::forgetDeclaration()
+{
   m_declaration.reset();
+  if (m_framingActive)
+    publishFraming(false);
+}
+
+/**
+ * @brief Retains the reader framing a declaration needs (spec 0111 R14) for AppState: the declared
+ *        delimiters and checksum under the Project File framing policy, or inactive for line
+ *        framing. Declaration rate only; the reader is recreated on the usual reconfigure path.
+ */
+void DataModel::QuickPlotBuilder::publishFraming(const bool active)
+{
+  IO::FrameConfig config;
+  const auto& source = m_declaration.current().source;
+  SS_ASSERT(!active || m_declaration.current().binary, return);
+  if (active) {
+    QByteArray start, end;
+    read_io_settings(start, end, config.checksumAlgorithm, serialize(source));
+    const bool both        = source.frameDetection == SerialStudio::StartAndEndDelimiter;
+    config.operationMode   = SerialStudio::ProjectFile;
+    config.frameDetection  = static_cast<SerialStudio::FrameDetection>(source.frameDetection);
+    config.startSequences  = {start};
+    config.finishSequences = both ? QList<QByteArray>{end} : QList<QByteArray>{};
+  }
+
+  m_framingActive = active;
+  auto& bus       = Core::services().bus;
+  bus.publishState<Core::Bus::DeclaredFraming>(active, config);
 }
 
 /**
@@ -127,15 +166,63 @@ DataModel::DeclarationOutcome DataModel::QuickPlotBuilder::declare(
 {
   SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return DeclarationOutcome::Unchanged);
   SS_ASSERT(isDeclarationLine(line), return DeclarationOutcome::Unchanged);
+  if (!isDeclarationContent(line))
+    return DeclarationOutcome::Unchanged;
 
   const auto outcome = m_declaration.offer(line, timestamp);
   if (outcome != DeclarationOutcome::Unchanged)
     qInfo().noquote() << "[QuickPlot]" << m_declaration.message();
 
-  if (outcome == DeclarationOutcome::Rebuild)
-    m_state.pinDeclared(declaredChannels(m_declaration.current()));
+  if (outcome != DeclarationOutcome::Rebuild)
+    return outcome;
+
+  QString error;
+  const auto& current = m_declaration.current();
+  const auto& params  = current.source.frameParserParams;
+  m_state.pinDeclared(declaredChannels(current));
+  const bool binary = current.binary
+                   && parsePackedLayout(params.value(QStringLiteral("fields")).toString(),
+                                        params.value(QStringLiteral("endianness")).toString(),
+                                        m_layout,
+                                        error);
+  if (binary || m_framingActive)
+    publishFraming(binary);
 
   return outcome;
+}
+
+/**
+ * @brief Writes one packed binary frame into the declared structure (spec 0111 R14): the fields
+ *        decode into the fixed scratch and each dataset takes its frame position's number as text
+ *        and value, in place, then its declared format. A frame of another length is dropped.
+ */
+bool DataModel::QuickPlotBuilder::applyPacked(const QByteArray& frame)
+{
+  SS_ASSERT(m_framingActive, return false);
+  SS_ASSERT(!m_frame.groups.empty(), return false);
+  const auto count =
+    decodePackedStruct(frame, m_layout, m_packed.data(), static_cast<qsizetype>(m_packed.size()));
+  if (count <= 0)
+    return false;
+
+  for (auto& group : m_frame.groups) {
+    SS_NO_UNROLL
+    for (auto& dataset : group.datasets) {
+      const int channel = dataset.index - 1;
+      if (channel < 0 || channel >= count) [[unlikely]] {
+        dataset.numericValue = kNoSample;
+        continue;
+      }
+
+      dataset.numericValue = m_packed[static_cast<size_t>(channel)];
+      dataset.isNumeric    = true;
+      render_number_in_place(dataset.value, dataset.numericValue);
+      mirror_raw_value(dataset);
+      decode_dataset_in_place(dataset, DecodeStage::Parsed);
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -157,7 +244,7 @@ DataModel::QuickPlotLineOutcome DataModel::QuickPlotBuilder::observeReplayRow(QB
   SS_ASSERT(m_operationMode == SerialStudio::QuickPlot, return QuickPlotLineOutcome::Text);
   if (!m_state.pinned()) {
     m_state.pinPositional(0);
-    m_declaration.reset();
+    forgetDeclaration();
   }
 
   qsizetype end = row.size();
@@ -200,15 +287,16 @@ qsizetype DataModel::QuickPlotBuilder::tokenSpans(const QByteArrayView*& spans) 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds the synthetic source row that anchors a QuickPlot frame. Always returns a
+ * @brief Builds the synthetic source row that anchors a QuickPlot frame, carrying a binary
+ *        declaration's framing so Save as Project can write it (spec 0111 R14). Always returns a
  *        non-null title so downstream exporters bound to NOT NULL columns don't reject the row.
  */
 DataModel::Source DataModel::QuickPlotBuilder::makeSource() const
 {
-  DataModel::Source src;
-  src.sourceId = 0;
-  src.title    = tr("Device A");
-  src.busType  = activeBusType();
+  DataModel::Source src = m_framingActive ? m_declaration.current().source : DataModel::Source();
+  src.sourceId          = 0;
+  src.title             = tr("Device A");
+  src.busType           = activeBusType();
   return src;
 }
 
@@ -386,7 +474,9 @@ void DataModel::QuickPlotBuilder::mapFieldsToChannels() noexcept
 }
 
 /**
- * @brief One dataset from one field; the number text excludes the unit the structure already shows.
+ * @brief One dataset from one field; the number text excludes the unit the structure already shows,
+ *        and a declared format decodes it as the saved project's parse would (spec 0111 R9), after
+ *        the wire value is mirrored into the raw twin the recorders read.
  */
 void DataModel::QuickPlotBuilder::applyField(DataModel::Dataset& dataset, const int fieldIndex)
 {
@@ -401,6 +491,7 @@ void DataModel::QuickPlotBuilder::applyField(DataModel::Dataset& dataset, const 
     assign_utf8_in_place(dataset.value, field.value);
     dataset.numericValue = kNoSample;
     dataset.isNumeric    = false;
+    mirror_raw_value(dataset);
     return;
   }
 
@@ -409,6 +500,8 @@ void DataModel::QuickPlotBuilder::applyField(DataModel::Dataset& dataset, const 
   assign_utf8_in_place(dataset.value, trimLineAscii(field.value.first(numberLength)));
   dataset.numericValue = field.number;
   dataset.isNumeric    = true;
+  mirror_raw_value(dataset);
+  decode_dataset_in_place(dataset, DecodeStage::Parsed);
 }
 
 #ifdef BUILD_COMMERCIAL

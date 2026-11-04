@@ -9,6 +9,7 @@
   "wireVersion": 1,
   "request": "#ss?",
   "command": "#ss!",
+  "binaryTemplate": "packed_struct",
   "libraryVersion": "1.0.0",
   "caps": {
     "lineBytes": 16384,
@@ -55,7 +56,11 @@
       "OutputInitialValue",
       "OutputOnLabel",
       "OutputOffLabel",
-      "OutputCheckable"
+      "OutputCheckable",
+      "OutputInputKind",
+      "OutputDecimals",
+      "OutputUnits",
+      "OutputQuantize"
     ]
   },
   "groupWidgets": [

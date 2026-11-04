@@ -54,7 +54,7 @@ class DeviceIoRouter {
 public:
   using DeviceTable = std::unordered_map<int, std::unique_ptr<DeviceManager>>;
 
-  static constexpr std::size_t kMaxRawTaps = 6;
+  static constexpr std::size_t kMaxRawTaps = 8;
 
   DeviceIoRouter(IIngestBinder& binder,
                  ReplyCapture& replyCapture,

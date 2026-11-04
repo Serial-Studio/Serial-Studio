@@ -1023,6 +1023,7 @@ void Misc::ModuleManager::bindInterfaces()
   taps.push_back(&grpcServer);
   grpc = &grpcServer;
 #endif
+  taps.push_back(&DataModel::pipelineModules().projectModel.declarationWatch());
 
   pipelineHost.bindFrameBuilder(frameBuilder);
   frameBuilder.bindBlockSinks(sinks, &server, grpc);
@@ -1297,7 +1298,8 @@ void Misc::ModuleManager::setupCrossModuleConnections()
  */
 void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
 {
-  auto* ioManager = &IO::ConnectionManager::instance();
+  auto* ioManager    = &IO::ConnectionManager::instance();
+  auto& projectModel = DataModel::ProjectModel::instance();
 
   Misc::ContextRegistry registry;
   registry.add("Cpp_AppState", &AppState::instance());
@@ -1321,7 +1323,8 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   registry.add("Cpp_ThemeManager", &Misc::ThemeManager::instance());
   registry.add("Cpp_Console_Handler", &Console::Handler::instance());
   registry.add("Cpp_Misc_Translator", &Misc::Translator::instance());
-  registry.add("Cpp_JSON_ProjectModel", &DataModel::ProjectModel::instance());
+  registry.add("Cpp_JSON_ProjectModel", &projectModel);
+  registry.add("Cpp_JSON_DeclarationWatch", &projectModel.declarationWatch());
   registry.add("Cpp_JSON_ProjectEditor", &DataModel::ProjectEditor::instance());
   registry.add("Cpp_ControlScript", &DataModel::ControlScript::instance());
   registry.add("Cpp_JSON_ProtoImporter", &DataModel::ProtoImporter::instance());

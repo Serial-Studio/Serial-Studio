@@ -51,6 +51,7 @@ extern "C" {
 #include "Core/TimerEvents.h"
 #include "DataModel/ActionBytes.h"
 #include "DataModel/FrameBuilder/BuilderFlagAudit.h"
+#include "DataModel/FrameBuilder/BuilderSupport.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/ControlScript.h"
@@ -59,69 +60,6 @@ extern "C" {
 #include "DataModel/Scripting/FrameParserPipeline.h"
 
 DataModel::FrameBuilder* DataModel::FrameBuilder::s_instance = nullptr;
-
-//--------------------------------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Returns the per-frame cadence carried by a captured chunk, clamped to >=1 ns.
- */
-[[nodiscard]] std::chrono::nanoseconds capturedFrameStep(const IO::CapturedDataPtr& data)
-{
-  if (!data)
-    return std::chrono::nanoseconds(1);
-
-  return std::max(std::chrono::nanoseconds(1), data->frameStep);
-}
-
-/**
- * @brief Returns whether every dataset of @p frame is table-fed (Computed: no frame index, so the
- *        parse path never carries a value for it). Only such a source may feed the sinks from a
- *        synthetic refresh: one with parsed channels is already recorded on arrival, and would
- *        otherwise duplicate every channel at UI-tick rate under a now() stamp (A11).
- */
-[[nodiscard]] bool frameIsTableFed(const DataModel::Frame& frame)
-{
-  if (frame.groups.empty())
-    return false;
-
-  for (const auto& group : frame.groups)
-    for (const auto& dataset : group.datasets)
-      if (!dataset.virtual_)
-        return false;
-
-  return true;
-}
-
-/**
- * @brief Builds the runtime group list from the project, dropping disabled groups and the
- *        disabled datasets of the survivors so frame building never sees them. The editor keeps
- *        the full set; surviving datasets retain their explicit frame index, so no sibling shifts.
- */
-[[nodiscard]] std::vector<DataModel::Group> buildEnabledGroups(
-  const std::vector<DataModel::Group>& projectGroups)
-{
-  std::vector<DataModel::Group> groups;
-  groups.reserve(projectGroups.size());
-
-  for (const auto& group : projectGroups) {
-    if (!group.enabled)
-      continue;
-
-    DataModel::Group runtimeGroup = group;
-    std::vector<DataModel::Dataset> datasets;
-    datasets.reserve(runtimeGroup.datasets.size());
-    for (auto& dataset : runtimeGroup.datasets)
-      if (dataset.enabled)
-        datasets.push_back(std::move(dataset));
-
-    runtimeGroup.datasets = std::move(datasets);
-    groups.push_back(std::move(runtimeGroup));
-  }
-
-  return groups;
-}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -836,7 +774,7 @@ DataModel::FrameBuilder::ProjectSnapshot DataModel::FrameBuilder::collectProject
   snapshot.title              = pm.title();
   snapshot.transformLibrary   = pm.transformLibraryCode();
   snapshot.transformLibraryJs = pm.transformLibraryJsCode();
-  snapshot.groups             = buildEnabledGroups(pm.groups());
+  snapshot.groups             = BuilderSupport::buildEnabledGroups(pm.groups());
   snapshot.actions            = pm.actions();
   snapshot.sources            = pm.sources();
   snapshot.decoder            = pm.decoderMethod();
@@ -1236,7 +1174,7 @@ bool DataModel::FrameBuilder::emitRepublishedFrame(const DataModel::Frame& frame
 
   const quint64 before    = m_stager.blockNumber(sourceId);
   const bool previousMask = m_maskSinks;
-  m_maskSinks             = m_maskSinks || !lane.feedsExports() || !frameIsTableFed(frame);
+  m_maskSinks = m_maskSinks || !lane.feedsExports() || !BuilderSupport::frameIsTableFed(frame);
 
   m_stager.stage(sourceId, frame, DataModel::TimestampedFrame::SteadyClock::now());
   m_stager.flush(sourceId);
@@ -1551,7 +1489,7 @@ void DataModel::FrameBuilder::parseProjectFrameFor(int sourceId,
   else
     decodeProjectChannels(sourceId, perSource, data, multiChannels);
 
-  const auto step = capturedFrameStep(data);
+  const auto step = BuilderSupport::capturedFrameStep(data);
   for (int i = 0; i < multiChannels.size(); ++i) {
     const auto& channels = multiChannels.at(i);
     if (channels.isEmpty()) [[unlikely]]
@@ -1840,7 +1778,7 @@ int DataModel::FrameBuilder::tryCellLane(int sourceId,
   if (!parser.parseCellsUtf8(data->data, sourceId, m_cellRows, m_cellFallback))
     return -1;
 
-  const auto step      = capturedFrameStep(data);
+  const auto step      = BuilderSupport::capturedFrameStep(data);
   const qsizetype rows = m_cellRows.rowCount();
   int published        = 0;
   for (qsizetype row = 0; row < rows; ++row) {
@@ -2583,7 +2521,19 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
   SS_ASSERT_HOTPATH(!data->data.isEmpty());
   SS_ASSERT_HOTPATH(m_operationMode == SerialStudio::QuickPlot);
 
+  if (m_quickPlot.binary()) [[unlikely]] {
+    if (m_quickPlot.applyPacked(data->data))
+      m_stager.stage(m_quickPlot.frame().sourceId, m_quickPlot.frame(), data->timestamp);
+
+    return;
+  }
+
   const QByteArrayView line(data->data);
+  if (!m_playerOpen && DataModel::isDeclarationLine(line)) [[unlikely]] {
+    declareQuickPlot(line, data->timestamp);
+    return;
+  }
+
   const auto outcome =
     m_playerOpen ? m_quickPlot.observeReplayRow(line) : m_quickPlot.observe(line);
 
@@ -2608,6 +2558,41 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
 
   m_quickPlot.applyFields();
   m_stager.stage(quickPlotFrame.sourceId, quickPlotFrame, data->timestamp);
+}
+
+/**
+ * @brief Offers one declaration line (spec 0111 R2/R4) from the line lane or, in a binary session,
+ *        from the GUI watch; a Rebuild re-derives the structure through the one pool invalidation.
+ */
+void DataModel::FrameBuilder::declareQuickPlot(QByteArrayView line,
+                                               const DataModel::DeclarationState::TimePoint& ts)
+{
+  SS_ASSERT_HOTPATH(m_operationMode == SerialStudio::QuickPlot);
+  SS_ASSERT_HOTPATH(!m_playerOpen);
+  if (m_quickPlot.declare(line, ts) != DataModel::DeclarationOutcome::Rebuild)
+    return;
+
+  invalidateFramePool();
+  m_quickPlot.build();
+  ensureStructurePublished(m_quickPlot.frame().sourceId, m_quickPlot.frame());
+}
+
+/**
+ * @brief Re-declaration inside a binary session (spec 0111 R14): the reader frames on the binary
+ *        delimiters, so the GUI watch reads the line from the raw bytes and posts it here, at
+ *        declaration rate and fire-and-forget, never as a blocking hop into the pipeline.
+ */
+void DataModel::FrameBuilder::submitDeclarationLine(
+  const QByteArray& line, const DataModel::DeclarationState::TimePoint& timestamp)
+{
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThread([this, line, timestamp] { submitDeclarationLine(line, timestamp); });
+    return;
+  }
+
+  if (m_operationMode == SerialStudio::QuickPlot && !m_playerOpen
+      && DataModel::isDeclarationLine(line))
+    declareQuickPlot(line, timestamp);
 }
 
 //--------------------------------------------------------------------------------------------------

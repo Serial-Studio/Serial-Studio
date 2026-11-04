@@ -146,6 +146,38 @@ inline constexpr int kMaxFramesPerPacket = 10000;
   return std::bit_cast<float>(u32Be(data, i));
 }
 
+/**
+ * @brief Reads a 64-bit unsigned little-endian value at the offset.
+ */
+[[nodiscard]] inline quint64 u64Le(const QByteArray& data, qsizetype i)
+{
+  return static_cast<quint64>(u32Le(data, i)) | (static_cast<quint64>(u32Le(data, i + 4)) << 32);
+}
+
+/**
+ * @brief Reads a 64-bit unsigned big-endian value at the offset.
+ */
+[[nodiscard]] inline quint64 u64Be(const QByteArray& data, qsizetype i)
+{
+  return (static_cast<quint64>(u32Be(data, i)) << 32) | static_cast<quint64>(u32Be(data, i + 4));
+}
+
+/**
+ * @brief Reads a 64-bit IEEE-754 double (little-endian) at the offset.
+ */
+[[nodiscard]] inline double f64Le(const QByteArray& data, qsizetype i)
+{
+  return std::bit_cast<double>(u64Le(data, i));
+}
+
+/**
+ * @brief Reads a 64-bit IEEE-754 double (big-endian) at the offset.
+ */
+[[nodiscard]] inline double f64Be(const QByteArray& data, qsizetype i)
+{
+  return std::bit_cast<double>(u64Be(data, i));
+}
+
 [[nodiscard]] QList<QStringList> byteRowFrame(const QByteArray& bytes);
 
 [[nodiscard]] QString byteGroupValue(

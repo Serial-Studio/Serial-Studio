@@ -81,6 +81,7 @@ qt_add_library(
   API/Handlers/ProjectListCommands.cpp
   API/Handlers/ProjectOutputWidgetCommands.cpp
   API/Handlers/ProjectPainterCommands.cpp
+  API/Handlers/ProjectDeclarationCommands.cpp
   API/Handlers/ProjectParserCommands.cpp
   API/Handlers/ProjectUpdateCommands.cpp
   API/Handlers/ControlScriptHandler.cpp
@@ -140,6 +141,7 @@ qt_add_library(
   API/Handlers/ProjectListCommands.h
   API/Handlers/ProjectOutputWidgetCommands.h
   API/Handlers/ProjectPainterCommands.h
+  API/Handlers/ProjectDeclarationCommands.h
   API/Handlers/ProjectParserCommands.h
   API/Handlers/ProjectUpdateCommands.h
   API/Handlers/ControlScriptHandler.h

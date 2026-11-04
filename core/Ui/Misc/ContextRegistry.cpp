@@ -59,6 +59,7 @@
     QStringLiteral("Cpp_Console_Handler"),
     QStringLiteral("Cpp_Misc_Translator"),
     QStringLiteral("Cpp_JSON_ProjectModel"),
+    QStringLiteral("Cpp_JSON_DeclarationWatch"),
     QStringLiteral("Cpp_JSON_ProjectEditor"),
     QStringLiteral("Cpp_ControlScript"),
     QStringLiteral("Cpp_JSON_ProtoImporter"),

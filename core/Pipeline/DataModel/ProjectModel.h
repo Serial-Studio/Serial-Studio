@@ -34,6 +34,7 @@
 #include "Core/DataModel/Frame.h"
 #include "Core/DataModel/FrameSupport.h"
 #include "Core/SerialStudio.h"
+#include "DataModel/Project/DeclarationWatch.h"
 #include "DataModel/Project/ProjectBulkOps.h"
 #include "DataModel/Project/ProjectEntities.h"
 #include "DataModel/Project/ProjectFolders.h"
@@ -518,6 +519,8 @@ public:
   [[nodiscard]] QString redoText() const { return m_history.redoText(); }
 
   [[nodiscard]] ProjectHistory& history() noexcept { return m_history; }
+
+  [[nodiscard]] DeclarationWatch& declarationWatch() noexcept { return m_declarationWatch; }
 
   [[nodiscard]] bool locked() const noexcept { return m_locked; }
 
@@ -1416,5 +1419,6 @@ private:
   ProjectEntities m_entities;
   ProjectOutputWidgets m_outputWidgets;
   ProjectBulkOps m_bulk;
+  DeclarationWatch m_declarationWatch;
 };
 }  // namespace DataModel

@@ -434,14 +434,24 @@ ss_add_unit_test(tst_quickplot_roundtrip
 #
 # Device declarations (spec 0111): parse and validate (AC2), the inertness of a declaration line to
 # 0106's detector and a pre-0111 app (AC8), and the declared session's Save as Project round trip.
+# DeclaredControls reads the shipped command template, aliased in by declared-controls.qrc.
 #
+qt_add_resources(SS_TEST_DECLARED_CONTROLS_RCC
+  ${CMAKE_CURRENT_SOURCE_DIR}/support/declared-controls.qrc)
+
 ss_add_unit_test(tst_device_declaration
   SOURCES tst_device_declaration.cpp
+          ${SS_TEST_DECLARED_CONTROLS_RCC}
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/QuickPlotFormatState.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Project/DeviceDeclaration.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/DeclaredControls.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
   LIBS    Qt6::Core
+          Qt6::Qml
           SerialStudio::Core
 )
 target_compile_definitions(tst_device_declaration PRIVATE
@@ -459,11 +469,14 @@ target_compile_definitions(tst_declaration_inert PRIVATE
 
 ss_add_unit_test(tst_declared_roundtrip
   SOURCES tst_declared_roundtrip.cpp
+          ${SS_TEST_DECLARED_CONTROLS_RCC}
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/QuickPlotFormatState.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Project/QuickPlotProject.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Project/DeviceDeclaration.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/DeclaredControls.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
@@ -473,6 +486,19 @@ ss_add_unit_test(tst_declared_roundtrip
 )
 target_compile_definitions(tst_declared_roundtrip PRIVATE
   SS_DECLARATION_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/tests/golden")
+
+#
+# The packed_struct Built-In template (spec 0111 R14): one allocation-free decode for the template
+# and the Quick Plot binary lane.
+#
+ss_add_unit_test(tst_packed_struct
+  SOURCES tst_packed_struct.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
 
 #
 # Group widget requirements (spec 0100 R15/R16): the one rule the group editor warning and the
@@ -1204,6 +1230,7 @@ ss_add_unit_test(tst_opcua_wire
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
@@ -1544,6 +1571,7 @@ ss_add_unit_test(tst_cframe_parser
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp

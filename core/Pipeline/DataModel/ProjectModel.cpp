@@ -93,6 +93,7 @@ DataModel::ProjectModel::ProjectModel(Core::Bus::MessageBus& bus)
   , m_entities(*this)
   , m_outputWidgets(*this)
   , m_bulk(*this)
+  , m_declarationWatch(*this, bus)
 {
   const auto bumpEpoch = [this] {
     ++m_mutationEpoch;
@@ -429,14 +430,19 @@ bool DataModel::ProjectModel::saveQuickPlotAsProject()
     return false;
 
   LineFormat format;
+  Source declaredSource;
   QString declaredTitle;
   std::vector<Group> groups;
   auto& frameBuilder = modules.frameBuilder;
   frameBuilder.invokeOnBuilderThreadBlocking([&] {
-    groups = frameBuilder.quickPlotFrame().groups;
-    format = frameBuilder.quickPlotFormat();
-    if (frameBuilder.quickPlotDeclared())
-      declaredTitle = frameBuilder.quickPlotFrame().title;
+    const auto& frame = frameBuilder.quickPlotFrame();
+    groups            = frame.groups;
+    format            = frameBuilder.quickPlotFormat();
+    if (frameBuilder.quickPlotDeclared()) {
+      declaredTitle = frame.title;
+      if (!frame.sources.empty())
+        declaredSource = frame.sources.front();
+    }
   });
   if (groups.empty())
     return false;
@@ -444,7 +450,8 @@ bool DataModel::ProjectModel::saveQuickPlotAsProject()
   const auto driver   = m_bus.latest<Core::Bus::ActiveUiDriverSettings>();
   const int busType   = driver ? driver->busType : static_cast<int>(SerialStudio::BusType::UART);
   const auto settings = driver ? driver->settings : QJsonObject();
-  const auto project  = QuickPlotProject::build(groups, busType, settings, format, declaredTitle);
+  const auto project =
+    QuickPlotProject::build(groups, busType, settings, format, declaredTitle, declaredSource);
   if (project.isEmpty())
     return false;
 
@@ -778,6 +785,7 @@ void DataModel::ProjectModel::setupExternalConnections()
     },
     Qt::DirectConnection);
   m_loader.watchGeneratedProjectRequests();
+  m_declarationWatch.setupExternalConnections();
 }
 
 /**

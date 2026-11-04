@@ -49,15 +49,18 @@ enum class DeclarationOutcome : quint8 {
 
 /**
  * @brief One parsed device declaration (spec 0111): the project title, the groups in project shape
- *        with frame indices assigned, the number of frame positions, and the notes the console
- *        shows. valid is false when the line was refused, and reason says why.
+ *        with frame indices assigned, the number of frame positions, the notes the console shows,
+ *        and for a binary device (R14) the framing and packed_struct source. valid is false when
+ *        the line was refused, and reason says why.
  */
 struct DeviceDeclaration {
   bool valid   = false;
+  bool binary  = false;
   int channels = 0;
   QString title;
   QString reason;
   QStringList notes;
+  Source source;
   std::vector<Group> groups;
 };
 
@@ -69,6 +72,18 @@ struct DeviceDeclaration {
 [[nodiscard]] inline bool isDeclarationLine(QByteArrayView line) noexcept
 {
   return !line.isEmpty() && line.front() == '#' && line.startsWith(Declaration::kPrefix);
+}
+
+/**
+ * @brief True when @p line is a declaration proper: the prefix, then a wire version digit. The
+ *        app's request and command lines share the prefix with no digit, so a device that echoes
+ *        them is ignored without a console message in either mode.
+ */
+[[nodiscard]] inline bool isDeclarationContent(QByteArrayView line) noexcept
+{
+  const auto digit = Declaration::kPrefix.size();
+  return isDeclarationLine(line) && line.size() > digit && line.at(digit) >= '0'
+      && line.at(digit) <= '9';
 }
 
 [[nodiscard]] DeviceDeclaration parseDeclaration(QByteArrayView line);
@@ -95,6 +110,8 @@ public:
 
   [[nodiscard]] const QString& message() const noexcept { return m_message; }
 
+  [[nodiscard]] const QString& reason() const noexcept { return m_reason; }
+
   [[nodiscard]] const DeviceDeclaration& current() const noexcept { return m_current; }
 
   [[nodiscard]] DeclarationOutcome offer(QByteArrayView line, TimePoint timestamp);
@@ -103,6 +120,7 @@ public:
 private:
   bool m_rebuilt;
   TimePoint m_lastRebuild;
+  QString m_reason;
   QString m_message;
   QByteArray m_heldLine;
   QByteArray m_acceptedLine;

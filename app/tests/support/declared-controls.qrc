@@ -1,0 +1,13 @@
+<!--
+  SPDX-FileCopyrightText: 2020-2026 Alex Spataru <alex@serial-studio.com>
+  SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+
+  DataModel::DeclaredControls reads its command template from
+  :/scripts/output/serial_studio_command.js. The real file is aliased in rather than copied, so the
+  declaration suites test the transmit function the app ships.
+-->
+<RCC>
+    <qresource prefix="/">
+        <file alias="scripts/output/serial_studio_command.js">../../rcc/scripts/output/serial_studio_command.js</file>
+    </qresource>
+</RCC>

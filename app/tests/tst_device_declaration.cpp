@@ -20,10 +20,12 @@
  */
 
 #include <QFile>
+#include <QJSEngine>
 #include <QJsonArray>
 #include <QTest>
 
 #include "Core/DataModel/FrameKeys.h"
+#include "DataModel/Project/DeclaredControls.h"
 #include "DataModel/Project/DeviceDeclaration.h"
 
 // Device declarations (spec 0111 AC2): refused and stripped lines, the once-per-content rebuild,
@@ -76,10 +78,18 @@ private slots:
   void goldenMpu6050();
   void goldenTinyGps();
   void goldenHexAdcSharesChannels();
-  void goldenControlsDropsOutputGroup();
+  void goldenControlsBuildOutputGroup();
+  void controlNamesAreRefused_data();
+  void controlNamesAreRefused();
+  void sliderTransmitsCommand();
+  void controlsBindReplyChannels();
+  void textFieldIsANumberField();
   void refusedLines_data();
   void refusedLines();
   void codeAndPathsAreStripped();
+  void goldenBinarySource();
+  void binarySourceRefusals_data();
+  void binarySourceRefusals();
   void sanitizerBoundsValues();
   void indexPastNextPositionIsRefused();
   void sameLineRebuildsOnce();
@@ -164,15 +174,28 @@ void DeviceDeclarationTest::goldenHexAdcSharesChannels()
 }
 
 /**
- * @brief Version 1 drops the output group with a note and keeps labels and alarm bands.
+ * @brief The control group becomes an output group whose every control sends through the command
+ *        template, and the data group keeps its labels and alarm bands.
  */
-void DeviceDeclarationTest::goldenControlsDropsOutputGroup()
+void DeviceDeclarationTest::goldenControlsBuildOutputGroup()
 {
   const auto d = DataModel::parseDeclaration(golden(QStringLiteral("controls.decl")));
   QVERIFY2(d.valid, qPrintable(d.reason));
-  QCOMPARE(d.groups.size(), size_t(1));
-  QCOMPARE(d.channels, 3);
-  QVERIFY(d.notes.join(' ').contains(QStringLiteral("Controls")));
+  QCOMPARE(d.groups.size(), size_t(3));
+  QCOMPARE(d.channels, 6);
+
+  const auto& panel = d.groups[1];
+  QCOMPARE(panel.groupType, DataModel::GroupType::Output);
+  QVERIFY(panel.widget.isEmpty());
+  QVERIFY(panel.datasets.empty());
+  QCOMPARE(panel.outputWidgets.size(), size_t(4));
+  QCOMPARE(panel.outputWidgets[0].type, DataModel::OutputWidgetType::Button);
+  QCOMPARE(panel.outputWidgets[1].offLabel, QStringLiteral("Off"));
+  QCOMPARE(panel.outputWidgets[2].type, DataModel::OutputWidgetType::Slider);
+  QCOMPARE(panel.outputWidgets[2].maxValue, 255.0);
+  QCOMPARE(panel.outputWidgets[3].stepSize, 0.5);
+  for (const auto& control : panel.outputWidgets)
+    QVERIFY(control.transmitFunction.contains("const CONTROL = \"" + control.title + "\";"));
 
   const auto& datasets = d.groups[0].datasets;
   QCOMPARE(datasets[0].labels.size(), size_t(4));
@@ -180,6 +203,119 @@ void DeviceDeclarationTest::goldenControlsDropsOutputGroup()
   QCOMPARE(datasets[1].alarmBands.size(), size_t(1));
   QCOMPARE(datasets[1].alarmBands[0].max, 200.0);
   QCOMPARE(datasets[2].title, QStringLiteral("Tank 2 Pressure"));
+}
+
+/**
+ * @brief Controls get three hidden reply channels after the declared ones (token, code, message),
+ *        and every control is bound to the unique ids a build and a project load both derive.
+ */
+void DeviceDeclarationTest::controlsBindReplyChannels()
+{
+  const auto d = DataModel::parseDeclaration(golden(QStringLiteral("controls.decl")));
+  QVERIFY2(d.valid, qPrintable(d.reason));
+  QCOMPARE(d.groups.size(), size_t(3));
+
+  const auto& replies = d.groups[2];
+  QCOMPARE(replies.groupId, 2);
+  QCOMPARE(replies.datasets.size(), size_t(3));
+  for (int i = 0; i < 3; ++i) {
+    QVERIFY(replies.datasets[static_cast<size_t>(i)].hideOnDashboard);
+    QCOMPARE(replies.datasets[static_cast<size_t>(i)].index, 4 + i);
+  }
+
+  for (const auto& control : d.groups[1].outputWidgets) {
+    QCOMPARE(control.replyTokenDatasetId, DataModel::dataset_unique_id(0, 2, 0));
+    QCOMPARE(control.replyCodeDatasetId, DataModel::dataset_unique_id(0, 2, 1));
+    QCOMPARE(control.replyMessageDatasetId, DataModel::dataset_unique_id(0, 2, 2));
+    QVERIFY(DataModel::outputExpectsReply(control));
+  }
+
+  const auto channels = DataModel::declaredChannels(d);
+  QCOMPARE(channels.size(), size_t(6));
+  QCOMPARE(channels[5].name, QByteArray("Reply Message"));
+
+  const auto plain = DataModel::parseDeclaration(golden(QStringLiteral("mpu6050.decl")));
+  QCOMPARE(plain.groups.size(), size_t(3));
+  QCOMPARE(plain.channels, 7);
+}
+
+/**
+ * @brief A declared text field is a Number field (spec 0109), so its typed value is admitted to
+ *        Min to Max before it is sent.
+ */
+void DeviceDeclarationTest::textFieldIsANumberField()
+{
+  const QByteArray line =
+    "#ss1{\"title\":\"T\",\"groups\":[{\"title\":\"G\",\"datasets\":[{\"title\":\"d\"}]},{\"title\":"
+    "\"C\",\"groupType\":1,\"outputWidgets\":[{\"title\":\"Rate\",\"outputType\":3,\"outputMin\":"
+    "0,\"outputMax\":50,\"outputUnits\":\"Hz\",\"inputKind\":0}]}]}";
+
+  const auto d = DataModel::parseDeclaration(line);
+  QVERIFY2(d.valid, qPrintable(d.reason));
+  QCOMPARE(d.groups.size(), size_t(3));
+
+  const auto& field = d.groups[1].outputWidgets.front();
+  QCOMPARE(field.type, DataModel::OutputWidgetType::TextField);
+  QCOMPARE(field.inputKind, DataModel::OutputInputKind::Number);
+  QCOMPARE(field.maxValue, 50.0);
+  QVERIFY(DataModel::outputIsNumeric(field));
+  QCOMPARE(field.units, QStringLiteral("Hz"));
+}
+
+/**
+ * @brief One row per control name that must refuse the whole declaration (spec 0111 R10).
+ */
+void DeviceDeclarationTest::controlNamesAreRefused_data()
+{
+  QTest::addColumn<QByteArray>("title");
+
+  QTest::newRow("quote") << QByteArray("a\\\"b");
+  QTest::newRow("backslash") << QByteArray("a\\\\b");
+  QTest::newRow("newline") << QByteArray("a\\nb");
+  QTest::newRow("script tag") << QByteArray("</script>");
+  QTest::newRow("33 bytes") << QByteArray(33, 'a');
+  QTest::newRow("leading space") << QByteArray(" a");
+  QTest::newRow("double space") << QByteArray("a  b");
+  QTest::newRow("non-ascii") << QByteArray("Gr\xC3\xBC\xC3\x9F");
+  QTest::newRow("empty") << QByteArray();
+}
+
+/**
+ * @brief A control name outside [A-Za-z0-9_ .-]{1,32} refuses the line, so device text never
+ *        becomes part of a transmit function.
+ */
+void DeviceDeclarationTest::controlNamesAreRefused()
+{
+  QFETCH(QByteArray, title);
+  const QByteArray line =
+    "#ss1{\"title\":\"T\",\"groups\":[{\"title\":\"G\",\"datasets\":[{\"title\""
+    ":\"d\"}]},{\"title\":\"C\",\"groupType\":1,\"outputWidgets\":[{\"title\":\""
+    + title + "\",\"outputType\":1}]}]}";
+
+  const auto d = DataModel::parseDeclaration(line);
+  QVERIFY(!d.valid);
+  QVERIFY(d.reason.contains(QStringLiteral("valid name")));
+  QVERIFY(DataModel::DeclaredControls::transmitFunction(QString::fromUtf8(title)).isEmpty());
+}
+
+/**
+ * @brief A declared slider at 128 sends the library's command line, and the token suffix rides
+ *        along when the app passes one (spec 0110).
+ */
+void DeviceDeclarationTest::sliderTransmitsCommand()
+{
+  const auto code = DataModel::DeclaredControls::transmitFunction(QStringLiteral("Speed"));
+  QVERIFY(!code.isEmpty());
+  QVERIFY(!code.contains(QStringLiteral("\"control\"")));
+
+  QJSEngine engine;
+  auto transmit =
+    engine.evaluate(QStringLiteral("(function() { %1\nreturn transmit; })()").arg(code));
+  QVERIFY(transmit.isCallable());
+  QCOMPARE(transmit.call({QJSValue(128)}).toString(), QStringLiteral("#ss!Speed=128\n"));
+  QCOMPARE(transmit.call({QJSValue(128), QJSValue(7)}).toString(),
+           QStringLiteral("#ss!Speed=128@7\n"));
+  QVERIFY(DataModel::DeclaredControls::validName(QStringLiteral("Pump 2.speed_x-1")));
 }
 
 /**
@@ -236,7 +372,10 @@ void DeviceDeclarationTest::refusedLines()
 void DeviceDeclarationTest::codeAndPathsAreStripped()
 {
   const QByteArray line =
-    "#ss1{\"title\":\"T\",\"controlScriptCode\":\"x\",\"sources\":[{\"frameParserCode\":\"x\"}],"
+    "#ss1{\"title\":\"T\",\"controlScriptCode\":\"x\",\"sources\":[{\"frameParserCode\":\"x\","
+    "\"connection\":{\"port\":\"/dev/x\"},\"frameStart\":\"$\",\"frameDetection\":3,"
+    "\"decoderMethod\":3,\"frameParserTemplate\":\"packed_struct\",\"frameParserParams\":{"
+    "\"fields\":\"f32\",\"script\":\"x\"}}],"
     "\"groups\":[{\"title\":\"G\",\"widget\":\"painter\",\"painterCode\":\"p\",\"datasets\":[{"
     "\"title\":\"d\",\"transformCode\":\"return 1\",\"virtual\":true,\"xAxis\":7,"
     "\"transformParams\":{\"k\":1},\"alarmBands\":[{\"min\":1,\"max\":2,\"sound\":\"/etc/a.wav\"}]"
@@ -258,10 +397,82 @@ void DeviceDeclarationTest::codeAndPathsAreStripped()
   QCOMPARE(dataset.alarmBands.size(), size_t(1));
   QVERIFY(dataset.alarmBands.front().sound.isEmpty());
 
+  QVERIFY(d.binary);
+  QVERIFY(d.source.frameParserCode.isEmpty());
+  QVERIFY(d.source.connectionSettings.isEmpty());
+  QVERIFY(!d.source.frameParserParams.contains(QStringLiteral("script")));
+
   const auto notes = d.notes.join(' ');
   QVERIFY(notes.contains(QStringLiteral("transformCode")));
-  QVERIFY(notes.contains(QStringLiteral("sources")));
+  QVERIFY(notes.contains(QStringLiteral("frameParserCode")));
+  QVERIFY(notes.contains(QStringLiteral("connection")));
   QVERIFY(notes.contains(QStringLiteral("painter")));
+}
+
+/**
+ * @brief The binary MPU6050 line carries its framing and a seven-field packed_struct layout.
+ */
+void DeviceDeclarationTest::goldenBinarySource()
+{
+  const auto d = DataModel::parseDeclaration(golden(QStringLiteral("mpu6050_bin.decl")));
+  QVERIFY2(d.valid, qPrintable(d.reason));
+  QVERIFY(d.binary);
+  QCOMPARE(d.channels, 7);
+  QCOMPARE(d.groups.size(), size_t(3));
+  QCOMPARE(d.source.frameStart, QStringLiteral("AA55"));
+  QVERIFY(d.source.hexadecimalDelimiters);
+  QCOMPARE(d.source.frameDetection, static_cast<int>(SerialStudio::StartDelimiterOnly));
+  QCOMPARE(d.source.checksumAlgorithm, QStringLiteral("CRC-16"));
+  QCOMPARE(d.source.decoderMethod, static_cast<int>(SerialStudio::Binary));
+  QCOMPARE(d.source.frameParserTemplate, QStringLiteral("packed_struct"));
+  QCOMPARE(d.source.frameParserParams.value(QStringLiteral("fields")).toString(),
+           QStringLiteral("f32,f32,f32,f32,f32,f32,f32"));
+  QCOMPARE(d.source.frameParserParams.value(QStringLiteral("endianness")).toString(),
+           QStringLiteral("little"));
+}
+
+/**
+ * @brief One row per binary source that must refuse the whole declaration.
+ */
+void DeviceDeclarationTest::binarySourceRefusals_data()
+{
+  QTest::addColumn<QByteArray>("source");
+
+  const QByteArray ok =
+    "\"frameStart\":\"AA55\",\"hexadecimalDelimiters\":true,\"frameDetection\":3,"
+    "\"decoderMethod\":3,\"frameParserTemplate\":\"packed_struct\"";
+  const QByteArray two = ",\"frameParserParams\":{\"fields\":\"f32,u8\"}";
+
+  QTest::newRow("text decoder") << QByteArray(ok).replace("\"decoderMethod\":3",
+                                                          "\"decoderMethod\":0")
+                                     + two;
+  QTest::newRow("other template") << QByteArray(ok).replace("packed_struct", "raw_bytes") + two;
+  QTest::newRow("field count") << ok + ",\"frameParserParams\":{\"fields\":\"f32\"}";
+  QTest::newRow("unknown type") << ok + ",\"frameParserParams\":{\"fields\":\"f32,f16\"}";
+  QTest::newRow("unknown checksum") << ok + two + ",\"checksumAlgorithm\":\"MD5\"";
+  QTest::newRow("long delimiter") << QByteArray(ok).replace("AA55", "AABBCCDDEEFF001122") + two;
+  QTest::newRow("end only") << QByteArray(ok).replace("\"frameDetection\":3",
+                                                      "\"frameDetection\":0")
+                                 + two;
+  QTest::newRow("no end") << QByteArray(ok).replace("\"frameDetection\":3", "\"frameDetection\":1")
+                               + two;
+}
+
+/**
+ * @brief A binary source the app cannot frame or decode refuses the line, so a device never gets
+ *        a dashboard whose values would be read with the wrong layout.
+ */
+void DeviceDeclarationTest::binarySourceRefusals()
+{
+  QFETCH(QByteArray, source);
+  const QByteArray line = "#ss1{\"title\":\"T\",\"sources\":[{" + source
+                        + "}],\"groups\":[{\"title\":\"G\",\"datasets\":[{\"title\":\"a\"},{"
+                          "\"title\":\"b\"}]}]}";
+
+  const auto d = DataModel::parseDeclaration(line);
+  QVERIFY(!d.valid);
+  QVERIFY(!d.binary);
+  QVERIFY(!d.reason.isEmpty());
 }
 
 /**
@@ -385,6 +596,6 @@ void DeviceDeclarationTest::projectionMatchesALoadedProject()
   QVERIFY(!declared.value(Keys::Groups).toArray().isEmpty());
 }
 
-QTEST_APPLESS_MAIN(DeviceDeclarationTest)
+QTEST_GUILESS_MAIN(DeviceDeclarationTest)
 
 #include "tst_device_declaration.moc"

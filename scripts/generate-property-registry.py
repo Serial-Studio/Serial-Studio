@@ -2462,6 +2462,14 @@ def render_declaration_header(manifest: dict, wire: dict, declaration: dict) -> 
         "",
     ]
     lines += doxygen(
+        "The Built-In template a binary declaration's frames parse with (R14)."
+    )
+    lines += [
+        "inline constexpr QLatin1StringView kBinaryTemplate("
+        f'"{declaration["binaryTemplate"]}");',
+        "",
+    ]
+    lines += doxygen(
         "The wire version this build reads and the library version it ships."
     )
     lines += [
@@ -2573,6 +2581,7 @@ def render_firmware_c(wire: dict, declaration: dict) -> str:
         f'#define SS_PREFIX "{declaration["prefix"]}"',
         f'#define SS_REQUEST "{declaration["request"]}"',
         f'#define SS_COMMAND "{declaration["command"]}"',
+        f'#define SS_BINARY_TEMPLATE "{declaration["binaryTemplate"]}"',
         f"#define SS_WIRE_VERSION {declaration['wireVersion']}",
         f'#define SS_LIBRARY_VERSION "{declaration["libraryVersion"]}"',
         f"#define SS_LIBRARY_VERSION_MAJOR {major}",
@@ -2621,6 +2630,7 @@ def render_firmware_python(wire: dict, declaration: dict) -> str:
         f'PREFIX = "{declaration["prefix"]}"',
         f'REQUEST = "{declaration["request"]}"',
         f'COMMAND = "{declaration["command"]}"',
+        f'BINARY_TEMPLATE = "{declaration["binaryTemplate"]}"',
         f"WIRE_VERSION = {declaration['wireVersion']}",
         "",
         f"MAX_LINE_BYTES = {caps['lineBytes']}",

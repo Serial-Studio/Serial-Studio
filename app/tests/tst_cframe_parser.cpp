@@ -49,7 +49,7 @@ static const QString kSmokeText("temperature=25,humidity=40");
 static const QByteArray kSmokeUtf8("temperature=25,humidity=40");
 static const QByteArray kSmokeBinary = QByteArray::fromHex("0102030405060708090a0b0c0d0e0f10");
 
-// Registry sizes as shipped: eleven text templates, thirteen binary protocols, two multi-frame
+// Registry sizes as shipped: eleven text templates, fourteen binary protocols, two multi-frame
 // expanders. Adding a template is expected to update these numbers together with the catalog.
 // binaryNativeTemplates() also appends wireLatchNativeTemplates(), which carries the five
 // driver-generated decoders in a Pro build and is empty in a GPL one, so the binary count is a
@@ -60,7 +60,7 @@ static constexpr qsizetype kWireLatchTemplateCount = 5;
 #else
 static constexpr qsizetype kWireLatchTemplateCount = 0;
 #endif
-static constexpr qsizetype kBinaryTemplateCount = 13 + kWireLatchTemplateCount;
+static constexpr qsizetype kBinaryTemplateCount = 14 + kWireLatchTemplateCount;
 static constexpr qsizetype kMultiTemplateCount  = 2;
 static constexpr qsizetype kTotalTemplateCount =
   kTextTemplateCount + kBinaryTemplateCount + kMultiTemplateCount;

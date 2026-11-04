@@ -89,6 +89,7 @@ qt_add_library(
   DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
   DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
   DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+  DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
   DataModel/Scripting/NativeTemplates/BinaryRaw.cpp
   DataModel/Scripting/NativeTemplates/BinaryHex.cpp
   DataModel/Scripting/NativeTemplates/BinaryBase64.cpp
@@ -133,6 +134,8 @@ qt_add_library(
   DataModel/Project/ProjectFixedLayouts.cpp
   DataModel/Project/QuickPlotProject.cpp
   DataModel/Project/DeviceDeclaration.cpp
+  DataModel/Project/DeclarationWatch.cpp
+  DataModel/Project/DeclaredControls.cpp
   DataModel/Project/ProjectTables.cpp
   DataModel/Project/ProjectSources.cpp
   DataModel/Project/ProjectEntities.cpp
@@ -148,6 +151,7 @@ qt_add_library(
   DataModel/CachedFlag.cpp
   DataModel/FrameBuilder/BlockPublisher.cpp
   DataModel/FrameBuilder/BuilderFlagAudit.cpp
+  DataModel/FrameBuilder/BuilderSupport.cpp
   DataModel/FrameBuilder/BlockStager.cpp
   DataModel/FrameBuilder/ExternalWiring.cpp
   DataModel/FrameBuilder/ReplayIngest.cpp
@@ -219,6 +223,7 @@ qt_add_library(
   DataModel/Scripting/CFrameParser.h
   DataModel/Scripting/NativeTemplates/NativeTemplate.h
   DataModel/Scripting/NativeTemplates/NativeTemplateSupport.h
+  DataModel/Scripting/NativeTemplates/BinaryPackedStruct.h
   DataModel/Scripting/NativeTemplates/BinaryRaw.h
   DataModel/Scripting/NativeTemplates/BinaryHex.h
   DataModel/Scripting/NativeTemplates/BinaryBase64.h
@@ -265,6 +270,8 @@ qt_add_library(
   DataModel/Project/ProjectFixedLayouts.h
   DataModel/Project/QuickPlotProject.h
   DataModel/Project/DeviceDeclaration.h
+  DataModel/Project/DeclarationWatch.h
+  DataModel/Project/DeclaredControls.h
   DataModel/Project/ProjectTables.h
   DataModel/Project/ProjectSources.h
   DataModel/Project/ProjectEntities.h
@@ -285,6 +292,7 @@ qt_add_library(
   DataModel/CachedFlag.h
   DataModel/FrameBuilder/BlockPublisher.h
   DataModel/FrameBuilder/BuilderFlagAudit.h
+  DataModel/FrameBuilder/BuilderSupport.h
   DataModel/FrameBuilder/BlockStager.h
   DataModel/FrameBuilder/ExternalWiring.h
   DataModel/FrameBuilder/ReplayIngest.h

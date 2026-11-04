@@ -38,6 +38,7 @@ API::Handlers::ProjectHandler::ProjectHandler(CommandRegistry& registry)
   , m_dryRun(registry)
   , m_list(registry)
   , m_discovery(registry)
+  , m_declaration(registry)
 {}
 
 /**
@@ -73,4 +74,5 @@ void API::Handlers::ProjectHandler::registerAll()
   m_file.registerSnapshotCommand();
   m_list.registerMoveCommands();
   m_file.registerTemplateCommands();
+  m_declaration.registerCommands();
 }

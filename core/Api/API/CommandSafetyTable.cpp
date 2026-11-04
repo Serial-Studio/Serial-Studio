@@ -28,7 +28,7 @@
 namespace API::CommandSafety {
 
 // clang-format off
-static constexpr std::array<Entry, 467> kEntries = {{
+static constexpr std::array<Entry, 470> kEntries = {{
   {QLatin1StringView("alarms.acknowledge"), Tier::Confirm, false},
   {QLatin1StringView("alarms.clear"), Tier::AlwaysConfirm, false},
   {QLatin1StringView("alarms.getProjectSounds"), Tier::Safe, false},
@@ -366,6 +366,9 @@ static constexpr std::array<Entry, 467> kEntries = {{
   {QLatin1StringView("project.dataset.setVirtual"), Tier::Confirm, false},
   {QLatin1StringView("project.dataset.transform.dryRun"), Tier::Safe, false},
   {QLatin1StringView("project.dataset.update"), Tier::Confirm, false},
+  {QLatin1StringView("project.declaration.adopt"), Tier::AlwaysConfirm, false},
+  {QLatin1StringView("project.declaration.get"), Tier::Safe, false},
+  {QLatin1StringView("project.declaration.keep"), Tier::Confirm, false},
   {QLatin1StringView("project.dryRun.endToEnd"), Tier::Safe, false},
   {QLatin1StringView("project.exportJson"), Tier::Safe, false},
   {QLatin1StringView("project.frameParser.dryCompile"), Tier::Safe, false},

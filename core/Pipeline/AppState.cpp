@@ -52,6 +52,7 @@ AppState::AppState(Core::Bus::MessageBus& bus)
   , m_frameBuilder(nullptr)
   , m_hasPendingMode(false)
   , m_pendingMode(SerialStudio::QuickPlot)
+  , m_hasDeclaredFraming(false)
 {
   const int saved   = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
   const int clamped = (saved >= SerialStudio::ProjectFile && saved <= SerialStudio::QuickPlot)
@@ -63,8 +64,15 @@ AppState::AppState(Core::Bus::MessageBus& bus)
 
   m_linkState = m_bus.subscribe<Core::Bus::ConnectionStateChanged>(
     this, [this](const std::shared_ptr<const Core::Bus::ConnectionStateChanged>& link) {
-      if (!link->connected && !link->connecting)
-        applyPendingMode();
+      if (link->connected || link->connecting)
+        return;
+
+      applyDeclaredFraming(false, IO::FrameConfig());
+      applyPendingMode();
+    });
+  m_declaredFramingState = m_bus.subscribe<Core::Bus::DeclaredFraming>(
+    this, [this](const std::shared_ptr<const Core::Bus::DeclaredFraming>& framing) {
+      applyDeclaredFraming(framing->active, framing->config);
     });
 }
 
@@ -194,7 +202,8 @@ void AppState::setOperationMode(SerialStudio::OperationMode mode)
   if (m_operationMode == mode)
     return;
 
-  m_operationMode = mode;
+  m_operationMode      = mode;
+  m_hasDeclaredFraming = false;
   if (!m_ephemeralSession)
     m_settings.setValue("operation_mode", static_cast<int>(mode));
 
@@ -279,6 +288,27 @@ void AppState::applyPendingMode()
 }
 
 /**
+ * @brief Adopts or drops the binary framing a Quick Plot device declared (spec 0111 R14) and
+ *        re-announces source 0's framing, so the reader is recreated on the usual reconfigure
+ *        path. An activation counts only in Quick Plot with the link up: one queued from the
+ *        pipeline just before a disconnect must not outlive that session.
+ */
+void AppState::applyDeclaredFraming(const bool active, const IO::FrameConfig& config)
+{
+  const auto link = m_bus.latest<Core::Bus::ConnectionStateChanged>();
+  const bool next = active && link && link->connected && m_operationMode == SerialStudio::QuickPlot;
+  SS_ASSERT(!next || !config.startSequences.isEmpty(), return);
+  if (!next && !m_hasDeclaredFraming)
+    return;
+
+  m_hasDeclaredFraming = next;
+  m_declaredFraming    = next ? config : IO::FrameConfig();
+  m_frameConfig        = deriveFrameConfig();
+  m_bus.publishState<Core::Bus::FrameConfigChanged>(m_frameConfig);
+  Q_EMIT frameConfigChanged(m_frameConfig);
+}
+
+/**
  * @brief Retains the mode and its framing on the bus, mode first, so a subscriber replaying the
  *        latest state or a library below reading latest<>() sees both at any point after
  *        construction (the headless roots never run a wiring pass).
@@ -296,6 +326,9 @@ IO::FrameConfig AppState::deriveFrameConfig() const
 {
   IO::FrameConfig cfg;
   cfg.operationMode = m_operationMode;
+
+  if (m_operationMode == SerialStudio::QuickPlot && m_hasDeclaredFraming)
+    return m_declaredFraming;
 
   if (m_operationMode == SerialStudio::QuickPlot) {
     cfg.startSequences    = {};

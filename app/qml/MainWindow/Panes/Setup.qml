@@ -246,6 +246,23 @@ Widgets.Pane {
           if (checked && shouldChange)
             Cpp_AppState.operationMode = SerialStudio.QuickPlot
         }
+      } Widgets.Toggle {
+        objectName: "setup.quickPlot.requestDeclaration"
+
+        ToolTip.delay: 500
+        Layout.leftMargin: -6
+        ToolTip.visible: hovered
+        Layout.maximumHeight: 18
+        Layout.maximumWidth: root.maxItemWidth
+        text: qsTr("Ask the device for its dashboard")
+        checked: Cpp_JSON_DeclarationWatch.requestOnConnect
+        visible: Cpp_AppState.operationMode === SerialStudio.QuickPlot
+        ToolTip.text: qsTr("Sends one request line on connect, so a device that uses the "
+                           + "Serial Studio library declares its dashboard.")
+        onCheckedChanged: {
+          if (Cpp_JSON_DeclarationWatch.requestOnConnect !== checked)
+            Cpp_JSON_DeclarationWatch.requestOnConnect = checked
+        }
       } Widgets.Radio {
         objectName: "setup.operationMode.projectFile"
 
@@ -280,6 +297,29 @@ Widgets.Pane {
                  qsTr("Change Project File (%1)").arg(Cpp_AppState.projectFileName) :
                  qsTr("Select Project File") + "...")
         enabled: Cpp_AppState.operationMode === SerialStudio.ProjectFile
+      }
+
+      //
+      // Device declaration offer
+      //
+      Widgets.PushButton {
+        objectName: "setup.declaration.adopt"
+
+        Layout.fillWidth: true
+        text: qsTr("Use Device Dashboard")
+        Layout.maximumWidth: root.maxItemWidth
+        onClicked: Cpp_JSON_DeclarationWatch.adopt()
+        visible: Cpp_AppState.operationMode === SerialStudio.ProjectFile
+                 && Cpp_JSON_DeclarationWatch.pendingDifference
+      } Widgets.PushButton {
+        objectName: "setup.declaration.keep"
+
+        Layout.fillWidth: true
+        text: qsTr("Keep Project")
+        Layout.maximumWidth: root.maxItemWidth
+        onClicked: Cpp_JSON_DeclarationWatch.keep()
+        visible: Cpp_AppState.operationMode === SerialStudio.ProjectFile
+                 && Cpp_JSON_DeclarationWatch.pendingDifference
       }
 
       //

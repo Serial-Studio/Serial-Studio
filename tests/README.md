@@ -279,7 +279,7 @@ ctest --test-dir build/dev -R dsp_kernels --output-on-failure
 | `tst_hal_driver`      | `HAL_Driver.h` default implementations: sync `beginOpen` seam, `abortOpen`, `applyConnectionSettings` routing, `publishReceivedData`, `makeCapturedData` frame-step clamp |
 | `tst_xymodem`         | XMODEM/YMODEM sender state machines through the `writeRequested`/`processInput` seam plus `CRC.h` vectors; block framing, ACK/NAK/EOT flows, padding, cancellation, YMODEM batch headers |
 | `tst_zmodem`          | ZMODEM sender against a simulated receiver: header/subpacket framing with independently reimplemented CRCs, ZDLE escaping, reposition, cancel paths, session teardown |
-| `tst_cframe_parser`   | The Built-In parser engine: catalog/schema/descriptor contracts and a behavior test for every native template (10 text, 13 binary, 2 multi-frame) plus the span fast lane |
+| `tst_cframe_parser`   | The Built-In parser engine: catalog/schema/descriptor contracts and a behavior test for every native template (10 text, 14 binary, 2 multi-frame) plus the span fast lane |
 | `tst_lua_compat`      | The Lua 5.1/5.2 compat shim on a raw `lua_State`: math/table/string/bit32 surface, native `string.split`, sandboxed console and restricted `os` |
 | `tst_js_watchdog`     | `JsWatchdog`/`JsWatchdogThread`: interrupt of runaway scripts within budget, engine reuse after interrupt, per-engine isolation, exception-vs-timeout distinction, worker shutdown |
 | `tst_mirror_protocol` | Spec-0040 wire codec: `layoutHash` FNV-1a pins (including fixture cross-checks), `roundSignificant`, structure/snapshot/heartbeat encoding, chunking and reassembly |
