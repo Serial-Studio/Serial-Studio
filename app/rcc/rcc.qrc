@@ -678,6 +678,7 @@
         <file>icons/editor/32/clear.svg</file>
         <file>icons/editor/32/compress.svg</file>
         <file>icons/editor/32/control-script.svg</file>
+        <file>icons/editor/32/dataset-values.svg</file>
         <file>icons/editor/32/dataset.svg</file>
         <file>icons/editor/32/expand.svg</file>
         <file>icons/editor/32/export-table.svg</file>
@@ -727,6 +728,7 @@
         <file>icons/editor/48/compress.svg</file>
         <file>icons/editor/48/control-script.svg</file>
         <file>icons/editor/48/dashboard-widgets.svg</file>
+        <file>icons/editor/48/dataset-values.svg</file>
         <file>icons/editor/48/dataset.svg</file>
         <file>icons/editor/48/device.svg</file>
         <file>icons/editor/48/expand.svg</file>
