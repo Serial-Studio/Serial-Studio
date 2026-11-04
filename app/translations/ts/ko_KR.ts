@@ -4,47 +4,47 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="371"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="376"/>
         <source>Mixed</source>
         <translation>혼합</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="444"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="443"/>
         <source>Client Certificate</source>
         <translation>클라이언트 인증서</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="445"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="444"/>
         <source>Optional (mutual TLS)</source>
         <translation>선택 사항 (상호 TLS)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="446"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="445"/>
         <source>PEM certificate presented to brokers that require mutual TLS (AWS IoT Core)</source>
         <translation>상호 TLS를 요구하는 브로커에 제시되는 PEM 인증서 (AWS IoT Core)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="457"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="456"/>
         <source>Private Key</source>
         <translation>개인 키</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="458"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="457"/>
         <source>Defaults to the certificate file</source>
         <translation>기본값은 인증서 파일</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="459"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="458"/>
         <source>PEM private key matching the client certificate</source>
         <translation>클라이언트 인증서와 일치하는 PEM 개인 키</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="469"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="468"/>
         <source>Key Passphrase</source>
         <translation>키 암호문구</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="470"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="469"/>
         <source>Passphrase for an encrypted private key (stored obfuscated in this machine's credential vault, never in the project file)</source>
         <translation>암호화된 개인 키의 암호문구 (이 기기의 자격 증명 저장소에 난독화되어 보관되며, 프로젝트 파일에는 저장되지 않음)</translation>
     </message>
@@ -53,22 +53,22 @@
         <translation type="vanished">암호화된 개인 키의 암호문구 (암호화된 저장소에 보관되며 프로젝트 파일에는 저장되지 않음)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="481"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (포트 443을 통한 MQTT)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="483"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
         <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
         <translation>브로커가 방화벽 뒤에서 포트 443으로 MQTT를 제공할 수 있도록 ALPN 프로토콜 알림</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="497"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="496"/>
         <source>ALPN Protocol</source>
         <translation>ALPN 프로토콜</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="499"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="498"/>
         <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
         <translation>TLS 핸드셰이크 중 알리는 프로토콜 이름 (AWS IoT는 x-amzn-mqtt-ca 사용)</translation>
     </message>
@@ -222,6 +222,11 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation>%1의 응답 대기 중. 로컬 하드웨어에서 모델 로드 및 프롬프트 처리에 시간이 걸릴 수 있습니다...</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1466"/>
+        <source>This conversation is long enough that the assistant may be losing track of earlier details, so recent replies may be less reliable. Consider starting a new chat.</source>
+        <translation>이 대화는 충분히 길어서 어시스턴트가 이전 세부 사항을 놓칠 수 있으므로, 최근 답변이 덜 신뢰할 수 있습니다. 새 채팅을 시작하는 것을 고려하세요.</translation>
+    </message>
+    <message>
         <source>%1 operation(s) failed</source>
         <translation type="vanished">%1개 작업 실패</translation>
     </message>
@@ -243,14 +248,12 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation>이번 턴의 도구 호출 한도에 도달했습니다. 더 이상 도구를 요청하지 마십시오. 지금까지 찾은 내용을 요약하고, 작업이 완료되지 않았다면 남은 단계를 알려 사용자가 계속 진행하도록 할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1467"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
-        <translation>모델이 컨텍스트 무결성 라인 재생성을 중단했습니다. 긴 대화는 조용히 저하되며, 최근 응답의 신뢰도가 낮을 수 있습니다.</translation>
+        <translation type="vanished">모델이 컨텍스트 무결성 라인 재생성을 중단했습니다. 긴 대화는 조용히 저하되며, 최근 응답의 신뢰도가 낮을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1470"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
-        <translation>모델이 컨텍스트 무결성 라인을 변경했습니다(드리프트 세그먼트: %1). 긴 대화는 조용히 저하되며, 최근 응답의 신뢰도가 낮을 수 있습니다.</translation>
+        <translation type="vanished">모델이 컨텍스트 무결성 라인을 변경했습니다(드리프트 세그먼트: %1). 긴 대화는 조용히 저하되며, 최근 응답의 신뢰도가 낮을 수 있습니다.</translation>
     </message>
     <message>
         <source>Tool-call budget exceeded</source>
@@ -558,12 +561,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1037"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1104"/>
         <source>API server</source>
         <translation>API 서버</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1037"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1104"/>
         <source>Invalid pending connection</source>
         <translation>잘못된 대기 중인 연결</translation>
     </message>
@@ -1442,12 +1445,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AppState</name>
     <message>
-        <location filename="../../../core/Pipeline/AppState.cpp" line="233"/>
+        <location filename="../../../core/Pipeline/AppState.cpp" line="243"/>
         <source>Mode changes after you disconnect</source>
         <translation>연결 해제 후 모드 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/AppState.cpp" line="234"/>
+        <location filename="../../../core/Pipeline/AppState.cpp" line="244"/>
         <source>The project is ready. Serial Studio switches to Project File mode when the current connection ends, so the session in progress is not interrupted.</source>
         <translation>프로젝트가 준비되었습니다. Serial Studio는 현재 연결이 종료되면 프로젝트 파일 모드로 전환되므로 진행 중인 세션이 중단되지 않습니다.</translation>
     </message>
@@ -1989,9 +1992,13 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>편집 자동 승인</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="196"/>
         <source>Reversible project edits run without asking. Edits are checkpointed to your backups folder; the project file on disk changes only when you save.</source>
-        <translation>되돌릴 수 있는 프로젝트 편집은 확인 없이 실행됩니다. 편집 내용은 백업 폴더에 체크포인트로 저장되며, 디스크의 프로젝트 파일은 저장할 때만 변경됩니다.</translation>
+        <translation type="vanished">되돌릴 수 있는 프로젝트 편집은 확인 없이 실행됩니다. 편집 내용은 백업 폴더에 체크포인트로 저장되며, 디스크의 프로젝트 파일은 저장할 때만 변경됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="196"/>
+        <source>Reversible project edits run without asking. A backup copy goes to your backups folder, and the project file on disk changes only when you save.</source>
+        <translation>되돌릴 수 있는 프로젝트 편집은 확인 없이 실행됩니다. 백업 사본이 백업 폴더로 이동하며, 디스크의 프로젝트 파일은 저장할 때만 변경됩니다.</translation>
     </message>
     <message>
         <location filename="../../qml/AI/AssistantPanel/AssistantTopBar.qml" line="205"/>
@@ -2382,114 +2389,122 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>실행 중 인터페이스가 정지됩니다</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="183"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
-        <translation>각 단계는 메인 스레드에서 전력으로 실행되므로 완료될 때까지 창이 응답하지 않습니다. 벤치마크가 끝나면 현재 프로젝트가 자동으로 다시 로드됩니다.</translation>
+        <translation type="vanished">각 단계는 메인 스레드에서 전력으로 실행되므로 완료될 때까지 창이 응답하지 않습니다. 벤치마크가 끝나면 현재 프로젝트가 자동으로 다시 로드됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="240"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="239"/>
         <source>Frames per phase:</source>
         <translation>단계당 프레임 수:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="257"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="256"/>
         <source>Minimum duration:</source>
         <translation>최소 지속 시간:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="288"/>
         <source>Stages</source>
         <translation>단계</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="296"/>
         <source>Parsers</source>
         <translation>파서</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="309"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="308"/>
         <source>Data export</source>
         <translation>데이터 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="320"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="319"/>
         <source>Dashboard</source>
         <translation>대시보드</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="334"/>
         <source>Data</source>
         <translation>데이터</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="345"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="344"/>
         <source>Numeric only</source>
         <translation>숫자 값만</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="356"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="355"/>
         <source>Mixed (numeric + text)</source>
         <translation>혼합(숫자 + 텍스트)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="376"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="375"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>벤치마크를 실행하려면 최소 하나의 단계와 하나의 데이터 유형을 선택하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="214"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="213"/>
         <source>Running %1...</source>
         <translation>%1 실행 중...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="215"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="183"/>
+        <source>The window stops responding while the benchmark runs. Your project reloads automatically when it finishes.</source>
+        <translation>벤치마크 실행 중에 창이 응답하지 않습니다. 완료되면 프로젝트가 자동으로 다시 로드됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="214"/>
         <source>Preparing...</source>
         <translation>준비 중...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="391"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="390"/>
         <source>Disconnect the active device before running a benchmark.</source>
         <translation>벤치마크를 실행하기 전에 활성 장치의 연결을 끊으십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="392"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="391"/>
         <source>Close the open recording before running a benchmark.</source>
         <translation>벤치마크를 실행하기 전에 열린 녹화를 닫으십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="424"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="423"/>
         <source>Pipeline</source>
         <translation>파이프라인</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="436"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="435"/>
         <source>Throughput</source>
         <translation>처리량</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="448"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="447"/>
         <source>Time</source>
         <translation>시간</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="460"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="459"/>
         <source>Result</source>
         <translation>결과</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="560"/>
         <source>Run a test to see results</source>
         <translation>결과를 보려면 테스트를 실행하십시오</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="578"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="577"/>
         <source>Peak memory: %1</source>
         <translation>피크 메모리: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="592"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="591"/>
+        <source>A stage passes when it keeps up with the speed a fast device needs: about a million frames per second for the data pipeline and the built-in parsers, down to 64 thousand for JavaScript with mixed data. The export and dashboard rows are for information only.</source>
+        <translation type="unfinished">스테이지는 빠른 장치가 필요로 하는 속도를 유지할 때 통과합니다. 데이터 파이프라인 및 기본 제공 파서의 경우 초당 약 100만 프레임, 혼합 데이터가 있는 JavaScript의 경우 64,000까지입니다. 내보내기 및 대시보드 행은 정보 제공용입니다.</translation>
+    </message>
+    <message>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
-        <translation>합격/불합격은 데이터 파이프라인 및 파서 단계에만 적용됩니다(데이터 파이프라인 및 내장 숫자 1024 K 프레임/초; 내장 혼합 512 K; Lua 숫자 256 K; JavaScript 숫자 및 Lua 혼합 128 K; JavaScript 혼합 64 K). 내보내기 및 대시보드 단계는 정보 제공용입니다.</translation>
+        <translation type="vanished">합격/불합격은 데이터 파이프라인 및 파서 단계에만 적용됩니다(데이터 파이프라인 및 내장 숫자 1024 K 프레임/초; 내장 혼합 512 K; Lua 숫자 256 K; JavaScript 숫자 및 Lua 혼합 128 K; JavaScript 혼합 64 K). 내보내기 및 대시보드 단계는 정보 제공용입니다.</translation>
     </message>
     <message>
         <source>Pass/Fail applies to the data-pipeline and parser phases (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard phases are informational.</source>
@@ -2500,7 +2515,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">합격/불합격은 데이터 파이프라인 및 파서 단계에 적용됩니다(데이터 파이프라인 및 네이티브 숫자 1024 K 프레임/초; 네이티브 혼합 512 K; Lua 숫자 256 K; JavaScript 숫자 및 Lua 혼합 128 K; JavaScript 혼합 64 K). 내보내기 및 대시보드 단계는 참고용입니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="607"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="606"/>
         <source>Copy</source>
         <translation>복사</translation>
     </message>
@@ -2513,22 +2528,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">합격/불합격은 파서 단계에만 적용됩니다(Lua 목표 256 K 프레임/초, JavaScript 128 K). 내보내기 및 대시보드 단계는 정보 제공용입니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="614"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="613"/>
         <source>Clear</source>
         <translation>지우기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="623"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="622"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="631"/>
         <source>Running...</source>
         <translation>실행 중...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="631"/>
         <source>Run Benchmark</source>
         <translation>벤치마크 실행</translation>
     </message>
@@ -2839,8 +2854,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="299"/>
+        <source>Bluetooth LE is not supported on this operating system yet. Support will come in a future update.</source>
+        <translation>Bluetooth LE는 이 운영 체제에서 아직 지원되지 않습니다. 향후 업데이트에서 지원이 제공될 예정입니다.</translation>
+    </message>
+    <message>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
-        <translation>QT에서 공식적으로 지원하는 즉시 이 운영 체제에서 작동하도록 Serial Studio를 업데이트할 예정입니다</translation>
+        <translation type="vanished">QT에서 공식적으로 지원하는 즉시 이 운영 체제에서 작동하도록 Serial Studio를 업데이트할 예정입니다</translation>
     </message>
 </context>
 <context>
@@ -3094,9 +3113,13 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>(앱 기본값)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="156"/>
         <source>A Critical notification on a channel plays its Warning file, a Warning notification its Caution file, an Info notification its Advisory file. Empty cells use the sounds from Preferences.</source>
-        <translation>채널의 Critical 알림은 Warning 파일을 재생하고, Warning 알림은 Caution 파일을, Info 알림은 Advisory 파일을 재생합니다. 빈 셀은 환경설정의 사운드를 사용합니다.</translation>
+        <translation type="vanished">채널의 Critical 알림은 Warning 파일을 재생하고, Warning 알림은 Caution 파일을, Info 알림은 Advisory 파일을 재생합니다. 빈 셀은 환경설정의 사운드를 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="156"/>
+        <source>Choose the sounds this channel plays. A Critical notification plays the Warning sound, a Warning notification the Caution sound, and an Info notification the Advisory sound. Empty cells use the sounds from Preferences.</source>
+        <translation>이 채널이 재생하는 사운드를 선택하세요. Critical 알림은 Warning 사운드를 재생하고, Warning 알림은 Caution 사운드를, Info 알림은 Advisory 사운드를 재생합니다. 빈 셀은 환경설정의 사운드를 사용합니다.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="167"/>
@@ -5281,6 +5304,216 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
 </context>
 <context>
+    <name>ConnectionSequenceEditor</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="36"/>
+        <source>Connection Sequence</source>
+        <translation>연결 시퀀스</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="65"/>
+        <source>Send BREAK</source>
+        <translation>BREAK 전송</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="66"/>
+        <source>Wait</source>
+        <translation>대기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="67"/>
+        <source>Set Control Line</source>
+        <translation>제어 라인 설정</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="68"/>
+        <source>Send Data</source>
+        <translation>데이터 전송</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="69"/>
+        <source>Expect Reply</source>
+        <translation>응답 대기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="70"/>
+        <source>Clear Received Data</source>
+        <translation>수신 데이터 지우기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="71"/>
+        <source>Set Baud Rate</source>
+        <translation>보레이트 설정</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="72"/>
+        <source>Set Flow Control</source>
+        <translation>흐름 제어 설정</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="80"/>
+        <source>No Line Ending</source>
+        <translation>줄 끝 없음</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="81"/>
+        <source>New Line</source>
+        <translation>새 줄</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="82"/>
+        <source>Carriage Return</source>
+        <translation>캐리지 리턴</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="83"/>
+        <source>CR + NL</source>
+        <translation>CR + NL</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="290"/>
+        <source>Some devices need a few steps before they start sending data, such as a reset, a wake-up command, or a reply to wait for. These steps run in order every time Serial Studio connects. If one fails, the connection stops and the console says which step failed.</source>
+        <translation>일부 장치는 데이터 전송을 시작하기 전에 리셋, 웨이크업 명령, 또는 대기할 응답 등 몇 가지 단계가 필요합니다. 이러한 단계는 Serial Studio가 연결될 때마다 순서대로 실행됩니다. 하나라도 실패하면 연결이 중단되고 콘솔에 실패한 단계가 표시됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="309"/>
+        <source>Steps</source>
+        <translation>단계</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="322"/>
+        <source>Add Step</source>
+        <translation>단계 추가</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="326"/>
+        <source>Append a step at the end of the sequence.</source>
+        <translation>시퀀스 끝에 단계를 추가합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="438"/>
+        <source>Move up.</source>
+        <translation>위로 이동합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="458"/>
+        <source>Move down.</source>
+        <translation>아래로 이동합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="476"/>
+        <source>Remove this step.</source>
+        <translation>이 단계를 제거합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="506"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="638"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="790"/>
+        <source>ms</source>
+        <translation>ms</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="538"/>
+        <source>High</source>
+        <translation>높음</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="538"/>
+        <source>Low</source>
+        <translation>낮음</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="561"/>
+        <source>e.g. 15 15</source>
+        <translation>예: 15 15</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="561"/>
+        <source>e.g. AT<byte value="xd"/></source>
+        <translation>예: AT</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="568"/>
+        <source>Hex</source>
+        <translation>16진수</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="614"/>
+        <source>Reply in hex, for example 06</source>
+        <translation>16진수로 응답, 예: 06</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="615"/>
+        <source>The bytes the device should send back, in hex. Write ?? for a byte that can be anything. To accept more than one reply, separate them with a vertical bar, for example 06 | 15.</source>
+        <translation>장치가 보내야 할 바이트(16진수). 임의의 바이트는 ??로 표기합니다. 여러 응답을 허용하려면 수직 막대로 구분하세요. 예: 06 | 15.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="623"/>
+        <source>wait up to</source>
+        <translation>최대 대기 시간</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="648"/>
+        <source>Continue If No Reply</source>
+        <translation>응답 없을 때 계속</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="649"/>
+        <source>If no matching reply arrives in time, note it in the console and go on to the next step instead of stopping the connection.</source>
+        <translation>일치하는 응답이 시간 내에 도착하지 않으면 콘솔에 기록하고 연결을 중단하지 않고 다음 단계로 진행합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="666"/>
+        <source>Throws away anything the device has sent so far.</source>
+        <translation>장치가 지금까지 보낸 모든 데이터를 삭제합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="693"/>
+        <source>baud until disconnected</source>
+        <translation>보드레이트(연결 해제될 때까지)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="732"/>
+        <source>No steps. Serial Studio starts reading data as soon as the port opens.</source>
+        <translation>단계 없음. Serial Studio는 포트가 열리자마자 데이터 읽기를 시작합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="748"/>
+        <source>Step %1: %2</source>
+        <translation>단계 %1: %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="762"/>
+        <source>Time Limit</source>
+        <translation>시간 제한</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="765"/>
+        <source>All steps must finish within this time, or the connection stops.</source>
+        <translation>모든 단계는 이 시간 내에 완료되어야 하며, 그렇지 않으면 연결이 중단됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="802"/>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="804"/>
+        <source>Discard changes.</source>
+        <translation>변경 사항 폐기.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="815"/>
+        <source>Apply</source>
+        <translation>적용</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml" line="819"/>
+        <source>Apply the sequence; it runs on the next connection.</source>
+        <translation>시퀀스를 적용합니다. 다음 연결 시 실행됩니다.</translation>
+    </message>
+</context>
+<context>
     <name>Console</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Console.qml" line="32"/>
@@ -5427,6 +5660,11 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>16진수</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="1289"/>
+        <source>[Connection Sequence]</source>
+        <translation>[연결 시퀀스]</translation>
+    </message>
+    <message>
         <source>Plain Text</source>
         <translation type="vanished">일반 텍스트</translation>
     </message>
@@ -5440,7 +5678,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>체크섬 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="1209"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="1213"/>
         <source>Device %1</source>
         <translation>장치 %1</translation>
     </message>
@@ -5523,9 +5761,13 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>%1개 주석 유지됨</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="394"/>
         <source>Each bar is a byte range the decoder labelled, one lane per decoder row: oldest on the left, newest on the right.</source>
-        <translation>각 막대는 디코더가 레이블을 지정한 바이트 범위이며, 디코더 행당 하나의 레인으로 표시됩니다: 가장 오래된 것은 왼쪽, 최신 것은 오른쪽입니다.</translation>
+        <translation type="vanished">각 막대는 디코더가 레이블을 지정한 바이트 범위이며, 디코더 행당 하나의 레인으로 표시됩니다: 가장 오래된 것은 왼쪽, 최신 것은 오른쪽입니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="394"/>
+        <source>Each bar is a part of the data that the annotation script named. Each row has its own lane, with the oldest data on the left.</source>
+        <translation>각 막대는 주석 스크립트로 명명된 데이터의 일부입니다. 각 행은 자체 레인을 가지며, 가장 오래된 데이터가 왼쪽에 있습니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="397"/>
@@ -5670,8 +5912,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1104"/>
+        <source>Annotations name the parts of incoming data, such as a header or a checksum. A short script finds each part, and this panel draws them, lists them, and lets you copy their bytes.</source>
+        <translation>주석은 헤더 또는 체크섬과 같은 들어오는 데이터의 부분을 명명합니다. 짧은 스크립트가 각 부분을 찾고, 이 패널이 그려서 나열하고 바이트를 복사할 수 있게 합니다.</translation>
+    </message>
+    <message>
         <source>Annotations label ranges of the incoming byte stream: a small script names each range, and this panel draws them as lanes, lists them, and extracts their bytes.</source>
-        <translation>주석은 수신 바이트 스트림의 범위에 레이블을 지정합니다: 작은 스크립트가 각 범위에 이름을 지정하면 이 패널은 이를 레인으로 그리고 목록으로 표시하며 바이트를 추출합니다.</translation>
+        <translation type="vanished">주석은 수신 바이트 스트림의 범위에 레이블을 지정합니다: 작은 스크립트가 각 범위에 이름을 지정하면 이 패널은 이를 레인으로 그리고 목록으로 표시하며 바이트를 추출합니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1112"/>
@@ -6267,7 +6513,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardButton</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="97"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="101"/>
         <source>Send</source>
         <translation>전송</translation>
     </message>
@@ -6394,17 +6640,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">명령 입력…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="134"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="156"/>
+        <source>refused: %1</source>
+        <translation>거부됨: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="158"/>
+        <source>acknowledged</source>
+        <translation>확인됨</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="159"/>
+        <source>unanswered</source>
+        <translation>응답 없음</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="160"/>
         <source>no data</source>
         <translation>데이터 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="135"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="161"/>
         <source>waiting…</source>
         <translation>대기 중…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="136"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="162"/>
         <source>live</source>
         <translation>실시간</translation>
     </message>
@@ -6419,12 +6680,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="44"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="88"/>
         <source>Enter command…</source>
         <translation>명령 입력…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="56"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="128"/>
         <source>Send</source>
         <translation>전송</translation>
     </message>
@@ -6632,7 +6893,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>개요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="362"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="363"/>
         <source>Active</source>
         <translation>활성</translation>
     </message>
@@ -7218,11 +7479,23 @@ v
     </message>
 </context>
 <context>
+    <name>DataModel::DeclarationWatch</name>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/DeclarationWatch.cpp" line="503"/>
+        <source>The device declares a different dashboard</source>
+        <translation>기기가 다른 대시보드를 선언합니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/DeclarationWatch.cpp" line="504"/>
+        <source>"%1" differs from the loaded project. In the Setup panel, Use Device Dashboard opens it as a new, unsaved project, and Keep Project leaves the loaded project as it is.</source>
+        <translation>"%1"이(가) 로드된 프로젝트와 다릅니다. 설정 패널에서 기기 대시보드 사용은 새로운 저장되지 않은 프로젝트로 열고, 프로젝트 유지는 로드된 프로젝트를 그대로 둡니다.</translation>
+    </message>
+</context>
+<context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="327"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
-        <translation>다운스트림 소비자(대시보드, CSV/MDF4 내보내기, 히스토리안 또는 API 구독자)가 충분히 빠르게 처리하지 못하여 표시 및 활성 기록에서 데이터가 손실되고 있습니다. 부하가 큰 소비자를 비활성화하거나 데이터 전송률을 줄이십시오.</translation>
+        <translation type="vanished">다운스트림 소비자(대시보드, CSV/MDF4 내보내기, 히스토리안 또는 API 구독자)가 충분히 빠르게 처리하지 못하여 표시 및 활성 기록에서 데이터가 손실되고 있습니다. 부하가 큰 소비자를 비활성화하거나 데이터 전송률을 줄이십시오.</translation>
     </message>
     <message>
         <source>Channel %1</source>
@@ -7241,23 +7514,32 @@ v
         <translation type="vanished">빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="325"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="264"/>
         <source>Block pool exhausted</source>
         <translation>블록 풀 소진</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="266"/>
+        <source>Serial Studio can't keep up with the data: the dashboard, a recording, or an API client is too slow, so some data is missing from the display and from recordings. Close a heavy widget, stop a recording, or lower the data rate.</source>
+        <translation>Serial Studio가 데이터를 따라잡을 수 없습니다. 대시보드, 녹화 또는 API 클라이언트가 너무 느려서 일부 데이터가 표시 및 녹화에서 누락되었습니다. 무거운 위젯을 닫거나, 녹화를 중지하거나, 데이터 속도를 낮추세요.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2298"/>
+        <source>A dataset transform took longer than %1 ms, so the rest of this frame shows raw values. Simplify the transform so it keeps up.</source>
+        <translation>데이터셋 변환이 %1ms 이상 소요되어, 이 프레임의 나머지는 원시 값을 표시합니다. 변환을 단순화하여 속도를 맞추세요.</translation>
     </message>
     <message>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, session DB, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation type="vanished">다운스트림 소비자(대시보드, CSV/MDF4 내보내기, 세션 DB 또는 API 구독자)가 충분히 빠르게 처리하지 못하여 데이터가 화면 표시 및 활성 기록에서 손실되고 있습니다. 부하가 큰 소비자를 비활성화하거나 데이터 전송률을 줄이십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2351"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2297"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript 변환 예산 초과</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2352"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
-        <translation>데이터셋 변환이 %1ms 이상 소요되어, 프레임의 나머지 데이터셋은 다음 프레임까지 원시 값으로 대체되었습니다. 변환 코드를 프로파일링하거나 단순화하세요.</translation>
+        <translation type="vanished">데이터셋 변환이 %1ms 이상 소요되어, 프레임의 나머지 데이터셋은 다음 프레임까지 원시 값으로 대체되었습니다. 변환 코드를 프로파일링하거나 단순화하세요.</translation>
     </message>
     <message>
         <source>Frame pool exhausted</source>
@@ -7283,87 +7565,92 @@ v
 <context>
     <name>DataModel::FrameParserModel</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="268"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="269"/>
         <source>Plain text (UTF-8)</source>
         <translation>일반 텍스트 (UTF-8)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="268"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="269"/>
         <source>Hexadecimal</source>
         <translation>16진수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="268"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="269"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="268"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="269"/>
         <source>Binary (raw bytes)</source>
         <translation>바이너리 (원시 바이트)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="276"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="277"/>
         <source>End delimiter only</source>
         <translation>종료 구분자만</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="277"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="278"/>
         <source>Start + end delimiters</source>
         <translation>시작 + 종료 구분자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="278"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="279"/>
         <source>Start delimiter only</source>
         <translation>시작 구분자만</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="279"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="280"/>
         <source>No delimiters (whole chunk)</source>
         <translation>구분자 없음 (전체 청크)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="290"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="281"/>
+        <source>Fixed length</source>
+        <translation>고정 길이</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="292"/>
         <source>No Checksum</source>
         <translation>체크섬 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="321"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="323"/>
         <source>Select Frame Parser Template</source>
         <translation>프레임 파서 템플릿 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="322"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="324"/>
         <source>Choose a template to load:</source>
         <translation>로드할 템플릿 선택:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="504"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="509"/>
         <source>Invalid hexadecimal input.</source>
         <translation>잘못된 16진수 입력입니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="535"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="547"/>
         <source>No template selected.</source>
         <translation>템플릿이 선택되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="566"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="578"/>
         <source>Dataset %1</source>
         <translation>데이터셋 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="602"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="614"/>
         <source>%1 frame(s) extracted | %2 byte(s) consumed | %3 byte(s) buffered | %4 dropped</source>
         <translation>%1개 프레임 추출됨 | %2바이트 소비됨 | %3바이트 버퍼됨 | %4개 삭제됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="673"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="685"/>
         <source>Invalid JSON: %1</source>
         <translation>잘못된 JSON: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="769"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/FrameParserModel.cpp" line="781"/>
         <source>Parameters</source>
         <translation>매개변수</translation>
     </message>
@@ -7943,7 +8230,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">시간 또는 샘플 번호에 대해 모든 곡선 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="414"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="583"/>
         <source>Logarithmic X Axis</source>
         <translation>로그 X축</translation>
     </message>
@@ -7952,7 +8239,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">X축을 10진수 단위로 스케일링; X축 소스가 샘플일 때 사용 가능(시간 제외)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="427"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="597"/>
         <source>Logarithmic Y Axis</source>
         <translation>로그 Y축</translation>
     </message>
@@ -8005,48 +8292,129 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">IEC 60870-5-104</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="216"/>
         <source>Frame Detection</source>
-        <translation type="vanished">프레임 감지</translation>
+        <translation>프레임 감지</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="231"/>
         <source>Frame Detection Method</source>
-        <translation type="vanished">프레임 감지 방법</translation>
+        <translation>프레임 감지 방법</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="234"/>
         <source>Select how incoming data frames are identified</source>
-        <translation type="vanished">수신 데이터 프레임 식별 방법 선택</translation>
+        <translation>수신 데이터 프레임 식별 방법 선택</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="161"/>
         <source>Hexadecimal Delimiters</source>
-        <translation type="vanished">16진수 구분자</translation>
+        <translation>16진수 구분자</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="84"/>
+        <source>Frame Length</source>
+        <translation>프레임 길이</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="85"/>
+        <source>Number of bytes in every frame, checksum included</source>
+        <translation>체크섬을 포함한 모든 프레임의 바이트 수</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="92"/>
+        <source>Header Rule Mask</source>
+        <translation>헤더 규칙 마스크</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="93"/>
+        <source>Bits of a frame's first byte that must match; 00 disables</source>
+        <translation>프레임의 첫 번째 바이트 중 일치해야 하는 비트; 00은 비활성화</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="100"/>
+        <source>Header Rule Value</source>
+        <translation>헤더 규칙 값</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="101"/>
+        <source>Value the masked bits of the first byte must equal</source>
+        <translation>첫 번째 바이트의 마스크된 비트 값이 같아야 함</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="108"/>
+        <source>Body Rule Mask</source>
+        <translation>Body Rule Mask</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="109"/>
+        <source>Bits of the other bytes that must match; 00 disables</source>
+        <translation>첫 번째 바이트 이후의 모든 바이트에서 일치해야 하는 비트; 00은 비활성화</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="116"/>
+        <source>Body Rule Value</source>
+        <translation>Body Rule Value</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="117"/>
+        <source>Value the masked bits of every byte after the first must equal</source>
+        <translation>첫 번째 바이트 이후의 모든 바이트에서 마스크된 비트 값이 같아야 함</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="164"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
-        <translation type="vanished">프레임 시작/종료 시퀀스를 16진수 값으로 입력</translation>
+        <translation>프레임 시작/종료 시퀀스를 16진수 값으로 입력</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="180"/>
         <source>Frame Start Delimiter</source>
-        <translation type="vanished">프레임 시작 구분자</translation>
+        <translation>프레임 시작 구분자</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="181"/>
         <source>e.g. /*</source>
-        <translation type="vanished">예: /*</translation>
+        <translation>예: /*</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="182"/>
         <source>Sequence that marks the beginning of a data frame</source>
-        <translation type="vanished">데이터 프레임의 시작을 표시하는 시퀀스</translation>
+        <translation>데이터 프레임의 시작을 표시하는 시퀀스</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="191"/>
         <source>Frame End Delimiter</source>
-        <translation type="vanished">프레임 종료 구분자</translation>
+        <translation>프레임 종료 구분자</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="192"/>
         <source>e.g. */</source>
-        <translation type="vanished">예: */</translation>
+        <translation>예: */</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="193"/>
         <source>Sequence that marks the end of a data frame</source>
-        <translation type="vanished">데이터 프레임의 끝을 표시하는 시퀀스</translation>
+        <translation>데이터 프레임의 끝을 표시하는 시퀀스</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="264"/>
+        <source>Connection Sequence</source>
+        <translation>연결 시퀀스</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="267"/>
+        <source>Steps run on every open, before any byte reaches the dashboard</source>
+        <translation>모든 열기 시 실행되는 단계, 대시보드에 도달하기 전</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="272"/>
+        <source>Connection Sequence… (1 step)</source>
+        <translation>연결 시퀀스… (1단계)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/SourceFramingRows.cpp" line="273"/>
+        <source>Connection Sequence… (%1 steps)</source>
+        <translation>연결 시퀀스… (%1단계)</translation>
     </message>
     <message>
         <source>Payload Processing &amp; Validation</source>
@@ -8105,24 +8473,20 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">가상 데이터셋은 변환 및 데이터 테이블에서 값을 계산하며 프레임 인덱스가 필요하지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="578"/>
         <source>Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall</source>
-        <translation>주파수 축을 데케이드 단위로 스케일링하여 낮은 옥타브를 읽기 쉽게 유지; FFT 플롯과 워터폴 모두에 적용</translation>
+        <translation type="vanished">주파수 축을 데케이드 단위로 스케일링하여 낮은 옥타브를 읽기 쉽게 유지; FFT 플롯과 워터폴 모두에 적용</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="694"/>
         <source>Fixed decimal places for the value display; overrides the format (-1 = auto)</source>
-        <translation>값 표시에 사용되는 고정 소수 자릿수; 형식을 재정의함(-1 = 자동)</translation>
+        <translation type="vanished">값 표시에 사용되는 고정 소수 자릿수; 형식을 재정의함(-1 = 자동)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="733"/>
         <source>Auto-detect</source>
-        <translation>자동 감지</translation>
+        <translation type="vanished">자동 감지</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="733"/>
         <source>Manual Delimiters</source>
-        <translation>수동 구분 기호</translation>
+        <translation type="vanished">수동 구분 기호</translation>
     </message>
     <message>
         <source>Detection Mode</source>
@@ -8497,7 +8861,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">연결 설정</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="215"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="239"/>
         <source>General Information</source>
         <translation>일반 정보</translation>
     </message>
@@ -8626,22 +8990,226 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">각 트리거마다 명령을 전송할 횟수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="227"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="251"/>
         <source>Untitled Dataset</source>
         <translation>제목 없는 데이터셋</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="228"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="252"/>
         <source>Dataset Title</source>
         <translation>데이터셋 제목</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="229"/>
-        <source>Name of the dataset, used for labeling and identification</source>
-        <translation>레이블 지정 및 식별에 사용되는 데이터셋 이름</translation>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="253"/>
+        <source>The name shown on the dashboard and in exports.</source>
+        <translation>대시보드 및 내보내기에 표시되는 이름</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="251"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="263"/>
+        <source>Calculates the value with a transform instead of reading it from the incoming data, so it needs no frame index.</source>
+        <translation>Transform를 사용하여 값을 계산하므로 들어오는 데이터에서 읽을 필요가 없어 Frame 인덱스가 필요하지 않습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="275"/>
+        <source>Hides this dataset's own widget on the dashboard. Canvas widgets can still read its value.</source>
+        <translation>이 데이터셋의 대시보드 위젯을 숨깁니다. 캔버스 위젯은 여전히 값을 읽을 수 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="290"/>
+        <source>Which value of each frame this dataset reads, counting from 1. Use 0 to leave it unassigned.</source>
+        <translation>각 Frame에서 이 데이터셋이 읽는 값으로, 1부터 계산합니다. 할당하지 않으려면 0을 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="302"/>
+        <source>The unit shown next to the value, such as V or mA. Optional.</source>
+        <translation>값 옆에 표시되는 단위(예: V 또는 mA). 선택 사항입니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="328"/>
+        <source>A short, unique name that scripts and the API can use to find this dataset. Optional.</source>
+        <translation>스크립트와 API가 이 데이터셋을 찾는 데 사용할 수 있는 짧고 고유한 이름입니다. 선택 사항입니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="348"/>
+        <source>The color of this dataset's plots and widgets. Automatic uses the theme's colors.</source>
+        <translation>이 데이터셋의 Plot 및 위젯 색상입니다. 자동은 테마의 색상을 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="380"/>
+        <source>The highest value this dataset is expected to reach. Widgets and the FFT plot use it when their own range is empty.</source>
+        <translation>이 데이터셋이 도달할 것으로 예상되는 최댓값입니다. 위젯과 FFT Plot은 자신의 범위가 비어 있을 때 이를 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="395"/>
+        <source>Value Format</source>
+        <translation>값 포맷</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="410"/>
+        <source>Format</source>
+        <translation>포맷</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="411"/>
+        <source>Decodes the raw number before any transform: as fixed point, as a group of bits, or with a scale and offset.</source>
+        <translation>Transform 전에 원본 숫자를 디코딩합니다: 고정 소수점, 비트 그룹 또는 스케일과 오프셋으로.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="425"/>
+        <source>Integer Width (bits)</source>
+        <translation>정수 너비(비트)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="426"/>
+        <source>How many bits the raw number has, from 1 to 64. Numbers wider than 53 bits lose precision.</source>
+        <translation>원시 숫자가 몇 비트인지, 1~64 범위. 53비트보다 큰 숫자는 정밀도가 손실됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="438"/>
+        <source>Signed</source>
+        <translation>부호 있음</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="439"/>
+        <source>Reads the raw number as signed (two's complement) at this width.</source>
+        <translation>원시 숫자를 이 너비에서 부호 있는 수(2의 보수)로 읽습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="454"/>
+        <source>Fraction Bits</source>
+        <translation>소수 비트</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="455"/>
+        <source>The raw number is divided by 2 to this power. For example, the Q15 format uses 15.</source>
+        <translation>원시 숫자를 2의 이 거듭제곱으로 나눕니다. 예를 들어 Q15 형식은 15를 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="481"/>
+        <source>Bit Offset</source>
+        <translation>비트 오프셋</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="482"/>
+        <source>Where the field starts, counted in bits from the lowest bit (0).</source>
+        <translation>필드가 시작되는 위치, 최하위 비트(0)에서 비트 단위로 계산됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="497"/>
+        <source>Bit Count</source>
+        <translation>비트 개수</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="498"/>
+        <source>How many bits the field has. Use 1 for a single on/off flag.</source>
+        <translation>필드가 몇 비트인지. 단일 온/오프 플래그의 경우 1을 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="511"/>
+        <source>Scale</source>
+        <translation>배율</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="512"/>
+        <source>The raw number is multiplied by this value, then the offset is added.</source>
+        <translation>원시 숫자에 이 값을 곱한 후 오프셋을 더합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="525"/>
+        <source>Offset</source>
+        <translation>오프셋</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="526"/>
+        <source>Added to the value after it is multiplied by the scale.</source>
+        <translation>값에 스케일을 곱한 후 더해집니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="557"/>
+        <source>Plots the value over time.</source>
+        <translation>시간에 따라 값을 플롯합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="571"/>
+        <source>What the plot's horizontal axis shows: time, or another dataset.</source>
+        <translation>플롯의 수평축이 표시하는 내용: 시간 또는 다른 데이터셋.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="584"/>
+        <source>Uses a logarithmic scale for the horizontal axis. Available when the axis shows samples or a dataset, not time.</source>
+        <translation>수평축에 로그 스케일을 사용합니다. 축이 샘플 또는 데이터셋을 표시할 때 사용 가능(시간 제외).</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="598"/>
+        <source>Uses a logarithmic scale for the vertical axis. Values at or below zero are drawn at the bottom.</source>
+        <translation>수직축에 로그 스케일을 사용합니다. 0 이하의 값은 맨 아래에 표시됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="651"/>
+        <source>Peaks jump up at once and fall back slowly over the release time, like a hardware audio analyzer.</source>
+        <translation>피크가 즉시 올라갔다가 릴리스 시간에 걸쳐 천천히 내려갑니다(하드웨어 오디오 분석기처럼).</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="664"/>
+        <source>How long a peak takes to fall back, from 50 to 5000 ms.</source>
+        <translation>피크가 내려가는 데 걸리는 시간(50~5000ms).</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="680"/>
+        <source>What the waterfall's vertical axis shows: time (the default) or another dataset. Choosing an RPM dataset, for example, turns the waterfall into a Campbell diagram.</source>
+        <translation>워터폴의 수직축이 표시하는 내용: 시간(기본값) 또는 다른 데이터셋. 예를 들어 RPM 데이터셋을 선택하면 워터폴이 캠벨 다이어그램으로 변환됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="707"/>
+        <source>How many samples each frequency analysis uses. More samples show finer frequency detail but react more slowly.</source>
+        <translation>각 주파수 분석에 사용되는 샘플 수입니다. 샘플이 많을수록 더 세밀한 주파수 세부 정보를 표시하지만 반응이 더 느립니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="723"/>
+        <source>Shapes each block of samples before the analysis so that nearby frequencies don't blur together. Used by the FFT plot and the waterfall.</source>
+        <translation>분석 전에 각 샘플 블록을 성형하여 인접한 주파수가 함께 흐릿해지지 않도록 합니다. FFT 플롯 및 워터폴에서 사용됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="738"/>
+        <source>How many samples per second the device sends for this dataset. The frequency axis is only correct when this matches.</source>
+        <translation>장치가 이 데이터셋에 대해 초당 전송하는 샘플 수입니다. 주파수 축은 이 값이 일치할 때만 정확합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="917"/>
+        <source>Marks the lowest and highest values seen since the data was last cleared.</source>
+        <translation>데이터가 마지막으로 지워진 이후 관찰된 최저값과 최고값을 표시합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="929"/>
+        <source>Keeps the alarm bands on the widget, but never sends notifications, raises alarms, or plays sounds for them.</source>
+        <translation>위젯에 알람 범위를 유지하지만 알람 포인트를 발생시키거나 음성 알림을 재생하지 않습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="943"/>
+        <source>Sends notifications, raises alarms, and plays sounds for the bands only while a widget showing this dataset is on screen. Suppress Alarms still turns them off entirely.</source>
+        <translation>이 데이터셋을 표시하는 위젯이 화면에 있는 동안만 알람 포인트를 발생시키고 음성 알림을 재생합니다. 알람 억제가 우선합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="959"/>
+        <source>How far the value must move back out of a band, in the dataset's units, before that band can alarm again. Stops a value that hovers at a limit from alarming over and over. Use 0 for none.</source>
+        <translation>값이 범위를 벗어나기 전에 이동해야 하는 거리(데이터셋 단위)로, 그 범위가 다시 알람할 수 있도록 합니다. 한계값에서 맴도는 값이 반복적으로 알람하는 것을 방지합니다. 없음은 0을 사용하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="991"/>
+        <source>Shows this dataset as a light in the LED panel.</source>
+        <translation>이 데이터셋을 LED 패널의 조명으로 표시합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="1004"/>
+        <source>The LED turns on when the value reaches this level. Use alarm bands for more than two states.</source>
+        <translation>LED는 값이 이 수준에 도달할 때 켜집니다. 2개 이상의 상태를 위해 알람 범위를 사용하세요.</translation>
+    </message>
+    <message>
+        <source>Name of the dataset, used for labeling and identification</source>
+        <translation type="vanished">레이블 지정 및 식별에 사용되는 데이터셋 이름</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="274"/>
         <source>Hide on Dashboard</source>
         <translation>대시보드에서 숨기기</translation>
     </message>
@@ -8650,203 +9218,236 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">이 데이터셋의 독립 대시보드 타일을 표시하지 않습니다. 페인터 위젯은 여전히 값을 읽을 수 있습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="324"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
         <source>Automatic</source>
         <translation>자동</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="325"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="347"/>
         <source>Widget Color</source>
         <translation>위젯 색상</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="326"/>
         <source>Custom display color for this dataset; automatic uses the theme palette</source>
-        <translation>이 데이터셋의 사용자 지정 표시 색상; 자동은 테마 팔레트를 사용합니다</translation>
+        <translation type="vanished">이 데이터셋의 사용자 지정 표시 색상; 자동은 테마 팔레트를 사용합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="304"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="326"/>
         <source>Stable name</source>
         <translation>안정적 이름</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="239"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="262"/>
         <source>Computed Dataset</source>
         <translation>계산된 데이터셋</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="240"/>
         <source>Computed datasets compute their value from transforms and shared variables, they do not require a frame index</source>
-        <translation>계산된 데이터셋은 변환 및 공유 변수에서 값을 계산하며 프레임 인덱스가 필요하지 않음</translation>
+        <translation type="vanished">계산된 데이터셋은 변환 및 공유 변수에서 값을 계산하며 프레임 인덱스가 필요하지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="252"/>
         <source>Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values</source>
-        <translation>이 데이터셋의 독립 대시보드 타일을 표시하지 않습니다. 캔버스 위젯은 여전히 값을 읽을 수 있습니다</translation>
+        <translation type="vanished">이 데이터셋의 독립 대시보드 타일을 표시하지 않습니다. 캔버스 위젯은 여전히 값을 읽을 수 있습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="268"/>
         <source>Position of this value in the parser's output (first value = 1). 0 = unassigned.</source>
-        <translation>파서 출력에서 이 값의 위치(첫 번째 값 = 1). 0 = 미할당.</translation>
+        <translation type="vanished">파서 출력에서 이 값의 위치(첫 번째 값 = 1). 0 = 미할당.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="305"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="327"/>
         <source>Script Alias</source>
         <translation>스크립트 별칭</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="306"/>
         <source>Stable name for getDataset-style script/API lookups; must be unique (optional)</source>
-        <translation>getDataset 스타일 스크립트/API 조회를 위한 안정적 이름; 고유해야 함 (선택 사항)</translation>
+        <translation type="vanished">getDataset 스타일 스크립트/API 조회를 위한 안정적 이름; 고유해야 함 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
         <source>Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
-        <translation>데이터셋 값 범위의 하한; 위젯과 FFT는 자체 범위가 설정되지 않은 경우 이 값을 사용합니다</translation>
+        <translation type="vanished">데이터셋 값 범위의 하한; 위젯과 FFT는 자체 범위가 설정되지 않은 경우 이 값을 사용합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="358"/>
         <source>Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset</source>
-        <translation>데이터셋 값 범위의 상한; 위젯과 FFT는 자체 범위가 설정되지 않은 경우 이 값을 사용합니다</translation>
+        <translation type="vanished">데이터셋 값 범위의 상한; 위젯과 FFT는 자체 범위가 설정되지 않은 경우 이 값을 사용합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="402"/>
         <source>Choose Time or a dataset to drive the X-Axis in plots</source>
-        <translation>플롯의 X축을 구동할 시간 또는 데이터셋을 선택하세요</translation>
+        <translation type="vanished">플롯의 X축을 구동할 시간 또는 데이터셋을 선택하세요</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="415"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)</source>
-        <translation>X축을 10진수 단위로 스케일링; X축 소스가 샘플 또는 데이터셋일 때 사용 가능(시간 제외)</translation>
+        <translation type="vanished">X축을 10진수 단위로 스케일링; X축 소스가 샘플 또는 데이터셋일 때 사용 가능(시간 제외)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="428"/>
         <source>Scale the Y axis in decades; values at or below zero are clamped</source>
-        <translation>Y축을 10진수 단위로 스케일링; 0 이하의 값은 클램핑됨</translation>
+        <translation type="vanished">Y축을 10진수 단위로 스케일링; 0 이하의 값은 클램핑됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="443"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="613"/>
         <source>Frequency Analysis</source>
         <translation>주파수 분석</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="480"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="627"/>
+        <source>Shows how strong each frequency is in the signal.</source>
+        <translation>신호에서 각 주파수의 강도를 표시합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="638"/>
+        <source>Shows a scrolling picture of the signal's frequencies over time (Pro).</source>
+        <translation>신호의 주파수를 시간에 따라 스크롤하는 그림으로 표시합니다(Pro).</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="650"/>
         <source>Peak Ballistics</source>
         <translation>피크 밸리스틱</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="481"/>
         <source>Analyzer-style display: peaks rise instantly and decay smoothly over the release time</source>
-        <translation>분석기 스타일 디스플레이: 피크가 즉시 상승하고 릴리스 시간 동안 부드럽게 감쇠</translation>
+        <translation type="vanished">분석기 스타일 디스플레이: 피크가 즉시 상승하고 릴리스 시간 동안 부드럽게 감쇠</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="493"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="663"/>
         <source>Ballistics Release (ms)</source>
         <translation>밸리스틱 릴리스 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="494"/>
         <source>Decay time for the ballistics display (50-5000 ms)</source>
-        <translation>밸리스틱 디스플레이의 감쇠 시간 (50-5000 ms)</translation>
+        <translation type="vanished">밸리스틱 디스플레이의 감쇠 시간 (50-5000 ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="510"/>
         <source>Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM</source>
-        <translation>시간(기본값) 또는 Y축을 구동하는 값을 가진 데이터셋 선택 -- 예: RPM에 바인딩하면 캠벨 다이어그램 생성</translation>
+        <translation type="vanished">시간(기본값) 또는 Y축을 구동하는 값을 가진 데이터셋 선택 -- 예: RPM에 바인딩하면 캠벨 다이어그램 생성</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="550"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="722"/>
         <source>FFT Window Function</source>
         <translation>FFT 윈도우 함수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="551"/>
         <source>Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall</source>
-        <translation>스펙트럼 누설을 줄이기 위해 변환 전에 적용되는 윈도우; FFT 플롯과 워터폴 모두에 영향을 미침</translation>
+        <translation type="vanished">스펙트럼 누설을 줄이기 위해 변환 전에 적용되는 윈도우; FFT 플롯과 워터폴 모두에 영향을 미침</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="577"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="751"/>
         <source>Logarithmic Frequency Axis</source>
         <translation>로그 주파수 축</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="740"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="752"/>
+        <source>Uses a logarithmic frequency axis so low frequencies stay readable. Used by the FFT plot and the waterfall.</source>
+        <translation>로그 주파수 축을 사용하여 낮은 주파수를 읽기 쉽게 유지합니다. FFT 플롯과 워터폴에서 사용됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="765"/>
+        <source>The lowest value expected in the signal, used to scale the analysis. Leave empty to use the dataset's Minimum Value.</source>
+        <translation>신호에서 예상되는 최솟값으로, 분석을 스케일링하는 데 사용됩니다. 비워두면 데이터셋의 최솟값을 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="779"/>
+        <source>The highest value expected in the signal, used to scale the analysis. Leave empty to use the dataset's Maximum Value.</source>
+        <translation>신호에서 예상되는 최댓값으로, 분석을 스케일링하는 데 사용됩니다. 비워두면 데이터셋의 최댓값을 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
+        <source>The widget that shows this dataset on the dashboard.</source>
+        <translation>대시보드에서 이 데이터셋을 표시하는 위젯입니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="840"/>
+        <source>How many major marks the dial shows. Use 0 to fit them to the widget's size.</source>
+        <translation>다이얼이 표시하는 주요 눈금의 개수입니다. 위젯 크기에 맞추려면 0을 사용하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="855"/>
+        <source>How numbers appear on gauge and bar marks and captions. Hexadecimal and Binary also apply wherever the value is shown as text.</source>
+        <translation>게이지 및 막대 눈금과 캡션에 숫자가 표시되는 방식입니다. 16진수 및 이진수는 값이 텍스트로 표시되는 모든 곳에 적용됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="870"/>
+        <source>How many decimal places the value shows. Overrides Label Format. Use -1 for automatic.</source>
+        <translation>값이 표시되는 소수 자릿수입니다. 레이블 형식을 재정의합니다. 자동으로 설정하려면 -1을 사용하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="892"/>
+        <source>The lowest value on the gauge or bar. Leave empty to use the dataset's Minimum Value.</source>
+        <translation>게이지 또는 막대의 최솟값입니다. 비워두면 데이터셋의 최솟값을 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="904"/>
+        <source>The highest value on the gauge or bar. Leave empty to use the dataset's Maximum Value.</source>
+        <translation>게이지 또는 막대의 최댓값입니다. 비워두면 데이터셋의 최댓값을 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="916"/>
         <source>Hold Min/Max Markers</source>
         <translation>최소/최대 마커 유지</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="741"/>
         <source>Show hold markers at the lowest and highest values observed since the last data reset</source>
-        <translation>마지막 데이터 재설정 이후 관찰된 최저값과 최고값에 홀드 마커 표시</translation>
+        <translation type="vanished">마지막 데이터 재설정 이후 관찰된 최저값과 최고값에 홀드 마커 표시</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="752"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="928"/>
         <source>Suppress Alarms</source>
         <translation>알람 억제</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="753"/>
         <source>Keep the bands on the widget but never notify, raise an alarm point or sound for them</source>
-        <translation>위젯에 밴드를 유지하지만 알람 포인트를 발생시키거나 음성 알림을 재생하지 않음</translation>
+        <translation type="vanished">위젯에 밴드를 유지하지만 알람 포인트를 발생시키거나 음성 알림을 재생하지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="765"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="942"/>
         <source>Alarms only while visible</source>
         <translation>표시되는 동안만 알람</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="766"/>
         <source>Notify, raise an alarm point and sound for the bands only while a widget showing this dataset is on screen; Suppress Alarms still wins</source>
-        <translation>이 데이터세트를 표시하는 위젯이 화면에 있는 동안만 알람 포인트를 발생시키고 음성 알림을 재생합니다. 알람 억제가 우선합니다</translation>
+        <translation type="vanished">이 데이터세트를 표시하는 위젯이 화면에 있는 동안만 알람 포인트를 발생시키고 음성 알림을 재생합니다. 알람 억제가 우선합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="780"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="958"/>
         <source>Alarm Deadband</source>
         <translation>알람 데드밴드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="781"/>
         <source>Hysteresis in the dataset's units: the active band holds until the value leaves it by this much, so a reading hovering on a threshold does not re-alarm on every frame (0 = none)</source>
-        <translation>데이터셋 단위의 히스테리시스: 활성 대역은 값이 이 정도만큼 벗어날 때까지 유지되므로, 임계값에 근접한 판독값이 매 프레임마다 다시 알람을 발생시키지 않습니다 (0 = 없음).</translation>
+        <translation type="vanished">데이터셋 단위의 히스테리시스: 활성 대역은 값이 이 정도만큼 벗어날 때까지 유지되므로, 임계값에 근접한 판독값이 매 프레임마다 다시 알람을 발생시키지 않습니다 (0 = 없음).</translation>
     </message>
     <message>
         <source>Scale the FFT frequency axis in decades so low octaves stay readable</source>
         <translation type="vanished">FFT 주파수 축을 데케이드 단위로 스케일링하여 낮은 옥타브를 읽기 쉽게 유지</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="591"/>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="715"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="764"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="891"/>
         <source>Minimum Value (optional)</source>
         <translation>최대값 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="592"/>
         <source>Lower bound for data normalization; falls back to the dataset value range when left unset</source>
-        <translation>데이터 정규화의 하한값; 설정하지 않으면 데이터셋 값 범위로 대체됩니다</translation>
+        <translation type="vanished">데이터 정규화의 하한값; 설정하지 않으면 데이터셋 값 범위로 대체됩니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="604"/>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="727"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="778"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="903"/>
         <source>Maximum Value (optional)</source>
         <translation>최대값 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="605"/>
         <source>Upper bound for data normalization; falls back to the dataset value range when left unset</source>
-        <translation>데이터 정규화의 상한값; 설정하지 않으면 데이터셋 값 범위로 대체됩니다</translation>
+        <translation type="vanished">데이터 정규화의 상한값; 설정하지 않으면 데이터셋 값 범위로 대체됩니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="716"/>
         <source>Lower bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
-        <translation>게이지 또는 막대 범위의 하한값; 설정하지 않으면 데이터셋 값 범위로 대체됩니다</translation>
+        <translation type="vanished">게이지 또는 막대 범위의 하한값; 설정하지 않으면 데이터셋 값 범위로 대체됩니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="728"/>
         <source>Upper bound of the gauge or bar range; falls back to the dataset value range when left unset</source>
-        <translation>게이지 또는 막대 범위의 상한값; 설정하지 않으면 데이터셋 값 범위로 대체됩니다</translation>
+        <translation type="vanished">게이지 또는 막대 범위의 상한값; 설정하지 않으면 데이터셋 값 범위로 대체됩니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="693"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="869"/>
         <source>Decimal Points</source>
         <translation>소수점 자릿수</translation>
     </message>
@@ -8859,18 +9460,16 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">켜짐</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="827"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
-        <translation>값이 이 임계값 이상일 때 LED가 켜집니다. 다중 상태 색상에 대한 알람 범위를 정의하세요</translation>
+        <translation type="vanished">값이 이 임계값 이상일 때 LED가 켜집니다. 다중 상태 색상에 대한 알람 범위를 정의하세요</translation>
     </message>
     <message>
         <source>Painter Widget</source>
         <translation type="vanished">페인터 위젯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="750"/>
         <source>Web View</source>
-        <translation>웹 뷰</translation>
+        <translation type="vanished">웹 뷰</translation>
     </message>
     <message>
         <source>Raw and transformed values for every dataset (read-only)</source>
@@ -8897,7 +9496,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">작업 공간 정리</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="267"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="289"/>
         <source>Frame Index</source>
         <translation>프레임 인덱스</translation>
     </message>
@@ -8922,37 +9521,35 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">시간상 데이터셋 정렬에 사용되는 프레임 위치</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="279"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="301"/>
         <source>Measurement Unit</source>
         <translation>측정 단위</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="278"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="300"/>
         <source>Volts, Amps, etc.</source>
         <translation>볼트, 암페어 등</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="280"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation>볼트 또는 암페어와 같은 측정 단위 (선택 사항)</translation>
+        <translation type="vanished">볼트 또는 암페어와 같은 측정 단위 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="373"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="542"/>
         <source>Plot Settings</source>
         <translation>플롯 설정</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="387"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="556"/>
         <source>Enable Plot Widget</source>
         <translation>플롯 위젯 활성화</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="388"/>
         <source>Plot data in real-time</source>
-        <translation>실시간으로 데이터 플롯</translation>
+        <translation type="vanished">실시간으로 데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="401"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="570"/>
         <source>X-Axis Source</source>
         <translation>X축 소스</translation>
     </message>
@@ -8981,27 +9578,25 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">FFT 구성</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="456"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="626"/>
         <source>Enable FFT Analysis</source>
         <translation>FFT 분석 활성화</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="457"/>
         <source>Perform frequency-domain analysis of the dataset</source>
-        <translation>데이터셋의 주파수 영역 분석 수행</translation>
+        <translation type="vanished">데이터셋의 주파수 영역 분석 수행</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="467"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="637"/>
         <source>Enable Waterfall Plot</source>
         <translation>워터폴 플롯 활성화</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="468"/>
         <source>Show a scrolling spectrogram of frequency content over time (Pro)</source>
-        <translation>시간에 따른 주파수 콘텐츠의 스크롤 스펙트로그램 표시 (Pro)</translation>
+        <translation type="vanished">시간에 따른 주파수 콘텐츠의 스크롤 스펙트로그램 표시 (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="679"/>
         <source>Waterfall Y Axis</source>
         <translation>워터폴 Y축</translation>
     </message>
@@ -9010,24 +9605,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">시간(기본값) 또는 Y축을 구동하는 값을 가진 데이터셋 선택 — 예: RPM에 바인딩하면 캠벨 다이어그램 생성</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="535"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="706"/>
         <source>FFT Window Size</source>
         <translation>FFT 윈도우 크기</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="536"/>
         <source>Number of samples used for each FFT calculation window</source>
-        <translation>각 FFT 계산 윈도우에 사용되는 샘플 수</translation>
+        <translation type="vanished">각 FFT 계산 윈도우에 사용되는 샘플 수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="564"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="737"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT 샘플링 레이트 (Hz, 필수)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="565"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation>FFT에 사용되는 샘플링 주파수 (Hz 단위)</translation>
+        <translation type="vanished">FFT에 사용되는 샘플링 주파수 (Hz 단위)</translation>
     </message>
     <message>
         <source>Minimum Value (recommended)</source>
@@ -9046,19 +9639,18 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">데이터 정규화의 상한값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="795"/>
         <source>Widget Settings</source>
         <translation>위젯 설정</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="636"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="811"/>
         <source>Widget</source>
         <translation>위젯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="637"/>
         <source>Select the visual widget used to display this dataset</source>
-        <translation>이 데이터셋을 표시하는 데 사용할 시각적 위젯 선택</translation>
+        <translation type="vanished">이 데이터셋을 표시하는 데 사용할 시각적 위젯 선택</translation>
     </message>
     <message>
         <source>Minimum Display Value (required)</source>
@@ -9077,31 +9669,28 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">게이지 또는 막대 표시 범위의 상한값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="763"/>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="663"/>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="690"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="838"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="866"/>
         <source>Auto</source>
         <translation>자동</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="664"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="839"/>
         <source>Tick Count</source>
         <translation>눈금 개수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="665"/>
         <source>Major-tick count on the dial scale (0 = auto-fit to widget size)</source>
-        <translation>다이얼 눈금의 주요 눈금 개수 (0 = 위젯 크기에 자동 맞춤)</translation>
+        <translation type="vanished">다이얼 눈금의 주요 눈금 개수 (0 = 위젯 크기에 자동 맞춤)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="854"/>
         <source>Label Format</source>
         <translation>레이블 포맷</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="680"/>
         <source>Decimal places or notation used on tick labels and the value display</source>
-        <translation>눈금 레이블 및 값 표시에 사용되는 소수 자릿수 또는 표기법</translation>
+        <translation type="vanished">눈금 레이블 및 값 표시에 사용되는 소수 자릿수 또는 표기법</translation>
     </message>
     <message>
         <source>Show Value Indicator</source>
@@ -9140,22 +9729,21 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">값이 이 임계값을 초과하면 시각적 알람 트리거</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="799"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="977"/>
         <source>LED Display Settings</source>
         <translation>LED 디스플레이 설정</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="990"/>
         <source>Show in LED Panel</source>
         <translation>LED 패널에 표시</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="813"/>
         <source>Enable visual status monitoring using an LED display</source>
-        <translation>LED 디스플레이를 사용한 시각적 상태 모니터링 활성화</translation>
+        <translation type="vanished">LED 디스플레이를 사용한 시각적 상태 모니터링 활성화</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="826"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="1003"/>
         <source>LED On Threshold (required)</source>
         <translation>LED 켜짐 임계값 (필수)</translation>
     </message>
@@ -9168,316 +9756,257 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">페인터 코드 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="575"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="574"/>
         <source>Edit Canvas Code</source>
         <translation>캔버스 코드 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="599"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="598"/>
         <source>Edit Transmit Function</source>
         <translation>전송 함수 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Rectangular (None)</source>
-        <translation>직사각형 (없음)</translation>
+        <translation type="vanished">직사각형 (없음)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Bartlett (Triangular)</source>
-        <translation>Bartlett (삼각형)</translation>
+        <translation type="vanished">Bartlett (삼각형)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Hann</source>
-        <translation>Hann</translation>
+        <translation type="vanished">Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Hamming</source>
-        <translation>Hamming</translation>
+        <translation type="vanished">Hamming</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Blackman</source>
-        <translation>Blackman</translation>
+        <translation type="vanished">Blackman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Blackman-Harris</source>
-        <translation>Blackman-Harris</translation>
+        <translation type="vanished">Blackman-Harris</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Nuttall</source>
-        <translation>Nuttall</translation>
+        <translation type="vanished">Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="699"/>
         <source>Blackman-Nuttall</source>
-        <translation>Blackman-Nuttall</translation>
+        <translation type="vanished">Blackman-Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="699"/>
         <source>Flat Top</source>
-        <translation>Flat Top</translation>
+        <translation type="vanished">Flat Top</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="699"/>
         <source>Welch</source>
-        <translation>Welch</translation>
+        <translation type="vanished">Welch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="699"/>
         <source>Bartlett-Hann</source>
-        <translation>Bartlett-Hann</translation>
+        <translation type="vanished">Bartlett-Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="700"/>
         <source>Bohman</source>
-        <translation>Bohman</translation>
+        <translation type="vanished">Bohman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="700"/>
         <source>Cosine (Sine)</source>
-        <translation>Cosine (Sine)</translation>
+        <translation type="vanished">Cosine (Sine)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="700"/>
         <source>Lanczos</source>
-        <translation>Lanczos</translation>
+        <translation type="vanished">Lanczos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="700"/>
         <source>Parzen</source>
-        <translation>Parzen</translation>
+        <translation type="vanished">Parzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="711"/>
         <source>Off</source>
-        <translation>꺼짐</translation>
+        <translation type="vanished">꺼짐</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="711"/>
         <source>Auto Start</source>
-        <translation>자동 시작</translation>
+        <translation type="vanished">자동 시작</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="711"/>
         <source>Start on Trigger</source>
-        <translation>트리거 시 시작</translation>
+        <translation type="vanished">트리거 시 시작</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="711"/>
         <source>Toggle on Trigger</source>
-        <translation>트리거 시 토글</translation>
+        <translation type="vanished">트리거 시 토글</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="712"/>
         <source>Repeat N Times</source>
-        <translation>N회 반복</translation>
+        <translation type="vanished">N회 반복</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="715"/>
         <source>Plain Text (UTF8)</source>
-        <translation>일반 텍스트 (UTF8)</translation>
+        <translation type="vanished">일반 텍스트 (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="715"/>
         <source>Hexadecimal</source>
-        <translation>16진수</translation>
+        <translation type="vanished">16진수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="715"/>
         <source>Base64</source>
-        <translation>Base64</translation>
+        <translation type="vanished">Base64</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Binary (Direct)</source>
-        <translation>바이너리 (직접)</translation>
+        <translation type="vanished">바이너리 (직접)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="721"/>
         <source>No Checksum</source>
-        <translation>체크섬 없음</translation>
+        <translation type="vanished">체크섬 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="725"/>
         <source>End Delimiter Only</source>
-        <translation>종료 구분자만</translation>
+        <translation type="vanished">종료 구분자만</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="725"/>
         <source>Start Delimiter Only</source>
-        <translation>시작 구분자만</translation>
+        <translation type="vanished">시작 구분자만</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="726"/>
         <source>Start + End Delimiter</source>
-        <translation>시작 + 종료 구분자</translation>
+        <translation type="vanished">시작 + 종료 구분자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="726"/>
         <source>No Delimiters</source>
-        <translation>구분자 없음</translation>
+        <translation type="vanished">구분자 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
         <source>Button</source>
-        <translation>버튼</translation>
+        <translation type="vanished">버튼</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
         <source>Slider</source>
-        <translation>슬라이더</translation>
+        <translation type="vanished">슬라이더</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
         <source>Toggle</source>
-        <translation>토글</translation>
+        <translation type="vanished">토글</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
         <source>Text Field</source>
-        <translation>텍스트 필드</translation>
+        <translation type="vanished">텍스트 필드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="737"/>
         <source>Knob</source>
-        <translation>노브</translation>
+        <translation type="vanished">노브</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="741"/>
         <source>Bar Panel</source>
-        <translation>바 패널</translation>
+        <translation type="vanished">바 패널</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="742"/>
         <source>Data Grid</source>
-        <translation>데이터 그리드</translation>
+        <translation type="vanished">데이터 그리드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
         <source>GPS Map</source>
-        <translation>GPS 맵</translation>
+        <translation type="vanished">GPS 맵</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
         <source>Gyroscope</source>
-        <translation>자이로스코프</translation>
+        <translation type="vanished">자이로스코프</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
         <source>Multi-Plot</source>
-        <translation>다중 플롯</translation>
+        <translation type="vanished">다중 플롯</translation>
     </message>
     <message>
         <source>Multiple Plot</source>
         <translation type="vanished">다중 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
         <source>Accelerometer</source>
-        <translation>가속도계</translation>
+        <translation type="vanished">가속도계</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
         <source>3D Plot</source>
-        <translation>3D 플롯</translation>
+        <translation type="vanished">3D 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
         <source>Image View</source>
-        <translation>이미지 뷰</translation>
+        <translation type="vanished">이미지 뷰</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="749"/>
         <source>Canvas Widget</source>
-        <translation>캔버스 위젯</translation>
+        <translation type="vanished">캔버스 위젯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="751"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="771"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="121"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="122"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="186"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="270"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="755"/>
         <source>Bar</source>
-        <translation>바</translation>
+        <translation type="vanished">바</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="756"/>
         <source>Gauge</source>
-        <translation>게이지</translation>
+        <translation type="vanished">게이지</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="757"/>
         <source>Compass</source>
-        <translation>나침반</translation>
+        <translation type="vanished">나침반</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="758"/>
         <source>Meter</source>
-        <translation>미터</translation>
+        <translation type="vanished">미터</translation>
     </message>
     <message>
         <source>Thermometer</source>
         <translation type="vanished">온도계</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="764"/>
         <source>Integer (0 decimals)</source>
-        <translation>정수 (소수점 0자리)</translation>
+        <translation type="vanished">정수 (소수점 0자리)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="765"/>
         <source>1 decimal</source>
-        <translation>소수점 1자리</translation>
+        <translation type="vanished">소수점 1자리</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="766"/>
         <source>2 decimals</source>
-        <translation>소수점 2자리</translation>
+        <translation type="vanished">소수점 2자리</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="767"/>
         <source>3 decimals</source>
-        <translation>소수점 3자리</translation>
+        <translation type="vanished">소수점 3자리</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="768"/>
         <source>Scientific</source>
-        <translation>과학적 표기법</translation>
+        <translation type="vanished">과학적 표기법</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="772"/>
         <source>New Line (\n)</source>
-        <translation>새 줄 (</translation>
+        <translation type="vanished">새 줄 (</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="773"/>
         <source>Carriage Return (\r)</source>
-        <translation>캐리지 리턴 (\r)</translation>
+        <translation type="vanished">캐리지 리턴 (\r)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="774"/>
         <source>CRLF (\r\n)</source>
-        <translation>CRLF (\r</translation>
+        <translation type="vanished">CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="777"/>
         <source>No</source>
-        <translation>아니오</translation>
+        <translation type="vanished">아니오</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="778"/>
         <source>Yes</source>
-        <translation>예</translation>
+        <translation type="vanished">예</translation>
     </message>
     <message>
         <source>(multiple)</source>
@@ -9520,16 +10049,82 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">transmit()가 문자열 값을 반환할 때 사용되는 문자 인코딩</translation>
     </message>
     <message>
-        <source>Value Range</source>
-        <translation type="vanished">값 범위</translation>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="63"/>
+        <source>Decimals</source>
+        <translation>소수점 자릿수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="345"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="64"/>
+        <source>Decimals shown for the value, -1 to pick from Step</source>
+        <translation>값에 표시할 소수점 자릿수, -1로 설정하면 Step에서 선택</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="90"/>
+        <source>Value Range</source>
+        <translation>값 범위</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="102"/>
+        <source>Text</source>
+        <translation>텍스트</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="103"/>
+        <source>Number</source>
+        <translation>숫자</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="107"/>
+        <source>Input</source>
+        <translation>입력:</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="109"/>
+        <source>Text sends what is typed. Number reads it as a number and refuses a value outside Min to Max before the transmit function runs.</source>
+        <translation>텍스트는 입력한 내용을 그대로 전송합니다. 숫자는 숫자로 읽으며 전송 함수 실행 전에 Min에서 Max 범위를 벗어난 값을 거부합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="124"/>
+        <source>Min</source>
+        <translation>최소값</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="129"/>
+        <source>Max</source>
+        <translation>최대값</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="134"/>
+        <source>Step</source>
+        <translation>Step</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="140"/>
+        <source>Units</source>
+        <translation>단위</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="147"/>
+        <source>Quantize to Step</source>
+        <translation>Step에 맞춤</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
+        <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
+        <translation>Min에서 계산한 가장 가까운 Step으로 입력한 값을 맞춘 후 범위 확인 실행</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="367"/>
         <source>Minimum Value</source>
         <translation>최소값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="357"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="368"/>
+        <source>The lowest value this dataset is expected to reach. Widgets and the FFT plot use it when their own range is empty.</source>
+        <translation>이 데이터셋이 도달할 것으로 예상되는 최솟값입니다. 위젯과 FFT 플롯은 자신의 범위가 비어 있을 때 이 값을 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="379"/>
         <source>Maximum Value</source>
         <translation>최대값</translation>
     </message>
@@ -9602,131 +10197,165 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">출력 위젯 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="111"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="260"/>
         <source>State Feedback</source>
         <translation>상태 피드백</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="122"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="271"/>
         <source>Dataset</source>
         <translation>데이터셋</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="123"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="272"/>
         <source>Table Variable</source>
         <translation>테이블 변수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="127"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="276"/>
         <source>State Source</source>
         <translation>상태 소스</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="129"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="278"/>
         <source>Where this control reads the state it displays. Unbound, it shows what you last set rather than what the equipment reports.</source>
         <translation>이 컨트롤이 표시하는 상태를 읽어오는 위치입니다. 바인딩되지 않으면 장비가 보고하는 값이 아닌 마지막으로 설정한 값을 표시합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="150"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="197"/>
         <source>Source</source>
         <translation>소스</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="153"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="148"/>
+        <source>Reply Token</source>
+        <translation>응답 토큰</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="149"/>
+        <source>The dataset where the device echoes the token this control sent. Leave it unbound and the control does not wait for a reply.</source>
+        <translation>디바이스가 이 컨트롤이 전송한 토큰을 에코하는 데이터셋입니다. 바인딩하지 않으면 컨트롤이 응답을 기다리지 않습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="160"/>
+        <source>Result Code</source>
+        <translation>결과 코드</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="161"/>
+        <source>The dataset carrying the device's result: 0 acknowledges, anything else refuses. A reply needs both a token and a code.</source>
+        <translation>디바이스의 결과를 전달하는 데이터셋입니다: 0은 승인, 다른 값은 거부입니다. 응답에는 토큰과 코드가 모두 필요합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="170"/>
+        <source>Reply Message</source>
+        <translation>응답 메시지</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="171"/>
+        <source>Optional dataset with the device's text, shown beside a refusal</source>
+        <translation>디바이스의 텍스트를 포함하는 선택적 데이터셋으로, 거부 옆에 표시됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="200"/>
         <source>The dataset or table variable this control follows</source>
         <translation>이 컨트롤이 따르는 데이터셋 또는 테이블 변수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="166"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="213"/>
         <source>On Value</source>
         <translation>On 값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="168"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="215"/>
         <source>Value that means on. Leave it empty and any non-zero number means on, which a device reporting text like RUN can never satisfy. Anything needing a threshold or a bitmask belongs in the dataset transform.</source>
         <translation>ON을 의미하는 값입니다. 비워두면 0이 아닌 모든 숫자가 ON을 의미하며, RUN과 같은 텍스트를 보고하는 장치는 이를 만족할 수 없습니다. 임계값이나 비트마스크가 필요한 경우 데이터셋 변환에서 처리해야 합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="183"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="236"/>
         <source>Confirm Within (ms)</source>
         <translation>확인 시간 제한 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="184"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="237"/>
+        <source>How long the control shows a request as outstanding: the wait for the state source and for a reply to end, then it goes back to displaying what the source reports</source>
+        <translation>컨트롤이 요청을 대기 중으로 표시하는 시간: 상태 소스 대기와 응답 대기가 끝난 후 소스가 보고하는 내용을 다시 표시하기까지의 시간</translation>
+    </message>
+    <message>
         <source>How long the control shows a request as outstanding before it goes back to displaying what the source reports</source>
-        <translation>컨트롤이 요청을 대기 중으로 표시한 후 소스가 보고하는 내용을 다시 표시하기까지의 시간</translation>
+        <translation type="vanished">컨트롤이 요청을 대기 중으로 표시한 후 소스가 보고하는 내용을 다시 표시하기까지의 시간</translation>
     </message>
 </context>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="282"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="291"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="283"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="292"/>
         <source>Lock Project</source>
         <translation>프로젝트 잠금</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="283"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="284"/>
         <source>Choose a password to lock the project:</source>
         <translation>프로젝트를 잠글 비밀번호를 선택하세요:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="291"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="292"/>
         <source>Confirm the password:</source>
         <translation>비밀번호 확인:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="296"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="297"/>
         <source>Passwords do not match</source>
         <translation>비밀번호 불일치</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="297"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="298"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>입력한 두 비밀번호가 일치하지 않습니다. 프로젝트가 잠기지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="334"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="335"/>
         <source>Unlock Project</source>
         <translation>프로젝트 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="335"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="336"/>
         <source>Enter the project password:</source>
         <translation>프로젝트 비밀번호를 입력하세요:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="345"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="346"/>
         <source>Incorrect password</source>
         <translation>잘못된 비밀번호</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="346"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="347"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>입력한 비밀번호가 프로젝트 파일에 저장된 비밀번호와 일치하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="450"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="459"/>
         <source>Save Quick Plot as Project</source>
         <translation>빠른 플롯을 프로젝트로 저장</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="451"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="460"/>
         <source>Quick Plot Project</source>
         <translation>Quick Plot 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="508"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="517"/>
         <source>New Project</source>
         <translation>새 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1056"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1066"/>
         <source>Edit Control Loop</source>
         <translation>제어 루프 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1202"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1212"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog and the Safe-mode memory budget cannot operate: a script stuck in an infinite loop will stall its device until you disconnect, and one that keeps allocating will grow without limit.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9739,12 +10368,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">샘플</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="650"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="659"/>
         <source>Change MQTT Publisher</source>
         <translation>MQTT 발행자 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="666"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="675"/>
         <source>Change InfluxDB Sink</source>
         <translation>InfluxDB Sink 변경</translation>
     </message>
@@ -9757,12 +10386,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">표시 제목 (비워두면 원래대로 복원됨):</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="682"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="691"/>
         <source>Change Alarm Sounds</source>
         <translation>알람 소리 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1040"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1050"/>
         <source>Change Project Title</source>
         <translation>프로젝트 제목 변경</translation>
     </message>
@@ -9771,42 +10400,42 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">제어 스크립트 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1075"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1085"/>
         <source>Edit Shared Library</source>
         <translation>공유 라이브러리 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1092"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1102"/>
         <source>Edit JavaScript Library</source>
         <translation>JavaScript 라이브러리 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1108"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1118"/>
         <source>Change Point Count</source>
         <translation>포인트 개수 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1126"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1136"/>
         <source>Change Plot Time Range</source>
         <translation>플롯 시간 범위 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1148"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1158"/>
         <source>Toggle Freeze</source>
         <translation>고정 전환</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1163"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1173"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>변경 기반 변환 전환</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1180"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1190"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>고속 Lua 실행 전환</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1201"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1211"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>고속 Lua 실행을 활성화하시겠습니까?</translation>
     </message>
@@ -9827,37 +10456,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 안전 모드에서 먼저 테스트하고 신뢰할 수 있는 스크립트에만 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1208"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1218"/>
         <source>Fast Lua Execution</source>
         <translation>고속 Lua 실행</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1237"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1247"/>
         <source>Change Frame Start Sequence</source>
         <translation>프레임 시작 시퀀스 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1256"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1266"/>
         <source>Change Frame End Sequence</source>
         <translation>프레임 종료 시퀀스 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1275"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1285"/>
         <source>Change Checksum</source>
         <translation>체크섬 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1294"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1304"/>
         <source>Change Frame Detection</source>
         <translation>프레임 감지 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1313"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1323"/>
         <source>Change Decoder</source>
         <translation>디코더 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1332"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1342"/>
         <source>Toggle Hex Delimiters</source>
         <translation>16진수 구분자 전환</translation>
     </message>
@@ -9930,54 +10559,54 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">이 프로젝트에 저장되지 않은 수정 사항이 있습니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="176"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="185"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="199"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="177"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="186"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="200"/>
         <source>Project error</source>
         <translation>프로젝트 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="176"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="177"/>
         <source>Project title cannot be empty!</source>
         <translation>프로젝트 제목은 비워둘 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="185"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="186"/>
         <source>You need to add at least one group!</source>
         <translation>최소 하나의 그룹을 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="199"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="200"/>
         <source>You need to add at least one dataset!</source>
         <translation>최소 하나의 데이터셋을 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="240"/>
         <source>Your project needs a title</source>
         <translation>프로젝트에 제목이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="241"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="242"/>
         <source>Add a group to get started</source>
         <translation>시작하려면 그룹을 추가하세요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="243"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="244"/>
         <source>Add a dataset to a group</source>
         <translation>그룹에 데이터셋을 추가하세요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="257"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="258"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>트리 상단의 프로젝트 보기를 열고 이름을 입력하세요. 프로젝트는 언제든지 이름을 변경할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="260"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="261"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>그룹은 데이터셋을 대시보드 위젯으로 구성합니다. 위 도구 모음의 그룹 버튼을 사용하여 그룹을 생성한 다음 데이터셋을 추가하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="264"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="265"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>데이터셋은 대시보드에 표시되는 값입니다. 트리에서 그룹을 선택하고 툴바의 데이터셋 버튼을 사용하여 추가하세요.</translation>
     </message>
@@ -9998,17 +10627,17 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Serial Studio 프로젝트 저장</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="452"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="461"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio 프로젝트 파일 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="867"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="877"/>
         <source>Untitled Project</source>
         <translation>제목 없는 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="885"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="895"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
@@ -10707,34 +11336,34 @@ Reload it?</source>
 <context>
     <name>DataModel::QuickPlotBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="183"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="298"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="279"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="467"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="431"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="624"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="227"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="483"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="347"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="640"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="234"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="354"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="246"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="366"/>
         <source>Multi-Plot</source>
         <translation>다중 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="478"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="635"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
     </message>
@@ -11186,59 +11815,134 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">대체 위젯을 사용 중입니다. 전체 기능을 잠금 해제하려면 라이선스를 구매하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="172"/>
         <source>Computed dataset: its value comes from its transform, not from the frame, so it has no frame index. A transform that never reads value makes a dataset computed.</source>
-        <translation>계산된 데이터셋: 값이 프레임이 아닌 변환에서 나오므로 프레임 인덱스가 없습니다. 값을 읽지 않는 변환은 데이터셋을 계산된 것으로 만듭니다.</translation>
+        <translation type="vanished">계산된 데이터셋: 값이 프레임이 아닌 변환에서 나오므로 프레임 인덱스가 없습니다. 값을 읽지 않는 변환은 데이터셋을 계산된 것으로 만듭니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="203"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="198"/>
+        <source>This is a computed dataset: its transform calculates the value, so it does not read a position in the frame. A dataset becomes computed when its transform does not use the incoming value.</source>
+        <translation>이것은 계산된 데이터셋입니다: 변환이 값을 계산하므로 프레임의 위치를 읽지 않습니다. 변환이 들어오는 값을 사용하지 않으면 데이터셋이 계산됨 상태가 됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="229"/>
         <source>Plots</source>
         <translation>플롯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="208"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="234"/>
         <source>Plot</source>
         <translation>플롯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="212"/>
-        <source>Toggle 2D plot visualization for this dataset</source>
-        <translation>이 데이터셋에 대한 2D 플롯 시각화 전환</translation>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="238"/>
+        <source>Show or hide a plot of this value over time.</source>
+        <translation>이 값의 시간 경과에 따른 플롯을 표시하거나 숨깁니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="224"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
+        <source>Show or hide a plot of the signal's frequencies.</source>
+        <translation>신호의 주파수 플롯을 표시하거나 숨깁니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="269"/>
+        <source>Show or hide a scrolling picture of the frequencies over time. Uses the FFT settings.</source>
+        <translation>시간 경과에 따른 주파수의 스크롤 이미지를 표시하거나 숨깁니다. FFT 설정을 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="296"/>
+        <source>Show or hide a bar for this value.</source>
+        <translation>이 값에 대한 막대를 표시하거나 숨깁니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="313"/>
+        <source>Show or hide a round gauge for this value.</source>
+        <translation>이 값에 대한 원형 게이지를 표시하거나 숨깁니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="329"/>
+        <source>Show or hide a compass for a direction value.</source>
+        <translation>방향 값에 대한 나침반을 표시하거나 숨깁니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="345"/>
+        <source>Show or hide a half-circle meter for this value.</source>
+        <translation>이 값에 대한 반원형 미터를 표시하거나 숨깁니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="360"/>
+        <source>Show or hide a light that turns on above a level.</source>
+        <translation>레벨 이상에서 켜지는 표시등을 표시하거나 숨깁니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="392"/>
+        <source>Color ranges of the value, such as normal, warning and critical, and choose which ones raise alarms. Available for Bar, Gauge, Meter, LED, and Bar Panel datasets.</source>
+        <translation>정상, 경고, 심각 등의 값 범위를 색상으로 지정하고 알람을 발생시킬 범위를 선택합니다. 막대, 게이지, 미터, LED 및 막대 패널 데이터셋에서 사용 가능합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="407"/>
+        <source>Mark named frequencies or ranges on the FFT plot and waterfall, with optional warning and alarm levels.</source>
+        <translation>FFT 플롯과 워터폴에 명명된 주파수 또는 범위를 표시하며, 선택적으로 경고 및 알람 레벨을 설정할 수 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="414"/>
+        <source>Labels</source>
+        <translation>레이블</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="419"/>
+        <source>Show words instead of numbers, such as Running for 1. Plots and alarms keep the number.</source>
+        <translation>1과 같은 숫자 대신 단어를 표시합니다. 플롯과 알람은 숫자를 유지합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="430"/>
+        <source>Calibrate, filter, or convert the value with a short formula or script.</source>
+        <translation>짧은 수식 또는 스크립트로 값을 보정, 필터링 또는 변환합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="449"/>
+        <source>Make a copy of this dataset with the same settings.</source>
+        <translation>동일한 설정으로 이 데이터셋의 복사본 만들기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="457"/>
+        <source>Remove this dataset from the group.</source>
+        <translation>그룹에서 이 데이터셋 제거</translation>
+    </message>
+    <message>
+        <source>Toggle 2D plot visualization for this dataset</source>
+        <translation type="vanished">이 데이터셋에 대한 2D 플롯 시각화 전환</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="250"/>
         <source>FFT Plot</source>
         <translation>FFT 플롯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="227"/>
         <source>Toggle FFT plot to visualize frequency content</source>
-        <translation>주파수 콘텐츠를 시각화하기 위해 FFT 플롯 전환</translation>
+        <translation type="vanished">주파수 콘텐츠를 시각화하기 위해 FFT 플롯 전환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="265"/>
         <source>Waterfall</source>
         <translation>워터폴</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="243"/>
         <source>Toggle waterfall (spectrogram) plot — uses the FFT settings</source>
-        <translation>워터폴(스펙트로그램) 플롯 전환 — FFT 설정 사용</translation>
+        <translation type="vanished">워터폴(스펙트로그램) 플롯 전환 — FFT 설정 사용</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="287"/>
         <source>Widgets</source>
         <translation>위젯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="265"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="292"/>
         <source>Bar</source>
         <translation>바</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="270"/>
         <source>Toggle the bar widget for this dataset</source>
-        <translation>이 데이터셋의 막대 위젯 전환</translation>
+        <translation type="vanished">이 데이터셋의 막대 위젯 전환</translation>
     </message>
     <message>
         <source>Bar/Level</source>
@@ -11249,53 +11953,48 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">이 데이터셋에 대한 바/레벨 표시기 전환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="281"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="308"/>
         <source>Gauge</source>
         <translation>게이지</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="286"/>
         <source>Toggle gauge widget for analog-style display</source>
-        <translation>아날로그 스타일 디스플레이를 위한 게이지 위젯 전환</translation>
+        <translation type="vanished">아날로그 스타일 디스플레이를 위한 게이지 위젯 전환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="298"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="325"/>
         <source>Compass</source>
         <translation>나침반</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="302"/>
         <source>Toggle compass widget for directional data</source>
-        <translation>방향 데이터를 위한 나침반 위젯 전환</translation>
+        <translation type="vanished">방향 데이터를 위한 나침반 위젯 전환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="313"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="340"/>
         <source>Meter</source>
         <translation>미터</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="317"/>
         <source>Toggle analog meter (half-arc) widget</source>
-        <translation>아날로그 미터(반원형) 위젯 전환</translation>
+        <translation type="vanished">아날로그 미터(반원형) 위젯 전환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="365"/>
         <source>Define colored value ranges with severity tiers. Available for Bar, Gauge, Meter, LED, and Bar Panel datasets.</source>
-        <translation>심각도 단계별로 색상이 지정된 값 범위를 정의합니다. 막대, 게이지, 미터, LED 및 막대 패널 데이터셋에서 사용 가능합니다.</translation>
+        <translation type="vanished">심각도 단계별로 색상이 지정된 값 범위를 정의합니다. 막대, 게이지, 미터, LED 및 막대 패널 데이터셋에서 사용 가능합니다.</translation>
     </message>
     <message>
         <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
         <translation type="vanished">이 데이터셋의 게이지 또는 LED에 대해 심각도 단계별로 색상이 지정된 값 범위를 정의합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="371"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="400"/>
         <source>Freq. Markers</source>
         <translation>주파수 마커</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="378"/>
         <source>Pin labeled frequencies or bands on the FFT plot and waterfall, with optional warning and alarm levels.</source>
-        <translation>FFT 플롯과 워터폴에 레이블이 지정된 주파수 또는 대역을 고정하며, 선택적으로 경고 및 알람 레벨을 설정할 수 있습니다.</translation>
+        <translation type="vanished">FFT 플롯과 워터폴에 레이블이 지정된 주파수 또는 대역을 고정하며, 선택적으로 경고 및 알람 레벨을 설정할 수 있습니다.</translation>
     </message>
     <message>
         <source>Thermometer</source>
@@ -11306,22 +12005,21 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">온도 데이터를 위한 온도계 위젯 전환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="356"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="334"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
-        <translation>이진 또는 임계값에 대한 LED 표시기 전환</translation>
+        <translation type="vanished">이진 또는 임계값에 대한 LED 표시기 전환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="354"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="381"/>
         <source>Behavior</source>
         <translation>동작</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="360"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="387"/>
         <source>Alarm Bands</source>
         <translation>알람 밴드</translation>
     </message>
@@ -11330,34 +12028,31 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">이 데이터셋의 게이지에 대해 심각도 단계별로 색상이 지정된 값 범위를 정의합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="384"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="426"/>
         <source>Transform</source>
         <translation>변환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="388"/>
         <source>Edit a value transform expression for calibration, filtering, or unit conversion</source>
-        <translation>보정, 필터링 또는 단위 변환을 위한 값 변환 표현식 편집</translation>
+        <translation type="vanished">보정, 필터링 또는 단위 변환을 위한 값 변환 표현식 편집</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="401"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="444"/>
         <source>Duplicate</source>
         <translation>복제</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="406"/>
         <source>Duplicate this dataset with the same configuration</source>
-        <translation>동일한 구성으로 이 데이터셋 복제</translation>
+        <translation type="vanished">동일한 구성으로 이 데이터셋 복제</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="454"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="414"/>
         <source>Delete this dataset from the group</source>
-        <translation>그룹에서 이 데이터셋 삭제</translation>
+        <translation type="vanished">그룹에서 이 데이터셋 삭제</translation>
     </message>
 </context>
 <context>
@@ -11542,9 +12237,13 @@ Valid format: 01 A2 FF 3C</source>
         <translation>%1 개발 후원!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="104"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
-        <translation>Serial Studio는 자원봉사자들이 지원하는 무료 오픈소스 소프트웨어입니다. 개발 활동을 지원하기 위해 기부하거나 Pro 라이선스를 구매해 주세요 :)</translation>
+        <translation type="vanished">Serial Studio는 자원봉사자들이 지원하는 무료 오픈소스 소프트웨어입니다. 개발 활동을 지원하기 위해 기부하거나 Pro 라이선스를 구매해 주세요 :)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Donate.qml" line="104"/>
+        <source>Serial Studio is free and open-source software supported by volunteers. Consider donating or getting a Pro license to support its development.</source>
+        <translation>Serial Studio는 자원봉사자들이 지원하는 무료 오픈소스 소프트웨어입니다. 개발을 지원하기 위해 기부하거나 Pro 라이선스를 구매해 주세요.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="117"/>
@@ -11824,85 +12523,90 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>EditorCommit</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="125"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="127"/>
         <source>Rename Device</source>
         <translation>장치 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="285"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="363"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="383"/>
         <source>Edit Device</source>
         <translation>장치 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="382"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="405"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="411"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="486"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="480"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="503"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="584"/>
         <source>Edit Group</source>
         <translation>그룹 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="428"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="526"/>
         <source>Rename Group</source>
         <translation>그룹 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="735"/>
         <source>Edit Action</source>
         <translation>액션 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="777"/>
         <source>Rename Project</source>
         <translation>프로젝트 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="726"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="824"/>
         <source>Alias "%1" is already in use</source>
         <translation>별칭 "%1"이(가) 이미 사용 중입니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="727"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="825"/>
         <source>Dataset aliases must be unique across the project. The change was not applied.</source>
         <translation>데이터셋 별칭은 프로젝트 전체에서 고유해야 합니다. 변경 사항이 적용되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="729"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="827"/>
         <source>Duplicate Alias</source>
         <translation>중복된 별칭</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="740"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="838"/>
         <source>Alias "%1" contains only digits</source>
         <translation>별칭 "%1"에 숫자만 포함되어 있습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="741"/>
-        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not &amp;m_editor alias.</source>
-        <translation>스크립트에서는 문자열로 인용해야 합니다(예: getDataset("%1")). 숫자 인수는 이 별칭이 아닌 uniqueId로 읽힙니다.</translation>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="839"/>
+        <source>Scripts must pass it in quotes, for example getDataset("%1"). Without quotes, the number is read as a dataset ID instead of this alias.</source>
+        <translation>스크립트는 따옴표로 묶어서 전달해야 합니다. 예: getDataset("%1"). 따옴표 없이 사용하면 숫자가 이 별칭 대신 데이터셋 ID로 읽힙니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="745"/>
+        <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not &amp;m_editor alias.</source>
+        <translation type="vanished">스크립트에서는 문자열로 인용해야 합니다(예: getDataset("%1")). 숫자 인수는 이 별칭이 아닌 uniqueId로 읽힙니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="843"/>
         <source>Numeric Alias</source>
         <translation>숫자 별칭</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="932"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1030"/>
         <source>Edit Alarms</source>
         <translation>알람 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1084"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1234"/>
         <source>Rename Dataset</source>
         <translation>데이터셋 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1105"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1255"/>
         <source>Edit Dataset</source>
         <translation>데이터셋 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1284"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1460"/>
         <source>Edit Output Widget</source>
         <translation>출력 위젯 편집</translation>
     </message>
@@ -11910,184 +12614,181 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>EditorForms</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="139"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="142"/>
         <source>Project Information</source>
         <translation>프로젝트 정보</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="150"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="153"/>
         <source>Project Title</source>
         <translation>프로젝트 제목</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="151"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="154"/>
         <source>Untitled Project</source>
         <translation>제목 없는 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="152"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="155"/>
         <source>Name or description of the project</source>
         <translation>프로젝트의 이름 또는 설명</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="171"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="174"/>
         <source>Group Information</source>
         <translation>그룹 정보</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="182"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="185"/>
         <source>Group Title</source>
         <translation>그룹 제목</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="183"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="186"/>
         <source>Untitled Group</source>
         <translation>제목 없는 그룹</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="184"/>
         <source>Title or description of &amp;m_editor dataset group</source>
-        <translation>이 데이터셋 그룹의 제목 또는 설명</translation>
+        <translation type="vanished">이 데이터셋 그룹의 제목 또는 설명</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="199"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="784"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="202"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="720"/>
         <source>Device %1</source>
         <translation>장치 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="217"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="482"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="220"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="485"/>
         <source>Input Device</source>
         <translation>입력 장치</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="218"/>
         <source>Select which connected device provides data for &amp;m_editor group</source>
-        <translation>이 그룹에 데이터를 제공할 연결된 장치 선택</translation>
+        <translation type="vanished">이 그룹에 데이터를 제공할 연결된 장치 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="235"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="238"/>
         <source>Image Configuration</source>
         <translation>이미지 구성</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="249"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="252"/>
         <source>Detection Mode</source>
         <translation>감지 모드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="251"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="254"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>자동 감지는 JPEG/PNG 매직 바이트를 읽고, 수동은 명시적 시작/종료 시퀀스 사용</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="261"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="264"/>
         <source>Start Sequence (Hex)</source>
         <translation>시작 시퀀스 (16진수)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="262"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="265"/>
         <source>e.g. FF D8 FF</source>
         <translation>예: FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="263"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="266"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>이미지 프레임의 시작을 표시하는 16진수 바이트</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="272"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="275"/>
         <source>End Sequence (Hex)</source>
         <translation>종료 시퀀스 (16진수)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="273"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="276"/>
         <source>e.g. FF D9</source>
         <translation>예: FF D9</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="274"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="277"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>이미지 프레임의 끝을 표시하는 16진수 바이트</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="293"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="296"/>
         <source>Datasets</source>
         <translation>데이터셋</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="323"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="326"/>
         <source>Time</source>
         <translation>시간</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="323"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="326"/>
         <source>Samples</source>
         <translation>샘플</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="334"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="337"/>
         <source>X-Axis Source</source>
         <translation>X축 소스</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="335"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="338"/>
         <source>Plot every curve against time or against the sample number</source>
         <translation>시간 또는 샘플 번호에 대해 모든 곡선 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="350"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="353"/>
         <source>Logarithmic X Axis</source>
         <translation>로그 X축</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="351"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="354"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples (not Time)</source>
         <translation>X축을 10진수 단위로 스케일링; X축 소스가 샘플일 때 사용 가능(시간 제외)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="363"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="366"/>
         <source>Logarithmic Y Axis</source>
         <translation>로그 Y축</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="364"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="367"/>
         <source>Scale the shared Y axis in decades; values at or below zero are clamped</source>
         <translation>공유 Y축을 10진수 단위로 스케일링; 0 이하의 값은 클램핑됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="381"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="384"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="383"/>
         <source>Web address to load in &amp;m_editor widget</source>
-        <translation>이 위젯에 로드할 웹 주소</translation>
+        <translation type="vanished">이 위젯에 로드할 웹 주소</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="402"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="405"/>
         <source>Auto</source>
         <translation>자동</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="402"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="405"/>
         <source>Horizontal</source>
         <translation>가로</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="402"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="405"/>
         <source>Vertical</source>
         <translation>세로</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="405"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="408"/>
         <source>Bar Style</source>
         <translation>바 스타일</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="406"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="409"/>
         <source>Bar orientation: automatic, horizontal rows, or vertical columns</source>
         <translation>바 방향: 자동, 가로 행 또는 세로 열</translation>
     </message>
@@ -12100,162 +12801,149 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">이 데이터셋 그룹을 시각화할 방법 선택 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="493"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="496"/>
         <source>Device Name</source>
         <translation>장치 이름</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="494"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="497"/>
         <source>Device 1</source>
         <translation>장치 1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="495"/>
         <source>Human-readable name for &amp;m_editor input device</source>
-        <translation>이 입력 장치의 사람이 읽을 수 있는 이름</translation>
+        <translation type="vanished">이 입력 장치의 사람이 읽을 수 있는 이름</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="504"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="507"/>
         <source>Bus Type</source>
         <translation>버스 유형</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="505"/>
         <source>Select the hardware interface for &amp;m_editor input device</source>
-        <translation>이 입력 장치의 하드웨어 인터페이스 선택</translation>
+        <translation type="vanished">이 입력 장치의 하드웨어 인터페이스 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="508"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="508"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
         <source>Network</source>
         <translation>네트워크</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="508"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
         <source>Raw USB</source>
         <translation>Raw USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="513"/>
         <source>HID Device</source>
         <translation>HID 장치</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="513"/>
         <source>Process</source>
         <translation>프로세스</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="513"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT 구독자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="513"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="514"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="514"/>
         <source>EtherNet/IP</source>
         <translation>EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="514"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="535"/>
         <source>Frame Detection</source>
-        <translation>프레임 감지</translation>
+        <translation type="vanished">프레임 감지</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="550"/>
         <source>Frame Detection Method</source>
-        <translation>프레임 감지 방법</translation>
+        <translation type="vanished">프레임 감지 방법</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="551"/>
         <source>Select how incoming data frames are identified</source>
-        <translation>수신 데이터 프레임 식별 방법 선택</translation>
+        <translation type="vanished">수신 데이터 프레임 식별 방법 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="561"/>
         <source>Hexadecimal Delimiters</source>
-        <translation>16진수 구분자</translation>
+        <translation type="vanished">16진수 구분자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="562"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
-        <translation>프레임 시작/종료 시퀀스를 16진수 값으로 입력</translation>
+        <translation type="vanished">프레임 시작/종료 시퀀스를 16진수 값으로 입력</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="578"/>
         <source>Frame Start Delimiter</source>
-        <translation>프레임 시작 구분자</translation>
+        <translation type="vanished">프레임 시작 구분자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="579"/>
         <source>e.g. /*</source>
-        <translation>예: /*</translation>
+        <translation type="vanished">예: /*</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="580"/>
         <source>Sequence that marks the beginning of a data frame</source>
-        <translation>데이터 프레임의 시작을 표시하는 시퀀스</translation>
+        <translation type="vanished">데이터 프레임의 시작을 표시하는 시퀀스</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="592"/>
         <source>Frame End Delimiter</source>
-        <translation>프레임 종료 구분자</translation>
+        <translation type="vanished">프레임 종료 구분자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="593"/>
         <source>e.g. */</source>
-        <translation>예: */</translation>
+        <translation type="vanished">예: */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="594"/>
         <source>Sequence that marks the end of a data frame</source>
-        <translation>데이터 프레임의 끝을 표시하는 시퀀스</translation>
+        <translation type="vanished">데이터 프레임의 끝을 표시하는 시퀀스</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="607"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="538"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>페이로드 처리 및 검증</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="618"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="549"/>
         <source>Data Conversion Method</source>
         <translation>데이터 변환 방법</translation>
     </message>
@@ -12264,328 +12952,377 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">수신된 바이너리 데이터를 파싱하기 전에 디코딩하는 방법 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="448"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="451"/>
         <source>Group Widget</source>
         <translation>그룹 위젯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="449"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="452"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>이 데이터셋 그룹을 시각화할 방법 선택 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="550"/>
         <source>How incoming bytes become text before parsing: plain text, hexadecimal, Base64, or raw binary for binary parsers</source>
         <translation>들어오는 바이트가 파싱 전에 텍스트로 변환되는 방식: 일반 텍스트, 16진수, Base64, 또는 이진 파서용 원본 이진 형식</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="636"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="567"/>
         <source>Checksum Algorithm</source>
         <translation>체크섬 알고리즘</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="568"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>프레임 검증에 사용할 체크섬 알고리즘 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="690"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="624"/>
         <source>Connection Settings</source>
         <translation>연결 설정</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="750"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1168"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="687"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1105"/>
         <source>General Information</source>
         <translation>일반 정보</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="760"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="697"/>
         <source>Action Title</source>
         <translation>액션 제목</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="762"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="699"/>
         <source>Untitled Action</source>
         <translation>제목 없는 액션</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="763"/>
         <source>Name or description of &amp;m_editor action</source>
-        <translation>이 액션의 이름 또는 설명</translation>
+        <translation type="vanished">이 액션의 이름 또는 설명</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="772"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="709"/>
         <source>Action Icon</source>
         <translation>액션 아이콘</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="773"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="710"/>
         <source>Default Icon</source>
         <translation>기본 아이콘</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="774"/>
         <source>Icon displayed for &amp;m_editor action in the dashboard</source>
-        <translation>대시보드에서 이 액션에 표시되는 아이콘</translation>
+        <translation type="vanished">대시보드에서 이 액션에 표시되는 아이콘</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="802"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="738"/>
         <source>Target Device</source>
         <translation>대상 장치</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="803"/>
         <source>Select which connected device &amp;m_editor action sends data to</source>
-        <translation>이 액션이 데이터를 전송할 연결된 장치 선택</translation>
+        <translation type="vanished">이 액션이 데이터를 전송할 연결된 장치 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="816"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="752"/>
         <source>Data Payload</source>
         <translation>데이터 페이로드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="828"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="764"/>
         <source>Send as Binary</source>
         <translation>바이너리로 전송</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="829"/>
         <source>Send raw binary data when &amp;m_editor action is triggered</source>
-        <translation>&amp;m_editor 액션이 트리거될 때 원시 바이너리 데이터 전송</translation>
+        <translation type="vanished">&amp;m_editor 액션이 트리거될 때 원시 바이너리 데이터 전송</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="840"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="852"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="776"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="788"/>
         <source>Command</source>
         <translation>명령</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="841"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="777"/>
         <source>Transmit Data (Hex)</source>
         <translation>데이터 전송 (Hex)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="842"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="778"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>액션이 트리거될 때 전송할 16진수 페이로드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="853"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="789"/>
         <source>Transmit Data</source>
         <translation>데이터 전송</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="854"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="790"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>액션이 트리거될 때 전송할 텍스트 페이로드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="865"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1293"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="801"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
         <source>Text Encoding</source>
         <translation>텍스트 인코딩</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="866"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="802"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>텍스트 페이로드 직렬화에 사용되는 문자 인코딩</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="891"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="827"/>
         <source>End-of-Line Sequence</source>
         <translation>줄 끝 시퀀스</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="892"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="828"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>메시지에 추가할 EOL 문자 (예: </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="897"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="833"/>
         <source>No Checksum</source>
         <translation>체크섬 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="906"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="842"/>
         <source>Checksum</source>
         <translation>체크섬</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="907"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="843"/>
         <source>Checksum appended to the payload (covers payload and EOL)</source>
         <translation>페이로드에 추가된 체크섬 (페이로드 및 EOL 포함)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="920"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="856"/>
         <source>Execution Behavior</source>
         <translation>실행 동작</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="932"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="868"/>
         <source>Auto-Execute on Connect</source>
         <translation>연결 시 자동 실행</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="933"/>
         <source>Automatically trigger &amp;m_editor action when the device connects</source>
-        <translation>장치 연결 시 &amp;m_editor 액션 자동 트리거</translation>
+        <translation type="vanished">장치 연결 시 &amp;m_editor 액션 자동 트리거</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="939"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="875"/>
         <source>Timer Behavior</source>
         <translation>타이머 동작</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="948"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="884"/>
         <source>Timer Mode</source>
         <translation>타이머 모드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="951"/>
         <source>Choose when and how &amp;m_editor action should repeat automatically</source>
-        <translation>&amp;m_editor 액션이 자동으로 반복되는 시점 및 방법 선택</translation>
+        <translation type="vanished">&amp;m_editor 액션이 자동으로 반복되는 시점 및 방법 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="958"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="894"/>
         <source>Interval (ms)</source>
         <translation>간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="962"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="898"/>
         <source>Timer Interval (ms)</source>
         <translation>타이머 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="963"/>
         <source>Milliseconds between each repeated trigger of &amp;m_editor action</source>
-        <translation>&amp;m_editor 액션의 각 반복 트리거 사이 간격(밀리초)</translation>
+        <translation type="vanished">&amp;m_editor 액션의 각 반복 트리거 사이 간격(밀리초)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="970"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="974"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="187"/>
+        <source>Title or description of this dataset group</source>
+        <translation>이 데이터셋 그룹의 제목 또는 설명</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="221"/>
+        <source>Select which connected device provides data for this group</source>
+        <translation>이 그룹에 데이터를 제공할 연결된 장치 선택</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="386"/>
+        <source>Web address to load in this widget</source>
+        <translation>이 위젯에 로드할 웹 주소</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="498"/>
+        <source>Human-readable name for this input device</source>
+        <translation>이 입력 장치의 사람이 읽을 수 있는 이름</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="508"/>
+        <source>Select the hardware interface for this input device</source>
+        <translation>이 입력 장치의 하드웨어 인터페이스 선택</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="700"/>
+        <source>Name or description of this action</source>
+        <translation>이 액션의 이름 또는 설명</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="711"/>
+        <source>Icon displayed for this action in the dashboard</source>
+        <translation>대시보드에서 이 액션에 표시되는 아이콘</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="739"/>
+        <source>Select which connected device this action sends data to</source>
+        <translation>이 액션이 데이터를 전송할 연결된 장치 선택</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="765"/>
+        <source>Send raw binary data when this action is triggered</source>
+        <translation>이 액션이 트리거될 때 원시 바이너리 데이터 전송</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="869"/>
+        <source>Automatically trigger this action when the device connects</source>
+        <translation>장치 연결 시 이 액션을 자동으로 트리거</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="887"/>
+        <source>Choose when and how this action should repeat automatically</source>
+        <translation>이 액션이 자동으로 반복되는 시기와 방법 선택</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="899"/>
+        <source>Milliseconds between each repeated trigger of this action</source>
+        <translation>이 액션의 반복 트리거 간 밀리초 간격</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="906"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="910"/>
         <source>Repeat Count</source>
         <translation>반복 횟수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="975"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="911"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>각 트리거마다 명령을 전송할 횟수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1069"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1006"/>
         <source>On</source>
         <translation>켜짐</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1179"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1116"/>
         <source>Label</source>
         <translation>레이블</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1180"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1117"/>
         <source>Display label</source>
         <translation>레이블 표시</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1190"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1127"/>
         <source>Button Icon</source>
         <translation>버튼 아이콘</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1199"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1136"/>
         <source>Colorize Icon</source>
         <translation>아이콘 색상화</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1200"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1137"/>
         <source>Tint the icon with the button color</source>
         <translation>버튼 색상으로 아이콘 색조 적용</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1209"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1146"/>
         <source>Automatic</source>
         <translation>자동</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1210"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1147"/>
         <source>Button Color</source>
         <translation>버튼 색상</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1211"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1148"/>
         <source>Custom fill color for this button; automatic uses the group accent</source>
         <translation>이 버튼의 사용자 정의 채우기 색상; 자동은 그룹 강조 색상 사용</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1222"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1159"/>
         <source>Button Size</source>
         <translation>버튼 크기</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1160"/>
         <source>Scales the button, its icon and its caption</source>
         <translation>버튼, 아이콘 및 캡션의 크기 조정</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1232"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1169"/>
         <source>Toggle Button</source>
         <translation>토글 버튼</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1233"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>눌린 상태를 유지하고 단일 클릭 대신 1(켜짐) / 0(꺼짐) 전송</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1255"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1192"/>
         <source>On Label</source>
         <translation>켜짐 레이블</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1256"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1193"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>래치된 상태에서 표시되는 캡션(기본값은 레이블)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1265"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1202"/>
         <source>Off Label</source>
         <translation>꺼짐 레이블</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1266"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1203"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>해제된 상태에서 표시되는 캡션(기본값은 레이블)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1282"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
         <source>Initial Value</source>
         <translation>초기값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1294"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1231"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>transmit()가 문자열 값을 반환할 때 사용되는 문자 인코딩</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1313"/>
         <source>Value Range</source>
-        <translation>값 범위</translation>
+        <translation type="vanished">값 범위</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1324"/>
         <source>Minimum Value</source>
-        <translation>최소값</translation>
+        <translation type="vanished">최소값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1333"/>
         <source>Maximum Value</source>
-        <translation>최대값</translation>
+        <translation type="vanished">최대값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1342"/>
         <source>Step Size</source>
-        <translation>단계 크기</translation>
+        <translation type="vanished">단계 크기</translation>
     </message>
 </context>
 <context>
@@ -12704,263 +13441,279 @@ Valid format: 01 A2 FF 3C</source>
         <translation>게시 속도 (Hz)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="181"/>
         <source>How many times per second to publish (1-30 Hz). Higher rates increase broker load; dashboard data is rate-limited so a slow broker never blocks frame parsing.</source>
-        <translation>초당 게시 횟수 (1-30 Hz). 높은 속도는 브로커 부하를 증가시킴; 대시보드 데이터는 속도 제한되므로 느린 브로커가 프레임 파싱을 차단하지 않음.</translation>
+        <translation type="vanished">초당 게시 횟수 (1-30 Hz). 높은 속도는 브로커 부하를 증가시킴; 대시보드 데이터는 속도 제한되므로 느린 브로커가 프레임 파싱을 차단하지 않음.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="193"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="192"/>
         <source>Topic Base</source>
         <translation>토픽 베이스</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="194"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="193"/>
         <source>serial-studio/device</source>
         <translation>serial-studio/device</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="195"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="194"/>
         <source>Base topic used for frame and raw-byte publishing</source>
         <translation>프레임 및 원시 바이트 게시에 사용되는 기본 토픽</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="205"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="204"/>
         <source>Script Topic</source>
         <translation>스크립트 토픽</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="206"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="205"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="229"/>
         <source>Defaults to Topic Base when empty</source>
         <translation>비어 있으면 기본 토픽으로 설정됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="207"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="206"/>
         <source>Topic the user script publishes to</source>
         <translation>사용자 스크립트가 게시하는 토픽</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="217"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="216"/>
         <source>Publish Notifications</source>
         <translation>알림 게시</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="218"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="217"/>
         <source>Mirror dashboard notifications to a dedicated topic</source>
         <translation>대시보드 알림을 전용 토픽에 미러링</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="229"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="228"/>
         <source>Notification Topic</source>
         <translation>알림 토픽</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="230"/>
         <source>Topic where dashboard notifications are mirrored</source>
         <translation>대시보드 알림이 미러링되는 토픽</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="248"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="247"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="260"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="259"/>
         <source>Publish as Edge Node</source>
         <translation>Edge Node로 게시</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="261"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="260"/>
         <source>Publish datasets in the Sparkplug B namespace instead of the payload selected above, with birth, death and rebirth handling</source>
         <translation>위에서 선택한 페이로드 대신 Sparkplug B 네임스페이스에서 데이터셋을 게시하며, birth, death 및 rebirth 처리를 포함합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="275"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="274"/>
         <source>Group ID</source>
         <translation>그룹 ID</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="276"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="275"/>
         <source>Plant1</source>
         <translation>Plant1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="277"/>
         <source>Logical group &amp;m_editor edge node belongs to</source>
-        <translation>&amp;m_editor 에지 노드가 속한 논리 그룹</translation>
+        <translation type="vanished">&amp;m_editor 에지 노드가 속한 논리 그룹</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="286"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="285"/>
         <source>Edge Node ID</source>
         <translation>Edge Node ID</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="287"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="286"/>
         <source>SerialStudio</source>
         <translation>SerialStudio</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="288"/>
         <source>Identifies &amp;m_editor node inside the group</source>
-        <translation>그룹 내에서 &amp;m_editor 노드 식별</translation>
+        <translation type="vanished">그룹 내에서 &amp;m_editor 노드 식별</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="297"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="296"/>
         <source>Device ID</source>
         <translation>장치 ID</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="298"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="297"/>
         <source>Optional</source>
         <translation>선택 사항</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="299"/>
         <source>When set, datasets are published as a device of &amp;m_editor node</source>
-        <translation>설정 시 데이터셋이 &amp;m_editor 노드의 장치로 발행됨</translation>
+        <translation type="vanished">설정 시 데이터셋이 &amp;m_editor 노드의 장치로 발행됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="313"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="181"/>
+        <source>How many times per second to publish, from 1 to 30. Higher rates put more load on the broker. A slow broker never slows down the dashboard.</source>
+        <translation>초당 발행 횟수(1~30회). 높은 속도는 Broker에 더 많은 부하를 줍니다. 느린 Broker는 대시보드 속도를 저하시키지 않습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="276"/>
+        <source>Logical group this edge node belongs to</source>
+        <translation>이 Edge Node가 속한 논리적 그룹</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="287"/>
+        <source>Identifies this node inside the group</source>
+        <translation>그룹 내에서 이 노드를 식별합니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="298"/>
+        <source>When set, datasets are published as a device of this node</source>
+        <translation>설정 시 데이터셋이 이 노드의 장치로 게시됩니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="312"/>
         <source>Broker</source>
         <translation>브로커</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="324"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="323"/>
         <source>Hostname</source>
         <translation>호스트명</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="325"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="324"/>
         <source>broker.hivemq.com</source>
         <translation>broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="326"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="325"/>
         <source>Hostname or IP address of the MQTT broker</source>
         <translation>MQTT 브로커의 호스트명 또는 IP 주소</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="335"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="334"/>
         <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="336"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="335"/>
         <source>TCP port exposed by the broker (1883 plain, 8883 TLS)</source>
         <translation>브로커가 노출하는 TCP 포트 (1883 평문, 8883 TLS)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="345"/>
         <source>Custom Client ID</source>
         <translation>사용자 지정 클라이언트 ID</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="348"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="347"/>
         <source>Off: a fresh random id is generated on every project load. On: use the id below.</source>
         <translation>끔: 프로젝트를 로드할 때마다 새로운 무작위 ID가 생성됩니다. 켬: 아래 ID를 사용합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="359"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="358"/>
         <source>Client ID</source>
         <translation>클라이언트 ID</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="360"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="359"/>
         <source>Identifier sent to the broker on CONNECT</source>
         <translation>CONNECT 시 브로커로 전송되는 식별자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="373"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="372"/>
         <source>Protocol Version</source>
         <translation>프로토콜 버전</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="374"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="373"/>
         <source>MQTT protocol revision used on CONNECT</source>
         <translation>CONNECT 시 사용되는 MQTT 프로토콜 버전</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="383"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="382"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (초)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="384"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="383"/>
         <source>Seconds between PINGREQ packets when idle</source>
         <translation>유휴 상태에서 PINGREQ 패킷 간 간격(초)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="393"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="392"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="394"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="393"/>
         <source>Discard any persistent session state on CONNECT</source>
         <translation>CONNECT 시 모든 영구 세션 상태 삭제</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="411"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="410"/>
         <source>Username</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="412"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="411"/>
         <source>Username for broker authentication (leave empty for anonymous)</source>
         <translation>브로커 인증용 사용자 이름(익명 접속 시 비워둠)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="422"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="421"/>
         <source>Password</source>
         <translation>비밀번호</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="423"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="422"/>
         <source>Password for broker authentication</source>
         <translation>브로커 인증용 비밀번호</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="514"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="513"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="524"/>
         <source>Use SSL/TLS</source>
         <translation>SSL/TLS 사용</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="526"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>TLS를 통해 브로커 연결 터널링</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="538"/>
         <source>Protocol</source>
         <translation>프로토콜</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="540"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
         <source>Negotiated TLS protocol family</source>
         <translation>협상된 TLS 프로토콜 패밀리</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="549"/>
         <source>Peer Verify</source>
         <translation>피어 검증</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="551"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>브로커의 인증서 체인 검증 엄격도</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="560"/>
         <source>Verify Depth</source>
         <translation>검증 깊이</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="562"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>허용되는 최대 인증서 체인 길이 (0 = 무제한)</translation>
     </message>
@@ -12968,23 +13721,23 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>EditorMultiSelect</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="212"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="326"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="213"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="331"/>
         <source>(multiple)</source>
         <translation>(다중)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="226"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="340"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="227"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="345"/>
         <source>Mixed</source>
         <translation>혼합</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="434"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="435"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="497"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="498"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="554"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="439"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="440"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="502"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="503"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="559"/>
         <source>Edit Selection</source>
         <translation>선택 항목 편집</translation>
     </message>
@@ -13138,6 +13891,332 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="909"/>
         <source>Control Loop</source>
         <translation>제어 루프</translation>
+    </message>
+</context>
+<context>
+    <name>EditorVocabulary</name>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="95"/>
+        <source>Rectangular (None)</source>
+        <translation>직사각형 (없음)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="95"/>
+        <source>Bartlett (Triangular)</source>
+        <translation>Bartlett (삼각형)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="95"/>
+        <source>Hann</source>
+        <translation>Hann</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="96"/>
+        <source>Hamming</source>
+        <translation>Hamming</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="96"/>
+        <source>Blackman</source>
+        <translation>Blackman</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="96"/>
+        <source>Blackman-Harris</source>
+        <translation>Blackman-Harris</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="96"/>
+        <source>Nuttall</source>
+        <translation>Nuttall</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="97"/>
+        <source>Blackman-Nuttall</source>
+        <translation>Blackman-Nuttall</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="97"/>
+        <source>Flat Top</source>
+        <translation>Flat Top</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="97"/>
+        <source>Welch</source>
+        <translation>Welch</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="98"/>
+        <source>Bartlett-Hann</source>
+        <translation>Bartlett-Hann</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="98"/>
+        <source>Bohman</source>
+        <translation>Bohman</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="98"/>
+        <source>Cosine (Sine)</source>
+        <translation>Cosine (Sine)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="99"/>
+        <source>Lanczos</source>
+        <translation>Lanczos</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="99"/>
+        <source>Parzen</source>
+        <translation>Parzen</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="119"/>
+        <source>Off</source>
+        <translation>꺼짐</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="119"/>
+        <source>Auto Start</source>
+        <translation>자동 시작</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="119"/>
+        <source>Start on Trigger</source>
+        <translation>트리거 시 시작</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="120"/>
+        <source>Toggle on Trigger</source>
+        <translation>트리거 시 토글</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="120"/>
+        <source>Repeat N Times</source>
+        <translation>N회 반복</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="123"/>
+        <source>Plain Text (UTF8)</source>
+        <translation>일반 텍스트 (UTF8)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="123"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="191"/>
+        <source>Hexadecimal</source>
+        <translation>16진수</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="123"/>
+        <source>Base64</source>
+        <translation>Base64</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="124"/>
+        <source>Binary (Direct)</source>
+        <translation>바이너리 (직접)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="129"/>
+        <source>No Checksum</source>
+        <translation>체크섬 없음</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="133"/>
+        <source>End Delimiter Only</source>
+        <translation>종료 구분자만</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="133"/>
+        <source>Start Delimiter Only</source>
+        <translation>시작 구분자만</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="134"/>
+        <source>Start + End Delimiter</source>
+        <translation>시작 + 종료 구분자</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="134"/>
+        <source>No Delimiters</source>
+        <translation>구분자 없음</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="135"/>
+        <source>Fixed Length</source>
+        <translation>고정 길이</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="143"/>
+        <source>Auto-detect</source>
+        <translation>자동 감지</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="143"/>
+        <source>Manual Delimiters</source>
+        <translation>수동 구분 기호</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="146"/>
+        <source>Button</source>
+        <translation>버튼</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="146"/>
+        <source>Slider</source>
+        <translation>슬라이더</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="146"/>
+        <source>Toggle</source>
+        <translation>토글</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="146"/>
+        <source>Text Field</source>
+        <translation>텍스트 필드</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="147"/>
+        <source>Knob</source>
+        <translation>노브</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="157"/>
+        <source>Bar Panel</source>
+        <translation>바 패널</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="158"/>
+        <source>Data Grid</source>
+        <translation>데이터 그리드</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="159"/>
+        <source>GPS Map</source>
+        <translation>GPS 맵</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="160"/>
+        <source>Gyroscope</source>
+        <translation>자이로스코프</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="161"/>
+        <source>Multi-Plot</source>
+        <translation>다중 플롯</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="162"/>
+        <source>Accelerometer</source>
+        <translation>가속도계</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="163"/>
+        <source>3D Plot</source>
+        <translation>3D 플롯</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="164"/>
+        <source>Image View</source>
+        <translation>이미지 뷰</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="165"/>
+        <source>Canvas Widget</source>
+        <translation>캔버스 위젯</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="166"/>
+        <source>Web View</source>
+        <translation>웹 뷰</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="167"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="170"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="195"/>
+        <source>None</source>
+        <translation>없음</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="171"/>
+        <source>Bar</source>
+        <translation>바</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="172"/>
+        <source>Gauge</source>
+        <translation>게이지</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="173"/>
+        <source>Compass</source>
+        <translation>나침반</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="174"/>
+        <source>Meter</source>
+        <translation>미터</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="185"/>
+        <source>Auto</source>
+        <translation>자동</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="186"/>
+        <source>Integer (0 decimals)</source>
+        <translation>정수 (소수점 0자리)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="187"/>
+        <source>1 decimal</source>
+        <translation>소수점 1자리</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="188"/>
+        <source>2 decimals</source>
+        <translation>소수점 2자리</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="189"/>
+        <source>3 decimals</source>
+        <translation>소수점 3자리</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="190"/>
+        <source>Scientific</source>
+        <translation>과학적 표기법</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="192"/>
+        <source>Binary</source>
+        <translation>바이너리</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="196"/>
+        <source>New Line (\n)</source>
+        <translation>새 줄 (</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="197"/>
+        <source>Carriage Return (\r)</source>
+        <translation>캐리지 리턴 (\r)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="198"/>
+        <source>CRLF (\r\n)</source>
+        <translation>CRLF (\r</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="201"/>
+        <source>No</source>
+        <translation>아니오</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorVocabulary.cpp" line="202"/>
+        <source>Yes</source>
+        <translation>예</translation>
     </message>
 </context>
 <context>
@@ -13775,8 +14854,12 @@ Add controller tags above to poll them.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="772"/>
+        <source>Not available on a Remote Dashboard. This widget needs every raw sample, and a Remote Dashboard receives only the displayed values.</source>
+        <translation>원격 대시보드에서 사용할 수 없습니다. 이 위젯은 모든 원본 샘플이 필요하며, 원격 대시보드는 표시된 값만 수신합니다.</translation>
+    </message>
+    <message>
         <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
-        <translation>원격 연결에서는 사용할 수 없습니다. 이 위젯은 대시보드 미러가 전달하지 않는 원격의 원시 샘플 스트림이 필요합니다.</translation>
+        <translation type="vanished">원격 연결에서는 사용할 수 없습니다. 이 위젯은 대시보드 미러가 전달하지 않는 원격의 원시 샘플 스트림이 필요합니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="278"/>
@@ -15339,6 +16422,209 @@ Add controller tags above to poll them.</source>
     <message>
         <source>Device %1</source>
         <translation type="vanished">장치 %1</translation>
+    </message>
+</context>
+<context>
+    <name>IO::ConnectionSequence</name>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="407"/>
+        <source>The time limit must be between 1 and %1 ms</source>
+        <translation>시간 제한은 1~%1 ms 사이여야 합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="410"/>
+        <source>A Connection Sequence holds at most %1 steps</source>
+        <translation>연결 시퀀스는 최대 %1개의 단계를 포함할 수 있습니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="428"/>
+        <source>The fixed waits up to this step (%1 ms) exceed the %2 ms time limit</source>
+        <translation>이 단계까지의 고정 대기(%1 ms)가 %2 ms 시간 제한을 초과합니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="444"/>
+        <source>A BREAK lasts 1 to %1 ms</source>
+        <translation>BREAK는 1~%1 ms 지속됩니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="449"/>
+        <source>A wait lasts 0 to %1 ms</source>
+        <translation>대기는 0~%1 ms 지속됩니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="458"/>
+        <source>The baud rate must be between 1 and %1</source>
+        <translation>보드레이트는 1~%1 사이여야 합니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="462"/>
+        <source>Unknown control line: use DTR or RTS</source>
+        <translation>알 수 없는 제어 라인: DTR 또는 RTS를 사용하세요</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="464"/>
+        <source>Unknown flow control mode</source>
+        <translation>알 수 없는 흐름 제어 모드</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="471"/>
+        <source>Unknown step kind</source>
+        <translation>알 수 없는 단계 종류</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="482"/>
+        <source>A send step needs data</source>
+        <translation>전송 단계에는 데이터가 필요합니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="485"/>
+        <source>"%1" is not valid hexadecimal: use byte pairs such as 15 15</source>
+        <translation>"%1"은(는) 유효한 16진수가 아닙니다: 15 15와 같은 바이트 쌍을 사용하세요</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="488"/>
+        <source>Unknown checksum "%1"</source>
+        <translation>알 수 없는 체크섬 "%1"</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="502"/>
+        <source>An expect step needs at least one pattern</source>
+        <translation>Expect 단계에는 최소 하나의 패턴이 필요합니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="507"/>
+        <source>Pattern "%1" is not valid: use hex bytes, with ?? for any byte</source>
+        <translation>패턴 "%1"이(가) 유효하지 않습니다: 16진수 바이트를 사용하고, 모든 바이트에 대해 ??를 사용하세요</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="510"/>
+        <source>Pattern "%1" is longer than the %2-byte receive buffer</source>
+        <translation>패턴 "%1"이(가) %2바이트 수신 버퍼보다 깁니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="515"/>
+        <source>The reply timeout must be between 1 and %1 ms</source>
+        <translation>응답 타임아웃은 1~%1ms 사이여야 합니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="527"/>
+        <source>Step %1 of %2: %3</source>
+        <translation>단계 %1/%2: %3</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="538"/>
+        <source>Send BREAK</source>
+        <translation>BREAK 전송</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="540"/>
+        <source>Wait</source>
+        <translation>대기</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="542"/>
+        <source>Set Control Line</source>
+        <translation>제어 라인 설정</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="544"/>
+        <source>Send Data</source>
+        <translation>데이터 전송</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="546"/>
+        <source>Expect Reply</source>
+        <translation>응답 대기</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="548"/>
+        <source>Clear Received Data</source>
+        <translation>수신 데이터 지우기</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="550"/>
+        <source>Set Baud Rate</source>
+        <translation>보레이트 설정</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="552"/>
+        <source>Set Flow Control</source>
+        <translation>흐름 제어 설정</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="557"/>
+        <source>Unknown</source>
+        <translation>알 수 없음</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="566"/>
+        <source>nothing</source>
+        <translation>없음</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="584"/>
+        <source>Send BREAK for %1 ms</source>
+        <translation>%1 ms 동안 BREAK 전송</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="586"/>
+        <source>Wait %1 ms</source>
+        <translation>%1 ms 대기</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="588"/>
+        <source>Set %1 high</source>
+        <translation>%1 높음으로 설정</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="588"/>
+        <source>Set %1 low</source>
+        <translation>%1 낮음으로 설정</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="590"/>
+        <source>Send %1</source>
+        <translation>%1 전송</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="590"/>
+        <source>Send "%1"</source>
+        <translation>"%1" 전송</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="593"/>
+        <source>Expect %1 within %2 ms, continue if no reply</source>
+        <translation>%2ms 이내에 %1을(를) 수신하고, 응답이 없으면 계속</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="596"/>
+        <source>Expect %1 within %2 ms</source>
+        <translation>%2ms 이내에 %1을(를) 수신</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="598"/>
+        <source>Discard pending input</source>
+        <translation>대기 중인 입력 폐기</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="600"/>
+        <source>Set baud rate to %1</source>
+        <translation>보레이트를 %1로 설정</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="603"/>
+        <source>Set flow control to RTS/CTS</source>
+        <translation>흐름 제어를 RTS/CTS로 설정</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="605"/>
+        <source>Set flow control to XON/XOFF</source>
+        <translation>흐름 제어를 XON/XOFF로 설정</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="606"/>
+        <source>Set flow control to None</source>
+        <translation>흐름 제어를 없음으로 설정</translation>
     </message>
 </context>
 <context>
@@ -17995,6 +19281,54 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
 </context>
 <context>
+    <name>IO::Drivers::SequenceRunner</name>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/SequenceRunner.cpp" line="240"/>
+        <source>the port refused BREAK</source>
+        <translation>포트가 BREAK를 거부함</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/SequenceRunner.cpp" line="285"/>
+        <source>the port did not release BREAK</source>
+        <translation>포트가 BREAK를 해제하지 않음</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/SequenceRunner.cpp" line="408"/>
+        <source>no reply matched within %1 ms</source>
+        <translation>%1 ms 내에 일치하는 응답이 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/SequenceRunner.cpp" line="500"/>
+        <source>Connection Sequence is not valid: %1</source>
+        <translation>연결 시퀀스가 유효하지 않습니다: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/SequenceRunner.cpp" line="592"/>
+        <source>Step %1 got no reply and was skipped: %2</source>
+        <translation>단계 %1에서 응답이 없어 건너뛰었습니다: %2</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/SequenceRunner.cpp" line="670"/>
+        <source>this step cannot run here</source>
+        <translation>이 단계는 여기서 실행할 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/SequenceRunner.cpp" line="675"/>
+        <source>the port refused: %1</source>
+        <translation>포트가 거부했습니다: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/SequenceRunner.cpp" line="690"/>
+        <source>the port accepted %1 of %2 bytes: %3</source>
+        <translation>포트가 %2바이트 중 %1바이트를 수락했습니다: %3</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/SequenceRunner.cpp" line="725"/>
+        <source>the whole sequence ran past its %1 ms time limit</source>
+        <translation>전체 시퀀스가 %1 ms 시간 제한을 초과했습니다</translation>
+    </message>
+</context>
+<context>
     <name>IO::Drivers::SerialCanBackendBase</name>
     <message>
         <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="194"/>
@@ -18051,82 +19385,82 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="105"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="106"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="437"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="476"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="74"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="75"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="449"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="488"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="395"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="800"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="407"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="839"/>
         <source>Select Port</source>
         <translation>포트 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="438"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="450"/>
         <source>Even</source>
         <translation>짝수</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="439"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="451"/>
         <source>Odd</source>
         <translation>홀수</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="440"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="452"/>
         <source>Space</source>
         <translation>Space</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="441"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="453"/>
         <source>Mark</source>
         <translation>Mark</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="477"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="489"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="478"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="490"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="613"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="652"/>
         <source>"%1" is not a valid path</source>
         <translation>"%1"은(는) 유효한 경로가 아닙니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="614"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="653"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>사용자 정의 시리얼 장치를 등록하려면 다른 경로를 입력하십시오</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="898"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="958"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>지정한 장치를 찾을 수 없습니다. 연결을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="905"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="965"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>알 수 없는 오류가 발생했습니다. 장치를 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="907"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="967"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>장치가 열려 있지 않습니다. 이 작업을 시도하기 전에 장치를 여십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="308"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="312"/>
         <source>Failed to connect to serial port "%1"</source>
         <translation>시리얼 포트 "%1"에 연결하지 못했습니다</translation>
     </message>
     <message>
         <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="288"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="550"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="571"/>
         <source>Failed to set baud rate</source>
         <translation>보레이트 설정 실패</translation>
     </message>
@@ -18136,114 +19470,159 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>포트 "%2"에 대한 보레이트 %1 거부됨: %3</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="551"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="572"/>
         <source>Baud rate %1 rejected: %2</source>
         <translation>보레이트 %1 거부됨: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="622"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="661"/>
         <source>Serial device not registered</source>
         <translation>시리얼 장치가 등록되지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="623"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="662"/>
         <source>"%1" is not a valid path; type another path to register a custom serial device.</source>
         <translation>"%1"은(는) 유효한 경로가 아닙니다. 사용자 정의 시리얼 장치를 등록하려면 다른 경로를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="871"/>
         <source>Unknown</source>
-        <translation>알 수 없음</translation>
+        <translation type="vanished">알 수 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="914"/>
         <source>Critical error on serial port "%1"</source>
         <translation>시리얼 포트 "%1"에서 치명적 오류 발생</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="873"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="903"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="897"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="957"/>
         <source>No error occurred.</source>
         <translation>오류가 발생하지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="899"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="959"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>권한이 거부되었습니다. 애플리케이션이 장치에 대한 필요한 액세스 권한을 가지고 있는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="900"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="960"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>장치를 열지 못했습니다. 이미 사용 중이거나 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="901"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="961"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>장치에 데이터를 쓰는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="962"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>장치에서 데이터를 읽는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="903"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="963"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>치명적인 리소스 오류가 발생했습니다. 장치가 연결 해제되었거나 더 이상 액세스할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="904"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="964"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>요청한 작업은 이 장치에서 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="906"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="966"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>작업 시간이 초과되었습니다. 장치가 응답하지 않을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1007"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1054"/>
+        <source>BREAK release failed</source>
+        <translation>BREAK 해제 실패</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1055"/>
+        <source>The serial port refused to release the BREAK condition; disconnecting.</source>
+        <translation>직렬 포트가 BREAK 조건 해제를 거부했습니다. 연결을 끊습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1161"/>
+        <source>Hold RTS failed</source>
+        <translation>RTS 유지 실패</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1162"/>
+        <source>The serial port refused to set RTS: %1</source>
+        <translation>직렬 포트가 RTS 설정을 거부했습니다: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1193"/>
+        <source>Completed, the device is ready</source>
+        <translation>완료됨, 장치가 준비되었습니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1203"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1217"/>
+        <source>Connection Sequence failed</source>
+        <translation>연결 시퀀스 실패</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1310"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1015"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1318"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1023"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1326"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1031"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1334"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1039"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1342"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1047"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1350"/>
         <source>Flow Control</source>
         <translation>흐름 제어</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1055"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1358"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1062"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1365"/>
+        <source>Hold RTS</source>
+        <translation>RTS 유지</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1373"/>
         <source>Auto-Reconnect</source>
         <translation>자동 재연결</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/UartPolicy.h" line="88"/>
+        <source>Connection Sequence failed at step %1 (%2): %3</source>
+        <translation>연결 시퀀스가 단계 %1 (%2)에서 실패했습니다: %3</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/UartPolicy.h" line="92"/>
+        <source>Connection Sequence failed at step %1 (%2): %3; received: %4</source>
+        <translation>연결 시퀀스가 단계 %1 (%2)에서 실패했습니다: %3; 수신됨: %4</translation>
     </message>
 </context>
 <context>
@@ -18521,6 +19900,19 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
 </context>
 <context>
+    <name>IO::Drivers::UartSequencePort</name>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/UartSequencePort.cpp" line="121"/>
+        <source>RTS is driven by RTS/CTS flow control</source>
+        <translation>RTS는 RTS/CTS 흐름 제어에 의해 구동됩니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/UART/UartSequencePort.cpp" line="203"/>
+        <source>the port is closed</source>
+        <translation>포트가 닫혀 있습니다</translation>
+    </message>
+</context>
+<context>
     <name>IO::FileTransmission</name>
     <message>
         <location filename="../../../core/Devices/IO/FileTransmission.cpp" line="215"/>
@@ -18628,14 +20020,18 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="397"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="430"/>
         <source>Frames dropped</source>
         <translation>프레임 손실</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="399"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="432"/>
+        <source>Data is arriving faster than Serial Studio can process it, and %1 frame(s) were dropped. Lower the data rate, or close widgets and recordings you don't need.</source>
+        <translation>데이터가 Serial Studio가 처리할 수 있는 것보다 빠르게 도착하고 있으며, %1개의 프레임이 손실되었습니다. 데이터 속도를 낮추거나 필요하지 않은 위젯과 기록을 닫으세요.</translation>
+    </message>
+    <message>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
-        <translation>수신 데이터가 Serial Studio의 처리 속도보다 빠르게 도착하고 있습니다; %1개의 프레임이 손실되었습니다. 데이터 전송률을 줄이거나 부하가 큰 소비자를 비활성화하십시오.</translation>
+        <translation type="vanished">수신 데이터가 Serial Studio의 처리 속도보다 빠르게 도착하고 있습니다; %1개의 프레임이 손실되었습니다. 데이터 전송률을 줄이거나 부하가 큰 소비자를 비활성화하십시오.</translation>
     </message>
 </context>
 <context>
@@ -19299,12 +20695,12 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">자체 API 키를 사용하세요. 키는 머신별 키로 암호화되어 저장되며, 선택한 제공업체와 통신할 때를 제외하고는 컴퓨터 외부로 전송되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="168"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="167"/>
         <source>Key set</source>
         <translation>키 설정됨</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="169"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="168"/>
         <source>No key</source>
         <translation>키 없음</translation>
     </message>
@@ -19338,92 +20734,100 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>Mistral. 기본값은 Mistral Large입니다. Codestral은 코드 완성을 대상으로 하고, Pixtral은 비전을 처리하며, Ministral 모델은 엣지/저지연 사용에 최적화되어 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="80"/>
         <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
-        <translation>로컬 모델 서버. OpenAI 호환 엔드포인트(Ollama, llama.cpp의 llama-server, LM Studio, vLLM)와 작동합니다. 모든 데이터가 사용자 시스템에 남습니다. 모델 목록은 서버에서 실시간으로 조회됩니다.</translation>
+        <translation type="vanished">로컬 모델 서버. OpenAI 호환 엔드포인트(Ollama, llama.cpp의 llama-server, LM Studio, vLLM)와 작동합니다. 모든 데이터가 사용자 시스템에 남습니다. 모델 목록은 서버에서 실시간으로 조회됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="102"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="101"/>
         <source>Bring your own API keys. They are stored obfuscated in this machine's settings and never leave your computer except to communicate with the provider you select.</source>
         <translation>자체 API 키를 사용하세요. 키는 이 컴퓨터의 설정에 난독화되어 저장되며, 선택한 제공업체와 통신할 때를 제외하고는 컴퓨터 외부로 전송되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="206"/>
         <source>A key is on file -- paste a new one to replace it</source>
-        <translation>키가 등록되어 있습니다 -- 새 키를 붙여넣어 교체하세요</translation>
+        <translation type="vanished">키가 등록되어 있습니다 -- 새 키를 붙여넣어 교체하세요</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="207"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="80"/>
+        <source>Local model server. Works with any OpenAI-compatible endpoint, such as Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is read live from the server.</source>
+        <translation>로컬 모델 서버. OpenAI 호환 엔드포인트(Ollama, llama.cpp의 llama-server, LM Studio, vLLM 등)와 작동합니다. 모든 데이터가 사용자 시스템에 남습니다. 모델 목록은 서버에서 실시간으로 읽습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="205"/>
+        <source>A key is saved. Paste a new one to replace it.</source>
+        <translation>키가 저장되었습니다. 새 키를 붙여넣어 교체하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="206"/>
         <source>Paste your API key here</source>
         <translation>API 키를 여기에 붙여넣으세요</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="214"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="213"/>
         <source>Hide key</source>
         <translation>키 숨기기</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="215"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="214"/>
         <source>Show key while typing</source>
         <translation>입력 중 키 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="226"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
         <source>Get key</source>
         <translation>키 가져오기</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="227"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="226"/>
         <source>Open the provider's console to create a new key</source>
         <translation>공급자의 콘솔을 열어 새 키 생성</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="238"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="237"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="256"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="255"/>
         <source>Remove the stored key for %1</source>
         <translation>%1에 저장된 키 제거</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="280"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="279"/>
         <source>http://localhost:11434/v1</source>
         <translation>http://localhost:11434/v1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="284"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="283"/>
         <source>Install Ollama</source>
         <translation>Ollama 설치</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="285"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="284"/>
         <source>Open the Ollama download page</source>
         <translation>Ollama 다운로드 페이지 열기</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="296"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="295"/>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="311"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="310"/>
         <source>Re-query the model list</source>
         <translation>모델 목록 다시 조회</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="332"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="331"/>
         <source>Context window</source>
         <translation>컨텍스트 윈도우</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="341"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="340"/>
         <source>Tokens the model accepts, e.g. 8192</source>
         <translation>모델이 수용하는 토큰 수(예: 8192)</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="389"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="388"/>
         <source>No API keys configured yet. Add a key to get started.</source>
         <translation>아직 구성된 API 키가 없습니다. 시작하려면 키를 추가하세요.</translation>
     </message>
@@ -19432,12 +20836,12 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">아직 구성된 API 키가 없습니다. 시작하려면 위에서 하나 이상 추가하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="391"/>
         <source>One provider is ready.</source>
         <translation>공급자 1개 준비됨.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="394"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="393"/>
         <source>%1 providers are ready.</source>
         <translation>공급자 %1개 준비됨.</translation>
     </message>
@@ -21821,9 +23225,9 @@ Do you want to update them now?</source>
         <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1218"/>
         <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1239"/>
         <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1263"/>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1306"/>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1316"/>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1324"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1305"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1315"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1323"/>
         <source>Plugin Error</source>
         <translation>플러그인 오류</translation>
     </message>
@@ -21851,42 +23255,50 @@ Do you want to update them now?</source>
     </message>
     <message>
         <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1274"/>
+        <source>This plugin receives its data through the API server, which is turned off.
+
+Turn on the API server now?</source>
+        <translation>이 플러그인은 API 서버를 통해 데이터를 수신하는데, API 서버가 꺼져 있습니다.
+
+지금 API 서버를 켜시겠습니까?</translation>
+    </message>
+    <message>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
-        <translation>이 플러그인은 고성능 데이터 스트리밍을 위해 GRPC를 사용합니다. API 서버를 활성화해야 합니다.
+        <translation type="vanished">이 플러그인은 고성능 데이터 스트리밍을 위해 GRPC를 사용합니다. API 서버를 활성화해야 합니다.
 
 지금 활성화하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1280"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1279"/>
         <source>API Server Required</source>
         <translation>API 서버 필요</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1307"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1306"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>플러그인 "%1"의 info.json에 'entry' 필드가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1317"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1316"/>
         <source>Entry point not found:
 %1</source>
         <translation>진입점을 찾을 수 없음:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1325"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1324"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>플러그인 "%1"의 진입점 경로가 유효하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1368"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1367"/>
         <source>Missing Dependency</source>
         <translation>종속성 누락</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1369"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1368"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -21895,7 +23307,7 @@ Would you like to open the download page?</source>
 다운로드 페이지를 여시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1277"/>
+        <location filename="../../../core/Ui/Misc/ExtensionManager.cpp" line="1276"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>플러그인이 Serial Studio와 통신하려면 API 서버가 필요합니다. 지금 활성화하시겠습니까?</translation>
     </message>
@@ -22879,6 +24291,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="312"/>
         <source>Endianness</source>
         <translation>엔디언</translation>
     </message>
@@ -23199,7 +24612,7 @@ Add groups above to poll multiple register types.</source>
         <translation>쉼표로 구분된 매개변수 이름. 각 키의 위치가 채널 인덱스를 설정합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="359"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="369"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <source>Fields (in channel order)</source>
         <translation>필드 (채널 순서)</translation>
@@ -23236,39 +24649,54 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">신호 비트 레이아웃 및 스케일링이 포함된 CAN 메시지. DBC 가져오기에서 작성됨.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="323"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="333"/>
         <source>Format</source>
         <translation>포맷</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="324"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="334"/>
         <source>Delimited values on one line, or a one-line JSON object whose numeric leaves are the fields.</source>
         <translation>한 줄의 구분된 값 또는 숫자 리프가 필드인 한 줄의 JSON 객체</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="334"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="344"/>
         <source>Separator</source>
         <translation>구분자</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="335"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="345"/>
         <source>What separates the values of a delimited line; space means any run of spaces.</source>
         <translation>구분된 줄의 값을 구분하는 것; 공백은 공백의 연속을 의미합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="351"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="361"/>
         <source>Decimal comma</source>
         <translation>소수점 쉼표</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="352"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="362"/>
         <source>Reads 23,5 as 23.5 (semicolon or space separated lines).</source>
         <translation>23,5를 23.5로 읽음 (세미콜론 또는 공백으로 구분된 줄)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="360"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="370"/>
         <source>Comma-separated field names or JSON paths such as temp, hum or imu.ax, acc[0]. Leave empty for positional values.</source>
         <translation>쉼표로 구분된 필드 이름 또는 JSON 경로 (예: temp, hum 또는 imu.ax, acc[0]). 위치 값의 경우 비워 둡니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="303"/>
+        <source>Fields</source>
+        <translation>필드</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="304"/>
+        <source>Field types in frame order, comma separated: i8, u8, i16, u16, i32, u32, i64, u64, f32 or f64.</source>
+        <translation>프레임 순서대로 쉼표로 구분된 필드 유형: i8, u8, i16, u16, i32, u32, i64, u64, f32 또는 f64.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="313"/>
+        <source>Byte order of every multi-byte field.</source>
+        <translation>모든 멀티바이트 필드의 바이트 순서.</translation>
     </message>
 </context>
 <context>
@@ -24394,8 +25822,12 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="368"/>
+        <source>Not available on a Remote Dashboard. This widget needs every raw sample, and a Remote Dashboard receives only the displayed values.</source>
+        <translation>원격 대시보드에서는 사용할 수 없습니다. 이 위젯은 모든 원본 샘플이 필요하며, 원격 대시보드는 표시된 값만 수신합니다.</translation>
+    </message>
+    <message>
         <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
-        <translation>원격 연결에서는 사용할 수 없습니다. 이 위젯은 대시보드 미러가 전달하지 않는 원격의 원시 샘플 스트림이 필요합니다.</translation>
+        <translation type="vanished">원격 연결에서는 사용할 수 없습니다. 이 위젯은 대시보드 미러가 전달하지 않는 원격의 원시 샘플 스트림이 필요합니다.</translation>
     </message>
 </context>
 <context>
@@ -24437,23 +25869,23 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotFormatter</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="411"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="416"/>
         <source>Drag to move, right-click to clear</source>
         <translation>드래그하여 이동, 우클릭하여 지우기</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="412"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="417"/>
         <source>ΔX: %1  ΔY: %2</source>
         <translation>ΔX: %1  ΔY: %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="414"/>
-        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="421"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="419"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="426"/>
         <source>%1 — %2</source>
         <translation>%1 — %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="418"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotFormatter.qml" line="423"/>
         <source>%1  1/ΔX: %2</source>
         <translation>%1  1/ΔX: %2</translation>
     </message>
@@ -24528,7 +25960,7 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="844"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="845"/>
         <source>Time</source>
         <translation>시간</translation>
     </message>
@@ -24601,17 +26033,17 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">취소</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="845"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="846"/>
         <source>%1 from zero</source>
         <translation>0부터 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="871"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="872"/>
         <source>Click to place cursor</source>
         <translation>클릭하여 커서 배치</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="873"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="874"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>클릭하여 두 번째 커서 배치 — 드래그하여 이동</translation>
     </message>
@@ -24817,8 +26249,12 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="345"/>
+        <source>Start a program and read its output, or connect to a named pipe that another program writes to.</source>
+        <translation>프로그램을 시작하고 그 출력을 읽거나, 다른 프로그램이 쓰는 명명된 파이프에 연결합니다.</translation>
+    </message>
+    <message>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
-        <translation>자식 프로세스를 실행하여 stdout을 캡처하거나, 기존 프로세스가 작성한 명명된 파이프에 연결합니다.</translation>
+        <translation type="vanished">자식 프로세스를 실행하여 stdout을 캡처하거나, 기존 프로세스가 작성한 명명된 파이프에 연결합니다.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="353"/>
@@ -25441,9 +26877,13 @@ Click Refresh to update the list.</source>
         <translation>프로젝트가 이전 파일 형식에서 업그레이드됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="744"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
-        <translation>이 프로젝트는 스키마 버전 %1(으)로 저장되었습니다. 현재 버전은 %2입니다. 새 필드에는 기본값이 적용되었습니다. 업그레이드를 확정하려면 프로젝트를 저장하세요.</translation>
+        <translation type="vanished">이 프로젝트는 스키마 버전 %1(으)로 저장되었습니다. 현재 버전은 %2입니다. 새 필드에는 기본값이 적용되었습니다. 업그레이드를 확정하려면 프로젝트를 저장하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="744"/>
+        <source>This project was saved by an older version of Serial Studio (file format %1, now %2). New settings use their defaults. Save the project to keep the update.</source>
+        <translation>이 프로젝트는 이전 버전의 Serial Studio에서 저장되었습니다(파일 형식 %1, 현재 %2). 새 설정은 기본값을 사용합니다. 프로젝트를 저장하여 업데이트를 유지하세요.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="865"/>
@@ -25555,8 +26995,17 @@ Click Refresh to update the list.</source>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="716"/>
+        <source>%1 was changed by another program. Serial Studio kept the version it has open; reopen the file to load the other program's changes.</source>
+        <translation>%1이(가) 다른 프로그램에 의해 변경되었습니다. Serial Studio는 열려 있는 버전을 유지했습니다. 다른 프로그램의 변경 사항을 로드하려면 파일을 다시 여십시오.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="777"/>
+        <source>%1 can no longer be read and may be damaged. Serial Studio kept the version it has open. Save the project to write it back to disk.</source>
+        <translation>%1을(를) 더 이상 읽을 수 없으며 손상되었을 수 있습니다. Serial Studio는 열려 있는 버전을 유지했습니다. 프로젝트를 저장하여 디스크에 다시 쓰세요.</translation>
+    </message>
+    <message>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
-        <translation>%1이(가) 다른 프로그램에 의해 수정되었습니다. 메모리 내 프로젝트가 유지되었습니다. 외부 변경 사항을 로드하려면 파일을 다시 여십시오.</translation>
+        <translation type="vanished">%1이(가) 다른 프로그램에 의해 수정되었습니다. 메모리 내 프로젝트가 유지되었습니다. 외부 변경 사항을 로드하려면 파일을 다시 여십시오.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="734"/>
@@ -25582,9 +27031,8 @@ Reload it?</source>
         <translation>프로젝트 파일을 다시 로드할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="777"/>
         <source>%1 could not be read back: it is unreadable or no longer valid JSON. Your in-memory project was kept; save it to overwrite the file on disk.</source>
-        <translation>%1을(를) 다시 읽을 수 없습니다: 읽을 수 없거나 더 이상 유효한 JSON이 아닙니다. 메모리의 프로젝트는 유지되었습니다. 저장하여 디스크의 파일을 덮어쓰세요.</translation>
+        <translation type="vanished">%1을(를) 다시 읽을 수 없습니다: 읽을 수 없거나 더 이상 유효한 JSON이 아닙니다. 메모리의 프로젝트는 유지되었습니다. 저장하여 디스크의 파일을 덮어쓰세요.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="54"/>
@@ -26323,8 +27771,22 @@ Reload it?</source>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="598"/>
+        <source>The folder is deleted, and its workspaces and sub-folders move up one level.</source>
+        <translation>폴더가 삭제되며, 해당 폴더의 작업 공간과 하위 폴더는 한 단계 위로 이동합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="810"/>
+        <source>The folder is deleted, and its groups and sub-folders move up one level.</source>
+        <translation>폴더가 삭제되고, 해당 그룹과 하위 폴더가 한 수준 위로 이동합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1058"/>
+        <source>The folder is deleted, and its Variables tables and sub-folders move up one level. Scripts that read those tables by path need the new path.</source>
+        <translation>폴더가 삭제되고, 해당 변수 테이블과 하위 폴더가 한 수준 위로 이동합니다. 경로로 이 테이블을 읽는 스크립트는 새 경로가 필요합니다.</translation>
+    </message>
+    <message>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
-        <translation>폴더가 제거되며, 해당 폴더의 작업 공간과 하위 폴더는 상위 폴더로 이동합니다.</translation>
+        <translation type="vanished">폴더가 제거되며, 해당 폴더의 작업 공간과 하위 폴더는 상위 폴더로 이동합니다.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="601"/>
@@ -26350,9 +27812,8 @@ Reload it?</source>
         <translation>폴더 이동</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="810"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
-        <translation>폴더가 제거되며, 해당 폴더의 그룹과 하위 폴더는 상위 폴더로 이동합니다.</translation>
+        <translation type="vanished">폴더가 제거되며, 해당 폴더의 그룹과 하위 폴더는 상위 폴더로 이동합니다.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="913"/>
@@ -26373,9 +27834,8 @@ Reload it?</source>
         <translation>변수 테이블</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1058"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
-        <translation>폴더가 제거되며, 해당 폴더의 테이블과 하위 폴더는 상위 폴더로 이동합니다. 해당 테이블의 접근자 경로가 그에 따라 변경됩니다.</translation>
+        <translation type="vanished">폴더가 제거되며, 해당 폴더의 테이블과 하위 폴더는 상위 폴더로 이동합니다. 해당 테이블의 접근자 경로가 그에 따라 변경됩니다.</translation>
     </message>
 </context>
 <context>
@@ -26880,47 +28340,44 @@ Reload it?</source>
         <translation>변경 기반 변환:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="255"/>
         <source>Run a dataset's transform only when one of its inputs changes. Speeds up large table-driven projects; off by default.</source>
-        <translation>입력 중 하나가 변경될 때만 데이터셋의 변환을 실행합니다. 대규모 테이블 기반 프로젝트의 속도를 향상시키며, 기본적으로 비활성화되어 있습니다.</translation>
+        <translation type="vanished">입력 중 하나가 변경될 때만 데이터셋의 변환을 실행합니다. 대규모 테이블 기반 프로젝트의 속도를 향상시키며, 기본적으로 비활성화되어 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="263"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="264"/>
         <source>Fast Lua Execution:</source>
         <translation>고속 Lua 실행:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="275"/>
         <source>Run Lua scripts with the JIT compiler for maximum throughput. Disables the runaway-script watchdog; off by default.</source>
-        <translation>최대 처리량을 위해 JIT 컴파일러로 Lua 스크립트를 실행합니다. 무한 루프 방지 감시 기능이 비활성화되며 기본적으로 꺼져 있습니다.</translation>
+        <translation type="vanished">최대 처리량을 위해 JIT 컴파일러로 Lua 스크립트를 실행합니다. 무한 루프 방지 감시 기능이 비활성화되며 기본적으로 꺼져 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="291"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="292"/>
         <source>Alarm Sequence:</source>
         <translation>알람 시퀀스:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="303"/>
         <source>App preference</source>
         <translation>앱 기본 설정</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="314"/>
         <source>How alarms latch and reset (ISA-18.1). A = automatic reset, M = manual reset, R = ringback; -4 means the alarm does not stay latched after it clears.</source>
-        <translation>알람이 래치되고 리셋되는 방식(ISA-18.1). A = 자동 리셋, M = 수동 리셋, R = 링백; -4는 알람이 해제된 후 래치되지 않음을 의미합니다.</translation>
+        <translation type="vanished">알람이 래치되고 리셋되는 방식(ISA-18.1). A = 자동 리셋, M = 수동 리셋, R = 링백; -4는 알람이 해제된 후 래치되지 않음을 의미합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="399"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="401"/>
         <source>Device</source>
         <translation>장치</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="400"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="402"/>
         <source>Devices</source>
         <translation>장치</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="506"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="508"/>
         <source>Double-click a block to edit it. Right-click anywhere to add a group, dataset, action, Variables table, or device.</source>
         <translation>블록을 더블 클릭하여 편집합니다. 아무 곳이나 우클릭하여 그룹, 데이터셋, 액션, 변수 테이블 또는 장치를 추가합니다.</translation>
     </message>
@@ -26941,46 +28398,40 @@ Reload it?</source>
         <translation type="vanished">이 프로젝트의 ISA-18.1 경보기 시퀀스: 정상 복귀 시 자동 재설정, 수동 재설정 또는 링백.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="303"/>
         <source>A-4 - Automatic reset, no lock-in</source>
-        <translation>A-4 - 자동 재설정, 잠금 없음</translation>
+        <translation type="vanished">A-4 - 자동 재설정, 잠금 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="304"/>
         <source>A - Automatic reset, lock-in until acknowledged</source>
-        <translation>A - 자동 재설정, 확인 시까지 잠금</translation>
+        <translation type="vanished">A - 자동 재설정, 확인 시까지 잠금</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="305"/>
         <source>M-4 - Manual reset, no lock-in</source>
-        <translation>M-4 - 수동 재설정, 잠금 없음</translation>
+        <translation type="vanished">M-4 - 수동 재설정, 잠금 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="306"/>
         <source>M - Manual reset, lock-in until acknowledged</source>
-        <translation>M - 수동 재설정, 확인 시까지 잠금</translation>
+        <translation type="vanished">M - 수동 재설정, 확인 시까지 잠금</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="307"/>
         <source>R-4 - Ringback, no lock-in</source>
-        <translation>R-4 - 링백, 잠금 없음</translation>
+        <translation type="vanished">R-4 - 링백, 잠금 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="308"/>
         <source>R - Ringback, lock-in until acknowledged</source>
-        <translation>R - 링백, 확인 시까지 잠금</translation>
+        <translation type="vanished">R - 링백, 확인 시까지 잠금</translation>
     </message>
     <message>
         <source>ISA-18.1 annunciator sequence for this project: automatic reset, manual reset, or ringback on return to normal; "-4" (option 4) stops a momentary alarm as soon as its condition clears instead of locking it in until acknowledged.</source>
         <translation type="vanished">이 프로젝트의 ISA-18.1 경보 시퀀스: 정상 복귀 시 자동 재설정, 수동 재설정 또는 링백; "-4"(옵션 4)는 조건이 해제되는 즉시 일시 경보를 중지하며 확인 시까지 잠금하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="320"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="322"/>
         <source>Channel Sounds:</source>
         <translation>채널 사운드:</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="326"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="328"/>
         <source>Edit...</source>
         <translation>편집…</translation>
     </message>
@@ -26993,32 +28444,77 @@ Reload it?</source>
         <translation type="vanished">소스</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="405"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="255"/>
+        <source>Runs a dataset's transform only when one of its inputs changes. Speeds up large projects that use Variables. Off by default.</source>
+        <translation>입력 중 하나가 변경될 때만 데이터셋의 변환을 실행합니다. 변수를 사용하는 대규모 프로젝트의 속도를 높입니다. 기본값은 꺼짐입니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="276"/>
+        <source>Runs Lua scripts faster. A script stuck in an endless loop can no longer be stopped, which can freeze Serial Studio. Off by default.</source>
+        <translation>Lua 스크립트를 더 빠르게 실행합니다. 무한 루프에 갇힌 스크립트는 더 이상 중지할 수 없으므로 Serial Studio가 멈출 수 있습니다. 기본값은 꺼짐입니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="304"/>
+        <source>Automatic reset, no lock-in (A-4)</source>
+        <translation>자동 재설정, 잠금 없음 (A-4)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="305"/>
+        <source>Automatic reset, lock-in until acknowledged (A)</source>
+        <translation>자동 재설정, 확인 시까지 잠금 (A)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="306"/>
+        <source>Manual reset, no lock-in (M-4)</source>
+        <translation>수동 재설정, 잠금 없음 (M-4)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="307"/>
+        <source>Manual reset, lock-in until acknowledged (M)</source>
+        <translation>수동 재설정, 확인 시까지 잠금 (M)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="308"/>
+        <source>Ringback, no lock-in (R-4)</source>
+        <translation>링백, 잠금 없음 (R-4)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="309"/>
+        <source>Ringback, lock-in until acknowledged (R)</source>
+        <translation>링백, 확인 시까지 잠금 (R)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="315"/>
+        <source>What an alarm does after it clears. Automatic reset ends it by itself, manual reset waits for someone to reset it, and ringback sounds a short tone when it clears. Lock-in keeps it showing until it is acknowledged.</source>
+        <translation>알람이 해제된 후 수행할 작업입니다. 자동 리셋은 자체적으로 종료되고, 수동 리셋은 누군가 리셋할 때까지 대기하며, 링백은 해제될 때 짧은 톤을 발생시킵니다. 잠금은 승인될 때까지 표시 상태를 유지합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="407"/>
         <source>Group</source>
         <translation>그룹</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="406"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="408"/>
         <source>Groups</source>
         <translation>그룹</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="413"/>
         <source>Dataset</source>
         <translation>데이터셋</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="414"/>
         <source>Datasets</source>
         <translation>데이터셋</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="417"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="419"/>
         <source>Action</source>
         <translation>액션</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="418"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="420"/>
         <source>Actions</source>
         <translation>작업</translation>
     </message>
@@ -27040,9 +28536,13 @@ Reload it?</source>
         <translation>Proto 파일: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="175"/>
         <source>Browse the messages below, then create the project. Every message becomes a dashboard group; matching-type channel blocks get a MultiPlot and mixed-type messages get a DataGrid.</source>
-        <translation>아래 메시지를 확인한 후 프로젝트를 생성합니다. 모든 메시지는 대시보드 그룹이 되며, 동일 유형 채널 블록은 MultiPlot으로, 혼합 유형 메시지는 DataGrid로 표시됩니다.</translation>
+        <translation type="vanished">아래 메시지를 확인한 후 프로젝트를 생성합니다. 모든 메시지는 대시보드 그룹이 되며, 동일 유형 채널 블록은 MultiPlot으로, 혼합 유형 메시지는 DataGrid로 표시됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="175"/>
+        <source>Browse the messages below, then create the project. Each message becomes a dashboard group: a message of similar numeric channels gets a Multi-Plot, and any other message gets a Data Grid.</source>
+        <translation>아래 메시지를 확인한 후 프로젝트를 생성합니다. 각 메시지는 대시보드 그룹이 되며, 유사한 숫자 채널의 메시지는 Multi-Plot으로, 다른 메시지는 Data Grid로 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="185"/>
@@ -28198,12 +29698,12 @@ function parse(%1) { ... }
         <translation>Transform의 알림</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="139"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="160"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="215"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="255"/>
         <source>Quick Plot Project</source>
         <translation>Quick Plot 프로젝트</translation>
     </message>
@@ -29214,6 +30714,11 @@ Add absolute addresses above to poll the controller.</source>
         <translation>(진행 중)</translation>
     </message>
     <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="637"/>
+        <source>Shows how the project open in the editor would decode this recording, and where its values differ from the recorded ones. Nothing is saved to the recording.</source>
+        <translation>편집기에서 열린 프로젝트가 이 녹화를 어떻게 디코딩하는지, 그리고 그 값이 녹화된 값과 어떻게 다른지 보여줍니다. 녹화에는 아무것도 저장되지 않습니다.</translation>
+    </message>
+    <message>
         <source>Frames:</source>
         <translation type="vanished">프레임:</translation>
     </message>
@@ -29254,42 +30759,41 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">현재 프로젝트와의 드리프트</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="638"/>
         <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
-        <translation>이 세션의 디코딩된 값을 편집기에서 현재 열려 있는 프로젝트와 비교합니다. 결과는 임시 후보를 반영하며 세션에 저장되지 않습니다.</translation>
+        <translation type="vanished">이 세션의 디코딩된 값을 편집기에서 현재 열려 있는 프로젝트와 비교합니다. 결과는 임시 후보를 반영하며 세션에 저장되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="659"/>
         <source>Candidate: %1 (%2)</source>
         <translation>후보: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="661"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
         <source>untitled</source>
         <translation>제목 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="672"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="671"/>
         <source>Archived-configuration reproduction status: %1</source>
         <translation>보관된 구성 재현 상태: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="726"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="725"/>
         <source>%1: only in the current project</source>
         <translation>%1: 현재 프로젝트에만 존재</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="729"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="728"/>
         <source>%1: only in the recorded project</source>
         <translation>%1: 기록된 프로젝트에만 존재</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="731"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="730"/>
         <source>%1: %2 of %3 values changed, %4 missing, %5 extra</source>
         <translation>%1: %3개 값 중 %2개 변경됨, %4개 누락, %5개 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="747"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="746"/>
         <source>…and %1 more datasets are affected.</source>
         <translation>…그 외 %1개 데이터셋이 영향을 받았습니다.</translation>
     </message>
@@ -29346,7 +30850,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation>추가</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="598"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="597"/>
         <source>Project Comparison</source>
         <translation>프로젝트 비교</translation>
     </message>
@@ -30010,8 +31514,12 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
+        <source>This dashboard comes from the recording, and the project file has changed since it was recorded. Close the recording to return to the current project.</source>
+        <translation>이 대시보드는 녹화에서 가져온 것이며, 프로젝트 파일은 녹화된 이후 변경되었습니다. 현재 프로젝트로 돌아가려면 녹화를 닫으십시오.</translation>
+    </message>
+    <message>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
-        <translation>표시된 대시보드는 녹화에 포함된 버전이며, 디스크의 프로젝트는 이후 변경되었습니다. 현재 프로젝트로 돌아가려면 세션을 닫으십시오.</translation>
+        <translation type="vanished">표시된 대시보드는 녹화에 포함된 버전이며, 디스크의 프로젝트는 이후 변경되었습니다. 현재 프로젝트로 돌아가려면 세션을 닫으십시오.</translation>
     </message>
     <message>
         <source>No sessions found</source>
@@ -30566,12 +32074,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation>재설정</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="271"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="281"/>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
@@ -30668,8 +32176,12 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="136"/>
+        <source>Set to 0 to write a row for every frame received. Any other value writes one row with every channel at that interval, which keeps files small for fast or multi-device projects.</source>
+        <translation>수신된 모든 프레임에 대해 행을 기록하려면 0으로 설정합니다. 다른 값은 해당 간격으로 모든 채널의 행을 하나씩 기록하여 빠른 속도 또는 다중 장치 프로젝트의 파일 크기를 줄입니다.</translation>
+    </message>
+    <message>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
-        <translation>0은 수신된 프레임당 하나의 행을 기록합니다. 양수 값은 해당 간격으로 모든 채널의 스냅샷 행을 하나씩 기록하여 다중 소스 또는 고속 프로젝트의 파일 크기를 제한합니다.</translation>
+        <translation type="vanished">0은 수신된 프레임당 하나의 행을 기록합니다. 양수 값은 해당 간격으로 모든 채널의 스냅샷 행을 하나씩 기록하여 다중 소스 또는 고속 프로젝트의 파일 크기를 제한합니다.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="149"/>
@@ -30866,8 +32378,12 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="146"/>
+        <source>Off by default, because Serial Studio logs many minor warnings that would bury real alarms. Critical messages are always sent to notifications.</source>
+        <translation>기본적으로 비활성화 — Serial Studio는 많은 경미한 경고를 기록하므로 이를 활성화하면 실제 알람이 묻힐 수 있습니다. 중요 메시지는 항상 알림으로 전송됩니다.</translation>
+    </message>
+    <message>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
-        <translation>기본적으로 비활성화 — QT와 QML은 경고를 자주 발생시키며 이 옵션을 활성화하면 실제 알람이 묻힐 수 있습니다. 중요 메시지는 이 설정과 관계없이 항상 전달됩니다.</translation>
+        <translation type="vanished">기본적으로 비활성화 — QT와 QML은 경고를 자주 발생시키며 이 옵션을 활성화하면 실제 알람이 묻힐 수 있습니다. 중요 메시지는 이 설정과 관계없이 항상 전달됩니다.</translation>
     </message>
 </context>
 <context>
@@ -30891,6 +32407,21 @@ Add absolute addresses above to poll the controller.</source>
         <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="154"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>UI 새로고침 레이트 (Hz)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="185"/>
+        <source>Quick Plot</source>
+        <translation>빠른 플롯</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="200"/>
+        <source>Ask Devices for Their Dashboard</source>
+        <translation>장치에 대시보드 요청</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="223"/>
+        <source>On connect in Quick Plot, sends one request line so a device that uses the Serial Studio library answers with its dashboard declaration.</source>
+        <translation>Quick Plot에서 연결 시 요청 줄 하나를 전송하여 Serial Studio 라이브러리를 사용하는 장치가 대시보드 선언으로 응답하도록 합니다.</translation>
     </message>
 </context>
 <context>
@@ -31157,31 +32688,35 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="347"/>
-        <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
-        <translation>성능 힌트는 프로세스 우선순위를 높이고 OS 전력 조절을 해제합니다. 변경 사항은 다음 Serial Studio 시작 시 적용됩니다.</translation>
+        <source>Runs Serial Studio at a higher priority and keeps the system from slowing it down to save power. Takes effect the next time Serial Studio starts.</source>
+        <translation>Serial Studio를 더 높은 우선순위로 실행하고 전력 절약을 위해 시스템이 속도를 낮추지 않도록 합니다. 다음 Serial Studio 시작 시 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
+        <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
+        <translation type="vanished">성능 힌트는 프로세스 우선순위를 높이고 OS 전력 조절을 해제합니다. 변경 사항은 다음 Serial Studio 시작 시 적용됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="357"/>
         <source>Updates &amp; News</source>
         <translation>업데이트 및 소식</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="373"/>
         <source>Automatically Check for Updates</source>
         <translation>자동으로 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="399"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="398"/>
         <source>Check for Extension Updates</source>
         <translation>확장 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="425"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="424"/>
         <source>Install Extension Updates Automatically</source>
         <translation>확장 업데이트 자동 설치</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="457"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="456"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>설치된 확장 및 테마는 Serial Studio 시작 시 애플리케이션 업데이트와 함께 확인됩니다. 자동 설치가 활성화되지 않은 경우 Serial Studio는 설치 전에 확인을 요청합니다.</translation>
     </message>
@@ -31338,52 +32873,66 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">샘플당 한 줄씩 플롯하고 첫 번째 숫자 줄에서 형식을 감지합니다: 쉼표, 세미콜론, 탭 또는 공백으로 구분된 값(12.5, 30.1, 0.98), 명명된 값(temp:23.5, hum:60), 숫자 뒤의 단위(23.5°C) 또는 한 줄 JSON 객체({"t":23.5,"h":60}).</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
         <source>Plots each line as a sample. Detects delimited values, name:value pairs, units and one-line JSON automatically.</source>
-        <translation>각 줄을 샘플로 플롯합니다. 구분된 값, name:value 쌍, 단위 및 한 줄 JSON을 자동으로 감지합니다.</translation>
+        <translation type="vanished">각 줄을 샘플로 플롯합니다. 구분된 값, name:value 쌍, 단위 및 한 줄 JSON을 자동으로 감지합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
+        <source>Plots every line the device sends. Values separated by commas, tabs, or spaces, name and value pairs, units, and one-line JSON are detected automatically.</source>
+        <translation>장치가 전송하는 모든 줄을 플롯합니다. 쉼표, 탭 또는 공백으로 구분된 값, name:value 쌍, 단위 및 한 줄 JSON이 자동으로 감지됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="259"/>
         <source>Parse via Project File</source>
         <translation>프로젝트 파일을 통한 파싱</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="262"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>프로젝트 편집기에서 만든 프로젝트로부터 대시보드를 구성합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
         <source>Change Project File (%1)</source>
         <translation>프로젝트 파일 변경 (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="282"/>
         <source>Select Project File</source>
         <translation>프로젝트 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="296"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="293"/>
+        <source>Use Device Dashboard</source>
+        <translation>기기 대시보드 사용</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="302"/>
+        <source>Keep Project</source>
+        <translation>프로젝트 유지</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="320"/>
         <source>Data Export</source>
         <translation>데이터 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="346"/>
         <source>CSV Spreadsheet</source>
         <translation>CSV 스프레드시트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="368"/>
         <source>Historian Database</source>
         <translation>히스토리안 데이터베이스</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="454"/>
         <source>Connection: %1</source>
         <translation>연결: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="525"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="549"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>각 장치는 고유한 연결 설정을 가집니다. 프로젝트 편집기의 장치 탭에서 구성하십시오.</translation>
     </message>
@@ -31396,12 +32945,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">세션 기록</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="365"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="389"/>
         <source>MDF4 Recording</source>
         <translation>MDF4 기록</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="383"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="407"/>
         <source>Console Log</source>
         <translation>콘솔 로그</translation>
     </message>
@@ -31442,12 +32991,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">I/O 인터페이스: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="523"/>
         <source>Multi-Device Project</source>
         <translation>다중 장치 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="512"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="536"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>이 프로젝트는 %1개의 독립 장치에서 데이터를 스트리밍합니다.</translation>
     </message>
@@ -31456,7 +33005,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">각 장치는 고유한 연결 설정을 가집니다. 프로젝트 편집기의 소스 탭에서 구성하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="546"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="570"/>
         <source>Open Project Editor</source>
         <translation>프로젝트 편집기 열기</translation>
     </message>
@@ -32022,22 +33571,22 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>SourceView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="116"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="150"/>
         <source>Duplicate</source>
         <translation>복제</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="118"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="152"/>
         <source>Create a copy of this device</source>
         <translation>이 장치의 복사본 만들기</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="135"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="169"/>
         <source>Remove this device</source>
         <translation>이 장치 제거</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="170"/>
         <source>The primary device cannot be removed</source>
         <translation>기본 장치는 제거할 수 없습니다</translation>
     </message>
@@ -32046,7 +33595,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">이 데이터 소스의 사본 생성</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="130"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="164"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
@@ -32570,9 +34119,13 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>검색… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="952"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
-        <translation>데이터가 스크립트의 처리 속도보다 빠르게 도착하고 있습니다; 일부 프레임이 간소화되고 있습니다. 자세한 내용은 문제 센터를 참조하십시오.</translation>
+        <translation type="vanished">데이터가 스크립트의 처리 속도보다 빠르게 도착하고 있습니다; 일부 프레임이 간소화되고 있습니다. 자세한 내용은 문제 센터를 참조하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="952"/>
+        <source>Data is arriving faster than the scripts can process it, so some frames are being skipped. See the Problem Center for details.</source>
+        <translation>데이터가 스크립트의 처리 속도보다 빠르게 도착하고 있으므로 일부 프레임이 건너뛰어지고 있습니다. 자세한 내용은 문제 센터를 참조하십시오.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
@@ -33633,8 +35186,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="409"/>
+        <source>Leave Timebase empty to use the plot's time range, or lower it to zoom in on a fast signal. Holdoff waits a moment after each trigger before another one can fire.</source>
+        <translation>타임베이스를 비워 두면 플롯의 시간 범위를 사용하거나, 빠른 신호를 확대하려면 낮추십시오. Holdoff는 각 트리거 후 다음 트리거가 발생하기 전에 잠시 대기합니다.</translation>
+    </message>
+    <message>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
-        <translation>타임베이스를 비워 두면 플롯의 시간 범위를 사용합니다. 빠른 신호를 확대하려면 낮추십시오. Holdoff는 각 트리거 후 잠시 동안 새 트리거를 무시합니다.</translation>
+        <translation type="vanished">타임베이스를 비워 두면 플롯의 시간 범위를 사용합니다. 빠른 신호를 확대하려면 낮추십시오. Holdoff는 각 트리거 후 잠시 동안 새 트리거를 무시합니다.</translation>
     </message>
     <message>
         <source>Signal:</source>
@@ -33703,12 +35260,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">타임베이스는 한 스윕이 표시하는 시간을 설정합니다. 비워 두면 플롯의 시간 범위를 사용합니다. 빠른 신호를 확대하려면 낮추십시오. Holdoff는 각 트리거 후 잠시 동안 새 트리거를 무시합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="425"/>
         <source>Capture Next</source>
         <translation>다음 캡처</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="426"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="427"/>
         <source>Arm for one more single-shot capture</source>
         <translation>단일 샷 캡처 1회 재설정</translation>
     </message>
@@ -33739,7 +35296,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">재설정</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="439"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="440"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -33747,80 +35304,115 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UART</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="53"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="87"/>
         <source>COM Port</source>
         <translation>COM 포트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="53"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="87"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="100"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="134"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="187"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="221"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="243"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="233"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="267"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="256"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="290"/>
         <source>Flow Control</source>
         <translation>흐름 제어</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="322"/>
         <source>Auto Reconnect</source>
         <translation>자동 재연결</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="308"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="342"/>
         <source>Send DTR Signal</source>
         <translation>DTR 신호 전송</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="319"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="353"/>
         <source>Raises the DTR line when the port opens. Many boards (for example Arduino) reset when DTR changes; turn it off to connect without a reset.</source>
         <translation>포트가 열릴 때 DTR 라인을 올립니다. 많은 보드(예: Arduino)는 DTR이 변경될 때 리셋됩니다. 리셋 없이 연결하려면 이를 끕니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="367"/>
+        <source>Hold RTS</source>
+        <translation>RTS 유지</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="370"/>
+        <source>Not applicable under RTS/CTS flow control: the port driver owns RTS.</source>
+        <translation>RTS/CTS 흐름 제어에서는 적용되지 않음: 포트 드라이버가 RTS를 제어합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="387"/>
+        <source>Asserts RTS when the port opens and holds it for the whole connection. Some adapters stay silent until RTS is high.</source>
+        <translation>포트가 열릴 때 RTS를 어설션하고 전체 연결 동안 유지합니다. 일부 어댑터는 RTS가 높을 때까지 침묵 상태를 유지합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="414"/>
+        <source>Connection Sequence…</source>
+        <translation>연결 시퀀스…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="427"/>
+        <source>No steps: connects as soon as the port opens</source>
+        <translation>단계 없음: 포트가 열리면 즉시 연결</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="429"/>
+        <source>1 step</source>
+        <translation>1단계</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="430"/>
+        <source>%1 steps</source>
+        <translation>%1 단계</translation>
     </message>
 </context>
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="340"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="343"/>
         <source>Alarm</source>
         <translation>알람</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="344"/>
         <source>critical</source>
         <translation>심각</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="344"/>
         <source>warning</source>
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="345"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="348"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>값 %1%2이(가) %3 구간(%4–%5)에 진입했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="351"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="354"/>
         <source>Alarms</source>
         <translation>알람</translation>
     </message>
@@ -34328,6 +35920,224 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
 </context>
 <context>
+    <name>ValueLabelsEditor</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="37"/>
+        <source>Value Labels</source>
+        <translation>값 레이블</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="62"/>
+        <source>Off / On</source>
+        <translation>꺼짐 / 켜짐</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="63"/>
+        <source>Off</source>
+        <translation>꺼짐</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="63"/>
+        <source>On</source>
+        <translation>켜짐</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="66"/>
+        <source>Closed / Open</source>
+        <translation>닫힘 / 열림</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="67"/>
+        <source>Closed</source>
+        <translation>닫힘</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="67"/>
+        <source>Open</source>
+        <translation>열기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="70"/>
+        <source>Stopped / Running</source>
+        <translation>중지됨 / 실행 중</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="71"/>
+        <source>Stopped</source>
+        <translation>중지됨</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="71"/>
+        <source>Running</source>
+        <translation>실행 중</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="74"/>
+        <source>No / Yes</source>
+        <translation>아니오 / 예</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="75"/>
+        <source>No</source>
+        <translation>아니오</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="75"/>
+        <source>Yes</source>
+        <translation>예</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="78"/>
+        <source>Low / Medium / High</source>
+        <translation>낮음 / 중간 / 높음</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="79"/>
+        <source>Low</source>
+        <translation>낮음</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="80"/>
+        <source>Medium</source>
+        <translation>중간</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="81"/>
+        <source>High</source>
+        <translation>높음</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="84"/>
+        <source>OK / Warning / Fault</source>
+        <translation>확인 / 경고 / 고장</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="85"/>
+        <source>OK</source>
+        <translation>확인</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="86"/>
+        <source>Warning</source>
+        <translation>경고</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="87"/>
+        <source>Fault</source>
+        <translation>고장</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="173"/>
+        <source>Show words instead of numbers. For example, when this dataset reports 1, the dashboard can show "Running" instead. Plots, alarms, and exports still use the number.</source>
+        <translation>숫자 대신 단어를 표시합니다. 예를 들어, 이 데이터셋이 1을 보고하면 대시보드에 "실행 중"을 표시할 수 있습니다. 플롯, 알람 및 내보내기는 여전히 숫자를 사용합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="186"/>
+        <source>Start From a Preset</source>
+        <translation>프리셋에서 시작</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="208"/>
+        <source>Preset</source>
+        <translation>프리셋</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="224"/>
+        <source>Choose a preset…</source>
+        <translation>프리셋 선택…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="239"/>
+        <source>Replaces the labels below.</source>
+        <translation>아래 레이블을 바꿉니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="258"/>
+        <source>Labels</source>
+        <translation>레이블</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="271"/>
+        <source>Add Label</source>
+        <translation>레이블 추가</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="277"/>
+        <source>Add a row for the next number.</source>
+        <translation>다음 숫자에 대한 행을 추가합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="304"/>
+        <source>Number</source>
+        <translation>숫자</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="311"/>
+        <source>Shown As</source>
+        <translation>다음으로 표시</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="376"/>
+        <source>For example, Running</source>
+        <translation>예: 실행 중</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="389"/>
+        <source>Remove this label.</source>
+        <translation>이 레이블을 제거합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="407"/>
+        <source>No labels yet. Choose a preset or click Add Label.</source>
+        <translation>아직 레이블이 없습니다. 사전 설정을 선택하거나 레이블 추가를 클릭하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="420"/>
+        <source>A number appears more than once. Only its first row is kept when you click Apply.</source>
+        <translation>숫자가 두 번 이상 나타납니다. 적용을 클릭하면 첫 번째 행만 유지됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="422"/>
+        <source>Numbers with decimals are rounded to the nearest whole number before they are matched.</source>
+        <translation>소수점이 있는 숫자는 일치하기 전에 가장 가까운 정수로 반올림됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="435"/>
+        <source>Other Numbers</source>
+        <translation>기타 숫자</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="459"/>
+        <source>Any number not listed</source>
+        <translation>나열되지 않은 모든 숫자</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="469"/>
+        <source>Leave empty to show the number</source>
+        <translation>숫자를 표시하려면 비워 두세요.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="490"/>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="494"/>
+        <source>Discard changes.</source>
+        <translation>변경 사항 폐기.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="502"/>
+        <source>Apply</source>
+        <translation>적용</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml" line="506"/>
+        <source>Save the labels to this dataset.</source>
+        <translation>이 데이터셋에 레이블을 저장합니다.</translation>
+    </message>
+</context>
+<context>
     <name>Waterfall</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="232"/>
@@ -34371,8 +36181,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Waterfall.qml" line="506"/>
+        <source>Not available on a Remote Dashboard. This widget needs every raw sample, and a Remote Dashboard receives only the displayed values.</source>
+        <translation>원격 대시보드에서는 사용할 수 없습니다. 이 위젯은 모든 원시 샘플이 필요하며, 원격 대시보드는 표시된 값만 수신합니다.</translation>
+    </message>
+    <message>
         <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
-        <translation>원격 연결에서는 사용할 수 없습니다. 이 위젯은 대시보드 미러가 전달하지 않는 원격의 원시 샘플 스트림이 필요합니다.</translation>
+        <translation type="vanished">원격 연결에서는 사용할 수 없습니다. 이 위젯은 대시보드 미러가 전달하지 않는 원격의 원시 샘플 스트림이 필요합니다.</translation>
     </message>
     <message>
         <source>Clear History</source>
@@ -34388,8 +36202,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/WebView.qml" line="81"/>
+        <source>This version of Serial Studio can't display web pages.</source>
+        <translation>이 버전의 Serial Studio는 웹 페이지를 표시할 수 없습니다.</translation>
+    </message>
+    <message>
         <source>This build of Serial Studio was compiled without Qt WebEngine, so web pages cannot be displayed.</source>
-        <translation>이 Serial Studio 빌드는 QT WebEngine 없이 컴파일되어 웹 페이지를 표시할 수 없습니다.</translation>
+        <translation type="vanished">이 Serial Studio 빌드는 QT WebEngine 없이 컴파일되어 웹 페이지를 표시할 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -34734,43 +36552,43 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Compass</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="191"/>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="214"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="202"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="225"/>
         <source>N</source>
         <translation>N</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="194"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="205"/>
         <source>NE</source>
         <translation>NE</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="197"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="208"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="200"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="211"/>
         <source>SE</source>
         <translation>SE</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="203"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="214"/>
         <source>S</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="206"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="217"/>
         <source>SW</source>
         <translation>남서</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="209"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="220"/>
         <source>W</source>
         <translation>서</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="212"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="223"/>
         <source>NW</source>
         <translation>북서</translation>
     </message>
@@ -34861,12 +36679,27 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="412"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="422"/>
+        <source>Refused: %1</source>
+        <translation>거부됨: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="564"/>
+        <source>Enter a number from %1 to %2%3</source>
+        <translation>%1에서 %2 사이의 숫자를 입력하십시오%3</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="565"/>
+        <source>Allowed range: %1 to %2%3</source>
+        <translation>허용 범위: %1에서 %2%3</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="642"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>전송 스크립트가 %1 ms 후 시간 초과됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="428"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="658"/>
         <source>Payload exceeds maximum size</source>
         <translation>페이로드가 최대 크기를 초과함</translation>
     </message>
@@ -34874,12 +36707,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Plot.cpp" line="92"/>
+        <location filename="../../../core/Ui/UI/Widgets/Plot.cpp" line="94"/>
         <source>Time (s)</source>
         <translation>시간 (s)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Plot.cpp" line="110"/>
+        <location filename="../../../core/Ui/UI/Widgets/Plot.cpp" line="112"/>
         <source>Samples</source>
         <translation>샘플</translation>
     </message>
@@ -35431,6 +37264,11 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>콘텐츠</translation>
     </message>
     <message>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="430"/>
+        <source>This project has no groups to show yet. Add a group with widgets to fill the workspaces.</source>
+        <translation>이 프로젝트에는 아직 표시할 그룹이 없습니다. 작업 공간을 채우려면 위젯이 있는 그룹을 추가하십시오.</translation>
+    </message>
+    <message>
         <source>Widgets</source>
         <translation type="vanished">위젯</translation>
     </message>
@@ -35440,9 +37278,8 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>작업 공간이 없습니다. 위 도구 모음에서 추가하거나 자동 레이아웃으로 재설정하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="430"/>
         <source>Project has no eligible groups -- add a group with widgets to populate workspaces.</source>
-        <translation>프로젝트에 적합한 그룹이 없습니다 -- 작업 공간을 채우려면 위젯이 있는 그룹을 추가하십시오.</translation>
+        <translation type="vanished">프로젝트에 적합한 그룹이 없습니다 -- 작업 공간을 채우려면 위젯이 있는 그룹을 추가하십시오.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="436"/>

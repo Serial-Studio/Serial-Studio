@@ -212,6 +212,7 @@ section a pointer names before working there. The inline blocks are pointers, no
 | [j-space.md](doc/claude/j-space.md) | The verbalization discipline and its grounding. Read when tuning any AI-facing doc or skill. |
 | [repo-skills.md](doc/claude/repo-skills.md) | The project `/`-skills catalog and when each fires. Most auto-activate; this is the deliberate-pick lookup. |
 | [spec-driven.md](doc/claude/spec-driven.md) | Before any non-trivial or multi-file feature: the four gated phases, where artifacts live, when to skip. |
+| [TODO.md](doc/claude/TODO.md) | Open work across sessions: icons to draw, commands to wire, follow-ups, maintainer steps. Read it at the start of a task; add what you defer, delete what you finish in the same commit. |
 
 ## J-Space Discipline — Verbalize the Binding Constraints
 

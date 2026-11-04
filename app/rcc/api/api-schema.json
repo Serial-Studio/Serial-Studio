@@ -4506,19 +4506,19 @@
         "name": "project.dataset.update",
         "properties": {
             "alarmDeadband": {
-                "description": "Hysteresis in the dataset's units: the active band holds until the value leaves it by this much, so a reading hovering on a threshold does not re-alarm on every frame (0 = none)",
+                "description": "How far the value must move back out of a band, in the dataset's units, before that band can alarm again. Stops a value that hovers at a limit from alarming over and over. Use 0 for none.",
                 "type": "number"
             },
             "alarmsWhileVisible": {
-                "description": "Notify, raise an alarm point and sound for the bands only while a widget showing this dataset is on screen; Suppress Alarms still wins",
+                "description": "Sends notifications, raises alarms, and plays sounds for the bands only while a widget showing this dataset is on screen. Suppress Alarms still turns them off entirely.",
                 "type": "boolean"
             },
             "alias": {
-                "description": "Stable name for getDataset-style script/API lookups; must be unique (optional)",
+                "description": "A short, unique name that scripts and the API can use to find this dataset. Optional.",
                 "type": "string"
             },
             "color": {
-                "description": "Custom display color for this dataset; automatic uses the theme palette",
+                "description": "The color of this dataset's plots and widgets. Automatic uses the theme's colors.",
                 "type": "string"
             },
             "datasetId": {
@@ -4526,11 +4526,11 @@
                 "type": "integer"
             },
             "decimalPoints": {
-                "description": "Fixed decimal places for the value display; overrides the format (-1 = auto)",
+                "description": "How many decimal places the value shows. Overrides Label Format. Use -1 for automatic.",
                 "type": "integer"
             },
             "displayFormat": {
-                "description": "Decimal places on analog widget ticks and captions; Hexadecimal and Binary apply wherever the value is shown as text",
+                "description": "How numbers appear on gauge and bar marks and captions. Hexadecimal and Binary also apply wherever the value is shown as text.",
                 "enum": [
                     "",
                     "0d",
@@ -4544,39 +4544,39 @@
                 "type": "string"
             },
             "displayTickCount": {
-                "description": "Major-tick count on the dial scale (0 = auto-fit to widget size)",
+                "description": "How many major marks the dial shows. Use 0 to fit them to the widget's size.",
                 "type": "integer"
             },
             "extremeHold": {
-                "description": "Show hold markers at the lowest and highest values observed since the last data reset",
+                "description": "Marks the lowest and highest values seen since the data was last cleared.",
                 "type": "boolean"
             },
             "fft": {
-                "description": "Perform frequency-domain analysis of the dataset",
+                "description": "Shows how strong each frequency is in the signal.",
                 "type": "boolean"
             },
             "fftBallistics": {
-                "description": "Analyzer-style display: peaks rise instantly and decay smoothly over the release time",
+                "description": "Peaks jump up at once and fall back slowly over the release time, like a hardware audio analyzer.",
                 "type": "boolean"
             },
             "fftBallisticsRelease": {
-                "description": "Decay time for the ballistics display (50-5000 ms)",
+                "description": "How long a peak takes to fall back, from 50 to 5000 ms.",
                 "type": "integer"
             },
             "fftLogX": {
-                "description": "Scale the frequency axis in decades so low octaves stay readable; applies to both the FFT plot and the waterfall",
+                "description": "Uses a logarithmic frequency axis so low frequencies stay readable. Used by the FFT plot and the waterfall.",
                 "type": "boolean"
             },
             "fftMax": {
-                "description": "Upper bound for data normalization; falls back to the dataset value range when left unset",
+                "description": "The highest value expected in the signal, used to scale the analysis. Leave empty to use the dataset's Maximum Value.",
                 "type": "number"
             },
             "fftMin": {
-                "description": "Lower bound for data normalization; falls back to the dataset value range when left unset",
+                "description": "The lowest value expected in the signal, used to scale the analysis. Leave empty to use the dataset's Minimum Value.",
                 "type": "number"
             },
             "fftSamples": {
-                "description": "Number of samples used for each FFT calculation window",
+                "description": "How many samples each frequency analysis uses. More samples show finer frequency detail but react more slowly.",
                 "enum": [
                     8,
                     16,
@@ -4598,11 +4598,11 @@
                 "type": "integer"
             },
             "fftSamplingRate": {
-                "description": "Sampling frequency used for FFT (in Hz)",
+                "description": "How many samples per second the device sends for this dataset. The frequency axis is only correct when this matches.",
                 "type": "integer"
             },
             "fftWindow": {
-                "description": "Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall",
+                "description": "Shapes each block of samples before the analysis so that nearby frequencies don't blur together. Used by the FFT plot and the waterfall.",
                 "enum": [
                     0,
                     1,
@@ -4623,7 +4623,7 @@
                 "type": "integer"
             },
             "format": {
-                "description": "Decodes the raw value before any transform: fixed point, a bit field or a linear scale",
+                "description": "Decodes the raw number before any transform: as fixed point, as a group of bits, or with a scale and offset.",
                 "enum": [
                     0,
                     1,
@@ -4633,35 +4633,35 @@
                 "type": "integer"
             },
             "formatBitOffset": {
-                "description": "Position of the field's lowest bit, counted from the least significant bit (0)",
+                "description": "Where the field starts, counted in bits from the lowest bit (0).",
                 "type": "integer"
             },
             "formatBitWidth": {
-                "description": "Number of bits in the field (1 = a single flag bit)",
+                "description": "How many bits the field has. Use 1 for a single on/off flag.",
                 "type": "integer"
             },
             "formatFractionBits": {
-                "description": "Fraction bits of the fixed-point value: the raw integer is divided by 2^N (Q15 = 15)",
+                "description": "The raw number is divided by 2 to this power. For example, the Q15 format uses 15.",
                 "type": "integer"
             },
             "formatOffset": {
-                "description": "Added after the scale: value = raw * scale + offset",
+                "description": "Added to the value after it is multiplied by the scale.",
                 "type": "number"
             },
             "formatScale": {
-                "description": "Multiplier of the linear decoder: value = raw * scale + offset",
+                "description": "The raw number is multiplied by this value, then the offset is added.",
                 "type": "number"
             },
             "formatSigned": {
-                "description": "Read the raw integer as two's complement at the declared width",
+                "description": "Reads the raw number as signed (two's complement) at this width.",
                 "type": "boolean"
             },
             "formatWidth": {
-                "description": "Width of the raw integer in bits (1-64); integers wider than 53 bits lose precision",
+                "description": "How many bits the raw number has, from 1 to 64. Numbers wider than 53 bits lose precision.",
                 "type": "integer"
             },
             "graph": {
-                "description": "Plot data in real-time",
+                "description": "Plots the value over time.",
                 "type": "boolean"
             },
             "groupId": {
@@ -4669,11 +4669,11 @@
                 "type": "integer"
             },
             "hideOnDashboard": {
-                "description": "Suppress this dataset's standalone dashboard tile; the canvas widget can still read its values",
+                "description": "Hides this dataset's own widget on the dashboard. Canvas widgets can still read its value.",
                 "type": "boolean"
             },
             "index": {
-                "description": "Position of this value in the parser's output (first value = 1). 0 = unassigned.",
+                "description": "Which value of each frame this dataset reads, counting from 1. Use 0 to leave it unassigned.",
                 "type": "integer"
             },
             "labelsDefault": {
@@ -4681,11 +4681,11 @@
                 "type": "string"
             },
             "led": {
-                "description": "Enable visual status monitoring using an LED display",
+                "description": "Shows this dataset as a light in the LED panel.",
                 "type": "boolean"
             },
             "ledHigh": {
-                "description": "LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors",
+                "description": "The LED turns on when the value reaches this level. Use alarm bands for more than two states.",
                 "type": "number"
             },
             "log": {
@@ -4697,19 +4697,19 @@
                 "type": "boolean"
             },
             "plotLogX": {
-                "description": "Scale the X axis in decades; available when the X-Axis source is Samples or a dataset (not Time)",
+                "description": "Uses a logarithmic scale for the horizontal axis. Available when the axis shows samples or a dataset, not time.",
                 "type": "boolean"
             },
             "plotLogY": {
-                "description": "Scale the Y axis in decades; values at or below zero are clamped",
+                "description": "Uses a logarithmic scale for the vertical axis. Values at or below zero are drawn at the bottom.",
                 "type": "boolean"
             },
             "pltMax": {
-                "description": "Upper bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset",
+                "description": "The highest value this dataset is expected to reach. Widgets and the FFT plot use it when their own range is empty.",
                 "type": "number"
             },
             "pltMin": {
-                "description": "Lower bound of the dataset value range; widgets and FFT fall back to it when their own range is left unset",
+                "description": "The lowest value this dataset is expected to reach. Widgets and the FFT plot use it when their own range is empty.",
                 "type": "number"
             },
             "sourceId": {
@@ -4717,11 +4717,11 @@
                 "type": "integer"
             },
             "suppressAlarms": {
-                "description": "Keep the bands on the widget but never notify, raise an alarm point or sound for them",
+                "description": "Keeps the alarm bands on the widget, but never sends notifications, raises alarms, or plays sounds for them.",
                 "type": "boolean"
             },
             "title": {
-                "description": "Name of the dataset, used for labeling and identification",
+                "description": "The name shown on the dashboard and in exports.",
                 "type": "string"
             },
             "transformCode": {
@@ -4733,31 +4733,31 @@
                 "type": "integer"
             },
             "units": {
-                "description": "Unit of measurement, such as volts or amps (optional)",
+                "description": "The unit shown next to the value, such as V or mA. Optional.",
                 "type": "string"
             },
             "virtual": {
-                "description": "Computed datasets compute their value from transforms and shared variables, they do not require a frame index",
+                "description": "Calculates the value with a transform instead of reading it from the incoming data, so it needs no frame index.",
                 "type": "boolean"
             },
             "waterfall": {
-                "description": "Show a scrolling spectrogram of frequency content over time (Pro)",
+                "description": "Shows a scrolling picture of the signal's frequencies over time (Pro).",
                 "type": "boolean"
             },
             "waterfallYAxis": {
-                "description": "Choose Time (default) or any dataset whose value drives the Y axis -- produces a Campbell diagram when bound to e.g. RPM",
+                "description": "What the waterfall's vertical axis shows: time (the default) or another dataset. Choosing an RPM dataset, for example, turns the waterfall into a Campbell diagram.",
                 "type": "integer"
             },
             "wgtMax": {
-                "description": "Upper bound of the gauge or bar range; falls back to the dataset value range when left unset",
+                "description": "The highest value on the gauge or bar. Leave empty to use the dataset's Maximum Value.",
                 "type": "number"
             },
             "wgtMin": {
-                "description": "Lower bound of the gauge or bar range; falls back to the dataset value range when left unset",
+                "description": "The lowest value on the gauge or bar. Leave empty to use the dataset's Minimum Value.",
                 "type": "number"
             },
             "widget": {
-                "description": "Select the visual widget used to display this dataset",
+                "description": "The widget that shows this dataset on the dashboard.",
                 "enum": [
                     "",
                     "bar",
@@ -4768,7 +4768,7 @@
                 "type": "string"
             },
             "xAxisId": {
-                "description": "Choose Time or a dataset to drive the X-Axis in plots",
+                "description": "What the plot's horizontal axis shows: time, or another dataset.",
                 "type": "integer"
             }
         },
