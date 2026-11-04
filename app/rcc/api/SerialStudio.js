@@ -430,6 +430,7 @@ project.dashboard = project.dashboard || {};
 project.dataTable = project.dataTable || {};
 project.dataset = project.dataset || {};
 project.dataset.transform = project.dataset.transform || {};
+project.declaration = project.declaration || {};
 project.dryRun = project.dryRun || {};
 project.frameParser = project.frameParser || {};
 project.group = project.group || {};
@@ -1740,6 +1741,17 @@ io.uart.getConfig = function() {
   return apiCall('io.uart.getConfig', p);
 };
 
+io.uart.getLineStates = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('io.uart.getLineStates', p);
+};
+
+io.uart.getSequence = function() {
+  var p = {};
+  return apiCall('io.uart.getSequence', p);
+};
+
 io.uart.listBaudRates = function() {
   var p = {};
   return apiCall('io.uart.listBaudRates', p);
@@ -1748,6 +1760,19 @@ io.uart.listBaudRates = function() {
 io.uart.listPorts = function() {
   var p = {};
   return apiCall('io.uart.listPorts', p);
+};
+
+io.uart.runSequence = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('io.uart.runSequence', p);
+};
+
+io.uart.sendBreak = function(durationMs, options) {
+  var p = {};
+  p['durationMs'] = durationMs;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('io.uart.sendBreak', p);
 };
 
 io.uart.setAutoReconnect = function(autoReconnect) {
@@ -1786,6 +1811,13 @@ io.uart.setFlowControl = function(flowControlIndex) {
   return apiCall('io.uart.setFlowControl', p);
 };
 
+io.uart.setLiveBaudRate = function(baudRate, options) {
+  var p = {};
+  p['baudRate'] = baudRate;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('io.uart.setLiveBaudRate', p);
+};
+
 io.uart.setParity = function(parityIndex) {
   var p = {};
   p['parityIndex'] = parityIndex;
@@ -1796,6 +1828,18 @@ io.uart.setPortIndex = function(portIndex) {
   var p = {};
   p['portIndex'] = portIndex;
   return apiCall('io.uart.setPortIndex', p);
+};
+
+io.uart.setRtsEnabled = function(rtsEnabled) {
+  var p = {};
+  p['rtsEnabled'] = rtsEnabled;
+  return apiCall('io.uart.setRtsEnabled', p);
+};
+
+io.uart.setSequence = function(sequence) {
+  var p = {};
+  p['sequence'] = sequence;
+  return apiCall('io.uart.setSequence', p);
 };
 
 io.uart.setStopBits = function(stopBitsIndex) {
@@ -2249,6 +2293,13 @@ project.dataset.getFFTMarkers = function(groupId, datasetId) {
   return apiCall('project.dataset.getFFTMarkers', p);
 };
 
+project.dataset.getLabels = function(groupId, datasetId) {
+  var p = {};
+  p['groupId'] = groupId;
+  p['datasetId'] = datasetId;
+  return apiCall('project.dataset.getLabels', p);
+};
+
 project.dataset.list = function(options) {
   var p = {};
   if (options) for (var k in options) p[k] = options[k];
@@ -2277,6 +2328,15 @@ project.dataset.setFFTMarkers = function(groupId, datasetId, fftMarkers) {
   p['datasetId'] = datasetId;
   p['fftMarkers'] = fftMarkers;
   return apiCall('project.dataset.setFFTMarkers', p);
+};
+
+project.dataset.setLabels = function(groupId, datasetId, labels, options) {
+  var p = {};
+  p['groupId'] = groupId;
+  p['datasetId'] = datasetId;
+  p['labels'] = labels;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('project.dataset.setLabels', p);
 };
 
 project.dataset.setOption = function(groupId, datasetId, option, enabled) {
@@ -2321,9 +2381,10 @@ project.dataset.transform.dryRun = function(code, language, values) {
   return apiCall('project.dataset.transform.dryRun', p);
 };
 
-// options.displayFormat: "" | "0d" | "1d" | "2d" | "3d" | "sci"
+// options.displayFormat: "" | "0d" | "1d" | "2d" | "3d" | "sci" | "hex" | "bin"
 // options.fftSamples: 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048 | 4096 | 8192 | 16384 | 32768 | 65536 | 131072 | 262144
 // options.fftWindow: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14
+// options.format: 0 | 1 | 2 | 3
 // options.widget: "" | "bar" | "compass" | "gauge" | "meter"
 project.dataset.update = function(groupId, datasetId, options) {
   var p = {};
@@ -2331,6 +2392,22 @@ project.dataset.update = function(groupId, datasetId, options) {
   p['datasetId'] = datasetId;
   if (options) for (var k in options) p[k] = options[k];
   return apiCall('project.dataset.update', p);
+};
+
+project.declaration.adopt = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('project.declaration.adopt', p);
+};
+
+project.declaration.get = function() {
+  var p = {};
+  return apiCall('project.declaration.get', p);
+};
+
+project.declaration.keep = function() {
+  var p = {};
+  return apiCall('project.declaration.keep', p);
 };
 
 project.dryRun.endToEnd = function(options) {

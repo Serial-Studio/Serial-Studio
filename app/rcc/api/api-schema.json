@@ -253,7 +253,7 @@
         ]
     },
     {
-        "description": "Validate a script by kind without writing. Routes to project.frameParser.dryRun, project.dataset.transform.dryRun, project.painter.dryRun, project.outputWidget.dryRun, or project.dryRun.endToEnd based on `kind`. All other params are forwarded verbatim (code, language, values, inputValue / hex for output_widget, sampleFrame / sampleFrames for end_to_end, plus for frame_parser the pipeline inputs inputBytesHex / decoderMethod / frameDetection / frameStart / frameEnd / hexadecimalDelimiters / checksumAlgorithm / operationMode).",
+        "description": "Validate a script by kind without writing. Routes to project.frameParser.dryRun, project.dataset.transform.dryRun, project.painter.dryRun, project.outputWidget.dryRun, or project.dryRun.endToEnd based on `kind`. All other params are forwarded verbatim (code, language, values, inputValue / hex for output_widget, sampleFrame / sampleFrames for end_to_end, plus for frame_parser the pipeline inputs inputBytesHex / decoderMethod / frameDetection / frameStart / frameEnd / hexadecimalDelimiters / checksumAlgorithm / operationMode, and for frameDetection 4 the frameLength and frameHeader/Body Mask/Value bytes).",
         "name": "assistant.script.dryRun",
         "properties": {
             "code": {
@@ -2829,6 +2829,27 @@
         ]
     },
     {
+        "description": "Read the modem lines of the connected port: cts, dsr, dcd, ri, rts and dtr (params: optional sourceId)",
+        "name": "io.uart.getLineStates",
+        "properties": {
+            "sourceId": {
+                "description": "Source to act on (default 0)",
+                "minimum": 0,
+                "type": "integer"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Get the Connection Sequence of the serial port",
+        "name": "io.uart.getSequence",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
         "description": "Get list of common baud rates",
         "name": "io.uart.listBaudRates",
         "properties": {
@@ -2842,6 +2863,39 @@
         "properties": {
         },
         "required": [
+        ]
+    },
+    {
+        "description": "Re-run the Connection Sequence on the connected port; frames pause until it ends and the result is reported in the console (params: optional sourceId)",
+        "name": "io.uart.runSequence",
+        "properties": {
+            "sourceId": {
+                "description": "Source to act on (default 0)",
+                "minimum": 0,
+                "type": "integer"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Send BREAK: hold the connected line in BREAK, then release it (params: durationMs, optional sourceId)",
+        "name": "io.uart.sendBreak",
+        "properties": {
+            "durationMs": {
+                "description": "BREAK duration in milliseconds (1-10000)",
+                "maximum": 10000,
+                "minimum": 1,
+                "type": "integer"
+            },
+            "sourceId": {
+                "description": "Source to act on (default 0)",
+                "minimum": 0,
+                "type": "integer"
+            }
+        },
+        "required": [
+            "durationMs"
         ]
     },
     {
@@ -2938,6 +2992,26 @@
         ]
     },
     {
+        "description": "Change the baud rate of the connected port without closing it; the saved rate is unchanged (params: baudRate, optional sourceId)",
+        "name": "io.uart.setLiveBaudRate",
+        "properties": {
+            "baudRate": {
+                "description": "Baud rate in bits per second (1-15000000)",
+                "maximum": 15000000,
+                "minimum": 1,
+                "type": "integer"
+            },
+            "sourceId": {
+                "description": "Source to act on (default 0)",
+                "minimum": 0,
+                "type": "integer"
+            }
+        },
+        "required": [
+            "baudRate"
+        ]
+    },
+    {
         "description": "Set parity (params: parityIndex - 0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)",
         "name": "io.uart.setParity",
         "properties": {
@@ -2970,6 +3044,32 @@
         },
         "required": [
             "portIndex"
+        ]
+    },
+    {
+        "description": "Enable/disable Hold RTS: assert RTS on open and hold it; not applicable under RTS/CTS flow control (params: rtsEnabled)",
+        "name": "io.uart.setRtsEnabled",
+        "properties": {
+            "rtsEnabled": {
+                "description": "Hold RTS asserted while connected",
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "rtsEnabled"
+        ]
+    },
+    {
+        "description": "Replace the Connection Sequence of the serial port; it runs on every open before data flows (params: sequence)",
+        "name": "io.uart.setSequence",
+        "properties": {
+            "sequence": {
+                "description": "{budgetMs, steps: [{kind: break|wait|line|send|expect|discard|baud|flow, ...}]}; an empty steps array clears the sequence",
+                "type": "object"
+            }
+        },
+        "required": [
+            "sequence"
         ]
     },
     {
@@ -4051,6 +4151,24 @@
         ]
     },
     {
+        "description": "Returns the dataset's value labels: labels is an array of {value (integer), text} sorted by value, labelsDefault the catch-all text shown for a value no row lists (empty = show the number). Labels change only how the value reads as text; plots, alarms, exports and the API's numeric fields keep the number.",
+        "name": "project.dataset.getLabels",
+        "properties": {
+            "datasetId": {
+                "description": "Dataset id within the group",
+                "type": "integer"
+            },
+            "groupId": {
+                "description": "Owning group id",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "groupId",
+            "datasetId"
+        ]
+    },
+    {
         "description": "List all datasets across all groups. Large projects: pass offset/limit to page the flattened dataset array (reply carries window/nextOffset/projectEpoch); datasetCount always reflects the whole project. Prefer project.search to find datasets by partial name.",
         "name": "project.dataset.list",
         "properties": {
@@ -4201,6 +4319,50 @@
             "groupId",
             "datasetId",
             "fftMarkers"
+        ]
+    },
+    {
+        "description": "Atomically replaces the dataset's value labels. Each entry is {value, text} where value must be an integer (a non-integer value is refused with an error); rows with empty text or a repeated value are dropped and counted in result.droppedInvalid (the first row of a value wins). The dataset's value is rounded to the nearest integer before the lookup, and wherever it is shown as text the matching row's text replaces it; plots, alarms, exports and numeric API fields keep the number. labelsDefault (optional) sets the catch-all text for unlisted values. Labels are not Pro content. Pass an empty array to clear all labels.",
+        "name": "project.dataset.setLabels",
+        "properties": {
+            "datasetId": {
+                "description": "Dataset id within the group",
+                "type": "integer"
+            },
+            "groupId": {
+                "description": "Owning group id",
+                "type": "integer"
+            },
+            "labels": {
+                "description": "Full replacement label list (empty = no labels).",
+                "items": {
+                    "properties": {
+                        "text": {
+                            "description": "Text shown in place of the number",
+                            "type": "string"
+                        },
+                        "value": {
+                            "description": "Integer the rounded value is matched against",
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "value",
+                        "text"
+                    ],
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "labelsDefault": {
+                "description": "Optional catch-all text for unlisted values (empty = show the number)",
+                "type": "string"
+            }
+        },
+        "required": [
+            "groupId",
+            "datasetId",
+            "labels"
         ]
     },
     {
@@ -4368,14 +4530,16 @@
                 "type": "integer"
             },
             "displayFormat": {
-                "description": "Decimal places or notation used on tick labels and the value display",
+                "description": "Decimal places on analog widget ticks and captions; Hexadecimal and Binary apply wherever the value is shown as text",
                 "enum": [
                     "",
                     "0d",
                     "1d",
                     "2d",
                     "3d",
-                    "sci"
+                    "sci",
+                    "hex",
+                    "bin"
                 ],
                 "type": "string"
             },
@@ -4458,6 +4622,44 @@
                 ],
                 "type": "integer"
             },
+            "format": {
+                "description": "Decodes the raw value before any transform: fixed point, a bit field or a linear scale",
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3
+                ],
+                "type": "integer"
+            },
+            "formatBitOffset": {
+                "description": "Position of the field's lowest bit, counted from the least significant bit (0)",
+                "type": "integer"
+            },
+            "formatBitWidth": {
+                "description": "Number of bits in the field (1 = a single flag bit)",
+                "type": "integer"
+            },
+            "formatFractionBits": {
+                "description": "Fraction bits of the fixed-point value: the raw integer is divided by 2^N (Q15 = 15)",
+                "type": "integer"
+            },
+            "formatOffset": {
+                "description": "Added after the scale: value = raw * scale + offset",
+                "type": "number"
+            },
+            "formatScale": {
+                "description": "Multiplier of the linear decoder: value = raw * scale + offset",
+                "type": "number"
+            },
+            "formatSigned": {
+                "description": "Read the raw integer as two's complement at the declared width",
+                "type": "boolean"
+            },
+            "formatWidth": {
+                "description": "Width of the raw integer in bits (1-64); integers wider than 53 bits lose precision",
+                "type": "integer"
+            },
             "graph": {
                 "description": "Plot data in real-time",
                 "type": "boolean"
@@ -4473,6 +4675,10 @@
             "index": {
                 "description": "Position of this value in the parser's output (first value = 1). 0 = unassigned.",
                 "type": "integer"
+            },
+            "labelsDefault": {
+                "description": "Text shown for a value no label row matches; empty shows the number",
+                "type": "string"
             },
             "led": {
                 "description": "Enable visual status monitoring using an LED display",
@@ -4572,6 +4778,34 @@
         ]
     },
     {
+        "description": "Open the pending device declaration as a new, unsaved project (Project File mode, pendingDifference true). Disconnects the device first; the loaded project's file is not modified, so reopening it reverses the choice. Refused while the loaded project has unsaved changes, unless discardChanges:true says to drop them (DESTRUCTIVE for those edits).",
+        "name": "project.declaration.adopt",
+        "properties": {
+            "discardChanges": {
+                "description": "If true, discard the loaded project's unsaved changes instead of refusing.",
+                "type": "boolean"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Report device declarations (spec 0111). quickPlot: whether the live Quick Plot dashboard was built from a device declaration, with its title and group count. In Project File mode: the last declaration the device sent (status none, matches, differs, kept or rejected; reason; title; groups; datasets; notes), pendingDifference, and requestOnConnect (the Quick Plot request toggle).",
+        "name": "project.declaration.get",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Keep the loaded project instead of the pending device declaration (Project File mode, pendingDifference true). The offer stays dismissed for this project and declaration content; nothing is loaded or changed on disk.",
+        "name": "project.declaration.keep",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
         "description": "End-to-end dry run: takes a sample frame body, runs the project's frame parser, then applies every dataset's transform in execution order, and returns the final per-dataset values WITHOUT touching live state. Required: sampleFrame (single body) OR sampleFrames (array of bodies); everything else defaults to the live project. Use this to verify the full parse->transform pipeline before issuing setCode/setTransformCode. Note: the table API (tableGet/tableSet/datasetGetRaw/datasetGetFinal) is NOT injected; transforms that depend on it should be tested with project.dataset.transform.dryRun individually.",
         "name": "project.dryRun.endToEnd",
         "properties": {
@@ -4648,13 +4882,33 @@
                 "description": "0=PlainText (default; UTF-8 -> QString, mojibakes binary), 1=Hexadecimal (toHex -> QString), 2=Base64 (toBase64 -> QString), 3=Binary (raw QByteArray, only mode that's safe for binary protocols).",
                 "type": "integer"
             },
+            "frameBodyMask": {
+                "description": "FixedLength: mask for the payload bytes after the first, 0-255.",
+                "type": "integer"
+            },
+            "frameBodyValue": {
+                "description": "FixedLength: value the masked payload bytes must equal, 0-255.",
+                "type": "integer"
+            },
             "frameDetection": {
-                "description": "0=EndDelimiterOnly (default), 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly.",
+                "description": "0=EndDelimiterOnly (default), 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly, 4=FixedLength (needs frameLength).",
                 "type": "integer"
             },
             "frameEnd": {
                 "description": "End delimiter. Hex when hexadecimalDelimiters is true. Default: none.",
                 "type": "string"
+            },
+            "frameHeaderMask": {
+                "description": "FixedLength: mask for the first byte, 0-255 (0 = no rule).",
+                "type": "integer"
+            },
+            "frameHeaderValue": {
+                "description": "FixedLength: value the masked first byte must equal, 0-255.",
+                "type": "integer"
+            },
+            "frameLength": {
+                "description": "FixedLength: bytes per frame, checksum included (1 to 524288).",
+                "type": "integer"
             },
             "frameStart": {
                 "description": "Start delimiter. Hex when hexadecimalDelimiters is true. Default: none.",
@@ -4811,7 +5065,7 @@
         ]
     },
     {
-        "description": "Configure frame extraction settings on a source (params: startSequence, endSequence, checksumAlgorithm, frameDetection, decoderMethod, hexadecimalDelimiters, operationMode). This is the persist path for delimiters -- parser code alone (setCode) never changes them.",
+        "description": "Configure frame extraction settings on a source (params: startSequence, endSequence, checksumAlgorithm, frameDetection (0-4, 4=FixedLength), frameLength, frameHeaderMask, frameHeaderValue, frameBodyMask, frameBodyValue, decoderMethod, hexadecimalDelimiters, operationMode). This is the persist path for delimiters -- parser code alone (setCode) never changes them.",
         "name": "project.frameParser.update",
         "properties": {
             "checksumAlgorithm": {
@@ -4826,8 +5080,28 @@
                 "description": "Frame end delimiter",
                 "type": "string"
             },
+            "frameBodyMask": {
+                "description": "FixedLength: mask for the payload bytes after the first, 0-255",
+                "type": "integer"
+            },
+            "frameBodyValue": {
+                "description": "FixedLength: value the masked payload bytes must equal, 0-255",
+                "type": "integer"
+            },
             "frameDetection": {
-                "description": "Frame detection mode (0-3)",
+                "description": "Frame detection mode (0-4; 4=FixedLength)",
+                "type": "integer"
+            },
+            "frameHeaderMask": {
+                "description": "FixedLength: mask for the first byte, 0-255 (0 = no rule)",
+                "type": "integer"
+            },
+            "frameHeaderValue": {
+                "description": "FixedLength: value the masked first byte must equal, 0-255",
+                "type": "integer"
+            },
+            "frameLength": {
+                "description": "FixedLength: bytes per frame, checksum included (1 to 524288)",
                 "type": "integer"
             },
             "hexadecimalDelimiters": {
@@ -5250,7 +5524,7 @@
         ]
     },
     {
-        "description": "Compile an output-widget transmit function WITHOUT touching the live project. Verifies the script compiles and defines transmit(value); returns ok / compileError + line. The transmitFunction is **JavaScript only** and runs with the same injected Modbus/CAN helper globals + table API as the live widget. Pass inputValue (and hex:true for hex byte input) to also execute it once and return the produced bytes (outputHex + byteCount). Validate here BEFORE project.outputWidget.update.",
+        "description": "Compile an output-widget transmit function WITHOUT touching the live project. Verifies the script compiles and defines transmit(value); returns ok / compileError + line. The transmitFunction is **JavaScript only** and runs with the same injected Modbus/CAN helper globals + table API as the live widget. Pass inputValue (and hex:true for hex byte input) to also execute it once and return the produced bytes (outputHex + byteCount); the optional second argument, the reply token, is always 1 in a dry run. Validate here BEFORE project.outputWidget.update.",
         "name": "project.outputWidget.dryRun",
         "properties": {
             "code": {
@@ -5289,7 +5563,7 @@
         ]
     },
     {
-        "description": "Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, checkable, color, size, on/offLabel, min/max/step/initialValue, transmitFunction, and the state binding (stateSource with its stateDatasetId or stateTable/stateVariable, stateOnValue, stateConfirmMs) when one is set. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.",
+        "description": "Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, checkable, color, size, on/offLabel, min/max/step/initialValue, transmitFunction, and the state binding (stateSource with its stateDatasetId or stateTable/stateVariable, stateOnValue, stateConfirmMs) when one is set, and the reply binding (replyTokenDatasetId, replyCodeDatasetId, replyMessageDatasetId, with stateConfirmMs) when one is set. Also returns inputKind (0=text, 1=number; a text field only), decimals (-1 = automatic), units and quantize: a slider, a knob and a number field refuse a value outside minValue to maxValue as out of range, so read these before driving a control. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.",
         "name": "project.outputWidget.get",
         "properties": {
             "groupId": {
@@ -5307,7 +5581,7 @@
         ]
     },
     {
-        "description": "Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, checkable, color, size, onLabel, offLabel, minValue, maxValue, stepSize, initialValue, stateSource, stateDatasetId, stateTable, stateVariable, stateOnValue, stateConfirmMs). A checkable button latches and transmits 1 (on) / 0 (off) like a toggle, instead of pulsing a single value on click; color is a hex fill override (empty = group accent) and size is 0=small, 1=normal, 2=large, 3=extra large. stateSource binds the displayed state to feedback (0=none, 1=dataset via stateDatasetId, 2=variable via stateTable/stateVariable); stateOnValue is the value that reads as on (empty = any non-zero) and stateConfirmMs how long a request stays outstanding. The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat, each with an optional trailing unit 1..247 to write to another unit on the bus / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.",
+        "description": "Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, checkable, color, size, onLabel, offLabel, minValue, maxValue, stepSize, initialValue, stateSource, stateDatasetId, stateTable, stateVariable, stateOnValue, stateConfirmMs, inputKind, decimals, units, quantize, replyTokenDatasetId, replyCodeDatasetId, replyMessageDatasetId). A checkable button latches and transmits 1 (on) / 0 (off) like a toggle, instead of pulsing a single value on click; color is a hex fill override (empty = group accent) and size is 0=small, 1=normal, 2=large, 3=extra large. stateSource binds the displayed state to feedback (0=none, 1=dataset via stateDatasetId, 2=variable via stateTable/stateVariable); stateOnValue is the value that reads as on (empty = any non-zero) and stateConfirmMs how long a request stays outstanding. The reply ids are dataset uniqueIds (-1 = unbound): the device echoes the token transmit(value, token) was given in the token dataset and reports a result code (0 acknowledges, anything else refuses) with an optional message; token and code must both be set. inputKind is 0=text, 1=number for a text field; a number field, slider and knob enforce minValue to maxValue before transmit() runs and refuse a value outside it as out of range, so a transmitFunction needs no range clamp. decimals (-1 = automatic) and units are display only; quantize snaps a typed number field value to stepSize counted from minValue. The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat, each with an optional trailing unit 1..247 to write to another unit on the bus / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.",
         "name": "project.outputWidget.update",
         "properties": {
             "groupId": {
@@ -5589,7 +5863,7 @@
         ]
     },
     {
-        "description": "Patch source fields by id (Commercial). Required: sourceId. Optional fields: title, busType, frameStart, frameEnd, checksumAlgorithm, frameDetection, decoderMethod, hexadecimalDelimiters.",
+        "description": "Patch source fields by id (Commercial). Required: sourceId. Optional fields: title, busType, frameStart, frameEnd, checksumAlgorithm, frameDetection, frameLength, frameHeaderMask, frameHeaderValue, frameBodyMask, frameBodyValue, decoderMethod, hexadecimalDelimiters.",
         "name": "project.source.update",
         "properties": {
             "busType": {
@@ -5604,13 +5878,33 @@
                 "description": "Decoder method enum (0=PlainText, 1=Hex, 2=Base64)",
                 "type": "integer"
             },
+            "frameBodyMask": {
+                "description": "FixedLength: mask for the payload bytes after the first, 0-255 (0 = no rule)",
+                "type": "integer"
+            },
+            "frameBodyValue": {
+                "description": "FixedLength: value the masked payload bytes must equal, 0-255",
+                "type": "integer"
+            },
             "frameDetection": {
-                "description": "Frame detection enum (0=EndDelimiter, 1=StartAndEndDelimiter, 2=NoDelimiters)",
+                "description": "Frame detection enum (0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly, 4=FixedLength)",
                 "type": "integer"
             },
             "frameEnd": {
                 "description": "Hex end delimiter for the frame",
                 "type": "string"
+            },
+            "frameHeaderMask": {
+                "description": "FixedLength: mask for the first byte of a frame, 0-255 (0 = no rule)",
+                "type": "integer"
+            },
+            "frameHeaderValue": {
+                "description": "FixedLength: value the masked first byte must equal, 0-255",
+                "type": "integer"
+            },
+            "frameLength": {
+                "description": "FixedLength: bytes per frame, checksum included (1 to 524288)",
+                "type": "integer"
             },
             "frameStart": {
                 "description": "Hex start delimiter for the frame",

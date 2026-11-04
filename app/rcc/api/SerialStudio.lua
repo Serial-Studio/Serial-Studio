@@ -107,6 +107,7 @@ project.dashboard = project.dashboard or {}
 project.dataTable = project.dataTable or {}
 project.dataset = project.dataset or {}
 project.dataset.transform = project.dataset.transform or {}
+project.declaration = project.declaration or {}
 project.dryRun = project.dryRun or {}
 project.frameParser = project.frameParser or {}
 project.group = project.group or {}
@@ -1417,6 +1418,17 @@ function io.uart.getConfig()
   return apiCall('io.uart.getConfig', p)
 end
 
+function io.uart.getLineStates(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('io.uart.getLineStates', p)
+end
+
+function io.uart.getSequence()
+  local p = {}
+  return apiCall('io.uart.getSequence', p)
+end
+
 function io.uart.listBaudRates()
   local p = {}
   return apiCall('io.uart.listBaudRates', p)
@@ -1425,6 +1437,19 @@ end
 function io.uart.listPorts()
   local p = {}
   return apiCall('io.uart.listPorts', p)
+end
+
+function io.uart.runSequence(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('io.uart.runSequence', p)
+end
+
+function io.uart.sendBreak(durationMs, options)
+  local p = {}
+  p['durationMs'] = durationMs
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('io.uart.sendBreak', p)
 end
 
 function io.uart.setAutoReconnect(autoReconnect)
@@ -1463,6 +1488,13 @@ function io.uart.setFlowControl(flowControlIndex)
   return apiCall('io.uart.setFlowControl', p)
 end
 
+function io.uart.setLiveBaudRate(baudRate, options)
+  local p = {}
+  p['baudRate'] = baudRate
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('io.uart.setLiveBaudRate', p)
+end
+
 function io.uart.setParity(parityIndex)
   local p = {}
   p['parityIndex'] = parityIndex
@@ -1473,6 +1505,18 @@ function io.uart.setPortIndex(portIndex)
   local p = {}
   p['portIndex'] = portIndex
   return apiCall('io.uart.setPortIndex', p)
+end
+
+function io.uart.setRtsEnabled(rtsEnabled)
+  local p = {}
+  p['rtsEnabled'] = rtsEnabled
+  return apiCall('io.uart.setRtsEnabled', p)
+end
+
+function io.uart.setSequence(sequence)
+  local p = {}
+  p['sequence'] = sequence
+  return apiCall('io.uart.setSequence', p)
 end
 
 function io.uart.setStopBits(stopBitsIndex)
@@ -1926,6 +1970,13 @@ function project.dataset.getFFTMarkers(groupId, datasetId)
   return apiCall('project.dataset.getFFTMarkers', p)
 end
 
+function project.dataset.getLabels(groupId, datasetId)
+  local p = {}
+  p['groupId'] = groupId
+  p['datasetId'] = datasetId
+  return apiCall('project.dataset.getLabels', p)
+end
+
 function project.dataset.list(options)
   local p = {}
   if options then for k, v in pairs(options) do p[k] = v end end
@@ -1954,6 +2005,15 @@ function project.dataset.setFFTMarkers(groupId, datasetId, fftMarkers)
   p['datasetId'] = datasetId
   p['fftMarkers'] = fftMarkers
   return apiCall('project.dataset.setFFTMarkers', p)
+end
+
+function project.dataset.setLabels(groupId, datasetId, labels, options)
+  local p = {}
+  p['groupId'] = groupId
+  p['datasetId'] = datasetId
+  p['labels'] = labels
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('project.dataset.setLabels', p)
 end
 
 function project.dataset.setOption(groupId, datasetId, option, enabled)
@@ -1998,9 +2058,10 @@ function project.dataset.transform.dryRun(code, language, values)
   return apiCall('project.dataset.transform.dryRun', p)
 end
 
--- options.displayFormat: "" | "0d" | "1d" | "2d" | "3d" | "sci"
+-- options.displayFormat: "" | "0d" | "1d" | "2d" | "3d" | "sci" | "hex" | "bin"
 -- options.fftSamples: 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048 | 4096 | 8192 | 16384 | 32768 | 65536 | 131072 | 262144
 -- options.fftWindow: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14
+-- options.format: 0 | 1 | 2 | 3
 -- options.widget: "" | "bar" | "compass" | "gauge" | "meter"
 function project.dataset.update(groupId, datasetId, options)
   local p = {}
@@ -2008,6 +2069,22 @@ function project.dataset.update(groupId, datasetId, options)
   p['datasetId'] = datasetId
   if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('project.dataset.update', p)
+end
+
+function project.declaration.adopt(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('project.declaration.adopt', p)
+end
+
+function project.declaration.get()
+  local p = {}
+  return apiCall('project.declaration.get', p)
+end
+
+function project.declaration.keep()
+  local p = {}
+  return apiCall('project.declaration.keep', p)
 end
 
 function project.dryRun.endToEnd(options)

@@ -1447,6 +1447,18 @@
       "reserved": [],
       "next": 2
     },
+    "io.uart.getLineStates": {
+      "fields": {
+        "sourceId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.getSequence": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
     "io.uart.listBaudRates": {
       "fields": {},
       "reserved": [],
@@ -1456,6 +1468,21 @@
       "fields": {},
       "reserved": [],
       "next": 2
+    },
+    "io.uart.runSequence": {
+      "fields": {
+        "sourceId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.sendBreak": {
+      "fields": {
+        "durationMs": 2,
+        "sourceId": 3
+      },
+      "reserved": [],
+      "next": 4
     },
     "io.uart.setAutoReconnect": {
       "fields": {
@@ -1499,6 +1526,14 @@
       "reserved": [],
       "next": 3
     },
+    "io.uart.setLiveBaudRate": {
+      "fields": {
+        "baudRate": 2,
+        "sourceId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
     "io.uart.setParity": {
       "fields": {
         "parityIndex": 2
@@ -1509,6 +1544,20 @@
     "io.uart.setPortIndex": {
       "fields": {
         "portIndex": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setRtsEnabled": {
+      "fields": {
+        "rtsEnabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "io.uart.setSequence": {
+      "fields": {
+        "sequence": 2
       },
       "reserved": [],
       "next": 3
@@ -2027,6 +2076,14 @@
       "reserved": [],
       "next": 4
     },
+    "project.dataset.getLabels": {
+      "fields": {
+        "datasetId": 2,
+        "groupId": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
     "project.dataset.list": {
       "fields": {
         "limit": 2,
@@ -2061,6 +2118,16 @@
       },
       "reserved": [],
       "next": 5
+    },
+    "project.dataset.setLabels": {
+      "fields": {
+        "datasetId": 2,
+        "groupId": 3,
+        "labels": 4,
+        "labelsDefault": 5
+      },
+      "reserved": [],
+      "next": 6
     },
     "project.dataset.setOption": {
       "fields": {
@@ -2129,10 +2196,19 @@
         "fftSamples": 15,
         "fftSamplingRate": 16,
         "fftWindow": 17,
+        "format": 45,
+        "formatBitOffset": 46,
+        "formatBitWidth": 47,
+        "formatFractionBits": 48,
+        "formatOffset": 49,
+        "formatScale": 50,
+        "formatSigned": 51,
+        "formatWidth": 52,
         "graph": 18,
         "groupId": 3,
         "hideOnDashboard": 19,
         "index": 20,
+        "labelsDefault": 53,
         "led": 21,
         "ledHigh": 22,
         "log": 23,
@@ -2156,7 +2232,24 @@
         "xAxisId": 40
       },
       "reserved": [],
-      "next": 45
+      "next": 54
+    },
+    "project.declaration.adopt": {
+      "fields": {
+        "discardChanges": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.declaration.get": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.declaration.keep": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
     },
     "project.dryRun.endToEnd": {
       "fields": {
@@ -2188,8 +2281,13 @@
         "checksumAlgorithm": 2,
         "code": 3,
         "decoderMethod": 4,
+        "frameBodyMask": 13,
+        "frameBodyValue": 14,
         "frameDetection": 5,
         "frameEnd": 6,
+        "frameHeaderMask": 15,
+        "frameHeaderValue": 16,
+        "frameLength": 17,
         "frameStart": 7,
         "hexadecimalDelimiters": 8,
         "inputBytes": 9,
@@ -2198,7 +2296,7 @@
         "operationMode": 12
       },
       "reserved": [],
-      "next": 13
+      "next": 18
     },
     "project.frameParser.getCode": {
       "fields": {
@@ -2269,14 +2367,19 @@
         "checksumAlgorithm": 2,
         "decoderMethod": 3,
         "endSequence": 4,
+        "frameBodyMask": 10,
+        "frameBodyValue": 11,
         "frameDetection": 5,
+        "frameHeaderMask": 12,
+        "frameHeaderValue": 13,
+        "frameLength": 14,
         "hexadecimalDelimiters": 6,
         "operationMode": 7,
         "sourceId": 8,
         "startSequence": 9
       },
       "reserved": [],
-      "next": 10
+      "next": 15
     },
     "project.getStatus": {
       "fields": {},
@@ -2602,15 +2705,20 @@
         "busType": 2,
         "checksumAlgorithm": 3,
         "decoderMethod": 4,
+        "frameBodyMask": 11,
+        "frameBodyValue": 12,
         "frameDetection": 5,
         "frameEnd": 6,
+        "frameHeaderMask": 13,
+        "frameHeaderValue": 14,
+        "frameLength": 15,
         "frameStart": 7,
         "hexadecimalDelimiters": 8,
         "sourceId": 9,
         "title": 10
       },
       "reserved": [],
-      "next": 11
+      "next": 16
     },
     "project.template.apply": {
       "fields": {
