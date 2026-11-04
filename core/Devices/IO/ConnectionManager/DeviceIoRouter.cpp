@@ -73,6 +73,24 @@ void IO::DeviceIoRouter::bindRawTaps(std::span<IRawByteTap* const> taps)
   }
 }
 
+/**
+ * @brief Echoes the bytes @p device's driver writes on its own through onRawDataSent(): a Direct
+ *        hop between two GUI-thread objects at command rate, as the inbound chunk path is wired.
+ *        The connection dies with the device or with @p context, whichever goes first.
+ */
+void IO::DeviceIoRouter::watchSentBytes(DeviceManager* device, QObject* context)
+{
+  SS_ASSERT(device != nullptr, return);
+  SS_ASSERT(context != nullptr, return);
+
+  QObject::connect(
+    device,
+    &DeviceManager::rawDataSent,
+    context,
+    [this](int deviceId, const QByteArray& data) { onRawDataSent(deviceId, data); },
+    Qt::DirectConnection);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Inbound payloads
 //--------------------------------------------------------------------------------------------------
@@ -191,6 +209,19 @@ qint64 IO::DeviceIoRouter::writeToDevice(int deviceId, const QByteArray& data)
   }
 
   return bytes;
+}
+
+/**
+ * @brief Echoes bytes a driver wrote on its own (a Connection Sequence step) to every bound tap,
+ *        as writeToDevice() echoes a routed write, so the console shows both directions.
+ */
+void IO::DeviceIoRouter::onRawDataSent(int deviceId, const QByteArray& data)
+{
+  SS_ASSERT(deviceId >= 0, return);
+  SS_ASSERT(!data.isEmpty(), return);
+
+  for (std::size_t i = 0; i < m_tapCount; ++i)
+    m_taps[i]->onSentBytes(deviceId, data);
 }
 
 /**

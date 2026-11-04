@@ -97,6 +97,15 @@ def test_uart_driver_configuration(api_client, clean_state):
     assert config["dtrEnabled"] is True
     assert config["autoReconnect"] is True
 
+    if api_client.command_exists("io.uart.setRtsEnabled"):
+        api_client.command("io.uart.setRtsEnabled", {"rtsEnabled": True})
+        config = api_client.command("io.uart.getConfig")
+        assert config["rtsEnabled"] is True
+        assert isinstance(config["liveBaudRate"], int)
+        assert isinstance(config["sequenceStepCount"], int)
+        api_client.command("io.uart.setRtsEnabled", {"rtsEnabled": False})
+        assert api_client.command("io.uart.getConfig")["rtsEnabled"] is False
+
 
 @pytest.mark.integration
 def test_network_driver_configuration(api_client, clean_state):

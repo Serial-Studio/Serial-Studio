@@ -39,6 +39,7 @@ class DeviceManager : public QObject {
   Q_OBJECT
 
 signals:
+  void rawDataSent(int deviceId, const QByteArray& data);
   void rawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
   void consoleDataReceived(int deviceId, const IO::CapturedDataPtr& data);
 
@@ -65,6 +66,7 @@ public slots:
   void close();
 
 private slots:
+  void onRawDataSent(const QByteArray& data);
   void onRawDataReceived(const IO::CapturedDataPtr& data);
   void onConsoleDataReceived(const IO::CapturedDataPtr& data);
 

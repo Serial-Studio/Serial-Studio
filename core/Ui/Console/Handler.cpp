@@ -693,6 +693,10 @@ void Console::Handler::setupExternalConnections()
     this, [notifyTerminal](const std::shared_ptr<const Core::Bus::OperationModeChanged>&) {
       notifyTerminal();
     });
+  m_sequenceNotes = m_bus.subscribe<Core::Bus::LinkSequenceNote>(
+    this, [this](const std::shared_ptr<const Core::Bus::LinkSequenceNote>& note) {
+      appendSequenceNote(note->sourceId, note->text);
+    });
   connect(m_connectionManager, &IO::ConnectionManager::connectedChanged, this, notifyTerminal);
 
   connect(m_projectModel,
@@ -1269,6 +1273,29 @@ QString Console::Handler::appendToDevice(int deviceId, const QString& str, bool 
   }
 
   return processed;
+}
+
+/**
+ * @brief Appends one Connection Sequence line (spec 0103) to the source's console buffer in the
+ *        system style, on a line of its own; the prefix keeps it marked in exported text too.
+ */
+void Console::Handler::appendSequenceNote(int sourceId, const QString& text)
+{
+  SS_ASSERT(!text.isEmpty(), return);
+
+  const auto state   = m_deviceState.find(sourceId);
+  const bool midLine = state != m_deviceState.end() && !state->second.line.isStartingLine;
+
+  auto line = QStringLiteral("%1 %2").arg(tr("[Connection Sequence]"), text);
+  if (ansiColorsEnabled())
+    line = QStringLiteral("\033[36m%1\033[0m").arg(line);
+
+  if (midLine)
+    line.prepend(QLatin1Char('\n'));
+
+  line.append(QLatin1Char('\n'));
+  const auto processed = appendToDevice(sourceId, line, showTimestamp());
+  Q_EMIT deviceDataReady(sourceId, processed);
 }
 
 /**

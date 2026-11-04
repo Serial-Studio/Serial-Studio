@@ -21,15 +21,18 @@
 
 #pragma once
 
+#include <QCoreApplication>
 #include <QSerialPort>
+#include <QString>
 
 namespace IO {
 namespace Drivers {
 
 /**
- * @brief The two decisions the UART error handler makes, as pure functions: whether an error ends
- *        the link, and whether the driver's own auto-reconnect owns the recovery. They live apart
- *        from the driver so both can be pinned without a real port (spec 0075).
+ * @brief The decisions the UART driver makes, as pure functions: whether an error ends the link,
+ *        whether the driver's own auto-reconnect owns the recovery (spec 0075), whether RTS may be
+ *        driven by hand and how a failed Connection Sequence reads (spec 0103). They live apart
+ *        from the driver so each can be pinned without a real port.
  */
 namespace UartPolicy {
 
@@ -59,6 +62,36 @@ namespace UartPolicy {
                                               bool autoReconnectEnabled) noexcept
 {
   return autoReconnectEnabled && error == QSerialPort::ResourceError;
+}
+
+/**
+ * @brief Whether the driver may drive RTS by hand. Under RTS/CTS flow control the port driver owns
+ *        the line and Qt refuses setRequestToSend() with UnsupportedOperationError.
+ */
+[[nodiscard]] inline bool rtsSettable(QSerialPort::FlowControl flowControl) noexcept
+{
+  return flowControl != QSerialPort::HardwareControl;
+}
+
+/**
+ * @brief The one-line verdict of a failed Connection Sequence: the step by position (@p index is
+ *        zero-based) and kind, the reason, and the bytes the device sent when an expect step is
+ *        what failed, so a wrong reply is diagnosable from the console alone.
+ */
+[[nodiscard]] inline QString sequenceFailureText(const QString& kind,
+                                                 int index,
+                                                 const QString& reason,
+                                                 const QString& received)
+{
+  const auto step = QString::number(index + 1);
+  if (received.isEmpty())
+    return QCoreApplication::translate("IO::Drivers::UART",
+                                       "Connection Sequence failed at step %1 (%2): %3")
+      .arg(step, kind, reason);
+
+  return QCoreApplication::translate("IO::Drivers::UART",
+                                     "Connection Sequence failed at step %1 (%2): %3; received: %4")
+    .arg(step, kind, reason, received);
 }
 
 }  // namespace UartPolicy

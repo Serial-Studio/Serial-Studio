@@ -126,6 +126,8 @@ qt_add_library(
   IO/IPayloadInjector.h
   IO/FrameConfigBuilder.h
   IO/FrameConfigBuilder.cpp
+  IO/ConnectionSequence.h
+  IO/ConnectionSequence.cpp
   IO/LaunchAuthorizer.h
   IO/LaunchAuthorizer.cpp
   Crypto/SimpleCrypt.h

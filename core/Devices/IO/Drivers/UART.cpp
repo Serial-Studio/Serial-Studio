@@ -21,11 +21,8 @@
 
 #include "IO/Drivers/UART.h"
 
+#include <QJsonDocument>
 #include <QJsonObject>
-
-#ifdef Q_OS_WIN
-#  include <windows.h>
-#endif
 
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
@@ -34,54 +31,22 @@
 #include "Core/Translator.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/SerialPortIdentity.h"
+#include "IO/Drivers/UART/SequenceRunner.h"
 #include "IO/Drivers/UART/UartPolicy.h"
+#include "IO/Drivers/UART/UartSequencePort.h"
 
 //--------------------------------------------------------------------------------------------------
 // Static utility functions
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Calculates an ideal read buffer size for a serial port.
+ * @brief The connection manager a driver hands its drops and recoveries to; one cached reach.
  */
-static size_t idealSerialBufferSize(const qint32 baud)
+static IO::ConnectionManager& connectionManager()
 {
-  size_t bytes = static_cast<size_t>(baud * 0.02);
-  bytes        = std::max<size_t>(256, bytes);
-  bytes        = std::min<size_t>(524288, bytes);
-
-  constexpr size_t granularity = 256;
-  bytes                        = ((bytes + granularity - 1) / granularity) * granularity;
-
-  return bytes;
+  static auto& manager = IO::ConnectionManager::instance();
+  return manager;
 }
-
-#ifdef Q_OS_WIN
-/**
- * @brief Expands the kernel-side serial FIFO and tunes COMM timeouts for
- *        high-throughput reception. QSerialPort::setReadBufferSize() only
- *        controls the Qt-level ring; the OS driver has its own FIFO that
- *        overflows at high baud rates if left at the default (typically 4 KB).
- */
-static void configureNativeBuffer(QSerialPort* port, const qint32 baud)
-{
-  if (!port || !port->isOpen())
-    return;
-
-  const auto handle = port->handle();
-  if (handle == INVALID_HANDLE_VALUE)
-    return;
-
-  const size_t buf = idealSerialBufferSize(baud);
-  SetupComm(handle, static_cast<DWORD>(buf), static_cast<DWORD>(buf));
-
-  COMMTIMEOUTS timeouts;
-  GetCommTimeouts(handle, &timeouts);
-  timeouts.ReadIntervalTimeout        = MAXDWORD;
-  timeouts.ReadTotalTimeoutMultiplier = 0;
-  timeouts.ReadTotalTimeoutConstant   = 0;
-  SetCommTimeouts(handle, &timeouts);
-}
-#endif
 
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
@@ -96,7 +61,11 @@ IO::Drivers::UART::UART()
   , m_autoReconnect(false)
   , m_pendingReconnect(false)
   , m_usingCustomSerialPort(false)
+  , m_rtsEnabled(false)
+  , m_breakHeld(false)
+  , m_sequenceConnecting(false)
   , m_portIndex(0)
+  , m_breakTimer(Async::kInvalidTimerId)
 {
   populateErrors();
 
@@ -113,6 +82,8 @@ IO::Drivers::UART::UART()
   setStopBits(m_settings.value("UartDriver/stopBits", defStopBits).toInt());
   setAutoReconnect(m_settings.value("UartDriver/autoReconnect", 0).toBool());
   setFlowControl(m_settings.value("UartDriver/flowControl", defFlow).toInt());
+  setRtsEnabled(m_settings.value("UartDriver/rts", 0).toBool());
+  setConnectionSequence(m_settings.value("UartDriver/connectionSequence").toString());
 
   connect(
     this, &IO::Drivers::UART::portIndexChanged, this, &IO::Drivers::UART::configurationChanged);
@@ -129,6 +100,12 @@ IO::Drivers::UART::UART()
     this, &IO::Drivers::UART::dtrEnabledChanged, this, &IO::Drivers::UART::configurationChanged);
   connect(
     this, &IO::Drivers::UART::autoReconnectChanged, this, &IO::Drivers::UART::configurationChanged);
+  connect(
+    this, &IO::Drivers::UART::rtsEnabledChanged, this, &IO::Drivers::UART::configurationChanged);
+  connect(this,
+          &IO::Drivers::UART::connectionSequenceChanged,
+          this,
+          &IO::Drivers::UART::configurationChanged);
 
   connect(this, &IO::Drivers::UART::languageChanged, this, &IO::Drivers::UART::populateErrors);
 
@@ -141,6 +118,9 @@ IO::Drivers::UART::UART()
  */
 IO::Drivers::UART::~UART()
 {
+  if (m_runner)
+    m_runner->cancel();
+
   if (port()) {
     if (port()->isOpen())
       port()->close();
@@ -158,6 +138,9 @@ IO::Drivers::UART::~UART()
  */
 void IO::Drivers::UART::close()
 {
+  stopSequence();
+  releaseBreak();
+
   if (port() != nullptr) {
     disconnect(port(), &QSerialPort::errorOccurred, this, &IO::Drivers::UART::handleError);
     disconnect(port(), &QIODevice::readyRead, this, &IO::Drivers::UART::onReadyRead);
@@ -179,14 +162,28 @@ void IO::Drivers::UART::close()
 }
 
 /**
- * @brief Returns true when the serial port is open.
+ * @brief Returns true when the link is connected: the port is open and no connect-time
+ *        Connection Sequence still owns it. Internal "does the port exist" checks use portOpen().
  */
 bool IO::Drivers::UART::isOpen() const noexcept
 {
-  if (port())
-    return port()->isOpen();
+  return portOpen() && !m_sequenceConnecting;
+}
 
-  return false;
+/**
+ * @brief Returns true while a connect-time Connection Sequence runs on the open port.
+ */
+bool IO::Drivers::UART::isConnecting() const noexcept
+{
+  return portOpen() && m_sequenceConnecting;
+}
+
+/**
+ * @brief Returns true when the serial port itself is open, whatever the connected state.
+ */
+bool IO::Drivers::UART::portOpen() const noexcept
+{
+  return m_port != nullptr && m_port->isOpen();
 }
 
 /**
@@ -224,6 +221,9 @@ bool IO::Drivers::UART::configurationOk() const noexcept
  */
 qint64 IO::Drivers::UART::write(const QByteArray& data)
 {
+  if (m_runner || m_breakHeld)
+    return 0;
+
   if (isWritable())
     return port()->write(data);
 
@@ -292,15 +292,19 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     port()->setDataBits(dataBits());
     port()->setStopBits(stopBits());
     port()->setFlowControl(flowControl());
-    port()->setReadBufferSize(idealSerialBufferSize(baudRate()));
+    port()->setReadBufferSize(UartSequencePort::readBufferSize(baudRate()));
 
     if (port()->open(mode)) {
       connect(port(), &QSerialPort::errorOccurred, this, &IO::Drivers::UART::handleError);
       connect(port(), &QIODevice::readyRead, this, &IO::Drivers::UART::onReadyRead);
       port()->setDataTerminalReady(dtrEnabled());
-#ifdef Q_OS_WIN
-      configureNativeBuffer(port(), baudRate());
-#endif
+      if (m_rtsEnabled && UartPolicy::rtsSettable(flowControl()))
+        port()->setRequestToSend(true);
+
+      UartSequencePort::tuneNativeBuffer(port(), baudRate());
+      if (!m_sequence.isEmpty())
+        startSequence(m_sequence, true);
+
       return true;
     }
 
@@ -340,6 +344,14 @@ bool IO::Drivers::UART::autoReconnect() const
 bool IO::Drivers::UART::dtrEnabled() const
 {
   return m_dtrEnabled;
+}
+
+/**
+ * @brief Returns true when RTS is asserted on open and held for the connection (Hold RTS).
+ */
+bool IO::Drivers::UART::rtsEnabled() const
+{
+  return m_rtsEnabled;
 }
 
 /**
@@ -496,6 +508,15 @@ qint32 IO::Drivers::UART::baudRate() const
 }
 
 /**
+ * @brief Returns the rate the open port runs at, which a Connection Sequence or the API may have
+ *        changed; the saved baudRate() when the port is closed.
+ */
+qint32 IO::Drivers::UART::liveBaudRate() const
+{
+  return portOpen() ? port()->baudRate() : m_baudRate;
+}
+
+/**
  * @brief Returns the active data bits setting as a QSerialPort enum.
  */
 QSerialPort::DataBits IO::Drivers::UART::dataBits() const
@@ -544,7 +565,7 @@ void IO::Drivers::UART::setBaudRate(const qint32 rate)
     m_baudRate = rate;
     m_settings.setValue("IO_Serial_Baud_Rate", rate);
 
-    if (port()) {
+    if (port() && !m_runner) {
       if (!port()->setBaudRate(baudRate())) {
         logDriverError(
           tr("Failed to set baud rate"),
@@ -567,10 +588,28 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
   m_dtrEnabled = enabled;
   m_settings.setValue("UartDriver/dtr", enabled);
 
-  if (port() && port()->isOpen())
+  if (portOpen() && !m_runner)
     port()->setDataTerminalReady(enabled);
 
   Q_EMIT dtrEnabledChanged();
+}
+
+/**
+ * @brief Sets Hold RTS. Applied to an open port only outside RTS/CTS flow control, where the port
+ *        driver owns the line, and never while a Connection Sequence drives the port.
+ */
+void IO::Drivers::UART::setRtsEnabled(const bool enabled)
+{
+  if (m_rtsEnabled == enabled)
+    return;
+
+  m_rtsEnabled = enabled;
+  m_settings.setValue("UartDriver/rts", enabled);
+
+  if (portOpen() && !m_runner && UartPolicy::rtsSettable(port()->flowControl()))
+    port()->setRequestToSend(enabled);
+
+  Q_EMIT rtsEnabledChanged();
 }
 
 /**
@@ -667,7 +706,7 @@ void IO::Drivers::UART::setParity(const quint8 parityIndex)
       break;
   }
 
-  if (port())
+  if (port() && !m_runner)
     port()->setParity(parity());
 
   Q_EMIT parityChanged();
@@ -704,7 +743,7 @@ void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
       break;
   }
 
-  if (port())
+  if (port() && !m_runner)
     port()->setDataBits(dataBits());
 
   Q_EMIT dataBitsChanged();
@@ -738,7 +777,7 @@ void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
       break;
   }
 
-  if (port())
+  if (port() && !m_runner)
     port()->setStopBits(stopBits());
 
   Q_EMIT stopBitsChanged();
@@ -785,7 +824,7 @@ void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
       break;
   }
 
-  if (port())
+  if (port() && !m_runner)
     port()->setFlowControl(flowControl());
 
   Q_EMIT flowControlChanged();
@@ -829,7 +868,7 @@ void IO::Drivers::UART::refreshSerialDevices()
  */
 void IO::Drivers::UART::pollAutoReconnect()
 {
-  if (!m_pendingReconnect || !autoReconnect() || isOpen()) {
+  if (!m_pendingReconnect || !autoReconnect() || portOpen()) {
     m_reconnectTimer.stop();
     return;
   }
@@ -842,35 +881,38 @@ void IO::Drivers::UART::pollAutoReconnect()
   m_pendingReconnect = false;
   m_reconnectTimer.stop();
   setPortIndex(static_cast<quint8>(index));
-
-  static auto& connectionManager = ConnectionManager::instance();
-  connectionManager.connectDevice(this);
+  connectionManager().connectDevice(this);
 }
 
 /**
  * @brief Ends the link on a fatal port error and hands the recovery to the driver's own opt-in
  *        auto-reconnect when it owns it. A custom device path no longer swallows ResourceError:
- *        an unplugged by-id node or pty left the port "open" for the rest of the session.
+ *        an unplugged by-id node or pty left the port "open" for the rest of the session. During
+ *        a connect-time Connection Sequence the error is that sequence's verdict, naming the step.
  */
 void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 {
-  auto serialPort = port();
-  if (serialPort && !serialPort->isOpen())
-    return;
-
-  if (!isOpen())
+  if (!portOpen())
     return;
 
   if (!UartPolicy::isFatalPortError(error, m_usingCustomSerialPort))
     return;
 
-  static auto& connectionManager = ConnectionManager::instance();
-  connectionManager.disconnectDevice(this);
+  const bool dialing = m_sequenceConnecting;
+  const auto name    = port()->portName();
+  const auto reason  = m_errorDescriptions.value(error, tr("Unknown error"));
+  if (dialing) {
+    const int step  = m_runner ? qMax(m_runner->currentStep(), 0) : 0;
+    const auto kind = IO::ConnectionSequence::kindLabel(m_sequence.steps.value(step).kind);
+    onSequenceFinished(false, UartPolicy::sequenceFailureText(kind, step, reason, {}), step);
+  } else {
+    connectionManager().disconnectDevice(this);
+  }
 
   if (!UartPolicy::shouldAutoReconnect(error, m_autoReconnect)) {
-    const auto name = serialPort ? serialPort->portName() : tr("Unknown");
-    logDriverError(tr("Critical error on serial port \"%1\"").arg(name),
-                   m_errorDescriptions.value(error, tr("Unknown error")));
+    if (!dialing)
+      logDriverError(tr("Critical error on serial port \"%1\"").arg(name), reason);
+
     return;
   }
 
@@ -879,12 +921,30 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 }
 
 /**
- * @brief Reads all the data from the serial port.
+ * @brief Reads all the data from the serial port. While a Connection Sequence owns the port the
+ *        bytes reach its runner and the console only, never the frame pipeline; while BREAK is
+ *        held they are dropped.
  */
 void IO::Drivers::UART::onReadyRead()
 {
-  if (isOpen())
-    publishReceivedData(port()->readAll());
+  if (!portOpen())
+    return;
+
+  auto data = port()->readAll();
+  if (m_breakHeld)
+    return;
+
+  if (!m_runner) {
+    publishReceivedData(std::move(data));
+    return;
+  }
+
+  if (m_runner->breakHeld())
+    return;
+
+  auto* runner = m_runner.get();
+  publishConsoleData(QByteArray(data));
+  runner->feed(data);
 }
 
 /**
@@ -926,6 +986,222 @@ bool IO::Drivers::UART::relocateOpenPortIndex(const QVector<QSerialPortInfo>& po
   }
 
   return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Line control & Connection Sequence (spec 0103)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reads the modem lines of the open port; empty when it is closed.
+ */
+QJsonObject IO::Drivers::UART::lineStates() const
+{
+  if (!portOpen())
+    return {};
+
+  const auto pins = port()->pinoutSignals();
+  QJsonObject states;
+  states.insert(QStringLiteral("cts"), pins.testFlag(QSerialPort::ClearToSendSignal));
+  states.insert(QStringLiteral("dsr"), pins.testFlag(QSerialPort::DataSetReadySignal));
+  states.insert(QStringLiteral("dcd"), pins.testFlag(QSerialPort::DataCarrierDetectSignal));
+  states.insert(QStringLiteral("ri"), pins.testFlag(QSerialPort::RingIndicatorSignal));
+  states.insert(QStringLiteral("rts"), pins.testFlag(QSerialPort::RequestToSendSignal));
+  states.insert(QStringLiteral("dtr"), pins.testFlag(QSerialPort::DataTerminalReadySignal));
+  return states;
+}
+
+/**
+ * @brief Holds the open line in BREAK for @p ms milliseconds, then releases it and discards what
+ *        arrived meanwhile. Refused while a BREAK or a Connection Sequence already owns the line.
+ */
+bool IO::Drivers::UART::sendBreak(int ms)
+{
+  if (!isOpen() || m_runner || m_breakHeld || ms < 1 || ms > IO::kMaxBreakMs)
+    return false;
+
+  if (!port()->setBreakEnabled(true))
+    return false;
+
+  m_breakHeld  = true;
+  m_breakTimer = m_clock.schedule(ms, [this]() {
+    m_breakTimer = Async::kInvalidTimerId;
+    releaseBreak();
+  });
+  return true;
+}
+
+/**
+ * @brief Ends a BREAK sendBreak() started: stops its timer, releases the line and discards the
+ *        bytes the device sent while it was held.
+ */
+void IO::Drivers::UART::releaseBreak()
+{
+  m_clock.cancel(m_breakTimer);
+  m_breakTimer = Async::kInvalidTimerId;
+  if (!m_breakHeld)
+    return;
+
+  m_breakHeld = false;
+  if (!portOpen())
+    return;
+
+  (void)port()->setBreakEnabled(false);
+  (void)port()->clear(QSerialPort::Input);
+}
+
+/**
+ * @brief Changes the rate of the open port without closing it; the saved rate, and so every
+ *        reopen, stays as it was. Refused while a Connection Sequence owns the port.
+ */
+bool IO::Drivers::UART::setLiveBaudRate(qint32 rate)
+{
+  if (!isOpen() || m_runner || !UartSequencePort::applyBaud(*port(), rate))
+    return false;
+
+  Q_EMIT liveBaudRateChanged();
+  return true;
+}
+
+/**
+ * @brief Re-runs the Connection Sequence on the connected port, for a device power-cycled while
+ *        the port stayed open. The link stays connected; frames pause until the run ends.
+ */
+bool IO::Drivers::UART::runSequence()
+{
+  if (!isOpen() || m_runner || m_breakHeld || m_sequence.isEmpty())
+    return false;
+
+  startSequence(m_sequence, false);
+  return true;
+}
+
+/**
+ * @brief Returns the Connection Sequence as compact JSON text, the editor dialog's payload.
+ */
+QString IO::Drivers::UART::connectionSequenceJson() const
+{
+  return QString::fromUtf8(QJsonDocument(m_sequence.toJson()).toJson(QJsonDocument::Compact));
+}
+
+/**
+ * @brief Validates a Connection Sequence given as JSON text: the first problem's step index (-1
+ *        for the whole sequence) and message, an empty message when it is valid.
+ */
+QVariantMap IO::Drivers::UART::validateConnectionSequence(const QString& json) const
+{
+  const auto error = IO::ConnectionSequence::fromVariant(json).validate();
+  QVariantMap result;
+  result.insert(QStringLiteral("step"), error.step);
+  result.insert(QStringLiteral("message"), error.message);
+  return result;
+}
+
+/**
+ * @brief Replaces the Connection Sequence from a QJsonObject, a QVariantMap or JSON text; an
+ *        empty value clears it. It runs on the next open, never on the one in progress.
+ */
+void IO::Drivers::UART::setConnectionSequence(const QVariant& value)
+{
+  const auto sequence = IO::ConnectionSequence::fromVariant(value);
+  if (sequence.toJson() == m_sequence.toJson())
+    return;
+
+  m_sequence = sequence;
+  m_settings.setValue("UartDriver/connectionSequence", connectionSequenceJson());
+  Q_EMIT connectionSequenceChanged();
+}
+
+/**
+ * @brief Hands the open port to a runner. A connect-time run keeps isOpen() false until its
+ *        verdict; a re-run keeps the link connected. Either way bytes go to the runner and writes
+ *        are refused until it ends. The start is queued, so open() returns before the first step.
+ */
+void IO::Drivers::UART::startSequence(const IO::ConnectionSequence& sequence, bool connectTime)
+{
+  SS_ASSERT(portOpen(), return);
+
+  stopSequence();
+  m_sequenceConnecting = connectTime;
+  m_sequencePort       = std::make_unique<UartSequencePort>(port());
+  m_runner             = std::make_unique<SequenceRunner>(sequence, *m_sequencePort, m_clock);
+
+  auto* runner    = m_runner.get();
+  const auto note = [this](int, const QString& text) {
+    publishSequenceNote(text);
+  };
+  connect(runner, &SequenceRunner::stepNote, this, note);
+  connect(runner, &SequenceRunner::stepStarted, this, note);
+  connect(runner, &SequenceRunner::bytesSent, this, &UART::publishSentData);
+  connect(runner, &SequenceRunner::finished, this, &UART::onSequenceFinished);
+  QMetaObject::invokeMethod(runner, &SequenceRunner::start, Qt::QueuedConnection);
+}
+
+/**
+ * @brief Cancels a running sequence without a verdict (a user disconnect is not a failed step)
+ *        and retires the runner later, since this may run inside the runner's own emission.
+ */
+void IO::Drivers::UART::stopSequence()
+{
+  m_sequenceConnecting = false;
+  if (!m_runner)
+    return;
+
+  m_runner->cancel();
+  m_runner.release()->deleteLater();
+}
+
+/**
+ * @brief Settles a run. A connect-time run reports the open verdict once through the latch:
+ *        connected after the last step, or a logged driver error naming the step. A re-run
+ *        reports through the console and, on failure, the notification center.
+ */
+void IO::Drivers::UART::onSequenceFinished(bool ok, const QString& reason, int stepIndex)
+{
+  Q_UNUSED(stepIndex)
+
+  const bool connecting = m_sequenceConnecting;
+  stopSequence();
+  Q_EMIT liveBaudRateChanged();
+  publishSequenceNote(ok ? tr("Completed, the device is ready") : reason);
+  if (ok) {
+    if (connecting) {
+      reportOpenFinished(true);
+      Q_EMIT configurationChanged();
+    }
+
+    return;
+  }
+
+  logDriverError(tr("Connection Sequence failed"), reason);
+  if (connecting) {
+    reportOpenFinished(false, reason);
+    if (portOpen())
+      connectionManager().disconnectDevice(this);
+
+    return;
+  }
+
+  auto* bus = messageBus();
+  if (bus)
+    bus->publish<Core::Bus::NotificationRaised>(Core::Bus::kSeverityWarning,
+                                                QStringLiteral("UART"),
+                                                QString(),
+                                                tr("Connection Sequence failed"),
+                                                reason);
+}
+
+/**
+ * @brief Publishes one Connection Sequence console line for the source this driver backs.
+ */
+void IO::Drivers::UART::publishSequenceNote(const QString& text)
+{
+  auto* bus = messageBus();
+  if (!bus || text.isEmpty())
+    return;
+
+  const int sourceId = qMax(0, connectionManager().deviceIdForDriver(this));
+  bus->publish<Core::Bus::LinkSequenceNote>(sourceId, text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1057,12 +1333,26 @@ QList<IO::DriverProperty> IO::Drivers::UART::driverProperties() const
   dtr.value = m_dtrEnabled;
   props.append(dtr);
 
+  IO::DriverProperty rts;
+  rts.key   = QStringLiteral("rts");
+  rts.label = tr("Hold RTS");
+  rts.type  = IO::DriverProperty::CheckBox;
+  rts.value = m_rtsEnabled;
+  rts.showWhen(QStringLiteral("flowControlIndex"), {0, 2});
+  props.append(rts);
+
   IO::DriverProperty reconnect;
   reconnect.key   = QStringLiteral("autoReconnect");
   reconnect.label = tr("Auto-Reconnect");
   reconnect.type  = IO::DriverProperty::CheckBox;
   reconnect.value = m_autoReconnect;
   props.append(reconnect);
+
+  IO::DriverProperty sequence;
+  sequence.key   = QStringLiteral("connectionSequence");
+  sequence.type  = IO::DriverProperty::Text;
+  sequence.value = QVariant::fromValue(m_sequence.toJson());
+  props.append(sequence);
 
   return props;
 }
@@ -1102,6 +1392,16 @@ void IO::Drivers::UART::setDriverProperty(const QString& key, const QVariant& va
     return;
   }
 
+  if (key == QLatin1String("rts")) {
+    setRtsEnabled(value.toBool());
+    return;
+  }
+
+  if (key == QLatin1String("connectionSequence")) {
+    setConnectionSequence(value);
+    return;
+  }
+
   if (key == QLatin1String("autoReconnect")) {
     setAutoReconnect(value.toBool());
     return;
@@ -1114,6 +1414,24 @@ void IO::Drivers::UART::setDriverProperty(const QString& key, const QVariant& va
 
   if (key == QLatin1String("device"))
     applyDeviceProperty(value);
+}
+
+/**
+ * @brief Applies a source's saved settings. A non-empty set saved before spec 0103 has no "rts"
+ *        or "connectionSequence" key and must behave as it did then, never inherit whatever the
+ *        Setup Panel last held: a sequence meant for another device would run on this one.
+ */
+void IO::Drivers::UART::applyConnectionSettings(const QJsonObject& settings)
+{
+  HAL_Driver::applyConnectionSettings(settings);
+  if (settings.isEmpty())
+    return;
+
+  if (!settings.contains(QStringLiteral("rts")))
+    setRtsEnabled(false);
+
+  if (!settings.contains(QStringLiteral("connectionSequence")))
+    setConnectionSequence(QVariant());
 }
 
 /**

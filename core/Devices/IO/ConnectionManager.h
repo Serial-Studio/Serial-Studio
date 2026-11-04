@@ -185,6 +185,7 @@ public:
   void bindRawTaps(std::span<IRawByteTap* const> taps);
 
   [[nodiscard]] HAL_Driver* driver(int deviceId = 0) const;
+  [[nodiscard]] int deviceIdForDriver(const HAL_Driver* driver) const;
   [[nodiscard]] HAL_Driver* driverForEditing(int deviceId);
   [[nodiscard]] HAL_Driver* activeUiDriver() const noexcept;
   [[nodiscard]] HAL_Driver* uiDriverForBusType(SerialStudio::BusType type) const noexcept;
@@ -269,7 +270,6 @@ private:
   [[nodiscard]] bool anyDeviceConnecting() const;
 
   [[nodiscard]] bool projectConfigurationOk() const;
-  [[nodiscard]] int deviceIdForDriver(const HAL_Driver* driver) const;
   [[nodiscard]] std::vector<int> deviceIdSnapshot(bool projectSourcesOnly) const;
   void wireStreamLifecycle();
   void dropUnavailablePrimaryDevice(SerialStudio::BusType type);

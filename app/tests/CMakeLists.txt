@@ -3115,6 +3115,33 @@ ss_add_unit_test(tst_uart_policy
 )
 
 #
+# The Connection Sequence model of spec 0103: JSON round trip of every step kind, the three shapes
+# a driver property restores from, validation verdicts with their step index, and the expect
+# pattern grammar. Pure Qt Core, so the model TU plus the Core archive (checksums, hex and escape
+# helpers) is the whole link set.
+#
+ss_add_unit_test(tst_connection_sequence
+  SOURCES tst_connection_sequence.cpp
+          ${SS_CORE_SRC}/Core/IO/ConnectionSequence.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# The Connection Sequence runner of spec 0103: one verdict per run and only after the last step,
+# each failure kind naming its step, the optional flag, the budget, silent cancel, BREAK timing
+# and the bytes dropped while it is held. A scripted fake port and a virtual clock stand in for
+# the serial port and real time; the task-tree engine and the model come from the Core archive.
+#
+ss_add_unit_test(tst_sequence_runner
+  SOURCES tst_sequence_runner.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/UART/SequenceRunner.cpp
+  LIBS    Qt6::Core
+          Qt6::SerialPort
+          SerialStudio::Core
+)
+
+#
 # The two serial CAN adapter protocols and the policies of the base they now share: the LAWICEL
 # and analyzer decoders, the bitrate tables, the fatal-error classification behind the unplug
 # path, and the bounded receive buffer. SerialPortIdentity is what both backends enumerate and

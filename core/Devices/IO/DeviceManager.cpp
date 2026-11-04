@@ -52,6 +52,7 @@ IO::DeviceManager::DeviceManager(int deviceId,
           &IO::HAL_Driver::consoleDataReceived,
           this,
           &IO::DeviceManager::onConsoleDataReceived);
+  connect(m_driver.get(), &IO::HAL_Driver::dataSent, this, &IO::DeviceManager::onRawDataSent);
 
   attachToPipeline(config);
 }
@@ -183,6 +184,15 @@ void IO::DeviceManager::reconfigure(const FrameConfig& config)
 //--------------------------------------------------------------------------------------------------
 // Private slots
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Re-emits bytes the driver wrote on its own, tagged with the device identifier, so the
+ *        console echoes them; command rate on the GUI thread, never on the frame path.
+ */
+void IO::DeviceManager::onRawDataSent(const QByteArray& data)
+{
+  Q_EMIT rawDataSent(m_deviceId, data);
+}
 
 /**
  * @brief Re-emits raw bytes from the driver tagged with the device identifier.

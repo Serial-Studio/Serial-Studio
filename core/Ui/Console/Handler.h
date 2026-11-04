@@ -360,10 +360,12 @@ private:
   [[nodiscard]] QString appendToDevice(int deviceId, const QString& str, bool addTimestamp);
   void recordDisplay(const QString& text);
   void resetDisplayHistory();
+  void appendSequenceNote(int sourceId, const QString& text);
 
 private:
   Core::Bus::MessageBus& m_bus;
   Core::Bus::Subscription m_terminalModeWatch;
+  Core::Bus::Subscription m_sequenceNotes;
   DataMode m_dataMode;
   LineEnding m_lineEnding;
   DisplayMode m_displayMode;

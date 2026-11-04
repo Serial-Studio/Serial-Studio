@@ -37,6 +37,8 @@ private slots:
   void customPathIgnoresUnsupportedOperations();
   void customPathHonoursResourceErrors();
   void autoReconnectOwnsResourceErrorsOnly();
+  void rtsIsSettableOutsideHardwareFlowControl();
+  void sequenceFailureNamesStepAndReply();
 };
 
 /**
@@ -86,6 +88,39 @@ void TstUartPolicy::autoReconnectOwnsResourceErrorsOnly()
   QVERIFY(!shouldAutoReconnect(QSerialPort::ResourceError, false));
   QVERIFY(!shouldAutoReconnect(QSerialPort::PermissionError, true));
   QVERIFY(!shouldAutoReconnect(QSerialPort::NoError, true));
+}
+
+/**
+ * @brief RTS is the port driver's under RTS/CTS flow control; the driver drives it in the two
+ *        other modes only, so Hold RTS never meets an UnsupportedOperationError.
+ */
+void TstUartPolicy::rtsIsSettableOutsideHardwareFlowControl()
+{
+  QVERIFY(rtsSettable(QSerialPort::NoFlowControl));
+  QVERIFY(rtsSettable(QSerialPort::SoftwareControl));
+  QVERIFY(!rtsSettable(QSerialPort::HardwareControl));
+}
+
+/**
+ * @brief A failed sequence names the step by its one-based position and kind and carries the
+ *        reason; the reply is quoted only when an expect step has one to quote.
+ */
+void TstUartPolicy::sequenceFailureNamesStepAndReply()
+{
+  const auto withReply = sequenceFailureText(QStringLiteral("Expect Reply"),
+                                             2,
+                                             QStringLiteral("no match within 100 ms"),
+                                             QStringLiteral("5A 00"));
+  QVERIFY(withReply.contains(QStringLiteral("step 3")));
+  QVERIFY(withReply.contains(QStringLiteral("Expect Reply")));
+  QVERIFY(withReply.contains(QStringLiteral("no match within 100 ms")));
+  QVERIFY(withReply.contains(QStringLiteral("5A 00")));
+
+  const auto noReply = sequenceFailureText(
+    QStringLiteral("Send Data"), 0, QStringLiteral("the port refused the write"), QString());
+  QVERIFY(noReply.contains(QStringLiteral("step 1")));
+  QVERIFY(noReply.contains(QStringLiteral("the port refused the write")));
+  QVERIFY(!noReply.contains(QStringLiteral("received")));
 }
 
 QTEST_APPLESS_MAIN(TstUartPolicy)

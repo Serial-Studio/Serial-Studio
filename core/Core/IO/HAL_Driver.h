@@ -335,6 +335,13 @@ protected:
   void publishSampleBlock(const IO::SampleBlockPtr& block) { Q_EMIT sampleBlockReceived(block); }
 
   /**
+   * @brief Echoes bytes the driver wrote on its own (a Connection Sequence step) to the console,
+   *        as the router echoes a routed write. Never called from write(): the router already
+   *        echoes those, so a second echo would show every byte twice.
+   */
+  void publishSentData(const QByteArray& data) { Q_EMIT dataSent(data); }
+
+  /**
    * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps
    *        the event loop, so one raised from a connect or error stack lets queued work retire the
    *        very driver still on that stack (spec 0056).

@@ -21,17 +21,24 @@
 
 #pragma once
 
+#include <memory>
 #include <QByteArray>
 #include <QObject>
 #include <QSettings>
 #include <QString>
 #include <QTimer>
 #include <QtSerialPort>
+#include <QVariantMap>
 
+#include "Core/Async/AsyncClock.h"
+#include "Core/IO/ConnectionSequence.h"
 #include "Core/IO/HAL_Driver.h"
 
 namespace IO {
 namespace Drivers {
+class SequenceRunner;
+class UartSequencePort;
+
 /**
  * @brief HAL driver for serial (UART) ports via QSerialPort.
  */
@@ -46,6 +53,16 @@ class UART : public HAL_Driver {
              READ dtrEnabled
              WRITE setDtrEnabled
              NOTIFY dtrEnabledChanged)
+  Q_PROPERTY(bool rtsEnabled
+             READ rtsEnabled
+             WRITE setRtsEnabled
+             NOTIFY rtsEnabledChanged)
+  Q_PROPERTY(qint32 liveBaudRate
+             READ liveBaudRate
+             NOTIFY liveBaudRateChanged)
+  Q_PROPERTY(QString connectionSequenceJson
+             READ connectionSequenceJson
+             NOTIFY connectionSequenceChanged)
   Q_PROPERTY(quint8 portIndex
              READ portIndex
              WRITE setPortIndex
@@ -99,11 +116,14 @@ signals:
   void stopBitsChanged();
   void portIndexChanged();
   void dtrEnabledChanged();
+  void rtsEnabledChanged();
   void flowControlChanged();
+  void liveBaudRateChanged();
   void baudRateListChanged();
   void autoReconnectChanged();
   void baudRateIndexChanged();
   void availablePortsChanged();
+  void connectionSequenceChanged();
   void connectionError(const QString& name);
 
 public:
@@ -116,8 +136,10 @@ public:
   UART& operator=(const UART&) = delete;
 
   void close() override;
+  void applyConnectionSettings(const QJsonObject& settings) override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
+  [[nodiscard]] bool isConnecting() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -131,7 +153,15 @@ public:
   [[nodiscard]] QSerialPort* port() const;
   [[nodiscard]] bool autoReconnect() const;
 
+  [[nodiscard]] bool runSequence();
+  [[nodiscard]] bool sendBreak(int ms);
+  [[nodiscard]] bool setLiveBaudRate(qint32 rate);
+  [[nodiscard]] QJsonObject lineStates() const;
+  [[nodiscard]] QString connectionSequenceJson() const;
+  Q_INVOKABLE [[nodiscard]] QVariantMap validateConnectionSequence(const QString& json) const;
+
   [[nodiscard]] bool dtrEnabled() const;
+  [[nodiscard]] bool rtsEnabled() const;
   [[nodiscard]] quint8 portIndex() const;
   [[nodiscard]] quint8 parityIndex() const;
   [[nodiscard]] quint8 displayMode() const;
@@ -148,6 +178,7 @@ public:
   [[nodiscard]] QStringList flowControlList() const;
 
   [[nodiscard]] qint32 baudRate() const;
+  [[nodiscard]] qint32 liveBaudRate() const;
   [[nodiscard]] QSerialPort::Parity parity() const;
   [[nodiscard]] QSerialPort::DataBits dataBits() const;
   [[nodiscard]] QSerialPort::StopBits stopBits() const;
@@ -158,6 +189,7 @@ public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;
   void setBaudRate(const qint32 rate);
   void setDtrEnabled(const bool enabled);
+  void setRtsEnabled(const bool enabled);
   void setParity(const quint8 parityIndex);
   void setPortIndex(const quint8 portIndex);
   void registerDevice(const QString& device);
@@ -165,6 +197,7 @@ public slots:
   void setStopBits(const quint8 stopBitsIndex);
   void setAutoReconnect(const bool autoreconnect);
   void setFlowControl(const quint8 flowControlIndex);
+  void setConnectionSequence(const QVariant& value);
 
 private slots:
   void onReadyRead();
@@ -172,11 +205,18 @@ private slots:
   void pollAutoReconnect();
   void refreshSerialDevices();
   void handleError(QSerialPort::SerialPortError error);
+  void onSequenceFinished(bool ok, const QString& reason, int stepIndex);
 
 private:
+  [[nodiscard]] bool portOpen() const noexcept;
+
+  void releaseBreak();
+  void stopSequence();
+  void publishSequenceNote(const QString& text);
   void applyDeviceProperty(const QVariant& value);
   void applyBaudRateProperty(const QVariant& value);
   bool relocateOpenPortIndex(const QVector<QSerialPortInfo>& ports);
+  void startSequence(const IO::ConnectionSequence& sequence, bool connectTime);
 
 private:
   QSerialPort* m_port;
@@ -185,6 +225,9 @@ private:
   bool m_autoReconnect;
   bool m_pendingReconnect;
   bool m_usingCustomSerialPort;
+  bool m_rtsEnabled;
+  bool m_breakHeld;
+  bool m_sequenceConnecting;
 
   QString m_lastPortName;
 
@@ -208,6 +251,13 @@ private:
   QStringList m_deviceLocations;
 
   QMap<QSerialPort::SerialPortError, QString> m_errorDescriptions;
+
+  // Spec 0103: destroyed bottom-up, the runner before the port adapter and the clock it uses
+  Async::TimerId m_breakTimer;
+  IO::ConnectionSequence m_sequence;
+  Async::SystemClock m_clock;
+  std::unique_ptr<UartSequencePort> m_sequencePort;
+  std::unique_ptr<SequenceRunner> m_runner;
 };
 }  // namespace Drivers
 }  // namespace IO

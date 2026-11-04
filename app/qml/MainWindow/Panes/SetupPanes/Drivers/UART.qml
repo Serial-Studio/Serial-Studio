@@ -33,6 +33,40 @@ Item {
   implicitWidth: layout.implicitWidth + 16
 
   //
+  // Number of Connection Sequence steps, for the status line under the button
+  //
+  readonly property int sequenceSteps: {
+    try {
+      const sequence = JSON.parse(Cpp_IO_Serial.connectionSequenceJson)
+      return Array.isArray(sequence.steps) ? sequence.steps.length : 0
+    } catch (e) {
+      return 0
+    }
+  }
+
+  //
+  // Lazy-loaded Connection Sequence editor, shared with the Project Editor
+  //
+  Loader {
+    id: _sequenceDialog
+
+    active: false
+    asynchronous: false
+    source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/ConnectionSequenceEditor.qml"
+
+    onLoaded: {
+      _sequenceDialog.item.closing.connect(() => _sequenceDialog.active = false)
+      _sequenceDialog.item.applied.connect((json) => Cpp_IO_Serial.setConnectionSequence(json))
+    }
+
+    function show() {
+      _sequenceDialog.active = true
+      if (_sequenceDialog.status === Loader.Ready)
+        _sequenceDialog.item.showDialog(Cpp_IO_Serial.connectionSequenceJson)
+    }
+  }
+
+  //
   // Controls
   //
   GridLayout {
@@ -322,6 +356,78 @@ Item {
       onCheckedChanged: {
         if (Cpp_IO_Serial.dtrEnabled !== checked)
           Cpp_IO_Serial.dtrEnabled = checked
+      }
+    }
+
+    //
+    // Hold RTS (not applicable under RTS/CTS flow control, where the port driver owns RTS)
+    //
+    Label {
+      ToolTip.delay: 700
+      text: qsTr("Hold RTS") + ":"
+      opacity: _rts.enabled ? 1 : 0.5
+      ToolTip.visible: _rtsLabelHover.hovered && !_rts.enabled
+      ToolTip.text: qsTr("Not applicable under RTS/CTS flow control: the port driver owns RTS.")
+
+      HoverHandler {
+        id: _rtsLabelHover
+      }
+    } CheckBox {
+      id: _rts
+
+      objectName: "setup.uart.rtsEnabled"
+
+      Layout.leftMargin: -8
+      Layout.maximumHeight: 18
+      ToolTip.delay: 700
+      ToolTip.visible: hovered
+      checked: Cpp_IO_Serial.rtsEnabled
+      enabled: Cpp_IO_Serial.flowControlIndex !== 1
+      Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+      ToolTip.text: qsTr("Asserts RTS when the port opens and holds it for the whole connection. "
+                         + "Some adapters stay silent until RTS is high.")
+      onCheckedChanged: {
+        if (Cpp_IO_Serial.rtsEnabled !== checked)
+          Cpp_IO_Serial.rtsEnabled = checked
+      }
+    }
+
+    //
+    // Connection Sequence: opens the shared editor dialog
+    //
+    Item {
+      Layout.topMargin: 8
+      Layout.columnSpan: 2
+      Layout.fillWidth: true
+      implicitHeight: _sequenceButton.height + _sequenceStatus.height + 4
+
+      Widgets.PushButton {
+        id: _sequenceButton
+
+        objectName: "setup.uart.connectionSequence"
+
+        enabled: app.ioEnabled
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        onClicked: _sequenceDialog.show()
+        text: qsTr("Connection Sequence…")
+      }
+
+      Label {
+        id: _sequenceStatus
+
+        opacity: 0.5
+        anchors.topMargin: 4
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: _sequenceButton.bottom
+        horizontalAlignment: Text.AlignHCenter
+        font: Cpp_Misc_CommonFonts.customUiFont(0.85)
+        text: root.sequenceSteps === 0 ? qsTr("No steps: connects as soon as the port opens")
+                                       : (root.sequenceSteps === 1
+                                          ? qsTr("1 step")
+                                          : qsTr("%1 steps").arg(root.sequenceSteps))
       }
     }
 

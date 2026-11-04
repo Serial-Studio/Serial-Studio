@@ -49,6 +49,8 @@ qt_add_library(
   IO/Drivers/Network/NetworkWebSocket.cpp
   IO/Drivers/Network/NetworkHttp.cpp
   IO/Drivers/UART.cpp
+  IO/Drivers/UART/SequenceRunner.cpp
+  IO/Drivers/UART/UartSequencePort.cpp
   IO/Drivers/BluetoothLE.cpp
   IO/Drivers/BluetoothLE/BleUuids.cpp
   IO/Drivers/SerialPortIdentity.cpp
@@ -70,6 +72,9 @@ qt_add_library(
   IO/FileTransmission.cpp
   IO/Drivers/UART.h
   IO/Drivers/UART/UartPolicy.h
+  IO/Drivers/UART/SequencePort.h
+  IO/Drivers/UART/SequenceRunner.h
+  IO/Drivers/UART/UartSequencePort.h
   IO/Drivers/Network.h
   IO/Drivers/BluetoothLE.h
   IO/DeviceManager.h

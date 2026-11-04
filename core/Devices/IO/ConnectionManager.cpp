@@ -1192,6 +1192,7 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
           this,
           &IO::ConnectionManager::onConsoleDataReceived,
           Qt::DirectConnection);
+  m_io.watchSentBytes(dm, this);
 }
 
 /**

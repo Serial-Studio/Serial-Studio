@@ -34,6 +34,8 @@
 #include "Core/IO/HAL_Driver.h"
 #include "Core/SerialStudio.h"
 
+class QObject;
+
 namespace IO {
 
 class DeviceManager;
@@ -66,7 +68,9 @@ public:
   DeviceIoRouter& operator=(const DeviceIoRouter&) = delete;
 
   void bindRawTaps(std::span<IRawByteTap* const> taps);
+  void watchSentBytes(DeviceManager* device, QObject* context);
 
+  void onRawDataSent(int deviceId, const QByteArray& data);
   void onRawDataReceived(int deviceId, const CapturedDataPtr& data);
   void onConsoleDataReceived(int deviceId, const CapturedDataPtr& data);
   void processPayload(const QByteArray& payload);

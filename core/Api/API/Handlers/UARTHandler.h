@@ -35,7 +35,9 @@ public:
   static void registerCommands();
 
 private:
+  static void registerLineControl(CommandRegistry& registry);
   static void registerLineSettings(CommandRegistry& registry);
+  static void registerSequenceCommands(CommandRegistry& registry);
 
   static CommandResponse setDevice(const QString& id, const QJsonObject& params);
   static CommandResponse setPortIndex(const QString& id, const QJsonObject& params);
@@ -46,10 +48,17 @@ private:
   static CommandResponse setFlowControl(const QString& id, const QJsonObject& params);
   static CommandResponse setDtrEnabled(const QString& id, const QJsonObject& params);
   static CommandResponse setAutoReconnect(const QString& id, const QJsonObject& params);
+  static CommandResponse setRtsEnabled(const QString& id, const QJsonObject& params);
+  static CommandResponse sendBreak(const QString& id, const QJsonObject& params);
+  static CommandResponse setLiveBaudRate(const QString& id, const QJsonObject& params);
+  static CommandResponse runSequence(const QString& id, const QJsonObject& params);
+  static CommandResponse setSequence(const QString& id, const QJsonObject& params);
 
   static CommandResponse getPortList(const QString& id, const QJsonObject& params);
   static CommandResponse getBaudRateList(const QString& id, const QJsonObject& params);
   static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
+  static CommandResponse getLineStates(const QString& id, const QJsonObject& params);
+  static CommandResponse getSequence(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace Handlers

@@ -22,12 +22,16 @@
 #include "API/Handlers/UARTHandler.h"
 
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QMetaObject>
 
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
 #include "API/SchemaBuilder.h"
+#include "Core/DataModel/Frame.h"
+#include "Core/IO/ConnectionSequence.h"
 #include "IO/ConnectionManager.h"
+#include "IO/Drivers/UART.h"
 
 static constexpr int kMaxBaudRate = 15000000;
 
@@ -85,6 +89,82 @@ void API::Handlers::UARTHandler::registerLineSettings(CommandRegistry& registry)
 }
 
 /**
+ * @brief Registers the live line-control commands (spec 0103). They act on an open port, so they
+ *        take an optional sourceId (default 0) and target that source's live driver.
+ */
+void API::Handlers::UARTHandler::registerLineControl(CommandRegistry& registry)
+{
+  const auto source = API::rangeProp(
+    QString(Keys::SourceId), QStringLiteral("Source to act on (default 0)"), 0, QJsonValue());
+
+  registry.registerCommand(
+    QStringLiteral("io.uart.sendBreak"),
+    QStringLiteral("Send BREAK: hold the connected line in BREAK, then release it "
+                   "(params: durationMs, optional sourceId)"),
+    API::makeSchema({API::rangeProp(QStringLiteral("durationMs"),
+                                    QStringLiteral("BREAK duration in milliseconds (1-10000)"),
+                                    1,
+                                    IO::kMaxBreakMs)},
+                    {source}),
+    &sendBreak);
+  registry.registerCommand(
+    QStringLiteral("io.uart.setLiveBaudRate"),
+    QStringLiteral("Change the baud rate of the connected port without closing it; the saved "
+                   "rate is unchanged (params: baudRate, optional sourceId)"),
+    API::makeSchema({API::rangeProp(QStringLiteral("baudRate"),
+                                    QStringLiteral("Baud rate in bits per second (1-15000000)"),
+                                    1,
+                                    kMaxBaudRate)},
+                    {source}),
+    &setLiveBaudRate);
+  registry.registerCommand(
+    QStringLiteral("io.uart.getLineStates"),
+    QStringLiteral("Read the modem lines of the connected port: cts, dsr, dcd, ri, rts and dtr "
+                   "(params: optional sourceId)"),
+    API::makeSchema({}, {source}),
+    &getLineStates);
+  registry.registerCommand(
+    QStringLiteral("io.uart.runSequence"),
+    QStringLiteral("Re-run the Connection Sequence on the connected port; frames pause until it "
+                   "ends and the result is reported in the console (params: optional sourceId)"),
+    API::makeSchema({}, {source}),
+    &runSequence);
+}
+
+/**
+ * @brief Registers the Hold RTS setting and the Connection Sequence commands of the serial port
+ *        settings (the UI driver, like the other io.uart setters).
+ */
+void API::Handlers::UARTHandler::registerSequenceCommands(CommandRegistry& registry)
+{
+  registry.registerCommand(
+    QStringLiteral("io.uart.setRtsEnabled"),
+    QStringLiteral("Enable/disable Hold RTS: assert RTS on open and hold it; "
+                   "not applicable under RTS/CTS flow control "
+                   "(params: rtsEnabled)"),
+    API::makeSchema({
+      {QStringLiteral("rtsEnabled"),
+       QStringLiteral("boolean"),
+       QStringLiteral("Hold RTS asserted while connected")}
+  }),
+    &setRtsEnabled);
+  registry.registerCommand(QStringLiteral("io.uart.getSequence"),
+                           QStringLiteral("Get the Connection Sequence of the serial port"),
+                           &getSequence);
+  registry.registerCommand(
+    QStringLiteral("io.uart.setSequence"),
+    QStringLiteral("Replace the Connection Sequence of the serial port; it runs on every open "
+                   "before data flows (params: sequence)"),
+    API::makeSchema({
+      {QStringLiteral("sequence"),
+       QStringLiteral("object"),
+       QStringLiteral("{budgetMs, steps: [{kind: break|wait|line|send|expect|discard|baud|flow, "
+                      "...}]}; an empty steps array clears the sequence")}
+  }),
+    &setSequence);
+}
+
+/**
  * @brief Register all UART commands with the registry
  */
 void API::Handlers::UARTHandler::registerCommands()
@@ -110,6 +190,8 @@ void API::Handlers::UARTHandler::registerCommands()
     &setPortIndex);
 
   registerLineSettings(registry);
+  registerLineControl(registry);
+  registerSequenceCommands(registry);
 
   registry.registerCommand(QStringLiteral("io.uart.setDtrEnabled"),
                            QStringLiteral("Enable/disable DTR signal (params: dtrEnabled)"),
@@ -420,6 +502,226 @@ API::CommandResponse API::Handlers::UARTHandler::setAutoReconnect(const QString&
 }
 
 //--------------------------------------------------------------------------------------------------
+// Line control & Connection Sequence (spec 0103)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Resolves the live UART driver of the source a live-control command names. The io.*
+ *        convention for a command that acts on an open port: an optional sourceId, default 0,
+ *        because the UI driver has no port and a multi-source project has one per source. A
+ *        source that is not a serial port, or not connected, is refused with the reason.
+ */
+static IO::Drivers::UART* liveUart(const QJsonObject& params, QString& error)
+{
+  const int sourceId = params.value(Keys::SourceId).toInt(0);
+  auto& manager      = API::handlerContext().connectionManager;
+  auto* uart         = qobject_cast<IO::Drivers::UART*>(manager.driver(sourceId));
+  if (!uart) {
+    error = QStringLiteral("Source %1 is not a serial port").arg(sourceId);
+    return nullptr;
+  }
+
+  if (!uart->isOpen()) {
+    error = QStringLiteral("Source %1 is not connected").arg(sourceId);
+    return nullptr;
+  }
+
+  return uart;
+}
+
+/**
+ * @brief Enable or disable Hold RTS
+ */
+API::CommandResponse API::Handlers::UARTHandler::setRtsEnabled(const QString& id,
+                                                               const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("rtsEnabled"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: rtsEnabled"));
+  }
+
+  const bool rtsEnabled   = params.value(QStringLiteral("rtsEnabled")).toBool();
+  auto& connectionManager = API::handlerContext().connectionManager;
+  auto* uart              = connectionManager.uart();
+  QMetaObject::invokeMethod(
+    uart, [uart, rtsEnabled]() { uart->setRtsEnabled(rtsEnabled); }, Qt::AutoConnection);
+
+  QJsonObject result;
+  result[QStringLiteral("rtsEnabled")] = rtsEnabled;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Hold a connected source's line in BREAK for durationMs, then release it
+ */
+API::CommandResponse API::Handlers::UARTHandler::sendBreak(const QString& id,
+                                                           const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("durationMs"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: durationMs"));
+  }
+
+  const int durationMs = params.value(QStringLiteral("durationMs")).toInt(0);
+  if (durationMs < 1 || durationMs > IO::kMaxBreakMs) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("durationMs must be between 1 and %1").arg(IO::kMaxBreakMs));
+  }
+
+  QString error;
+  auto* uart = liveUart(params, error);
+  if (!uart)
+    return CommandResponse::makeError(id, ErrorCode::ExecutionError, error);
+
+  if (!uart->sendBreak(durationMs)) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("The port refused BREAK, or a BREAK or a Connection Sequence is running"));
+  }
+
+  QJsonObject result;
+  result[QStringLiteral("durationMs")] = durationMs;
+  result[Keys::SourceId]               = params.value(Keys::SourceId).toInt(0);
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Change a connected source's running baud rate, leaving the saved one alone
+ */
+API::CommandResponse API::Handlers::UARTHandler::setLiveBaudRate(const QString& id,
+                                                                 const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("baudRate"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: baudRate"));
+  }
+
+  const int baudRate = params.value(QStringLiteral("baudRate")).toInt();
+  if (baudRate <= 0 || baudRate > kMaxBaudRate) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("baudRate must be between 1 and %1").arg(kMaxBaudRate));
+  }
+
+  QString error;
+  auto* uart = liveUart(params, error);
+  if (!uart)
+    return CommandResponse::makeError(id, ErrorCode::ExecutionError, error);
+
+  if (!uart->setLiveBaudRate(baudRate)) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("The port refused baud rate %1, or a Connection Sequence is running")
+        .arg(baudRate));
+  }
+
+  QJsonObject result;
+  result[QStringLiteral("liveBaudRate")] = uart->liveBaudRate();
+  result[QStringLiteral("baudRate")]     = uart->baudRate();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Read the modem lines of a connected source
+ */
+API::CommandResponse API::Handlers::UARTHandler::getLineStates(const QString& id,
+                                                               const QJsonObject& params)
+{
+  QString error;
+  auto* uart = liveUart(params, error);
+  if (!uart)
+    return CommandResponse::makeError(id, ErrorCode::ExecutionError, error);
+
+  auto result            = uart->lineStates();
+  result[Keys::SourceId] = params.value(Keys::SourceId).toInt(0);
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Re-run the Connection Sequence of a connected source; the outcome is reported in the
+ *        console and, on failure, the notification center
+ */
+API::CommandResponse API::Handlers::UARTHandler::runSequence(const QString& id,
+                                                             const QJsonObject& params)
+{
+  QString error;
+  auto* uart = liveUart(params, error);
+  if (!uart)
+    return CommandResponse::makeError(id, ErrorCode::ExecutionError, error);
+
+  if (!uart->runSequence()) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("No Connection Sequence is set, or a BREAK or a sequence is running"));
+  }
+
+  QJsonObject result;
+  result[QStringLiteral("started")] = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Get the Connection Sequence of the serial port settings
+ */
+API::CommandResponse API::Handlers::UARTHandler::getSequence(const QString& id,
+                                                             const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  auto& connectionManager = API::handlerContext().connectionManager;
+  const auto json         = connectionManager.uart()->connectionSequenceJson().toUtf8();
+  const auto sequence = IO::ConnectionSequence::fromJson(QJsonDocument::fromJson(json).object());
+  const auto error    = sequence.validate();
+
+  QJsonObject result;
+  result[QStringLiteral("sequence")]  = sequence.toJson();
+  result[QStringLiteral("stepCount")] = static_cast<int>(sequence.steps.size());
+  result[QStringLiteral("valid")]     = error.message.isEmpty();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Replace the Connection Sequence of the serial port settings; a sequence that does not
+ *        validate is refused with the index of the step at fault
+ */
+API::CommandResponse API::Handlers::UARTHandler::setSequence(const QString& id,
+                                                             const QJsonObject& params)
+{
+  if (!params.value(QStringLiteral("sequence")).isObject()) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required object parameter: sequence"));
+  }
+
+  const auto sequence =
+    IO::ConnectionSequence::fromJson(params.value(QStringLiteral("sequence")).toObject());
+  const auto error = sequence.validate();
+  if (!error.message.isEmpty()) {
+    QJsonObject data;
+    data[QStringLiteral("step")] = error.step;
+    const auto where =
+      error.step < 0 ? QStringLiteral("Sequence") : QStringLiteral("Step %1").arg(error.step + 1);
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("%1: %2").arg(where, error.message), data);
+  }
+
+  auto& connectionManager = API::handlerContext().connectionManager;
+  auto* uart              = connectionManager.uart();
+  const auto json         = sequence.toJson();
+  QMetaObject::invokeMethod(
+    uart, [uart, json]() { uart->setConnectionSequence(json); }, Qt::AutoConnection);
+
+  QJsonObject result;
+  result[QStringLiteral("stepCount")] = static_cast<int>(sequence.steps.size());
+  return CommandResponse::makeSuccess(id, result);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Getters
 //--------------------------------------------------------------------------------------------------
 
@@ -510,9 +812,15 @@ API::CommandResponse API::Handlers::UARTHandler::getConfiguration(const QString&
     result[QStringLiteral("flowControlName")] = flowControlList.at(uart->flowControlIndex());
 
   result[QStringLiteral("dtrEnabled")]      = uart->dtrEnabled();
+  result[QStringLiteral("rtsEnabled")]      = uart->rtsEnabled();
   result[QStringLiteral("autoReconnect")]   = uart->autoReconnect();
   result[QStringLiteral("isOpen")]          = uart->isOpen();
   result[QStringLiteral("configurationOk")] = uart->configurationOk();
+
+  const auto* live = qobject_cast<IO::Drivers::UART*>(connectionManager.driver(0));
+  const auto steps = IO::ConnectionSequence::fromVariant(uart->connectionSequenceJson()).steps;
+  result[QStringLiteral("liveBaudRate")]      = live ? live->liveBaudRate() : uart->baudRate();
+  result[QStringLiteral("sequenceStepCount")] = static_cast<int>(steps.size());
 
   return CommandResponse::makeSuccess(id, result);
 }

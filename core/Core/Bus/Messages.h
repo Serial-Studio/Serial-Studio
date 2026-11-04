@@ -236,6 +236,15 @@ struct DeviceOpenAttempted final {
 };
 
 /**
+ * @brief A UART Connection Sequence step started, was skipped or ended (spec 0103): one console
+ *        line for the source that runs it. Published at step rate, never per byte.
+ */
+struct LinkSequenceNote final {
+  int sourceId;
+  QString text;
+};
+
+/**
  * @brief A Modbus register map was imported into the project; the Modbus driver applies it,
  *        replacing its groups, or appending to them when the map joined an open project.
  */
