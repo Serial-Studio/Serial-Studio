@@ -43,6 +43,7 @@ extern "C" {
 #include <QDebug>
 #include <stdexcept>
 
+#include "Core/DataModel/ValueDecoder.h"
 #include "Core/IO/IDeviceWriter.h"
 #include "Core/ModuleConstruction.h"
 #include "Core/Services.h"
@@ -2139,6 +2140,8 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
     m_tableStore.setDatasetRaw(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
 
+  DataModel::decode_dataset_in_place(dataset, !dataset.virtual_ && !finalValueReplay);
+
   if (!dataset.transformCode.isEmpty() && !finalValueReplay) [[unlikely]] {
     const auto input = dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
     if (dep)
@@ -2160,6 +2163,8 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
       dataset.value     = result.toString();
       dataset.isNumeric = false;
     }
+
+    DataModel::decode_dataset_in_place(dataset, dataset.virtual_);
   }
 
   if (!dataset.isNumeric)
@@ -2269,6 +2274,8 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetToken(Dataset& dataset,
       table_slots.first, dataset.numericValue, dataset.value, dataset.isNumeric);
   }
 
+  DataModel::decode_dataset_in_place(dataset, token != nullptr);
+
   if (!dataset.transformCode.isEmpty()) [[unlikely]] {
     const auto input = dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
     if (dep)
@@ -2290,6 +2297,8 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetToken(Dataset& dataset,
       dataset.value     = result.toString();
       dataset.isNumeric = false;
     }
+
+    DataModel::decode_dataset_in_place(dataset, token == nullptr);
   }
 
   if (!dataset.isNumeric)
@@ -2421,7 +2430,8 @@ bool DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
       if (!dataset.virtual_) {
         bool numeric     = false;
         const double raw = SerialStudio::toDouble(dataset.rawValue, &numeric);
-        input            = numeric ? QVariant(raw) : QVariant(dataset.rawValue);
+        input =
+          numeric ? QVariant(DataModel::decode_value(dataset, raw)) : QVariant(dataset.rawValue);
       }
 
       const double prev_numeric  = dataset.numericValue;
@@ -2449,6 +2459,7 @@ bool DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
         dataset.isNumeric = false;
       }
 
+      DataModel::decode_dataset_in_place(dataset, dataset.virtual_);
       if (!dataset.isNumeric)
         dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
 

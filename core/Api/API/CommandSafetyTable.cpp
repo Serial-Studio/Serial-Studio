@@ -28,7 +28,7 @@
 namespace API::CommandSafety {
 
 // clang-format off
-static constexpr std::array<Entry, 458> kEntries = {{
+static constexpr std::array<Entry, 460> kEntries = {{
   {QLatin1StringView("alarms.acknowledge"), Tier::Confirm, false},
   {QLatin1StringView("alarms.clear"), Tier::AlwaysConfirm, false},
   {QLatin1StringView("alarms.getProjectSounds"), Tier::Safe, false},
@@ -347,10 +347,12 @@ static constexpr std::array<Entry, 458> kEntries = {{
   {QLatin1StringView("project.dataset.getByUniqueId"), Tier::Safe, false},
   {QLatin1StringView("project.dataset.getExecutionOrder"), Tier::Safe, false},
   {QLatin1StringView("project.dataset.getFFTMarkers"), Tier::Safe, false},
+  {QLatin1StringView("project.dataset.getLabels"), Tier::Safe, false},
   {QLatin1StringView("project.dataset.list"), Tier::Safe, false},
   {QLatin1StringView("project.dataset.move"), Tier::Confirm, false},
   {QLatin1StringView("project.dataset.setAlarmBands"), Tier::Confirm, false},
   {QLatin1StringView("project.dataset.setFFTMarkers"), Tier::Confirm, false},
+  {QLatin1StringView("project.dataset.setLabels"), Tier::Confirm, false},
   {QLatin1StringView("project.dataset.setOption"), Tier::Confirm, false},
   {QLatin1StringView("project.dataset.setOptions"), Tier::Confirm, false},
   {QLatin1StringView("project.dataset.setTransformCode"), Tier::AlwaysConfirm, false},

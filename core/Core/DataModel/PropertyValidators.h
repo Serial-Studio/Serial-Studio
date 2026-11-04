@@ -32,6 +32,10 @@
  *        link never rejects a document.
  */
 
+namespace DataModel {
+struct Dataset;
+}  // namespace DataModel
+
 namespace DataModel::PropertyHooks {
 
 /**
@@ -54,4 +58,7 @@ void setActionIconResolver(ActionIconResolver resolver) noexcept;
 [[nodiscard]] bool isValidFftWindow(int window);
 [[nodiscard]] bool isValidTransformLanguage(int language);
 [[nodiscard]] bool isValidAlarmDeadband(double deadband);
+[[nodiscard]] bool isValidValueFormat(int format);
+[[nodiscard]] bool isValidFormatFraction(const Dataset& d);
+[[nodiscard]] bool isValidFormatBitField(const Dataset& d);
 }  // namespace DataModel::PropertyHooks

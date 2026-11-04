@@ -256,9 +256,43 @@
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "fftWindow": 5,
-                    "graph": false,
+                    "graph": true,
                     "groupId": 3,
                     "index": 8,
+                    "labels": [
+                        {
+                            "text": "Park/Neutral",
+                            "value": 0
+                        },
+                        {
+                            "text": "1st",
+                            "value": 1
+                        },
+                        {
+                            "text": "2nd",
+                            "value": 2
+                        },
+                        {
+                            "text": "3rd",
+                            "value": 3
+                        },
+                        {
+                            "text": "4th",
+                            "value": 4
+                        },
+                        {
+                            "text": "5th",
+                            "value": 5
+                        },
+                        {
+                            "text": "6th",
+                            "value": 6
+                        },
+                        {
+                            "text": "Reverse",
+                            "value": 255
+                        }
+                    ],
                     "led": false,
                     "ledHigh": 80,
                     "log": true,
@@ -266,7 +300,7 @@
                     "plotMax": 255,
                     "plotMin": 0,
                     "title": "CurrentGear",
-                    "transformCode": "local LABELS = {\n  [0] = \"Park/Neutral\",\n  [1] = \"1st\",\n  [2] = \"2nd\",\n  [3] = \"3rd\",\n  [4] = \"4th\",\n  [5] = \"5th\",\n  [6] = \"6th\",\n  [255] = \"Reverse\",\n}\n\nfunction transform(value)\n  local raw = math.floor((tableGet(\"TRANSMISSION_GEAR\", \"CurrentGear\") or 0) + 0.5)\n  return LABELS[raw] or (\"Unknown (\" .. raw .. \")\")\nend\n",
+                    "transformCode": "function transform(value)\n  return tableGet(\"TRANSMISSION_GEAR\", \"CurrentGear\") or 0\nend\n",
                     "transformLanguage": 1,
                     "uniqueId": 30000,
                     "units": "",

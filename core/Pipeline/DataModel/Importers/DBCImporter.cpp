@@ -315,7 +315,8 @@ QString DataModel::DBCImporter::datasetTitle(const DBCMux::OrderedSignal& entry)
 
 /**
  * @brief Builds a Dataset for a CAN signal: a computed dataset whose Lua transform reads the
- *        signal's physical value back from the message's data table.
+ *        signal's physical value back from the message's data table. A VAL_ table becomes the
+ *        dataset's labels, and the signal keeps the widget and plot policy of any other.
  */
 DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
   const DBCMux::OrderedSignal& entry,
@@ -364,10 +365,8 @@ DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
   }
 
   const bool plainScaling = (signal.factor() == 1.0 && signal.offset() == 0.0);
-  if (!valueLabels.isEmpty() && plainScaling) {
-    dataset.transformCode = enumTransformCode(tableName, signal.name(), valueLabels);
-    return dataset;
-  }
+  if (!valueLabels.isEmpty() && plainScaling)
+    dataset.labels = valueLabelsFor(valueLabels);
 
   const bool dataGridGroup = (groupWidget == SerialStudio::groupWidgetId(SerialStudio::DataGrid));
   dataset.widget           = dataGridGroup ? selectWidgetForSignal(signal) : QString("");
@@ -765,28 +764,24 @@ QString DataModel::DBCImporter::signalSpecLine(const DBCMux::OrderedSignal& entr
 }
 
 /**
- * @brief Builds the Lua transform that maps a VAL_ enum signal's raw value to its DBC label,
- *        so the dataset shows readable state text instead of a bare number.
+ * @brief Turns a VAL_ enum signal's value descriptions into the dataset's label table (spec
+ *        0108), sorted by raw value; the dataset keeps the number, so it still plots and alarms.
  */
-QString DataModel::DBCImporter::enumTransformCode(
-  const QString& table, const QString& reg, const QCanDbcFileParser::ValueDescriptions& valueLabels)
+std::vector<DataModel::ValueLabel> DataModel::DBCImporter::valueLabelsFor(
+  const QCanDbcFileParser::ValueDescriptions& valueLabels)
 {
   auto keys = valueLabels.keys();
   std::sort(keys.begin(), keys.end());
 
-  QString out = QStringLiteral("local LABELS = {\n");
-  for (const auto key : keys)
-    out +=
-      QStringLiteral("  [%1] = %2,\n").arg(QString::number(key), luaQuote(valueLabels.value(key)));
+  std::vector<ValueLabel> labels;
+  labels.reserve(static_cast<std::size_t>(keys.size()));
+  for (const auto key : keys) {
+    const auto text = valueLabels.value(key).simplified();
+    if (!text.isEmpty())
+      labels.push_back(ValueLabel{static_cast<qint64>(key), text});
+  }
 
-  out += QStringLiteral("}\n\n"
-                        "function transform(value)\n"
-                        "  local raw = math.floor((tableGet(%1, %2) or 0) + 0.5)\n"
-                        "  return LABELS[raw] or (\"Unknown (\" .. raw .. \")\")\n"
-                        "end\n")
-           .arg(luaQuote(table), luaQuote(reg));
-
-  return out;
+  return labels;
 }
 
 //--------------------------------------------------------------------------------------------------

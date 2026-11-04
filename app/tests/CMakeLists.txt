@@ -1428,6 +1428,25 @@ ss_add_unit_test(tst_frame_support
 )
 
 #
+# The dataset value decoders (spec 0108, AC1): fixed point, bit field and scale bit for bit, plus
+# the Core validators that refuse a declaration past the declared integer width.
+#
+ss_add_unit_test(tst_value_decoder
+  SOURCES tst_value_decoder.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# The one presentation formatter (spec 0108): Label Format notation and widths, labels, units.
+#
+ss_add_unit_test(tst_value_format
+  SOURCES tst_value_format.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # Pins the persisted ordinals and the id/name round trips of the SerialStudio vocabulary now that
 # it is a Core namespace (spec 0077): header-only enums plus the Core helpers, nothing else.
 #

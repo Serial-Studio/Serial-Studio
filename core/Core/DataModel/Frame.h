@@ -315,6 +315,14 @@ struct alignas(8) FrequencyMarker {
 static_assert(sizeof(FrequencyMarker) % alignof(FrequencyMarker) == 0,
               "Unaligned FrequencyMarker struct");
 
+/** @brief One row of a dataset's value-to-text label table (spec 0108). */
+struct alignas(8) ValueLabel {
+  qint64 value = 0;  ///< Integer key the rounded dataset value is matched against
+  QString text;      ///< Text shown in place of the number
+};
+
+static_assert(sizeof(ValueLabel) % alignof(ValueLabel) == 0, "Unaligned ValueLabel struct");
+
 inline constexpr int kXAxisSamples = -1;
 inline constexpr int kXAxisTime    = -2;
 
@@ -335,6 +343,11 @@ struct alignas(8) Dataset {
   int fftBallisticsRelease = 300;    ///< Ballistics release time in ms (display decay)
   int fftWindow            = 5;      ///< FFT window (SerialStudio::FFTWindow; 5 = Blackman-Harris)
   int transformLanguage    = -1;     ///< Transform script language (-1 = unset, 0 = JS, 1 = Lua)
+  int format               = 0;      ///< Decoder: 0 none, 1 fixed point, 2 bit field, 3 scale
+  int formatWidth          = 16;     ///< Raw integer width in bits (fixed point, bit field)
+  int formatFractionBits   = 0;      ///< Fixed-point fraction bits: the value is raw / 2^N
+  int formatBitOffset      = 0;      ///< Bit-field offset from the least significant bit
+  int formatBitWidth       = 1;      ///< Bit-field width in bits
   bool fft                 = false;  ///< Enables FFT processing
   bool fftLogX             = false;  ///< Logarithmic frequency axis (FFT widget)
   bool fftBallistics       = false;  ///< Display ballistics: instant attack, timed release
@@ -352,6 +365,7 @@ struct alignas(8) Dataset {
   bool enabled         = true;   ///< False excludes the dataset from frame building (editor-only)
   bool suppressAlarms  = false;  ///< Bands stay drawn but never notify, raise a point or sound
   bool alarmsWhileVisible = false;  ///< Bands alarm only while a widget showing this is on screen
+  bool formatSigned       = false;  ///< Raw integer is two's complement at formatWidth bits
   double fftMin           = 0;      ///< Minimum value (for FFT)
   double fftMax           = 0;      ///< Maximum value (for FFT)
   double pltMin           = 0;      ///< Minimum value (for plots)
@@ -360,6 +374,8 @@ struct alignas(8) Dataset {
   double wgtMax           = 0;      ///< Maximum value (for widgets)
   double alarmDeadband    = 0;      ///< Hysteresis before the active alarm band releases (0 = none)
   double ledHigh          = 80;     ///< LED activation threshold
+  double formatScale      = 1;      ///< Linear decoder: value = raw * formatScale + formatOffset
+  double formatOffset     = 0;      ///< Linear decoder offset
   qint64 displaySampleMs  = 0;      ///< Transient GUI receipt time; never serialized
   double numericValue     = 0;      ///< Parsed numeric value after transforms
   double rawNumericValue  = 0;      ///< Parsed numeric value before transforms
@@ -373,11 +389,14 @@ struct alignas(8) Dataset {
   QString color;           ///< Optional hex override; empty -> automatic (theme palette)
   QString alias;           ///< Optional stable script/API name; empty -> address by uniqueId
   QString transformCode;   ///< Optional per-dataset transform script
+  QString labelsDefault;   ///< Catch-all label for a value no row matches; empty -> the number
+  QString label;           ///< Runtime label text of the current value; never authored
   QVariantMap transformParams;  ///< Named values the transform reads as `params` (spec 0083)
   QString displayFormat =
     QStringLiteral("0d");  ///< Tick/value label format on analog widgets ("0d" = integer)
   std::vector<AlarmBand> alarmBands;        ///< Colour-banded alarm zones (empty = no alarms)
   std::vector<FrequencyMarker> fftMarkers;  ///< Labeled FFT frequency markers (empty = none)
+  std::vector<ValueLabel> labels;           ///< Value-to-text table sorted by value (empty = none)
 };
 
 static_assert(sizeof(Dataset) % alignof(Dataset) == 0, "Unaligned Dataset struct");
@@ -1230,6 +1249,10 @@ void readDatasetFrequencyMarkers(Dataset& d, const QJsonObject& obj);
  */
 void readDatasetTransformParams(Dataset& d, const QJsonObject& obj);
 void writeDatasetTransformParams(QJsonObject& obj, const Dataset& d);
+
+/** @brief Read/write @p d.labels as a JSON array of {value, text} rows sorted by value. */
+void readDatasetLabels(Dataset& d, const QJsonObject& obj);
+void writeDatasetLabels(QJsonObject& obj, const Dataset& d);
 
 /**
  * @brief Swaps inverted (min > max) FFT / plot / widget range pairs from legacy projects.

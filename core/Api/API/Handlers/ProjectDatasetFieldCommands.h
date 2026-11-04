@@ -39,10 +39,15 @@ public:
   void registerCommands();
 
 private:
+  void registerLabelCommands();
   void registerAlarmCommands();
   void registerMarkerCommands();
   void registerFieldCommands();
 
+  [[nodiscard]] static CommandResponse datasetGetLabels(const QString& id,
+                                                        const QJsonObject& params);
+  [[nodiscard]] static CommandResponse datasetSetLabels(const QString& id,
+                                                        const QJsonObject& params);
   [[nodiscard]] static CommandResponse datasetSetVirtual(const QString& id,
                                                          const QJsonObject& params);
   [[nodiscard]] static CommandResponse datasetGetFFTMarkers(const QString& id,

@@ -78,6 +78,7 @@ qt_add_library(
   DataModel/FrameKeys.h
   DataModel/WorkspaceProfile.h
   DataModel/DataBlock.h
+  DataModel/ValueDecoder.h
   DataModel/ExportSchema.h
   DataModel/FrameConsumer.h
   DataModel/FrameConsumer.cpp
@@ -87,6 +88,8 @@ qt_add_library(
   DataModel/IBlockSink.cpp
   DataModel/PropertyValidators.h
   DataModel/PropertyValidators.cpp
+  DataModel/ValueFormat.h
+  DataModel/ValueFormat.cpp
   DataModel/Generated/DatasetSerialization.cpp
   IO/HAL_Driver.h
   IO/StreamConfig.h

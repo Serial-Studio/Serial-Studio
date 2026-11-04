@@ -21,6 +21,7 @@
 
 #include "Core/DataModel/Frame.h"
 
+#include <algorithm>
 #include <cmath>
 #include <QDebug>
 #include <utility>
@@ -456,4 +457,59 @@ void DataModel::writeDatasetTransformParams(QJsonObject& obj, const Dataset& d)
     return;
 
   obj.insert(Keys::TransformParams, QJsonObject::fromVariantMap(d.transformParams));
+}
+
+/**
+ * @brief Populates @p d.labels from @p obj (spec 0108). A row whose value is not an integer an
+ *        IEEE double holds exactly, or whose text is empty, is dropped; the table is sorted by
+ *        value for the presentation lookup's binary search, and the first row of a key wins.
+ */
+void DataModel::readDatasetLabels(Dataset& d, const QJsonObject& obj)
+{
+  d.labels.clear();
+  if (!obj.contains(Keys::Labels))
+    return;
+
+  constexpr double kExactIntegerLimit = 9007199254740992.0;
+  const auto arr                      = obj.value(Keys::Labels).toArray();
+  d.labels.reserve(arr.size());
+  for (const auto& v : arr) {
+    const auto row   = v.toObject();
+    bool ok          = false;
+    const double key = SerialStudio::toDouble(row.value(Keys::Value), &ok);
+    const auto text  = row.value(Keys::LabelText).toString().simplified();
+    if (!ok || text.isEmpty() || std::abs(key) > kExactIntegerLimit || key != std::trunc(key))
+      continue;
+
+    d.labels.push_back(ValueLabel{static_cast<qint64>(key), text});
+  }
+
+  const auto byValue = [](const ValueLabel& a, const ValueLabel& b) {
+    return a.value < b.value;
+  };
+  const auto sameKey = [](const ValueLabel& a, const ValueLabel& b) {
+    return a.value == b.value;
+  };
+  std::stable_sort(d.labels.begin(), d.labels.end(), byValue);
+  d.labels.erase(std::unique(d.labels.begin(), d.labels.end(), sameKey), d.labels.end());
+  SS_ASSERT_LOG(std::is_sorted(d.labels.begin(), d.labels.end(), byValue));
+}
+
+/**
+ * @brief Writes @p d.labels into @p obj as one JSON array when the dataset has any.
+ */
+void DataModel::writeDatasetLabels(QJsonObject& obj, const Dataset& d)
+{
+  if (d.labels.empty())
+    return;
+
+  QJsonArray rows;
+  for (const auto& label : d.labels) {
+    QJsonObject row;
+    row.insert(Keys::Value, label.value);
+    row.insert(Keys::LabelText, label.text);
+    rows.append(row);
+  }
+
+  obj.insert(Keys::Labels, rows);
 }

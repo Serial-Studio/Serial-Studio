@@ -526,6 +526,20 @@ bool IO::StreamProcessor::transformsReferenceTableApi(int language) const
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Decodes every sample of @p samples in place through @p spec (spec 0108), before any
+ *        transform sees them; bounded by the block's sample count, allocation-free.
+ */
+static void decodeSamples(const DataModel::ValueDecoderSpec& spec, std::vector<double>& samples)
+{
+  SS_ASSERT_HOTPATH(spec.format != DataModel::ValueFormatNone);
+  SS_ASSERT_HOTPATH(!samples.empty());
+
+  SS_NO_UNROLL
+  for (auto& sample : samples)
+    sample = DataModel::decode_value(spec, sample);
+}
+
+/**
  * @brief Consumes one typed sample block: extract each channel into the reused scratch, transform,
  *        then publish samples + FFT + latest as one update. A re-entrant block is dropped and
  *        counted, and samples is clamped to the shortest column so a channel the source does not
@@ -647,6 +661,10 @@ void IO::StreamProcessor::processChannel(ChannelState& state,
   DSP::simdDeinterleaveToF64(
     block.samples.data(), static_cast<std::size_t>(frames), channels, index, m_scratch.data());
 
+  const bool decoded = state.config.decoder.format != DataModel::ValueFormatNone;
+  if (decoded) [[unlikely]]
+    decodeSamples(state.config.decoder, m_scratch);
+
   const double t0Ms = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(
                         block.t0.time_since_epoch())
                         .count();
@@ -662,6 +680,9 @@ void IO::StreamProcessor::processChannel(ChannelState& state,
 
   if (m_jsTimedOut) [[unlikely]] {
     restoreRawSamples(block, index);
+    if (decoded)
+      decodeSamples(state.config.decoder, m_scratch);
+
     noteTransformTimeout(state);
   }
 
@@ -990,11 +1011,13 @@ void IO::StreamProcessor::processExpressionChannels(const IO::SampleBlock& block
         continue;
 
       const int index = state.config.channel;
-      const double v =
-        (index >= 0 && index < channels)
-          ? static_cast<double>(
-              raw[i * static_cast<std::size_t>(channels) + static_cast<std::size_t>(index)])
-          : std::numeric_limits<double>::quiet_NaN();
+      double v = (index >= 0 && index < channels)
+                 ? static_cast<double>(
+                     raw[i * static_cast<std::size_t>(channels) + static_cast<std::size_t>(index)])
+                 : std::numeric_limits<double>::quiet_NaN();
+      if (state.config.decoder.format != DataModel::ValueFormatNone) [[unlikely]]
+        v = DataModel::decode_value(state.config.decoder, v);
+
       const double y           = state.expr.run(v, t, m_exprSlots);
       out.columns[c].values[i] = y;
       m_exprSlots.publish(state.config.uniqueId, y);

@@ -679,7 +679,7 @@ def render_serialization(manifest: dict) -> str:
 
     doc_props = [p for p in manifest["properties"] if p["persist"] != "never"]
     runtime_written = [
-        r for r in manifest["runtimeFields"] if r.get("persist") == "always"
+        r for r in manifest["runtimeFields"] if r.get("persist", "never") != "never"
     ]
 
     def as_property(entry: dict) -> dict:
@@ -1431,7 +1431,7 @@ def emit_api_field(prop: dict, manifest: dict) -> list[str]:
     validate = prop.get("validate")
     rebuild = prop.get("api", {}).get("rebuildTree", False)
 
-    if not validate:
+    if not validate or validate in DATASET_VALIDATORS:
         if rebuild:
             lines += [
                 f"  if (!{key_var}.isEmpty()) {{",
@@ -1485,7 +1485,32 @@ def validator_function(validate: str) -> str:
         "fftWindowRange": "isValidFftWindow",
         "transformLanguageDomain": "isValidTransformLanguage",
         "deadbandNonNegative": "isValidAlarmDeadband",
+        "formatKindDomain": "isValidValueFormat",
     }[validate]
+
+
+# Cross-field validators: they read the whole dataset, so they run once after every field of the
+# update applied and a request that sets related fields never fails on its own field order.
+DATASET_VALIDATORS = {
+    "formatFractionFitsWidth": "isValidFormatFraction",
+    "formatBitsFitWidth": "isValidFormatBitField",
+}
+
+
+def emit_dataset_validations(manifest: dict, exposed: list[dict]) -> list[str]:
+    """Emit the post-apply checks, each gated on its property being in the request."""
+    lines: list[str] = []
+    for prop in exposed:
+        check = DATASET_VALIDATORS.get(prop.get("validate"))
+        if not check:
+            continue
+        present = " || ".join(
+            f"consumed.contains({json_name(n)})" for n in api_names(prop, manifest)
+        )
+        lines += emit_statement("  ", f"if ({present} && !PropertyHooks::{check}(d))")
+        lines += wrapped_call("    return QStringLiteral(", prop["apiError"], ");", False)
+        lines.append("")
+    return lines
 
 
 def render_api(manifest: dict) -> str:
@@ -1597,6 +1622,7 @@ def render_api(manifest: dict) -> str:
             "    return err;",
             "",
         ]
+    lines += emit_dataset_validations(manifest, exposed)
     lines += [
         "  applyDatasetSubEntityFields(d, params, consumed);",
         "  return QString();",

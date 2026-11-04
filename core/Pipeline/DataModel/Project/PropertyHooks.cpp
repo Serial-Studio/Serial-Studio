@@ -25,6 +25,7 @@
 
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
+#include "Core/DataModel/ValueDecoder.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
 #include "DataModel/ProjectModel.h"
@@ -594,6 +595,43 @@ bool DataModel::PropertyHooks::ledBandsAbsent(const Dataset& d, const ProjectMod
 {
   Q_UNUSED(pm);
   return d.alarmBands.empty();
+}
+
+/**
+ * @brief Returns true when the dataset's decoder reads a declared integer width: fixed point or
+ *        bit field (spec 0108).
+ */
+bool DataModel::PropertyHooks::formatHasWidth(const Dataset& d, const ProjectModel& pm)
+{
+  Q_UNUSED(pm);
+  return d.format == ValueFormatFixedPoint || d.format == ValueFormatBitField;
+}
+
+/**
+ * @brief Returns true when the dataset decodes a fixed-point value.
+ */
+bool DataModel::PropertyHooks::formatIsFixed(const Dataset& d, const ProjectModel& pm)
+{
+  Q_UNUSED(pm);
+  return d.format == ValueFormatFixedPoint;
+}
+
+/**
+ * @brief Returns true when the dataset extracts a bit field.
+ */
+bool DataModel::PropertyHooks::formatIsBits(const Dataset& d, const ProjectModel& pm)
+{
+  Q_UNUSED(pm);
+  return d.format == ValueFormatBitField;
+}
+
+/**
+ * @brief Returns true when the dataset applies a linear scale and offset.
+ */
+bool DataModel::PropertyHooks::formatIsScale(const Dataset& d, const ProjectModel& pm)
+{
+  Q_UNUSED(pm);
+  return d.format == ValueFormatScale;
 }
 
 //--------------------------------------------------------------------------------------------------

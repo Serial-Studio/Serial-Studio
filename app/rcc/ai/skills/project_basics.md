@@ -340,7 +340,7 @@ abbreviation footgun like min/max).
 
 | Field           | Type / default | Accepts                                                        | Affects                                                                 |
 |-----------------|----------------|---------------------------------------------------------------|------------------------------------------------------------------------|
-| `displayFormat` | string, `"0d"` | `"auto"`, `"0d"`..`"3d"`, `"sci"`, printf `"%.Nf"` / `"%.Ne"` | Tick labels **and** the digital value on analog widgets (Bar/Gauge/Meter). Ignored by the DataGrid. |
+| `displayFormat` | string, `"0d"` | `"auto"`, `"0d"`..`"3d"`, `"sci"`, `"hex"`, `"bin"`, printf `"%.Nf"` / `"%.Ne"` | Tick labels **and** the digital value on analog widgets (Bar/Gauge/Meter). The DataGrid reads only `"hex"` / `"bin"`. |
 | `decimalPoints` | int, `-1`      | `-1` (auto) or `0`..`15` fixed places                          | The DataGrid value column; and when `>= 0` it **overrides** `displayFormat` on the Bar/Gauge/Meter value and tick labels too. |
 
 `displayFormat` is the richer **tick/label notation** control: precision
@@ -367,6 +367,32 @@ number wants exactly 3 places → leave `displayFormat: "auto"` and set
 
 Both are settable via `project.dataset.update` and read back under the
 same names; verify with `dataset.getByPath` after writing.
+
+`"hex"` / `"bin"` render the rounded value as `0xFF` / `0b1010`: two's
+complement zero-padded to `formatWidth` when a fixed-point or bit-field
+`format` declares one, minimal digits with a sign otherwise. Unlike the
+decimal choices they also reach the DataGrid, captions and extensions.
+
+### Value decoders and labels (`format*`, `labels`)
+
+Reach for these BEFORE writing a transform: they are declarative, they
+keep the dataset numeric, and they are not Pro content (a transform is).
+
+| Field                          | Meaning                                                              |
+|--------------------------------|----------------------------------------------------------------------|
+| `format`                       | `0` none, `1` fixed point, `2` bit field, `3` scale                  |
+| `formatWidth`, `formatSigned`  | Fixed point / bit field: raw width (1..64, default 16), two's compl. |
+| `formatFractionBits`           | Fixed point: raw / 2^N, N below `formatWidth` (Q15 = 16, signed, 15) |
+| `formatBitOffset`, `formatBitWidth` | Bit field: N bits from bit K, never sign-extended               |
+| `formatScale`, `formatOffset`  | Scale: `raw * formatScale + formatOffset`                            |
+| `labels`, `labelsDefault`      | `[{value, text}]` integer keys; catch-all text for unlisted values   |
+
+The decoder runs on the parsed value before the transform (on a computed
+dataset, on the transform's result). Labels only change text: plots,
+alarms and exports keep the number, and the live frame carries `label`
+beside `value`. A status-word LED is a bit-field dataset per bit, all on
+the same `index`. Prefer `project.dataset.setLabels` for the table: it
+refuses a non-integer `value` instead of dropping the row.
 
 ### Frame detection enum (`frameDetection` field)
 

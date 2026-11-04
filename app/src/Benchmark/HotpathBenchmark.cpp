@@ -110,6 +110,9 @@ static constexpr bool kAllocStatsAvailable = false;
 // Latched when a statistics read fails, so a broken counter reports n/a instead of a false zero
 static bool s_allocStatsFailed = false;
 
+// Set around the ungated native(numeric, decoded) row: every dataset decodes as 16-bit Q4
+static bool s_decodeDatasets = false;
+
 #if defined(SS_ALLOC_STATS) && defined(SS_MIMALLOC_ACTIVE)
 /**
  * @brief Allocations recorded so far in mimalloc's main heap (spec 0084): the read merges the
@@ -251,6 +254,12 @@ QJsonObject HotpathBenchmark::buildProjectJson(int language, int channels, bool 
     ds.insert(Keys::Graph, true);
     ds.insert(Keys::Min, 0);
     ds.insert(Keys::Max, 0);
+    if (s_decodeDatasets) {
+      ds.insert(Keys::Format, 1);
+      ds.insert(Keys::FormatWidth, 16);
+      ds.insert(Keys::FormatFractionBits, 4);
+    }
+
     datasets.append(ds);
   }
 
@@ -1045,6 +1054,10 @@ int HotpathBenchmark::runAndReport(
   const StageBreakdown stages =
     measureNativeStages(results[kReportData], results[kReportNative], channels);
 
+  s_decodeDatasets     = true;
+  const Result decoded = parse(1.0, SerialStudio::Native, false, false);
+  s_decodeDatasets     = false;
+
   results[kReportNativeMix] = parse(minFps * 2.0, SerialStudio::Native, false, true);
   results[kReportLua]       = parse(minFps, SerialStudio::Lua, false, false);
   results[kReportJs]        = parse(minFps * 0.5, SerialStudio::JavaScript, false, false);
@@ -1074,6 +1087,16 @@ int HotpathBenchmark::runAndReport(
   const int code = HotpathReport::print(results, coverage, stages, outputFile, channels)
                    ? EXIT_SUCCESS
                    : EXIT_FAILURE;
+
+  // code-verify off
+  // Report lines must reach raw stdout (CI parses them), like the stream phase below.
+  std::printf("hotpath: native(numeric, decoded) %.0f frames/s (native(numeric) %.0f frames/s)\n"
+              "HOTPATH_NATIVE_DECODED_FPS=%.0f\n",
+              decoded.framesPerSecond,
+              results[kReportNative].framesPerSecond,
+              decoded.framesPerSecond);
+  std::fflush(stdout);
+  // code-verify on
 
   runStreamPhase(minSeconds);
 

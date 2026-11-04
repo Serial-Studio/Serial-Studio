@@ -150,6 +150,7 @@ void IO::StreamConfigBuilder::appendProjectChannels(int deviceId, StreamConfig& 
       channel.transformParams   = dataset.transformParams;
       channel.title             = dataset.title;
       channel.alias             = dataset.alias;
+      channel.decoder           = DataModel::decoder_spec(dataset);
       config.datasets.push_back(std::move(channel));
     }
   }

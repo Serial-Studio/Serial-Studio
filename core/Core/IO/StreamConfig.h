@@ -26,6 +26,7 @@
 #include <QVariantMap>
 #include <vector>
 
+#include "Core/DataModel/ValueDecoder.h"
 #include "Core/IO/HAL_Driver.h"
 
 namespace IO {
@@ -60,6 +61,7 @@ struct StreamChannelConfig {
   QVariantMap transformParams;
   QString title;
   QString alias;
+  DataModel::ValueDecoderSpec decoder;
 };
 
 /**

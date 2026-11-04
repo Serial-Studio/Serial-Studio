@@ -126,6 +126,19 @@ inline constexpr KeyView UniqueId("uniqueId");
 inline constexpr KeyView NumericValue("numericValue");
 inline constexpr KeyView ExtremeHold("extremeHold");
 
+// Dataset value format and labels (spec 0108); Label doubles as the runtime label text key
+inline constexpr KeyView Format("format");
+inline constexpr KeyView FormatWidth("formatWidth");
+inline constexpr KeyView FormatSigned("formatSigned");
+inline constexpr KeyView FormatFractionBits("formatFractionBits");
+inline constexpr KeyView FormatBitOffset("formatBitOffset");
+inline constexpr KeyView FormatBitWidth("formatBitWidth");
+inline constexpr KeyView FormatScale("formatScale");
+inline constexpr KeyView FormatOffset("formatOffset");
+inline constexpr KeyView Labels("labels");
+inline constexpr KeyView LabelText("text");
+inline constexpr KeyView LabelsDefault("labelsDefault");
+
 // Frame container keys
 inline constexpr KeyView Groups("groups");
 inline constexpr KeyView Actions("actions");

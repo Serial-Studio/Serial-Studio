@@ -41,7 +41,15 @@
     "ExtremeHold",
     "SuppressAlarms",
     "AlarmDeadband",
-    "AlarmsWhileVisible"
+    "AlarmsWhileVisible",
+    "Format",
+    "FormatWidth",
+    "FormatSigned",
+    "FormatFractionBits",
+    "FormatBitOffset",
+    "FormatBitWidth",
+    "FormatScale",
+    "FormatOffset"
   ],
   "struct": {
     "type": "DataModel::Dataset",
@@ -95,7 +103,7 @@
       "valueType": "string",
       "translate": "ProjectEditor",
       "notFoundIndex": 0,
-      "notes": "Order is QMap key order (m_displayFormats).",
+      "notes": "The first six rows follow the legacy QMap key order (m_displayFormats); Hexadecimal and Binary append after them (spec 0108) so no stored index moves. The QMap is only an index-range guard.",
       "entries": [
         {
           "value": "",
@@ -125,6 +133,45 @@
         {
           "value": "sci",
           "label": "Scientific",
+          "translated": true
+        },
+        {
+          "value": "hex",
+          "label": "Hexadecimal",
+          "translated": true
+        },
+        {
+          "value": "bin",
+          "label": "Binary",
+          "translated": true
+        }
+      ]
+    },
+    "valueFormats": {
+      "kind": "parallelValues",
+      "valueType": "int",
+      "translate": "ProjectEditor",
+      "notFoundIndex": 0,
+      "notes": "Dataset::format (spec 0108). An int domain is a parallelValues source: StaticMapOptions keys on strings.",
+      "entries": [
+        {
+          "value": 0,
+          "label": "None",
+          "translated": true
+        },
+        {
+          "value": 1,
+          "label": "Fixed point",
+          "translated": true
+        },
+        {
+          "value": 2,
+          "label": "Bit field",
+          "translated": true
+        },
+        {
+          "value": 3,
+          "label": "Scale",
           "translated": true
         }
       ]
@@ -370,6 +417,23 @@
       "signature": "bool isValidAlarmDeadband(double deadband)",
       "origin": "PropertyValidators.cpp:isValidAlarmDeadband (alarm deadband, 2026-10)"
     },
+    "formatKindDomain": {
+      "kind": "validator",
+      "signature": "bool isValidValueFormat(int format)",
+      "origin": "PropertyValidators.cpp:isValidValueFormat (spec 0108)"
+    },
+    "formatFractionFitsWidth": {
+      "kind": "validator",
+      "signature": "bool isValidFormatFraction(const DataModel::Dataset& d)",
+      "origin": "PropertyValidators.cpp:isValidFormatFraction (spec 0108)",
+      "notes": "Cross-field: checked on the whole dataset after every field of an API update applied, so the order of the fields in one request never matters."
+    },
+    "formatBitsFitWidth": {
+      "kind": "validator",
+      "signature": "bool isValidFormatBitField(const DataModel::Dataset& d)",
+      "origin": "PropertyValidators.cpp:isValidFormatBitField (spec 0108)",
+      "notes": "Cross-field: checked on the whole dataset after every field of an API update applied, so the order of the fields in one request never matters."
+    },
     "insidePainterGroup": {
       "kind": "predicate",
       "signature": "bool insidePainterGroup(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
@@ -434,6 +498,26 @@
       "kind": "predicate",
       "signature": "bool ledBandsAbsent(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
       "origin": "ProjectEditorForms.cpp:addLEDSection (early return once alarm bands exist)"
+    },
+    "formatHasWidth": {
+      "kind": "predicate",
+      "signature": "bool formatHasWidth(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "PropertyHooks.cpp:formatHasWidth (spec 0108)"
+    },
+    "formatIsFixed": {
+      "kind": "predicate",
+      "signature": "bool formatIsFixed(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "PropertyHooks.cpp:formatIsFixed (spec 0108)"
+    },
+    "formatIsBits": {
+      "kind": "predicate",
+      "signature": "bool formatIsBits(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "PropertyHooks.cpp:formatIsBits (spec 0108)"
+    },
+    "formatIsScale": {
+      "kind": "predicate",
+      "signature": "bool formatIsScale(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "PropertyHooks.cpp:formatIsScale (spec 0108)"
     },
     "datasetIndexPlaceholder": {
       "kind": "placeholder",
@@ -510,6 +594,16 @@
       "kind": "subEntity",
       "signature": "void DataModel::writeDatasetTransformParams(QJsonObject& obj, const Dataset& d)",
       "origin": "Frame.cpp"
+    },
+    "readLabels": {
+      "kind": "subEntity",
+      "signature": "void DataModel::readDatasetLabels(Dataset& d, const QJsonObject& obj)",
+      "origin": "Frame.cpp (spec 0108)"
+    },
+    "writeLabels": {
+      "kind": "subEntity",
+      "signature": "void DataModel::writeDatasetLabels(QJsonObject& obj, const Dataset& d)",
+      "origin": "Frame.cpp (spec 0108)"
     }
   },
   "postRead": [
@@ -520,6 +614,7 @@
     "readAlarmBands",
     "readFrequencyMarkers",
     "readTransformParams",
+    "readLabels",
     "normalizeRanges"
   ],
   "sections": [
@@ -528,6 +623,12 @@
       "title": "General Information",
       "iconCategory": "editor",
       "iconName": "dataset"
+    },
+    {
+      "id": "format",
+      "title": "Value Format",
+      "iconCategory": "editor",
+      "iconName": "data-conversion"
     },
     {
       "id": "plot",
@@ -595,6 +696,31 @@
         "rows": [
           "PltMin",
           "PltMax"
+        ]
+      },
+      {
+        "function": "addFormatSection",
+        "signature": "model+dataset",
+        "section": "format",
+        "rows": [
+          "Format",
+          "FormatWidth",
+          "FormatSigned",
+          "FormatFractionBits"
+        ],
+        "calls": [
+          "buildFormatFieldRows"
+        ],
+        "notes": "Spec 0108; the caller runs it right after addGeneralSection. Format reshapes the rows, so its commit asks for a synchronous rebuild."
+      },
+      {
+        "function": "buildFormatFieldRows",
+        "signature": "model+dataset",
+        "rows": [
+          "FormatBitOffset",
+          "FormatBitWidth",
+          "FormatScale",
+          "FormatOffset"
         ]
       },
       {
@@ -1436,9 +1562,8 @@
       "section": "widget",
       "widget": "ComboBox",
       "label": "Label Format",
-      "description": "Decimal places or notation used on tick labels and the value display",
+      "description": "Decimal places on analog widget ticks and captions; Hexadecimal and Binary apply wherever the value is shown as text",
       "options": "displayFormats",
-      "enabledWhen": "widgetRangeApplicable",
       "undo": {
         "label": "Edit Dataset",
         "coalesce": false
@@ -1776,6 +1901,279 @@
       }
     },
     {
+      "id": "Format",
+      "field": "format",
+      "jsonKey": "Format",
+      "formId": "kDatasetView_Format",
+      "type": "int",
+      "default": 0,
+      "scope": "document",
+      "persist": "whenNonZero",
+      "section": "format",
+      "widget": "ComboBox",
+      "label": "Format",
+      "description": "Decodes the raw value before any transform: fixed point, a bit field or a linear scale",
+      "options": "valueFormats",
+      "validate": "formatKindDomain",
+      "apiError": "Invalid format: must be 0 (none), 1 (fixed point), 2 (bit field) or 3 (scale)",
+      "onCommit": "onReshape",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "format"
+      },
+      "notes": "Spec 0108. The decoder runs on the value that feeds the dataset: the parsed value of a channel dataset, the transform's result of a computed one."
+    },
+    {
+      "id": "FormatWidth",
+      "field": "formatWidth",
+      "jsonKey": "FormatWidth",
+      "formId": "kDatasetView_FormatWidth",
+      "type": "int",
+      "default": 16,
+      "scope": "document",
+      "persist": "withProperty",
+      "persistWith": "Format",
+      "clamp": {
+        "editor": {
+          "min": 1,
+          "max": 64
+        },
+        "api": {
+          "min": 1,
+          "max": 64
+        }
+      },
+      "section": "format",
+      "widget": "IntField",
+      "label": "Integer Width (bits)",
+      "description": "Width of the raw integer in bits (1-64); integers wider than 53 bits lose precision",
+      "placeholder": 16,
+      "minValue": 1,
+      "maxValue": 64,
+      "visibleWhen": "formatHasWidth",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "formatWidth"
+      }
+    },
+    {
+      "id": "FormatSigned",
+      "field": "formatSigned",
+      "jsonKey": "FormatSigned",
+      "formId": "kDatasetView_FormatSigned",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "format",
+      "widget": "CheckBox",
+      "label": "Signed",
+      "description": "Read the raw integer as two's complement at the declared width",
+      "visibleWhen": "formatHasWidth",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "api": {
+        "expose": true,
+        "name": "formatSigned"
+      }
+    },
+    {
+      "id": "FormatFractionBits",
+      "field": "formatFractionBits",
+      "jsonKey": "FormatFractionBits",
+      "formId": "kDatasetView_FormatFractionBits",
+      "type": "int",
+      "default": 0,
+      "scope": "document",
+      "persist": "whenNonZero",
+      "clamp": {
+        "editor": {
+          "min": 0,
+          "max": 63
+        },
+        "api": {
+          "min": 0,
+          "max": 63
+        }
+      },
+      "section": "format",
+      "widget": "IntField",
+      "label": "Fraction Bits",
+      "description": "Fraction bits of the fixed-point value: the raw integer is divided by 2^N (Q15 = 15)",
+      "placeholder": 0,
+      "minValue": 0,
+      "maxValue": 63,
+      "visibleWhen": "formatIsFixed",
+      "validate": "formatFractionFitsWidth",
+      "apiError": "Invalid formatFractionBits: must be 0 to formatWidth - 1",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "formatFractionBits"
+      }
+    },
+    {
+      "id": "FormatBitOffset",
+      "field": "formatBitOffset",
+      "jsonKey": "FormatBitOffset",
+      "formId": "kDatasetView_FormatBitOffset",
+      "type": "int",
+      "default": 0,
+      "scope": "document",
+      "persist": "whenNonZero",
+      "clamp": {
+        "editor": {
+          "min": 0,
+          "max": 63
+        },
+        "api": {
+          "min": 0,
+          "max": 63
+        }
+      },
+      "section": "format",
+      "widget": "IntField",
+      "label": "Bit Offset",
+      "description": "Position of the field's lowest bit, counted from the least significant bit (0)",
+      "placeholder": 0,
+      "minValue": 0,
+      "maxValue": 63,
+      "visibleWhen": "formatIsBits",
+      "validate": "formatBitsFitWidth",
+      "apiError": "Invalid bit field: formatBitOffset + formatBitWidth must not exceed formatWidth",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "formatBitOffset"
+      }
+    },
+    {
+      "id": "FormatBitWidth",
+      "field": "formatBitWidth",
+      "jsonKey": "FormatBitWidth",
+      "formId": "kDatasetView_FormatBitWidth",
+      "type": "int",
+      "default": 1,
+      "scope": "document",
+      "persist": "withProperty",
+      "persistWith": "Format",
+      "clamp": {
+        "editor": {
+          "min": 1,
+          "max": 64
+        },
+        "api": {
+          "min": 1,
+          "max": 64
+        }
+      },
+      "section": "format",
+      "widget": "IntField",
+      "label": "Bit Count",
+      "description": "Number of bits in the field (1 = a single flag bit)",
+      "placeholder": 1,
+      "minValue": 1,
+      "maxValue": 64,
+      "visibleWhen": "formatIsBits",
+      "validate": "formatBitsFitWidth",
+      "apiError": "Invalid bit field: formatBitOffset + formatBitWidth must not exceed formatWidth",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "formatBitWidth"
+      }
+    },
+    {
+      "id": "FormatScale",
+      "field": "formatScale",
+      "jsonKey": "FormatScale",
+      "formId": "kDatasetView_FormatScale",
+      "type": "double",
+      "default": 1,
+      "scope": "document",
+      "persist": "withProperty",
+      "persistWith": "Format",
+      "section": "format",
+      "widget": "FloatField",
+      "label": "Scale",
+      "description": "Multiplier of the linear decoder: value = raw * scale + offset",
+      "placeholder": 1,
+      "visibleWhen": "formatIsScale",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "formatScale"
+      }
+    },
+    {
+      "id": "FormatOffset",
+      "field": "formatOffset",
+      "jsonKey": "FormatOffset",
+      "formId": "kDatasetView_FormatOffset",
+      "type": "double",
+      "default": 0,
+      "scope": "document",
+      "persist": "whenNonZero",
+      "section": "format",
+      "widget": "FloatField",
+      "label": "Offset",
+      "description": "Added after the scale: value = raw * scale + offset",
+      "placeholder": 0,
+      "visibleWhen": "formatIsScale",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "formatOffset"
+      }
+    },
+    {
+      "id": "LabelsDefault",
+      "field": "labelsDefault",
+      "jsonKey": "LabelsDefault",
+      "type": "string",
+      "default": "",
+      "scope": "document",
+      "apiDescription": "Text shown for a value no label row matches; empty shows the number",
+      "persist": "whenNonEmpty",
+      "writeTransform": "simplified",
+      "readTransform": "simplified",
+      "commitTransform": "simplified",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "labelsDefault"
+      },
+      "notes": "Spec 0108; edited in the Labels dialog as the table's catch-all row, not a form row."
+    },
+    {
       "id": "GroupId",
       "field": "groupId",
       "jsonKey": "GroupId",
@@ -1899,6 +2297,15 @@
       "persist": "never",
       "default": false,
       "reason": "Derived on read from value; never serialized."
+    },
+    {
+      "field": "label",
+      "type": "string",
+      "jsonKey": "Label",
+      "persist": "whenNonEmpty",
+      "default": "",
+      "reason": "Label text of the current value (spec 0108), set on the dashboard's copy at ingest and written beside value only when a label matched; derived, never read back.",
+      "readBack": false
     }
   ],
   "subEntities": [
@@ -1948,6 +2355,15 @@
       "writeHook": "writeTransformParams",
       "apiName": "transformParams",
       "notes": "Named scalar parameters (number | string | bool) the dataset transform reads as `params` (spec 0083); nested values are dropped by the reader."
+    },
+    {
+      "field": "labels",
+      "jsonKey": "Labels",
+      "shape": "map",
+      "readHook": "readLabels",
+      "writeHook": "writeLabels",
+      "apiName": "labels",
+      "notes": "Value-to-text table (spec 0108): a JSON array of {value, text} the two hooks own whole, through the hook-driven map shape. The reader drops a non-integer or duplicate key and an empty text and sorts by value; an empty table writes nothing."
     }
   ]
 }

@@ -23,6 +23,8 @@
 
 #include <cmath>
 
+#include "Core/DataModel/Frame.h"
+#include "Core/DataModel/ValueDecoder.h"
 #include "Core/SerialStudio.h"
 
 static DataModel::PropertyHooks::ColorValidator s_colorValidator         = nullptr;
@@ -100,4 +102,31 @@ bool DataModel::PropertyHooks::isValidTransformLanguage(int language)
 {
   return language == -1 || language == SerialStudio::JavaScript || language == SerialStudio::Lua
       || language == SerialStudio::Expression;
+}
+
+/**
+ * @brief Returns true when @p format names a value decoder: none, fixed point, bit field or
+ *        scale (spec 0108).
+ */
+bool DataModel::PropertyHooks::isValidValueFormat(int format)
+{
+  return format >= ValueFormatNone && format <= ValueFormatScale;
+}
+
+/**
+ * @brief Returns true when the fixed-point fraction bits fit the declared integer width: 0 to
+ *        formatWidth - 1, so one integer or sign bit always remains.
+ */
+bool DataModel::PropertyHooks::isValidFormatFraction(const Dataset& d)
+{
+  return d.formatFractionBits >= 0 && d.formatFractionBits < d.formatWidth;
+}
+
+/**
+ * @brief Returns true when the bit field lies inside the declared integer width.
+ */
+bool DataModel::PropertyHooks::isValidFormatBitField(const Dataset& d)
+{
+  return d.formatBitOffset >= 0 && d.formatBitWidth >= 1
+      && d.formatBitOffset + d.formatBitWidth <= d.formatWidth;
 }

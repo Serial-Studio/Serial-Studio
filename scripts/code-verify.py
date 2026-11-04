@@ -2136,6 +2136,7 @@ _HOTPATH_ASSERT_ALLOWED = (
     "core/Core/DataModel/Frame.h",
     "core/Core/DataModel/Frame.cpp",
     "core/Core/DataModel/DataBlock.h",
+    "core/Core/DataModel/ValueDecoder.h",
     "core/Pipeline/DataModel/FrameBuilder.h",
     "core/Pipeline/DataModel/FrameBuilder.cpp",
     "core/Pipeline/DataModel/FrameBuilder/BlockPublisher.cpp",
@@ -3909,6 +3910,9 @@ _REGISTRY_KEY_ALLOWED = {
     # tier can link the ProjectModel-free validators alone.
     "core/Pipeline/DataModel/Project/PropertyHooks.cpp": "the manifest's named escape hatches",
     "core/Core/DataModel/PropertyValidators.cpp": "the ProjectModel-free validators",
+    # The dedicated sub-entity verbs (alarm bands, FFT markers, value labels): each payload is
+    # read through the manifest's own subEntity hook, so no field map is spelled out here.
+    "core/Api/API/Handlers/ProjectDatasetFieldCommands.cpp": "sub-entity verbs over manifest hooks",
 }
 
 

@@ -104,9 +104,7 @@ private:
                                             const QString& rootSelector);
   [[nodiscard]] static QString signalSpecLine(const DBCMux::OrderedSignal& entry,
                                               const QString& rootSelector);
-  [[nodiscard]] static QString enumTransformCode(
-    const QString& table,
-    const QString& reg,
+  [[nodiscard]] static std::vector<ValueLabel> valueLabelsFor(
     const QCanDbcFileParser::ValueDescriptions& valueLabels);
 
   QString selectGroupWidget(const QCanMessageDescription& message);

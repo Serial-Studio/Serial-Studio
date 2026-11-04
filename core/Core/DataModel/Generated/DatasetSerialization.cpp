@@ -77,6 +77,9 @@ static void writeDatasetFlags(QJsonObject& obj, const Dataset& d)
   if (d.overviewDisplay)
     obj.insert(Keys::Overview, true);
 
+  if (d.formatSigned)
+    obj.insert(Keys::FormatSigned, true);
+
   if (!d.enabled)
     obj.insert(Keys::Disabled, true);
 }
@@ -118,6 +121,27 @@ static void writeDatasetNumbers(QJsonObject& obj, const Dataset& d)
   if (!d.transformCode.isEmpty())
     obj.insert(Keys::TransformLanguage, d.transformLanguage);
 
+  if (d.format != 0)
+    obj.insert(Keys::Format, d.format);
+
+  if (d.format)
+    obj.insert(Keys::FormatWidth, d.formatWidth);
+
+  if (d.formatFractionBits != 0)
+    obj.insert(Keys::FormatFractionBits, d.formatFractionBits);
+
+  if (d.formatBitOffset != 0)
+    obj.insert(Keys::FormatBitOffset, d.formatBitOffset);
+
+  if (d.format)
+    obj.insert(Keys::FormatBitWidth, d.formatBitWidth);
+
+  if (d.format)
+    obj.insert(Keys::FormatScale, d.formatScale);
+
+  if (d.formatOffset != 0)
+    obj.insert(Keys::FormatOffset, d.formatOffset);
+
   obj.insert(Keys::GroupId, d.groupId);
   obj.insert(Keys::DatasetId, d.datasetId);
   if (d.uniqueId >= 0)
@@ -148,7 +172,12 @@ static void writeDatasetStrings(QJsonObject& obj, const Dataset& d)
   if (!d.transformCode.isEmpty())
     obj.insert(Keys::TransformCode, d.transformCode);
 
+  if (!d.labelsDefault.isEmpty())
+    obj.insert(Keys::LabelsDefault, d.labelsDefault.simplified());
+
   obj.insert(Keys::Value, d.value.simplified());
+  if (!d.label.isEmpty())
+    obj.insert(Keys::Label, d.label);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -175,6 +204,8 @@ static void writeDatasetSubEntities(QJsonObject& obj, const Dataset& d)
   }
 
   writeDatasetTransformParams(obj, d);
+
+  writeDatasetLabels(obj, d);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -199,6 +230,7 @@ static void readDatasetFlags(Dataset& d, const QJsonObject& obj)
   d.alarmsWhileVisible = ss_jsr(obj, Keys::AlarmsWhileVisible, false).toBool();
   d.led = ss_jsr(obj, Keys::LED, false).toBool();
   d.overviewDisplay = ss_jsr(obj, Keys::Overview, false).toBool();
+  d.formatSigned = ss_jsr(obj, Keys::FormatSigned, false).toBool();
   d.enabled = !ss_jsr(obj, Keys::Disabled, false).toBool();
 }
 
@@ -227,6 +259,13 @@ static void readDatasetNumbers(Dataset& d, const QJsonObject& obj)
   d.alarmDeadband = SerialStudio::toDouble(ss_jsr(obj, Keys::AlarmDeadband, 0));
   d.ledHigh = SerialStudio::toDouble(ss_jsr(obj, Keys::LedHigh, 80));
   d.transformLanguage = ss_jsr(obj, Keys::TransformLanguage, -1).toInt();
+  d.format = ss_jsr(obj, Keys::Format, 0).toInt();
+  d.formatWidth = ss_jsr(obj, Keys::FormatWidth, 16).toInt();
+  d.formatFractionBits = ss_jsr(obj, Keys::FormatFractionBits, 0).toInt();
+  d.formatBitOffset = ss_jsr(obj, Keys::FormatBitOffset, 0).toInt();
+  d.formatBitWidth = ss_jsr(obj, Keys::FormatBitWidth, 1).toInt();
+  d.formatScale = SerialStudio::toDouble(ss_jsr(obj, Keys::FormatScale, 1));
+  d.formatOffset = SerialStudio::toDouble(ss_jsr(obj, Keys::FormatOffset, 0));
   d.uniqueId = ss_jsr(obj, Keys::UniqueId, -1).toInt();
   d.sourceId = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
 }
@@ -245,6 +284,7 @@ static void readDatasetStrings(Dataset& d, const QJsonObject& obj)
   d.widget = ss_jsr(obj, Keys::Widget, "").toString().simplified();
   d.displayFormat = ss_jsr(obj, Keys::DisplayFormat, "0d").toString();
   d.transformCode = ss_jsr(obj, Keys::TransformCode, "").toString();
+  d.labelsDefault = ss_jsr(obj, Keys::LabelsDefault, "").toString().simplified();
   d.value = ss_jsr(obj, Keys::Value, "").toString().simplified();
 }
 
@@ -283,6 +323,7 @@ static void finalizeDatasetRead(Dataset& d, const QJsonObject& obj)
   readDatasetAlarmBands(d, obj);
   readDatasetFrequencyMarkers(d, obj);
   readDatasetTransformParams(d, obj);
+  readDatasetLabels(d, obj);
   normalizeDatasetRanges(d);
 }
 

@@ -285,6 +285,7 @@
           "persist": {
             "enum": [
               "always",
+              "whenNonEmpty",
               "never"
             ]
           },
@@ -333,7 +334,7 @@
               "collection",
               "map"
             ],
-            "description": "collection (default): a std::vector of structs written through serialize(entry); map: a QVariantMap written and read through the named hooks as one JSON object."
+            "description": "collection (default): a std::vector of structs written through serialize(entry); map: a value the named hooks write and read whole (a QVariantMap as one JSON object, or the labels array)."
           },
           "apiName": {
             "type": "string"
@@ -390,6 +391,7 @@
           "readAlarmBands",
           "readFrequencyMarkers",
           "readTransformParams",
+          "readLabels",
           "normalizeRanges"
         ]
       },

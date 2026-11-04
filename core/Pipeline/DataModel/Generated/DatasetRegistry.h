@@ -74,6 +74,14 @@ typedef enum {
   kDatasetView_SuppressAlarms,
   kDatasetView_AlarmDeadband,
   kDatasetView_AlarmsWhileVisible,
+  kDatasetView_Format,
+  kDatasetView_FormatWidth,
+  kDatasetView_FormatSigned,
+  kDatasetView_FormatFractionBits,
+  kDatasetView_FormatBitOffset,
+  kDatasetView_FormatBitWidth,
+  kDatasetView_FormatScale,
+  kDatasetView_FormatOffset,
 } DatasetItem;
 
 namespace DataModel::Registry {
@@ -228,6 +236,33 @@ inline constexpr DatasetProperty kDatasetProperties[] = {
   {"TransformLanguage", "transformLanguage", "transformLanguage", "Edit Dataset", "dataset", -1,
    PropertyType::Int, PropertyWidget::None, PersistRule::WithProperty, false, false, false,
    false},
+  {"Format", "format", "format", "Edit Dataset", "dataset", kDatasetView_Format,
+   PropertyType::Int, PropertyWidget::ComboBox, PersistRule::WhenNonZero, true, false, false,
+   false},
+  {"FormatWidth", "formatWidth", "formatWidth", "Edit Dataset", "dataset",
+   kDatasetView_FormatWidth, PropertyType::Int, PropertyWidget::IntField,
+   PersistRule::WithProperty, true, true, false, false},
+  {"FormatSigned", "formatSigned", "formatSigned", "Edit Dataset", "dataset",
+   kDatasetView_FormatSigned, PropertyType::Bool, PropertyWidget::CheckBox, PersistRule::WhenTrue,
+   true, false, false, false},
+  {"FormatFractionBits", "formatFractionBits", "formatFractionBits", "Edit Dataset", "dataset",
+   kDatasetView_FormatFractionBits, PropertyType::Int, PropertyWidget::IntField,
+   PersistRule::WhenNonZero, true, true, false, false},
+  {"FormatBitOffset", "formatBitOffset", "formatBitOffset", "Edit Dataset", "dataset",
+   kDatasetView_FormatBitOffset, PropertyType::Int, PropertyWidget::IntField,
+   PersistRule::WhenNonZero, true, true, false, false},
+  {"FormatBitWidth", "formatBitWidth", "formatBitWidth", "Edit Dataset", "dataset",
+   kDatasetView_FormatBitWidth, PropertyType::Int, PropertyWidget::IntField,
+   PersistRule::WithProperty, true, true, false, false},
+  {"FormatScale", "formatScale", "formatScale", "Edit Dataset", "dataset",
+   kDatasetView_FormatScale, PropertyType::Double, PropertyWidget::FloatField,
+   PersistRule::WithProperty, true, true, false, false},
+  {"FormatOffset", "formatOffset", "formatOffset", "Edit Dataset", "dataset",
+   kDatasetView_FormatOffset, PropertyType::Double, PropertyWidget::FloatField,
+   PersistRule::WhenNonZero, true, true, false, false},
+  {"LabelsDefault", "labelsDefault", "labelsDefault", "Edit Dataset", "dataset", -1,
+   PropertyType::String, PropertyWidget::None, PersistRule::WhenNonEmpty, false, true, false,
+   false},
   {"GroupId", "groupId", "", "", "dataset", -1, PropertyType::Int, PropertyWidget::None,
    PersistRule::Always, false, false, false, false},
   {"DatasetId", "datasetId", "", "", "dataset", -1, PropertyType::Int, PropertyWidget::None,
@@ -243,7 +278,7 @@ inline constexpr DatasetProperty kDatasetProperties[] = {
 /**
  * @brief Number of declared dataset properties.
  */
-inline constexpr int kDatasetPropertyCount = 45;
+inline constexpr int kDatasetPropertyCount = 54;
 
 /**
  * @brief Returns the property bound to a form-field id, or null when none is.
@@ -282,6 +317,11 @@ inline constexpr int kDatasetPropertyCount = 45;
  * @brief Returns the shared option source for the displayFormats domain.
  */
 [[nodiscard]] const PropertyHooks::StaticMapOptions& displayFormatsOptions();
+
+/**
+ * @brief Returns the shared option source for the valueFormats domain.
+ */
+[[nodiscard]] const PropertyHooks::ParallelValueOptions& valueFormatsOptions();
 
 /**
  * @brief Returns the shared option source for the plotOptions domain.

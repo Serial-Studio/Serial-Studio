@@ -22,6 +22,7 @@
 #include "API/Handlers/ProjectDatasetFieldCommands.h"
 
 #include <algorithm>
+#include <cmath>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QStringList>
@@ -49,13 +50,79 @@ API::Handlers::ProjectDatasetFieldCommands::ProjectDatasetFieldCommands(CommandR
 {}
 
 /**
- * @brief Register dataset field setters, alarm bands and FFT markers.
+ * @brief Register dataset field setters, alarm bands, FFT markers and value labels.
  */
 void API::Handlers::ProjectDatasetFieldCommands::registerCommands()
 {
   registerFieldCommands();
   registerAlarmCommands();
   registerMarkerCommands();
+  registerLabelCommands();
+}
+
+/**
+ * @brief Register the dataset value-label getter / setter commands (spec 0108).
+ */
+void API::Handlers::ProjectDatasetFieldCommands::registerLabelCommands()
+{
+  auto& registry = m_registry;
+
+  registry.registerCommand(
+    QStringLiteral("project.dataset.getLabels"),
+    QStringLiteral("Returns the dataset's value labels: labels is an array of {value (integer), "
+                   "text} sorted by value, labelsDefault the catch-all text shown for a value no "
+                   "row lists (empty = show the number). Labels change only how the value reads "
+                   "as text; plots, alarms, exports and the API's numeric fields keep the "
+                   "number."),
+    makeSchema({
+      {  QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                  },
+      {QString(Keys::DatasetId),
+       QStringLiteral("integer"),
+       QStringLiteral("Dataset id within the group")}
+  }),
+    &datasetGetLabels);
+
+  registry.registerCommand(
+    QStringLiteral("project.dataset.setLabels"),
+    QStringLiteral("Atomically replaces the dataset's value labels. Each entry is {value, text} "
+                   "where value must be an integer (a non-integer value is refused with an "
+                   "error); rows with empty text or a repeated value are dropped and counted in "
+                   "result.droppedInvalid (the first row of a value wins). The dataset's value "
+                   "is rounded to the nearest integer before the lookup, and wherever it is "
+                   "shown as text the matching row's text replaces it; plots, alarms, exports "
+                   "and numeric API fields keep the number. labelsDefault (optional) sets the "
+                   "catch-all text for unlisted values. Labels are not Pro content. Pass an "
+                   "empty array to clear all labels."),
+    makeSchema(
+      {
+        {                   QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                               },
+        {                          QString(Keys::DatasetId),
+         QStringLiteral("integer"),
+         QStringLiteral("Dataset id within the group")              },
+        arrayProp(
+          QString(Keys::Labels),
+          QStringLiteral("Full replacement label list (empty = no labels)."),
+          QJsonObject{
+         {QStringLiteral("type"), QStringLiteral("object")},
+         {QStringLiteral("properties"),
+         QJsonObject{
+         {QString(Keys::Value),
+         QJsonObject{{QStringLiteral("type"), QStringLiteral("integer")},
+         {QStringLiteral("description"),
+         QStringLiteral("Integer the rounded value is matched against")}}},
+         {QString(Keys::LabelText),
+         QJsonObject{{QStringLiteral("type"), QStringLiteral("string")},
+         {QStringLiteral("description"),
+         QStringLiteral("Text shown in place of the number")}}}}},
+         {QStringLiteral("required"),
+         QJsonArray{QString(Keys::Value), QString(Keys::LabelText)}}}
+        )
+  },
+      {{QString(Keys::LabelsDefault),
+        QStringLiteral("string"),
+        QStringLiteral("Optional catch-all text for unlisted values (empty = show the "
+                       "number)")}}),
+    &datasetSetLabels);
 }
 
 /**
@@ -662,6 +729,136 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetFFTMa
   result[Keys::GroupId]             = groupId;
   result[Keys::DatasetId]           = datasetId;
   result[QStringLiteral("count")]   = static_cast<int>(updated.fftMarkers.size());
+  result[QStringLiteral("updated")] = true;
+  if (dropped > 0)
+    result[QStringLiteral("droppedInvalid")] = dropped;
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Value labels (spec 0108)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Finds the project dataset @p params names; null with @p error set when none matches.
+ */
+[[nodiscard]] static const DataModel::Dataset* labelTarget(const QJsonObject& params,
+                                                           QString& error)
+{
+  const int groupId   = params.value(Keys::GroupId).toInt();
+  const int datasetId = params.value(Keys::DatasetId).toInt();
+  for (const auto& group : DataModel::pipelineModules().projectModel.groups()) {
+    if (group.groupId != groupId)
+      continue;
+
+    for (const auto& dataset : group.datasets)
+      if (dataset.datasetId == datasetId)
+        return &dataset;
+
+    error = QStringLiteral("Dataset id not found in group: %1/%2")
+              .arg(QString::number(groupId), QString::number(datasetId));
+    return nullptr;
+  }
+
+  error = QStringLiteral("Group id not found: %1").arg(groupId);
+  return nullptr;
+}
+
+/**
+ * @brief Returns the index of the first label entry whose value is not an integer a double holds
+ *        exactly, or -1 when every entry passes.
+ */
+[[nodiscard]] static int firstNonIntegerLabel(const QJsonArray& labels)
+{
+  constexpr double kExactIntegerLimit = 9007199254740992.0;
+  for (qsizetype i = 0; i < labels.size(); ++i) {
+    bool ok            = false;
+    const double value = SerialStudio::toDouble(labels.at(i).toObject().value(Keys::Value), &ok);
+    if (!ok || std::abs(value) > kExactIntegerLimit || value != std::trunc(value))
+      return static_cast<int>(i);
+  }
+
+  return -1;
+}
+
+/**
+ * @brief Returns the dataset's value labels as {value, text} rows plus the catch-all text.
+ */
+API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetGetLabels(
+  const QString& id, const QJsonObject& params)
+{
+  const QStringList required{QString(Keys::GroupId), QString(Keys::DatasetId)};
+  for (const auto& key : required)
+    if (!params.contains(key))
+      return CommandResponse::makeError(
+        id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: %1").arg(key));
+
+  QString error;
+  const auto* dataset = labelTarget(params, error);
+  if (!dataset)
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
+
+  QJsonArray labels;
+  for (const auto& label : dataset->labels) {
+    QJsonObject row;
+    row.insert(Keys::Value, label.value);
+    row.insert(Keys::LabelText, label.text);
+    labels.append(row);
+  }
+
+  QJsonObject result;
+  result[Keys::GroupId]           = dataset->groupId;
+  result[Keys::DatasetId]         = dataset->datasetId;
+  result[Keys::Labels]            = labels;
+  result[Keys::LabelsDefault]     = dataset->labelsDefault;
+  result[QStringLiteral("count")] = labels.size();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Atomic write of the dataset's value labels; a non-integer value refuses the whole call,
+ *        and the rows then pass through the project reader's own rule.
+ */
+API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetLabels(
+  const QString& id, const QJsonObject& params)
+{
+  const QStringList required{
+    QString(Keys::GroupId), QString(Keys::DatasetId), QString(Keys::Labels)};
+  for (const auto& key : required)
+    if (!params.contains(key))
+      return CommandResponse::makeError(
+        id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: %1").arg(key));
+
+  QString error;
+  const auto* dataset = labelTarget(params, error);
+  if (!dataset)
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
+
+  const auto rows = params.value(Keys::Labels).toArray();
+  if (const int bad = firstNonIntegerLabel(rows); bad >= 0)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Invalid labels[%1].value: label values must be integers").arg(bad));
+
+  QJsonObject payload;
+  payload.insert(Keys::Labels, rows);
+
+  DataModel::Dataset updated = *dataset;
+  DataModel::readDatasetLabels(updated, payload);
+  if (params.contains(Keys::LabelsDefault))
+    updated.labelsDefault = params.value(Keys::LabelsDefault).toString().simplified();
+
+  auto& pm = DataModel::pipelineModules().projectModel;
+  pm.updateDataset(updated.groupId, updated.datasetId, updated, true);
+
+  const int dropped = static_cast<int>(rows.size()) - static_cast<int>(updated.labels.size());
+
+  QJsonObject result;
+  result[Keys::GroupId]             = updated.groupId;
+  result[Keys::DatasetId]           = updated.datasetId;
+  result[QStringLiteral("count")]   = static_cast<int>(updated.labels.size());
   result[QStringLiteral("updated")] = true;
   if (dropped > 0)
     result[QStringLiteral("droppedInvalid")] = dropped;

@@ -29,6 +29,8 @@
 #include <vector>
 
 #include "Core/DataModel/Frame.h"
+#include "Core/DataModel/ValueDecoder.h"
+#include "Core/DataModel/ValueFormat.h"
 #include "Core/HotpathOptimization.h"
 #include "Core/SSAssert.h"
 
@@ -273,13 +275,13 @@ SS_FORCE_INLINE void assign_string_owned(QString& dst, const QString& src)
 
 /**
  * @brief The ONE rule for whether a block column carries a pre-transform ("raw") twin (spec 0085):
- *        only a transform or a computed dataset can make the final value differ from the parsed
- *        one. The live writers skip the dataset-level raw copies under the same rule; the block
- *        column is the gated site every consumer reads, falling back to the final value.
+ *        only a transform, a computed dataset or a value decoder (spec 0108) can make the final
+ *        value differ from the parsed one. The live writers skip the dataset-level raw copies under
+ *        the same rule; the block column is the gated site every consumer reads.
  */
 [[nodiscard]] SS_FORCE_INLINE bool dataset_carries_raw(const Dataset& dataset) noexcept
 {
-  return dataset.virtual_ || !dataset.transformCode.isEmpty();
+  return dataset.virtual_ || !dataset.transformCode.isEmpty() || has_decoder(dataset);
 }
 
 /**
@@ -409,6 +411,9 @@ inline void apply_block_sample(FrameTemplate& tpl, const DataBlock& block, qsize
 
     dataset->rawNumericValue = column.hasRaw ? column.rawValues[slot] : dataset->numericValue;
     dataset->rawValue = column.hasRaw && column.hasText ? column.rawText[slot] : dataset->value;
+    if (!dataset->labels.empty() || !dataset->labelsDefault.isEmpty()) [[unlikely]]
+      dataset->label =
+        dataset->isNumeric ? ValueFormat::labelFor(*dataset, dataset->numericValue) : QString();
   }
 }
 

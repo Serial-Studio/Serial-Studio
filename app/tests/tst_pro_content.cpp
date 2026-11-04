@@ -44,6 +44,7 @@ private slots:
   void unchangedTransformDoesNotAuthor();
   void newCodeAuthors();
   void languageOrParamsChangeAuthors();
+  void formatsAndLabelsAreFree();
 };
 
 /**
@@ -187,6 +188,41 @@ void TstProContent::languageOrParamsChangeAuthors()
   auto params = before;
   params.transformParams.insert(QStringLiteral("gain"), 2.0);
   QVERIFY(SerialStudio::authorsTransform(before, params));
+}
+
+/**
+ * @brief Declarative formats and value labels are not Pro content (spec 0108 R7, AC5): a project
+ *        using every decoder and a label table, with no transform, counts zero.
+ */
+void TstProContent::formatsAndLabelsAreFree()
+{
+  DataModel::Group group;
+  for (int kind = 0; kind <= 3; ++kind) {
+    DataModel::Dataset dataset;
+    dataset.format             = kind;
+    dataset.formatWidth        = 16;
+    dataset.formatSigned       = true;
+    dataset.formatFractionBits = 4;
+    dataset.formatBitOffset    = 3;
+    dataset.formatBitWidth     = 2;
+    dataset.formatScale        = 0.5;
+    dataset.formatOffset       = -40;
+    dataset.displayFormat      = kind % 2 ? QStringLiteral("hex") : QStringLiteral("bin");
+    dataset.labels             = {{0, QStringLiteral("Off")}, {1, QStringLiteral("On")}};
+    dataset.labelsDefault      = QStringLiteral("Fault");
+    group.datasets.push_back(dataset);
+  }
+
+  const std::vector<DataModel::Group> groups = {group};
+  const auto summary                         = SerialStudio::proContentSummary(groups, 0);
+  QCOMPARE(summary.transforms, 0);
+  QCOMPARE(summary.tables, 0);
+
+  const auto& labelled = group.datasets.front();
+  auto relabelled      = labelled;
+  relabelled.labels.push_back({2, QStringLiteral("Error")});
+  relabelled.format = 1;
+  QVERIFY(!SerialStudio::authorsTransform(labelled, relabelled));
 }
 
 QTEST_GUILESS_MAIN(TstProContent)

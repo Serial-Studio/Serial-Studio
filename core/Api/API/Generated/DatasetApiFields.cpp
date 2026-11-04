@@ -133,13 +133,17 @@ static QString applyDatasetStringFields2(DataModel::Dataset& d,
   if (!key_transform_code.isEmpty())
     d.transformCode = params.value(key_transform_code).toString();
 
+  const auto key_labels_default = takeDatasetField(params, consumed, {Keys::LabelsDefault});
+  if (!key_labels_default.isEmpty())
+    d.labelsDefault = params.value(key_labels_default).toString().simplified();
+
   return QString();
 }
 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies declared number fields onto d (part 1 of 4); returns a non-empty error string when
+ * @brief Applies declared number fields onto d (part 1 of 5); returns a non-empty error string when
  *        a value is rejected.
  */
 static QString applyDatasetNumberFields1(DataModel::Dataset& d,
@@ -191,7 +195,7 @@ static QString applyDatasetNumberFields1(DataModel::Dataset& d,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies declared number fields onto d (part 2 of 4); returns a non-empty error string when
+ * @brief Applies declared number fields onto d (part 2 of 5); returns a non-empty error string when
  *        a value is rejected.
  */
 static QString applyDatasetNumberFields2(DataModel::Dataset& d,
@@ -236,7 +240,7 @@ static QString applyDatasetNumberFields2(DataModel::Dataset& d,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies declared number fields onto d (part 3 of 4); returns a non-empty error string when
+ * @brief Applies declared number fields onto d (part 3 of 5); returns a non-empty error string when
  *        a value is rejected.
  */
 static QString applyDatasetNumberFields3(DataModel::Dataset& d,
@@ -291,7 +295,7 @@ static QString applyDatasetNumberFields3(DataModel::Dataset& d,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies declared number fields onto d (part 4 of 4); returns a non-empty error string when
+ * @brief Applies declared number fields onto d (part 4 of 5); returns a non-empty error string when
  *        a value is rejected.
  */
 static QString applyDatasetNumberFields4(DataModel::Dataset& d,
@@ -300,6 +304,58 @@ static QString applyDatasetNumberFields4(DataModel::Dataset& d,
                                          QSet<QString>& consumed)
 {
   Q_UNUSED(rebuildTree);
+
+  const auto key_format = takeDatasetField(params, consumed, {Keys::Format});
+  if (!key_format.isEmpty()) {
+    const auto candidate = params.value(key_format).toInt();
+    if (!PropertyHooks::isValidValueFormat(candidate))
+      return QStringLiteral("Invalid format: must be 0 (none), 1 (fixed point), 2 (bit field) or "
+                            "3 (scale)");
+
+    d.format = candidate;
+  }
+
+  const auto key_format_width = takeDatasetField(params, consumed, {Keys::FormatWidth});
+  if (!key_format_width.isEmpty())
+    d.formatWidth = qBound(1, params.value(key_format_width).toInt(), 64);
+
+  const auto key_format_fraction_bits = takeDatasetField(
+    params, consumed,
+    {Keys::FormatFractionBits});
+  if (!key_format_fraction_bits.isEmpty())
+    d.formatFractionBits = qBound(0, params.value(key_format_fraction_bits).toInt(), 63);
+
+  const auto key_format_bit_offset = takeDatasetField(params, consumed, {Keys::FormatBitOffset});
+  if (!key_format_bit_offset.isEmpty())
+    d.formatBitOffset = qBound(0, params.value(key_format_bit_offset).toInt(), 63);
+
+  const auto key_format_bit_width = takeDatasetField(params, consumed, {Keys::FormatBitWidth});
+  if (!key_format_bit_width.isEmpty())
+    d.formatBitWidth = qBound(1, params.value(key_format_bit_width).toInt(), 64);
+
+  const auto key_format_scale = takeDatasetField(params, consumed, {Keys::FormatScale});
+  if (!key_format_scale.isEmpty())
+    d.formatScale = SerialStudio::toDouble(params.value(key_format_scale));
+
+  return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Applies declared number fields onto d (part 5 of 5); returns a non-empty error string when
+ *        a value is rejected.
+ */
+static QString applyDatasetNumberFields5(DataModel::Dataset& d,
+                                         const QJsonObject& params,
+                                         bool& rebuildTree,
+                                         QSet<QString>& consumed)
+{
+  Q_UNUSED(rebuildTree);
+
+  const auto key_format_offset = takeDatasetField(params, consumed, {Keys::FormatOffset});
+  if (!key_format_offset.isEmpty())
+    d.formatOffset = SerialStudio::toDouble(params.value(key_format_offset));
 
   const auto key_source_id = takeDatasetField(
     params, consumed,
@@ -427,6 +483,10 @@ static QString applyDatasetFlagFields3(DataModel::Dataset& d,
     rebuildTree = true;
   }
 
+  const auto key_format_signed = takeDatasetField(params, consumed, {Keys::FormatSigned});
+  if (!key_format_signed.isEmpty())
+    d.formatSigned = params.value(key_format_signed).toBool();
+
   return QString();
 }
 
@@ -488,6 +548,13 @@ static void applyDatasetSubEntityFields(DataModel::Dataset& d,
     nested.insert(Keys::TransformParams, params.value(key_transform_params));
     readDatasetTransformParams(d, nested);
   }
+
+  const auto key_labels = takeDatasetField(params, consumed, {Keys::Labels});
+  if (!key_labels.isEmpty()) {
+    QJsonObject nested;
+    nested.insert(Keys::Labels, params.value(key_labels));
+    readDatasetLabels(d, nested);
+  }
 }
 
 }  // namespace API::Handlers
@@ -520,6 +587,9 @@ QString API::Handlers::ProjectHandler::applyDatasetUpdateParams(DataModel::Datas
   if (auto err = applyDatasetNumberFields4(d, params, rebuildTree, consumed); !err.isEmpty())
     return err;
 
+  if (auto err = applyDatasetNumberFields5(d, params, rebuildTree, consumed); !err.isEmpty())
+    return err;
+
   if (auto err = applyDatasetFlagFields1(d, params, rebuildTree, consumed); !err.isEmpty())
     return err;
 
@@ -528,6 +598,17 @@ QString API::Handlers::ProjectHandler::applyDatasetUpdateParams(DataModel::Datas
 
   if (auto err = applyDatasetFlagFields3(d, params, rebuildTree, consumed); !err.isEmpty())
     return err;
+
+  if (consumed.contains(Keys::FormatFractionBits) && !PropertyHooks::isValidFormatFraction(d))
+    return QStringLiteral("Invalid formatFractionBits: must be 0 to formatWidth - 1");
+
+  if (consumed.contains(Keys::FormatBitOffset) && !PropertyHooks::isValidFormatBitField(d))
+    return QStringLiteral("Invalid bit field: formatBitOffset + formatBitWidth must not exceed "
+                          "formatWidth");
+
+  if (consumed.contains(Keys::FormatBitWidth) && !PropertyHooks::isValidFormatBitField(d))
+    return QStringLiteral("Invalid bit field: formatBitOffset + formatBitWidth must not exceed "
+                          "formatWidth");
 
   applyDatasetSubEntityFields(d, params, consumed);
   return QString();
@@ -554,7 +635,7 @@ static QJsonObject datasetSchemaProperty(const char* type,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Declares dataset schema properties, part 1 of 4.
+ * @brief Declares dataset schema properties, part 1 of 5.
  */
 static void datasetSchemaPart1(QJsonObject& props)
 {
@@ -618,7 +699,7 @@ static void datasetSchemaPart1(QJsonObject& props)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Declares dataset schema properties, part 2 of 4.
+ * @brief Declares dataset schema properties, part 2 of 5.
  */
 static void datasetSchemaPart2(QJsonObject& props)
 {
@@ -686,7 +767,7 @@ static void datasetSchemaPart2(QJsonObject& props)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Declares dataset schema properties, part 3 of 4.
+ * @brief Declares dataset schema properties, part 3 of 5.
  */
 static void datasetSchemaPart3(QJsonObject& props)
 {
@@ -706,9 +787,11 @@ static void datasetSchemaPart3(QJsonObject& props)
                                      QJsonArray()));
   props.insert(Keys::DisplayFormat,
                datasetSchemaProperty("string",
-                                     "Decimal places or notation used on tick labels and the "
-                                     "value display",
-                                     QJsonArray({"", "0d", "1d", "2d", "3d", "sci"})));
+                                     "Decimal places on analog widget ticks and captions; "
+                                     "Hexadecimal and Binary apply wherever the value is shown as "
+                                     "text",
+                                     QJsonArray({"", "0d", "1d", "2d", "3d", "sci", "hex",
+                                                 "bin"})));
   props.insert(Keys::DecimalPoints,
                datasetSchemaProperty("integer",
                                      "Fixed decimal places for the value display; overrides the "
@@ -756,7 +839,7 @@ static void datasetSchemaPart3(QJsonObject& props)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Declares dataset schema properties, part 4 of 4.
+ * @brief Declares dataset schema properties, part 4 of 5.
  */
 static void datasetSchemaPart4(QJsonObject& props)
 {
@@ -778,6 +861,58 @@ static void datasetSchemaPart4(QJsonObject& props)
                                      "Transform script language: -1 inherit, 0 JavaScript, 1 Lua, "
                                      "3 Expression",
                                      QJsonArray()));
+  props.insert(Keys::Format,
+               datasetSchemaProperty("integer",
+                                     "Decodes the raw value before any transform: fixed point, a "
+                                     "bit field or a linear scale",
+                                     QJsonArray({0, 1, 2, 3})));
+  props.insert(Keys::FormatWidth,
+               datasetSchemaProperty("integer",
+                                     "Width of the raw integer in bits (1-64); integers wider "
+                                     "than 53 bits lose precision",
+                                     QJsonArray()));
+  props.insert(Keys::FormatSigned,
+               datasetSchemaProperty("boolean",
+                                     "Read the raw integer as two's complement at the declared "
+                                     "width",
+                                     QJsonArray()));
+  props.insert(Keys::FormatFractionBits,
+               datasetSchemaProperty("integer",
+                                     "Fraction bits of the fixed-point value: the raw integer is "
+                                     "divided by 2^N (Q15 = 15)",
+                                     QJsonArray()));
+  props.insert(Keys::FormatBitOffset,
+               datasetSchemaProperty("integer",
+                                     "Position of the field's lowest bit, counted from the least "
+                                     "significant bit (0)",
+                                     QJsonArray()));
+  props.insert(Keys::FormatBitWidth,
+               datasetSchemaProperty("integer",
+                                     "Number of bits in the field (1 = a single flag bit)",
+                                     QJsonArray()));
+  props.insert(Keys::FormatScale,
+               datasetSchemaProperty("number",
+                                     "Multiplier of the linear decoder: value = raw * scale + "
+                                     "offset",
+                                     QJsonArray()));
+  props.insert(Keys::FormatOffset,
+               datasetSchemaProperty("number",
+                                     "Added after the scale: value = raw * scale + offset",
+                                     QJsonArray()));
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Declares dataset schema properties, part 5 of 5.
+ */
+static void datasetSchemaPart5(QJsonObject& props)
+{
+  props.insert(Keys::LabelsDefault,
+               datasetSchemaProperty("string",
+                                     "Text shown for a value no label row matches; empty shows "
+                                     "the number",
+                                     QJsonArray()));
   props.insert(Keys::SourceId,
                datasetSchemaProperty("integer",
                                      "Source (device) this dataset belongs to",
@@ -797,6 +932,7 @@ QJsonObject API::Handlers::datasetFieldSchema()
   datasetSchemaPart2(props);
   datasetSchemaPart3(props);
   datasetSchemaPart4(props);
+  datasetSchemaPart5(props);
   return props;
 }
 

@@ -225,6 +225,10 @@ private:
 [[nodiscard]] bool alarmBandsDrawn(const Dataset& d, const ProjectModel& pm);
 [[nodiscard]] bool ledEnabled(const Dataset& d, const ProjectModel& pm);
 [[nodiscard]] bool ledBandsAbsent(const Dataset& d, const ProjectModel& pm);
+[[nodiscard]] bool formatHasWidth(const Dataset& d, const ProjectModel& pm);
+[[nodiscard]] bool formatIsFixed(const Dataset& d, const ProjectModel& pm);
+[[nodiscard]] bool formatIsBits(const Dataset& d, const ProjectModel& pm);
+[[nodiscard]] bool formatIsScale(const Dataset& d, const ProjectModel& pm);
 
 //--------------------------------------------------------------------------------------------------
 // Dynamic placeholders
