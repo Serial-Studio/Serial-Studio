@@ -1,5 +1,28 @@
 # Directory Map
 
+## Product Overview
+
+Data sources: UART,
+TCP/UDP/WebSocket/HTTP (one Network driver, spec 0068), BLE, Audio, Modbus, CAN Bus (Qt
+plugins plus direct gs_usb/SLCAN/Seeed backends; J1939 TP + ISO-TP reassembly, spec 0073),
+MQTT (Sparkplug B both directions, specs 0073/0074: host-application subscribe with project
+generation, edge-node publish with stable aliases), OPC UA (embedded open62541 + mbedTLS,
+six security policies None through Aes256_Sha256_RsaPss, spec 0067), Siemens S7comm
+(S7-300/400/1200/1500, in-house stack), EtherNet/IP (libplctag), IEC 60870-5-104 (in-house
+stack; all three PLC/telecontrol drivers are read-only clients, spec 0073), USB (libusb),
+HID (hidapi), Process I/O.
+
+Per-dataset value transforms in JS or Lua, with one shared library per
+language per project and per-dataset `params` (spec 0083). Pro features: Output
+widgets, Modbus, CAN Bus, OPC UA, S7comm, EtherNet/IP, IEC 60870-5-104, Sparkplug B, MDF4,
+3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer,
+Historian (per-session SQLite recording), InfluxDB 2.x sink (`core/Storage/InfluxDB/`, line
+protocol per block).
+
+Aural alerts (spec 0087, every build): an ISA-18.1 annunciator (`UI::Alarms::AlarmAnnunciator`,
+root-owned, `Cpp_UI_Alarms`, `alarms.*` API) with IEC 60601-1-8 WAV signatures played by
+`IO::Audio::SoundPlayer` on a raw miniaudio device.
+
 ## `core/`
 
 Seven statically linked CamelCase libraries live under `core/`; `app/src` holds only the

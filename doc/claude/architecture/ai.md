@@ -12,6 +12,8 @@ touched by any of it.
 
 ## The Tier Model — What May Run Without a Click
 
+**Contract (moved verbatim from CLAUDE.md, 2026-11-04):** A mutating tool call takes a **checkpoint**, never a save — the API descriptions and `app/rcc/ai/skills/` say so to the model, so a disk-contract change is incomplete until those strings change too. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. The table is generated into `core/Api/API/CommandSafetyTable.cpp` for the MCP tool hints (`scripts/generate-command-safety.py`; never hand-edit it). Enforced: ctest:tst_command_safety_table. The bundled source behind the `source/` prefix (spec 0078) is read-only and joins a search ONLY through the `path` scope — never add it to the default walk.
+
 Every command the model can reach carries a safety tier. The table of record is
 `app/rcc/ai/command_safety.json` (bundled through `rcc.qrc`), read once by
 `AI::CommandRegistry` through `Misc::JsonValidator::parseAndValidate`. Tiers are

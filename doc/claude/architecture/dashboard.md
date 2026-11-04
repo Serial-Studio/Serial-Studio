@@ -97,6 +97,8 @@ ring nodes, so cached pointers would dangle): `plotIndexes`, `multiplotCurves`, 
 
 ## Alarm Bands — Central Tracking in `UI::AlarmMonitor`
 
+**Contract (moved verbatim from CLAUDE.md, 2026-11-04):** Whether a dataset's bands are drawn has ONE home, `SerialStudio::datasetRendersAlarmBands` (Bar, Gauge, Meter, LED or a Bar Panel member); whether they alarm is `datasetRaisesBandAlarms` beside it (drawn, non-empty, `suppressAlarms` off) and, with `alarmsWhileVisible`, `datasetAlarmsNow` (a widget on screen). A second copy of one lets a band drawn nowhere sound while the editor refuses to open it. Bands on other datasets are kept and ignored, never cleared.
+
 Alarm-band *notifications* are dataset-level, not widget-level. `UI::AlarmMonitor` (singleton,
 wired in `ModuleManager::setupCrossModuleConnections`) rebuilds per-dataset trackers from
 `Dashboard::datasets()` on `widgetCountChanged` / `dataReset` and evaluates them on `updated()`
@@ -801,6 +803,8 @@ live data. Switching workspace tabs is where a user sees it. That is what "a hid
 releases its image and textures" costs.
 
 ## HDR Output (spec 0089)
+
+**Contract (moved verbatim from CLAUDE.md, 2026-11-04):** The whole UI composites SDR inside a per-window FP16 layer; only the output transform converts. An emissive element behind a `MultiEffect` or default-format layer silently clamps to SDR ("slightly dim" is a defect). The transfer math lives in `Misc/HdrTransfer.h` and every shader copies it verbatim (`tst_hdr_transfer` pins it); `_qt_sg_hdr_format` is private Qt API — re-verify per Qt bump.
 
 Free feature, macOS/Metal + Windows/D3D11 only. The whole design rests on one fact verified
 against the Qt 6.11.2 sources: the 2D scene graph neither linearizes sRGB nor applies the

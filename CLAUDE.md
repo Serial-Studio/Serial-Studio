@@ -11,6 +11,10 @@
   or multi-file work runs through spec-driven development (`/ss-spec` → `/ss-plan` → `/ss-tasks`
   → `/ss-implement`); see [doc/claude/spec-driven.md](doc/claude/spec-driven.md).
 - **Edit, don't rewrite.** Targeted `Edit` calls; full rewrite only when asked or >70% changed.
+- **Work on master, in the main checkout.** No branches and no worktrees, yours or a subagent's
+  (`isolation: "worktree"`): the maintainer builds and tests what master holds, and
+  `.claude/settings.json` denies `git branch`, `git worktree add` and `EnterWorktree`. Commit as
+  soon as a change verifies, in one `sanitize-commit.py` and one `commit-batch.py` run.
 - **No preamble, no trailing summary** — except a one-line statement of
   intent before non-trivial work, and one or two sentences naming what
   changed (and what's next) when you stop. Skip both on trivial edits.
@@ -129,13 +133,9 @@ checklists; advisories are baseline debt, new code still clears them.
 strings, command manifests, the manual and the assistant corpus, banned synonyms in
 `scripts/term-rules.json`; internal identifiers keep their old names on purpose.
 
-Four gates ratchet *growth* against a checked-in baseline instead of capping absolute size,
-and `--accept` re-seeds each: `code-verify.py --singleton-census`, `code-verify.py
---tu-census` (excess over 1500 lines), `claim-verify.py`, which resolves every path,
-symbol and pinned constant in the AI-facing docs — the canary's values included — against the
-tree, and `ledger-verify.py` (uncodified ledger rows); `layer-verify.py` gates the `core/`
-layering the same way. Baselines, fences and anchor mechanics:
-[doc/claude/scripts.md](doc/claude/scripts.md).
+Growth ratchets (the singleton and TU censuses, `claim-verify.py`, `ledger-verify.py`,
+`layer-verify.py`) re-seed with `--accept`; the gate list, baselines, fences and anchor
+mechanics live in [doc/claude/scripts.md](doc/claude/scripts.md).
 
 ## Tests
 
@@ -169,29 +169,15 @@ pytest tests/ -m "not destructive" -v     # skip server-crashing tests
 
 ## Project Overview
 
-Serial Studio: cross-platform telemetry dashboard, Qt 6.11.2 + C++20. Data sources: UART,
-TCP/UDP/WebSocket/HTTP (one Network driver, spec 0068), BLE, Audio, Modbus, CAN Bus (Qt
-plugins plus direct gs_usb/SLCAN/Seeed backends; J1939 TP + ISO-TP reassembly, spec 0073),
-MQTT (Sparkplug B both directions, specs 0073/0074: host-application subscribe with project
-generation, edge-node publish with stable aliases), OPC UA (embedded open62541 + mbedTLS,
-six security policies None through Aes256_Sha256_RsaPss, spec 0067), Siemens S7comm
-(S7-300/400/1200/1500, in-house stack), EtherNet/IP (libplctag), IEC 60870-5-104 (in-house
-stack; all three PLC/telecontrol drivers are read-only clients, spec 0073), USB (libusb),
-HID (hidapi), Process I/O. 15+ visualization
-widgets, 5 output (control) widgets, 256 kHz+ data rate (CI-gated; see below).
+Serial Studio: cross-platform telemetry dashboard, Qt 6.11.2 + C++20, 15+ visualization
+widgets, 5 output (control) widgets, 256 kHz+ data rate (CI-gated; see below). Data sources,
+per-dataset transforms, the Pro feature list and the aural alerts live in
+[directory-map.md](doc/claude/directory-map.md) "Product Overview".
 Frame parsers in JavaScript (`QJSEngine`), Lua (embedded LuaJIT 2.1, 5.1 + shims; per-project
 Safe/Fast execution mode — spec 0051), or Built-In ("Native"
 in all internal identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeTemplate`; only
 user-facing strings/docs say Built-In. Parametrized C++ templates configured via a JSON
-descriptor, no user code). Per-dataset value transforms in JS or Lua, with one shared library per
-language per project and per-dataset `params` (spec 0083). Pro features: Output
-widgets, Modbus, CAN Bus, OPC UA, S7comm, EtherNet/IP, IEC 60870-5-104, Sparkplug B, MDF4,
-3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer,
-Historian (per-session SQLite recording), InfluxDB 2.x sink (`core/Storage/InfluxDB/`, line
-protocol per block).
-Aural alerts (spec 0087, every build): an ISA-18.1 annunciator (`UI::Alarms::AlarmAnnunciator`,
-root-owned, `Cpp_UI_Alarms`, `alarms.*` API) with IEC 60601-1-8 WAV signatures played by
-`IO::Audio::SoundPlayer` on a raw miniaudio device.
+descriptor, no user code).
 User-facing renames of 2026-08-19, internal identifiers unchanged: Historian (was Session
 Database; `Sessions::`, `sessions.*`, the "Session Databases" folder stay), Variables (was Shared
 Memory; `RegisterDef`/`registers` stay), Computed Dataset (was Virtual Dataset; `virtual_` and
@@ -366,15 +352,15 @@ The hazard column names what breaks silently; the doc holds the rule.
 | A dataset property or any API-surface generator (specs 0036, 0037) | [project.md](doc/claude/architecture/project.md) "Dataset Property Registry", `project.md` "Generated API Surfaces" | `app/rcc/properties/dataset.json` generates six checked-in artifacts — **never hand-edit a generated file**. gRPC field numbers are append-only; a moved one fails CI. |
 | A toolbar button, palette entry, context menu, shortcut, or fixed icon (specs 0028/0063) | [commands-icons.md](doc/claude/architecture/commands-icons.md) "Icons", `commands-icons.md` "Commands" | Icons resolve ONLY via `Misc::IconRegistry` — never hardcode `qrc:/icons/...`. New command = one manifest entry + one bindings entry; Enforced: script:scripts/registry-verify.py. Project Editor context menus are registry-driven too (`editor-menus.json` + `ProjectEditorMenuBindings.qml` + `CommandMenu.qml`) — never hand-write a `Menu` there. |
 | Installable widgets, `UI::WidgetExtensions` (spec 0038) | [dashboard.md](doc/claude/architecture/dashboard.md) "Widget Extensions" | Packages resolve to `DashboardExtension = 100`, persist as `"ext:<id>"`; `readsStringValues` is what registers one in `string_targets`. Trust model is consent, not containment — never call an extension sandboxed. |
-| Alarm bands: `UI::AlarmMonitor` trackers, the annunciator's band points, the Project Editor's Alarm Bands buttons, the `suppressAlarms` or `alarmsWhileVisible` option (specs 0093/0105) | [dashboard.md](doc/claude/architecture/dashboard.md) "Alarm Bands" | Whether a dataset's bands are drawn has ONE home, `SerialStudio::datasetRendersAlarmBands` (Bar, Gauge, Meter, LED or a Bar Panel member); whether they alarm is `datasetRaisesBandAlarms` beside it (drawn, non-empty, `suppressAlarms` off) and, with `alarmsWhileVisible`, `datasetAlarmsNow` (a widget on screen). A second copy of one lets a band drawn nowhere sound while the editor refuses to open it. Bands on other datasets are kept and ignored, never cleared. |
+| Alarm bands: `UI::AlarmMonitor` trackers, the annunciator's band points, the Project Editor's Alarm Bands buttons, the `suppressAlarms` or `alarmsWhileVisible` option (specs 0093/0105) | [dashboard.md](doc/claude/architecture/dashboard.md) "Alarm Bands" | Whether a dataset's bands are drawn has ONE home, `SerialStudio::datasetRendersAlarmBands`, and whether they alarm one more beside it (`datasetRaisesBandAlarms`, `datasetAlarmsNow`). A second copy of one lets a band drawn nowhere sound while the editor refuses to open it. |
 | `core/Ui/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" | `annotate()` stages, `commitPending()` publishes per tick — reading `count()` right after needs a commit. `reset()` clears the model *before* re-reading the offset. |
 | `core/Api/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) "Wire protocol" | Dataset ordering or `wireUniqueId` changes are wire breaks: bump `kWireVersion`, regenerate `tests/fixtures/mirror/`. Viewer frames never reach the export fan-out. |
 | Chrome motion: a popup, menu, dialog or button animation in `app/qml` | [PopupEnter.qml](app/qml/Widgets/PopupEnter.qml), [PopupExit.qml](app/qml/Widgets/PopupExit.qml) | Popups take the two shared transitions plus a `transformOrigin`, never an ad-hoc `Transition`. Anything that scales, slides or bounces gates on `Cpp_Misc_GraphicsBackend.reduceMotion` (fades stay). Animate `opacity`/`scale`/`Translate` only — never `width`/`height` of a laid-out item, never inside `Widgets/Dashboard/` or a recycled `TreeView`/`ListView` delegate. |
-| HDR output: `HdrSurface`/`HdrBoost`, `Misc::HdrOutput`, an emissive material, a shader under `app/shaders/`, or any `MultiEffect`/`layer` near an emissive element (spec 0089) | [dashboard.md](doc/claude/architecture/dashboard.md) "HDR Output" | The whole UI composites SDR inside a per-window FP16 layer; only the output transform converts. An emissive element behind a `MultiEffect` or default-format layer silently clamps to SDR ("slightly dim" is a defect). The transfer math lives in `Misc/HdrTransfer.h` and every shader copies it verbatim (`tst_hdr_transfer` pins it); `_qt_sg_hdr_format` is private Qt API — re-verify per Qt bump. |
+| HDR output: `HdrSurface`/`HdrBoost`, `Misc::HdrOutput`, an emissive material, a shader under `app/shaders/`, or any `MultiEffect`/`layer` near an emissive element (spec 0089) | [dashboard.md](doc/claude/architecture/dashboard.md) "HDR Output" | The whole UI composites SDR inside a per-window FP16 layer; only the output transform converts. An emissive element behind a `MultiEffect` or default-format layer silently clamps to SDR. `_qt_sg_hdr_format` is private Qt API — re-verify per Qt bump. |
 | An embedded code editor's render cadence | [scripting.md](doc/claude/architecture/scripting.md) "Embedded Code Editors" | Never give a main-window-embedded editor an unconditional per-tick `grab()` — cost 13% of the GUI thread (2026-08-17). |
-| The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface, the sandbox roots | [ai.md](doc/claude/architecture/ai.md) "The Tier Model", `ai.md` "Checkpoint Semantics" | A mutating tool call takes a **checkpoint**, never a save — the API descriptions and `app/rcc/ai/skills/` say so to the model, so a disk-contract change is incomplete until those strings change too. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. The table is generated into `core/Api/API/CommandSafetyTable.cpp` for the MCP tool hints (`scripts/generate-command-safety.py`; never hand-edit it). Enforced: ctest:tst_command_safety_table. The bundled source behind the `source/` prefix (spec 0078) is read-only and joins a search ONLY through the `path` scope — never add it to the default walk. |
+| The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface, the sandbox roots | [ai.md](doc/claude/architecture/ai.md) "The Tier Model", `ai.md` "Checkpoint Semantics" | A mutating tool call takes a **checkpoint**, never a save. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. Enforced: ctest:tst_command_safety_table. The bundled source behind the `source/` prefix (spec 0078) is read-only and joins a search ONLY through the `path` scope — never add it to the default walk. |
 | Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs: decompose into member sub-objects instead. |
-| The connect gate, a dataset transform or user-table mutator, or any new way to author either (spec 0094) | [io.md](doc/claude/architecture/io.md) "Opening a Link" | A project with transforms or user tables refuses to CONNECT unlicensed (`IO::EntitlementGate`, rule in `SerialStudio::proContentSummary`), and a live unlicensed session ends when its content grows past what its connect admitted; it never runs with the math switched off, because uncalibrated values on a dashboard are worse than a refusal. A new authoring path (API command, importer, generator) needs the license refusal too, and removal paths stay ungated on purpose. Playback is not gated: replay never runs a transform. |
+| The connect gate, a dataset transform or user-table mutator, or any new way to author either (spec 0094) | [io.md](doc/claude/architecture/io.md) "Opening a Link" | A project with transforms or user tables refuses to CONNECT unlicensed (`IO::EntitlementGate`, rule in `SerialStudio::proContentSummary`), and a live unlicensed session ends when its content grows past what its connect admitted. A new authoring path (API command, importer, generator) needs the license refusal too. |
 | Anything that switches the operation mode: a project load, save or generation, a file drop, an example download, the Project Editor opening (spec 0100) | [AppState.h](core/Pipeline/AppState.h) | An *implicit* switch goes through `AppState::requestOperationMode()`, which defers while a link is live and applies on disconnect; only explicit mode choices (radios, `mode.*`, CLI, the API mode command) call `setOperationMode()`. A direct `setOperationMode` from a load path rebuilds devices under a live connection. |
 | A new API command, one that runs or installs code, loads a project or launches a process, or one that re-dispatches other commands (spec 0098) | [CommandCapabilities.h](core/Api/API/CommandCapabilities.h), [CommandRegistry.h](core/Api/API/CommandRegistry.h), [LaunchAuthorizer.h](core/Core/IO/LaunchAuthorizer.h) | Every command carries a capability classification, and the remote gate refuses one without. Enforced: ctest:tst_command_capability_registry. Dry runs and compile checks build their engines with `ScriptSurface::Inert`, never the live bridges. Every program start, a script's `system.exec` or a Process source, asks `IO::authorizeLaunch` (the per-project launch consent). Remote origin is a dispatch scope (`RemoteDispatchScope`), never a per-site check, and the assistant's tiers ride a separate `DispatchPolicyScope`, because licensing reads `RemoteDispatchScope::active()`. `SERIAL_STUDIO_API_AUTO_CONSENT=1` grants every gate for headless runs. |
 | A new API command, or anything that serializes the project or a live frame outward (spec 0096) | [io.md](doc/claude/architecture/io.md) "Sealed Sessions" | A process opened from a `.ssdeploy` package is sealed one-way (`Core::Runtime::sealed()`). A new command needs a classification in `API::SealedPolicy`, and an unclassified name is refused (Enforced: ctest:tst_sealed_policy_registry). A new exit for the project or a live frame consults the seal and strips through `DataModel::stripSealedContent`, or it hands the package's script source to any API client (Enforced: ctest:tst_sealed_strip). |

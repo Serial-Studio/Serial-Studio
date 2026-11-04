@@ -35,8 +35,14 @@
       "Bash(git restore *)",
       "Bash(git reset *)",
       "Bash(git stash *)",
-      "Bash(git clean *)"
+      "Bash(git clean *)",
+      "Bash(git branch *)",
+      "Bash(git worktree add *)",
+      "EnterWorktree"
     ]
+  },
+  "worktree": {
+    "bgIsolation": "none"
   },
   "hooks": {
     "SessionStart": [

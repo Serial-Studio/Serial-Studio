@@ -63,6 +63,8 @@ legacy CSV text path, so the branch inside `Audio::processInputBuffer` is delibe
 
 ## Opening a Link — One Synchronous Call, Several Async Dials Behind It
 
+**Contract (moved verbatim from CLAUDE.md, 2026-11-04):** A project with transforms or user tables refuses to CONNECT unlicensed (`IO::EntitlementGate`, rule in `SerialStudio::proContentSummary`), and a live unlicensed session ends when its content grows past what its connect admitted; it never runs with the math switched off, because uncalibrated values on a dashboard are worse than a refusal. A new authoring path (API command, importer, generator) needs the license refusal too, and removal paths stay ungated on purpose. Playback is not gated: replay never runs a transform.
+
 `DeviceManager::open(mode)` starts the `FrameReader` if it is null and then calls
 `m_driver->open(mode)` directly. There is no orchestration layer: `DeviceManager` owns no
 task runner, and nothing sits between `ConnectionManager::connectDevice()` and the driver.
