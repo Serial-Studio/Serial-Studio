@@ -107,16 +107,16 @@ The sequence runs every time the port opens: from the Connect button, from `io.c
 |------|------------|--------------|
 | **Send BREAK** | Duration, 1 to 10000 ms | Holds the line in BREAK, then releases it. Bytes the device sends meanwhile are discarded, and the input buffer is cleared on release. |
 | **Wait** | Duration, 0 to 600000 ms | Pauses. |
-| **Set Line** | DTR or RTS, high or low | Drives a modem line. RTS is refused under RTS/CTS flow control. |
+| **Set Control Line** | DTR or RTS, high or low | Drives a modem line. RTS is refused under RTS/CTS flow control. |
 | **Send Data** | Data, Hex, line ending, checksum | Writes the data (text with `\r`/`\n` escapes, or hex bytes), then the line ending, then the checksum over both, in the order an action uses. |
-| **Expect Reply** | Patterns, timeout, Optional | Waits until the bytes received match one of the patterns. |
-| **Discard Input** | none | Drops whatever the port has received so far. |
+| **Expect Reply** | Patterns, timeout, Continue If No Reply | Waits until the bytes received match one of the patterns. |
+| **Clear Received Data** | none | Drops whatever the port has received so far. |
 | **Set Baud Rate** | Rate | Changes the running rate. The saved **Baud Rate** is untouched, so every reconnection starts from it again. |
 | **Set Flow Control** | None, RTS/CTS or XON/XOFF | Changes the running flow-control mode. |
 
-An **Expect Reply** pattern is a list of hex bytes. `??` matches any byte and a single `?` matches one hex digit, so `5?` accepts `50` to `5F`. Separate several acceptable replies with `|`: `55 | 5D ??` succeeds on either. The step looks at everything received since the previous matched reply (up to 4 KiB) and consumes through the match. A step marked **Optional** that times out leaves a console note and the sequence carries on.
+An **Expect Reply** pattern is a list of hex bytes. `??` matches any byte and a single `?` matches one hex digit, so `5?` accepts `50` to `5F`. Separate several acceptable replies with `|`: `55 | 5D ??` succeeds on either. The step looks at everything received since the previous matched reply (up to 4 KiB) and consumes through the match. A step with **Continue If No Reply** checked that times out leaves a console note and the sequence carries on.
 
-The **Time Budget** (10000 ms by default, at most 600000 ms) bounds the whole sequence. The editor refuses a budget smaller than the BREAK and Wait steps add up to.
+The **Time Limit** (10000 ms by default, at most 600000 ms) bounds the whole sequence. The editor refuses a limit smaller than the BREAK and Wait steps add up to.
 
 ### Example: a bus adapter that resets on BREAK
 
@@ -131,7 +131,7 @@ The adapter powers up at 9600 baud, resets on a BREAK of at least 10 ms and answ
 
 ### When a step fails
 
-A step that fails ends the sequence and the connection attempt: an **Expect Reply** that times out, a write the port refuses, the port disappearing, or the budget running out. The console and the log name the step by position and kind and quote what the device sent:
+A step that fails ends the sequence and the connection attempt: an **Expect Reply** that times out, a write the port refuses, the port disappearing, or the time limit running out. The console and the log name the step by position and kind and quote what the device sent:
 
 ```
 Connection Sequence failed at step 2 (Expect Reply): no reply matched within 100 ms; received: 5A 00

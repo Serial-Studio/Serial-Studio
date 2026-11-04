@@ -232,6 +232,7 @@ Widgets.SmartDialog {
           Cpp_UI_Dashboard.plotTimeRange = 10
           Cpp_UI_Dashboard.points = 1000
           Cpp_Misc_TimerEvents.fps = 60
+          Cpp_JSON_DeclarationWatch.requestOnConnect = false
           Cpp_UI_Dashboard.autoHideToolbar = false
           Cpp_UI_Dashboard.showActionPanel = true
           Cpp_UI_Dashboard.showAlignmentGuides = false

@@ -71,7 +71,7 @@ Pick the "Quick Plot (Auto-Detected Format)" option under Operation Mode in the 
 
 - **Frame detection.** Line-based. Each line of text terminated by CR, LF, or CRLF is one frame.
 - **Data format.** Detected from the first qualifying line, one where at least half the fields are numbers (or name:value pairs with numbers). Each value maps to one channel.
-- **Device declarations.** On connect, Serial Studio sends one request line, `#ss?`, and a device that uses the SerialStudio library answers with a declaration that builds the dashboard in place of format detection. Turn this off with **Ask the device for its dashboard** in the Setup panel. Console Only and Project File mode never send the request. See [Device Declarations](Device-Declarations.md).
+- **Device declarations.** A device that uses the SerialStudio library can send a declaration that builds the dashboard in place of format detection. With **Ask Devices for Their Dashboard** turned on in **Preferences → Plotting** (off by default), Serial Studio also asks for it on connect with one request line, `#ss?`. Console Only and Project File mode never send the request. See [Device Declarations](Device-Declarations.md).
 - **Accepted shapes.**
   - Values separated by commas, semicolons, tabs or runs of spaces: `23.5,60,1013`, `23.5;60;1013`, `23.5 60 1013`.
   - A decimal comma under semicolon or space separation: `23,5;60`.

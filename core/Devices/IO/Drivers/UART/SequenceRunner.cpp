@@ -587,8 +587,9 @@ Async::Task* IO::Drivers::SequenceRunner::makeStep(int index)
       return new DelayTask(name, step.ms, m_clock);
     case IO::SequenceStep::Kind::Expect:
       return new ExpectTask(name, step, m_clock, m_rx, m_poll, [this, index](const QString& why) {
-        Q_EMIT stepNote(index,
-                        tr("Optional step %1 skipped: %2").arg(QString::number(index + 1), why));
+        Q_EMIT stepNote(
+          index,
+          tr("Step %1 got no reply and was skipped: %2").arg(QString::number(index + 1), why));
       });
     case IO::SequenceStep::Kind::SetLine:
     case IO::SequenceStep::Kind::Send:
@@ -721,7 +722,7 @@ void IO::Drivers::SequenceRunner::onTreeFinished(Async::Outcome outcome,
 
   const auto reason =
     outcome == Async::Outcome::TimedOut
-      ? tr("the whole sequence ran past its %1 ms time budget").arg(m_sequence.budgetMs)
+      ? tr("the whole sequence ran past its %1 ms time limit").arg(m_sequence.budgetMs)
       : error.reason;
 
   finishWith(false, failureText(qMax(m_current, 0), reason), m_current);

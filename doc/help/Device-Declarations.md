@@ -20,7 +20,7 @@ Releases up to 4.2.1 cannot use declarations: they rebuild the dashboard on any 
 2. In Quick Plot mode, the declaration replaces format detection. Serial Studio builds the dashboard from it.
 3. Every later line is a frame whose values follow the declared channel order.
 
-In Quick Plot mode, Serial Studio sends one request line, `#ss?`, when the connection opens. The library answers it with the declaration, so a device that declared at boot before Serial Studio was listening is still discovered, including after a reset. Turn the request off with **Ask the device for its dashboard** under Quick Plot in the Setup panel. Console Only and Project File modes never send it.
+With **Ask Devices for Their Dashboard** turned on in **Preferences → Plotting** (off by default), Serial Studio sends one request line, `#ss?`, when a Quick Plot connection opens. The library answers it with the declaration, so a device that declared at boot before Serial Studio was listening is still discovered, including after a reset. Without the request, a device's declaration is read whenever the device sends it, for example at power-up. Console Only and Project File modes never send the request.
 
 Sending the same declaration again changes nothing. A changed declaration rebuilds the dashboard, at most once per second. Each declaration, accepted or refused, is reported in the console.
 

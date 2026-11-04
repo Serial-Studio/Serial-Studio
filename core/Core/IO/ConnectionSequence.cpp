@@ -404,7 +404,7 @@ IO::ConnectionSequence IO::ConnectionSequence::fromVariant(const QVariant& value
 IO::SequenceError IO::ConnectionSequence::validate() const
 {
   if (budgetMs < 1 || budgetMs > kMaxSequenceBudgetMs)
-    return {-1, tr("The time budget must be between 1 and %1 ms").arg(kMaxSequenceBudgetMs)};
+    return {-1, tr("The time limit must be between 1 and %1 ms").arg(kMaxSequenceBudgetMs)};
 
   if (steps.size() > kMaxSequenceSteps)
     return {-1, tr("A Connection Sequence holds at most %1 steps").arg(kMaxSequenceSteps)};
@@ -425,7 +425,7 @@ IO::SequenceError IO::ConnectionSequence::validate() const
     fixed += step.ms;
     if (fixed > budgetMs)
       return {index,
-              tr("The fixed waits up to this step (%1 ms) exceed the %2 ms time budget")
+              tr("The fixed waits up to this step (%1 ms) exceed the %2 ms time limit")
                 .arg(QString::number(fixed), QString::number(budgetMs))};
   }
 
@@ -539,13 +539,13 @@ QString IO::ConnectionSequence::kindLabel(SequenceStep::Kind kind)
     case Kind::Wait:
       return tr("Wait");
     case Kind::SetLine:
-      return tr("Set Line");
+      return tr("Set Control Line");
     case Kind::Send:
       return tr("Send Data");
     case Kind::Expect:
       return tr("Expect Reply");
     case Kind::Discard:
-      return tr("Discard Input");
+      return tr("Clear Received Data");
     case Kind::SetBaud:
       return tr("Set Baud Rate");
     case Kind::SetFlowControl:
@@ -590,7 +590,7 @@ QString IO::ConnectionSequence::stepSummary(const SequenceStep& step)
       return step.hex ? tr("Send %1").arg(step.data.toUpper()) : tr("Send \"%1\"").arg(step.data);
     case Kind::Expect:
       if (step.optional)
-        return tr("Expect %1 within %2 ms (optional)")
+        return tr("Expect %1 within %2 ms, continue if no reply")
           .arg(patterns, QString::number(step.timeoutMs));
 
       return tr("Expect %1 within %2 ms").arg(patterns, QString::number(step.timeoutMs));

@@ -64,10 +64,10 @@ Widgets.SmartDialog {
   readonly property var kinds: [
     { slug: "break", label: qsTr("Send BREAK") },
     { slug: "wait", label: qsTr("Wait") },
-    { slug: "line", label: qsTr("Set Line") },
+    { slug: "line", label: qsTr("Set Control Line") },
     { slug: "send", label: qsTr("Send Data") },
     { slug: "expect", label: qsTr("Expect Reply") },
-    { slug: "discard", label: qsTr("Discard Input") },
+    { slug: "discard", label: qsTr("Clear Received Data") },
     { slug: "baud", label: qsTr("Set Baud Rate") },
     { slug: "flow", label: qsTr("Set Flow Control") }
   ]
@@ -287,10 +287,10 @@ Widgets.SmartDialog {
       Layout.fillWidth: true
       Layout.maximumWidth: 840
       color: Cpp_ThemeManager.colors["text"]
-      text: qsTr("The steps run in order every time the port opens, before any byte reaches the "
-                 + "dashboard. An Expect Reply step takes hex bytes, ?? for any byte, and "
-                 + "several patterns separated by |. A failed step fails the connection and "
-                 + "names itself in the console.")
+      text: qsTr("Some devices need a few steps before they start sending data, such as a "
+                 + "reset, a wake-up command, or a reply to wait for. These steps run in order "
+                 + "every time Serial Studio connects. If one fails, the connection stops and "
+                 + "the console says which step failed.")
     }
 
     //
@@ -609,12 +609,18 @@ Widgets.SmartDialog {
 
                   Layout.fillWidth: true
                   modelValue: stepRow.patterns
-                  placeholderText: qsTr("e.g. 55 | 5D ??")
+                  ToolTip.delay: 500
+                  ToolTip.visible: hovered
+                  placeholderText: qsTr("Reply in hex, for example 06")
+                  ToolTip.text: qsTr("The bytes the device should send back, in hex. Write ?? "
+                                     + "for a byte that can be anything. To accept more than one "
+                                     + "reply, separate them with a vertical bar, for example "
+                                     + "06 | 15.")
                   onCommitted: (value) => root.setField(stepRow.index, "patterns", value)
                 }
 
                 Label {
-                  text: qsTr("within")
+                  text: qsTr("wait up to")
                   color: Cpp_ThemeManager.colors["placeholder_text"]
                 }
 
@@ -636,8 +642,13 @@ Widgets.SmartDialog {
                 CheckBox {
                   objectName: "connectionSequenceEditor.optional"
 
-                  text: qsTr("Optional")
+                  ToolTip.delay: 500
+                  ToolTip.visible: hovered
                   checked: stepRow.optional
+                  text: qsTr("Continue If No Reply")
+                  ToolTip.text: qsTr("If no matching reply arrives in time, note it in the "
+                                     + "console and go on to the next step instead of stopping "
+                                     + "the connection.")
                   Layout.alignment: Qt.AlignVCenter
                   onToggled: root.setField(stepRow.index, "optional", checked)
                 }
@@ -652,7 +663,7 @@ Widgets.SmartDialog {
 
               Label {
                 elide: Text.ElideRight
-                text: qsTr("Drops whatever the port has received so far.")
+                text: qsTr("Throws away anything the device has sent so far.")
                 color: Cpp_ThemeManager.colors["placeholder_text"]
               }
             }
@@ -679,7 +690,7 @@ Widgets.SmartDialog {
 
                 Label {
                   Layout.fillWidth: true
-                  text: qsTr("baud, until the port closes")
+                  text: qsTr("baud until disconnected")
                   color: Cpp_ThemeManager.colors["placeholder_text"]
                 }
               }
@@ -718,7 +729,7 @@ Widgets.SmartDialog {
             visible: stepsModel.count === 0
             font: Cpp_Misc_CommonFonts.uiFont
             color: Cpp_ThemeManager.colors["placeholder_text"]
-            text: qsTr("No steps: the device connects as soon as the port opens.")
+            text: qsTr("No steps. Serial Studio starts reading data as soon as the port opens.")
           }
         }
       }
@@ -739,7 +750,7 @@ Widgets.SmartDialog {
     }
 
     //
-    // Footer: time budget, Cancel, Apply
+    // Footer: time limit, Cancel, Apply
     //
     RowLayout {
       spacing: 8
@@ -747,8 +758,19 @@ Widgets.SmartDialog {
       Layout.fillWidth: true
 
       Label {
-        text: qsTr("Time Budget") + ":"
+        ToolTip.delay: 500
+        text: qsTr("Time Limit") + ":"
         Layout.alignment: Qt.AlignVCenter
+        ToolTip.visible: _limitArea.containsMouse
+        ToolTip.text: qsTr("All steps must finish within this time, or the connection stops.")
+
+        MouseArea {
+          id: _limitArea
+
+          hoverEnabled: true
+          anchors.fill: parent
+          acceptedButtons: Qt.NoButton
+        }
       }
 
       SyncField {

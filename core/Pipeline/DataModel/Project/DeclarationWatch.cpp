@@ -91,12 +91,12 @@ DataModel::DeclarationWatch::DeclarationWatch(ProjectModel& model, Core::Bus::Me
   : m_mode(-1)
   , m_connected(false)
   , m_binarySession(false)
-  , m_requestOnConnect(true)
+  , m_requestOnConnect(false)
   , m_status(DeclarationStatus::None)
   , m_model(model)
   , m_bus(bus)
 {
-  m_requestOnConnect = m_settings.value(kRequestSetting, true).toBool();
+  m_requestOnConnect = m_settings.value(kRequestSetting, false).toBool();
   m_reevaluateTimer.setSingleShot(true);
   m_reevaluateTimer.setInterval(kReevaluateDelayMs);
 }

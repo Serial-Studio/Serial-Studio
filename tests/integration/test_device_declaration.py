@@ -113,6 +113,8 @@ class TestDeviceDeclaration:
         api_client.configure_network(host="127.0.0.1", port=PORT, socket_type="tcp")
         time.sleep(0.3)
         api_client.connect_device()
+        assert wait_until(api_client.is_connected), "the app never connected"
+        declared_device.declare_due = True  # a device booting after the link opens
 
         groups = wait_for_groups(api_client, 3)
         api_client.disconnect_device()
@@ -210,6 +212,13 @@ class TestDeviceDeclaration:
 
     def test_reconnect_request(self, api_client, declared_device, clean_state):
         """AC4: a device that declared once is rebuilt after a reconnect by the app's request."""
+        status = api_client.command("project.declaration.get")
+        if not status.get("requestOnConnect"):
+            pytest.skip(
+                "Ask Devices for Their Dashboard is off (Preferences > Plotting, off by "
+                "default); turn it on to run this test"
+            )
+
         requests = RequestLog(declared_device)
         api_client.set_operation_mode("quickplot")
         time.sleep(0.5)

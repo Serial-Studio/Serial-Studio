@@ -246,23 +246,6 @@ Widgets.Pane {
           if (checked && shouldChange)
             Cpp_AppState.operationMode = SerialStudio.QuickPlot
         }
-      } Widgets.Toggle {
-        objectName: "setup.quickPlot.requestDeclaration"
-
-        ToolTip.delay: 500
-        Layout.leftMargin: -6
-        ToolTip.visible: hovered
-        Layout.maximumHeight: 18
-        Layout.maximumWidth: root.maxItemWidth
-        text: qsTr("Ask the device for its dashboard")
-        checked: Cpp_JSON_DeclarationWatch.requestOnConnect
-        visible: Cpp_AppState.operationMode === SerialStudio.QuickPlot
-        ToolTip.text: qsTr("Sends one request line on connect, so a device that uses the "
-                           + "Serial Studio library declares its dashboard.")
-        onCheckedChanged: {
-          if (Cpp_JSON_DeclarationWatch.requestOnConnect !== checked)
-            Cpp_JSON_DeclarationWatch.requestOnConnect = checked
-        }
       } Widgets.Radio {
         objectName: "setup.operationMode.projectFile"
 

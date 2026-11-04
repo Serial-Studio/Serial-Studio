@@ -132,7 +132,8 @@ mode. Check `dashboard.getStatus` for the current mode, and call
 
 A device running the SerialStudio firmware library can declare its own
 dashboard: one line starting `#ss` plus a wire-version digit (`#ss1{...}`),
-sent at power-up and whenever the app's `#ss?` request arrives. In Quick Plot
+sent at power-up and whenever the app's `#ss?` request arrives (the request is the
+Preferences > Plotting switch Ask Devices for Their Dashboard, off by default). In Quick Plot
 it replaces format detection and builds the groups and datasets; Save as
 Project writes them out. The keys inside it are project keys (a dataset's
 `title`, `units`, `widget`, `plotMin`, ...), so a declared dashboard is edited

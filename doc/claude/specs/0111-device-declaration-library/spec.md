@@ -103,7 +103,9 @@ tool for the second week.
 6. **R6 — The app asks.** On connect in Quick Plot, and only there, the app sends one short
    request line for the declaration, and the library answers it; the Setup panel can turn the
    request off. Console Only and Project File mode never send it. A device that declared at boot, before the app was
-   listening, is therefore still discovered, including after the device resets.
+   listening, is therefore still discovered, including after the device resets. (Amended 2026-11-04: the request is a Preferences → Plotting
+   switch, off by default.)
+
 7. **R7 — Declared controls.** A device may declare the controls it accepts: button, toggle,
    slider and knob with title, range and step. Once spec 0109 lands, the numeric text field
    and units follow with 0109's fields. The generated project holds an Output Panel using one

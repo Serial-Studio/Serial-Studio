@@ -176,6 +176,54 @@ Item {
       }
     }
 
+    Item {
+      implicitHeight: 2
+      Layout.columnSpan: 2
+    } Label {
+      Layout.topMargin: 2
+      Layout.columnSpan: 2
+      text: qsTr("Quick Plot")
+      font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+      color: Cpp_ThemeManager.colors["pane_section_label"]
+      Component.onCompleted: font.capitalization = Font.AllUppercase
+    } Rectangle {
+      implicitHeight: 1
+      Layout.columnSpan: 2
+      Layout.fillWidth: true
+      color: Cpp_ThemeManager.colors["groupbox_border"]
+    } Item {
+      implicitHeight: 2
+      Layout.columnSpan: 2
+    }
+
+    Label {
+      text: qsTr("Ask Devices for Their Dashboard")
+      color: Cpp_ThemeManager.colors["text"]
+    } Widgets.Toggle {
+      objectName: "settings.plotting.requestDeclaration"
+
+      Layout.rightMargin: -8
+      Layout.alignment: Qt.AlignRight
+      checked: Cpp_JSON_DeclarationWatch.requestOnConnect
+      palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+      onCheckedChanged: {
+        if (checked !== Cpp_JSON_DeclarationWatch.requestOnConnect)
+          Cpp_JSON_DeclarationWatch.requestOnConnect = checked
+      }
+    }
+
+    Label {
+      Layout.columnSpan: 2
+      Layout.fillWidth: true
+      Layout.topMargin: -2
+      opacity: 0.7
+      wrapMode: Text.WordWrap
+      color: Cpp_ThemeManager.colors["text"]
+      font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+      text: qsTr("On connect in Quick Plot, sends one request line so a device that uses the "
+                 + "Serial Studio library answers with its dashboard declaration.")
+    }
+
     Item { Layout.fillHeight: true }
     Item { Layout.fillHeight: true }
   }
