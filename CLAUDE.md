@@ -120,7 +120,7 @@ advises, cheaper executors type.
 All scripts in `scripts/` are CWD-independent and write LF endings; run from anywhere. The
 per-script table lives in [doc/claude/scripts.md](doc/claude/scripts.md). What binds you:
 **run `sanitize-commit.py` before every commit** (sanitize only — it never commits or
-pushes); `code-verify.py` is the structural linter (`--fix` rewrites, `--check` regenerates
+pushes), then land a multi-commit series with one `commit-batch.py PLAN.json` run; `code-verify.py` is the structural linter (`--fix` rewrites, `--check` regenerates
 `.code-report`; errors block CI). Suppression: `// code-verify off` / `// code-verify on`
 (C++/QML), `<!-- doc-verify off -->` / `<!-- doc-verify on -->` (Markdown) — suppressions
 are a code-review trigger. `.code-report` / `.doc-report` / `.claim-report` / `.tidy-report` are the cleanup
