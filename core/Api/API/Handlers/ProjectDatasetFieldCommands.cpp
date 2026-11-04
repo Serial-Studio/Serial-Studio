@@ -835,6 +835,9 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetLabel
   if (!dataset)
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
 
+  if (const auto shape = labelRowsShapeError(params.value(Keys::Labels)); !shape.isEmpty())
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, shape);
+
   const auto rows = params.value(Keys::Labels).toArray();
   if (const int bad = firstNonIntegerLabel(rows); bad >= 0)
     return CommandResponse::makeError(

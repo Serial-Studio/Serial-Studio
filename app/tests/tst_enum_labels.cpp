@@ -248,7 +248,7 @@ void TstEnumLabels::frameDetectionFullSweep_data()
     << static_cast<int>(SerialStudio::StartDelimiterOnly) << QStringLiteral("start-delimiter")
     << QStringLiteral("Start delimiter only");
   QTest::newRow("FixedLength") << static_cast<int>(SerialStudio::FixedLength)
-                               << QStringLiteral("fixed-length") << QStringLiteral("Fixed Length");
+                               << QStringLiteral("fixed-length") << QStringLiteral("Fixed length");
 }
 
 /**

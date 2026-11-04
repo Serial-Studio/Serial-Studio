@@ -96,7 +96,7 @@ typedef enum {
   kSourceView_FrameHeaderValue,
   kSourceView_FrameBodyMask,
   kSourceView_FrameBodyValue,
-  kSourceView_ConnectionSequence
+  kSourceView_ConnectionSequence,
 } SourceItem;
 
 /**
@@ -128,7 +128,7 @@ typedef enum {
   kOutputWidget_Quantize,
   kOutputWidget_ReplyToken,
   kOutputWidget_ReplyCode,
-  kOutputWidget_ReplyMessage
+  kOutputWidget_ReplyMessage,
 } OutputWidgetItem;
 
 /**

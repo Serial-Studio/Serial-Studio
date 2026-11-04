@@ -85,8 +85,7 @@ IO::FrameConfig IO::FrameConfigBuilder::build(const Core::Bus::ProjectStructureS
     cfg.checksumAlgorithm = checksum;
     cfg.frameDetection    = static_cast<SerialStudio::FrameDetection>(src.frameDetection);
 
-    DataModel::FixedFrameSettings fixed;
-    DataModel::read_fixed_frame_settings(fixed, DataModel::serialize(src));
+    const auto fixed     = DataModel::fixed_frame_settings(src);
     cfg.fixedFrameLength = fixed.length;
     cfg.headerMask       = fixed.headerMask;
     cfg.headerValue      = fixed.headerValue;

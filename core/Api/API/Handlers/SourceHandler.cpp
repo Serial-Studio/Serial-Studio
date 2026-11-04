@@ -110,7 +110,8 @@ void API::Handlers::SourceHandler::registerCommands()
         QStringLiteral("FixedLength: value the masked first byte must equal, 0-255")},
        {QString(Keys::FrameBodyMask),
         QStringLiteral("integer"),
-        QStringLiteral("FixedLength: mask for the payload bytes after the first, 0-255 (0 = no rule)")},
+        QStringLiteral(
+          "FixedLength: mask for the payload bytes after the first, 0-255 (0 = no rule)")},
        {QString(Keys::FrameBodyValue),
         QStringLiteral("integer"),
         QStringLiteral("FixedLength: value the masked payload bytes must equal, 0-255")},
@@ -366,6 +367,12 @@ API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& i
   if (!DataModel::patch_fixed_frame_fields(updated, params, fixedError, fixedTouched))
     return CommandResponse::makeError(id, QStringLiteral("INVALID_PARAM"), fixedError);
 
+  if (updated.frameDetection == SerialStudio::FixedLength && updated.frameLength < 1)
+    return CommandResponse::makeError(
+      id,
+      QStringLiteral("INVALID_PARAM"),
+      QStringLiteral("frameDetection 4 (FixedLength) needs frameLength"));
+
   if (params.contains(Keys::DecoderMethod))
     updated.decoderMethod = params[Keys::DecoderMethod].toInt(updated.decoderMethod);
 
@@ -401,7 +408,14 @@ API::CommandResponse API::Handlers::SourceHandler::sourceConfigure(const QString
       id, QStringLiteral("INVALID_PARAM"), QStringLiteral("Invalid sourceId"));
 
   const QJsonObject settings = params[QStringLiteral("settings")].toObject();
-  auto& appState             = DataModel::pipelineModules().appState;
+  if (settings.contains(QStringLiteral("connectionSequence")))
+    return CommandResponse::makeError(
+      id,
+      QStringLiteral("INVALID_PARAM"),
+      QStringLiteral("connectionSequence is set with io.uart.setSequence, which validates the "
+                     "steps and asks for device-write consent"));
+
+  auto& appState = DataModel::pipelineModules().appState;
   const bool usesUiDriver =
     sourceId == 0 && sourceCount == 1 && appState.operationMode() == SerialStudio::ProjectFile;
 
@@ -454,7 +468,14 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
     return CommandResponse::makeError(
       id, QStringLiteral("INVALID_PARAM"), QStringLiteral("Invalid sourceId"));
 
-  const QString key  = params[QStringLiteral("key")].toString();
+  const QString key = params[QStringLiteral("key")].toString();
+  if (key == QLatin1String("connectionSequence"))
+    return CommandResponse::makeError(
+      id,
+      QStringLiteral("INVALID_PARAM"),
+      QStringLiteral("connectionSequence is set with io.uart.setSequence, which validates the "
+                     "steps and asks for device-write consent"));
+
   const QVariant val = params.contains(QStringLiteral("propertyValue"))
                        ? params[QStringLiteral("propertyValue")].toVariant()
                        : params[QStringLiteral("value")].toVariant();

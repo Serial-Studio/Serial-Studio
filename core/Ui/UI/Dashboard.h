@@ -273,7 +273,7 @@ public:
 
   [[nodiscard]] Q_INVOKABLE QString formatValue(double val, double min, double max) const;
 
-  [[nodiscard]] Q_INVOKABLE QString formatNumber(double value, int uniqueId) const
+  [[nodiscard]] Q_INVOKABLE QString formatNumber(int uniqueId, double value) const
   {
     const auto it = m_datasets.constFind(uniqueId);
     if (it == m_datasets.cend())

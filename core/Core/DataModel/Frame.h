@@ -38,6 +38,7 @@
 
 #include "Core/Concepts.h"
 #include "Core/DataModel/FrameKeys.h"
+#include "Core/DataModel/OutputWidget.h"
 #include "Core/DSPSimd.h"
 #include "Core/HotpathOptimization.h"
 #include "Core/SerialStudio.h"
@@ -116,165 +117,6 @@ static_assert(sizeof(Action) % alignof(Action) == 0, "Unaligned Action struct");
  * @brief Generates the raw byte sequence to transmit for a given Action.
  */
 
-//--------------------------------------------------------------------------------------------------
-// OutputWidget structure
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Type of interactive output widget for bidirectional communication.
- */
-enum class OutputWidgetType : quint8 {
-  Button,
-  Slider,
-  Toggle,
-  TextField,
-  Knob,
-};
-
-/**
- * @brief Presentation size of an output widget, relative to the normal metrics.
- */
-enum class OutputWidgetSize : quint8 {
-  Small,
-  Normal,
-  Large,
-  ExtraLarge,
-};
-
-/**
- * @brief Ceiling for an output control's confirm-within window. A window longer than this
- *        describes no real equipment, and every millisecond past it is one where the control
- *        latches "request outstanding" and refuses to adopt what the plant reports.
- */
-inline constexpr int kMaxOutputStateConfirmMs = 120000;
-
-/**
- * @brief Returns the metric multiplier of a size class; the ONE definition shared by the panel
- *        packing engine and the QML controls, so both agree on how large a control really is.
- */
-[[nodiscard]] inline constexpr double outputSizeScale(OutputWidgetSize size)
-{
-  switch (size) {
-    case OutputWidgetSize::Small:
-      return 0.8;
-    case OutputWidgetSize::Large:
-      return 1.35;
-    case OutputWidgetSize::ExtraLarge:
-      return 1.75;
-    default:
-      return 1.0;
-  }
-}
-
-/**
- * @brief Where a control reads the state it displays (spec 0080). None is the default, so a
- *        project written before state feedback existed reads back unbound and behaves exactly
- *        as it always did.
- */
-enum class OutputStateSource : quint8 {
-  None    = 0,
-  Dataset = 1,
-  Table   = 2,
-};
-
-/**
- * @brief How a text field reads what the operator typed (spec 0109). Text hands the string to the
- *        transmit script untouched; Number parses it and enforces Min to Max first.
- */
-enum class OutputInputKind : quint8 {
-  Text   = 0,
-  Number = 1,
-};
-
-/**
- * @brief Represents an interactive output widget that sends data to the device.
- */
-struct alignas(8) OutputWidget {
-  int widgetId          = -1;                        ///< Unique widget ID within the group
-  int groupId           = -1;                        ///< Owning group ID
-  int sourceId          = 0;                         ///< Target source/device ID
-  int txEncoding        = 0;                         ///< Encoding used for transmit payload
-  OutputWidgetType type = OutputWidgetType::Button;  ///< Widget presentation/behavior type
-  bool monoIcon         = false;                     ///< Use monochrome icon styling
-  bool checkable        = false;                     ///< Button latches on/off instead of pulsing
-  OutputWidgetSize size = OutputWidgetSize::Normal;  ///< Presentation size class
-  double minValue       = 0;                         ///< Minimum allowed value
-  double maxValue       = 100;                       ///< Maximum allowed value
-  double stepSize       = 1;                         ///< Value increment step
-  double initialValue   = 0;                         ///< Initial widget value
-  QString icon;
-  QString color;  ///< Optional hex fill override; empty -> group accent colour
-  QString title;
-  QString onLabel;
-  QString offLabel;
-  QString transmitFunction;
-
-  OutputStateSource stateSource = OutputStateSource::None;  ///< Where displayed state comes from
-  int stateDatasetId            = -1;    ///< Dataset uniqueId driving the display, -1 = none
-  int stateConfirmMs            = 3000;  ///< How long a request stays outstanding, milliseconds
-  QString stateTable;                    ///< Data table holding the state variable
-  QString stateVariable;                 ///< Variable within stateTable
-  QString stateOnValue;                  ///< Empty -> any non-zero value means on
-
-  int replyTokenDatasetId   = -1;  ///< Dataset uniqueId echoing the command token, -1 = none
-  int replyCodeDatasetId    = -1;  ///< Dataset uniqueId carrying the result code, -1 = none
-  int replyMessageDatasetId = -1;  ///< Dataset uniqueId carrying the reply text, -1 = none
-
-  OutputInputKind inputKind = OutputInputKind::Text;  ///< Text field: Text or Number (spec 0109)
-  int decimals              = -1;  ///< Displayed decimals, -1 = automatic from Step
-  QString units;                   ///< Suffix shown beside the value, e.g. "%"
-  bool quantize = false;           ///< Number field: snap a typed value to Step from Min
-};
-
-static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned OutputWidget struct");
-
-/**
- * @brief Serializes an OutputWidget to a QJsonObject.
- */
-[[nodiscard]] QJsonObject serialize(const OutputWidget& w);
-
-/**
- * @brief Deserializes an OutputWidget from a QJsonObject (Frame.cpp: uses SerialStudio::toDouble).
- */
-[[nodiscard]] bool read(OutputWidget& w, const QJsonObject& obj);
-
-/**
- * @brief Forces an output widget's numeric fields into the ranges the rest of the code assumes.
- *        Every door into the model calls this: read() for a project file and the API's patch
- *        handler for a live edit. Clamping in only one of them is how an out-of-range encoding,
- *        a negative source id or an inverted min/max reached the widgets through the other.
- */
-void normalize(OutputWidget& w);
-
-/**
- * @brief True when the control waits for a device reply (spec 0110): token and code both bound.
- */
-[[nodiscard]] bool outputExpectsReply(const OutputWidget& w);
-
-/**
- * @brief Verdict of admitOutputValue (spec 0109).
- */
-enum class OutputAdmission : quint8 {
-  Accepted   = 0,
-  NotANumber = 1,
-  OutOfRange = 2,
-};
-
-/**
- * @brief True when the control carries a numeric value bounded by Min to Max: a slider, a knob or
- *        a text field whose input kind is Number.
- */
-[[nodiscard]] bool outputIsNumeric(const OutputWidget& w);
-
-/**
- * @brief Pure admission rule for a numeric control: parses @p value, rejects a non-finite one,
- *        quantizes to Step from Min when enabled, then checks Min to Max. @p out receives the
- *        admitted double on Accepted.
- */
-[[nodiscard]] OutputAdmission admitOutputValue(const OutputWidget& w,
-                                               const QVariant& value,
-                                               double& out);
-
 /**
  * @brief Severity tier for an alarm band; drives default colour and notification policy.
  */
@@ -315,7 +157,9 @@ struct alignas(8) FrequencyMarker {
 static_assert(sizeof(FrequencyMarker) % alignof(FrequencyMarker) == 0,
               "Unaligned FrequencyMarker struct");
 
-/** @brief One row of a dataset's value-to-text label table (spec 0108). */
+/**
+ * @brief One row of a dataset's value-to-text label table (spec 0108).
+ */
 struct alignas(8) ValueLabel {
   qint64 value = 0;  ///< Integer key the rounded dataset value is matched against
   QString text;      ///< Text shown in place of the number
@@ -457,9 +301,9 @@ struct alignas(8) Source {
   QString streamLane;                  ///< Stream-lane override: ""/auto (driver), "on", "off"
   int frameLength      = 0;            ///< Fixed Length: bytes per frame
   int frameHeaderMask  = 0;            ///< Fixed Length: header rule mask (0 = no header rule)
-  int frameHeaderValue = 0;            ///< Fixed Length: header rule value (already masked)
+  int frameHeaderValue = 0;            ///< Fixed Length: header rule value (masked when read)
   int frameBodyMask    = 0;            ///< Fixed Length: body rule mask (0 = no body rule)
-  int frameBodyValue   = 0;            ///< Fixed Length: body rule value (already masked)
+  int frameBodyValue   = 0;            ///< Fixed Length: body rule value (masked when read)
 };
 
 static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
@@ -510,9 +354,8 @@ struct TableDef {
   obj.insert(Keys::DecoderMethod, s.decoderMethod);
 
   obj.insert(Keys::HexadecimalDelimiters, s.hexadecimalDelimiters);
-  if (s.frameDetection == SerialStudio::FixedLength || s.frameLength != 0
-      || s.frameHeaderMask != 0 || s.frameHeaderValue != 0 || s.frameBodyMask != 0
-      || s.frameBodyValue != 0) {
+  if (s.frameDetection == SerialStudio::FixedLength || s.frameLength != 0 || s.frameHeaderMask != 0
+      || s.frameHeaderValue != 0 || s.frameBodyMask != 0 || s.frameBodyValue != 0) {
     obj.insert(Keys::FrameLength, s.frameLength);
     obj.insert(Keys::FrameHeaderMask, s.frameHeaderMask);
     obj.insert(Keys::FrameHeaderValue, s.frameHeaderValue);
@@ -1016,7 +859,7 @@ void read_io_settings(QByteArray& frameStart,
  * @brief The Fixed Length framing settings of a source: frame size and the two byte rules.
  */
 struct FixedFrameSettings {
-  int length = 0;
+  int length         = 0;
   quint8 headerMask  = 0;
   quint8 headerValue = 0;
   quint8 bodyMask    = 0;
@@ -1024,8 +867,13 @@ struct FixedFrameSettings {
 };
 
 /**
- * @brief Reads the Fixed Length settings from a source JSON object, masking each rule value so
- *        a stored bit outside its mask cannot make the rule unsatisfiable.
+ * @brief Returns the Fixed Length settings of @p source, masking each rule value so a stored bit
+ *        outside its mask cannot make the rule unsatisfiable.
+ */
+[[nodiscard]] FixedFrameSettings fixed_frame_settings(const Source& source);
+
+/**
+ * @brief Reads the Fixed Length settings from a source JSON object through fixed_frame_settings().
  */
 void read_fixed_frame_settings(FixedFrameSettings& out, const QJsonObject& obj);
 
@@ -1297,7 +1145,9 @@ void readDatasetFrequencyMarkers(Dataset& d, const QJsonObject& obj);
 void readDatasetTransformParams(Dataset& d, const QJsonObject& obj);
 void writeDatasetTransformParams(QJsonObject& obj, const Dataset& d);
 
-/** @brief Read/write @p d.labels as a JSON array of {value, text} rows sorted by value. */
+/**
+ * @brief Read/write @p d.labels as a JSON array of {value, text} rows sorted by value.
+ */
 void readDatasetLabels(Dataset& d, const QJsonObject& obj);
 void writeDatasetLabels(QJsonObject& obj, const Dataset& d);
 

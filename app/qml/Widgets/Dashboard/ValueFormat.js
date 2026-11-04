@@ -34,7 +34,7 @@ function formatValue(model, val) {
   if (!isFinite(val))
     return "—"
 
-  return Cpp_UI_Dashboard.formatNumber(val, model.uniqueId)
+  return Cpp_UI_Dashboard.formatNumber(model.uniqueId, val)
 }
 
 //

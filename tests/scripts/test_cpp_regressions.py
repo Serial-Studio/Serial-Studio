@@ -2247,9 +2247,34 @@ def test_editor_display_formats_match_the_manifest():
         e["value"] for e in manifest["optionSources"]["displayFormats"]["entries"]
     }
 
-    text = _read("core/Ui/ProjectEditor/ProjectEditor.cpp")
+    text = _read("core/Ui/ProjectEditor/EditorVocabulary.cpp")
     inserts = re.findall(
         r'm_displayFormats\.insert\((?:QLatin1String|QStringLiteral)\("([^"]*)"\)', text
     )
-    assert inserts, "m_displayFormats must still be filled in ProjectEditor.cpp"
+    assert inserts, "m_displayFormats must still be filled in EditorVocabulary.cpp"
     assert set(inserts) == domain, "m_displayFormats and the manifest domain differ"
+
+
+def _uart_function_body(text: str, name: str) -> str:
+    """The body of IO::Drivers::UART::<name>, from its signature to the closing brace in column 0."""
+    match = re.search(
+        r"\nvoid IO::Drivers::UART::" + name + r"\([^)]*\)\n\{\n(.*?)\n\}\n", text, re.S
+    )
+    assert match, f"UART::{name} not found"
+    return match.group(1)
+
+
+def test_uart_internal_checks_use_port_open():
+    """UART::isOpen() is the connected state and stays false while a connect-time Connection
+    Sequence runs (spec 0103); the driver's own checks must ask portOpen(), or a mid-handshake
+    unplug is swallowed and handshake bytes leak into the frame reader.
+
+    retire when: the driver's port state and connected state stop sharing one class.
+    """
+    text = _read("core/Devices/IO/Drivers/UART.cpp")
+    bare_is_open = re.compile(r"(?<![\w>.])isOpen\(\)")
+    for name in ("close", "handleError", "onReadyRead", "pollAutoReconnect"):
+        body = _uart_function_body(text, name)
+        assert not bare_is_open.search(
+            body
+        ), f"UART::{name} gates on isOpen(); use portOpen()"

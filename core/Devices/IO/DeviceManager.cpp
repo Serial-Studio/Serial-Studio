@@ -52,7 +52,7 @@ IO::DeviceManager::DeviceManager(int deviceId,
           &IO::HAL_Driver::consoleDataReceived,
           this,
           &IO::DeviceManager::onConsoleDataReceived);
-  connect(m_driver.get(), &IO::HAL_Driver::dataSent, this, &IO::DeviceManager::onRawDataSent);
+  connect(m_driver.get(), &IO::HAL_Driver::driverDataSent, this, &IO::DeviceManager::onRawDataSent);
 
   attachToPipeline(config);
 }

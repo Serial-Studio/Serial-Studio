@@ -321,8 +321,8 @@ void EditorCommit::handleSourceFrameDetectionChange(QStandardItem* item, DataMod
 }
 
 /**
- * @brief Applies a Fixed Length edit (length or one-byte rule), keeping each rule value inside its
- *        mask and rebuilding the form when the masking changed what the user typed.
+ * @brief Applies a Fixed Length edit (length or one-byte rule) as typed and never rebuilds the
+ *        form, so a half-typed byte keeps its focus; the readers apply the mask.
  */
 void EditorCommit::handleSourceFixedFrameChange(QStandardItem* item, DataModel::Source& updated)
 {
@@ -333,8 +333,8 @@ void EditorCommit::handleSourceFixedFrameChange(QStandardItem* item, DataModel::
   if (id == kSourceView_FrameLength) {
     entered = qBound(1, item->data(EditableValue).toInt(), IO::kMaxFixedFrameLength);
   } else {
-    const auto bytes = QByteArray::fromHex(
-      item->data(EditableValue).toString().remove(QLatin1Char(' ')).toLatin1());
+    const auto bytes =
+      QByteArray::fromHex(item->data(EditableValue).toString().remove(QLatin1Char(' ')).toLatin1());
     if (bytes.size() != 1)
       return;
 
@@ -359,24 +359,11 @@ void EditorCommit::handleSourceFixedFrameChange(QStandardItem* item, DataModel::
       break;
   }
 
-  updated.frameHeaderValue &= updated.frameHeaderMask;
-  updated.frameBodyValue &= updated.frameBodyMask;
-
-  const auto& before = m_editor.m_selectedSource;
-  const bool relayout =
-    (id == kSourceView_FrameHeaderMask && updated.frameHeaderValue != before.frameHeaderValue)
-    || (id == kSourceView_FrameBodyMask && updated.frameBodyValue != before.frameBodyValue)
-    || (id == kSourceView_FrameHeaderValue && updated.frameHeaderValue != entered)
-    || (id == kSourceView_FrameBodyValue && updated.frameBodyValue != entered);
-
   m_model.setNextUndoHint(
     tr("Edit Device"),
     QStringLiteral("source-frame:%1:%2").arg(QString::number(sid), QString::number(id)));
   m_model.updateSource(sid, updated, false);
   m_editor.m_selectedSource = updated;
-
-  if (relayout)
-    m_editor.m_forms.buildSourceModel(m_editor.m_selectedSource);
 }
 
 /**
@@ -1405,7 +1392,7 @@ void EditorCommit::applyOutputWidgetField(QStandardItem* item, DataModel::Output
         qBound(0, value.toInt(), static_cast<int>(DataModel::OutputInputKind::Number)));
       break;
     case kOutputWidget_Decimals:
-      widget.decimals = qBound(-1, value.toInt(), 9);
+      widget.decimals = qBound(-1, value.toInt(), DataModel::kMaxOutputDecimals);
       break;
     case kOutputWidget_Units:
       widget.units = value.toString().simplified();

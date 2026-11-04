@@ -80,13 +80,13 @@ Q_ENUM_NS(ScriptLanguage)
  * @brief Strategy for detecting data frames inside a continuous stream.
  */
 // clang-format off
-enum FrameDetection
+enum FrameDetection : int
 {
   EndDelimiterOnly     = 0x00,
   StartAndEndDelimiter = 0x01,
   NoDelimiters         = 0x02,
   StartDelimiterOnly   = 0x03,
-  FixedLength          = 0x04
+  FixedLength          = 0x04,
 };
 Q_ENUM_NS(FrameDetection)
 // clang-format on

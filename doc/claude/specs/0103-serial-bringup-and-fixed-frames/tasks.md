@@ -135,6 +135,8 @@ updated: 2026-10-26
 - **Verify:** `code-verify.py --check` (hotpath rules are blockers), `syntax-check.py`; T9.
 - **Deps:** T1, T6
 - [x] done
+  (Review fix 2026-11-03: the body rule is checked on the ring with `findMaskedMismatch` before a slot is
+  claimed, so a rejected candidate is never copied; a refused BREAK release now closes the link.)
   (Main session 2026-11-03: the body rule checks the payload only, offsets [1, N - checksum length),
   because checksum bytes are arbitrary and would trip a high-bit rule; plan said [1, N).)
 
@@ -377,6 +379,8 @@ then once more with a Fixed Length project loaded to read the parse tiers.
   unchanged in its includes).
 - **Deps:** none
 - [x] done
+  (Review fix 2026-11-03: `publishSentData` emits its own `driverDataSent`, which `DeviceManager` wires;
+  Modbus, CAN and USB emit `dataSent` from `write()`, so wiring that signal echoed their writes twice.)
   - Status: syntax-check ok (DeviceManager.cpp; HAL_Driver.h through it), code-verify clean,
     layer-verify clean.
 
@@ -525,6 +529,9 @@ registered, so through `project.source.setProperty`) and watch a bring-up in the
 - **Verify:** `code-verify.py --check`, `syntax-check.py`; the three registry ctests at B3.
 - **Deps:** T29
 - [x] done
+  (Review fix 2026-11-03: `project.source.setProperty`/`setProperties` refuse the `connectionSequence` key
+  and point to `io.uart.setSequence`, closing a path that stored a sequence with no validation or consent;
+  FixedLength without a frameLength is refused on `source.update` and `frameParser.update`.)
   (Main session 2026-11-03, named to the maintainer: `setSequence` adds WritesDevice for a Send, BREAK or
   baud step, not Send alone, matching the direct sendBreak/setLiveBaudRate; parsed by
   `IO::ConnectionSequence::fromJson`, the handler's own reader.)

@@ -298,7 +298,7 @@ add_library(SerialStudio::Ui ALIAS SerialStudioUi)
 # The project editor (spec 0077)
 #---------------------------------------------------------------------------------------------------
 #
-# The QML-facing ProjectEditor facade with its eight by-value sub-objects (Editor*.{h,cpp},
+# The QML-facing ProjectEditor facade with its by-value sub-objects (Editor*.{h,cpp},
 # spec 0070 shape), the embedded code editors that
 # QCodeEditor backs, the frame-parser model and the transmit test dialog. Generated/DatasetForm.cpp
 # is emitted by scripts/generate-property-registry.py: never hand-edit it.
@@ -315,11 +315,13 @@ target_sources(
   ProjectEditor/EditorForms.cpp
   ProjectEditor/EditorForms/OutputStateRows.cpp
   ProjectEditor/EditorForms/OutputValueRows.cpp
+  ProjectEditor/EditorForms/SourceFramingRows.cpp
   ProjectEditor/EditorCommit.cpp
   ProjectEditor/EditorSummaries.cpp
   ProjectEditor/EditorMultiSelect.cpp
   ProjectEditor/EditorInflux.cpp
   ProjectEditor/EditorMqtt.cpp
+  ProjectEditor/EditorVocabulary.cpp
   ProjectEditor/ProjectNavHistory.cpp
   ProjectEditor/Generated/DatasetForm.cpp
   ProjectEditor/Editors/JsCodeEditor.cpp
@@ -341,11 +343,13 @@ target_sources(
   ProjectEditor/EditorForms.h
   ProjectEditor/EditorForms/OutputStateRows.h
   ProjectEditor/EditorForms/OutputValueRows.h
+  ProjectEditor/EditorForms/SourceFramingRows.h
   ProjectEditor/EditorCommit.h
   ProjectEditor/EditorSummaries.h
   ProjectEditor/EditorMultiSelect.h
   ProjectEditor/EditorInflux.h
   ProjectEditor/EditorMqtt.h
+  ProjectEditor/EditorVocabulary.h
   ProjectEditor/ProjectEditorIcons.h
   ProjectEditor/ProjectEditorItemIds.h
   ProjectEditor/ProjectNavHistory.h

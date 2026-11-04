@@ -2485,8 +2485,8 @@ ss_add_unit_test(tst_output_state_binding
           SerialStudio::Core
 )
 
-# The write-limit admission rule (spec 0109) is a pure function in Frame.cpp, so the Core library
-# alone links it.
+# The write-limit admission rule (spec 0109) is a pure function in OutputWidget.cpp, so the Core
+# library alone links it.
 #
 ss_add_unit_test(tst_output_write_limits
   SOURCES tst_output_write_limits.cpp

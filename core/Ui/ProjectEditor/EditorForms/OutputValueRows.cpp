@@ -47,6 +47,26 @@ static void appendRow(QStandardItemModel* model,
   model->appendRow(item);
 }
 
+/**
+ * @brief Appends the Decimals row, bounded to what the commit and normalize() accept.
+ */
+static void appendDecimalsRow(QStandardItemModel* model, const DataModel::OutputWidget& widget)
+{
+  auto* item = new QStandardItem();
+  item->setEditable(true);
+  item->setData(true, Active);
+  item->setData(IntField, WidgetType);
+  item->setData(-1, MinValue);
+  item->setData(DataModel::kMaxOutputDecimals, MaxValue);
+  item->setData(widget.decimals, EditableValue);
+  item->setData(kOutputWidget_Decimals, ParameterType);
+  item->setData(QCoreApplication::translate("DataModel::ProjectEditor", "Decimals"), ParameterName);
+  item->setData(QCoreApplication::translate("DataModel::ProjectEditor",
+                                            "Decimals shown for the value, -1 to pick from Step"),
+                ParameterDescription);
+  model->appendRow(item);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Rows
 //--------------------------------------------------------------------------------------------------
@@ -112,13 +132,7 @@ void DataModel::appendOutputValueRows(QStandardItemModel* model, const OutputWid
             widget.stepSize,
             kOutputWidget_StepSize,
             QCoreApplication::translate("DataModel::ProjectEditor", "Step"));
-  appendRow(model,
-            IntField,
-            widget.decimals,
-            kOutputWidget_Decimals,
-            QCoreApplication::translate("DataModel::ProjectEditor", "Decimals"),
-            QCoreApplication::translate("DataModel::ProjectEditor",
-                                        "Decimals shown for the value, -1 to pick from Step"));
+  appendDecimalsRow(model, widget);
   appendRow(model,
             TextField,
             widget.units,

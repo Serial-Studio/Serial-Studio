@@ -206,6 +206,7 @@ class HAL_Driver : public QObject {
 signals:
   void configurationChanged();
   void dataSent(const QByteArray& data);
+  void driverDataSent(const QByteArray& data);
   void dataReceived(const IO::CapturedDataPtr& data);
   void consoleDataReceived(const IO::CapturedDataPtr& data);
   void sampleBlockReceived(const IO::SampleBlockPtr& block);
@@ -336,10 +337,10 @@ protected:
 
   /**
    * @brief Echoes bytes the driver wrote on its own (a Connection Sequence step) to the console,
-   *        as the router echoes a routed write. Never called from write(): the router already
-   *        echoes those, so a second echo would show every byte twice.
+   *        as the router echoes a routed write. Its own signal, never dataSent: Modbus, CAN and
+   *        USB emit dataSent from write(), which the router already echoes once.
    */
-  void publishSentData(const QByteArray& data) { Q_EMIT dataSent(data); }
+  void publishSentData(const QByteArray& data) { Q_EMIT driverDataSent(data); }
 
   /**
    * @brief Logs a driver failure to the console. Drivers never raise modal dialogs: a modal pumps

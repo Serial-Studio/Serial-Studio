@@ -27,14 +27,12 @@
 #include <QHash>
 
 #include "API/HandlerContext.h"
-#include "Core/Checksum.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/WidgetResolution.h"
 #include "IO/ConnectionManager.h"
 #include "ProjectEditorItemIds.h"
-#include "UI/WidgetExtensions.h"
 
 static_assert(static_cast<int>(DataModel::ProjectEditor::KindNone) == DataModel::KindNone);
 static_assert(static_cast<int>(DataModel::ProjectEditor::KindGroup) == DataModel::KindGroup);
@@ -84,7 +82,7 @@ static_assert(static_cast<int>(DataModel::ProjectEditor::SectionHeader)
 static_assert(static_cast<int>(DataModel::ProjectEditor::ColorPicker) == DataModel::RowColorPicker);
 
 /**
- * @brief Constructs the ProjectEditor singleton: the shared state first, then the eight
+ * @brief Constructs the ProjectEditor singleton: the shared state first, then the by-value
  *        sub-objects (declared last so every reference they capture is already bound), then the
  *        wiring and the first tree and project-form build.
  */
@@ -135,6 +133,7 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_multiSelect(*this, m_projectModelRef)
   , m_mqtt(*this)
   , m_influx(*this)
+  , m_vocabulary(*this)
 {
   generateComboBoxModels();
 
@@ -684,125 +683,19 @@ const DataModel::OutputWidget& DataModel::ProjectEditor::selectedOutputWidget() 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Populates the combobox string lists used by the form models.
+ * @brief Populates the combobox string lists used by the form models (EditorVocabulary).
  */
 void DataModel::ProjectEditor::generateComboBoxModels()
 {
-  m_fftSamples.clear();
-  m_fftSamples << "8" << "16" << "32" << "64" << "128" << "256" << "512" << "1024" << "2048"
-               << "4096" << "8192" << "16384" << "32768" << "65536" << "131072" << "262144";
-
-  m_fftWindows.clear();
-  m_fftWindowValues.clear();
-  m_fftWindows << tr("Rectangular (None)") << tr("Bartlett (Triangular)") << tr("Hann")
-               << tr("Hamming") << tr("Blackman") << tr("Blackman-Harris") << tr("Nuttall")
-               << tr("Blackman-Nuttall") << tr("Flat Top") << tr("Welch") << tr("Bartlett-Hann")
-               << tr("Bohman") << tr("Cosine (Sine)") << tr("Lanczos") << tr("Parzen");
-  m_fftWindowValues << SerialStudio::FFTWindowRectangular << SerialStudio::FFTWindowBartlett
-                    << SerialStudio::FFTWindowHann << SerialStudio::FFTWindowHamming
-                    << SerialStudio::FFTWindowBlackman << SerialStudio::FFTWindowBlackmanHarris
-                    << SerialStudio::FFTWindowNuttall << SerialStudio::FFTWindowBlackmanNuttall
-                    << SerialStudio::FFTWindowFlatTop << SerialStudio::FFTWindowWelch
-                    << SerialStudio::FFTWindowBartlettHann << SerialStudio::FFTWindowBohman
-                    << SerialStudio::FFTWindowCosine << SerialStudio::FFTWindowLanczos
-                    << SerialStudio::FFTWindowParzen;
-
-  m_timerModes.clear();
-  m_timerModes << tr("Off") << tr("Auto Start") << tr("Start on Trigger") << tr("Toggle on Trigger")
-               << tr("Repeat N Times");
-
-  m_decoderOptions.clear();
-  m_decoderOptions << tr("Plain Text (UTF8)") << tr("Hexadecimal") << tr("Base64")
-                   << tr("Binary (Direct)");
-
-  m_checksumMethods         = IO::availableChecksums();
-  const int noChecksumIndex = m_checksumMethods.indexOf(QLatin1String(""));
-  if (noChecksumIndex >= 0)
-    m_checksumMethods[noChecksumIndex] = tr("No Checksum");
-
-  m_frameDetectionMethods.clear();
-  m_frameDetectionMethodsValues.clear();
-  m_frameDetectionMethods << tr("End Delimiter Only") << tr("Start Delimiter Only")
-                          << tr("Start + End Delimiter") << tr("No Delimiters")
-                          << tr("Fixed Length");
-  m_frameDetectionMethodsValues << SerialStudio::EndDelimiterOnly
-                                << SerialStudio::StartDelimiterOnly
-                                << SerialStudio::StartAndEndDelimiter << SerialStudio::NoDelimiters
-                                << SerialStudio::FixedLength;
-
-#ifdef BUILD_COMMERCIAL
-  m_imgDetectionModes.clear();
-  m_imgDetectionModes << tr("Auto-detect") << tr("Manual Delimiters");
-
-  m_outputWidgetTypes.clear();
-  m_outputWidgetTypes << tr("Button") << tr("Slider") << tr("Toggle") << tr("Text Field")
-                      << tr("Knob");
-#endif
-
-  m_groupWidgets.clear();
-  m_groupWidgets.insert(QStringLiteral("barpanel"), tr("Bar Panel"));
-  m_groupWidgets.insert(QStringLiteral("datagrid"), tr("Data Grid"));
-  m_groupWidgets.insert(QStringLiteral("map"), tr("GPS Map"));
-  m_groupWidgets.insert(QStringLiteral("gyro"), tr("Gyroscope"));
-  m_groupWidgets.insert(QStringLiteral("multiplot"), tr("Multi-Plot"));
-  m_groupWidgets.insert(QStringLiteral("accelerometer"), tr("Accelerometer"));
-  m_groupWidgets.insert(QStringLiteral("plot3d"), tr("3D Plot"));
-  m_groupWidgets.insert(QStringLiteral("image"), tr("Image View"));
-  m_groupWidgets.insert(QStringLiteral("painter"), tr("Canvas Widget"));
-  m_groupWidgets.insert(QStringLiteral("webview"), tr("Web View"));
-  m_groupWidgets.insert(QLatin1String(""), tr("None"));
-
-  m_datasetWidgets.clear();
-  m_datasetWidgets.insert(QLatin1String(""), tr("None"));
-  m_datasetWidgets.insert(QStringLiteral("bar"), tr("Bar"));
-  m_datasetWidgets.insert(QStringLiteral("gauge"), tr("Gauge"));
-  m_datasetWidgets.insert(QStringLiteral("compass"), tr("Compass"));
-  m_datasetWidgets.insert(QStringLiteral("meter"), tr("Meter"));
-
-  appendExtensionWidgets();
-
-  m_displayFormats.clear();
-  m_displayFormats.insert(QLatin1String(""), tr("Auto"));
-  m_displayFormats.insert(QStringLiteral("0d"), tr("Integer (0 decimals)"));
-  m_displayFormats.insert(QStringLiteral("1d"), tr("1 decimal"));
-  m_displayFormats.insert(QStringLiteral("2d"), tr("2 decimals"));
-  m_displayFormats.insert(QStringLiteral("3d"), tr("3 decimals"));
-  m_displayFormats.insert(QStringLiteral("sci"), tr("Scientific"));
-  m_displayFormats.insert(QStringLiteral("hex"), tr("Hexadecimal"));
-  m_displayFormats.insert(QStringLiteral("bin"), tr("Binary"));
-
-  m_eolSequences.clear();
-  m_eolSequences.insert(QLatin1String(""), tr("None"));
-  m_eolSequences.insert(QStringLiteral("\n"), tr("New Line (\\n)"));
-  m_eolSequences.insert(QStringLiteral("\r"), tr("Carriage Return (\\r)"));
-  m_eolSequences.insert(QStringLiteral("\r\n"), tr("CRLF (\\r\\n)"));
-
-  m_plotOptions.clear();
-  m_plotOptions.insert(qMakePair(false, false), tr("No"));
-  m_plotOptions.insert(qMakePair(true, false), tr("Yes"));
+  m_vocabulary.generateComboBoxModels();
 }
 
 /**
- * @brief Adds one widget-picker entry per installed extension package, in the picker matching the
- *        scope it declared. A bundled package that ships as a built-in implementation is skipped:
- *        its built-in entry already exists and keeps its own label.
+ * @brief Adds one widget-picker entry per installed extension package (EditorVocabulary).
  */
 void DataModel::ProjectEditor::appendExtensionWidgets()
 {
-  static auto& catalog = UI::WidgetExtensions::instance();
-
-  const auto packages = catalog.ids();
-  for (const auto& id : packages) {
-    const auto& package = catalog.descriptor(id);
-    if (!package.replaces.isEmpty() || package.title.isEmpty())
-      continue;
-
-    if (package.scope == UI::WidgetExtensions::GroupScope)
-      m_groupWidgets.insert(id, package.title);
-
-    else
-      m_datasetWidgets.insert(id, package.title);
-  }
+  m_vocabulary.appendExtensionWidgets();
 }
 
 //--------------------------------------------------------------------------------------------------

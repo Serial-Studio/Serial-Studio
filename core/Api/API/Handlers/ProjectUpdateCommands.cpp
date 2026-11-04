@@ -506,6 +506,11 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::datasetUpdate(const Q
                                       QStringLiteral("Dataset id not found: %1 in group %2")
                                         .arg(QString::number(datasetId), QString::number(groupId)));
 
+  const auto labelsShape =
+    params.contains(Keys::Labels) ? labelRowsShapeError(params.value(Keys::Labels)) : QString();
+  if (!labelsShape.isEmpty())
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, labelsShape);
+
   DataModel::Dataset d = datasets[datasetId];
   bool rebuildTree     = false;
   QSet<QString> consumed{

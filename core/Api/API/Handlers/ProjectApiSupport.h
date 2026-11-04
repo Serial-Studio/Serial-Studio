@@ -118,4 +118,9 @@ void appendStaleProjectWarning(QJsonObject& result,
  */
 [[nodiscard]] QString transformsRequirePro();
 
+/**
+ * @brief Refusal text when @p labels is not an array of objects, empty when it is (spec 0108).
+ */
+[[nodiscard]] QString labelRowsShapeError(const QJsonValue& labels);
+
 }  // namespace API::Handlers::ProjectApiSupport

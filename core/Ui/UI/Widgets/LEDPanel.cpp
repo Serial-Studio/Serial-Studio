@@ -255,7 +255,7 @@ void Widgets::LEDPanel::updateData()
 
       const QString bandLabel = idx >= 0 ? led.bands[static_cast<size_t>(idx)].label : QString();
       auto status             = ledStatusText(group.datasets[i], bandLabel);
-      if (status != m_labels[static_cast<int>(i)]) {
+      if (status != m_labels.at(static_cast<int>(i))) {
         m_labels[static_cast<int>(i)] = std::move(status);
         changed                       = true;
       }

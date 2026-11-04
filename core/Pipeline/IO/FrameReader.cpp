@@ -645,16 +645,20 @@ void IO::FrameReader::readFixedLengthFrames()
     if (!alignFixedLengthFrame(length))
       break;
 
+    if (m_bodyMask != 0) {
+      const int violation =
+        m_circularBuffer.findMaskedMismatch(m_bodyMask, m_bodyValue, 1, payload);
+      SS_ASSERT_HOTPATH(violation < payload);
+      if (violation > 0) {
+        consumeBytes(violation);
+        continue;
+      }
+    }
+
     CapturedDataPtr ptr;
     CapturedData* cd = claimCapturedSlot(ptr);
     m_circularBuffer.peekRangeInto(0, payload, cd->data);
     SS_ASSERT_HOTPATH(cd->data.size() == payload);
-
-    const qsizetype violation = bodyRuleViolation(cd->data);
-    if (violation > 0) {
-      consumeBytes(violation);
-      continue;
-    }
 
     const auto result = checksum(cd->data, payload);
     if (result == ValidationStatus::ChecksumIncomplete) [[unlikely]]
@@ -695,27 +699,6 @@ bool IO::FrameReader::alignFixedLengthFrame(qsizetype length)
 
   consumeBytes(header);
   return m_circularBuffer.size() >= length;
-}
-
-/**
- * @brief First offset after the header byte that breaks the body rule, or 0 when @p frame passes.
- *        Only the payload is checked: the checksum bytes are arbitrary by construction.
- */
-qsizetype IO::FrameReader::bodyRuleViolation(const QByteArray& frame) const noexcept
-{
-  SS_ASSERT_HOTPATH(!frame.isEmpty());
-  SS_ASSERT_HOTPATH((m_bodyValue & m_bodyMask) == m_bodyValue);
-
-  if (m_bodyMask == 0)
-    return 0;
-
-  const char* bytes   = frame.constData();
-  const qsizetype end = frame.size();
-  for (qsizetype i = 1; i < end; ++i)
-    if ((static_cast<quint8>(bytes[i]) & m_bodyMask) != m_bodyValue)
-      return i;
-
-  return 0;
 }
 
 //--------------------------------------------------------------------------------------------------

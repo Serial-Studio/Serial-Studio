@@ -173,8 +173,10 @@ void IO::Drivers::UartSequencePort::tuneNativeBuffer(QSerialPort* port, qint32 b
   const std::size_t buf = readBufferSize(baud);
   SetupComm(handle, static_cast<DWORD>(buf), static_cast<DWORD>(buf));
 
-  COMMTIMEOUTS timeouts;
-  GetCommTimeouts(handle, &timeouts);
+  COMMTIMEOUTS timeouts{};
+  if (!GetCommTimeouts(handle, &timeouts))
+    return;
+
   timeouts.ReadIntervalTimeout        = MAXDWORD;
   timeouts.ReadTotalTimeoutMultiplier = 0;
   timeouts.ReadTotalTimeoutConstant   = 0;

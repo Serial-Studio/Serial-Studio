@@ -370,3 +370,20 @@ QString API::Handlers::ProjectApiSupport::transformsRequirePro()
 {
   return Core::License::requiresProMessage(QStringLiteral("dataset transforms"));
 }
+
+/**
+ * @brief The refusal text for a value-label table that is not an array of objects, or empty when
+ *        the shape holds; a malformed table is refused, never read as "clear every label".
+ */
+QString API::Handlers::ProjectApiSupport::labelRowsShapeError(const QJsonValue& labels)
+{
+  if (!labels.isArray())
+    return QStringLiteral("Invalid labels: expected an array of {value, text} objects");
+
+  const auto rows = labels.toArray();
+  for (qsizetype i = 0; i < rows.size(); ++i)
+    if (!rows.at(i).isObject())
+      return QStringLiteral("Invalid labels[%1]: expected a {value, text} object").arg(i);
+
+  return QString();
+}

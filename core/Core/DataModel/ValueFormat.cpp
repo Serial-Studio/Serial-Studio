@@ -38,6 +38,11 @@
 static constexpr double kInt64Limit = 9223372036854775808.0;
 
 /**
+ * @brief Most fixed decimals a dataset's decimalPoints renders, past which a double is noise.
+ */
+static constexpr int kMaxFixedDecimals = 12;
+
+/**
  * @brief Decimal places the automatic format gives @p value: fewer as the magnitude grows.
  */
 static int autoDecimals(double value)
@@ -153,7 +158,7 @@ static int notationBase(const QString& fmt)
 static QString displayNumber(double value, const DataModel::Dataset& d)
 {
   if (d.decimalPoints >= 0)
-    return QString::number(value, 'f', d.decimalPoints);
+    return QString::number(value, 'f', std::min(kMaxFixedDecimals, d.decimalPoints));
 
   if (const int base = notationBase(d.displayFormat); base != 0) {
     auto text = notation(value, d, base);
@@ -188,7 +193,7 @@ QString DataModel::ValueFormat::autoNumber(double value, double min, double max)
 QString DataModel::ValueFormat::formatNumber(double value, const Dataset& d)
 {
   if (d.decimalPoints >= 0)
-    return QString::number(value, 'f', std::min(12, d.decimalPoints));
+    return QString::number(value, 'f', std::min(kMaxFixedDecimals, d.decimalPoints));
 
   const auto& fmt = d.displayFormat;
   if (const int base = notationBase(fmt); base != 0) {

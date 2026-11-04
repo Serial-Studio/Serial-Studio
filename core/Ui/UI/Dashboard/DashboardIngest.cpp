@@ -287,14 +287,18 @@ bool UI::DashboardIngest::applyBlockValues(const DataModel::DataBlock& block,
       return false;
     }
 
+    QString label;
     const bool numeric = DataModel::sample_is_numeric(column, index);
+    const auto* head   = push.targets.empty() ? nullptr : push.targets.front();
+    if (numeric && head && (!head->labels.empty() || !head->labelsDefault.isEmpty())) [[unlikely]]
+      label = DataModel::ValueFormat::labelFor(*head, column.values[slot]);
+
     for (auto* ptr : push.targets) {
       ptr->isNumeric       = numeric;
       ptr->numericValue    = column.values[slot];
       ptr->displaySampleMs = receivedMs;
       if (!ptr->labels.empty() || !ptr->labelsDefault.isEmpty()) [[unlikely]]
-        ptr->label =
-          numeric ? DataModel::ValueFormat::labelFor(*ptr, ptr->numericValue) : QString();
+        ptr->label = label;
     }
 
     if (!column.hasText) {

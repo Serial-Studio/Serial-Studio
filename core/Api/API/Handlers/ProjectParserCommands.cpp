@@ -314,11 +314,12 @@ void API::Handlers::ProjectParserCommands::registerConfigCommands()
 
   registry.registerCommand(
     QStringLiteral("project.frameParser.update"),
-    QStringLiteral("Configure frame extraction settings on a source (params: startSequence, "
-                   "endSequence, checksumAlgorithm, frameDetection (0-4, 4=FixedLength), "
-                   "frameLength, frameHeaderMask, frameHeaderValue, frameBodyMask, "
-                   "frameBodyValue, decoderMethod, hexadecimalDelimiters, operationMode). This is the persist path for "
-                   "delimiters -- parser code alone (setCode) never changes them."),
+    QStringLiteral(
+      "Configure frame extraction settings on a source (params: startSequence, "
+      "endSequence, checksumAlgorithm, frameDetection (0-4, 4=FixedLength), "
+      "frameLength, frameHeaderMask, frameHeaderValue, frameBodyMask, "
+      "frameBodyValue, decoderMethod, hexadecimalDelimiters, operationMode). This is the persist path for "
+      "delimiters -- parser code alone (setCode) never changes them."),
     makeSchema(
       {
   },
@@ -825,10 +826,22 @@ API::CommandResponse API::Handlers::ProjectParserCommands::frameParserConfigure(
   }
 
   DataModel::Source probe;
+  if (!model.sources().empty())
+    probe = model.sources()[static_cast<std::size_t>(sourceId)];
+
+  if (params.contains(Keys::FrameDetection))
+    probe.frameDetection = params.value(Keys::FrameDetection).toInt(probe.frameDetection);
+
   QString fixedError;
   bool fixedTouched = false;
   if (!DataModel::patch_fixed_frame_fields(probe, params, fixedError, fixedTouched))
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, fixedError);
+
+  if (probe.frameDetection == SerialStudio::FixedLength && probe.frameLength < 1)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("frameDetection 4 (FixedLength) needs frameLength"));
 
   if (sourceId == 0) {
     const bool basic = configurePrimarySourceFrame(params);

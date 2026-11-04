@@ -56,7 +56,10 @@ static constexpr std::array<KindSlug, 8> kKindSlugs{
    {Kind::SetFlowControl, "flow"}}
 };
 
-static constexpr std::array<const char*, 3> kFlowSlugs{"none", "rtscts", "xonxoff"};
+static constexpr std::array<const char*, 4> kFlowSlugs{"none", "rtscts", "xonxoff", "unknown"};
+static constexpr std::array<const char*, 3> kLineSlugs{"dtr", "rts", "unknown"};
+static_assert(kFlowSlugs.size() == static_cast<std::size_t>(Flow::Unknown) + 1);
+static_assert(kLineSlugs.size() == static_cast<std::size_t>(Line::Unknown) + 1);
 static constexpr int kQuotedBytes = 32;
 
 //--------------------------------------------------------------------------------------------------
@@ -88,15 +91,37 @@ static Kind kindFromSlug(const QString& slug)
 }
 
 /**
- * @brief Returns the flow-control mode a JSON slug names, None when it names none.
+ * @brief Returns the flow-control mode a JSON value names: None when absent, Unknown when it
+ *        names no mode, so validate() can report it instead of silently running without flow.
  */
-static Flow flowFromSlug(const QString& slug)
+static Flow flowFromSlug(const QJsonValue& value)
 {
+  if (value.isUndefined())
+    return Flow::None;
+
+  const auto slug = value.toString();
   for (std::size_t i = 0; i < kFlowSlugs.size(); ++i)
     if (slug == QLatin1String(kFlowSlugs[i]))
       return static_cast<Flow>(i);
 
-  return Flow::None;
+  return Flow::Unknown;
+}
+
+/**
+ * @brief Returns the control line a JSON value names: DTR when absent, Unknown when it names
+ *        neither line, so validate() can report it instead of silently driving DTR.
+ */
+static Line lineFromSlug(const QJsonValue& value)
+{
+  if (value.isUndefined())
+    return Line::Dtr;
+
+  const auto slug = value.toString();
+  for (std::size_t i = 0; i < kLineSlugs.size(); ++i)
+    if (slug.compare(QLatin1String(kLineSlugs[i]), Qt::CaseInsensitive) == 0)
+      return static_cast<Line>(i);
+
+  return Line::Unknown;
 }
 
 /**
@@ -169,6 +194,9 @@ bool IO::ExpectPattern::parse(const QString& text, ExpectPattern& out)
     parsed.mask.append(static_cast<char>(mask));
   }
 
+  SS_ASSERT_LOG(parsed.value.size() == parsed.mask.size());
+  SS_ASSERT_LOG(parsed.value.size() == compact.size() / 2);
+
   out = parsed;
   return true;
 }
@@ -217,7 +245,7 @@ QJsonObject IO::SequenceStep::toJson() const
       obj.insert(QStringLiteral("ms"), ms);
       break;
     case Kind::SetLine:
-      obj.insert(QStringLiteral("line"), line == Line::Rts ? "rts" : "dtr");
+      obj.insert(QStringLiteral("line"), kLineSlugs[static_cast<std::size_t>(line)]);
       obj.insert(QStringLiteral("high"), high);
       break;
     case Kind::Send:
@@ -261,11 +289,8 @@ IO::SequenceStep IO::SequenceStep::fromJson(const QJsonObject& obj)
   step.data      = obj.value(QStringLiteral("data")).toString();
   step.eol       = obj.value(QStringLiteral("eol")).toString();
   step.checksum  = obj.value(QStringLiteral("checksum")).toString();
-  step.flow      = flowFromSlug(obj.value(QStringLiteral("mode")).toString());
-
-  const auto lineSlug = obj.value(QStringLiteral("line")).toString();
-  step.line =
-    lineSlug.compare(QLatin1String("rts"), Qt::CaseInsensitive) == 0 ? Line::Rts : Line::Dtr;
+  step.flow      = flowFromSlug(obj.value(QStringLiteral("mode")));
+  step.line      = lineFromSlug(obj.value(QStringLiteral("line")));
 
   const auto array = obj.value(QStringLiteral("patterns")).toArray();
   for (const auto& item : array)
@@ -396,6 +421,7 @@ IO::SequenceError IO::ConnectionSequence::validate() const
     if (step.kind != Kind::Break && step.kind != Kind::Wait)
       continue;
 
+    SS_ASSERT_LOG(step.ms >= 0);
     fixed += step.ms;
     if (fixed > budgetMs)
       return {index,
@@ -403,6 +429,7 @@ IO::SequenceError IO::ConnectionSequence::validate() const
                 .arg(QString::number(fixed), QString::number(budgetMs))};
   }
 
+  SS_ASSERT_LOG(fixed >= 0 && fixed <= budgetMs);
   return {};
 }
 
@@ -432,8 +459,10 @@ QString IO::ConnectionSequence::stepProblem(const SequenceStep& step)
 
       return {};
     case Kind::SetLine:
-    case Kind::Discard:
+      return step.line == Line::Unknown ? tr("Unknown control line: use DTR or RTS") : QString();
     case Kind::SetFlowControl:
+      return step.flow == Flow::Unknown ? tr("Unknown flow control mode") : QString();
+    case Kind::Discard:
       return {};
     case Kind::Unknown:
       break;

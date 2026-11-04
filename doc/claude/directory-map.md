@@ -163,10 +163,13 @@ core/
     │   │            SdfStrokeMaterial (signed-distance plot stroke, spec 0097), WidgetBands.h
     │   └── Widgets/Output/  Button, Toggle, Slider, TextField, Panel (+ PanelLayout), Base
     ├── ProjectEditor/  ProjectEditor (the QML facade: every Q_PROPERTY/Q_INVOKABLE/slot/signal
-    │   │            plus the shared state) owning eight by-value sub-objects in the spec 0070
+    │   │            plus the shared state) owning by-value sub-objects in the spec 0070
     │   │            shape, one class per .h/.cpp pair: EditorWiring, EditorSelection,
     │   │            EditorTree, EditorForms, EditorCommit, EditorSummaries, EditorMultiSelect,
-    │   │            EditorMqtt; ProjectNavHistory, ProjectEditorIcons.h, ProjectEditorItemIds.h
+    │   │            EditorMqtt, EditorInflux, EditorVocabulary (fills the combo lists the facade
+    │   │            keeps); ProjectNavHistory, ProjectEditorIcons.h, ProjectEditorItemIds.h
+    │   ├── EditorForms/  row builders split out of EditorForms.cpp: OutputStateRows,
+    │   │            OutputValueRows, SourceFramingRows (frame detection, Connection Sequence)
     │   ├── Editors/  EmbeddedCodeEditorItem (the base all five hosts derive from) +
     │   │            ControlScriptEditor, JsCodeEditor, MacroEditor, OutputCodeEditor,
     │   │            PainterCodeEditor, PublisherScriptEditor (Pro), DatasetTransformEditor,

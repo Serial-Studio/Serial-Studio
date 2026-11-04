@@ -8,6 +8,8 @@
 
 #include "UI/Widgets/Output/Panel.h"
 
+#include <cmath>
+#include <limits>
 #include <QThread>
 #include <utility>
 
@@ -62,6 +64,18 @@
 [[nodiscard]] static quint64 tableWriteClock(const DataModel::DataTableSnapshot& snapshot)
 {
   return snapshot.writeClock;
+}
+
+/**
+ * @brief True when a reply dataset holds a finite number inside int range, so a garbled sample is
+ *        never rounded into a code of 0 (acknowledged).
+ */
+[[nodiscard]] static bool isIntegralReply(const DataModel::Dataset& dataset)
+{
+  const double value = dataset.numericValue;
+  return dataset.isNumeric && std::isfinite(value)
+      && value >= static_cast<double>(std::numeric_limits<int>::min())
+      && value <= static_cast<double>(std::numeric_limits<int>::max());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -222,6 +236,9 @@ void Widgets::Output::Panel::observeReply(Base* model)
   const auto token     = datasets.constFind(binding.replyTokenId());
   const auto code      = datasets.constFind(binding.replyCodeId());
   if (token == datasets.cend() || code == datasets.cend())
+    return;
+
+  if (!isIntegralReply(*token) || !isIntegralReply(*code))
     return;
 
   QString message;

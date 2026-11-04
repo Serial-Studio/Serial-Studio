@@ -172,6 +172,9 @@ void TstConnectionSequence::validationNamesTheStep_data()
     << R"({"steps":[{"kind":"expect","patterns":["55"],"timeoutMs":0}]})" << 0;
   QTest::newRow("zero baud") << R"({"steps":[{"kind":"baud","rate":0}]})" << 0;
   QTest::newRow("unknown kind") << R"({"steps":[{"kind":"teleport"}]})" << 0;
+  QTest::newRow("unknown flow mode")
+    << R"({"steps":[{"kind":"discard"},{"kind":"flow","mode":"dsrdtr"}]})" << 1;
+  QTest::newRow("unknown line") << R"({"steps":[{"kind":"line","line":"cts"}]})" << 0;
   QTest::newRow("waits exceed budget")
     << R"({"budgetMs":100,"steps":[{"kind":"break","ms":60},{"kind":"wait","ms":50}]})" << 1;
   QTest::newRow("budget out of range") << R"({"budgetMs":0,"steps":[]})" << -1;

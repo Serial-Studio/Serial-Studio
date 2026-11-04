@@ -357,6 +357,8 @@ void ExpectTask::check()
   if (!isRunning())
     return;
 
+  SS_ASSERT_LOG(m_rx.size() <= IO::kExpectBufferBytes);
+
   qsizetype best = -1;
   for (const auto& pattern : std::as_const(m_patterns)) {
     const auto end = pattern.matchIn(m_rx);
@@ -366,6 +368,8 @@ void ExpectTask::check()
 
   if (best < 0)
     return;
+
+  SS_ASSERT(best <= m_rx.size(), return);
 
   m_rx.remove(0, best);
   release();
@@ -508,12 +512,16 @@ void IO::Drivers::SequenceRunner::start()
  */
 void IO::Drivers::SequenceRunner::cancel()
 {
+  SS_ASSERT_LOG(m_running || !m_breakHeld);
+
   m_cancelled = true;
   if (!m_running)
     return;
 
   m_running = false;
   m_runner.cancel();
+  SS_ASSERT_LOG(!m_runner.isRunning());
+
   m_poll      = nullptr;
   m_breakHeld = false;
 }
@@ -530,6 +538,8 @@ void IO::Drivers::SequenceRunner::feed(const QByteArray& bytes)
   m_rx.append(bytes);
   if (m_rx.size() > IO::kExpectBufferBytes)
     m_rx.remove(0, m_rx.size() - IO::kExpectBufferBytes);
+
+  SS_ASSERT_LOG(m_rx.size() <= IO::kExpectBufferBytes);
 
   const auto poll = m_poll;
   if (poll)
@@ -580,7 +590,12 @@ Async::Task* IO::Drivers::SequenceRunner::makeStep(int index)
         Q_EMIT stepNote(index,
                         tr("Optional step %1 skipped: %2").arg(QString::number(index + 1), why));
       });
-    default:
+    case IO::SequenceStep::Kind::SetLine:
+    case IO::SequenceStep::Kind::Send:
+    case IO::SequenceStep::Kind::Discard:
+    case IO::SequenceStep::Kind::SetBaud:
+    case IO::SequenceStep::Kind::SetFlowControl:
+    case IO::SequenceStep::Kind::Unknown:
       break;
   }
 
@@ -608,6 +623,9 @@ void IO::Drivers::SequenceRunner::beginStep(int index)
  */
 bool IO::Drivers::SequenceRunner::holdBreak(bool enabled)
 {
+  SS_ASSERT_LOG(!enabled || m_running);
+  SS_ASSERT_LOG(!enabled || !m_breakHeld);
+
   const bool ok = m_port.setBreak(enabled);
   m_breakHeld   = enabled && ok;
   if (enabled)
@@ -644,7 +662,10 @@ bool IO::Drivers::SequenceRunner::runInstant(int index, QString& reason)
     case Kind::SetFlowControl:
       ok = m_port.setFlowControl(flowControlFor(step.flow));
       break;
-    default:
+    case Kind::Break:
+    case Kind::Wait:
+    case Kind::Expect:
+    case Kind::Unknown:
       reason = tr("this step cannot run here");
       return false;
   }
@@ -689,6 +710,9 @@ void IO::Drivers::SequenceRunner::onTreeFinished(Async::Outcome outcome,
 {
   if (!m_running || outcome == Async::Outcome::Cancelled)
     return;
+
+  SS_ASSERT_LOG(m_current >= -1 && m_current < m_sequence.steps.size());
+  SS_ASSERT_LOG(outcome != Async::Outcome::Success || m_current == m_sequence.steps.size() - 1);
 
   if (outcome == Async::Outcome::Success) {
     finishWith(true, QString(), m_current);

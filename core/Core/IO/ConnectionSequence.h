@@ -70,12 +70,14 @@ struct SequenceStep {
   enum class Line {
     Dtr,
     Rts,
+    Unknown,
   };
 
   enum class Flow {
     None,
     RtsCts,
     XonXoff,
+    Unknown,
   };
 
   Kind kind     = Kind::Wait;

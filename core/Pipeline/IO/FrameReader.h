@@ -107,7 +107,6 @@ private:
   void readStartDelimitedFrames();
   void readStartEndDelimitedFrames();
   [[nodiscard]] bool alignFixedLengthFrame(qsizetype length);
-  [[nodiscard]] qsizetype bodyRuleViolation(const QByteArray& frame) const noexcept;
 
   [[nodiscard]] IO::CapturedData* claimCapturedSlot(IO::CapturedDataPtr& ptr);
   void enqueueCaptured(IO::CapturedDataPtr&& ptr, IO::CapturedData* cd, qsizetype frameEndPos);

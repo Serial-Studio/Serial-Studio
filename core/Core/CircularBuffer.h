@@ -116,6 +116,7 @@ public:
                                                      const PatternAnchors& anchors) const;
 
   [[nodiscard]] int findMaskedByte(quint8 mask, quint8 value, int from = 0) const;
+  [[nodiscard]] int findMaskedMismatch(quint8 mask, quint8 value, int from, qsizetype to) const;
 
   [[nodiscard]] qsizetype overflowCount() const noexcept
   {
@@ -128,6 +129,8 @@ private:
   static constexpr qsizetype kShortPatternMax = 8;
 
   [[nodiscard]] std::vector<int> computeKMPTable(const T& p) const;
+  template<bool Match>
+  [[nodiscard]] int scanMasked(quint8 mask, quint8 value, qsizetype from, qsizetype to) const;
   [[nodiscard]] static int byteScanLinear(const StorageType* base,
                                           qsizetype current_size,
                                           int pos,
@@ -746,29 +749,56 @@ typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer
 }
 
 /**
- * @brief First logical offset at or after @p from whose byte satisfies (b & mask) == value, or -1
- *        (spec 0103 Fixed Length header rule). A predicate scan has no memchr form, so it walks
- *        the ring's two linear segments directly: no copy, no allocation, no lock.
+ * @brief First logical offset in [from, to) whose byte matches (b & mask) == value when @p Match,
+ *        or breaks it otherwise; -1 when none does. A predicate scan has no memchr form, so it
+ * walks the ring's two linear segments directly: no copy, no allocation, no lock.
  */
 template<typename T, Concepts::ByteLike StorageType>
-int IO::CircularBuffer<T, StorageType>::findMaskedByte(quint8 mask, quint8 value, int from) const
+template<bool Match>
+int IO::CircularBuffer<T, StorageType>::scanMasked(quint8 mask,
+                                                   quint8 value,
+                                                   qsizetype from,
+                                                   qsizetype to) const
 {
   SS_ASSERT_HOTPATH(from >= 0);
   SS_ASSERT_HOTPATH((value & mask) == value);
 
-  const qsizetype current_size = size();
-  if (from >= current_size) [[unlikely]]
+  const qsizetype end = std::min(to, size());
+  if (from >= end) [[unlikely]]
     return -1;
 
   const qsizetype head     = m_head.load(std::memory_order_acquire);
-  const qsizetype firstLen = std::min(current_size, m_capacity - head);
+  const qsizetype firstLen = std::min(end, m_capacity - head);
   for (qsizetype i = from; i < firstLen; ++i)
-    if ((static_cast<quint8>(m_buffer[head + i]) & mask) == value)
+    if (((static_cast<quint8>(m_buffer[head + i]) & mask) == value) == Match)
       return static_cast<int>(i);
 
-  for (qsizetype i = std::max<qsizetype>(from, firstLen); i < current_size; ++i)
-    if ((static_cast<quint8>(m_buffer[i - firstLen]) & mask) == value)
+  for (qsizetype i = std::max<qsizetype>(from, firstLen); i < end; ++i)
+    if (((static_cast<quint8>(m_buffer[i - firstLen]) & mask) == value) == Match)
       return static_cast<int>(i);
 
   return -1;
+}
+
+/**
+ * @brief First logical offset at or after @p from whose byte satisfies (b & mask) == value, or -1
+ *        (spec 0103 Fixed Length header rule).
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::findMaskedByte(quint8 mask, quint8 value, int from) const
+{
+  return scanMasked<true>(mask, value, from, size());
+}
+
+/**
+ * @brief First logical offset in [from, to) whose byte breaks (b & mask) == value, or -1 (spec 0103
+ *        Fixed Length body rule, checked in place so a rejected candidate is never copied).
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::findMaskedMismatch(quint8 mask,
+                                                           quint8 value,
+                                                           int from,
+                                                           qsizetype to) const
+{
+  return scanMasked<false>(mask, value, from, to);
 }

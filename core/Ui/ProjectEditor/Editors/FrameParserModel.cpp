@@ -517,8 +517,7 @@ void DataModel::FrameParserModel::dryRun(const QString& input, bool hex)
   spec.decoderMethod     = static_cast<SerialStudio::DecoderMethod>(src.decoderMethod);
   spec.checksumAlgorithm = src.checksumAlgorithm;
 
-  DataModel::FixedFrameSettings fixed;
-  DataModel::read_fixed_frame_settings(fixed, DataModel::serialize(src));
+  const auto fixed      = DataModel::fixed_frame_settings(src);
   spec.fixedFrameLength = fixed.length;
   spec.headerMask       = fixed.headerMask;
   spec.headerValue      = fixed.headerValue;

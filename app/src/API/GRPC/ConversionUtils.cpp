@@ -11,7 +11,6 @@
 
 #  include "API/GRPC/ConversionUtils.h"
 
-#  include "Core/DataModel/ValueFormat.h"
 #  include "Core/SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -183,9 +182,8 @@ google::protobuf::Struct API::GRPC::ConversionUtils::frameToProtoStruct(
       auto* ds_val = ds_list->add_values()->mutable_struct_value();
       setString(*ds_val, "title", ds.title);
       setString(*ds_val, "value", ds.value);
-      if (const auto label = DataModel::ValueFormat::labelFor(ds, ds.numericValue);
-          ds.isNumeric && !label.isEmpty())
-        setString(*ds_val, "label", label);
+      if (ds.isNumeric && !ds.label.isEmpty())
+        setString(*ds_val, "label", ds.label);
 
       setString(*ds_val, "units", ds.units);
       setNumber(*ds_val, "index", ds.index);

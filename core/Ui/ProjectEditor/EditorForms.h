@@ -77,7 +77,6 @@ private:
   void buildSourceCommonRows(const DataModel::Source& source);
   void appendDriverPropertyRows(const DataModel::Source& source);
   void buildSourcePayloadRows(const DataModel::Source& source);
-  void buildSourceFrameDetectionRows(const DataModel::Source& source);
   void buildActionTimingRows(const DataModel::Action& action);
   void buildActionGeneralRows(const DataModel::Action& action);
   void buildActionPayloadRows(const DataModel::Action& action);

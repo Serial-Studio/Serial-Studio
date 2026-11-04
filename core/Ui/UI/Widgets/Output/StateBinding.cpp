@@ -290,8 +290,12 @@ bool Widgets::Output::StateBinding::holdsDisplay(const qint64 nowMs) const
  */
 void Widgets::Output::StateBinding::settle(const qint64 nowMs)
 {
+  SS_ASSERT_LOG(m_confirmMs >= 0 && m_confirmMs <= DataModel::kMaxOutputStateConfirmMs);
+
   if (m_outcome == Outcome::Waiting && (nowMs - m_requestedMs) >= windowMs())
     m_outcome = Outcome::Unanswered;
+
+  SS_ASSERT_LOG(m_outcome != Outcome::Waiting || (nowMs - m_requestedMs) < windowMs());
 
   if (m_outcome != Outcome::Waiting && m_requestedMs >= 0 && stateConfirms(nowMs))
     m_requestedMs = -1;
@@ -303,12 +307,16 @@ void Widgets::Output::StateBinding::settle(const qint64 nowMs)
  */
 bool Widgets::Output::StateBinding::stateConfirms(const qint64 nowMs) const
 {
+  SS_ASSERT_LOG(!m_twoState || !m_textRequest);
+
   if (!m_hasRequest || !bound())
     return false;
 
   const auto current = verdict(nowMs);
   if (!current.known)
     return false;
+
+  SS_ASSERT_LOG(m_hasValue);
 
   if (m_twoState)
     return current.on == !qFuzzyIsNull(m_requestValue);

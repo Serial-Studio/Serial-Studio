@@ -136,7 +136,7 @@ QString API::EnumLabels::frameDetectionLabel(int value)
     case SerialStudio::StartDelimiterOnly:
       return QStringLiteral("Start delimiter only");
     case SerialStudio::FixedLength:
-      return QStringLiteral("Fixed Length");
+      return QStringLiteral("Fixed length");
   }
   return QStringLiteral("Unknown");
 }

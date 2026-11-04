@@ -69,7 +69,7 @@ user tables.
 | `core/Pipeline/DataModel/FrameBuilder.cpp` | The decoder call in the three tails: `applyDatasetToken` (`:2238`, span and cell lanes), `applyDatasetValue` (`:2098`, list lane), `reprocessDatasetValues` (`:2384`, re-decodes from `rawValue`); the computed-dataset order of question 1. |
 | `core/Pipeline/IO/StreamWorker.cpp` | `StreamProcessor::processChannel` (`:622`) decodes each deinterleaved sample before the block or sample transform, on the worker thread. |
 | `app/src/Benchmark/HotpathBenchmark.cpp` | One ungated row, `native(numeric, decoded)`: the synthetic project with a fixed-point decoder on every dataset, printed beside `native(numeric)` (AC6). |
-| `core/Ui/UI/Dashboard.h` / `.cpp` | `FMT_VAL` and `Dashboard::formatValue` delegate to `ValueFormat`; `Q_INVOKABLE` `formatNumber(double, int uniqueId)` and `labelFor(int uniqueId, double)` for QML. |
+| `core/Ui/UI/Dashboard.h` / `.cpp` | `FMT_VAL` and `Dashboard::formatValue` delegate to `ValueFormat`; `Q_INVOKABLE` `formatNumber(int uniqueId, double)` and `labelFor(int uniqueId, double)` for QML. |
 | `core/Ui/UI/Widgets/DataGrid.cpp` | `formatValue` (`:298-313`) becomes `ValueFormat::formatValue`. |
 | `core/Ui/UI/Widgets/ExtensionData.cpp` / `.h` | `formatDatasetValue` (`:69-84`) becomes `ValueFormat::formatValue`; the row gains a `label` role so a package renders what the dashboard does (R9). |
 | `core/Ui/UI/Widgets/BarPanel.cpp` | Caption text (`:354-359`) through the formatter. |

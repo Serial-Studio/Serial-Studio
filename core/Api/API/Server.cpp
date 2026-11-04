@@ -738,11 +738,12 @@ void API::Server::clientAuthenticated(QTcpSocket* socket, const ConnectionState&
   SS_ASSERT(state.authenticated, return);
 
   auto* worker = static_cast<ServerWorker*>(m_worker);
-  QMetaObject::invokeMethod(worker,
-                            "setSocketAuthenticated",
-                            Qt::QueuedConnection,
-                            Q_ARG(QTcpSocket*, socket),
-                            Q_ARG(QString, state.sessionId));
+  QMetaObject::invokeMethod(
+    worker,
+    [worker, socket, sessionId = state.sessionId] {
+      worker->setSocketAuthenticated(socket, sessionId);
+    },
+    Qt::QueuedConnection);
 }
 
 /**
@@ -768,11 +769,12 @@ void API::Server::enterMcpSession(QTcpSocket* socket, ConnectionState& state)
   }
 
   auto* worker = static_cast<ServerWorker*>(m_worker);
-  QMetaObject::invokeMethod(worker,
-                            "setSocketMcpSession",
-                            Qt::QueuedConnection,
-                            Q_ARG(QTcpSocket*, socket),
-                            Q_ARG(QString, state.sessionId));
+  QMetaObject::invokeMethod(
+    worker,
+    [worker, socket, sessionId = state.sessionId] {
+      worker->setSocketMcpSession(socket, sessionId);
+    },
+    Qt::QueuedConnection);
 }
 
 /**
@@ -1143,12 +1145,12 @@ void API::Server::acceptConnection()
   socket->moveToThread(&m_workerThread);
 
   auto* worker = static_cast<ServerWorker*>(m_worker);
-  QMetaObject::invokeMethod(worker,
-                            "addSocket",
-                            Qt::QueuedConnection,
-                            Q_ARG(QTcpSocket*, socket),
-                            Q_ARG(QString, state.sessionId),
-                            Q_ARG(bool, state.authenticated));
+  QMetaObject::invokeMethod(
+    worker,
+    [worker, socket, sessionId = state.sessionId, authenticated = state.authenticated] {
+      worker->addSocket(socket, sessionId, authenticated);
+    },
+    Qt::QueuedConnection);
 }
 
 /**

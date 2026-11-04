@@ -45,6 +45,7 @@
 #include "IO/ConnectionManager.h"
 #include "ProjectEditor/EditorForms/OutputStateRows.h"
 #include "ProjectEditor/EditorForms/OutputValueRows.h"
+#include "ProjectEditor/EditorForms/SourceFramingRows.h"
 #include "ProjectEditor/Editors/DatasetTransformEditor.h"
 #include "ProjectEditor/ProjectEditor.h"
 #include "ProjectEditor/ProjectEditorIcons.h"
@@ -528,176 +529,6 @@ static QString formIcon(const char* id)
 }
 
 /**
- * @brief Appends one Fixed Length row: the frame length (IntField) or a one-byte hex rule.
- */
-static void appendFixedFrameRow(QStandardItemModel* model,
-                                const int widget,
-                                const int id,
-                                const int value,
-                                const QString& name,
-                                const QString& description)
-{
-  auto* item = new QStandardItem();
-  item->setEditable(true);
-  item->setData(true, Active);
-  item->setData(widget, WidgetType);
-  item->setData(id, ParameterType);
-  item->setData(name, ParameterName);
-  item->setData(description, ParameterDescription);
-
-  if (widget == IntField) {
-    item->setData(1, MinValue);
-    item->setData(IO::kMaxFixedFrameLength, MaxValue);
-    item->setData(value, EditableValue);
-  } else {
-    item->setData(QStringLiteral("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper(),
-                  EditableValue);
-  }
-
-  model->appendRow(item);
-}
-
-/**
- * @brief Appends a UART source's Connection Sequence button row, labelled with its step count; a
- *        click reaches EditorCommit as a sentinel and opens the shared editor dialog.
- */
-static void appendConnectionSequenceRow(QStandardItemModel* model,
-                                        const QList<IO::DriverProperty>& props)
-{
-  qsizetype steps = 0;
-  for (const auto& prop : props)
-    if (prop.key == QLatin1String("connectionSequence"))
-      steps = prop.value.toJsonObject().value(QStringLiteral("steps")).toArray().size();
-
-  auto* item = new QStandardItem();
-  item->setEditable(true);
-  item->setData(true, Active);
-  item->setData(Button, WidgetType);
-  item->setData(kSourceView_ConnectionSequence, ParameterType);
-  item->setData(EditorForms::tr("Connection Sequence"), ParameterName);
-  item->setData(EditorForms::tr("Steps run on every open, before any byte reaches the dashboard"),
-                ParameterDescription);
-  item->setData(steps == 1 ? EditorForms::tr("Connection Sequence… (1 step)")
-                           : EditorForms::tr("Connection Sequence… (%1 steps)").arg(steps),
-                PlaceholderValue);
-  model->appendRow(item);
-}
-
-/**
- * @brief Appends the Fixed Length rows: frame length, Header Rule and Body Rule (mask, value).
- */
-static void appendFixedFrameRows(QStandardItemModel* model, const DataModel::Source& source)
-{
-  appendFixedFrameRow(model,
-                      IntField,
-                      kSourceView_FrameLength,
-                      source.frameLength,
-                      EditorForms::tr("Frame Length"),
-                      EditorForms::tr("Number of bytes in every frame, checksum included"));
-  appendFixedFrameRow(model,
-                      HexTextField,
-                      kSourceView_FrameHeaderMask,
-                      source.frameHeaderMask,
-                      EditorForms::tr("Header Rule Mask"),
-                      EditorForms::tr("Bits of a frame's first byte that must match; 00 disables"));
-  appendFixedFrameRow(model,
-                      HexTextField,
-                      kSourceView_FrameHeaderValue,
-                      source.frameHeaderValue,
-                      EditorForms::tr("Header Rule Value"),
-                      EditorForms::tr("Value the masked bits of the first byte must equal"));
-  appendFixedFrameRow(model,
-                      HexTextField,
-                      kSourceView_FrameBodyMask,
-                      source.frameBodyMask,
-                      EditorForms::tr("Body Rule Mask"),
-                      EditorForms::tr("Bits of the other bytes that must match; 00 disables"));
-  appendFixedFrameRow(model,
-                      HexTextField,
-                      kSourceView_FrameBodyValue,
-                      source.frameBodyValue,
-                      EditorForms::tr("Body Rule Value"),
-                      EditorForms::tr("Value the masked bits of every byte after the first "
-                                      "must equal"));
-}
-
-/**
- * @brief Appends the Frame Detection + Payload Processing rows to the source form model.
- */
-void EditorForms::buildSourceFrameDetectionRows(const DataModel::Source& source)
-{
-  auto* fdHdr = new QStandardItem();
-  fdHdr->setData(SectionHeader, WidgetType);
-  fdHdr->setData(tr("Frame Detection"), PlaceholderValue);
-  fdHdr->setData(formIcon("editor/frame-detection"), ParameterIcon);
-  m_editor.m_sourceModel->appendRow(fdHdr);
-
-  const auto detection     = static_cast<SerialStudio::FrameDetection>(source.frameDetection);
-  const bool hexDelimiters = source.hexadecimalDelimiters;
-
-  auto* frameDetectionItem = new QStandardItem();
-  frameDetectionItem->setEditable(true);
-  frameDetectionItem->setData(true, Active);
-  frameDetectionItem->setData(ComboBox, WidgetType);
-  frameDetectionItem->setData(m_editor.m_frameDetectionMethods, ComboBoxData);
-  frameDetectionItem->setData(m_editor.m_frameDetectionMethodsValues.indexOf(detection),
-                              EditableValue);
-  frameDetectionItem->setData(kSourceView_FrameDetection, ParameterType);
-  frameDetectionItem->setData(tr("Frame Detection Method"), ParameterName);
-  frameDetectionItem->setData(tr("Select how incoming data frames are identified"),
-                              ParameterDescription);
-  m_editor.m_sourceModel->appendRow(frameDetectionItem);
-
-  if (detection == SerialStudio::FixedLength) {
-    appendFixedFrameRows(m_editor.m_sourceModel, source);
-    return;
-  }
-
-  auto* hexSeqItem = new QStandardItem();
-  hexSeqItem->setEditable(true);
-  hexSeqItem->setData(true, Active);
-  hexSeqItem->setData(CheckBox, WidgetType);
-  hexSeqItem->setData(hexDelimiters, EditableValue);
-  hexSeqItem->setData(kSourceView_HexadecimalSequence, ParameterType);
-  hexSeqItem->setData(tr("Hexadecimal Delimiters"), ParameterName);
-  hexSeqItem->setData(tr("Enter frame start/end sequences as hexadecimal values"),
-                      ParameterDescription);
-  m_editor.m_sourceModel->appendRow(hexSeqItem);
-
-  const bool showStart = (detection == SerialStudio::StartDelimiterOnly
-                          || detection == SerialStudio::StartAndEndDelimiter);
-  const bool showEnd   = (detection == SerialStudio::EndDelimiterOnly
-                          || detection == SerialStudio::StartAndEndDelimiter);
-
-  if (showStart) {
-    auto* startSeqItem = new QStandardItem();
-    startSeqItem->setEditable(true);
-    startSeqItem->setData(true, Active);
-    startSeqItem->setData(hexDelimiters ? HexTextField : TextField, WidgetType);
-    startSeqItem->setData(source.frameStart, EditableValue);
-    startSeqItem->setData(kSourceView_FrameStartSequence, ParameterType);
-    startSeqItem->setData(tr("Frame Start Delimiter"), ParameterName);
-    startSeqItem->setData(tr("e.g. /*"), PlaceholderValue);
-    startSeqItem->setData(tr("Sequence that marks the beginning of a data frame"),
-                          ParameterDescription);
-    m_editor.m_sourceModel->appendRow(startSeqItem);
-  }
-
-  if (showEnd) {
-    auto* endSeqItem = new QStandardItem();
-    endSeqItem->setEditable(true);
-    endSeqItem->setData(true, Active);
-    endSeqItem->setData(hexDelimiters ? HexTextField : TextField, WidgetType);
-    endSeqItem->setData(source.frameEnd, EditableValue);
-    endSeqItem->setData(kSourceView_FrameEndSequence, ParameterType);
-    endSeqItem->setData(tr("Frame End Delimiter"), ParameterName);
-    endSeqItem->setData(tr("e.g. */"), PlaceholderValue);
-    endSeqItem->setData(tr("Sequence that marks the end of a data frame"), ParameterDescription);
-    m_editor.m_sourceModel->appendRow(endSeqItem);
-  }
-}
-
-/**
  * @brief Appends the Payload Processing & Validation rows (decoder, checksum) to the source form
  *        model.
  */
@@ -758,7 +589,10 @@ void EditorForms::buildSourceModel(const DataModel::Source& source)
   if (source.busType != static_cast<int>(SerialStudio::BusType::BluetoothLE))
     appendDriverPropertyRows(source);
 
-  buildSourceFrameDetectionRows(source);
+  appendSourceFramingRows(m_editor.m_sourceModel,
+                          source,
+                          m_editor.m_frameDetectionMethods,
+                          m_editor.m_frameDetectionMethodsValues);
   buildSourcePayloadRows(source);
 
   QObject::connect(m_editor.m_sourceModel,

@@ -28,7 +28,7 @@
 namespace API::CommandSafety {
 
 // clang-format off
-static constexpr std::array<Entry, 460> kEntries = {{
+static constexpr std::array<Entry, 467> kEntries = {{
   {QLatin1StringView("alarms.acknowledge"), Tier::Confirm, false},
   {QLatin1StringView("alarms.clear"), Tier::AlwaysConfirm, false},
   {QLatin1StringView("alarms.getProjectSounds"), Tier::Safe, false},
@@ -262,16 +262,23 @@ static constexpr std::array<Entry, 460> kEntries = {{
   {QLatin1StringView("io.setBusType"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.setPaused"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.getConfig"), Tier::Safe, false},
+  {QLatin1StringView("io.uart.getLineStates"), Tier::Safe, false},
+  {QLatin1StringView("io.uart.getSequence"), Tier::Safe, false},
   {QLatin1StringView("io.uart.listBaudRates"), Tier::Safe, false},
   {QLatin1StringView("io.uart.listPorts"), Tier::Safe, false},
+  {QLatin1StringView("io.uart.runSequence"), Tier::AlwaysConfirm, true},
+  {QLatin1StringView("io.uart.sendBreak"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.setAutoReconnect"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.setBaudRate"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.setDataBits"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.setDevice"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.setDtrEnabled"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.setFlowControl"), Tier::AlwaysConfirm, true},
+  {QLatin1StringView("io.uart.setLiveBaudRate"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.setParity"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.setPortIndex"), Tier::AlwaysConfirm, true},
+  {QLatin1StringView("io.uart.setRtsEnabled"), Tier::AlwaysConfirm, true},
+  {QLatin1StringView("io.uart.setSequence"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.uart.setStopBits"), Tier::AlwaysConfirm, true},
   {QLatin1StringView("io.usb.getConfig"), Tier::Safe, false},
   {QLatin1StringView("io.usb.listDevices"), Tier::Safe, false},

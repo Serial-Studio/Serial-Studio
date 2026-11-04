@@ -332,8 +332,7 @@ IO::FrameConfig AppState::deriveFrameConfig() const
   cfg.startSequences  = startSeq.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{startSeq};
   cfg.finishSequences = finishSeq.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{finishSeq};
 
-  DataModel::FixedFrameSettings fixed;
-  DataModel::read_fixed_frame_settings(fixed, DataModel::serialize(sources[0]));
+  const auto fixed     = DataModel::fixed_frame_settings(sources[0]);
   cfg.fixedFrameLength = fixed.length;
   cfg.headerMask       = fixed.headerMask;
   cfg.headerValue      = fixed.headerValue;

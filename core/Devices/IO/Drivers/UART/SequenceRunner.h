@@ -93,6 +93,7 @@ private:
   Async::AsyncClock& m_clock;
   std::function<void()> m_poll;
   IO::ConnectionSequence m_sequence;
+  // Must stay declared after m_rx and m_poll: an ExpectTask holds references into both.
   Async::TaskRunner m_runner;
 };
 

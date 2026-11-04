@@ -39,6 +39,7 @@
 #include "ProjectEditor/EditorSelection.h"
 #include "ProjectEditor/EditorSummaries.h"
 #include "ProjectEditor/EditorTree.h"
+#include "ProjectEditor/EditorVocabulary.h"
 #include "ProjectEditor/EditorWiring.h"
 
 namespace IO {
@@ -238,6 +239,7 @@ private:
   friend class EditorSelection;
   friend class EditorSummaries;
   friend class EditorTree;
+  friend class EditorVocabulary;
   friend class EditorWiring;
 
   ~ProjectEditor();
@@ -668,6 +670,7 @@ private:
   EditorMultiSelect m_multiSelect;
   EditorMqtt m_mqtt;
   EditorInflux m_influx;
+  EditorVocabulary m_vocabulary;
 };
 
 /**

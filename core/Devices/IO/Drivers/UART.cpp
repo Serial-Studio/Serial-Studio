@@ -1020,6 +1020,7 @@ bool IO::Drivers::UART::sendBreak(int ms)
   if (!isOpen() || m_runner || m_breakHeld || ms < 1 || ms > IO::kMaxBreakMs)
     return false;
 
+  SS_ASSERT_LOG(m_breakTimer == Async::kInvalidTimerId);
   if (!port()->setBreakEnabled(true))
     return false;
 
@@ -1028,12 +1029,15 @@ bool IO::Drivers::UART::sendBreak(int ms)
     m_breakTimer = Async::kInvalidTimerId;
     releaseBreak();
   });
+
+  SS_ASSERT_LOG(m_breakTimer != Async::kInvalidTimerId);
   return true;
 }
 
 /**
  * @brief Ends a BREAK sendBreak() started: stops its timer, releases the line and discards the
- *        bytes the device sent while it was held.
+ *        bytes the device sent while it was held. A port that refuses the release would swallow
+ *        every write that follows, so the link is closed and the failure logged instead.
  */
 void IO::Drivers::UART::releaseBreak()
 {
@@ -1046,8 +1050,15 @@ void IO::Drivers::UART::releaseBreak()
   if (!portOpen())
     return;
 
-  (void)port()->setBreakEnabled(false);
+  if (!port()->setBreakEnabled(false)) [[unlikely]] {
+    logDriverError(tr("BREAK release failed"),
+                   tr("The serial port refused to release the BREAK condition; disconnecting."));
+    connectionManager().disconnectDevice(this);
+    return;
+  }
+
   (void)port()->clear(QSerialPort::Input);
+  SS_ASSERT_LOG(!m_breakHeld);
 }
 
 /**
@@ -1149,6 +1160,7 @@ void IO::Drivers::UART::stopSequence()
 
   m_runner->cancel();
   m_runner.release()->deleteLater();
+  SS_ASSERT_LOG(!m_runner);
 }
 
 /**
@@ -1158,7 +1170,8 @@ void IO::Drivers::UART::stopSequence()
  */
 void IO::Drivers::UART::onSequenceFinished(bool ok, const QString& reason, int stepIndex)
 {
-  Q_UNUSED(stepIndex)
+  SS_ASSERT_LOG(stepIndex >= -1);
+  SS_ASSERT_LOG(m_runner != nullptr);
 
   const bool connecting = m_sequenceConnecting;
   stopSequence();
