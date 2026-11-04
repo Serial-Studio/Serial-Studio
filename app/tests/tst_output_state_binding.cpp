@@ -17,6 +17,7 @@
 //--------------------------------------------------------------------------------------------------
 
 using Binding = Widgets::Output::StateBinding;
+using Outcome = Binding::Outcome;
 
 static constexpr qint64 kNow    = 1'000'000;
 static constexpr int kConfirmMs = 3000;
@@ -36,6 +37,44 @@ static DataModel::OutputWidget boundWidget(const QString& onValue = QString())
 }
 
 /**
+ * @brief A control with a reply binding and no state source, with the given type.
+ */
+static DataModel::OutputWidget replyWidget(const int confirmMs = kConfirmMs)
+{
+  DataModel::OutputWidget w;
+  w.title                 = QStringLiteral("Blink");
+  w.replyTokenDatasetId   = 11;
+  w.replyCodeDatasetId    = 12;
+  w.replyMessageDatasetId = 13;
+  w.stateConfirmMs        = confirmMs;
+  return w;
+}
+
+/**
+ * @brief A toggle with both a state source and a reply binding.
+ */
+static DataModel::OutputWidget replyAndStateWidget()
+{
+  auto w                  = boundWidget();
+  w.type                  = DataModel::OutputWidgetType::Toggle;
+  w.replyTokenDatasetId   = 11;
+  w.replyCodeDatasetId    = 12;
+  w.replyMessageDatasetId = 13;
+  return w;
+}
+
+/**
+ * @brief Sends a command the way Base does: records the request, then the token that went out.
+ */
+static int sendCommand(Binding& binding, const qint64 now, const QVariant& request = QVariant())
+{
+  binding.noteRequested(now, request);
+  const int token = binding.issueToken();
+  binding.noteSent(now, token);
+  return token;
+}
+
+/**
  * @brief The rules a bound output control displays by (spec 0080). The load-bank case is the
  *        reason: a control that latches on its own click keeps claiming a fan is running after an
  *        interlock stopped it, so what the control shows must come from what the equipment says.
@@ -44,6 +83,7 @@ class OutputStateBindingTests : public QObject {
   Q_OBJECT
 
 private slots:
+  void init();
   void unboundKnowsNothing();
   void numericSourceDrivesTheDisplay();
   void aTextSourceNeedsAnExplicitOnValue();
@@ -54,11 +94,30 @@ private slots:
   void theIngestStampAndTheVerdictShareOneClock();
   void aTableVariableGoesStaleWhenItsWriterStops();
   void theConfirmWindowIsCapped();
+  void theRequestedStateEndsTheWaitEarly();
+  void aReplyWithThePreviousTokenLeavesTheControlWaiting();
+  void controlsOnOneTokenDatasetNeverDrawTheSameToken();
+  void aTokenNeverRepeatsTheOneTheLineShowed();
+  void theCounterWrapsToOneAndNeverIssuesZero();
+  void codeZeroAcknowledgesAndEndsPending();
+  void aRefusalEndsTheHoldOnTheDisplay();
+  void anAcknowledgementHoldsUntilTheStateConfirms();
+  void anAcknowledgementThatNeverConfirmsEndsWithTheWindow();
+  void silenceBecomesUnanswered();
+  void theReplyWindowHasAFloor();
 };
 
 //--------------------------------------------------------------------------------------------------
 // Tests
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Token counters are process-wide; each case starts from a clean map.
+ */
+void OutputStateBindingTests::init()
+{
+  Binding::resetTokens();
+}
 
 /**
  * @brief An unbound control reports nothing, which is what keeps every existing project unchanged.
@@ -159,6 +218,17 @@ void OutputStateBindingTests::anOutstandingRequestClearsOnConfirmationAndOnExpir
 
   QVERIFY(!binding.pending(kNow + kConfirmMs));
   QVERIFY(!binding.holdsDisplay(kNow + kConfirmMs));
+
+  auto widget = boundWidget();
+  widget.type = DataModel::OutputWidgetType::Toggle;
+  binding.configure(widget);
+  binding.observe(0.0, QString(), kNow);
+  binding.noteRequested(kNow, 1);
+  QVERIFY(binding.pending(kNow + 1));
+
+  binding.observe(1.0, QString(), kNow + 2);
+  QVERIFY(!binding.pending(kNow + 3));
+  QVERIFY(!binding.holdsDisplay(kNow + 3));
 }
 
 /**
@@ -243,6 +313,245 @@ void OutputStateBindingTests::theConfirmWindowIsCapped()
   binding.noteRequested(kNow);
 
   QVERIFY(!binding.pending(kNow + DataModel::kMaxOutputStateConfirmMs));
+}
+
+/**
+ * @brief The state the operator asked for ends the wait for a toggle, a value and a text control
+ *        (R11); any other state leaves it open, and once confirmed the window stays closed.
+ */
+void OutputStateBindingTests::theRequestedStateEndsTheWaitEarly()
+{
+  Binding toggle;
+  auto widget = boundWidget();
+  widget.type = DataModel::OutputWidgetType::Toggle;
+  toggle.configure(widget);
+  toggle.noteRequested(kNow, 1);
+  toggle.observe(0.0, QString(), kNow + 1);
+  QVERIFY(toggle.pending(kNow + 2));
+  toggle.observe(1.0, QString(), kNow + 3);
+  QVERIFY(!toggle.pending(kNow + 4));
+  toggle.settle(kNow + 4);
+  toggle.observe(0.0, QString(), kNow + 5);
+  QVERIFY(!toggle.pending(kNow + 6));
+  QVERIFY(!toggle.holdsDisplay(kNow + 6));
+
+  Binding value;
+  widget      = boundWidget();
+  widget.type = DataModel::OutputWidgetType::Slider;
+  value.configure(widget);
+  value.noteRequested(kNow, 40.0);
+  value.observe(39.0, QString(), kNow + 1);
+  QVERIFY(value.pending(kNow + 2));
+  value.observe(40.0, QString(), kNow + 3);
+  QVERIFY(!value.pending(kNow + 4));
+
+  Binding text;
+  widget      = boundWidget();
+  widget.type = DataModel::OutputWidgetType::TextField;
+  text.configure(widget);
+  text.noteRequested(kNow, QStringLiteral("go"));
+  text.observe(0.0, QStringLiteral("stop"), kNow + 1);
+  QVERIFY(text.pending(kNow + 2));
+  text.observe(0.0, QStringLiteral("go"), kNow + 3);
+  QVERIFY(!text.pending(kNow + 4));
+}
+
+/**
+ * @brief A reply carrying the previous token, seen after a second send, settles nothing (AC2).
+ */
+void OutputStateBindingTests::aReplyWithThePreviousTokenLeavesTheControlWaiting()
+{
+  Binding binding;
+  binding.configure(replyWidget());
+
+  const int first = sendCommand(binding, kNow);
+  binding.observeReply(kNow + 10, first, 0, QStringLiteral("OK"));
+  QVERIFY(binding.outcome(kNow + 11) == Outcome::Acknowledged);
+
+  const int second = sendCommand(binding, kNow + 100);
+  QVERIFY(second != first);
+  binding.observeReply(kNow + 110, first, 0, QStringLiteral("OK"));
+  QVERIFY(binding.outcome(kNow + 111) == Outcome::Waiting);
+  QVERIFY(binding.pending(kNow + 111));
+
+  binding.observeReply(kNow + 120, second, 0, QStringLiteral("OK"));
+  QVERIFY(binding.outcome(kNow + 121) == Outcome::Acknowledged);
+}
+
+/**
+ * @brief Two controls answering on one token dataset share one counter, so they never wait on the
+ *        same number.
+ */
+void OutputStateBindingTests::controlsOnOneTokenDatasetNeverDrawTheSameToken()
+{
+  Binding a;
+  Binding b;
+  a.configure(replyWidget());
+  b.configure(replyWidget());
+
+  QSet<int> seen;
+  for (int i = 0; i < 20; ++i) {
+    const int fromA = a.issueToken();
+    QVERIFY(!seen.contains(fromA));
+    seen.insert(fromA);
+    const int fromB = b.issueToken();
+    QVERIFY(!seen.contains(fromB));
+    seen.insert(fromB);
+  }
+}
+
+/**
+ * @brief The skip rule: the token the line showed last tick is never issued next, so a device
+ *        that kept running across a reconnect cannot acknowledge a fresh command with a stale
+ *        reply.
+ */
+void OutputStateBindingTests::aTokenNeverRepeatsTheOneTheLineShowed()
+{
+  Binding binding;
+  binding.configure(replyWidget());
+
+  binding.observeReply(kNow, 1, 0, QString());
+  QCOMPARE(binding.issueToken(), 2);
+
+  Binding::resetTokens();
+  binding.observeReply(kNow, 2, 0, QString());
+  QCOMPARE(binding.issueToken(), 1);
+}
+
+/**
+ * @brief Tokens run 1..32767, wrap to 1, and zero (a device's power-on value) is never issued; a
+ *        control with no reply binding draws from the shared counter without error.
+ */
+void OutputStateBindingTests::theCounterWrapsToOneAndNeverIssuesZero()
+{
+  Binding binding;
+  binding.configure(replyWidget());
+
+  int last = 0;
+  for (int i = 0; i < 32767; ++i) {
+    last = binding.issueToken();
+    QVERIFY(last > 0);
+  }
+
+  QCOMPARE(last, 32767);
+  QCOMPARE(binding.issueToken(), 1);
+
+  Binding plain;
+  plain.configure(DataModel::OutputWidget());
+  QCOMPARE(plain.issueToken(), 1);
+}
+
+/**
+ * @brief Code 0 acknowledges and ends the pending wait; the message is kept.
+ */
+void OutputStateBindingTests::codeZeroAcknowledgesAndEndsPending()
+{
+  Binding binding;
+  binding.configure(replyWidget());
+
+  const int token = sendCommand(binding, kNow);
+  QVERIFY(binding.pending(kNow + 1));
+  QVERIFY(binding.outcome(kNow + 1) == Outcome::Waiting);
+
+  binding.observeReply(kNow + 2, token, 0, QStringLiteral("OK"));
+  QVERIFY(binding.outcome(kNow + 3) == Outcome::Acknowledged);
+  QVERIFY(!binding.pending(kNow + 3));
+  QCOMPARE(binding.replyCode(), 0);
+  QCOMPARE(binding.replyMessage(), QStringLiteral("OK"));
+}
+
+/**
+ * @brief A refusal ends the hold on the display: the reported state wins at once.
+ */
+void OutputStateBindingTests::aRefusalEndsTheHoldOnTheDisplay()
+{
+  Binding binding;
+  binding.configure(replyAndStateWidget());
+  binding.observe(0.0, QString(), kNow);
+
+  const int token = sendCommand(binding, kNow, 1);
+  QVERIFY(binding.holdsDisplay(kNow + 1));
+
+  binding.observeReply(kNow + 2, token, 3, QStringLiteral("too hot"));
+  QVERIFY(binding.outcome(kNow + 3) == Outcome::Refused);
+  QVERIFY(!binding.holdsDisplay(kNow + 3));
+  QVERIFY(!binding.pending(kNow + 3));
+  QCOMPARE(binding.replyCode(), 3);
+  QCOMPARE(binding.replyMessage(), QStringLiteral("too hot"));
+}
+
+/**
+ * @brief With a state source, an acknowledgement still holds the display until the state
+ *        confirms the request (AC3).
+ */
+void OutputStateBindingTests::anAcknowledgementHoldsUntilTheStateConfirms()
+{
+  Binding binding;
+  binding.configure(replyAndStateWidget());
+  binding.observe(0.0, QString(), kNow);
+
+  const int token = sendCommand(binding, kNow, 1);
+  binding.observeReply(kNow + 2, token, 0, QStringLiteral("OK"));
+  QVERIFY(!binding.pending(kNow + 3));
+  QVERIFY(binding.holdsDisplay(kNow + 3));
+
+  binding.observe(1.0, QString(), kNow + 4);
+  QVERIFY(!binding.holdsDisplay(kNow + 5));
+}
+
+/**
+ * @brief An acknowledged request whose state never arrives stops holding when the window ends.
+ */
+void OutputStateBindingTests::anAcknowledgementThatNeverConfirmsEndsWithTheWindow()
+{
+  Binding binding;
+  binding.configure(replyAndStateWidget());
+  binding.observe(0.0, QString(), kNow);
+
+  const int token = sendCommand(binding, kNow, 1);
+  binding.observeReply(kNow + 2, token, 0, QStringLiteral("OK"));
+  QVERIFY(binding.holdsDisplay(kNow + kConfirmMs - 1));
+  QVERIFY(!binding.holdsDisplay(kNow + kConfirmMs));
+}
+
+/**
+ * @brief No echo inside the window reads unanswered, even with no frame to prompt a refresh, and
+ *        a late echo does not undo it.
+ */
+void OutputStateBindingTests::silenceBecomesUnanswered()
+{
+  Binding binding;
+  binding.configure(replyWidget(1000));
+
+  const int token = sendCommand(binding, kNow);
+  QVERIFY(binding.outcome(kNow + 999) == Outcome::Waiting);
+  QVERIFY(binding.outcome(kNow + 1000) == Outcome::Unanswered);
+  QVERIFY(!binding.pending(kNow + 1000));
+
+  binding.settle(kNow + 1000);
+  binding.observeReply(kNow + 1001, token, 0, QStringLiteral("OK"));
+  QVERIFY(binding.outcome(kNow + 1002) == Outcome::Unanswered);
+}
+
+/**
+ * @brief A zero Confirm Within never declares a reply unanswered at once: the reply window is
+ *        floored at 100 ms, while a state-only control keeps its zero.
+ */
+void OutputStateBindingTests::theReplyWindowHasAFloor()
+{
+  Binding binding;
+  binding.configure(replyWidget(0));
+  QCOMPARE(binding.windowMs(), qint64(100));
+
+  const int token = sendCommand(binding, kNow);
+  QVERIFY(binding.outcome(kNow + 50) == Outcome::Waiting);
+  binding.observeReply(kNow + 60, token, 0, QString());
+  QVERIFY(binding.outcome(kNow + 61) == Outcome::Acknowledged);
+
+  auto widget           = boundWidget();
+  widget.stateConfirmMs = 0;
+  binding.configure(widget);
+  QCOMPARE(binding.windowMs(), qint64(0));
 }
 
 QTEST_APPLESS_MAIN(OutputStateBindingTests)

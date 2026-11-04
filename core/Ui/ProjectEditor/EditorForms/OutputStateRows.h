@@ -35,4 +35,22 @@ void appendOutputStateRows(QStandardItemModel* model,
  */
 void applyOutputStateTarget(OutputWidget& widget, const ProjectModel& project, const int index);
 
+/**
+ * @brief Which of a reply binding's three datasets a picker edits (spec 0110).
+ */
+enum class OutputReplyRole : quint8 {
+  Token   = 0,
+  Code    = 1,
+  Message = 2,
+};
+
+/**
+ * @brief Resolves a reply picker index onto @p widget. Index 0 is "None"; an index past the end
+ *        also unbinds. Walks the datasets exactly as the picker listed them.
+ */
+void applyOutputReplyTarget(OutputWidget& widget,
+                            const ProjectModel& project,
+                            const OutputReplyRole role,
+                            const int index);
+
 }  // namespace DataModel

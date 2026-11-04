@@ -383,6 +383,21 @@ static void inspectWorkspaceReferences(const DataModel::Workspace& workspace,
 }
 
 /**
+ * @brief True when any of the widget's three reply datasets is bound to an id the project no
+ *        longer defines (spec 0110); -1 is unbound and never missing.
+ */
+[[nodiscard]] static bool replyDatasetMissing(const DataModel::OutputWidget& widget,
+                                              const QSet<int>& datasetIds)
+{
+  for (const int id :
+       {widget.replyTokenDatasetId, widget.replyCodeDatasetId, widget.replyMessageDatasetId})
+    if (id >= 0 && !datasetIds.contains(id))
+      return true;
+
+  return false;
+}
+
+/**
  * @brief Flags a control bound to a state source the project no longer defines. The control still
  *        works -- it just stops correcting itself, and silently, which is the failure state
  *        feedback exists to remove (spec 0080 R10). Loading such a project must still succeed.
@@ -409,6 +424,19 @@ static void inspectStateBindings(QList<Finding>& out)
         (dataset && !datasetIds.contains(widget.stateDatasetId))
         || (table
             && !variables.contains(widget.stateTable + QStringLiteral("/") + widget.stateVariable));
+      if (replyDatasetMissing(widget, datasetIds))
+        out.append(makeFinding(
+          Misc::ProblemCenter::Warning,
+          "dangling-reply-dataset",
+          trProblem("Output control waits on a missing reply dataset"),
+          trProblem("\"%1\" in group \"%2\" reads its reply from a dataset this project no "
+                    "longer defines, so it will never see an acknowledgement.")
+            .arg(widget.title, groupLabel(group)),
+          trProblem("Point the reply token, result code and message at existing datasets, or "
+                    "clear them."),
+          group.uniqueId,
+          kJumpGroup));
+
       if (!missing)
         continue;
 

@@ -306,13 +306,60 @@ A bound control shows three states rather than two.
 
 **live**: the source is reporting, and the control shows what it says.
 
-**waiting…**: you acted and the equipment has not confirmed yet. **Confirm Within (ms)** sets how long this lasts; a contactor may close in well under a second while a fan takes several. During this window the control keeps showing what you asked for, and feedback does not override it.
+**waiting…**: you acted and the equipment has not confirmed yet. **Confirm Within (ms)** sets how long this lasts; a contactor may close in well under a second while a fan takes several. During this window the control keeps showing what you asked for, and feedback does not override it. The wait ends as soon as the source reports the state you asked for, and otherwise when **Confirm Within** runs out, even if the device has stopped sending data.
 
 **no data**: the source has not reported, or has gone quiet. The control dims and says so, because showing "off" when the truth is "we have not heard" is the failure this feature exists to remove.
 
 Feedback never transmits. Reflecting equipment state is not an operator action, so a bound control cannot command itself in a loop. Dragging a bound slider is also never interrupted: feedback is held until you let go.
 
 If you delete the dataset or variable a control was bound to, the project still loads and the control still works — it stops correcting itself, and the Problems list reports it.
+
+## Acknowledged Commands
+
+State feedback shows what the equipment reports. An **acknowledged command** answers a narrower question: did the device accept the command I just sent? The control sends a number with each command, the device echoes it with a result, and the control shows whether the command was acknowledged, refused or never answered.
+
+The `transmit` function receives the number as a second argument:
+
+```javascript
+function transmit(value, token) {
+  return "SP " + value + " " + token + "\n";
+}
+```
+
+The token counts up from 1, wraps after 32767 and is never 0. A script that ignores `token` works as before.
+
+### The Reply Convention
+
+A text frame carries the reply as its last three fields, and the device repeats the latest reply in every frame until the next command arrives:
+
+```
+42,18,0,OK
+42,19,2,above limit
+```
+
+| Field | Meaning |
+|-------|---------|
+| Token | The number the command carried. A reply with any other token is ignored. |
+| Code | `0` acknowledges the command; any other number refuses it. |
+| Message | Optional text shown beside a refusal. It holds no separator character. |
+
+Each field is an ordinary dataset; hide them with **Hide on Dashboard** if they are not for display. Select the control in the Project Editor and, under **State Feedback**, pick **Reply Token**, then **Result Code** and the optional **Reply Message**. A reply needs both a token and a code. **Confirm Within (ms)** sets how long the control waits, with a floor of 100 ms for a reply.
+
+The dashboard reads the datasets once per display tick, so a reply sent once and not repeated can be missed under load and then reads as unanswered.
+
+### The Three Outcomes
+
+| Readout | Meaning |
+|---------|---------|
+| acknowledged | The device echoed the token with code 0. |
+| refused: *message* | The device echoed the token with another code. The control also shows its red border and tooltip. |
+| unanswered | **Confirm Within** ran out with no reply carrying the token, whether frames kept arriving or the device went silent. |
+
+While the reply is outstanding the control shows **waiting…**. A control with a state source as well holds what you asked for after an acknowledgement until the source confirms it or the window ends; after a refusal it returns to the reported state at once.
+
+Controls that share a Reply Token dataset share one token counter, so two of them never wait on the same number. The outcome lasts as long as the control's tile does: switching workspaces drops it, and the next command starts over.
+
+The `examples/Acknowledged Commands` example pairs an Arduino sketch with a Blink button and a Setpoint field; the sketch refuses a setpoint above 80 although the control accepts up to 100.
 
 ## Protocol Helper Functions
 

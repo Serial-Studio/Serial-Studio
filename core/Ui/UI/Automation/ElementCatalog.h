@@ -48,6 +48,7 @@ struct Element {
   bool enabled;
   bool focused;
   std::optional<bool> checked;
+  QJsonObject state;
   QQuickItem* item;
 };
 

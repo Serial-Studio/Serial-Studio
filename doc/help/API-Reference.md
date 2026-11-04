@@ -3536,7 +3536,8 @@ Read the configuration of an output widget by id. Use this before rewriting
 A slider, a knob and a Number field refuse a value outside `minValue` to `maxValue` as out of
 range before `transmit(value)` runs. A widget bound to feedback also reports `stateConfirmMs`, `stateOnValue`, and
 either `stateDatasetId` (`stateSource` 1) or `stateTable` and `stateVariable`
-(`stateSource` 2).
+(`stateSource` 2). A widget with a reply binding reports `replyTokenDatasetId`,
+`replyCodeDatasetId`, `replyMessageDatasetId` (when set) and `stateConfirmMs`.
 
 #### 🟢 `project.outputWidget.update`
 Patch any subset of output-widget fields by id.
@@ -3547,7 +3548,7 @@ Patch any subset of output-widget fields by id.
 - `title` (string, optional): Widget title
 - `icon` (string, optional): Icon identifier
 - `transmitFunction` (string, optional): JavaScript source defining
-  `transmit(value)`, converting UI state into device bytes. Validate first
+  `transmit(value)` or `transmit(value, token)`, converting UI state into device bytes. Validate first
   with `project.outputWidget.dryRun`.
 - `sourceId` (int, optional): Target source/device id
 - `txEncoding` (int, optional): Text encoding for string payloads
@@ -3584,6 +3585,13 @@ Patch any subset of output-widget fields by id.
   non-zero value
 - `stateConfirmMs` (int, optional): How long a request stays outstanding
   before the displayed state falls back to the feedback, in milliseconds
+- `replyTokenDatasetId` (int, optional): Unique id of the dataset where the
+  device echoes the token passed to `transmit(value, token)`; -1 = none
+- `replyCodeDatasetId` (int, optional): Unique id of the dataset carrying the
+  result code (0 acknowledges, anything else refuses); -1 = none. A reply needs
+  both the token and the code
+- `replyMessageDatasetId` (int, optional): Unique id of the dataset carrying
+  the reply text; -1 = none
 
 **Returns:**
 ```json
@@ -3598,7 +3606,7 @@ array (`code: "unknown_field"`) rather than failing the command.
 
 #### 🟢 `project.outputWidget.dryRun`
 Compile an output-widget transmit function without touching the live
-project. Verifies the script compiles and defines `transmit(value)`. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
+project. Verifies the script compiles and defines `transmit(value)`; the optional second argument, the reply token, is always 1 in a dry run. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 `transmitFunction` is JavaScript only and runs with the same table API (plus,
 in Pro builds, the injected Modbus/CAN helper globals) as the live widget.
 Validate here before `project.outputWidget.update`.
@@ -5272,9 +5280,14 @@ holds keyboard focus.
 
 #### 🟢 `ui.automation.listElements`
 List the interactive controls of a window as `[{id, role, label, text, x, y, width, height,
-enabled, checked, focused}]`, in drawing order. `text` is present for editable fields, combos,
+enabled, checked, focused, state}]`, in drawing order. `text` is present for editable fields, combos,
 spin boxes and sliders; `checked` for controls that have the property. A masked field (a password
 or key with a non-normal echo mode) reports no text and no label taken from its contents.
+`state` is present for a control that publishes one: an output control's cell
+(`dashboard.output.<groupId>.<widgetId>`) reports `outcome` (`none`, `waiting`, `acknowledged`,
+`refused` or `unanswered`), `token`, `code`, `message`, `waiting`, `known`, `holding` and
+`outOfRange`. Read `token` before and after driving the control to know the outcome is the
+answer to your own command. A masked field never reports `state`.
 
 **Parameters:**
 - `window` (string, optional): Window id, default `main`

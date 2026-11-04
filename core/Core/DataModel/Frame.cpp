@@ -302,11 +302,22 @@ void DataModel::normalize(OutputWidget& w)
   w.initialValue = finiteOr(w.initialValue, 0);
   w.stateSource  = static_cast<OutputStateSource>(
     qBound(0, static_cast<int>(w.stateSource), static_cast<int>(OutputStateSource::Table)));
-  w.stateConfirmMs = qBound(0, w.stateConfirmMs, kMaxOutputStateConfirmMs);
-  w.inputKind      = static_cast<OutputInputKind>(
+  w.stateConfirmMs        = qBound(0, w.stateConfirmMs, kMaxOutputStateConfirmMs);
+  w.replyTokenDatasetId   = qMax(-1, w.replyTokenDatasetId);
+  w.replyCodeDatasetId    = qMax(-1, w.replyCodeDatasetId);
+  w.replyMessageDatasetId = qMax(-1, w.replyMessageDatasetId);
+  w.inputKind             = static_cast<OutputInputKind>(
     qBound(0, static_cast<int>(w.inputKind), static_cast<int>(OutputInputKind::Number)));
   w.decimals = qBound(-1, w.decimals, 9);
   w.units    = w.units.simplified();
+}
+
+/**
+ * @brief True when token and result code are both bound (spec 0110); the message is optional.
+ */
+bool DataModel::outputExpectsReply(const OutputWidget& w)
+{
+  return w.replyTokenDatasetId >= 0 && w.replyCodeDatasetId >= 0;
 }
 
 /**
@@ -383,15 +394,18 @@ bool DataModel::read(OutputWidget& w, const QJsonObject& obj)
   w.transmitFunction = obj.value(Keys::TransmitFunction).toString();
   w.txEncoding       = ss_jsr(obj, Keys::OutputTxEncoding, 0).toInt();
   w.stateSource = static_cast<OutputStateSource>(ss_jsr(obj, Keys::OutputStateSource, 0).toInt());
-  w.stateDatasetId = ss_jsr(obj, Keys::OutputStateDatasetId, -1).toInt();
-  w.stateTable     = ss_jsr(obj, Keys::OutputStateTable, "").toString().simplified();
-  w.stateVariable  = ss_jsr(obj, Keys::OutputStateVariable, "").toString().simplified();
-  w.stateOnValue   = ss_jsr(obj, Keys::OutputStateOnValue, "").toString();
-  w.stateConfirmMs = ss_jsr(obj, Keys::OutputStateConfirmMs, 3000).toInt();
-  w.inputKind      = static_cast<OutputInputKind>(ss_jsr(obj, Keys::OutputInputKind, 0).toInt());
-  w.decimals       = ss_jsr(obj, Keys::OutputDecimals, -1).toInt();
-  w.units          = ss_jsr(obj, Keys::OutputUnits, "").toString();
-  w.quantize       = ss_jsr(obj, Keys::OutputQuantize, false).toBool();
+  w.stateDatasetId        = ss_jsr(obj, Keys::OutputStateDatasetId, -1).toInt();
+  w.stateTable            = ss_jsr(obj, Keys::OutputStateTable, "").toString().simplified();
+  w.stateVariable         = ss_jsr(obj, Keys::OutputStateVariable, "").toString().simplified();
+  w.stateOnValue          = ss_jsr(obj, Keys::OutputStateOnValue, "").toString();
+  w.stateConfirmMs        = ss_jsr(obj, Keys::OutputStateConfirmMs, 3000).toInt();
+  w.replyTokenDatasetId   = ss_jsr(obj, Keys::OutputReplyTokenId, -1).toInt();
+  w.replyCodeDatasetId    = ss_jsr(obj, Keys::OutputReplyCodeId, -1).toInt();
+  w.replyMessageDatasetId = ss_jsr(obj, Keys::OutputReplyMessageId, -1).toInt();
+  w.inputKind = static_cast<OutputInputKind>(ss_jsr(obj, Keys::OutputInputKind, 0).toInt());
+  w.decimals  = ss_jsr(obj, Keys::OutputDecimals, -1).toInt();
+  w.units     = ss_jsr(obj, Keys::OutputUnits, "").toString();
+  w.quantize  = ss_jsr(obj, Keys::OutputQuantize, false).toBool();
 
   normalize(w);
   return !w.title.isEmpty();
@@ -432,9 +446,19 @@ QJsonObject DataModel::serialize(const OutputWidget& w)
   obj.insert(Keys::TransmitFunction, w.transmitFunction);
   obj.insert(Keys::OutputTxEncoding, w.txEncoding);
 
+  const bool replyBound = outputExpectsReply(w);
+  if (w.stateSource != OutputStateSource::None || replyBound)
+    obj.insert(Keys::OutputStateConfirmMs, w.stateConfirmMs);
+
+  if (replyBound) {
+    obj.insert(Keys::OutputReplyTokenId, w.replyTokenDatasetId);
+    obj.insert(Keys::OutputReplyCodeId, w.replyCodeDatasetId);
+    if (w.replyMessageDatasetId >= 0)
+      obj.insert(Keys::OutputReplyMessageId, w.replyMessageDatasetId);
+  }
+
   if (w.stateSource != OutputStateSource::None) {
     obj.insert(Keys::OutputStateSource, static_cast<int>(w.stateSource));
-    obj.insert(Keys::OutputStateConfirmMs, w.stateConfirmMs);
     if (!w.stateOnValue.isEmpty())
       obj.insert(Keys::OutputStateOnValue, w.stateOnValue);
 

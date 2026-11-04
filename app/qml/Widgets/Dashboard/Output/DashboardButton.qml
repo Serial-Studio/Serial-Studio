@@ -21,6 +21,8 @@ Item {
   required property var model
   required property var widget
 
+  property string idPrefix: ""
+
   readonly property real scale: root.widget ? (root.widget.sizeScale || 1) : 1
   readonly property bool mono: root.widget ? (root.widget.monoIcon || false) : false
   readonly property bool checkable: root.widget ? (root.widget.checkable || false) : false
@@ -86,6 +88,8 @@ Item {
       font: Cpp_Misc_CommonFonts.customUiFont(root.scale, false)
       Layout.preferredWidth: Math.min(parent.width, Math.round(200 * root.scale))
       icon.source: root.iconSource.length > 0 ? root.iconSource : "qrc:/actions/Gears.svg"
+
+      objectName: root.idPrefix.length > 0 ? root.idPrefix + ".button" : ""
 
       text: {
         var caption = root.checkable

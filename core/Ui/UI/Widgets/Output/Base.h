@@ -91,6 +91,18 @@ class Base : public QQuickItem {
   Q_PROPERTY(QString stateText
              READ stateText
              NOTIFY stateChanged)
+  Q_PROPERTY(bool expectsReply
+             READ expectsReply
+             CONSTANT)
+  Q_PROPERTY(QString outcome
+             READ outcome
+             NOTIFY stateChanged)
+  Q_PROPERTY(QString outcomeText
+             READ outcomeText
+             NOTIFY stateChanged)
+  Q_PROPERTY(QVariantMap automationState
+             READ automationState
+             NOTIFY stateChanged)
   // clang-format on
 
 signals:
@@ -125,6 +137,10 @@ public:
   [[nodiscard]] double stateValue() const noexcept;
   [[nodiscard]] QString stateText() const;
 
+  [[nodiscard]] bool expectsReply() const noexcept;
+  [[nodiscard]] QString outcome() const;
+  [[nodiscard]] QString outcomeText() const;
+  [[nodiscard]] QVariantMap automationState() const;
   [[nodiscard]] StateBinding& stateBinding() noexcept;
 
   [[nodiscard]] static QVariantMap presentation(const DataModel::OutputWidget& config);
@@ -137,16 +153,19 @@ public slots:
   void observeTableState(const double value, const QString& text, const quint64 writeClock);
   void forgetState();
   void refreshState();
+  void observeReply(const int token, const int code, const QString& message);
 
 protected:
-  [[nodiscard]] QByteArray evaluateTransmitFunction(const QVariant& value);
+  [[nodiscard]] QByteArray evaluateTransmitFunction(const QVariant& value, const int token);
   virtual void applyStateVerdict(const StateBinding::Verdict& verdict);
-  void noteOperatorRequest();
+  void noteOperatorRequest(const QVariant& value, const int token, const bool bytesSent);
 
 private slots:
   void flushPendingValue();
 
 private:
+  void armWindowTimer();
+  void refreshOutcome(const qint64 nowMs);
   [[nodiscard]] bool admit(QVariant& value);
   void setRangeMessage(const QString& message);
   void deliverValue(const QVariant& value);
@@ -177,11 +196,13 @@ private:
   QElapsedTimer m_rateLimiter;
   bool m_hasPending;
   QTimer m_flushTimer;
+  QTimer m_windowTimer;
   QVariant m_pendingValue;
   static constexpr int kTransmitWatchdogMs = 500;
   static constexpr int kMaxPayloadBytes    = 65536;
 
   bool m_statePendingShown;
+  StateBinding::Outcome m_shownOutcome;
   TransmitTarget m_target;
   StateBinding m_stateBinding;
   StateBinding::Verdict m_stateVerdict;

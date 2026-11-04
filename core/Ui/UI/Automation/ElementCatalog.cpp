@@ -22,6 +22,7 @@
 #include "UI/Automation/ElementCatalog.h"
 
 #include <initializer_list>
+#include <QJSValue>
 #include <QLatin1StringView>
 #include <QMetaObject>
 #include <QQuickItem>
@@ -213,6 +214,19 @@ QString ElementCatalog::roleOf(const QQuickItem* item)
 }
 
 /**
+ * @brief The object an item publishes in its automationState property (spec 0110), from a
+ *        QVariantMap or a QML var; empty when the property is absent or not an object.
+ */
+static QJsonObject publishedState(const QQuickItem* item)
+{
+  const QVariant raw = item->property("automationState");
+  if (raw.metaType() == QMetaType::fromType<QJSValue>())
+    return QJsonObject::fromVariantMap(raw.value<QJSValue>().toVariant().toMap());
+
+  return QJsonObject::fromVariantMap(raw.toMap());
+}
+
+/**
  * @brief The catalog entry for a classified item: identifier from objectName, label from the
  *        first of text, title, placeholder or tooltip, geometry mapped to window coordinates. A
  *        masked field (password echo mode) contributes no text to either.
@@ -232,6 +246,7 @@ Element ElementCatalog::describe(QQuickItem* item, const QString& role)
   } else {
     element.label = firstStringProperty(item, {"text", "title", "placeholderText", "toolTip"});
     element.text  = textForRole(item, role);
+    element.state = publishedState(item);
   }
 
   element.rect    = item->mapRectToScene(QRectF(0.0, 0.0, item->width(), item->height()));
@@ -329,7 +344,7 @@ std::optional<Element> ElementCatalog::atPoint(QQuickWindow* window, const QPoin
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief The reply shape of one catalog entry; text and checked appear only when they apply.
+ * @brief The reply shape of one catalog entry; text, checked and state appear only when they apply.
  */
 QJsonObject ElementCatalog::toJson(const Element& element)
 {
@@ -349,5 +364,8 @@ QJsonObject ElementCatalog::toJson(const Element& element)
     json.insert(QStringLiteral("checked"), *element.checked);
 
   json.insert(QStringLiteral("focused"), element.focused);
+  if (!element.state.isEmpty())
+    json.insert(QStringLiteral("state"), element.state);
+
   return json;
 }

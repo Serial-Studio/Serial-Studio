@@ -62,6 +62,7 @@ protected:
   void itemChange(ItemChange change, const ItemChangeData& value) override;
 
 private:
+  void observeReply(Base* model);
   void observeTableState(Base* model);
 
 private:

@@ -50,6 +50,7 @@ Item {
 
     Button {
       objectName: "fixture.button"
+      property var automationState: ({outcome: "refused", token: 7})
       text: "Press"
       width: 120
       height: 32
@@ -74,6 +75,7 @@ Item {
 
     TextField {
       objectName: "fixture.secret"
+      property var automationState: ({outcome: "refused"})
       echoMode: TextInput.Password
       text: "hunter2"
       width: 200

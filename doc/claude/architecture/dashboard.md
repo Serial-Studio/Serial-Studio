@@ -590,6 +590,17 @@ after the license gates, through the pure `DataModel::admitOutputValue`; a refus
 `rangeMessage` and runs no script. A per-control clamp is a defect (the slider's geometry clamp
 excepted), because a new control kind inherits the check by calling `sendValue`.
 
+Acknowledged commands (spec 0110): `transmit(value, token)` takes a token from
+`StateBinding::issueToken()`, one counter per reply-token dataset (file-scope map, reset on
+connect, never the token the line showed last tick). `Panel::refreshStates` reads the token, code
+and message datasets from `Dashboard::datasets()` on `Dashboard::updated`, at display-tick rate:
+no push target, no per-frame signal, no table path. Tick sampling is enough only because the
+device repeats its latest reply in every frame; a reply sent once can be missed under load and
+reads as unanswered. `Base::m_windowTimer` is a single-shot GUI timer armed whenever a window
+opens, because `updated` fires only when a block arrived, so a silent device would otherwise leave
+a control waiting forever (it also ends a state-only control's "waiting"). The reply path never
+touches `m_target` (spec 0080 R3).
+
 ## Dashboard Freeze Mode (Pro) — spec 0007
 
 One stored flag, one derived flag, one input gate — keep the three roles separate:

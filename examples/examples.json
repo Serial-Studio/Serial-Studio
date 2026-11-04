@@ -1,5 +1,16 @@
 [
   {
+    "id": "Acknowledged Commands",
+    "title": "Acknowledged Commands",
+    "description": "Output controls that send a token with each command and show whether the device acknowledged it, refused it or never answered. UART sketch for any Arduino with a built-in LED.",
+    "category": "Sensors & Hardware",
+    "difficulty": "Intermediate",
+    "hasProjectFile": true,
+    "projectFileName": "AcknowledgedCommands.ssproj",
+    "hasScreenshot": false,
+    "requiresPro": true
+  },
+  {
     "id": "Project Tutorial",
     "title": "Project File Tutorial",
     "description": "The companion example of the Project File tutorial: a $-delimited frame parsed by the Built-In comma parser into a data grid and an accelerometer. Runs on any Arduino or with the included Python simulator.",

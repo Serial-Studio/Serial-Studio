@@ -54,11 +54,15 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config,
   , m_watchdog(&m_jsEngine, kTransmitWatchdogMs, QStringLiteral("transmit"))
   , m_hasPending(false)
   , m_statePendingShown(false)
+  , m_shownOutcome(StateBinding::Outcome::None)
   , m_target(std::move(target))
 {
   m_rateLimiter.start();
   m_flushTimer.setSingleShot(true);
   connect(&m_flushTimer, &QTimer::timeout, this, &Base::flushPendingValue);
+
+  m_windowTimer.setSingleShot(true);
+  connect(&m_windowTimer, &QTimer::timeout, this, &Base::refreshState);
 
   m_stateBinding.configure(config);
   const bool prepared =
@@ -327,10 +331,14 @@ bool Widgets::Output::Base::verdictDiffers(const StateBinding::Verdict& other) c
  */
 void Widgets::Output::Base::refreshState()
 {
+  const auto now = StateBinding::nowMs();
+  m_stateBinding.settle(now);
+  if (m_stateBinding.expectsReply())
+    refreshOutcome(now);
+
   if (!m_stateBinding.bound())
     return;
 
-  const auto now      = StateBinding::nowMs();
   const auto verdict  = m_stateBinding.verdict(now);
   const bool pending  = m_stateBinding.pending(now);
   const bool announce = verdictDiffers(verdict) || pending != m_statePendingShown;
@@ -361,19 +369,125 @@ void Widgets::Output::Base::beginInteraction()
 void Widgets::Output::Base::endInteraction()
 {
   m_stateBinding.endInteraction(StateBinding::nowMs());
+  armWindowTimer();
   Q_EMIT stateChanged();
 }
 
 /**
- * @brief Opens the confirm-within window after the control commanded something.
+ * @brief Records what the control commanded and opens the window (spec 0110): the request for every
+ *        state-bound control, so a matching report ends the wait early (R11), and the token for a
+ *        reply-bound one that actually sent bytes. The timer ends the window even from a silent
+ *        device (R10).
  */
-void Widgets::Output::Base::noteOperatorRequest()
+void Widgets::Output::Base::noteOperatorRequest(const QVariant& value,
+                                                const int token,
+                                                const bool bytesSent)
 {
-  if (!m_stateBinding.bound())
+  const bool reply = m_stateBinding.expectsReply();
+  if (!m_stateBinding.bound() && !reply)
     return;
 
-  m_stateBinding.noteRequested(StateBinding::nowMs());
+  const auto now = StateBinding::nowMs();
+  m_stateBinding.noteRequested(now, value);
+  if (reply && bytesSent)
+    m_stateBinding.noteSent(now, token);
+
+  armWindowTimer();
   Q_EMIT stateChanged();
+}
+
+/**
+ * @brief Starts the single-shot that re-evaluates the control when its window is up, 1 ms past it.
+ */
+void Widgets::Output::Base::armWindowTimer()
+{
+  SS_ASSERT_LOG(m_stateBinding.windowMs() >= 0);
+  m_windowTimer.start(static_cast<int>(m_stateBinding.windowMs()) + 1);
+}
+
+/**
+ * @brief Announces an outcome change, and reports a refusal once where transmit errors already
+ *        surface (spec 0110 R6).
+ */
+void Widgets::Output::Base::refreshOutcome(const qint64 nowMs)
+{
+  SS_ASSERT_LOG(m_stateBinding.expectsReply());
+
+  const auto current = m_stateBinding.outcome(nowMs);
+  if (current == m_shownOutcome)
+    return;
+
+  m_shownOutcome = current;
+  if (current == StateBinding::Outcome::Refused)
+    Q_EMIT transmitError(tr("Refused: %1").arg(outcomeText()));
+
+  Q_EMIT stateChanged();
+}
+
+/**
+ * @brief Hands the reply datasets' latest reading to the binding; the panel calls refreshState
+ *        right after, on the same display tick. Never transmits (spec 0080 R3).
+ */
+void Widgets::Output::Base::observeReply(const int token, const int code, const QString& message)
+{
+  m_stateBinding.observeReply(StateBinding::nowMs(), token, code, message);
+}
+
+/**
+ * @brief Whether the control waits for a device reply.
+ */
+bool Widgets::Output::Base::expectsReply() const noexcept
+{
+  return m_stateBinding.expectsReply();
+}
+
+/**
+ * @brief The outcome slug: none, waiting, acknowledged, refused or unanswered.
+ */
+QString Widgets::Output::Base::outcome() const
+{
+  switch (m_stateBinding.outcome(StateBinding::nowMs())) {
+    case StateBinding::Outcome::Waiting:
+      return QStringLiteral("waiting");
+    case StateBinding::Outcome::Acknowledged:
+      return QStringLiteral("acknowledged");
+    case StateBinding::Outcome::Refused:
+      return QStringLiteral("refused");
+    case StateBinding::Outcome::Unanswered:
+      return QStringLiteral("unanswered");
+    default:
+      return QStringLiteral("none");
+  }
+}
+
+/**
+ * @brief A refusal's message, or its code when the device sent none; empty otherwise.
+ */
+QString Widgets::Output::Base::outcomeText() const
+{
+  if (m_stateBinding.outcome(StateBinding::nowMs()) != StateBinding::Outcome::Refused)
+    return QString();
+
+  const auto& message = m_stateBinding.replyMessage();
+  return message.isEmpty() ? QString::number(m_stateBinding.replyCode()) : message;
+}
+
+/**
+ * @brief The machine-readable state the element catalog returns for this control (spec 0110 R7).
+ */
+QVariantMap Widgets::Output::Base::automationState() const
+{
+  const auto now = StateBinding::nowMs();
+  QVariantMap map;
+  map[QStringLiteral("outcome")]    = outcome();
+  map[QStringLiteral("token")]      = m_stateBinding.expectedToken();
+  map[QStringLiteral("code")]       = m_stateBinding.replyCode();
+  map[QStringLiteral("message")]    = m_stateBinding.replyMessage();
+  map[QStringLiteral("waiting")]    = m_stateBinding.pending(now);
+  map[QStringLiteral("known")]      = m_stateVerdict.known;
+  map[QStringLiteral("holding")]    = m_stateBinding.holdsDisplay(now);
+  map[QStringLiteral("outOfRange")] = !m_rangeMessage.isEmpty();
+  return map;
 }
 
 /**
@@ -492,23 +606,24 @@ void Widgets::Output::Base::deliverValue(const QVariant& value)
   if (!tk.isValid() || !SS_LICENSE_GUARD())
     return;
 
-  const auto data = evaluateTransmitFunction(value);
+  const int token = m_stateBinding.issueToken();
+  const auto data = evaluateTransmitFunction(value, token);
   if (!data.isEmpty() && m_target.deliver)
     m_target.deliver(data);
 
-  noteOperatorRequest();
+  noteOperatorRequest(value, token, !data.isEmpty());
 }
 
 /**
- * @brief Runs the JavaScript transmit(value) function and returns the result as a QByteArray.
+ * @brief Runs the JavaScript transmit(value, token) function and returns the result as bytes.
  */
-QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value)
+QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value, const int token)
 {
   if (!m_hasFn)
     return {};
 
   auto jsValue      = m_jsEngine.toScriptValue(value);
-  QJSValueList args = QJSValueList{jsValue};
+  QJSValueList args = QJSValueList{jsValue, QJSValue(token)};
   auto result       = m_watchdog.call(m_transmitFn, args);
 
   if (m_watchdog.lastCallTimedOut()) [[unlikely]] {

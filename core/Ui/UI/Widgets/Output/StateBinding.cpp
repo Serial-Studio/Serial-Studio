@@ -9,7 +9,9 @@
 #include "UI/Widgets/Output/StateBinding.h"
 
 #include <chrono>
+#include <QHash>
 #include <QtGlobal>
+#include <QThread>
 
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
@@ -20,6 +22,15 @@
 
 // Floor for the silence that counts as stale, so a zero confirm-within never means "instantly old"
 static constexpr qint64 kMinStaleMs = 2000;
+
+// Floor for a reply window, so a zero confirm-within never declares a command unanswered at once
+static constexpr qint64 kMinReplyWindowMs = 100;
+
+// Tokens run 1..32767 and wrap to 1; 0 is never issued, so a device's power-on zero matches nothing
+static constexpr int kMaxReplyToken = 32767;
+
+// Token counters per reply-token dataset (spec 0110 A1); GUI thread only, -1 = no reply bound
+static QHash<int, int> s_replyTokens;
 
 //--------------------------------------------------------------------------------------------------
 // Configuration
@@ -39,6 +50,22 @@ void Widgets::Output::StateBinding::configure(const DataModel::OutputWidget& con
   m_onValue   = config.stateOnValue;
   m_confirmMs = qBound(0, config.stateConfirmMs, DataModel::kMaxOutputStateConfirmMs);
 
+  m_twoState    = config.type == DataModel::OutputWidgetType::Toggle
+               || (config.type == DataModel::OutputWidgetType::Button && config.checkable);
+  m_textRequest = config.type == DataModel::OutputWidgetType::TextField
+               && config.inputKind == DataModel::OutputInputKind::Text;
+
+  const bool reply = DataModel::outputExpectsReply(config);
+  m_replyTokenId   = reply ? config.replyTokenDatasetId : -1;
+  m_replyCodeId    = reply ? config.replyCodeDatasetId : -1;
+  m_replyMessageId = reply ? config.replyMessageDatasetId : -1;
+  m_outcome        = Outcome::None;
+  m_expectedToken  = 0;
+  m_seenToken      = 0;
+  m_replyCode      = 0;
+  m_hasRequest     = false;
+  m_replyMessage.clear();
+
   forget();
 }
 
@@ -48,6 +75,38 @@ void Widgets::Output::StateBinding::configure(const DataModel::OutputWidget& con
 bool Widgets::Output::StateBinding::bound() const noexcept
 {
   return m_source != DataModel::OutputStateSource::None;
+}
+
+/**
+ * @brief Whether the control waits for a device reply: token and code datasets both bound.
+ */
+bool Widgets::Output::StateBinding::expectsReply() const noexcept
+{
+  return m_replyTokenId >= 0 && m_replyCodeId >= 0;
+}
+
+/**
+ * @brief Unique id of the dataset echoing the command token, or -1.
+ */
+int Widgets::Output::StateBinding::replyTokenId() const noexcept
+{
+  return m_replyTokenId;
+}
+
+/**
+ * @brief Unique id of the dataset carrying the result code, or -1.
+ */
+int Widgets::Output::StateBinding::replyCodeId() const noexcept
+{
+  return m_replyCodeId;
+}
+
+/**
+ * @brief Unique id of the dataset carrying the reply text, or -1.
+ */
+int Widgets::Output::StateBinding::replyMessageId() const noexcept
+{
+  return m_replyMessageId;
 }
 
 /**
@@ -152,11 +211,17 @@ void Widgets::Output::StateBinding::forget()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens the confirm-within window after an operator acted.
+ * @brief Opens the confirm-within window after an operator acted and records what was asked, so a
+ *        state report that matches it ends the wait early (spec 0110 R11). A new request also
+ *        clears the previous reply outcome: a refusal stays shown until the next send.
  */
-void Widgets::Output::StateBinding::noteRequested(const qint64 nowMs)
+void Widgets::Output::StateBinding::noteRequested(const qint64 nowMs, const QVariant& request)
 {
-  m_requestedMs = nowMs;
+  m_requestedMs  = nowMs;
+  m_outcome      = Outcome::None;
+  m_hasRequest   = request.isValid();
+  m_requestText  = request.toString();
+  m_requestValue = m_hasRequest ? SerialStudio::toDouble(request) : 0;
 }
 
 /**
@@ -175,31 +240,213 @@ void Widgets::Output::StateBinding::beginInteraction()
 void Widgets::Output::StateBinding::endInteraction(const qint64 nowMs)
 {
   m_interacting = false;
-  noteRequested(nowMs);
+  m_requestedMs = nowMs;
 }
 
 /**
- * @brief Whether an operator request is still awaiting confirmation.
+ * @brief Whether an operator request is still awaiting confirmation: a reply inside its window, or
+ *        a state-only request inside its window that the source has not yet confirmed. A settled
+ *        or unanswered reply is never pending.
  */
 bool Widgets::Output::StateBinding::pending(const qint64 nowMs) const
 {
   if (m_requestedMs < 0)
     return false;
 
-  return (nowMs - m_requestedMs) < static_cast<qint64>(m_confirmMs);
+  const bool open = (nowMs - m_requestedMs) < windowMs();
+  if (m_outcome == Outcome::Waiting)
+    return open;
+
+  if (m_outcome != Outcome::None)
+    return false;
+
+  return open && !stateConfirms(nowMs);
 }
 
 /**
- * @brief Whether feedback must leave the displayed state alone right now.
+ * @brief Whether feedback must leave the displayed state alone right now: while the operator holds
+ *        the control, while a request is pending, and after an acknowledgement until the state
+ *        confirms it or the window ends. A refused or unanswered command lets the state win at
+ * once.
  */
 bool Widgets::Output::StateBinding::holdsDisplay(const qint64 nowMs) const
 {
-  return m_interacting || pending(nowMs);
+  if (m_interacting)
+    return true;
+
+  if (m_outcome == Outcome::Acknowledged)
+    return m_requestedMs >= 0 && (nowMs - m_requestedMs) < windowMs() && !stateConfirms(nowMs);
+
+  if (m_outcome == Outcome::Refused || m_outcome == Outcome::Unanswered)
+    return false;
+
+  return pending(nowMs);
+}
+
+/**
+ * @brief Latches what the clock and the source have decided: a reply that ran out of window is
+ *        unanswered, and a confirmed request closes its window so the control follows its source
+ *        again. A window still waiting on a reply is never closed by the state.
+ */
+void Widgets::Output::StateBinding::settle(const qint64 nowMs)
+{
+  if (m_outcome == Outcome::Waiting && (nowMs - m_requestedMs) >= windowMs())
+    m_outcome = Outcome::Unanswered;
+
+  if (m_outcome != Outcome::Waiting && m_requestedMs >= 0 && stateConfirms(nowMs))
+    m_requestedMs = -1;
+}
+
+/**
+ * @brief Whether the state verdict matches the recorded request: the truth rule for a two-state
+ *        control, the text for a Text field, a fuzzy compare for a value.
+ */
+bool Widgets::Output::StateBinding::stateConfirms(const qint64 nowMs) const
+{
+  if (!m_hasRequest || !bound())
+    return false;
+
+  const auto current = verdict(nowMs);
+  if (!current.known)
+    return false;
+
+  if (m_twoState)
+    return current.on == !qFuzzyIsNull(m_requestValue);
+
+  if (m_textRequest)
+    return current.text.trimmed() == m_requestText.trimmed();
+
+  return qFuzzyCompare(1.0 + current.value, 1.0 + m_requestValue);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Replies (spec 0110)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Forgets every token counter; called when a link connects, so tokens restart at 1.
+ */
+void Widgets::Output::StateBinding::resetTokens()
+{
+  SS_ASSERT_LOG(QThread::isMainThread());
+  s_replyTokens.clear();
+}
+
+/**
+ * @brief The next token on this control's reply line: 1..32767, wrapping to 1, never 0, and never
+ *        the token the line showed last, so a device that kept running across a reconnect can not
+ *        acknowledge a fresh command with its stale reply.
+ */
+int Widgets::Output::StateBinding::issueToken()
+{
+  SS_ASSERT_LOG(QThread::isMainThread());
+
+  auto it = s_replyTokens.find(m_replyTokenId);
+  if (it == s_replyTokens.end())
+    it = s_replyTokens.insert(m_replyTokenId, 0);
+
+  int next = it.value();
+  for (int attempt = 0; attempt < 2; ++attempt) {
+    next = next >= kMaxReplyToken ? 1 : next + 1;
+    if (next != m_seenToken)
+      break;
+  }
+
+  it.value() = next;
+  return next;
+}
+
+/**
+ * @brief Records that bytes carrying @p token went out: the outcome is waiting from @p nowMs.
+ */
+void Widgets::Output::StateBinding::noteSent(const qint64 nowMs, const int token)
+{
+  SS_ASSERT(expectsReply(), return);
+  SS_ASSERT_LOG(token > 0);
+
+  m_requestedMs   = nowMs;
+  m_expectedToken = token;
+  m_outcome       = Outcome::Waiting;
+  m_replyCode     = 0;
+  m_replyMessage.clear();
+}
+
+/**
+ * @brief Reads the reply line: remembers the token it shows, and settles a waiting command whose
+ *        token it echoes inside the window (0 acknowledged, anything else refused). An older token,
+ *        or one arriving after the window, changes nothing but the remembered token.
+ */
+void Widgets::Output::StateBinding::observeReply(const qint64 nowMs,
+                                                 const int token,
+                                                 const int code,
+                                                 const QString& message)
+{
+  SS_ASSERT_LOG(expectsReply());
+
+  m_seenToken = token;
+  if (m_outcome != Outcome::Waiting || token != m_expectedToken)
+    return;
+
+  if ((nowMs - m_requestedMs) >= windowMs()) {
+    m_outcome = Outcome::Unanswered;
+    return;
+  }
+
+  m_replyCode    = code;
+  m_replyMessage = message;
+  m_outcome      = code == 0 ? Outcome::Acknowledged : Outcome::Refused;
+}
+
+/**
+ * @brief The outcome as of @p nowMs: a waiting command past its window reads unanswered even
+ *        before settle() latches it.
+ */
+Widgets::Output::StateBinding::Outcome Widgets::Output::StateBinding::outcome(
+  const qint64 nowMs) const
+{
+  if (m_outcome == Outcome::Waiting && (nowMs - m_requestedMs) >= windowMs())
+    return Outcome::Unanswered;
+
+  return m_outcome;
+}
+
+/**
+ * @brief The token the control is waiting for (or last waited for), 0 before any send.
+ */
+int Widgets::Output::StateBinding::expectedToken() const noexcept
+{
+  return m_expectedToken;
+}
+
+/**
+ * @brief The result code of the settled reply.
+ */
+int Widgets::Output::StateBinding::replyCode() const noexcept
+{
+  return m_replyCode;
+}
+
+/**
+ * @brief The message of the settled reply, empty when the device sent none.
+ */
+const QString& Widgets::Output::StateBinding::replyMessage() const noexcept
+{
+  return m_replyMessage;
 }
 
 //--------------------------------------------------------------------------------------------------
 // Verdict
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The one window that governs both state and reply (spec 0110 R5): confirm-within, floored
+ *        at 100 ms for a reply so a zero setting never reads as unanswered at once.
+ */
+qint64 Widgets::Output::StateBinding::windowMs() const noexcept
+{
+  const auto window = static_cast<qint64>(m_confirmMs);
+  return expectsReply() ? qMax(kMinReplyWindowMs, window) : window;
+}
 
 /**
  * @brief Silence that counts as stale: twice the equipment's own confirm-within, floored. Deriving

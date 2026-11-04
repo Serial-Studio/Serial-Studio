@@ -91,6 +91,8 @@ void API::Handlers::ProjectOutputWidgetCommands::registerCommands()
                    "checkable, color, size, on/offLabel, min/max/step/initialValue, "
                    "transmitFunction, and the state binding (stateSource with its "
                    "stateDatasetId or stateTable/stateVariable, stateOnValue, "
+                   "stateConfirmMs) when one is set, and the reply binding "
+                   "(replyTokenDatasetId, replyCodeDatasetId, replyMessageDatasetId, with "
                    "stateConfirmMs) when one is set. Also returns inputKind "
                    "(0=text, 1=number; a text field only), decimals (-1 = automatic), "
                    "units and quantize: a slider, a knob and a number field refuse a "
@@ -268,9 +270,17 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetGet
   result[QStringLiteral("txEncoding")]       = w.txEncoding;
   result[QStringLiteral("transmitFunction")] = w.transmitFunction;
   result[Keys::OutputStateSource]            = static_cast<int>(w.stateSource);
-  if (w.stateSource != DataModel::OutputStateSource::None) {
+  if (w.stateSource != DataModel::OutputStateSource::None)
+    result[Keys::OutputStateOnValue] = w.stateOnValue;
+
+  if (w.stateSource != DataModel::OutputStateSource::None || DataModel::outputExpectsReply(w))
     result[Keys::OutputStateConfirmMs] = w.stateConfirmMs;
-    result[Keys::OutputStateOnValue]   = w.stateOnValue;
+
+  if (DataModel::outputExpectsReply(w)) {
+    result[Keys::OutputReplyTokenId] = w.replyTokenDatasetId;
+    result[Keys::OutputReplyCodeId]  = w.replyCodeDatasetId;
+    if (w.replyMessageDatasetId >= 0)
+      result[Keys::OutputReplyMessageId] = w.replyMessageDatasetId;
   }
 
   if (w.stateSource == DataModel::OutputStateSource::Dataset)

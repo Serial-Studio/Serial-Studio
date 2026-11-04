@@ -76,6 +76,12 @@ Widgets::Output::Panel::Panel(int index, QQuickItem* parent)
 {
   connect(&m_dashboard, &UI::Dashboard::updated, this, &Panel::refreshStates);
 
+  auto* connections = &API::handlerContext().connectionManager;
+  connect(connections, &IO::ConnectionManager::connectedChanged, this, [connections] {
+    if (connections->isConnected())
+      StateBinding::resetTokens();
+  });
+
   if (!VALIDATE_WIDGET(SerialStudio::DashboardOutputPanel, index))
     return;
 
@@ -172,10 +178,18 @@ void Widgets::Output::Panel::refreshStates()
 
   for (const auto& entry : std::as_const(m_models)) {
     auto* model = entry.value<Base*>();
-    if (!model || !model->stateBinding().bound())
+    if (!model || (!model->stateBinding().bound() && !model->expectsReply()))
       continue;
 
+    if (model->expectsReply())
+      observeReply(model);
+
     const auto& binding = model->stateBinding();
+    if (!binding.bound()) {
+      model->refreshState();
+      continue;
+    }
+
     if (!binding.readsTable()) {
       const auto& datasets = m_dashboard.datasets();
       const auto it        = datasets.constFind(binding.datasetId());
@@ -190,6 +204,32 @@ void Widgets::Output::Panel::refreshStates()
 
     model->refreshState();
   }
+}
+
+/**
+ * @brief Reads a reply-bound control's three reply datasets on the display tick (spec 0110): token
+ *        and code from the number, the message from the text, or from the number when the sample
+ *        is numeric (these dataset copies carry text only for text samples). Never the table path,
+ *        which would arm the mirror; a dataset the frame no longer has reads as no reply.
+ */
+void Widgets::Output::Panel::observeReply(Base* model)
+{
+  SS_ASSERT(model != nullptr, return);
+  SS_ASSERT_LOG(model->expectsReply());
+
+  const auto& binding  = model->stateBinding();
+  const auto& datasets = m_dashboard.datasets();
+  const auto token     = datasets.constFind(binding.replyTokenId());
+  const auto code      = datasets.constFind(binding.replyCodeId());
+  if (token == datasets.cend() || code == datasets.cend())
+    return;
+
+  QString message;
+  const auto text = datasets.constFind(binding.replyMessageId());
+  if (text != datasets.cend())
+    message = text->isNumeric ? QString::number(text->numericValue) : text->value;
+
+  model->observeReply(qRound(token->numericValue), qRound(code->numericValue), message);
 }
 
 /**

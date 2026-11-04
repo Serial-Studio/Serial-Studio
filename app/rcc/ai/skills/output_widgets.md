@@ -45,12 +45,22 @@ Each widget has:
   (sliders, knobs); `initialValue != 0` starts a latching button on
 - `inputKind` (text field: 0 text, 1 number), `decimals` (-1 automatic),
   `units`, `quantize` (number field: snap to `stepSize` from `minValue`)
+- `replyTokenDatasetId`, `replyCodeDatasetId`, `replyMessageDatasetId`
+  (dataset uniqueIds, -1 = unbound; token and code must both be set) with
+  `stateConfirmMs`: the control sends a token as `transmit(value, token)`
+  and waits for the device to echo it with a result code
 - `transmitFunction`: JS source that returns the bytes to send
 
 Sliders, knobs and Number text fields enforce `minValue`..`maxValue` before
 `transmit()` runs; a value outside it is out of range and never reaches the
 script, so do not write a range clamp in the function. Read the range with
 `project.outputWidget.get` before driving a control.
+
+After driving a control, `ui.automation.listElements` for
+`dashboard.output.<groupId>.<widgetId>` returns a `state` object: compare
+`state.token` before and after to know the answer is yours, then read
+`state.outcome` (`acknowledged`, `refused` with `state.message`, or
+`unanswered`).
 
 ## The transmit function
 

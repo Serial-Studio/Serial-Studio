@@ -62,6 +62,8 @@ private slots:
   void outputWidgetRoundTripsEveryField();
   void outputWidgetWithoutATitleIsRejected();
   void outputWidgetDefaultsOmitTheWriteLimitKeys();
+  void outputWidgetReplyBindingRoundTrips();
+  void outputWidgetUnboundReplyWritesNoReplyKeys();
   void outputWidgetIdentityIsAssignedByTheGroupReader();
 
   void sourceRoundTripsEveryField();
@@ -401,8 +403,15 @@ void TstFrameSerialization::outputWidgetRoundTripsEveryField()
   w.units            = QStringLiteral("rpm");
   w.quantize         = true;
 
+  w.replyTokenDatasetId   = 4;
+  w.replyCodeDatasetId    = 5;
+  w.replyMessageDatasetId = 6;
+
   const auto restored = fromJson<OutputWidget>(toJson(w));
   QVERIFY(restored.has_value());
+  QCOMPARE(restored->replyTokenDatasetId, 4);
+  QCOMPARE(restored->replyCodeDatasetId, 5);
+  QCOMPARE(restored->replyMessageDatasetId, 6);
   QCOMPARE(restored->inputKind, OutputInputKind::Number);
   QCOMPARE(restored->decimals, 3);
   QCOMPARE(restored->units, QStringLiteral("rpm"));
@@ -446,6 +455,58 @@ void TstFrameSerialization::outputWidgetDefaultsOmitTheWriteLimitKeys()
   QCOMPARE(restored->decimals, -1);
   QVERIFY(restored->units.isEmpty());
   QVERIFY(!restored->quantize);
+}
+
+/**
+ * @brief A reply-only widget (no state source) writes its three ids and the confirm window and
+ *        reads them back (spec 0110); a negative id is floored at unbound.
+ */
+void TstFrameSerialization::outputWidgetReplyBindingRoundTrips()
+{
+  OutputWidget w;
+  w.title                 = QStringLiteral("Blink");
+  w.replyTokenDatasetId   = 2;
+  w.replyCodeDatasetId    = 3;
+  w.replyMessageDatasetId = 4;
+  w.stateConfirmMs        = 800;
+
+  const QJsonObject json = toJson(w);
+  QCOMPARE(json.value(Keys::OutputReplyTokenId).toInt(), 2);
+  QCOMPARE(json.value(Keys::OutputReplyCodeId).toInt(), 3);
+  QCOMPARE(json.value(Keys::OutputReplyMessageId).toInt(), 4);
+  QCOMPARE(json.value(Keys::OutputStateConfirmMs).toInt(), 800);
+  QVERIFY(!json.contains(Keys::OutputStateSource));
+
+  const auto restored = fromJson<OutputWidget>(json);
+  QVERIFY(restored.has_value());
+  QVERIFY(outputExpectsReply(*restored));
+  QCOMPARE(restored->stateConfirmMs, 800);
+
+  QJsonObject bad = json;
+  bad.insert(Keys::OutputReplyMessageId, -9);
+  const auto floored = fromJson<OutputWidget>(bad);
+  QVERIFY(floored.has_value());
+  QCOMPARE(floored->replyMessageDatasetId, -1);
+}
+
+/**
+ * @brief An unbound widget writes none of the three reply keys, and a token without a code is
+ *        not a reply binding, so a project saved before spec 0110 stays byte-identical.
+ */
+void TstFrameSerialization::outputWidgetUnboundReplyWritesNoReplyKeys()
+{
+  OutputWidget w;
+  w.title = QStringLiteral("Blink");
+
+  QJsonObject json = toJson(w);
+  QVERIFY(!json.contains(Keys::OutputReplyTokenId));
+  QVERIFY(!json.contains(Keys::OutputReplyCodeId));
+  QVERIFY(!json.contains(Keys::OutputReplyMessageId));
+  QVERIFY(!json.contains(Keys::OutputStateConfirmMs));
+
+  w.replyTokenDatasetId = 2;
+  json                  = toJson(w);
+  QVERIFY(!json.contains(Keys::OutputReplyTokenId));
 }
 
 void TstFrameSerialization::outputWidgetWithoutATitleIsRejected()

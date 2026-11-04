@@ -85,6 +85,14 @@ Item {
         property bool stateBound: cell.owModel ? cell.owModel.stateBound : false
         property bool stateKnown: cell.owModel ? cell.owModel.stateKnown : false
         property bool statePending: cell.owModel ? cell.owModel.statePending : false
+        property bool expectsReply: cell.owModel ? cell.owModel.expectsReply : false
+        property string outcome: cell.owModel ? cell.owModel.outcome : "none"
+        property string outcomeText: cell.owModel ? cell.owModel.outcomeText : ""
+        property var automationState: cell.owModel ? cell.owModel.automationState : ({})
+        property bool outcomeShown: cell.expectsReply
+                                    && (cell.outcome === "acknowledged"
+                                        || cell.outcome === "refused"
+                                        || cell.outcome === "unanswered")
         property color accentColor: cell.owColor.length > 0
                                     ? cell.owColor
                                     : SerialStudioHelpers.getDatasetAccentColor()
@@ -113,8 +121,9 @@ Item {
           onTriggered: cell.txError = false
         }
 
-        ToolTip.text: cell.txErrorText
-        ToolTip.visible: cell.txError && cellHover.hovered
+        ToolTip.text: cell.txError ? cell.txErrorText : cell.outcomeText
+        ToolTip.visible: (cell.txError || (cell.outcome === "refused" && cell.outcomeText.length > 0))
+                         && cellHover.hovered
 
         HoverHandler {
           id: cellHover
@@ -126,16 +135,28 @@ Item {
         //
         Label {
           z: 5
-          visible: cell.stateBound
+          visible: cell.stateBound || cell.expectsReply
           anchors.top: parent.top
           anchors.right: parent.right
+          anchors.left: parent.left
           anchors.margins: 4
+          elide: Text.ElideRight
+          horizontalAlignment: Text.AlignRight
           font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
-          color: cell.stateUnknown ? Cpp_ThemeManager.colors["alarm"]
-                                   : Cpp_ThemeManager.colors["placeholder_text"]
-          text: cell.stateUnknown ? qsTr("no data")
+          color: cell.outcome === "refused" ? Cpp_ThemeManager.colors["alarm"]
+                 : cell.outcome === "unanswered" && cell.expectsReply
+                   ? Cpp_ThemeManager.colors["alarm_warning"]
+                 : cell.stateUnknown ? Cpp_ThemeManager.colors["alarm"]
+                 : Cpp_ThemeManager.colors["placeholder_text"]
+          text: cell.outcomeShown
+                ? (cell.outcome === "refused"
+                   ? qsTr("refused: %1").arg(cell.outcomeText)
+                   : cell.outcome === "acknowledged" ? qsTr("acknowledged")
+                   : qsTr("unanswered"))
+                : cell.stateUnknown ? qsTr("no data")
                 : cell.statePending ? qsTr("waiting…")
-                : qsTr("live")
+                : cell.stateBound ? qsTr("live")
+                : ""
         }
 
         //
@@ -162,6 +183,7 @@ Item {
             model: cell.owModel
             widget: cell.owData
             color: cell.accentColor
+            idPrefix: cell.objectName
           }
         }
 
@@ -183,6 +205,7 @@ Item {
             model: cell.owModel
             widget: cell.owData
             color: cell.accentColor
+            idPrefix: cell.objectName
           }
         }
 

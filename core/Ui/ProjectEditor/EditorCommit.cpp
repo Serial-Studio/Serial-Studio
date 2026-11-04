@@ -1370,6 +1370,18 @@ void EditorCommit::applyOutputWidgetField(QStandardItem* item, DataModel::Output
     case kOutputWidget_StateTarget:
       DataModel::applyOutputStateTarget(widget, m_model, value.toInt());
       break;
+    case kOutputWidget_ReplyToken:
+      DataModel::applyOutputReplyTarget(
+        widget, m_model, DataModel::OutputReplyRole::Token, value.toInt());
+      break;
+    case kOutputWidget_ReplyCode:
+      DataModel::applyOutputReplyTarget(
+        widget, m_model, DataModel::OutputReplyRole::Code, value.toInt());
+      break;
+    case kOutputWidget_ReplyMessage:
+      DataModel::applyOutputReplyTarget(
+        widget, m_model, DataModel::OutputReplyRole::Message, value.toInt());
+      break;
     case kOutputWidget_StateOnValue:
       widget.stateOnValue = value.toString();
       break;
@@ -1431,7 +1443,7 @@ void EditorCommit::onOutputWidgetItemChanged(QStandardItem* item)
   } else {
     applyOutputWidgetField(item, m_editor.m_selectedOutputWidget);
     if (param == kOutputWidget_Checkable || param == kOutputWidget_StateSource
-        || param == kOutputWidget_InputKind)
+        || param == kOutputWidget_InputKind || param == kOutputWidget_ReplyToken)
       m_editor.m_forms.buildOutputWidgetModel(m_editor.m_selectedOutputWidget);
   }
 

@@ -256,7 +256,8 @@ void API::Handlers::ProjectDryRunCommands::registerScriptDryRunCommands()
                    "only** and runs with the same injected Modbus/CAN helper globals + table "
                    "API as the live widget. "
                    "Pass inputValue (and hex:true for hex byte input) to also execute it once "
-                   "and return the produced bytes (outputHex + byteCount). Validate here "
+                   "and return the produced bytes (outputHex + byteCount); the optional "
+                   "second argument, the reply token, is always 1 in a dry run. Validate here "
                    "BEFORE project.outputWidget.update."),
     makeSchema(
       {
@@ -772,7 +773,7 @@ static QJsonObject runOutputWidgetSample(DataModel::ScriptDryRun& session,
     jsValue         = numeric ? engine.toScriptValue(num) : engine.toScriptValue(text);
   }
 
-  const auto called = session.call(transmitFn, QJSValueList{jsValue});
+  const auto called = session.call(transmitFn, QJSValueList{jsValue, 1});
   QJsonObject out;
   if (session.timedOut()) {
     out[QStringLiteral("ok")]       = false;

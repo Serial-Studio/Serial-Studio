@@ -30,6 +30,17 @@ A slider, a knob and a Number text field enforce `minValue`..`maxValue` before
 `transmit()` runs, so `value` is always inside the range and the function needs
 no clamp of its own.
 
+`transmit(value, token)` also receives a second argument: the reply token, an
+integer in 1..32767 (never 0) that counts up per reply line. A script that
+ignores it works as before; one that sends it lets the control wait for the
+device to echo it. A dry run passes `1`. Bind the reply with
+`replyTokenDatasetId`, `replyCodeDatasetId` (0 acknowledges, anything else
+refuses) and optionally `replyMessageDatasetId` on `project.outputWidget.update`.
+After driving a control through `ui.automation.click`, read its `state` from
+`ui.automation.listElements` (id `dashboard.output.<groupId>.<widgetId>`):
+`state.outcome` is `acknowledged`, `refused` or `unanswered`, and
+`state.token` names which command it answers.
+
 Return either:
 
 - a **String**: encoded using the widget's configured TX encoding and sent.

@@ -172,6 +172,15 @@ static void applyOutputStateFields(DataModel::OutputWidget& w,
 
   if (take(Keys::OutputStateConfirmMs))
     w.stateConfirmMs = params.value(Keys::OutputStateConfirmMs).toInt();
+
+  if (take(Keys::OutputReplyTokenId))
+    w.replyTokenDatasetId = params.value(Keys::OutputReplyTokenId).toInt();
+
+  if (take(Keys::OutputReplyCodeId))
+    w.replyCodeDatasetId = params.value(Keys::OutputReplyCodeId).toInt();
+
+  if (take(Keys::OutputReplyMessageId))
+    w.replyMessageDatasetId = params.value(Keys::OutputReplyMessageId).toInt();
 }
 
 /**
@@ -367,7 +376,8 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
                    "checkable, color, size, onLabel, offLabel, minValue, maxValue, "
                    "stepSize, initialValue, stateSource, stateDatasetId, stateTable, "
                    "stateVariable, stateOnValue, stateConfirmMs, inputKind, decimals, "
-                   "units, quantize). A checkable button "
+                   "units, quantize, replyTokenDatasetId, replyCodeDatasetId, "
+                   "replyMessageDatasetId). A checkable button "
                    "latches and transmits 1 (on) / 0 (off) like a toggle, instead of "
                    "pulsing a single value on click; color is a hex fill override (empty "
                    "= group accent) and size is 0=small, 1=normal, 2=large, 3=extra "
@@ -375,7 +385,11 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
                    "1=dataset via stateDatasetId, 2=variable via stateTable/"
                    "stateVariable); stateOnValue is the value that reads as on (empty = "
                    "any non-zero) and stateConfirmMs how long a request stays "
-                   "outstanding. inputKind is 0=text, 1=number for a text field; a "
+                   "outstanding. The reply ids are dataset uniqueIds (-1 = unbound): the "
+                   "device echoes the token transmit(value, token) was given in the token "
+                   "dataset and reports a result code (0 acknowledges, anything else "
+                   "refuses) with an optional message; token and code must both be set. "
+                   "inputKind is 0=text, 1=number for a text field; a "
                    "number field, slider and knob enforce minValue to maxValue before "
                    "transmit() runs and refuse a value outside it as out of range, so a "
                    "transmitFunction needs no range clamp. decimals (-1 = automatic) and "

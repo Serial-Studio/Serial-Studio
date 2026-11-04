@@ -19,6 +19,8 @@ Item {
   required property var model
   required property var widget
 
+  property string idPrefix: ""
+
   readonly property string title: root.widget ? (root.widget.title || "") : ""
   readonly property bool unknown: root.model
                                   ? (root.model.stateBound && !root.model.stateKnown)
@@ -55,6 +57,8 @@ Item {
       checked: root.desiredChecked
       Layout.alignment: Qt.AlignHCenter
       opacity: root.unknown ? 0.45 : 1.0
+
+      objectName: root.idPrefix.length > 0 ? root.idPrefix + ".toggle" : ""
 
       palette.highlight: root.color
 

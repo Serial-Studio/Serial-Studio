@@ -57,6 +57,7 @@ private slots:
   void windowInventory();
   void catalogRolesAndIds();
   void catalogFilters();
+  void catalogPublishesState();
   void componentNameParsing();
   void modalDetection();
   void clickById();
@@ -212,6 +213,29 @@ void TstUiAutomation::catalogRolesAndIds()
   const auto disabled = ElementCatalog::byId(m_view, QStringLiteral("fixture.disabled"));
   QVERIFY(disabled.has_value());
   QVERIFY(!disabled->enabled);
+}
+
+/**
+ * @brief An item publishing automationState reports it under state (spec 0110); a masked field
+ *        with the same property reports none, and an item without it has no state key.
+ */
+void TstUiAutomation::catalogPublishesState()
+{
+  const auto button = ElementCatalog::byId(m_view, QStringLiteral("fixture.button"));
+  QVERIFY(button.has_value());
+  QCOMPARE(button->state.value(QStringLiteral("outcome")).toString(), QStringLiteral("refused"));
+  QCOMPARE(button->state.value(QStringLiteral("token")).toInt(), 7);
+  const QJsonObject json = ElementCatalog::toJson(*button);
+  QCOMPARE(json.value(QStringLiteral("state")).toObject(), button->state);
+
+  const auto secret = ElementCatalog::byId(m_view, QStringLiteral("fixture.secret"));
+  QVERIFY(secret.has_value());
+  QVERIFY(secret->state.isEmpty());
+  QVERIFY(!ElementCatalog::toJson(*secret).contains(QStringLiteral("state")));
+
+  const auto check = ElementCatalog::byId(m_view, QStringLiteral("fixture.check"));
+  QVERIFY(check.has_value());
+  QVERIFY(!ElementCatalog::toJson(*check).contains(QStringLiteral("state")));
 }
 
 /**

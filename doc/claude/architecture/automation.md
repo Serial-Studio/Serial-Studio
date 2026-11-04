@@ -93,6 +93,15 @@ readable without consent and sits in the assistant's safe tier. The walk uses an
 controls in child order, resolves an id to the first match and a point to the last listed
 control containing it (the one drawn on top).
 
+## The `state` object
+
+`ElementCatalog::describe` reads an item's `automationState` property (a `QVariantMap`, or a QML
+`var` as `QJSValue`) into `Element::state`, and `toJson` emits it as `state` when non-empty. The
+only publisher today is the Output panel cell (spec 0110: `outcome`, `token`, `code`, `message`,
+`waiting`, `known`, `holding`, `outOfRange`). A masked item never reports one, exactly as it
+reports no text, because the catalog is readable without consent. A new publisher puts nothing
+secret in it: the object is as public as the label.
+
 ## Gating
 
 `click` and `key` carry the `DrivesUi` capability (`core/Api/API/CommandCapabilities.cpp`);

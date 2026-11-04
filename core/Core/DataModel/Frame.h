@@ -216,6 +216,10 @@ struct alignas(8) OutputWidget {
   QString stateVariable;                 ///< Variable within stateTable
   QString stateOnValue;                  ///< Empty -> any non-zero value means on
 
+  int replyTokenDatasetId   = -1;  ///< Dataset uniqueId echoing the command token, -1 = none
+  int replyCodeDatasetId    = -1;  ///< Dataset uniqueId carrying the result code, -1 = none
+  int replyMessageDatasetId = -1;  ///< Dataset uniqueId carrying the reply text, -1 = none
+
   OutputInputKind inputKind = OutputInputKind::Text;  ///< Text field: Text or Number (spec 0109)
   int decimals              = -1;  ///< Displayed decimals, -1 = automatic from Step
   QString units;                   ///< Suffix shown beside the value, e.g. "%"
@@ -241,6 +245,11 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
  *        a negative source id or an inverted min/max reached the widgets through the other.
  */
 void normalize(OutputWidget& w);
+
+/**
+ * @brief True when the control waits for a device reply (spec 0110): token and code both bound.
+ */
+[[nodiscard]] bool outputExpectsReply(const OutputWidget& w);
 
 /**
  * @brief Verdict of admitOutputValue (spec 0109).

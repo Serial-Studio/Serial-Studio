@@ -125,7 +125,10 @@ typedef enum {
   kOutputWidget_InputKind,
   kOutputWidget_Decimals,
   kOutputWidget_Units,
-  kOutputWidget_Quantize
+  kOutputWidget_Quantize,
+  kOutputWidget_ReplyToken,
+  kOutputWidget_ReplyCode,
+  kOutputWidget_ReplyMessage
 } OutputWidgetItem;
 
 /**

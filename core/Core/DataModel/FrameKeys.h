@@ -177,6 +177,11 @@ inline constexpr KeyView OutputStateVariable("stateVariable");
 inline constexpr KeyView OutputStateOnValue("stateOnValue");
 inline constexpr KeyView OutputStateConfirmMs("stateConfirmMs");
 
+// Output widget reply binding (spec 0110): absent means unbound
+inline constexpr KeyView OutputReplyTokenId("replyTokenDatasetId");
+inline constexpr KeyView OutputReplyCodeId("replyCodeDatasetId");
+inline constexpr KeyView OutputReplyMessageId("replyMessageDatasetId");
+
 // Output widget write limits (spec 0109): absent means a Text field with automatic decimals
 inline constexpr KeyView OutputInputKind("inputKind");
 inline constexpr KeyView OutputDecimals("outputDecimals");

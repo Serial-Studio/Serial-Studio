@@ -190,6 +190,9 @@ void Widgets::Output::Preview::rebuildModel()
 
   DataModel::OutputWidget config = m_config;
   config.stateSource             = DataModel::OutputStateSource::None;
+  config.replyTokenDatasetId     = -1;
+  config.replyCodeDatasetId      = -1;
+  config.replyMessageDatasetId   = -1;
 
   Base* built = nullptr;
   switch (config.type) {

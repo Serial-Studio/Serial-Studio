@@ -8,6 +8,7 @@ You can also browse and download examples directly from Serial Studio via the **
 
 | Example | Description | Difficulty | Pro |
 |---------|-------------|:----------:|:---:|
+| [Acknowledged Commands](Acknowledged%20Commands) | Output controls that wait for a device acknowledgement, refusal or silence | Intermediate | Yes |
 | [ANSI Color Test](ANSI%20Color%20Test) | ANSI color and VT-100 terminal emulation test suite | Beginner | |
 | [API Test](API%20Test) | Python API client with interactive REPL and test suite | Intermediate | Yes |
 | [BLE Battery](BLE%20Battery) | BLE Battery Service level monitor | Beginner | |
@@ -82,6 +83,7 @@ You can also browse and download examples directly from Serial Studio via the **
 19. [S7 PLC Example](S7%20PLC%20Example): an S7comm source.
 20. [IEC 104 Example](IEC%20104%20Example): an IEC 60870-5-104 source.
 21. [Sparkplug Example](Sparkplug%20Example): Sparkplug B over MQTT.
+22. [Acknowledged Commands](Acknowledged%20Commands): output controls that show the device's reply.
 
 ### Advanced
 

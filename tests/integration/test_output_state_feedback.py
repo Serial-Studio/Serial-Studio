@@ -82,6 +82,18 @@ def test_controls_apply_feedback_without_their_own_setters():
         assert setter not in body, f"{name} transmits from its feedback path"
 
 
+def test_reply_path_never_reaches_the_target():
+    """
+    Spec 0110: a device reply is not an operator action. Base::observeReply and the Panel read
+    that feeds it settle an outcome and nothing else; neither may touch m_target.
+    """
+    base = (_OUTPUT_DIR / "Base.cpp").read_text(encoding="utf-8")
+    assert "m_target" not in _function_body(base, "observeReply")
+
+    panel = (_OUTPUT_DIR / "Panel.cpp").read_text(encoding="utf-8")
+    assert "m_target" not in _function_body(panel, "observeReply")
+
+
 def test_preview_builds_an_unbound_control():
     """
     A preview must not follow live equipment while the user edits a transmit script.
