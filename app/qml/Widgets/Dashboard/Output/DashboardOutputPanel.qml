@@ -86,13 +86,13 @@ Item {
         property bool stateKnown: cell.owModel ? cell.owModel.stateKnown : false
         property bool statePending: cell.owModel ? cell.owModel.statePending : false
         property bool expectsReply: cell.owModel ? cell.owModel.expectsReply : false
-        property string outcome: cell.owModel ? cell.owModel.outcome : "none"
+        property int outcome: cell.owModel ? cell.owModel.outcome : SerialStudio.OutputOutcome.None
         property string outcomeText: cell.owModel ? cell.owModel.outcomeText : ""
         property var automationState: cell.owModel ? cell.owModel.automationState : ({})
         property bool outcomeShown: cell.expectsReply
-                                    && (cell.outcome === "acknowledged"
-                                        || cell.outcome === "refused"
-                                        || cell.outcome === "unanswered")
+                                    && (cell.outcome === SerialStudio.OutputOutcome.Acknowledged
+                                        || cell.outcome === SerialStudio.OutputOutcome.Refused
+                                        || cell.outcome === SerialStudio.OutputOutcome.Unanswered)
         property color accentColor: cell.owColor.length > 0
                                     ? cell.owColor
                                     : SerialStudioHelpers.getDatasetAccentColor()
@@ -122,7 +122,9 @@ Item {
         }
 
         ToolTip.text: cell.txError ? cell.txErrorText : cell.outcomeText
-        ToolTip.visible: (cell.txError || (cell.outcome === "refused" && cell.outcomeText.length > 0))
+        ToolTip.visible: (cell.txError
+                          || (cell.outcome === SerialStudio.OutputOutcome.Refused
+                              && cell.outcomeText.length > 0))
                          && cellHover.hovered
 
         HoverHandler {
@@ -143,15 +145,17 @@ Item {
           elide: Text.ElideRight
           horizontalAlignment: Text.AlignRight
           font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
-          color: cell.outcome === "refused" ? Cpp_ThemeManager.colors["alarm"]
-                 : cell.outcome === "unanswered" && cell.expectsReply
+          color: cell.outcome === SerialStudio.OutputOutcome.Refused
+                 ? Cpp_ThemeManager.colors["alarm"]
+                 : cell.outcome === SerialStudio.OutputOutcome.Unanswered && cell.expectsReply
                    ? Cpp_ThemeManager.colors["alarm_warning"]
                  : cell.stateUnknown ? Cpp_ThemeManager.colors["alarm"]
                  : Cpp_ThemeManager.colors["placeholder_text"]
           text: cell.outcomeShown
-                ? (cell.outcome === "refused"
+                ? (cell.outcome === SerialStudio.OutputOutcome.Refused
                    ? qsTr("refused: %1").arg(cell.outcomeText)
-                   : cell.outcome === "acknowledged" ? qsTr("acknowledged")
+                   : cell.outcome === SerialStudio.OutputOutcome.Acknowledged
+                     ? qsTr("acknowledged")
                    : qsTr("unanswered"))
                 : cell.stateUnknown ? qsTr("no data")
                 : cell.statePending ? qsTr("waiting…")

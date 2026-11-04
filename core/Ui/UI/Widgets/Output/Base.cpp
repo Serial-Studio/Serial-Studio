@@ -47,9 +47,9 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config,
   , m_offLabel(config.offLabel)
   , m_txEncoding(static_cast<SerialStudio::TextEncoding>(config.txEncoding))
   , m_numeric(DataModel::outputIsNumeric(config))
+  , m_quantize(config.quantize)
   , m_decimals(config.decimals)
   , m_admittedValue(config.initialValue)
-  , m_admission(config)
   , m_hasFn(false)
   , m_watchdog(&m_jsEngine, kTransmitWatchdogMs, QStringLiteral("transmit"))
   , m_hasPending(false)
@@ -442,22 +442,32 @@ bool Widgets::Output::Base::expectsReply() const noexcept
 }
 
 /**
- * @brief The outcome slug: none, waiting, acknowledged, refused or unanswered.
+ * @brief Where the last command stands, as of now.
  */
-QString Widgets::Output::Base::outcome() const
+SerialStudio::OutputOutcome Widgets::Output::Base::outcome() const
 {
-  switch (m_stateBinding.outcome(StateBinding::nowMs())) {
-    case StateBinding::Outcome::Waiting:
-      return QStringLiteral("waiting");
-    case StateBinding::Outcome::Acknowledged:
-      return QStringLiteral("acknowledged");
-    case StateBinding::Outcome::Refused:
-      return QStringLiteral("refused");
-    case StateBinding::Outcome::Unanswered:
-      return QStringLiteral("unanswered");
-    default:
+  return m_stateBinding.outcome(StateBinding::nowMs());
+}
+
+/**
+ * @brief The outcome slug ui.automation.listElements reports: wire format, kept as text.
+ */
+[[nodiscard]] static QString outcomeSlug(const SerialStudio::OutputOutcome outcome)
+{
+  switch (outcome) {
+    case SerialStudio::OutputOutcome::None:
       return QStringLiteral("none");
+    case SerialStudio::OutputOutcome::Waiting:
+      return QStringLiteral("waiting");
+    case SerialStudio::OutputOutcome::Acknowledged:
+      return QStringLiteral("acknowledged");
+    case SerialStudio::OutputOutcome::Refused:
+      return QStringLiteral("refused");
+    case SerialStudio::OutputOutcome::Unanswered:
+      return QStringLiteral("unanswered");
   }
+
+  return QStringLiteral("none");
 }
 
 /**
@@ -479,7 +489,7 @@ QVariantMap Widgets::Output::Base::automationState() const
 {
   const auto now = StateBinding::nowMs();
   QVariantMap map;
-  map[QStringLiteral("outcome")]    = outcome();
+  map[QStringLiteral("outcome")]    = outcomeSlug(outcome());
   map[QStringLiteral("token")]      = m_stateBinding.expectedToken();
   map[QStringLiteral("code")]       = m_stateBinding.replyCode();
   map[QStringLiteral("message")]    = m_stateBinding.replyMessage();
@@ -544,8 +554,10 @@ bool Widgets::Output::Base::admit(QVariant& value)
   if (!m_numeric)
     return true;
 
-  double admitted    = 0;
-  const auto verdict = DataModel::admitOutputValue(m_admission, value, admitted);
+  double admitted = 0;
+  const DataModel::OutputLimits limits{
+    .minValue = m_minValue, .maxValue = m_maxValue, .stepSize = m_stepSize, .quantize = m_quantize};
+  const auto verdict = DataModel::admitOutputValue(limits, value, admitted);
   if (verdict != DataModel::OutputAdmission::Accepted) {
     const auto suffix = m_units.isEmpty() ? QString() : QStringLiteral(" ") + m_units;
     const auto text   = verdict == DataModel::OutputAdmission::NotANumber

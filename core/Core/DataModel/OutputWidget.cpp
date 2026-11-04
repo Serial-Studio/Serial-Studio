@@ -113,12 +113,12 @@ bool DataModel::outputIsNumeric(const OutputWidget& w)
  *        (spec 0109 R3): a number is taken as is and text is parsed; a non-finite result is not a
  *        number; Quantize snaps to Step counted from Min; anything outside Min to Max is refused.
  */
-DataModel::OutputAdmission DataModel::admitOutputValue(const OutputWidget& w,
+DataModel::OutputAdmission DataModel::admitOutputValue(const OutputLimits& limits,
                                                        const QVariant& value,
                                                        double& out)
 {
-  SS_ASSERT_LOG(w.minValue <= w.maxValue);
-  SS_ASSERT_LOG(std::isfinite(w.minValue) && std::isfinite(w.maxValue));
+  SS_ASSERT_LOG(limits.minValue <= limits.maxValue);
+  SS_ASSERT_LOG(std::isfinite(limits.minValue) && std::isfinite(limits.maxValue));
 
   bool ok           = false;
   const auto typeId = value.metaType().id();
@@ -131,13 +131,13 @@ DataModel::OutputAdmission DataModel::admitOutputValue(const OutputWidget& w,
   if (!ok || !std::isfinite(v))
     return OutputAdmission::NotANumber;
 
-  if (w.quantize && w.stepSize > 0) {
-    v = w.minValue + std::round((v - w.minValue) / w.stepSize) * w.stepSize;
-    if (v > w.maxValue && v - w.maxValue <= w.stepSize * 1e-9)
-      v = w.maxValue;
+  if (limits.quantize && limits.stepSize > 0) {
+    v = limits.minValue + std::round((v - limits.minValue) / limits.stepSize) * limits.stepSize;
+    if (v > limits.maxValue && v - limits.maxValue <= limits.stepSize * 1e-9)
+      v = limits.maxValue;
   }
 
-  if (v < w.minValue || v > w.maxValue)
+  if (v < limits.minValue || v > limits.maxValue)
     return OutputAdmission::OutOfRange;
 
   out = v;

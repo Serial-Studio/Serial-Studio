@@ -186,6 +186,17 @@ enum class OutputAdmission : quint8 {
 };
 
 /**
+ * @brief The four control fields admitOutputValue reads, so a caller hands over those rather than
+ *        a copy of the whole control.
+ */
+struct OutputLimits {
+  double minValue = 0;      ///< Minimum allowed value
+  double maxValue = 100;    ///< Maximum allowed value
+  double stepSize = 1;      ///< Quantize step, counted from minValue
+  bool quantize   = false;  ///< Snap a value to stepSize before the range check
+};
+
+/**
  * @brief True when the control carries a numeric value bounded by Min to Max: a slider, a knob or
  *        a text field whose input kind is Number.
  */
@@ -196,7 +207,7 @@ enum class OutputAdmission : quint8 {
  *        quantizes to Step from Min when enabled, then checks Min to Max. @p out receives the
  *        admitted double on Accepted.
  */
-[[nodiscard]] OutputAdmission admitOutputValue(const OutputWidget& w,
+[[nodiscard]] OutputAdmission admitOutputValue(const OutputLimits& limits,
                                                const QVariant& value,
                                                double& out);
 

@@ -55,6 +55,17 @@ enum ValueFormatKind : int {
 };
 
 /**
+ * @brief Which value a decode call in a dataset's value tail is for: Parsed (the call before the
+ *        transform), Computed (the call after it, for a computed dataset), or Skip (a replayed
+ *        final value, never decoded again).
+ */
+enum class DecodeStage : quint8 {
+  Parsed,
+  Computed,
+  Skip,
+};
+
+/**
  * @brief A dataset's decoder declaration, detached from the dataset so the stream lane's channel
  *        configuration can carry it without the rest of the dataset.
  */
@@ -204,12 +215,15 @@ SS_FORCE_INLINE void render_number_in_place(QString& dst, double value)
 
 /**
  * @brief Replaces a numeric dataset's value with its decoded value, number and text together, in
- *        place, when it declares a format and @p atThisStage holds: before the transform for a
- *        parsed value, after it for a computed one. A text token is left as received.
+ *        place, when it declares a format and @p stage is its stage: a parsed value decodes before
+ *        its transform, a computed one after it, a replayed final value never. Text is left as is.
  */
-SS_FORCE_INLINE void decode_dataset_in_place(Dataset& dataset, bool atThisStage)
+SS_FORCE_INLINE void decode_dataset_in_place(Dataset& dataset, DecodeStage stage)
 {
-  if (!has_decoder(dataset) || !atThisStage) [[likely]]
+  if (!has_decoder(dataset) || stage == DecodeStage::Skip) [[likely]]
+    return;
+
+  if (dataset.virtual_ != (stage == DecodeStage::Computed))
     return;
 
   if (!dataset.isNumeric) [[unlikely]]

@@ -279,12 +279,12 @@ void TstValueDecoder::decodeInPlaceRewritesNumberAndText()
   d.numericValue = 32768.0;
   d.value        = QStringLiteral("32768");
 
-  decode_dataset_in_place(d, true);
+  decode_dataset_in_place(d, DecodeStage::Parsed);
   QCOMPARE(d.numericValue, -1.0);
   QCOMPARE(d.value, QStringLiteral("-1"));
 
   d.numericValue = 16384.0;
-  decode_dataset_in_place(d, true);
+  decode_dataset_in_place(d, DecodeStage::Parsed);
   QCOMPARE(d.numericValue, 0.5);
   QCOMPARE(d.value, QStringLiteral("0.5"));
 }
@@ -299,16 +299,25 @@ void TstValueDecoder::decodeInPlaceLeavesTextAndOtherStages()
   d.numericValue = 0.0;
   d.value        = QStringLiteral("Reverse");
 
-  decode_dataset_in_place(d, true);
+  decode_dataset_in_place(d, DecodeStage::Parsed);
   QCOMPARE(d.value, QStringLiteral("Reverse"));
   QCOMPARE(d.numericValue, 0.0);
 
   d.isNumeric    = true;
   d.numericValue = 32768.0;
   d.value        = QStringLiteral("32768");
-  decode_dataset_in_place(d, false);
+  decode_dataset_in_place(d, DecodeStage::Computed);
   QCOMPARE(d.numericValue, 32768.0);
   QCOMPARE(d.value, QStringLiteral("32768"));
+
+  decode_dataset_in_place(d, DecodeStage::Skip);
+  QCOMPARE(d.numericValue, 32768.0);
+
+  d.virtual_ = true;
+  decode_dataset_in_place(d, DecodeStage::Parsed);
+  QCOMPARE(d.numericValue, 32768.0);
+  decode_dataset_in_place(d, DecodeStage::Computed);
+  QCOMPARE(d.numericValue, -1.0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -326,6 +335,11 @@ void TstValueDecoder::fractionValidatorRefusesBitsPastTheWidth()
   QVERIFY(!PropertyHooks::isValidFormatFraction(integerDecoder(1, 16, true, 16)));
   QVERIFY(!PropertyHooks::isValidFormatFraction(integerDecoder(1, 8, false, 12)));
   QVERIFY(!PropertyHooks::isValidFormatFraction(integerDecoder(1, 16, false, -1)));
+
+  auto scale   = integerDecoder(1, 8, false, 12);
+  scale.format = ValueFormatScale;
+  QVERIFY(PropertyHooks::isValidFormatFraction(scale));
+  QVERIFY(PropertyHooks::isValidFormatBitField(scale));
 }
 
 /**

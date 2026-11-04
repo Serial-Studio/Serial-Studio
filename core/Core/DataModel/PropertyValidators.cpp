@@ -115,10 +115,14 @@ bool DataModel::PropertyHooks::isValidValueFormat(int format)
 
 /**
  * @brief Returns true when the fixed-point fraction bits fit the declared integer width: 0 to
- *        formatWidth - 1, so one integer or sign bit always remains.
+ *        formatWidth - 1, so one integer or sign bit always remains. Only a fixed-point dataset is
+ *        judged: a value left from another format is inert and must not refuse an unrelated edit.
  */
 bool DataModel::PropertyHooks::isValidFormatFraction(const Dataset& d)
 {
+  if (d.format != ValueFormatFixedPoint)
+    return true;
+
   return d.formatFractionBits >= 0 && d.formatFractionBits < d.formatWidth;
 }
 
@@ -127,6 +131,9 @@ bool DataModel::PropertyHooks::isValidFormatFraction(const Dataset& d)
  */
 bool DataModel::PropertyHooks::isValidFormatBitField(const Dataset& d)
 {
+  if (d.format != ValueFormatBitField)
+    return true;
+
   return d.formatBitOffset >= 0 && d.formatBitWidth >= 1
       && d.formatBitOffset + d.formatBitWidth <= d.formatWidth;
 }

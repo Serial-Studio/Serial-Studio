@@ -1497,17 +1497,44 @@ DATASET_VALIDATORS = {
 }
 
 
+def emit_validation_gate(terms: list[str], check: str) -> list[str]:
+    """Emit `if (<any term> && !check(d))`, breaking before '||' and '&&' past 100 cols."""
+    gate = terms[0] if len(terms) == 1 else "(" + " || ".join(terms) + ")"
+    single = f"  if ({gate} && !PropertyHooks::{check}(d))"
+    if len(single) <= MAX_COLS:
+        return [single]
+
+    lines = [f"  if (({terms[0]}"]
+    for term in terms[1:]:
+        if len(lines[-1]) + len(term) + 5 <= MAX_COLS:
+            lines[-1] += f" || {term}"
+        else:
+            lines.append(f"       || {term}")
+    lines[-1] += ")"
+    lines.append(f"      && !PropertyHooks::{check}(d))")
+    return lines
+
+
 def emit_dataset_validations(manifest: dict, exposed: list[dict]) -> list[str]:
-    """Emit the post-apply checks, each gated on its property being in the request."""
+    """Emit each post-apply check once, gated on any field it reads being in the request: a
+    request naming only formatWidth can shrink the width under a fraction it never named.
+    """
+    props = by_id(manifest)
+    emitted: set[str] = set()
     lines: list[str] = []
     for prop in exposed:
-        check = DATASET_VALIDATORS.get(prop.get("validate"))
-        if not check:
+        validate = prop.get("validate")
+        check = DATASET_VALIDATORS.get(validate)
+        if not check or validate in emitted:
             continue
-        present = " || ".join(
-            f"consumed.contains({json_name(n)})" for n in api_names(prop, manifest)
-        )
-        lines += emit_statement("  ", f"if ({present} && !PropertyHooks::{check}(d))")
+        emitted.add(validate)
+        reads = manifest["hooks"][validate].get("reads", [prop["id"]])
+        terms = [
+            f"consumed.contains({json_name(n)})"
+            for read in reads
+            for n in api_names(props[read], manifest)
+        ]
+        lines += emit_validation_gate(terms, check)
         lines += wrapped_call(
             "    return QStringLiteral(", prop["apiError"], ");", False
         )

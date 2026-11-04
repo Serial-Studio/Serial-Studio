@@ -599,14 +599,14 @@ QString API::Handlers::ProjectHandler::applyDatasetUpdateParams(DataModel::Datas
   if (auto err = applyDatasetFlagFields3(d, params, rebuildTree, consumed); !err.isEmpty())
     return err;
 
-  if (consumed.contains(Keys::FormatFractionBits) && !PropertyHooks::isValidFormatFraction(d))
+  if ((consumed.contains(Keys::Format) || consumed.contains(Keys::FormatWidth)
+       || consumed.contains(Keys::FormatFractionBits))
+      && !PropertyHooks::isValidFormatFraction(d))
     return QStringLiteral("Invalid formatFractionBits: must be 0 to formatWidth - 1");
 
-  if (consumed.contains(Keys::FormatBitOffset) && !PropertyHooks::isValidFormatBitField(d))
-    return QStringLiteral("Invalid bit field: formatBitOffset + formatBitWidth must not exceed "
-                          "formatWidth");
-
-  if (consumed.contains(Keys::FormatBitWidth) && !PropertyHooks::isValidFormatBitField(d))
+  if ((consumed.contains(Keys::Format) || consumed.contains(Keys::FormatWidth)
+       || consumed.contains(Keys::FormatBitOffset) || consumed.contains(Keys::FormatBitWidth))
+      && !PropertyHooks::isValidFormatBitField(d))
     return QStringLiteral("Invalid bit field: formatBitOffset + formatBitWidth must not exceed "
                           "formatWidth");
 

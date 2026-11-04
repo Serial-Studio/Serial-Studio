@@ -169,6 +169,13 @@
           },
           "notes": {
             "type": "string"
+          },
+          "reads": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Cross-field validator only: the property ids it reads. The API runs it when a request names any of them."
           }
         }
       }

@@ -274,7 +274,7 @@ void EditorMqtt::buildMqttSparkplugSection(const MQTT::Publisher& pub, bool enab
   groupItem->setData(kMqttPublisher_SparkplugGroupId, ParameterType);
   groupItem->setData(tr("Group ID"), ParameterName);
   groupItem->setData(tr("Plant1"), PlaceholderValue);
-  groupItem->setData(tr("Logical group &m_editor edge node belongs to"), ParameterDescription);
+  groupItem->setData(tr("Logical group this edge node belongs to"), ParameterDescription);
   m_editor.m_mqttPublisherModel->appendRow(groupItem);
 
   auto* nodeItem = new QStandardItem();
@@ -285,7 +285,7 @@ void EditorMqtt::buildMqttSparkplugSection(const MQTT::Publisher& pub, bool enab
   nodeItem->setData(kMqttPublisher_SparkplugEdgeNode, ParameterType);
   nodeItem->setData(tr("Edge Node ID"), ParameterName);
   nodeItem->setData(tr("SerialStudio"), PlaceholderValue);
-  nodeItem->setData(tr("Identifies &m_editor node inside the group"), ParameterDescription);
+  nodeItem->setData(tr("Identifies this node inside the group"), ParameterDescription);
   m_editor.m_mqttPublisherModel->appendRow(nodeItem);
 
   auto* deviceItem = new QStandardItem();
@@ -296,7 +296,7 @@ void EditorMqtt::buildMqttSparkplugSection(const MQTT::Publisher& pub, bool enab
   deviceItem->setData(kMqttPublisher_SparkplugDevice, ParameterType);
   deviceItem->setData(tr("Device ID"), ParameterName);
   deviceItem->setData(tr("Optional"), PlaceholderValue);
-  deviceItem->setData(tr("When set, datasets are published as a device of &m_editor node"),
+  deviceItem->setData(tr("When set, datasets are published as a device of this node"),
                       ParameterDescription);
   m_editor.m_mqttPublisherModel->appendRow(deviceItem);
 }

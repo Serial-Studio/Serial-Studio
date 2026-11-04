@@ -94,7 +94,7 @@ class Base : public QQuickItem {
   Q_PROPERTY(bool expectsReply
              READ expectsReply
              CONSTANT)
-  Q_PROPERTY(QString outcome
+  Q_PROPERTY(SerialStudio::OutputOutcome outcome
              READ outcome
              NOTIFY stateChanged)
   Q_PROPERTY(QString outcomeText
@@ -138,7 +138,7 @@ public:
   [[nodiscard]] QString stateText() const;
 
   [[nodiscard]] bool expectsReply() const noexcept;
-  [[nodiscard]] QString outcome() const;
+  [[nodiscard]] SerialStudio::OutputOutcome outcome() const;
   [[nodiscard]] QString outcomeText() const;
   [[nodiscard]] QVariantMap automationState() const;
   [[nodiscard]] StateBinding& stateBinding() noexcept;
@@ -183,10 +183,10 @@ private:
   SerialStudio::TextEncoding m_txEncoding;
 
   bool m_numeric;
+  bool m_quantize;
   int m_decimals;
   double m_admittedValue;
   QString m_rangeMessage;
-  DataModel::OutputWidget m_admission;
 
   QJSEngine m_jsEngine;
   QJSValue m_transmitFn;

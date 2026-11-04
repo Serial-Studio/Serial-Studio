@@ -181,7 +181,7 @@ void EditorTree::buildTreeModel()
 
   // code-verify off
   // Seed expansion only from the persisted map (the single source of truth, kept current by every
-  // manual toggle via persistTreeExpansion), never from the live tree: &m_editor stops transient
+  // manual toggle via persistTreeExpansion), never from the live tree: this stops transient
   // force-expansion (search) and reveal (expandToIndex) from corrupting the saved state. A filtered
   // build is likewise never persisted back below, since its rows are force-expanded.
   // code-verify on

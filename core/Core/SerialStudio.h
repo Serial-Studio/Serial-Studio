@@ -249,6 +249,19 @@ enum OutputWidgetType {
 Q_ENUM_NS(OutputWidgetType)
 
 /**
+ * @brief Where a reply-bound output control's last command stands (spec 0110). QML reads it
+ *        scoped, as `SerialStudio.OutputOutcome.Refused`.
+ */
+enum class OutputOutcome {
+  None,
+  Waiting,
+  Acknowledged,
+  Refused,
+  Unanswered,
+};
+Q_ENUM_NS(OutputOutcome)
+
+/**
  * @brief Dashboard widget kinds. Ordinals are persisted state, so the list is append-only in
  *        both build configurations; BarPanel (90) and Extension (100) are pinned so nothing moves
  *        across the commercial block. Every third-party package shares DashboardExtension and

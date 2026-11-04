@@ -2140,7 +2140,7 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
     m_tableStore.setDatasetRaw(
       dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
 
-  DataModel::decode_dataset_in_place(dataset, !dataset.virtual_ && !finalValueReplay);
+  decode_dataset_in_place(dataset, finalValueReplay ? DecodeStage::Skip : DecodeStage::Parsed);
 
   if (!dataset.transformCode.isEmpty() && !finalValueReplay) [[unlikely]] {
     const auto input = dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
@@ -2164,7 +2164,7 @@ void DataModel::FrameBuilder::applyDatasetValue(Dataset& dataset,
       dataset.isNumeric = false;
     }
 
-    DataModel::decode_dataset_in_place(dataset, dataset.virtual_);
+    decode_dataset_in_place(dataset, DecodeStage::Computed);
   }
 
   if (!dataset.isNumeric)
@@ -2274,7 +2274,7 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetToken(Dataset& dataset,
       table_slots.first, dataset.numericValue, dataset.value, dataset.isNumeric);
   }
 
-  DataModel::decode_dataset_in_place(dataset, token != nullptr);
+  decode_dataset_in_place(dataset, DecodeStage::Parsed);
 
   if (!dataset.transformCode.isEmpty()) [[unlikely]] {
     const auto input = dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
@@ -2298,7 +2298,7 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetToken(Dataset& dataset,
       dataset.isNumeric = false;
     }
 
-    DataModel::decode_dataset_in_place(dataset, token == nullptr);
+    decode_dataset_in_place(dataset, DecodeStage::Computed);
   }
 
   if (!dataset.isNumeric)
@@ -2459,7 +2459,7 @@ bool DataModel::FrameBuilder::reprocessDatasetValues(DataModel::Frame& frame)
         dataset.isNumeric = false;
       }
 
-      DataModel::decode_dataset_in_place(dataset, dataset.virtual_);
+      decode_dataset_in_place(dataset, DecodeStage::Computed);
       if (!dataset.isNumeric)
         dataset.numericValue = (dataset.wgtMax > dataset.wgtMin) ? dataset.wgtMin : 0.0;
 

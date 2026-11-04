@@ -12,6 +12,7 @@
 #include <QVariant>
 
 #include "Core/DataModel/Frame.h"
+#include "Core/SerialStudio.h"
 
 namespace Widgets {
 namespace Output {
@@ -35,15 +36,10 @@ public:
   };
 
   /**
-   * @brief Where a reply-bound control's last command stands (spec 0110).
+   * @brief Where a reply-bound control's last command stands (spec 0110); the shared enum, so QML
+   *        compares the same values.
    */
-  enum class Outcome : quint8 {
-    None,
-    Waiting,
-    Acknowledged,
-    Refused,
-    Unanswered,
-  };
+  using Outcome = SerialStudio::OutputOutcome;
 
   void configure(const DataModel::OutputWidget& config);
   [[nodiscard]] bool bound() const noexcept;

@@ -299,11 +299,11 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
       connect(port(), &QIODevice::readyRead, this, &IO::Drivers::UART::onReadyRead);
       port()->setDataTerminalReady(dtrEnabled());
       if (m_rtsEnabled && UartPolicy::rtsSettable(flowControl()))
-        port()->setRequestToSend(true);
+        applyRts(true);
 
       UartSequencePort::tuneNativeBuffer(port(), baudRate());
       if (!m_sequence.isEmpty())
-        startSequence(m_sequence, true);
+        startSequence(SequenceStart::OnConnect);
 
       return true;
     }
@@ -607,7 +607,7 @@ void IO::Drivers::UART::setRtsEnabled(const bool enabled)
   m_settings.setValue("UartDriver/rts", enabled);
 
   if (portOpen() && !m_runner && UartPolicy::rtsSettable(port()->flowControl()))
-    port()->setRequestToSend(enabled);
+    applyRts(enabled);
 
   Q_EMIT rtsEnabledChanged();
 }
@@ -1083,7 +1083,7 @@ bool IO::Drivers::UART::runSequence()
   if (!isOpen() || m_runner || m_breakHeld || m_sequence.isEmpty())
     return false;
 
-  startSequence(m_sequence, false);
+  startSequence(SequenceStart::OnDemand);
   return true;
 }
 
@@ -1128,14 +1128,15 @@ void IO::Drivers::UART::setConnectionSequence(const QVariant& value)
  *        verdict; a re-run keeps the link connected. Either way bytes go to the runner and writes
  *        are refused until it ends. The start is queued, so open() returns before the first step.
  */
-void IO::Drivers::UART::startSequence(const IO::ConnectionSequence& sequence, bool connectTime)
+void IO::Drivers::UART::startSequence(SequenceStart start)
 {
   SS_ASSERT(portOpen(), return);
+  SS_ASSERT_LOG(!m_sequence.isEmpty());
 
   stopSequence();
-  m_sequenceConnecting = connectTime;
+  m_sequenceConnecting = start == SequenceStart::OnConnect;
   m_sequencePort       = std::make_unique<UartSequencePort>(port());
-  m_runner             = std::make_unique<SequenceRunner>(sequence, *m_sequencePort, m_clock);
+  m_runner             = std::make_unique<SequenceRunner>(m_sequence, *m_sequencePort, m_clock);
 
   auto* runner    = m_runner.get();
   const auto note = [this](int, const QString& text) {
@@ -1146,6 +1147,19 @@ void IO::Drivers::UART::startSequence(const IO::ConnectionSequence& sequence, bo
   connect(runner, &SequenceRunner::bytesSent, this, &UART::publishSentData);
   connect(runner, &SequenceRunner::finished, this, &UART::onSequenceFinished);
   QMetaObject::invokeMethod(runner, &SequenceRunner::start, Qt::QueuedConnection);
+}
+
+/**
+ * @brief Drives RTS on the open port and logs a refusal (an adapter without the line, or one whose
+ *        flow control owns it), so a Hold RTS the device never saw is reported, not silent.
+ */
+void IO::Drivers::UART::applyRts(bool on)
+{
+  SS_ASSERT(portOpen(), return);
+
+  if (!port()->setRequestToSend(on)) [[unlikely]]
+    logDriverError(tr("Hold RTS failed"),
+                   tr("The serial port refused to set RTS: %1").arg(port()->errorString()));
 }
 
 /**

@@ -208,6 +208,12 @@ private slots:
   void onSequenceFinished(bool ok, const QString& reason, int stepIndex);
 
 private:
+  // Why a sequence runs: on open (gates the connect verdict) or on demand (the link stays up)
+  enum class SequenceStart : quint8 {
+    OnConnect,
+    OnDemand,
+  };
+
   [[nodiscard]] bool portOpen() const noexcept;
 
   void releaseBreak();
@@ -216,7 +222,8 @@ private:
   void applyDeviceProperty(const QVariant& value);
   void applyBaudRateProperty(const QVariant& value);
   bool relocateOpenPortIndex(const QVector<QSerialPortInfo>& ports);
-  void startSequence(const IO::ConnectionSequence& sequence, bool connectTime);
+  void applyRts(bool on);
+  void startSequence(SequenceStart start);
 
 private:
   QSerialPort* m_port;

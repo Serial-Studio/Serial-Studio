@@ -184,7 +184,7 @@ void EditorForms::buildGroupGeneralSection(const DataModel::Group& group)
   titleItem->setData(kGroupView_Title, ParameterType);
   titleItem->setData(tr("Group Title"), ParameterName);
   titleItem->setData(tr("Untitled Group"), PlaceholderValue);
-  titleItem->setData(tr("Title or description of &m_editor dataset group"), ParameterDescription);
+  titleItem->setData(tr("Title or description of this dataset group"), ParameterDescription);
   m_editor.m_groupModel->appendRow(titleItem);
 }
 
@@ -218,7 +218,7 @@ void EditorForms::buildGroupSourceSection(const DataModel::Group& group)
   sourceItem->setData(sourceIndex, EditableValue);
   sourceItem->setData(kGroupView_Source, ParameterType);
   sourceItem->setData(tr("Input Device"), ParameterName);
-  sourceItem->setData(tr("Select which connected device provides data for &m_editor group"),
+  sourceItem->setData(tr("Select which connected device provides data for this group"),
                       ParameterDescription);
   m_editor.m_groupModel->appendRow(sourceItem);
 }
@@ -383,7 +383,7 @@ void EditorForms::buildGroupWebViewRow(const DataModel::Group& group)
   item->setData(kGroupView_WebUrl, ParameterType);
   item->setData(tr("URL"), ParameterName);
   item->setData(QStringLiteral("https://"), PlaceholderValue);
-  item->setData(tr("Web address to load in &m_editor widget"), ParameterDescription);
+  item->setData(tr("Web address to load in this widget"), ParameterDescription);
   m_editor.m_groupModel->appendRow(item);
 }
 
@@ -495,7 +495,7 @@ void EditorForms::buildSourceCommonRows(const DataModel::Source& source)
   titleItem->setData(kSourceView_Title, ParameterType);
   titleItem->setData(tr("Device Name"), ParameterName);
   titleItem->setData(tr("Device 1"), PlaceholderValue);
-  titleItem->setData(tr("Human-readable name for &m_editor input device"), ParameterDescription);
+  titleItem->setData(tr("Human-readable name for this input device"), ParameterDescription);
   m_editor.m_sourceModel->appendRow(titleItem);
 
   auto* busItem = new QStandardItem();
@@ -505,8 +505,7 @@ void EditorForms::buildSourceCommonRows(const DataModel::Source& source)
   busItem->setData(kSourceView_BusType, ParameterType);
   busItem->setData(source.busType, EditableValue);
   busItem->setData(tr("Bus Type"), ParameterName);
-  busItem->setData(tr("Select the hardware interface for &m_editor input device"),
-                   ParameterDescription);
+  busItem->setData(tr("Select the hardware interface for this input device"), ParameterDescription);
 
   QStringList busTypes = {tr("Serial Port"), tr("Network"), tr("Bluetooth LE")};
 #ifdef BUILD_COMMERCIAL
@@ -698,7 +697,7 @@ void EditorForms::buildActionGeneralRows(const DataModel::Action& action)
   titleItem->setData(tr("Action Title"), ParameterName);
   titleItem->setData(kActionView_Title, ParameterType);
   titleItem->setData(tr("Untitled Action"), PlaceholderValue);
-  titleItem->setData(tr("Name or description of &m_editor action"), ParameterDescription);
+  titleItem->setData(tr("Name or description of this action"), ParameterDescription);
   m_editor.m_actionModel->appendRow(titleItem);
 
   auto* iconItem = new QStandardItem();
@@ -709,8 +708,7 @@ void EditorForms::buildActionGeneralRows(const DataModel::Action& action)
   iconItem->setData(kActionView_Icon, ParameterType);
   iconItem->setData(tr("Action Icon"), ParameterName);
   iconItem->setData(tr("Default Icon"), PlaceholderValue);
-  iconItem->setData(tr("Icon displayed for &m_editor action in the dashboard"),
-                    ParameterDescription);
+  iconItem->setData(tr("Icon displayed for this action in the dashboard"), ParameterDescription);
   m_editor.m_actionModel->appendRow(iconItem);
 
   const auto& sources = m_model.sources();
@@ -738,7 +736,7 @@ void EditorForms::buildActionGeneralRows(const DataModel::Action& action)
   sourceItem->setData(sourceIndex, EditableValue);
   sourceItem->setData(kActionView_SourceId, ParameterType);
   sourceItem->setData(tr("Target Device"), ParameterName);
-  sourceItem->setData(tr("Select which connected device &m_editor action sends data to"),
+  sourceItem->setData(tr("Select which connected device this action sends data to"),
                       ParameterDescription);
   m_editor.m_actionModel->appendRow(sourceItem);
 }
@@ -764,7 +762,7 @@ void EditorForms::buildActionPayloadRows(const DataModel::Action& action)
   binaryItem->setData(action.binaryData, EditableValue);
   binaryItem->setData(kActionView_Binary, ParameterType);
   binaryItem->setData(tr("Send as Binary"), ParameterName);
-  binaryItem->setData(tr("Send raw binary data when &m_editor action is triggered"),
+  binaryItem->setData(tr("Send raw binary data when this action is triggered"),
                       ParameterDescription);
   m_editor.m_actionModel->appendRow(binaryItem);
 
@@ -868,7 +866,7 @@ void EditorForms::buildActionTimingRows(const DataModel::Action& action)
   autoExec->setData(kActionView_AutoExecute, ParameterType);
   autoExec->setData(action.autoExecuteOnConnect, EditableValue);
   autoExec->setData(tr("Auto-Execute on Connect"), ParameterName);
-  autoExec->setData(tr("Automatically trigger &m_editor action when the device connects"),
+  autoExec->setData(tr("Automatically trigger this action when the device connects"),
                     ParameterDescription);
   m_editor.m_actionModel->appendRow(autoExec);
 
@@ -886,7 +884,7 @@ void EditorForms::buildActionTimingRows(const DataModel::Action& action)
   timerMode->setData(tr("Timer Mode"), ParameterName);
   timerMode->setData(kActionView_TimerMode, ParameterType);
   timerMode->setData(static_cast<int>(action.timerMode), EditableValue);
-  timerMode->setData(tr("Choose when and how &m_editor action should repeat automatically"),
+  timerMode->setData(tr("Choose when and how this action should repeat automatically"),
                      ParameterDescription);
   m_editor.m_actionModel->appendRow(timerMode);
 
@@ -898,7 +896,7 @@ void EditorForms::buildActionTimingRows(const DataModel::Action& action)
   timerInterval->setData(action.timerIntervalMs, EditableValue);
   timerInterval->setData(kActionView_TimerInterval, ParameterType);
   timerInterval->setData(tr("Timer Interval (ms)"), PlaceholderValue);
-  timerInterval->setData(tr("Milliseconds between each repeated trigger of &m_editor action"),
+  timerInterval->setData(tr("Milliseconds between each repeated trigger of this action"),
                          ParameterDescription);
   m_editor.m_actionModel->appendRow(timerInterval);
 

@@ -89,6 +89,7 @@ private slots:
   void aTextSourceNeedsAnExplicitOnValue();
   void onValueMatchesAsTextAndAsNumber();
   void silenceBecomesUnknownRatherThanOff();
+  void rereadingTheLastSampleKeepsItsAge();
   void anOutstandingRequestClearsOnConfirmationAndOnExpiry();
   void interactionFreezesTheDisplay();
   void theIngestStampAndTheVerdictShareOneClock();
@@ -200,6 +201,23 @@ void OutputStateBindingTests::silenceBecomesUnknownRatherThanOff()
 
   const qint64 wellPast = kNow + (kConfirmMs * 2) + 1;
   QVERIFY(!binding.verdict(wellPast).known);
+}
+
+/**
+ * @brief The panel's 1 Hz tick re-reads a silent device's last sample with its own receipt stamp,
+ *        so the read never makes it fresh: past the stale window the control says "no data"
+ *        without waiting for a frame that is not coming.
+ */
+void OutputStateBindingTests::rereadingTheLastSampleKeepsItsAge()
+{
+  Binding binding;
+  binding.configure(boundWidget());
+  binding.observe(1.0, QString(), kNow);
+  QVERIFY(binding.verdict(kNow + 1000).known);
+
+  const qint64 tick = kNow + (kConfirmMs * 2) + 1;
+  binding.observe(1.0, QString(), kNow);
+  QVERIFY(!binding.verdict(tick).known);
 }
 
 /**

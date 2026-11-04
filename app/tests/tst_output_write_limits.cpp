@@ -32,19 +32,11 @@
 using namespace DataModel;
 
 /**
- * @brief A Number text field bounded to 0..100 in steps of 5.
+ * @brief The limits of a Number text field bounded to 0..100 in steps of 5.
  */
-static OutputWidget numberField(const bool quantize = false)
+static OutputLimits numberField(const bool quantize = false)
 {
-  OutputWidget w;
-  w.title     = QStringLiteral("Setpoint");
-  w.type      = OutputWidgetType::TextField;
-  w.inputKind = OutputInputKind::Number;
-  w.minValue  = 0;
-  w.maxValue  = 100;
-  w.stepSize  = 5;
-  w.quantize  = quantize;
-  return w;
+  return {.minValue = 0, .maxValue = 100, .stepSize = 5, .quantize = quantize};
 }
 
 /**

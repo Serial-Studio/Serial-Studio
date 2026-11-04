@@ -426,13 +426,24 @@
       "kind": "validator",
       "signature": "bool isValidFormatFraction(const DataModel::Dataset& d)",
       "origin": "PropertyValidators.cpp:isValidFormatFraction (spec 0108)",
-      "notes": "Cross-field: checked on the whole dataset after every field of an API update applied, so the order of the fields in one request never matters."
+      "notes": "Cross-field: checked on the whole dataset after every field of an API update applied, so the order of the fields in one request never matters.",
+      "reads": [
+        "Format",
+        "FormatWidth",
+        "FormatFractionBits"
+      ]
     },
     "formatBitsFitWidth": {
       "kind": "validator",
       "signature": "bool isValidFormatBitField(const DataModel::Dataset& d)",
       "origin": "PropertyValidators.cpp:isValidFormatBitField (spec 0108)",
-      "notes": "Cross-field: checked on the whole dataset after every field of an API update applied, so the order of the fields in one request never matters."
+      "notes": "Cross-field: checked on the whole dataset after every field of an API update applied, so the order of the fields in one request never matters.",
+      "reads": [
+        "Format",
+        "FormatWidth",
+        "FormatBitOffset",
+        "FormatBitWidth"
+      ]
     },
     "insidePainterGroup": {
       "kind": "predicate",

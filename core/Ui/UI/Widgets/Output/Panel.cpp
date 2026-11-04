@@ -14,7 +14,9 @@
 #include <utility>
 
 #include "API/HandlerContext.h"
+#include "Core/Services.h"
 #include "Core/SSAssert.h"
+#include "Core/TimerEvents.h"
 #include "DataModel/DataTable.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/PipelineModules.h"
@@ -89,6 +91,8 @@ Widgets::Output::Panel::Panel(int index, QQuickItem* parent)
   : QQuickItem(parent), m_tableContext(nullptr), m_dashboard(UI::Dashboard::instance())
 {
   connect(&m_dashboard, &UI::Dashboard::updated, this, &Panel::refreshStates);
+  connect(
+    &Core::services().timerEvents, &Misc::TimerEvents::timeout1Hz, this, &Panel::refreshStates);
 
   auto* connections = &API::handlerContext().connectionManager;
   connect(connections, &IO::ConnectionManager::connectedChanged, this, [connections] {
@@ -180,10 +184,10 @@ QVariantList Widgets::Output::Panel::geometry() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Feeds every bound control what its state source reports: display tick only, one lookup
- *        per bound control. A dataset binding never takes the table path, which would arm the
- *        snapshot mirror for the session (spec 0080), and a panel the operator is not looking at
- *        costs nothing, picking the state back up from itemChange().
+ * @brief Feeds every bound control what its state source reports, one lookup per control, on data
+ *        and on the 1 Hz tick, so a silent device ages into "no data" without a frame. A dataset
+ *        binding never takes the table path, which would arm the snapshot mirror (spec 0080), and
+ *        a hidden panel costs nothing, picking the state back up from itemChange().
  */
 void Widgets::Output::Panel::refreshStates()
 {
