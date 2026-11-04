@@ -641,50 +641,51 @@ static void datasetSchemaPart1(QJsonObject& props)
 {
   props.insert(Keys::Title,
                datasetSchemaProperty("string",
-                                     "Name of the dataset, used for labeling and identification",
+                                     "The name shown on the dashboard and in exports.",
                                      QJsonArray()));
   props.insert(Keys::Virtual,
                datasetSchemaProperty("boolean",
-                                     "Computed datasets compute their value from transforms and "
-                                     "shared variables, they do not require a frame index",
+                                     "Calculates the value with a transform instead of reading it "
+                                     "from the incoming data, so it needs no frame index.",
                                      QJsonArray()));
   props.insert(Keys::HideOnDashboard,
                datasetSchemaProperty("boolean",
-                                     "Suppress this dataset's standalone dashboard tile; the "
-                                     "canvas widget can still read its values",
+                                     "Hides this dataset's own widget on the dashboard. Canvas "
+                                     "widgets can still read its value.",
                                      QJsonArray()));
   props.insert(Keys::Index,
                datasetSchemaProperty("integer",
-                                     "Position of this value in the parser's output (first value "
-                                     "= 1). 0 = unassigned.",
+                                     "Which value of each frame this dataset reads, counting from "
+                                     "1. Use 0 to leave it unassigned.",
                                      QJsonArray()));
   props.insert(Keys::Units,
                datasetSchemaProperty("string",
-                                     "Unit of measurement, such as volts or amps (optional)",
+                                     "The unit shown next to the value, such as V or mA. Optional.",
                                      QJsonArray()));
   props.insert(Keys::Alias,
                datasetSchemaProperty("string",
-                                     "Stable name for getDataset-style script/API lookups; must "
-                                     "be unique (optional)",
+                                     "A short, unique name that scripts and the API can use to "
+                                     "find this dataset. Optional.",
                                      QJsonArray()));
   props.insert(Keys::Color,
                datasetSchemaProperty("string",
-                                     "Custom display color for this dataset; automatic uses the "
-                                     "theme palette",
+                                     "The color of this dataset's plots and widgets. Automatic "
+                                     "uses the theme's colors.",
                                      QJsonArray()));
   props.insert(QStringLiteral("pltMin"),
                datasetSchemaProperty("number",
-                                     "Lower bound of the dataset value range; widgets and FFT "
-                                     "fall back to it when their own range is left unset",
+                                     "The lowest value this dataset is expected to reach. Widgets "
+                                     "and the FFT plot use it when their own range is empty.",
                                      QJsonArray()));
   props.insert(QStringLiteral("pltMax"),
                datasetSchemaProperty("number",
-                                     "Upper bound of the dataset value range; widgets and FFT "
-                                     "fall back to it when their own range is left unset",
+                                     "The highest value this dataset is expected to reach. "
+                                     "Widgets and the FFT plot use it when their own range is "
+                                     "empty.",
                                      QJsonArray()));
   props.insert(Keys::Graph,
                datasetSchemaProperty("boolean",
-                                     "Plot data in real-time",
+                                     "Plots the value over time.",
                                      QJsonArray()));
   props.insert(Keys::Log,
                datasetSchemaProperty("boolean",
@@ -692,7 +693,8 @@ static void datasetSchemaPart1(QJsonObject& props)
                                      QJsonArray()));
   props.insert(QStringLiteral("xAxisId"),
                datasetSchemaProperty("integer",
-                                     "Choose Time or a dataset to drive the X-Axis in plots",
+                                     "What the plot's horizontal axis shows: time, or another "
+                                     "dataset.",
                                      QJsonArray()));
 }
 
@@ -705,62 +707,66 @@ static void datasetSchemaPart2(QJsonObject& props)
 {
   props.insert(Keys::PltLogX,
                datasetSchemaProperty("boolean",
-                                     "Scale the X axis in decades; available when the X-Axis "
-                                     "source is Samples or a dataset (not Time)",
+                                     "Uses a logarithmic scale for the horizontal axis. Available "
+                                     "when the axis shows samples or a dataset, not time.",
                                      QJsonArray()));
   props.insert(Keys::PltLogY,
                datasetSchemaProperty("boolean",
-                                     "Scale the Y axis in decades; values at or below zero are "
-                                     "clamped",
+                                     "Uses a logarithmic scale for the vertical axis. Values at "
+                                     "or below zero are drawn at the bottom.",
                                      QJsonArray()));
   props.insert(Keys::FFT,
                datasetSchemaProperty("boolean",
-                                     "Perform frequency-domain analysis of the dataset",
+                                     "Shows how strong each frequency is in the signal.",
                                      QJsonArray()));
   props.insert(Keys::Waterfall,
                datasetSchemaProperty("boolean",
-                                     "Show a scrolling spectrogram of frequency content over time "
-                                     "(Pro)",
+                                     "Shows a scrolling picture of the signal's frequencies over "
+                                     "time (Pro).",
                                      QJsonArray()));
   props.insert(Keys::FFTBallistics,
                datasetSchemaProperty("boolean",
-                                     "Analyzer-style display: peaks rise instantly and decay "
-                                     "smoothly over the release time",
+                                     "Peaks jump up at once and fall back slowly over the release "
+                                     "time, like a hardware audio analyzer.",
                                      QJsonArray()));
   props.insert(Keys::FFTBallisticsRelease,
                datasetSchemaProperty("integer",
-                                     "Decay time for the ballistics display (50-5000 ms)",
+                                     "How long a peak takes to fall back, from 50 to 5000 ms.",
                                      QJsonArray()));
   props.insert(Keys::WaterfallYAxis,
                datasetSchemaProperty("integer",
-                                     "Choose Time (default) or any dataset whose value drives the "
-                                     "Y axis -- produces a Campbell diagram when bound to e.g. "
-                                     "RPM",
+                                     "What the waterfall's vertical axis shows: time (the "
+                                     "default) or another dataset. Choosing an RPM dataset, for "
+                                     "example, turns the waterfall into a Campbell diagram.",
                                      QJsonArray()));
   props.insert(Keys::FFTSamples,
                datasetSchemaProperty("integer",
-                                     "Number of samples used for each FFT calculation window",
+                                     "How many samples each frequency analysis uses. More samples "
+                                     "show finer frequency detail but react more slowly.",
                                      QJsonArray({8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096,
                                                  8192, 16384, 32768, 65536, 131072, 262144})));
   props.insert(Keys::FFTWindow,
                datasetSchemaProperty("integer",
-                                     "Window applied before the transform to reduce spectral "
-                                     "leakage; affects both the FFT plot and the waterfall",
+                                     "Shapes each block of samples before the analysis so that "
+                                     "nearby frequencies don't blur together. Used by the FFT "
+                                     "plot and the waterfall.",
                                      QJsonArray({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
                                                  14})));
   props.insert(Keys::FFTSamplingRate,
                datasetSchemaProperty("integer",
-                                     "Sampling frequency used for FFT (in Hz)",
+                                     "How many samples per second the device sends for this "
+                                     "dataset. The frequency axis is only correct when this "
+                                     "matches.",
                                      QJsonArray()));
   props.insert(Keys::FFTLogX,
                datasetSchemaProperty("boolean",
-                                     "Scale the frequency axis in decades so low octaves stay "
-                                     "readable; applies to both the FFT plot and the waterfall",
+                                     "Uses a logarithmic frequency axis so low frequencies stay "
+                                     "readable. Used by the FFT plot and the waterfall.",
                                      QJsonArray()));
   props.insert(Keys::FFTMin,
                datasetSchemaProperty("number",
-                                     "Lower bound for data normalization; falls back to the "
-                                     "dataset value range when left unset",
+                                     "The lowest value expected in the signal, used to scale the "
+                                     "analysis. Leave empty to use the dataset's Minimum Value.",
                                      QJsonArray()));
 }
 
@@ -773,66 +779,66 @@ static void datasetSchemaPart3(QJsonObject& props)
 {
   props.insert(Keys::FFTMax,
                datasetSchemaProperty("number",
-                                     "Upper bound for data normalization; falls back to the "
-                                     "dataset value range when left unset",
+                                     "The highest value expected in the signal, used to scale the "
+                                     "analysis. Leave empty to use the dataset's Maximum Value.",
                                      QJsonArray()));
   props.insert(Keys::Widget,
                datasetSchemaProperty("string",
-                                     "Select the visual widget used to display this dataset",
+                                     "The widget that shows this dataset on the dashboard.",
                                      QJsonArray({"", "bar", "compass", "gauge", "meter"})));
   props.insert(Keys::DisplayTickCount,
                datasetSchemaProperty("integer",
-                                     "Major-tick count on the dial scale (0 = auto-fit to widget "
-                                     "size)",
+                                     "How many major marks the dial shows. Use 0 to fit them to "
+                                     "the widget's size.",
                                      QJsonArray()));
   props.insert(Keys::DisplayFormat,
                datasetSchemaProperty("string",
-                                     "Decimal places on analog widget ticks and captions; "
-                                     "Hexadecimal and Binary apply wherever the value is shown as "
-                                     "text",
+                                     "How numbers appear on gauge and bar marks and captions. "
+                                     "Hexadecimal and Binary also apply wherever the value is "
+                                     "shown as text.",
                                      QJsonArray({"", "0d", "1d", "2d", "3d", "sci", "hex",
                                                  "bin"})));
   props.insert(Keys::DecimalPoints,
                datasetSchemaProperty("integer",
-                                     "Fixed decimal places for the value display; overrides the "
-                                     "format (-1 = auto)",
+                                     "How many decimal places the value shows. Overrides Label "
+                                     "Format. Use -1 for automatic.",
                                      QJsonArray()));
   props.insert(QStringLiteral("wgtMin"),
                datasetSchemaProperty("number",
-                                     "Lower bound of the gauge or bar range; falls back to the "
-                                     "dataset value range when left unset",
+                                     "The lowest value on the gauge or bar. Leave empty to use "
+                                     "the dataset's Minimum Value.",
                                      QJsonArray()));
   props.insert(QStringLiteral("wgtMax"),
                datasetSchemaProperty("number",
-                                     "Upper bound of the gauge or bar range; falls back to the "
-                                     "dataset value range when left unset",
+                                     "The highest value on the gauge or bar. Leave empty to use "
+                                     "the dataset's Maximum Value.",
                                      QJsonArray()));
   props.insert(Keys::ExtremeHold,
                datasetSchemaProperty("boolean",
-                                     "Show hold markers at the lowest and highest values observed "
-                                     "since the last data reset",
+                                     "Marks the lowest and highest values seen since the data was "
+                                     "last cleared.",
                                      QJsonArray()));
   props.insert(Keys::SuppressAlarms,
                datasetSchemaProperty("boolean",
-                                     "Keep the bands on the widget but never notify, raise an "
-                                     "alarm point or sound for them",
+                                     "Keeps the alarm bands on the widget, but never sends "
+                                     "notifications, raises alarms, or plays sounds for them.",
                                      QJsonArray()));
   props.insert(Keys::AlarmsWhileVisible,
                datasetSchemaProperty("boolean",
-                                     "Notify, raise an alarm point and sound for the bands only "
-                                     "while a widget showing this dataset is on screen; Suppress "
-                                     "Alarms still wins",
+                                     "Sends notifications, raises alarms, and plays sounds for "
+                                     "the bands only while a widget showing this dataset is on "
+                                     "screen. Suppress Alarms still turns them off entirely.",
                                      QJsonArray()));
   props.insert(Keys::AlarmDeadband,
                datasetSchemaProperty("number",
-                                     "Hysteresis in the dataset's units: the active band holds "
-                                     "until the value leaves it by this much, so a reading "
-                                     "hovering on a threshold does not re-alarm on every frame (0 "
-                                     "= none)",
+                                     "How far the value must move back out of a band, in the "
+                                     "dataset's units, before that band can alarm again. Stops a "
+                                     "value that hovers at a limit from alarming over and over. "
+                                     "Use 0 for none.",
                                      QJsonArray()));
   props.insert(Keys::LED,
                datasetSchemaProperty("boolean",
-                                     "Enable visual status monitoring using an LED display",
+                                     "Shows this dataset as a light in the LED panel.",
                                      QJsonArray()));
 }
 
@@ -845,8 +851,8 @@ static void datasetSchemaPart4(QJsonObject& props)
 {
   props.insert(Keys::LedHigh,
                datasetSchemaProperty("number",
-                                     "LED lights up when value meets or exceeds this threshold; "
-                                     "define alarm bands for multi-state colors",
+                                     "The LED turns on when the value reaches this level. Use "
+                                     "alarm bands for more than two states.",
                                      QJsonArray()));
   props.insert(Keys::Overview,
                datasetSchemaProperty("boolean",
@@ -863,41 +869,41 @@ static void datasetSchemaPart4(QJsonObject& props)
                                      QJsonArray()));
   props.insert(Keys::Format,
                datasetSchemaProperty("integer",
-                                     "Decodes the raw value before any transform: fixed point, a "
-                                     "bit field or a linear scale",
+                                     "Decodes the raw number before any transform: as fixed "
+                                     "point, as a group of bits, or with a scale and offset.",
                                      QJsonArray({0, 1, 2, 3})));
   props.insert(Keys::FormatWidth,
                datasetSchemaProperty("integer",
-                                     "Width of the raw integer in bits (1-64); integers wider "
-                                     "than 53 bits lose precision",
+                                     "How many bits the raw number has, from 1 to 64. Numbers "
+                                     "wider than 53 bits lose precision.",
                                      QJsonArray()));
   props.insert(Keys::FormatSigned,
                datasetSchemaProperty("boolean",
-                                     "Read the raw integer as two's complement at the declared "
-                                     "width",
+                                     "Reads the raw number as signed (two's complement) at this "
+                                     "width.",
                                      QJsonArray()));
   props.insert(Keys::FormatFractionBits,
                datasetSchemaProperty("integer",
-                                     "Fraction bits of the fixed-point value: the raw integer is "
-                                     "divided by 2^N (Q15 = 15)",
+                                     "The raw number is divided by 2 to this power. For example, "
+                                     "the Q15 format uses 15.",
                                      QJsonArray()));
   props.insert(Keys::FormatBitOffset,
                datasetSchemaProperty("integer",
-                                     "Position of the field's lowest bit, counted from the least "
-                                     "significant bit (0)",
+                                     "Where the field starts, counted in bits from the lowest bit "
+                                     "(0).",
                                      QJsonArray()));
   props.insert(Keys::FormatBitWidth,
                datasetSchemaProperty("integer",
-                                     "Number of bits in the field (1 = a single flag bit)",
+                                     "How many bits the field has. Use 1 for a single on/off flag.",
                                      QJsonArray()));
   props.insert(Keys::FormatScale,
                datasetSchemaProperty("number",
-                                     "Multiplier of the linear decoder: value = raw * scale + "
-                                     "offset",
+                                     "The raw number is multiplied by this value, then the offset "
+                                     "is added.",
                                      QJsonArray()));
   props.insert(Keys::FormatOffset,
                datasetSchemaProperty("number",
-                                     "Added after the scale: value = raw * scale + offset",
+                                     "Added to the value after it is multiplied by the scale.",
                                      QJsonArray()));
 }
 

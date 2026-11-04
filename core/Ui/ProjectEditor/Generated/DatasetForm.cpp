@@ -250,8 +250,7 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model, const Datas
   item_title->setData(kDatasetView_Title, ParameterType);
   item_title->setData(tr("Untitled Dataset"), PlaceholderValue);
   item_title->setData(tr("Dataset Title"), ParameterName);
-  item_title->setData(tr("Name of the dataset, used for labeling and identification"),
-                      ParameterDescription);
+  item_title->setData(tr("The name shown on the dashboard and in exports."), ParameterDescription);
   model->appendRow(item_title);
 
   auto* item_virtual = new QStandardItem();
@@ -261,8 +260,8 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model, const Datas
   item_virtual->setData(dataset.virtual_, EditableValue);
   item_virtual->setData(kDatasetView_Virtual, ParameterType);
   item_virtual->setData(tr("Computed Dataset"), ParameterName);
-  item_virtual->setData(tr("Computed datasets compute their value from transforms and shared "
-                           "variables, they do not require a frame index"), ParameterDescription);
+  item_virtual->setData(tr("Calculates the value with a transform instead of reading it from the "
+                           "incoming data, so it needs no frame index."), ParameterDescription);
   model->appendRow(item_virtual);
 
   if (PropertyHooks::insidePainterGroup(dataset, m_projectModelRef)) {
@@ -273,9 +272,8 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model, const Datas
     item_hide_on_dashboard->setData(dataset.hideOnDashboard, EditableValue);
     item_hide_on_dashboard->setData(kDatasetView_HideOnDashboard, ParameterType);
     item_hide_on_dashboard->setData(tr("Hide on Dashboard"), ParameterName);
-    item_hide_on_dashboard->setData(tr("Suppress this dataset's standalone dashboard tile; the "
-                                       "canvas widget can still read its values"),
-                                    ParameterDescription);
+    item_hide_on_dashboard->setData(tr("Hides this dataset's own widget on the dashboard. Canvas "
+                                       "widgets can still read its value."), ParameterDescription);
     model->appendRow(item_hide_on_dashboard);
   }
 
@@ -289,8 +287,8 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model, const Datas
   const auto ph_index = PropertyHooks::datasetIndexPlaceholder(dataset, m_projectModelRef);
   item_index->setData(ph_index, PlaceholderValue);
   item_index->setData(tr("Frame Index"), ParameterName);
-  item_index->setData(tr("Position of this value in the parser's output (first value = 1). 0 = "
-                         "unassigned."), ParameterDescription);
+  item_index->setData(tr("Which value of each frame this dataset reads, counting from 1. Use 0 to "
+                         "leave it unassigned."), ParameterDescription);
   model->appendRow(item_index);
 
   auto* item_units = new QStandardItem();
@@ -301,7 +299,7 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model, const Datas
   item_units->setData(kDatasetView_Units, ParameterType);
   item_units->setData(tr("Volts, Amps, etc."), PlaceholderValue);
   item_units->setData(tr("Measurement Unit"), ParameterName);
-  item_units->setData(tr("Unit of measurement, such as volts or amps (optional)"),
+  item_units->setData(tr("The unit shown next to the value, such as V or mA. Optional."),
                       ParameterDescription);
   model->appendRow(item_units);
 
@@ -327,8 +325,8 @@ void DataModel::ProjectEditor::addDatasetAliasRow(CustomModel* model, const Data
   item_alias->setData(kDatasetView_Alias, ParameterType);
   item_alias->setData(tr("Stable name"), PlaceholderValue);
   item_alias->setData(tr("Script Alias"), ParameterName);
-  item_alias->setData(tr("Stable name for getDataset-style script/API lookups; must be unique "
-                         "(optional)"), ParameterDescription);
+  item_alias->setData(tr("A short, unique name that scripts and the API can use to find this "
+                         "dataset. Optional."), ParameterDescription);
   model->appendRow(item_alias);
 }
 
@@ -347,8 +345,8 @@ void DataModel::ProjectEditor::addGeneralColorRow(CustomModel* model, const Data
   item_color->setData(kDatasetView_Color, ParameterType);
   item_color->setData(tr("Automatic"), PlaceholderValue);
   item_color->setData(tr("Widget Color"), ParameterName);
-  item_color->setData(tr("Custom display color for this dataset; automatic uses the theme palette"),
-                      ParameterDescription);
+  item_color->setData(tr("The color of this dataset's plots and widgets. Automatic uses the "
+                         "theme's colors."), ParameterDescription);
   model->appendRow(item_color);
 }
 
@@ -367,8 +365,8 @@ void DataModel::ProjectEditor::addDatasetRangeRows(CustomModel* model, const Dat
   item_plt_min->setData(kDatasetView_PltMin, ParameterType);
   item_plt_min->setData(0, PlaceholderValue);
   item_plt_min->setData(tr("Minimum Value"), ParameterName);
-  item_plt_min->setData(tr("Lower bound of the dataset value range; widgets and FFT fall back to "
-                           "it when their own range is left unset"), ParameterDescription);
+  item_plt_min->setData(tr("The lowest value this dataset is expected to reach. Widgets and the "
+                           "FFT plot use it when their own range is empty."), ParameterDescription);
   model->appendRow(item_plt_min);
 
   auto* item_plt_max = new QStandardItem();
@@ -379,8 +377,8 @@ void DataModel::ProjectEditor::addDatasetRangeRows(CustomModel* model, const Dat
   item_plt_max->setData(kDatasetView_PltMax, ParameterType);
   item_plt_max->setData(0, PlaceholderValue);
   item_plt_max->setData(tr("Maximum Value"), ParameterName);
-  item_plt_max->setData(tr("Upper bound of the dataset value range; widgets and FFT fall back to "
-                           "it when their own range is left unset"), ParameterDescription);
+  item_plt_max->setData(tr("The highest value this dataset is expected to reach. Widgets and the "
+                           "FFT plot use it when their own range is empty."), ParameterDescription);
   model->appendRow(item_plt_max);
 }
 
@@ -410,8 +408,8 @@ void DataModel::ProjectEditor::addFormatSection(CustomModel* model, const Datase
   item_format->setData(kDatasetView_Format, ParameterType);
   item_format->setData(Registry::valueFormatsOptions().labels(m_projectModelRef), ComboBoxData);
   item_format->setData(tr("Format"), ParameterName);
-  item_format->setData(tr("Decodes the raw value before any transform: fixed point, a bit field "
-                          "or a linear scale"), ParameterDescription);
+  item_format->setData(tr("Decodes the raw number before any transform: as fixed point, as a "
+                          "group of bits, or with a scale and offset."), ParameterDescription);
   model->appendRow(item_format);
 
   if (PropertyHooks::formatHasWidth(dataset, m_projectModelRef)) {
@@ -425,8 +423,8 @@ void DataModel::ProjectEditor::addFormatSection(CustomModel* model, const Datase
     item_format_width->setData(1, MinValue);
     item_format_width->setData(64, MaxValue);
     item_format_width->setData(tr("Integer Width (bits)"), ParameterName);
-    item_format_width->setData(tr("Width of the raw integer in bits (1-64); integers wider than "
-                                  "53 bits lose precision"), ParameterDescription);
+    item_format_width->setData(tr("How many bits the raw number has, from 1 to 64. Numbers wider "
+                                  "than 53 bits lose precision."), ParameterDescription);
     model->appendRow(item_format_width);
   }
 
@@ -438,8 +436,8 @@ void DataModel::ProjectEditor::addFormatSection(CustomModel* model, const Datase
     item_format_signed->setData(dataset.formatSigned, EditableValue);
     item_format_signed->setData(kDatasetView_FormatSigned, ParameterType);
     item_format_signed->setData(tr("Signed"), ParameterName);
-    item_format_signed->setData(tr("Read the raw integer as two's complement at the declared "
-                                   "width"), ParameterDescription);
+    item_format_signed->setData(tr("Reads the raw number as signed (two's complement) at this "
+                                   "width."), ParameterDescription);
     model->appendRow(item_format_signed);
   }
 
@@ -454,8 +452,8 @@ void DataModel::ProjectEditor::addFormatSection(CustomModel* model, const Datase
     item_format_fraction_bits->setData(0, MinValue);
     item_format_fraction_bits->setData(63, MaxValue);
     item_format_fraction_bits->setData(tr("Fraction Bits"), ParameterName);
-    item_format_fraction_bits->setData(tr("Fraction bits of the fixed-point value: the raw "
-                                          "integer is divided by 2^N (Q15 = 15)"),
+    item_format_fraction_bits->setData(tr("The raw number is divided by 2 to this power. For "
+                                          "example, the Q15 format uses 15."),
                                        ParameterDescription);
     model->appendRow(item_format_fraction_bits);
   }
@@ -481,8 +479,8 @@ void DataModel::ProjectEditor::buildFormatFieldRows(CustomModel* model, const Da
     item_format_bit_offset->setData(0, MinValue);
     item_format_bit_offset->setData(63, MaxValue);
     item_format_bit_offset->setData(tr("Bit Offset"), ParameterName);
-    item_format_bit_offset->setData(tr("Position of the field's lowest bit, counted from the "
-                                       "least significant bit (0)"), ParameterDescription);
+    item_format_bit_offset->setData(tr("Where the field starts, counted in bits from the lowest "
+                                       "bit (0)."), ParameterDescription);
     model->appendRow(item_format_bit_offset);
   }
 
@@ -497,8 +495,8 @@ void DataModel::ProjectEditor::buildFormatFieldRows(CustomModel* model, const Da
     item_format_bit_width->setData(1, MinValue);
     item_format_bit_width->setData(64, MaxValue);
     item_format_bit_width->setData(tr("Bit Count"), ParameterName);
-    item_format_bit_width->setData(tr("Number of bits in the field (1 = a single flag bit)"),
-                                   ParameterDescription);
+    item_format_bit_width->setData(tr("How many bits the field has. Use 1 for a single on/off "
+                                      "flag."), ParameterDescription);
     model->appendRow(item_format_bit_width);
   }
 
@@ -511,8 +509,8 @@ void DataModel::ProjectEditor::buildFormatFieldRows(CustomModel* model, const Da
     item_format_scale->setData(kDatasetView_FormatScale, ParameterType);
     item_format_scale->setData(1, PlaceholderValue);
     item_format_scale->setData(tr("Scale"), ParameterName);
-    item_format_scale->setData(tr("Multiplier of the linear decoder: value = raw * scale + offset"),
-                               ParameterDescription);
+    item_format_scale->setData(tr("The raw number is multiplied by this value, then the offset is "
+                                  "added."), ParameterDescription);
     model->appendRow(item_format_scale);
   }
 
@@ -525,7 +523,7 @@ void DataModel::ProjectEditor::buildFormatFieldRows(CustomModel* model, const Da
     item_format_offset->setData(kDatasetView_FormatOffset, ParameterType);
     item_format_offset->setData(0, PlaceholderValue);
     item_format_offset->setData(tr("Offset"), ParameterName);
-    item_format_offset->setData(tr("Added after the scale: value = raw * scale + offset"),
+    item_format_offset->setData(tr("Added to the value after it is multiplied by the scale."),
                                 ParameterDescription);
     model->appendRow(item_format_offset);
   }
@@ -556,7 +554,7 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const Dataset&
   item_plt->setData(kDatasetView_Plot, ParameterType);
   item_plt->setData(Registry::plotOptions().labels(m_projectModelRef), ComboBoxData);
   item_plt->setData(tr("Enable Plot Widget"), ParameterName);
-  item_plt->setData(tr("Plot data in real-time"), ParameterDescription);
+  item_plt->setData(tr("Plots the value over time."), ParameterDescription);
   model->appendRow(item_plt);
 
   const bool on_x_axis_id = PropertyHooks::plotEnabled(dataset, m_projectModelRef);
@@ -570,7 +568,7 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const Dataset&
   item_x_axis_id->setData(kDatasetView_xAxis, ParameterType);
   item_x_axis_id->setData(Registry::xAxisSourcesOptions().labels(m_projectModelRef), ComboBoxData);
   item_x_axis_id->setData(tr("X-Axis Source"), ParameterName);
-  item_x_axis_id->setData(tr("Choose Time or a dataset to drive the X-Axis in plots"),
+  item_x_axis_id->setData(tr("What the plot's horizontal axis shows: time, or another dataset."),
                           ParameterDescription);
   model->appendRow(item_x_axis_id);
 
@@ -583,8 +581,9 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const Dataset&
   item_plt_log_x->setData(kDatasetView_Plt_LogX, ParameterType);
   item_plt_log_x->setData(0, PlaceholderValue);
   item_plt_log_x->setData(tr("Logarithmic X Axis"), ParameterName);
-  item_plt_log_x->setData(tr("Scale the X axis in decades; available when the X-Axis source is "
-                             "Samples or a dataset (not Time)"), ParameterDescription);
+  item_plt_log_x->setData(tr("Uses a logarithmic scale for the horizontal axis. Available when "
+                             "the axis shows samples or a dataset, not time."),
+                          ParameterDescription);
   model->appendRow(item_plt_log_x);
 
   const bool on_plt_log_y = PropertyHooks::plotEnabled(dataset, m_projectModelRef);
@@ -596,8 +595,8 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const Dataset&
   item_plt_log_y->setData(kDatasetView_Plt_LogY, ParameterType);
   item_plt_log_y->setData(0, PlaceholderValue);
   item_plt_log_y->setData(tr("Logarithmic Y Axis"), ParameterName);
-  item_plt_log_y->setData(tr("Scale the Y axis in decades; values at or below zero are clamped"),
-                          ParameterDescription);
+  item_plt_log_y->setData(tr("Uses a logarithmic scale for the vertical axis. Values at or below "
+                             "zero are drawn at the bottom."), ParameterDescription);
   model->appendRow(item_plt_log_y);
 }
 
@@ -625,7 +624,7 @@ void DataModel::ProjectEditor::buildFftGeneralRows(CustomModel* model, const Dat
   item_fft->setData(kDatasetView_FFT, ParameterType);
   item_fft->setData(0, PlaceholderValue);
   item_fft->setData(tr("Enable FFT Analysis"), ParameterName);
-  item_fft->setData(tr("Perform frequency-domain analysis of the dataset"), ParameterDescription);
+  item_fft->setData(tr("Shows how strong each frequency is in the signal."), ParameterDescription);
   model->appendRow(item_fft);
 
   auto* item_waterfall = new QStandardItem();
@@ -636,8 +635,8 @@ void DataModel::ProjectEditor::buildFftGeneralRows(CustomModel* model, const Dat
   item_waterfall->setData(kDatasetView_Waterfall, ParameterType);
   item_waterfall->setData(0, PlaceholderValue);
   item_waterfall->setData(tr("Enable Waterfall Plot"), ParameterName);
-  item_waterfall->setData(tr("Show a scrolling spectrogram of frequency content over time (Pro)"),
-                          ParameterDescription);
+  item_waterfall->setData(tr("Shows a scrolling picture of the signal's frequencies over time "
+                             "(Pro)."), ParameterDescription);
   model->appendRow(item_waterfall);
 
   const bool on_fft_ballistics = PropertyHooks::fftEnabled(dataset, m_projectModelRef);
@@ -649,8 +648,8 @@ void DataModel::ProjectEditor::buildFftGeneralRows(CustomModel* model, const Dat
   item_fft_ballistics->setData(kDatasetView_FFT_Ballistics, ParameterType);
   item_fft_ballistics->setData(0, PlaceholderValue);
   item_fft_ballistics->setData(tr("Peak Ballistics"), ParameterName);
-  item_fft_ballistics->setData(tr("Analyzer-style display: peaks rise instantly and decay "
-                                  "smoothly over the release time"), ParameterDescription);
+  item_fft_ballistics->setData(tr("Peaks jump up at once and fall back slowly over the release "
+                                  "time, like a hardware audio analyzer."), ParameterDescription);
   model->appendRow(item_fft_ballistics);
 
   const bool on_fft_ballistics_release = PropertyHooks::fftEnabled(dataset, m_projectModelRef);
@@ -662,8 +661,8 @@ void DataModel::ProjectEditor::buildFftGeneralRows(CustomModel* model, const Dat
   item_fft_ballistics_release->setData(kDatasetView_FFT_BallisticsRelease, ParameterType);
   item_fft_ballistics_release->setData(300, PlaceholderValue);
   item_fft_ballistics_release->setData(tr("Ballistics Release (ms)"), ParameterName);
-  item_fft_ballistics_release->setData(tr("Decay time for the ballistics display (50-5000 ms)"),
-                                       ParameterDescription);
+  item_fft_ballistics_release->setData(tr("How long a peak takes to fall back, from 50 to 5000 "
+                                          "ms."), ParameterDescription);
   model->appendRow(item_fft_ballistics_release);
 
   if (PropertyHooks::waterfallEnabled(dataset, m_projectModelRef)) {
@@ -678,9 +677,10 @@ void DataModel::ProjectEditor::buildFftGeneralRows(CustomModel* model, const Dat
     item_waterfall_y_axis->setData(Registry::waterfallYSourcesOptions().labels(m_projectModelRef),
                                    ComboBoxData);
     item_waterfall_y_axis->setData(tr("Waterfall Y Axis"), ParameterName);
-    item_waterfall_y_axis->setData(tr("Choose Time (default) or any dataset whose value drives "
-                                      "the Y axis -- produces a Campbell diagram when bound to "
-                                      "e.g. RPM"), ParameterDescription);
+    item_waterfall_y_axis->setData(tr("What the waterfall's vertical axis shows: time (the "
+                                      "default) or another dataset. Choosing an RPM dataset, for "
+                                      "example, turns the waterfall into a Campbell diagram."),
+                                   ParameterDescription);
     model->appendRow(item_waterfall_y_axis);
   }
 }
@@ -704,7 +704,8 @@ void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model, const Datas
   item_fft_samples->setData(Registry::fftSampleCountsOptions().labels(m_projectModelRef),
                             ComboBoxData);
   item_fft_samples->setData(tr("FFT Window Size"), ParameterName);
-  item_fft_samples->setData(tr("Number of samples used for each FFT calculation window"),
+  item_fft_samples->setData(tr("How many samples each frequency analysis uses. More samples show "
+                               "finer frequency detail but react more slowly."),
                             ParameterDescription);
   model->appendRow(item_fft_samples);
 
@@ -719,8 +720,9 @@ void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model, const Datas
   item_fft_window->setData(kDatasetView_FFT_Window, ParameterType);
   item_fft_window->setData(Registry::fftWindowsOptions().labels(m_projectModelRef), ComboBoxData);
   item_fft_window->setData(tr("FFT Window Function"), ParameterName);
-  item_fft_window->setData(tr("Window applied before the transform to reduce spectral leakage; "
-                              "affects both the FFT plot and the waterfall"), ParameterDescription);
+  item_fft_window->setData(tr("Shapes each block of samples before the analysis so that nearby "
+                              "frequencies don't blur together. Used by the FFT plot and the "
+                              "waterfall."), ParameterDescription);
   model->appendRow(item_fft_window);
 
   const bool on_fft_sampling_rate =
@@ -733,8 +735,9 @@ void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model, const Datas
   item_fft_sampling_rate->setData(kDatasetView_FFT_SamplingRate, ParameterType);
   item_fft_sampling_rate->setData(100, PlaceholderValue);
   item_fft_sampling_rate->setData(tr("FFT Sampling Rate (Hz, required)"), ParameterName);
-  item_fft_sampling_rate->setData(tr("Sampling frequency used for FFT (in Hz)"),
-                                  ParameterDescription);
+  item_fft_sampling_rate->setData(tr("How many samples per second the device sends for this "
+                                     "dataset. The frequency axis is only correct when this "
+                                     "matches."), ParameterDescription);
   model->appendRow(item_fft_sampling_rate);
 
   const bool on_fft_log_x = PropertyHooks::fftOrWaterfallEnabled(dataset, m_projectModelRef);
@@ -746,9 +749,8 @@ void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model, const Datas
   item_fft_log_x->setData(kDatasetView_FFT_LogX, ParameterType);
   item_fft_log_x->setData(0, PlaceholderValue);
   item_fft_log_x->setData(tr("Logarithmic Frequency Axis"), ParameterName);
-  item_fft_log_x->setData(tr("Scale the frequency axis in decades so low octaves stay readable; "
-                             "applies to both the FFT plot and the waterfall"),
-                          ParameterDescription);
+  item_fft_log_x->setData(tr("Uses a logarithmic frequency axis so low frequencies stay readable. "
+                             "Used by the FFT plot and the waterfall."), ParameterDescription);
   model->appendRow(item_fft_log_x);
 
   const bool on_fft_min = PropertyHooks::fftOrWaterfallEnabled(dataset, m_projectModelRef);
@@ -760,8 +762,9 @@ void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model, const Datas
   item_fft_min->setData(kDatasetView_FFTMin, ParameterType);
   item_fft_min->setData(0, PlaceholderValue);
   item_fft_min->setData(tr("Minimum Value (optional)"), ParameterName);
-  item_fft_min->setData(tr("Lower bound for data normalization; falls back to the dataset value "
-                           "range when left unset"), ParameterDescription);
+  item_fft_min->setData(tr("The lowest value expected in the signal, used to scale the analysis. "
+                           "Leave empty to use the dataset's Minimum Value."),
+                        ParameterDescription);
   model->appendRow(item_fft_min);
 
   const bool on_fft_max = PropertyHooks::fftOrWaterfallEnabled(dataset, m_projectModelRef);
@@ -773,8 +776,9 @@ void DataModel::ProjectEditor::buildFftRangeRows(CustomModel* model, const Datas
   item_fft_max->setData(kDatasetView_FFTMax, ParameterType);
   item_fft_max->setData(0, PlaceholderValue);
   item_fft_max->setData(tr("Maximum Value (optional)"), ParameterName);
-  item_fft_max->setData(tr("Upper bound for data normalization; falls back to the dataset value "
-                           "range when left unset"), ParameterDescription);
+  item_fft_max->setData(tr("The highest value expected in the signal, used to scale the analysis. "
+                           "Leave empty to use the dataset's Maximum Value."),
+                        ParameterDescription);
   model->appendRow(item_fft_max);
 }
 
@@ -805,7 +809,7 @@ void DataModel::ProjectEditor::addWidgetSection(CustomModel* model, const Datase
   item_widget->setData(kDatasetView_Widget, ParameterType);
   item_widget->setData(Registry::datasetWidgetsOptions().labels(m_projectModelRef), ComboBoxData);
   item_widget->setData(tr("Widget"), ParameterName);
-  item_widget->setData(tr("Select the visual widget used to display this dataset"),
+  item_widget->setData(tr("The widget that shows this dataset on the dashboard."),
                        ParameterDescription);
   model->appendRow(item_widget);
 
@@ -833,8 +837,8 @@ void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
   item_display_tick_count->setData(kDatasetView_DisplayTickCount, ParameterType);
   item_display_tick_count->setData(tr("Auto"), PlaceholderValue);
   item_display_tick_count->setData(tr("Tick Count"), ParameterName);
-  item_display_tick_count->setData(tr("Major-tick count on the dial scale (0 = auto-fit to widget "
-                                      "size)"), ParameterDescription);
+  item_display_tick_count->setData(tr("How many major marks the dial shows. Use 0 to fit them to "
+                                      "the widget's size."), ParameterDescription);
   model->appendRow(item_display_tick_count);
 
   const auto val_display_format =
@@ -848,9 +852,9 @@ void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
   item_display_format->setData(Registry::displayFormatsOptions().labels(m_projectModelRef),
                                ComboBoxData);
   item_display_format->setData(tr("Label Format"), ParameterName);
-  item_display_format->setData(tr("Decimal places on analog widget ticks and captions; "
-                                  "Hexadecimal and Binary apply wherever the value is shown as "
-                                  "text"), ParameterDescription);
+  item_display_format->setData(tr("How numbers appear on gauge and bar marks and captions. "
+                                  "Hexadecimal and Binary also apply wherever the value is shown "
+                                  "as text."), ParameterDescription);
   model->appendRow(item_display_format);
 
   auto* item_decimal_points = new QStandardItem();
@@ -863,8 +867,8 @@ void DataModel::ProjectEditor::buildWidgetFormatRows(CustomModel* model,
   item_decimal_points->setData(-1, MinValue);
   item_decimal_points->setData(15, MaxValue);
   item_decimal_points->setData(tr("Decimal Points"), ParameterName);
-  item_decimal_points->setData(tr("Fixed decimal places for the value display; overrides the "
-                                  "format (-1 = auto)"), ParameterDescription);
+  item_decimal_points->setData(tr("How many decimal places the value shows. Overrides Label "
+                                  "Format. Use -1 for automatic."), ParameterDescription);
   model->appendRow(item_decimal_points);
 }
 
@@ -885,8 +889,8 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
   item_wgt_min->setData(kDatasetView_WgtMin, ParameterType);
   item_wgt_min->setData(0, PlaceholderValue);
   item_wgt_min->setData(tr("Minimum Value (optional)"), ParameterName);
-  item_wgt_min->setData(tr("Lower bound of the gauge or bar range; falls back to the dataset "
-                           "value range when left unset"), ParameterDescription);
+  item_wgt_min->setData(tr("The lowest value on the gauge or bar. Leave empty to use the "
+                           "dataset's Minimum Value."), ParameterDescription);
   model->appendRow(item_wgt_min);
 
   auto* item_wgt_max = new QStandardItem();
@@ -897,8 +901,8 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
   item_wgt_max->setData(kDatasetView_WgtMax, ParameterType);
   item_wgt_max->setData(0, PlaceholderValue);
   item_wgt_max->setData(tr("Maximum Value (optional)"), ParameterName);
-  item_wgt_max->setData(tr("Upper bound of the gauge or bar range; falls back to the dataset "
-                           "value range when left unset"), ParameterDescription);
+  item_wgt_max->setData(tr("The highest value on the gauge or bar. Leave empty to use the "
+                           "dataset's Maximum Value."), ParameterDescription);
   model->appendRow(item_wgt_max);
 
   const bool on_extreme_hold = PropertyHooks::extremeHoldApplicable(dataset, m_projectModelRef);
@@ -910,8 +914,8 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
   item_extreme_hold->setData(kDatasetView_ExtremeHold, ParameterType);
   item_extreme_hold->setData(0, PlaceholderValue);
   item_extreme_hold->setData(tr("Hold Min/Max Markers"), ParameterName);
-  item_extreme_hold->setData(tr("Show hold markers at the lowest and highest values observed "
-                                "since the last data reset"), ParameterDescription);
+  item_extreme_hold->setData(tr("Marks the lowest and highest values seen since the data was last "
+                                "cleared."), ParameterDescription);
   model->appendRow(item_extreme_hold);
 
   if (PropertyHooks::alarmBandsDrawn(dataset, m_projectModelRef)) {
@@ -922,8 +926,9 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
     item_suppress_alarms->setData(dataset.suppressAlarms, EditableValue);
     item_suppress_alarms->setData(kDatasetView_SuppressAlarms, ParameterType);
     item_suppress_alarms->setData(tr("Suppress Alarms"), ParameterName);
-    item_suppress_alarms->setData(tr("Keep the bands on the widget but never notify, raise an "
-                                     "alarm point or sound for them"), ParameterDescription);
+    item_suppress_alarms->setData(tr("Keeps the alarm bands on the widget, but never sends "
+                                     "notifications, raises alarms, or plays sounds for them."),
+                                  ParameterDescription);
     model->appendRow(item_suppress_alarms);
   }
 
@@ -935,9 +940,10 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
     item_alarms_while_visible->setData(dataset.alarmsWhileVisible, EditableValue);
     item_alarms_while_visible->setData(kDatasetView_AlarmsWhileVisible, ParameterType);
     item_alarms_while_visible->setData(tr("Alarms only while visible"), ParameterName);
-    item_alarms_while_visible->setData(tr("Notify, raise an alarm point and sound for the bands "
-                                          "only while a widget showing this dataset is on screen; "
-                                          "Suppress Alarms still wins"), ParameterDescription);
+    item_alarms_while_visible->setData(tr("Sends notifications, raises alarms, and plays sounds "
+                                          "for the bands only while a widget showing this dataset "
+                                          "is on screen. Suppress Alarms still turns them off "
+                                          "entirely."), ParameterDescription);
     model->appendRow(item_alarms_while_visible);
   }
 
@@ -950,10 +956,10 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
     item_alarm_deadband->setData(kDatasetView_AlarmDeadband, ParameterType);
     item_alarm_deadband->setData(0, PlaceholderValue);
     item_alarm_deadband->setData(tr("Alarm Deadband"), ParameterName);
-    item_alarm_deadband->setData(tr("Hysteresis in the dataset's units: the active band holds "
-                                    "until the value leaves it by this much, so a reading "
-                                    "hovering on a threshold does not re-alarm on every frame (0 "
-                                    "= none)"), ParameterDescription);
+    item_alarm_deadband->setData(tr("How far the value must move back out of a band, in the "
+                                    "dataset's units, before that band can alarm again. Stops a "
+                                    "value that hovers at a limit from alarming over and over. "
+                                    "Use 0 for none."), ParameterDescription);
     model->appendRow(item_alarm_deadband);
   }
 }
@@ -982,8 +988,7 @@ void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const Dataset& 
   item_led->setData(kDatasetView_LED, ParameterType);
   item_led->setData(0, PlaceholderValue);
   item_led->setData(tr("Show in LED Panel"), ParameterName);
-  item_led->setData(tr("Enable visual status monitoring using an LED display"),
-                    ParameterDescription);
+  item_led->setData(tr("Shows this dataset as a light in the LED panel."), ParameterDescription);
   model->appendRow(item_led);
 
   if (PropertyHooks::ledBandsAbsent(dataset, m_projectModelRef)) {
@@ -996,8 +1001,8 @@ void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const Dataset& 
     item_led_high->setData(kDatasetView_LED_High, ParameterType);
     item_led_high->setData(0, PlaceholderValue);
     item_led_high->setData(tr("LED On Threshold (required)"), ParameterName);
-    item_led_high->setData(tr("LED lights up when value meets or exceeds this threshold; define "
-                              "alarm bands for multi-state colors"), ParameterDescription);
+    item_led_high->setData(tr("The LED turns on when the value reaches this level. Use alarm "
+                              "bands for more than two states."), ParameterDescription);
     model->appendRow(item_led_high);
   }
 }

@@ -235,7 +235,7 @@ Widgets.Pane {
               toolbarButton: false
               Layout.alignment: Qt.AlignVCenter
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "plot", 24)
-              ToolTip.text: qsTr("Toggle 2D plot visualization for this dataset")
+              ToolTip.text: qsTr("Show or hide a plot of this value over time.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetPlot
               onClicked: {
                 const option = SerialStudio.DatasetPlot
@@ -250,7 +250,7 @@ Widgets.Pane {
               text: qsTr("FFT Plot")
               Layout.alignment: Qt.AlignVCenter
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "fft", 24)
-              ToolTip.text: qsTr("Toggle FFT plot to visualize frequency content")
+              ToolTip.text: qsTr("Show or hide a plot of the signal's frequencies.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetFFT
               onClicked: {
                 const option = SerialStudio.DatasetFFT
@@ -266,7 +266,8 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "waterfall", 24)
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetWaterfall
-              ToolTip.text: qsTr("Toggle waterfall (spectrogram) plot — uses the FFT settings")
+              ToolTip.text: qsTr("Show or hide a scrolling picture of the frequencies over time. "
+                                 + "Uses the FFT settings.")
               onClicked: {
                 const option = SerialStudio.DatasetWaterfall
                 const value = Cpp_JSON_ProjectEditor.datasetOptions & option
@@ -292,8 +293,8 @@ Widgets.Pane {
               toolbarButton: false
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
+              ToolTip.text: qsTr("Show or hide a bar for this value.")
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "bar", 24)
-              ToolTip.text: qsTr("Toggle the bar widget for this dataset")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
               onClicked: {
                 const option = SerialStudio.DatasetBar
@@ -309,7 +310,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
               icon.source: Cpp_Misc_IconRegistry.icon("widgets", "gauge", 24)
-              ToolTip.text: qsTr("Toggle gauge widget for analog-style display")
+              ToolTip.text: qsTr("Show or hide a round gauge for this value.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
               onClicked: {
                 const option = SerialStudio.DatasetGauge
@@ -325,7 +326,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "compass", 24)
-              ToolTip.text: qsTr("Toggle compass widget for directional data")
+              ToolTip.text: qsTr("Show or hide a compass for a direction value.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetCompass
               onClicked: {
                 const option = SerialStudio.DatasetCompass
@@ -340,8 +341,8 @@ Widgets.Pane {
               toolbarButton: false
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-              ToolTip.text: qsTr("Toggle analog meter (half-arc) widget")
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "meter", 24)
+              ToolTip.text: qsTr("Show or hide a half-circle meter for this value.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter
               onClicked: {
                 const option = SerialStudio.DatasetMeter
@@ -356,8 +357,8 @@ Widgets.Pane {
               toolbarButton: false
               Layout.alignment: Qt.AlignVCenter
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "led", 24)
+              ToolTip.text: qsTr("Show or hide a light that turns on above a level.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetLED
-              ToolTip.text: qsTr("Toggle LED indicator for binary or thresholded values")
               onClicked: {
                 const option = SerialStudio.DatasetLED
                 const value = Cpp_JSON_ProjectEditor.datasetOptions & option
@@ -388,7 +389,9 @@ Widgets.Pane {
               enabled: Cpp_JSON_ProjectEditor.alarmBandsApplicable
               onClicked: Cpp_JSON_ProjectEditor.openAlarmBandsEditorForSelection()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "alarm-bands", 24)
-              ToolTip.text: qsTr("Define colored value ranges with severity tiers. Available for Bar, Gauge, Meter, LED, and Bar Panel datasets.")
+              ToolTip.text: qsTr("Color ranges of the value, such as normal, warning and "
+                                 + "critical, and choose which ones raise alarms. Available for "
+                                 + "Bar, Gauge, Meter, LED, and Bar Panel datasets.")
             }
 
             Widgets.ToolbarButton {
@@ -401,7 +404,8 @@ Widgets.Pane {
                            || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetWaterfall)
               onClicked: Cpp_JSON_ProjectEditor.openFrequencyMarkersEditorForSelection()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "fft", 24)
-              ToolTip.text: qsTr("Pin labeled frequencies or bands on the FFT plot and waterfall, with optional warning and alarm levels.")
+              ToolTip.text: qsTr("Mark named frequencies or ranges on the FFT plot and waterfall, "
+                                 + "with optional warning and alarm levels.")
             }
 
             Widgets.ToolbarButton {
@@ -412,7 +416,8 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectEditor.openValueLabelsEditorForSelection()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "dataset-values", 24)
-              ToolTip.text: qsTr("Show text in place of chosen values, such as a state name for a code. Plots and alarms keep the number.")
+              ToolTip.text: qsTr("Show words instead of numbers, such as Running for 1. Plots and "
+                                 + "alarms keep the number.")
             }
 
             Widgets.ToolbarButton {
@@ -422,7 +427,8 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               onClicked: Cpp_JSON_ProjectEditor.openTransformEditor()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "transform", 24)
-              ToolTip.text: qsTr("Edit a value transform expression for calibration, filtering, or unit conversion")
+              ToolTip.text: qsTr("Calibrate, filter, or convert the value with a short formula or "
+                                 + "script.")
             }
           }
 
@@ -440,7 +446,7 @@ Widgets.Pane {
               enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
               onClicked: Cpp_JSON_ProjectModel.duplicateCurrentDataset()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "duplicate", 24)
-              ToolTip.text: qsTr("Duplicate this dataset with the same configuration")
+              ToolTip.text: qsTr("Make a copy of this dataset with the same settings.")
             }
 
             Widgets.ToolbarButton {
@@ -448,7 +454,7 @@ Widgets.Pane {
               text: qsTr("Delete")
               toolbarButton: false
               Layout.alignment: Qt.AlignVCenter
-              ToolTip.text: qsTr("Delete this dataset from the group")
+              ToolTip.text: qsTr("Remove this dataset from the group.")
               onClicked: Cpp_JSON_ProjectModel.deleteCurrentDataset()
               enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 24)
