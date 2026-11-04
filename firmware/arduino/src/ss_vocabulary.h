@@ -18,6 +18,7 @@
 #define SS_PREFIX "#ss"
 #define SS_REQUEST "#ss?"
 #define SS_COMMAND "#ss!"
+#define SS_BINARY_TEMPLATE "packed_struct"
 #define SS_WIRE_VERSION 1
 #define SS_LIBRARY_VERSION "1.0.0"
 #define SS_LIBRARY_VERSION_MAJOR 1
@@ -113,6 +114,10 @@
 #define SS_KEY_ON_LABEL "onLabel"
 #define SS_KEY_OFF_LABEL "offLabel"
 #define SS_KEY_CHECKABLE "checkable"
+#define SS_KEY_INPUT_KIND "inputKind"
+#define SS_KEY_OUTPUT_DECIMALS "outputDecimals"
+#define SS_KEY_OUTPUT_UNITS "outputUnits"
+#define SS_KEY_QUANTIZE_TO_STEP "quantizeToStep"
 
 #define SS_GROUP_WIDGET_DATAGRID "datagrid"
 #define SS_GROUP_WIDGET_MULTIPLOT "multiplot"

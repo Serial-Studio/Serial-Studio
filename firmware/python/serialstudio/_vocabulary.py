@@ -15,6 +15,7 @@ __version__ = "1.0.0"
 PREFIX = "#ss"
 REQUEST = "#ss?"
 COMMAND = "#ss!"
+BINARY_TEMPLATE = "packed_struct"
 WIRE_VERSION = 1
 
 MAX_LINE_BYTES = 16384
@@ -103,6 +104,10 @@ KEY_INITIAL_VALUE = "initialValue"
 KEY_ON_LABEL = "onLabel"
 KEY_OFF_LABEL = "offLabel"
 KEY_CHECKABLE = "checkable"
+KEY_INPUT_KIND = "inputKind"
+KEY_OUTPUT_DECIMALS = "outputDecimals"
+KEY_OUTPUT_UNITS = "outputUnits"
+KEY_QUANTIZE_TO_STEP = "quantizeToStep"
 
 DATASET_KEYS = (
     "title",
@@ -189,6 +194,10 @@ CONTROL_KEYS = (
     "onLabel",
     "offLabel",
     "checkable",
+    "inputKind",
+    "outputDecimals",
+    "outputUnits",
+    "quantizeToStep",
 )
 
 SUB_ENTITY_KEYS = {

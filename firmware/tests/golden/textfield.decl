@@ -1,0 +1,1 @@
+#ss1{"title":"Tuner","groups":[{"title":"Status","datasets":[{"title":"Level","units":"m","graph":true}]},{"title":"Tuning","groupType":1,"outputWidgets":[{"title":"Frequency","outputType":3,"outputMin":0,"outputMax":50,"outputUnits":"Hz","outputDecimals":1}]}]}

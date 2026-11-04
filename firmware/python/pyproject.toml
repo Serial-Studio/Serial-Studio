@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "serialstudio"
+dynamic = ["version"]
+description = "Declare a Serial Studio dashboard from a script and stream its frames."
+readme = "../README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+authors = [{ name = "Alex Spataru" }]
+classifiers = ["License :: OSI Approved :: MIT License", "Programming Language :: Python :: 3"]
+
+[project.urls]
+Homepage = "https://serial-studio.com/"
+
+[tool.setuptools]
+packages = ["serialstudio"]
+
+[tool.setuptools.dynamic]
+version = { attr = "serialstudio._vocabulary.__version__" }
