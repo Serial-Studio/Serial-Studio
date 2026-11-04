@@ -193,6 +193,12 @@ class MCPClient:
     def tools_call(self, name: str, arguments: Optional[dict] = None) -> dict:
         return self.request("tools/call", {"name": name, "arguments": arguments or {}})
 
+    def tool_error(self, name: str, arguments: Optional[dict] = None) -> str:
+        """Call a tool that must fail: assert an `isError` result and return its text."""
+        result = self.tools_call(name, arguments)
+        assert result.get("isError") is True, f"{name} did not fail: {result}"
+        return "\n".join(b.get("text", "") for b in result.get("content", []))
+
     def resources_list(self) -> list[dict]:
         result = self.request("resources/list")
         return result.get("resources", [])
@@ -286,6 +292,7 @@ class TestMCPLifecycle:
         assert "tools" in caps
         assert "resources" in caps
         assert "prompts" in caps
+        assert "subscribe" not in caps["resources"]
 
     def test_ping_responds(self, mcp):
         result = mcp.request("ping")
@@ -669,59 +676,57 @@ class TestToolsCallErrors:
 
     def test_set_baud_rate_missing_param(self, mcp):
         """Calling setBaudRate with no arguments must fail."""
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.uart.setBaudRate", {})
+        mcp.tool_error("io.uart.setBaudRate", {})
 
     def test_set_baud_rate_wrong_type(self, mcp):
         """Passing baudRate as a string must fail (handler validates type)."""
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.uart.setBaudRate", {"baudRate": "fast"})
+        mcp.tool_error("io.uart.setBaudRate", {"baudRate": "fast"})
+
+    def test_wrong_type_names_parameter_and_type(self, mcp):
+        text = mcp.tool_error("io.uart.setBaudRate", {"baudRate": "fast"})
+        assert "baudRate" in text
+        assert "string" in text
+
+    def test_non_object_arguments_is_a_protocol_error(self, mcp):
+        with pytest.raises(MCPError) as exc_info:
+            mcp.request("tools/call", {"name": "io.uart.setBaudRate", "arguments": 5})
+        assert exc_info.value.code == -32602
 
     def test_set_port_index_negative(self, mcp):
         """Negative portIndex is out of range and must fail."""
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.uart.setPortIndex", {"portIndex": -1})
+        mcp.tool_error("io.uart.setPortIndex", {"portIndex": -1})
 
     def test_set_tcp_port_out_of_range(self, mcp):
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.network.setTcpPort", {"port": 99999})
+        mcp.tool_error("io.network.setTcpPort", {"port": 99999})
 
     def test_set_tcp_port_zero(self, mcp):
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.network.setTcpPort", {"port": 0})
+        mcp.tool_error("io.network.setTcpPort", {"port": 0})
 
     def test_set_bus_type_invalid(self, mcp):
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.setBusType", {"busType": 999})
+        mcp.tool_error("io.setBusType", {"busType": 999})
 
     def test_project_file_open_missing_param(self, mcp):
-        with pytest.raises(MCPError):
-            mcp.tools_call("project.open", {})
+        mcp.tool_error("project.open", {})
 
     def test_project_set_title_empty(self, mcp):
-        with pytest.raises(MCPError):
-            mcp.tools_call("project.setTitle", {"title": ""})
+        mcp.tool_error("project.setTitle", {"title": ""})
 
     def test_connect_without_valid_config_fails(self, mcp):
         """connect on an unconfigured port must fail gracefully."""
         mcp.tools_call("io.setBusType", {"busType": 0})
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.connect")
+        mcp.tool_error("io.connect")
 
     def test_disconnect_when_not_connected_fails(self, mcp):
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.disconnect")
+        mcp.tool_error("io.disconnect")
 
     def test_write_data_when_not_connected_fails(self, mcp):
         import base64
 
         data = base64.b64encode(b"hello").decode()
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.writeData", {"data": data})
+        mcp.tool_error("io.writeData", {"data": data})
 
     def test_network_address_empty_fails(self, mcp):
-        with pytest.raises(MCPError):
-            mcp.tools_call("io.network.setRemoteAddress", {"address": ""})
+        mcp.tool_error("io.network.setRemoteAddress", {"address": ""})
 
 
 # ---------------------------------------------------------------------------
@@ -774,21 +779,21 @@ class TestMCPResources:
             mcp.request("resources/read", {})
 
     def test_subscribe_current_frame(self, mcp):
-        result = mcp.request(
-            "resources/subscribe", {"uri": "serialstudio://frame/current"}
-        )
-        assert result is not None
+        with pytest.raises(MCPError) as exc_info:
+            mcp.request("resources/subscribe", {"uri": "serialstudio://frame/current"})
+        assert exc_info.value.code == -32601
 
     def test_unsubscribe_current_frame(self, mcp):
-        mcp.request("resources/subscribe", {"uri": "serialstudio://frame/current"})
-        result = mcp.request(
-            "resources/unsubscribe", {"uri": "serialstudio://frame/current"}
-        )
-        assert result is not None
+        with pytest.raises(MCPError) as exc_info:
+            mcp.request(
+                "resources/unsubscribe", {"uri": "serialstudio://frame/current"}
+            )
+        assert exc_info.value.code == -32601
 
     def test_subscribe_missing_uri_fails(self, mcp):
-        with pytest.raises(MCPError):
+        with pytest.raises(MCPError) as exc_info:
             mcp.request("resources/subscribe", {})
+        assert exc_info.value.code == -32601
 
 
 # ---------------------------------------------------------------------------
@@ -968,10 +973,8 @@ class TestOmittedTools:
         assert "licensing.getStatus" in names
 
     def test_control_script_only_call_meets_the_gate(self, mcp):
-        with pytest.raises(MCPError) as exc_info:
-            mcp.tools_call("system.runningProcesses")
-        assert exc_info.value.code != 0
-        assert exc_info.value.data["tool"] == "system.runningProcesses"
+        text = mcp.tool_error("system.runningProcesses")
+        assert '"tool":"system.runningProcesses"' in text.replace(": ", ":")
 
 
 class TestToolSchemaKeys:
@@ -981,3 +984,137 @@ class TestToolSchemaKeys:
         for tool in mcp.tools_list():
             extra = set(tool) - MCP_TOOL_KEYS
             assert not extra, f"Tool {tool['name']} has non-schema keys: {extra}"
+
+
+# ---------------------------------------------------------------------------
+# 12. Session hygiene (spec 0102)
+# ---------------------------------------------------------------------------
+
+STREAM_SECONDS = 5
+FRAMES_PER_SECOND = 20
+
+
+def _drain(sock: socket.socket, window: float) -> list[bytes]:
+    """Read complete lines from `sock` for `window` seconds (partial tails are dropped)."""
+    buf = b""
+    deadline = time.time() + window
+    while time.time() < deadline:
+        sock.settimeout(0.1)
+        try:
+            chunk = sock.recv(65536)
+        except socket.timeout:
+            continue
+        if not chunk:
+            break
+        buf += chunk
+    return [line for line in buf.split(b"\n")[:-1] if line.strip()]
+
+
+class TestSessionHygiene:
+
+    def test_mcp_session_receives_only_jsonrpc_while_streaming(
+        self, api_client, clean_state, device_simulator
+    ):
+        """An MCP connection gets replies only: no frames, raw data or events."""
+        mcp_client = MCPClient()
+        mcp_client.connect()
+        plain = socket.create_connection((MCPClient.HOST, MCPClient.PORT), timeout=5)
+        try:
+            mcp_client.initialize()
+
+            api_client.set_operation_mode("quickplot")
+            time.sleep(0.3)
+            api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+            api_client.connect_device()
+            assert api_client.wait_for_connection(timeout=10.0), "device never connected"
+            assert device_simulator.wait_for_connection(timeout=10.0)
+
+            mcp_lines: list[bytes] = []
+            plain_lines: list[bytes] = []
+            for _ in range(STREAM_SECONDS):
+                device_simulator.send_frames(
+                    [b"1,2,3\n"] * FRAMES_PER_SECOND,
+                    interval_seconds=1.0 / FRAMES_PER_SECOND,
+                )
+                mcp_client._send({"jsonrpc": "2.0", "id": mcp_client._next_id(), "method": "ping"})
+                mcp_lines += _drain(mcp_client._sock, 0.2)
+                plain_lines += _drain(plain, 0.2)
+            api_client.disconnect_device()
+            time.sleep(0.5)
+            mcp_lines += _drain(mcp_client._sock, 0.5)
+            plain_lines += _drain(plain, 0.5)
+
+            assert mcp_lines, "the MCP socket saw nothing, not even the ping replies"
+            for line in mcp_lines:
+                message = json.loads(line)
+                assert message.get("jsonrpc") == "2.0", line[:200]
+
+            plain_text = b"\n".join(plain_lines)
+            assert b'"frames"' in plain_text, "plain socket saw no frames line"
+            assert b'"data"' in plain_text, "plain socket saw no raw-data line"
+        finally:
+            plain.close()
+            mcp_client.disconnect()
+
+    def _stream_window(self, api_client, device_simulator, mcp_client) -> list[bytes]:
+        """Connect a Quick Plot device, stream for STREAM_SECONDS, return the MCP lines."""
+        api_client.set_operation_mode("quickplot")
+        time.sleep(0.3)
+        api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+        api_client.connect_device()
+        assert api_client.wait_for_connection(timeout=10.0), "device never connected"
+        assert device_simulator.wait_for_connection(timeout=10.0)
+
+        lines: list[bytes] = []
+        for _ in range(STREAM_SECONDS):
+            device_simulator.send_frames(
+                [b"1,2,3\n"] * FRAMES_PER_SECOND,
+                interval_seconds=1.0 / FRAMES_PER_SECOND,
+            )
+            lines += _drain(mcp_client._sock, 0.2)
+        api_client.disconnect_device()
+        return lines
+
+    def test_push_verbs_answer_with_a_tool_error(
+        self, api_client, clean_state, device_simulator
+    ):
+        """stream.subscribe and mirror.subscribe name the pull path; the socket stays quiet."""
+        with MCPClient() as client:
+            client.initialize()
+            for verb in ("stream.subscribe", "mirror.subscribe"):
+                text = client.tool_error(verb)
+                assert "serialstudio://frame/current" in text, verb
+
+            for line in self._stream_window(api_client, device_simulator, client):
+                assert json.loads(line).get("jsonrpc") == "2.0", line[:200]
+
+    def test_legacy_push_verb_on_an_mcp_session_is_refused(
+        self, api_client, clean_state, device_simulator
+    ):
+        """A legacy-envelope push verb after the first JSON-RPC message is refused."""
+        with MCPClient() as client:
+            client.initialize()
+            client._send(
+                {"type": "command", "id": "sub", "command": "stream.subscribe"}
+            )
+            reply = None
+            for line in _drain(client._sock, 2.0):
+                message = json.loads(line)
+                assert "streamBlock" not in message, line[:200]
+                if message.get("id") == "sub":
+                    reply = message
+
+            assert reply is not None, "no reply to the legacy command"
+            assert reply.get("success") is False
+            assert reply["error"]["code"] == "EXECUTION_ERROR"
+
+            api_client.set_operation_mode("quickplot")
+            time.sleep(0.3)
+            api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+            api_client.connect_device()
+            assert api_client.wait_for_connection(timeout=10.0)
+            assert device_simulator.wait_for_connection(timeout=10.0)
+            device_simulator.send_frames([b"1,2,3\n"] * 20, interval_seconds=0.05)
+            for line in _drain(client._sock, 2.0):
+                assert "streamBlock" not in json.loads(line), line[:200]
+            api_client.disconnect_device()

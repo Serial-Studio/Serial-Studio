@@ -47,6 +47,7 @@ private slots:
   void responsesDropTheClientOverTheCap();
 
   void unauthenticatedSocketReceivesRepliesOnly();
+  void mcpSocketsReceiveRepliesOnly();
 
 private:
   void fillBacklogPastTheCap();
@@ -237,6 +238,36 @@ void TstServerWorkerCaps::unauthenticatedSocketReceivesRepliesOnly()
   m_worker->writeRawData(QByteArrayLiteral("telemetry"));
   m_worker->broadcastEvent(event);
   QVERIFY(m_serverSide->bytesToWrite() > afterReply);
+}
+
+//--------------------------------------------------------------------------------------------------
+// MCP session hold
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief An MCP session gets replies but no raw-byte or lifecycle broadcast, and the skip is not
+ *        counted as a drop; a stale session id never mutes a reused socket pointer.
+ */
+void TstServerWorkerCaps::mcpSocketsReceiveRepliesOnly()
+{
+  QJsonObject event;
+  event.insert(QStringLiteral("event"), QStringLiteral("connected"));
+
+  m_worker->setSocketMcpSession(m_serverSide, QStringLiteral("s0"));
+  const qint64 open = m_serverSide->bytesToWrite();
+  m_worker->writeRawData(QByteArrayLiteral("telemetry"));
+  QVERIFY(m_serverSide->bytesToWrite() > open);
+
+  m_worker->setSocketMcpSession(m_serverSide, QStringLiteral("s1"));
+  const qint64 held = m_serverSide->bytesToWrite();
+  m_worker->writeRawData(QByteArrayLiteral("telemetry"));
+  m_worker->broadcastEvent(event);
+  QCOMPARE(m_serverSide->bytesToWrite(), held);
+  QCOMPARE(m_worker->droppedBroadcasts(), quint64(0));
+
+  const QByteArray reply = QByteArrayLiteral("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{}}\n");
+  m_worker->writeToSocket(m_serverSide, QStringLiteral("s1"), reply);
+  QCOMPARE(m_serverSide->bytesToWrite() - held, qint64(reply.size()));
 }
 
 QTEST_GUILESS_MAIN(TstServerWorkerCaps)

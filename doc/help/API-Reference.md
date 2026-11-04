@@ -618,7 +618,7 @@ client2 = connect_to_api()  # Monitoring connection
 client3 = connect_to_api()  # Data export control
 
 # Command responses go only to the socket that sent the command.
-# Push messages (frames, raw data, lifecycle events) go to every client.
+# Push messages (frames, raw data, lifecycle events) go to every client except an MCP session.
 status = client1.send("io.getStatus")
 # State changes made by one client are visible to all clients
 ```
@@ -7294,6 +7294,22 @@ The MCP handler wraps the Serial Studio TCP API (port 7777) in an MCP-compliant 
 
 Each tool carries a `title` and the MCP annotations that follow the in-app assistant's safety tiers: `readOnlyHint` on reads and queries, `destructiveHint` on the delete, clear, open-replace, credential and device-control families, and neither on reversible project or application settings. The licensing mutations and the process launcher are not listed. A hint describes a tool; it never authorizes a call, because every call passes the same remote gate and consent prompts as the TCP API. The server answers protocol revisions 2024-11-05, 2025-03-26 and 2025-06-18, echoing the revision the client offers in `initialize` and answering 2025-06-18 to any other.
 
+### Session Rules
+
+The first JSON-RPC message makes a connection an MCP session. From then on it receives replies only: no frame broadcasts, raw device data or connection events arrive on it, so a client can read the stream line by line as JSON-RPC. Telemetry is read on request, with `resources/read` on `serialstudio://frame/current`, or by polling `dashboard.getData` or `dashboard.tailFrames`.
+
+The five connection-scoped push commands (`mirror.subscribe`, `mirror.setRate`, `mirror.unsubscribe`, `stream.subscribe` and `stream.unsubscribe`) are refused on an MCP session. Called as a tool, they return an `isError` result that names the pull path. Sent as a `{"type":"command"}` line, they return an `EXECUTION_ERROR` with the same text. A plain TCP client that never sends JSON-RPC keeps receiving the broadcasts.
+
+### Errors
+
+A tool call that fails, including one a gate refuses, returns a successful JSON-RPC response whose result has `isError: true`. The first text block holds the message. The second holds compact JSON with the `error` (`code`, `message` and `data` when present), the `tool`, the `providedArguments` and, when the cause is a bad argument, the `parameter`, `receivedValue`, `receivedType` and a `suggestion`. `receivedType` uses the JSON names `string`, `number`, `boolean`, `object`, `array` and `null`.
+
+Only protocol faults are JSON-RPC errors: a parse error, an invalid request, a call before `initialize`, an unknown method, a missing tool name, an unknown tool, and `arguments` that is not an object (`-32602`).
+
+### Resources
+
+`resources/list` and `resources/read` expose the current frame. Resource subscription is not supported: `initialize` advertises no `subscribe` capability, and `resources/subscribe` and `resources/unsubscribe` answer `-32601`.
+
 ### Use Cases
 
 - Ask Claude to "connect to the serial port and start logging" without writing any code
@@ -7328,6 +7344,10 @@ See the **[MCP Client example](https://github.com/Serial-Studio/Serial-Studio/tr
 ## Changelog
 
 ### Version 4.1.0 (September 2026)
+- **Changed**: An MCP connection receives replies only; frame, raw-data and connection-event
+  broadcasts no longer reach it, and `stream.subscribe` / `mirror.subscribe` are refused on it
+- **Changed**: MCP tool failures are `isError` results with diagnostics instead of JSON-RPC
+  errors; `resources/subscribe` is no longer advertised and answers `-32601`
 - **Added**: `project.transformLibrary.get` / `set` / `dryRun` for the shared Lua and
   JavaScript libraries (`language` parameter)
 - **Added**: `project.workspace.profile.list` / `add` / `update` / `remove` / `select`

@@ -64,6 +64,9 @@ public:
   // Lifts the broadcast hold a remote connection is under until its token is accepted
   virtual void clientAuthenticated(QTcpSocket* socket, const ConnectionState& state) = 0;
 
+  // Turns a connection into an MCP session on its first JSON-RPC message (spec 0102)
+  virtual void enterMcpSession(QTcpSocket* socket, ConnectionState& state) = 0;
+
   virtual void sendResponse(QTcpSocket* socket, const QByteArray& response) = 0;
   virtual void closeSocket(QTcpSocket* socket, ConnectionState& state)      = 0;
   virtual void disconnectClient(QTcpSocket* socket,

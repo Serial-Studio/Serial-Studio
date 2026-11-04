@@ -39,6 +39,12 @@ inline constexpr std::array<QLatin1StringView, 3> kSupportedProtocolVersions = {
   QLatin1StringView("2025-06-18")};
 inline constexpr QLatin1StringView kLatestProtocolVersion = kSupportedProtocolVersions.back();
 
+// One text for both refusals of a connection-scoped push verb on an MCP session (spec 0102)
+inline constexpr QLatin1StringView kPushRefusal(
+  "This connection is an MCP session and receives replies only; connection-scoped push commands "
+  "are not available on it. Read telemetry with resources/read serialstudio://frame/current, or "
+  "poll dashboard.getData or dashboard.tailFrames.");
+
 /**
  * @brief Whether the server can honor the revision a client offers in initialize; tool titles
  *        are defined from 2025-06-18 and annotations from 2025-03-26, so the echo tells a client

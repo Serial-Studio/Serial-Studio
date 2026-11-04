@@ -41,7 +41,6 @@ public:
     bool initialized = false;
     QString clientName;
     QString clientVersion;
-    QStringList subscribedResources;
   };
 
 private:
@@ -68,10 +67,7 @@ private:
   MCP::MCPResponse handleToolsCall(const MCP::MCPRequest& request, const QString& sessionId);
   MCP::MCPResponse handleResourcesList(const MCP::MCPRequest& request);
   MCP::MCPResponse handleResourcesRead(const MCP::MCPRequest& request);
-  MCP::MCPResponse handleResourcesSubscribe(const MCP::MCPRequest& request,
-                                            const QString& sessionId);
-  MCP::MCPResponse handleResourcesUnsubscribe(const MCP::MCPRequest& request,
-                                              const QString& sessionId);
+  MCP::MCPResponse refuseSubscription(const MCP::MCPRequest& request);
   MCP::MCPResponse handlePromptsList(const MCP::MCPRequest& request);
   MCP::MCPResponse handlePromptsGet(const MCP::MCPRequest& request);
 

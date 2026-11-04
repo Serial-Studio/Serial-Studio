@@ -101,6 +101,7 @@ private:
 public:
   [[nodiscard]] static Server& instance();
   [[nodiscard]] static int maxClients() noexcept;
+  [[nodiscard]] static bool isConnectionCommand(const QString& command);
   [[nodiscard]] bool enabled() const noexcept;
   [[nodiscard]] bool sinkActive() const noexcept override;
   [[nodiscard]] bool hasStreamSubscribers() const noexcept;
@@ -164,6 +165,7 @@ private:
   void sendResponse(QTcpSocket* socket, const QByteArray& response) override;
   void closeSocket(QTcpSocket* socket, ConnectionState& state) override;
   void clientAuthenticated(QTcpSocket* socket, const ConnectionState& state) override;
+  void enterMcpSession(QTcpSocket* socket, ConnectionState& state) override;
   void disconnectClient(QTcpSocket* socket,
                         ConnectionState& state,
                         const QString& errorCode,

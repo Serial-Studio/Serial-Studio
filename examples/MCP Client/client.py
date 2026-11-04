@@ -83,14 +83,13 @@ class MCPClient:
     def _read_response(self, request_id):
         """Read lines until we get the JSON-RPC response matching request_id.
 
-        The server may send raw data events ({"data": "..."}) interleaved
-        with JSON-RPC responses. These are silently skipped.
+        An MCP connection receives replies only, but any line without a
+        "jsonrpc" key is skipped as a guard.
         """
         while True:
             msg = self._read_line()
 
-            # Skip raw data events from the server
-            if "data" in msg and "jsonrpc" not in msg:
+            if "jsonrpc" not in msg:
                 continue
 
             # Match by request id if present
@@ -142,9 +141,15 @@ class MCPClient:
             "tools/call", {"name": name, "arguments": arguments or {}}
         )
 
-        if "result" in response:
+        result = response.get("result")
+        if result is not None and result.get("isError"):
+            text = " ".join(b.get("text", "") for b in result.get("content", []))
+            print(f"✗ Tool '{name}' failed: {text}")
+            return None
+
+        if result is not None:
             print(f"\n✓ Tool '{name}' executed successfully")
-            return response["result"]
+            return result
         else:
             error = response.get("error", {})
             print(f"✗ Tool '{name}' failed: {error.get('message', 'Unknown error')}")

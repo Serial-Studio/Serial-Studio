@@ -71,6 +71,7 @@ public slots:
   void writeMirrorPayload(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void writeStreamBlock(QTcpSocket* socket, const QString& sessionId, const QByteArray& data);
   void setTemplateFrame(int sourceId, const DataModel::Frame& frame);
+  void setSocketMcpSession(QTcpSocket* socket, const QString& sessionId);
   void setSocketAuthenticated(QTcpSocket* socket, const QString& sessionId);
   void setSocketStreamFrames(QTcpSocket* socket, const QString& sessionId, const bool enabled);
 
@@ -103,6 +104,9 @@ private:
 
   // Remote sockets that have not presented the token yet: replies only, no broadcast of any kind
   QSet<QTcpSocket*> m_unauthenticatedSockets;
+
+  // MCP sessions (spec 0102): JSON-RPC replies only, so no broadcast ever reaches their reader
+  QSet<QTcpSocket*> m_mcpSockets;
 
   // Sockets already reported as over-cap; per socket so a later client's stall is not swallowed
   QSet<QTcpSocket*> m_warnedSockets;

@@ -54,3 +54,33 @@ def test_bridge_exits_with_the_fix_when_nothing_listens():
     ]
     assert lines, "bridge wrote nothing to stderr"
     assert "Enable API Server" in lines[-1], lines[-1]
+
+
+def test_bridge_forwards_only_jsonrpc_lines():
+    """Lines a legacy client would get (frames, raw data) never reach the MCP client."""
+    reply = b'{"jsonrpc":"2.0","id":1,"result":{}}\n'
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind(("127.0.0.1", 0))
+    server.listen(1)
+    env = dict(os.environ, SERIAL_STUDIO_API_PORT=str(server.getsockname()[1]))
+
+    proc = subprocess.Popen(
+        [sys.executable, "-I", str(BRIDGE)],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        env=env,
+    )
+    try:
+        server.settimeout(GIVE_UP_SECONDS)
+        conn, _ = server.accept()
+        conn.sendall(b'{"frames":[]}\n{"data":"AA=="}\n' + reply)
+        time.sleep(1.0)
+        conn.close()
+        out, err = proc.communicate(input=b"", timeout=GIVE_UP_SECONDS)
+    finally:
+        server.close()
+        proc.kill()
+
+    assert out == reply, out
+    assert b"Dropped 2 non-JSON-RPC" in err, err.decode("utf-8", "replace")

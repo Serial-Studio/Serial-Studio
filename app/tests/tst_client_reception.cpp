@@ -100,6 +100,13 @@ public:
     Q_UNUSED(state);
   }
 
+  void enterMcpSession(QTcpSocket* socket, API::ConnectionState& state) override
+  {
+    Q_UNUSED(socket);
+    Q_UNUSED(state);
+    ++mcpEntries;
+  }
+
   void closeSocket(QTcpSocket* socket, API::ConnectionState& state) override
   {
     Q_UNUSED(socket);
@@ -119,6 +126,7 @@ public:
   }
 
   int closes                      = 0;
+  int mcpEntries                  = 0;
   API::DeviceWriteVerdict verdict = API::DeviceWriteVerdict::Allowed;
   QByteArray expectedToken;
   QHash<QTcpSocket*, API::ConnectionState> connections;
@@ -151,6 +159,7 @@ private slots:
 
   void rawForwardingWaitsForOneJsonMessage();
   void consentRequiredRefusesWithoutWriting();
+  void firstMcpMessageEntersTheSessionOnce();
 
 private:
   [[nodiscard]] static API::ConnectionState authenticatedState(const QString& sessionId);
@@ -437,6 +446,35 @@ void TstClientReception::consentRequiredRefusesWithoutWriting()
   host.verdict = API::DeviceWriteVerdict::Allowed;
   reception.consumeBytes(&socket, QStringLiteral("15"), QByteArrayLiteral("AT+RESET\n"));
   QCOMPARE(host.deviceWrites, QList<QByteArray>{QByteArrayLiteral("AT+RESET")});
+}
+
+/**
+ * @brief The first JSON-RPC message marks the connection an MCP session and calls the host once,
+ *        however many follow; a legacy command line never enters one.
+ */
+void TstClientReception::firstMcpMessageEntersTheSessionOnce()
+{
+  QTcpSocket socket;
+  TableHost host;
+  host.connections.insert(&socket, authenticatedState(QStringLiteral("16")));
+
+  API::ClientReception reception(host);
+  reception.consumeBytes(&socket,
+                         QStringLiteral("16"),
+                         QByteArrayLiteral("{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"ping\"}\n"
+                                           "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"ping\"}\n"));
+
+  QCOMPARE(host.mcpEntries, 1);
+  QVERIFY(host.connections.value(&socket).mcpSession);
+
+  QTcpSocket legacy;
+  host.connections.insert(&legacy, authenticatedState(QStringLiteral("17")));
+  reception.consumeBytes(&legacy,
+                         QStringLiteral("17"),
+                         QByteArrayLiteral("{\"type\":\"command\",\"command\":\"a\"}\n"));
+
+  QCOMPARE(host.mcpEntries, 1);
+  QVERIFY(!host.connections.value(&legacy).mcpSession);
 }
 
 QTEST_GUILESS_MAIN(TstClientReception)

@@ -47,6 +47,7 @@ for _stream in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
+import json
 import os
 import socket
 import threading
@@ -67,6 +68,17 @@ def log(message):
     )
 
 
+def is_jsonrpc(line):
+    """True for a JSON-RPC 2.0 message or batch; anything else is not for the MCP client"""
+    try:
+        message = json.loads(line)
+    except ValueError:
+        return False
+    if isinstance(message, list):
+        return True
+    return isinstance(message, dict) and message.get("jsonrpc") == "2.0"
+
+
 def tcp_to_stdout(sock, should_stop):
     """
     Forward messages from Serial Studio (TCP) to Claude Desktop (stdout)
@@ -76,6 +88,7 @@ def tcp_to_stdout(sock, should_stop):
         should_stop: Threading event to signal shutdown
     """
     buffer = b""
+    dropped = 0
     try:
         while not should_stop.is_set():
             try:
@@ -92,10 +105,15 @@ def tcp_to_stdout(sock, should_stop):
                 # Process complete lines (newline-delimited JSON-RPC messages)
                 while b"\n" in buffer:
                     line, buffer = buffer.split(b"\n", 1)
-                    if line.strip():
-                        # Forward to Claude Desktop via stdout
-                        sys.stdout.buffer.write(line + b"\n")
-                        sys.stdout.buffer.flush()
+                    if not line.strip():
+                        continue
+
+                    if not is_jsonrpc(line):
+                        dropped += 1
+                        continue
+
+                    sys.stdout.buffer.write(line + b"\n")
+                    sys.stdout.buffer.flush()
 
             except socket.timeout:
                 continue  # Check should_stop flag
@@ -106,6 +124,8 @@ def tcp_to_stdout(sock, should_stop):
     except Exception as e:
         log(f"Fatal TCP→stdout error: {e}")
     finally:
+        if dropped:
+            log(f"Dropped {dropped} non-JSON-RPC line(s) from Serial Studio")
         should_stop.set()
 
 
@@ -206,7 +226,7 @@ def main():
     stdin_thread.start()
 
     log("✓ Bridge active - Claude can now control Serial Studio")
-    log(f"  Available tools: 182+ commands")
+    log("  Tools: every listed API command (tools/list)")
     log(f"  Resources: serialstudio://frame/current, serialstudio://frame/history")
 
     # Wait for threads to complete or stop signal

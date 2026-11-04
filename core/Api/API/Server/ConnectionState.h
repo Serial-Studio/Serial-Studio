@@ -62,6 +62,9 @@ struct ConnectionState {
   bool handshakeSeen  = false;
   bool firstBytesSeen = false;
 
+  // Set on the first JSON-RPC message: the connection then receives replies only (spec 0102)
+  bool mcpSession = false;
+
   // Mirror state; streamFrames defaults true so an unmodified client sees no change at all
   bool streamFrames     = true;
   bool mirrorSubscribed = false;

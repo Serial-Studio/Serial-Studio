@@ -81,7 +81,7 @@ The `gui` tier (`test_ui_automation.py`) drives the live window through the `ui.
 | `test_driver_api_comprehensive.py`   | Every driver command: UART, Network, BLE, Modbus, CAN Bus, Audio |
 | `test_new_driver_api.py`             | HID, raw USB, and Process driver commands; bus-type enumeration |
 | `test_api_drivers.py`                | Driver switching, UART/Network/BLE basics, console/export status |
-| `test_mcp.py`                        | MCP JSON-RPC 2.0: lifecycle, protocol revision negotiation, tools list with titles and annotations checked against `command_safety.json`, the omitted tools, tool-object keys, read/write calls, resources, prompts |
+| `test_mcp.py`                        | MCP JSON-RPC 2.0: lifecycle, protocol revision negotiation, tools list with titles and annotations checked against `command_safety.json`, the omitted tools, tool-object keys, read/write calls, resources, prompts, session hygiene (replies only while a device streams, push verbs refused) and the `isError` failure shape |
 | `test_licensing.py`                  | License status shape, set/activate/deactivate, concurrent connections |
 | `test_image_view.py`                 | ImageView widget: autodetect, manual mode, corrupted data |
 | `test_performance_concepts.py`       | Data rate vs. render rate decoupling, FPS range limits |
@@ -229,7 +229,7 @@ pytest tests/unit/ -v
 | `test_updates_manifest.py` | The repo-root `updates.json` appcast: one endpoint per shipped package type plus the legacy per-OS keys, URLs agreeing with each key |
 | `test_mirror_protocol.py` | The spec-0040 mirror wire contract against the recorded fixtures in `tests/fixtures/mirror/` |
 | `test_alarm_sounds.py` | The bundled sound theme under `app/rcc/sounds`: WAV format, duration caps, IEC 60601-1-8 pulse counts |
-| `test_mcp_bridge.py` | The Claude bridge from the MCP Client example against a closed port (through `SERIAL_STUDIO_API_PORT`): exit 1 within ten seconds, the Preferences fix on the last stderr line (spec 0112 AC7) |
+| `test_mcp_bridge.py` | The Claude bridge from the MCP Client example against a closed port (through `SERIAL_STUDIO_API_PORT`): exit 1 within ten seconds, the Preferences fix on the last stderr line (spec 0112 AC7); the stdout line filter that forwards only JSON-RPC |
 
 ## C++ unit tests (`app/tests/`)
 
@@ -325,9 +325,9 @@ registered suite. The suites spec 0075 added:
 | `tst_project_history` | The two-phase capture contract, nested scopes as one step, hint-over-slot precedence, the 1 s coalesce window, the 100-step and 64 MiB bounds, redo-tail truncation, save-point survival, the disabled and applying suppressions |
 | `tst_server_auth` | Token normalization and constant-time compare, the three command classifications (control-script-only, device write, script install incl. the param-gated updaters), the remote command policy's verdict-to-error mapping, the headless grant, the auth handshake and the reception caps |
 | `tst_consent_gate` | The consent gate behind every API prompt: `CONSENT_REQUIRED` while the queued prompt is pending, one prompt per decision, "no" session-only, "yes" persisted under the bound key only, the in-memory headless grant, rebind forgetting the answer |
-| `tst_client_reception` | The API receive loop under table churn: an entry erased mid-dispatch, the table rehashed mid-dispatch, single-count byte accounting, the HTTP sniff, the raw-forward handshake gate, the `CONSENT_REQUIRED` refusal |
+| `tst_client_reception` | The API receive loop under table churn: an entry erased mid-dispatch, the table rehashed mid-dispatch, single-count byte accounting, the HTTP sniff, the raw-forward handshake gate, the `CONSENT_REQUIRED` refusal, the one-time MCP session entry |
 | `tst_path_policy_registry` | Sweeps every command in `app/rcc/api/api-schema.json`: a path-shaped parameter with no declaration fails (reads the snapshot via `SS_API_SCHEMA_PATH`) |
-| `tst_server_worker_caps` | A real loopback pair with no event loop: the cap boundary, a response under cap, broadcast and mirror skipped over cap, the response lane dropping the client |
+| `tst_server_worker_caps` | A real loopback pair with no event loop: the cap boundary, a response under cap, broadcast and mirror skipped over cap, the response lane dropping the client, an MCP socket receiving replies only |
 | `tst_grpc_pending_call` | `PendingCall` dispatch, wait, abandon, timeout, and the four-handlers-parked shutdown shape |
 | `tst_sse_event_reader` | Frame splitting, CRLF carry-over, `[DONE]`, multi-line data, recoverable vs fatal parse errors |
 | `tst_redactor` | Tool-result scrubbing of key, bearer and PEM shapes; ordinary telemetry untouched |
@@ -510,7 +510,7 @@ tests/
 │   ├── test_driver_api_comprehensive.py# Every driver command (UART, Network, BLE, Modbus …)
 │   ├── test_new_driver_api.py          # HID, raw USB, Process driver APIs
 │   ├── test_api_drivers.py             # Driver switching and console/export basics
-│   ├── test_mcp.py                     # MCP JSON-RPC 2.0 protocol (tools with hints, resources)
+│   ├── test_mcp.py                     # MCP JSON-RPC 2.0 protocol (tools with hints, resources, session hygiene, isError shape)
 │   ├── test_licensing.py               # License status, set/activate/deactivate
 │   ├── test_image_view.py              # ImageView widget modes and corrupted data handling
 │   ├── test_performance_concepts.py    # Data rate vs. render rate decoupling
@@ -543,7 +543,7 @@ tests/
 │   ├── test_updates_manifest.py        # updates.json appcast shape (spec 0001)
 │   ├── test_mirror_protocol.py         # Spec-0040 mirror wire contract vs fixtures
 │   ├── test_alarm_sounds.py            # Spec-0087 sound theme: WAV format, pulse counts
-│   └── test_mcp_bridge.py              # Spec-0112 bridge failure path: exit 1, fix last
+│   └── test_mcp_bridge.py              # Spec-0112 bridge failure path: exit 1, fix last; JSON-RPC-only line filter
 │
 ├── fixtures/                           # Checked-in inputs the suites read
 │   ├── projects/legacy/*.ssproj        # One hand-written document per loader migration

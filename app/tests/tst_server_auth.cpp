@@ -111,6 +111,13 @@ public:
     ++authenticatedNotices;
   }
 
+  void enterMcpSession(QTcpSocket* socket, API::ConnectionState& state) override
+  {
+    Q_UNUSED(socket);
+    Q_UNUSED(state);
+    ++mcpEntries;
+  }
+
   void closeSocket(QTcpSocket* socket, API::ConnectionState& state) override
   {
     Q_UNUSED(socket);
@@ -133,6 +140,7 @@ public:
   bool connected                  = true;
   int closes                      = 0;
   int authenticatedNotices        = 0;
+  int mcpEntries                  = 0;
   API::ConnectionState* lastState = nullptr;
   QByteArray expectedToken;
   QList<QByteArray> responses;

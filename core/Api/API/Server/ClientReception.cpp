@@ -553,7 +553,12 @@ void API::ClientReception::handleJsonMessage(QTcpSocket* socket,
 
   if (MCP::isMCPMessage(jsonBytes)) {
     state->handshakeSeen = true;
-    const auto response  = m_host.dispatchMcp(jsonBytes, sessionId);
+    if (!state->mcpSession) {
+      state->mcpSession = true;
+      m_host.enterMcpSession(socket, *state);
+    }
+
+    const auto response = m_host.dispatchMcp(jsonBytes, sessionId);
     if (!response.isEmpty())
       m_host.sendResponse(socket, response);
 

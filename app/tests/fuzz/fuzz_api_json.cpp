@@ -92,6 +92,12 @@ public:
     Q_UNUSED(state);
   }
 
+  void enterMcpSession(QTcpSocket* socket, API::ConnectionState& state) override
+  {
+    Q_UNUSED(socket);
+    Q_UNUSED(state);
+  }
+
   void closeSocket(QTcpSocket* socket, API::ConnectionState& state) override
   {
     Q_UNUSED(socket);

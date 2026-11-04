@@ -686,6 +686,15 @@ bool API::Server::routeConnectionCommand(QTcpSocket* socket,
   SS_ASSERT_LOG(!state.sessionId.isEmpty());
 
   const auto command = json.value(QStringLiteral("command")).toString();
+  if (state.mcpSession && isConnectionCommand(command)) [[unlikely]] {
+    const auto request = CommandRequest::fromJson(json);
+    sendResponse(
+      socket,
+      CommandResponse::makeError(request.id, ErrorCode::ExecutionError, QString(MCP::kPushRefusal))
+        .toJsonBytes());
+    return true;
+  }
+
   if (MirrorCommands::isMirrorCommand(command)) {
     handleMirrorCommand(socket, state, json);
     return true;
@@ -731,6 +740,36 @@ void API::Server::clientAuthenticated(QTcpSocket* socket, const ConnectionState&
   auto* worker = static_cast<ServerWorker*>(m_worker);
   QMetaObject::invokeMethod(worker,
                             "setSocketAuthenticated",
+                            Qt::QueuedConnection,
+                            Q_ARG(QTcpSocket*, socket),
+                            Q_ARG(QString, state.sessionId));
+}
+
+/**
+ * @brief Makes @p socket an MCP session (spec 0102): releases any mirror or stream subscription it
+ *        held, then mutes every broadcast on the worker, queued ahead of the first reply.
+ *        streamFrames is left alone: only mirror.subscribe flips it (mirror.md).
+ */
+void API::Server::enterMcpSession(QTcpSocket* socket, ConnectionState& state)
+{
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT(state.mcpSession, return);
+
+  if (state.mirrorSubscribed) {
+    mirrorPublisher().unsubscribe(state.sessionId);
+    state.mirrorSubscribed = false;
+  }
+
+  if (state.streamSubscribed) {
+    state.streamSubscribed = false;
+    state.streamPending.clear();
+    refreshStreamSubscriberFlag();
+    Q_EMIT streamSubscribersChanged();
+  }
+
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(worker,
+                            "setSocketMcpSession",
                             Qt::QueuedConnection,
                             Q_ARG(QTcpSocket*, socket),
                             Q_ARG(QString, state.sessionId));
@@ -813,6 +852,15 @@ void API::Server::handleMirrorCommand(QTcpSocket* socket,
 //--------------------------------------------------------------------------------------------------
 // Typed stream-block subscription (connection-scoped, spec 0051 M6)
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Whether @p command is a connection-scoped push verb (mirror or stream), the five names an
+ *        MCP session may not use (spec 0102). The one list both MCP refusals read.
+ */
+bool API::Server::isConnectionCommand(const QString& command)
+{
+  return MirrorCommands::isMirrorCommand(command) || isStreamCommand(command);
+}
 
 /**
  * @brief Whether a command name is one of the connection-scoped stream commands. Handled here

@@ -172,7 +172,14 @@ enumerate the complete surface.
   - Same frame as `serialstudio://frame/current`, wrapped in a single-element array
   - No rolling buffer: the array holds 0 or 1 frames
 
-Resources support **subscription** for real-time updates.
+An MCP connection receives replies only: no frame broadcasts, raw device data or lifecycle
+events. Telemetry is read on request with `resources/read`, or by polling `dashboard.getData` and
+`dashboard.tailFrames`. Resources cannot be subscribed to, and the connection-scoped push commands
+(`mirror.subscribe`, `stream.subscribe`) are refused.
+
+Tool failures arrive as a successful `tools/call` result with `isError: true`. Its text blocks name
+the tool, the arguments sent and the reason, so a model can correct the call. Only protocol faults
+(an unknown tool, a missing tool name, non-object `arguments`) are JSON-RPC errors.
 
 ### 3. Prompts
 
@@ -376,7 +383,7 @@ You can now ask Claude to:
 
 **Analyze data:**
 ```
-"Subscribe to the current telemetry frame and tell me if the temperature sensor readings look anomalous"
+"Read the current telemetry frame and tell me if the temperature sensor readings look anomalous"
 ```
 
 **Control Serial Studio:**
@@ -514,7 +521,6 @@ of these and answers 2025-06-18 to any other. Supported methods:
 - ✅ `tools/list` and `tools/call`
 - ✅ Tool `title` and `annotations` (`readOnlyHint`, `destructiveHint`, `openWorldHint`)
 - ✅ `resources/list`, `resources/read`
-- ✅ `resources/subscribe`, `resources/unsubscribe`
 - ✅ `prompts/list`, `prompts/get`
 - ✅ `ping` health check
 - ✅ Notification support
@@ -537,10 +543,10 @@ assert frame["groups"][0]["datasets"][0]["value"] < 100
 ### 2. AI-Powered Anomaly Detection
 
 ```python
-# Subscribe to real-time frame updates
-client.send_request("resources/subscribe", {"uri": "serialstudio://frame/current"})
+# Poll the current frame
+frame = client.read_resource("serialstudio://frame/current")
 
-# Send each incoming frame to Claude for analysis
+# Send each frame to Claude for analysis
 # "Analyze this telemetry data and identify any anomalies..."
 ```
 

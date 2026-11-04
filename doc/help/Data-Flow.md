@@ -84,7 +84,7 @@ When CSV export, MDF4 export, the Historian, or the API server is active, every 
 - **CSV** writes one file per session under `Documents/Serial Studio/CSV/`. See [CSV Export & Playback](CSV-Export-Playback.md).
 - **MDF4 (Pro)** writes a binary measurement file suitable for automotive and high-rate workflows.
 - **Historian (Pro)** appends every frame, raw byte, and table snapshot to a per-project SQLite file that you can browse, tag, and replay later. See [Historian](Historian.md).
-- **API** on port 7777 serializes frames to JSON and broadcasts them to connected clients using MCP (JSON-RPC 2.0) or the legacy protocol. See the [API Reference](API-Reference.md).
+- **API** on port 7777 serializes frames to JSON and broadcasts them to legacy-protocol clients. An MCP (JSON-RPC 2.0) session receives replies only and reads frames on request. See the [API Reference](API-Reference.md).
 
 ## Troubleshooting data flow
 

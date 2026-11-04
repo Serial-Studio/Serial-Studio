@@ -173,6 +173,7 @@ void API::ServerWorker::closeResources()
   m_mutedSockets.clear();
   m_warnedSockets.clear();
   m_unauthenticatedSockets.clear();
+  m_mcpSockets.clear();
 
   Q_EMIT clientCountChanged(0);
 }
@@ -193,6 +194,7 @@ void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId, 
   m_streamAcks.remove(socket);
   m_mutedSockets.remove(socket);
   m_warnedSockets.remove(socket);
+  m_mcpSockets.remove(socket);
   if (authenticated)
     m_unauthenticatedSockets.remove(socket);
   else
@@ -227,6 +229,7 @@ void API::ServerWorker::removeSocket(QTcpSocket* socket)
   m_mutedSockets.remove(socket);
   m_warnedSockets.remove(socket);
   m_unauthenticatedSockets.remove(socket);
+  m_mcpSockets.remove(socket);
 
   Q_EMIT socketRemoved(socket, sessionId);
   releaseStreamAck(socket);
@@ -245,16 +248,23 @@ void API::ServerWorker::writeRawData(const QByteArray& data)
   if (data.isEmpty() || m_sockets.isEmpty())
     return;
 
+  QVector<QTcpSocket*> targets;
+  targets.reserve(m_sockets.size());
+  for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
+    auto* socket = *it;
+    if (socket && socket->isWritable() && receivesBroadcasts(socket) && underWriteCap(socket))
+      targets.append(socket);
+  }
+
+  if (targets.isEmpty())
+    return;
+
   QJsonObject object;
   object.insert(QStringLiteral("data"), QString::fromUtf8(data.toBase64()));
   const QJsonDocument document(object);
   const auto json = document.toJson(QJsonDocument::Compact) + "\n";
-
-  for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
-    auto* socket = *it;
-    if (socket && socket->isWritable() && receivesBroadcasts(socket) && underWriteCap(socket))
-      socket->write(json);
-  }
+  for (auto* socket : targets)
+    socket->write(json);
 }
 
 /**
@@ -427,16 +437,32 @@ void API::ServerWorker::setSocketAuthenticated(QTcpSocket* socket, const QString
 }
 
 /**
+ * @brief Marks @p socket an MCP session (spec 0102): it keeps its replies and loses every
+ *        broadcast. Dropped when the session id no longer matches, so a reused pointer is never
+ *        muted.
+ */
+void API::ServerWorker::setSocketMcpSession(QTcpSocket* socket, const QString& sessionId)
+{
+  SS_ASSERT(socket != nullptr, return);
+  SS_ASSERT_LOG(!sessionId.isEmpty());
+
+  if (m_sockets.value(socket) != sessionId)
+    return;
+
+  m_mcpSockets.insert(socket);
+}
+
+/**
  * @brief Whether @p socket may receive the frame, raw-byte and lifecycle broadcasts: every
- *        authenticated client. Checked before the write cap, so a held socket is never counted
- *        as a dropped broadcast.
+ *        authenticated client that is not an MCP session. Checked before the write cap, so a
+ *        held socket is never counted as a dropped broadcast.
  */
 bool API::ServerWorker::receivesBroadcasts(QTcpSocket* socket) const
 {
   SS_ASSERT(socket != nullptr, return false);
   SS_ASSERT_LOG(QThread::currentThread() == thread());
 
-  return !m_unauthenticatedSockets.contains(socket);
+  return !m_unauthenticatedSockets.contains(socket) && !m_mcpSockets.contains(socket);
 }
 
 /**

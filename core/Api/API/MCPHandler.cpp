@@ -31,6 +31,7 @@
 #include "Core/AppInfo.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/Runtime.h"
+#include "Core/SSAssert.h"
 #include "DataModel/IDashboardFrames.h"
 #include "DataModel/Project/ProjectSealing.h"
 
@@ -206,11 +207,8 @@ API::MCP::MCPResponse API::MCPHandler::processRequest(const MCP::MCPRequest& req
   if (method == MCP::Method::ResourcesRead)
     return handleResourcesRead(request);
 
-  if (method == MCP::Method::ResourcesSubscribe)
-    return handleResourcesSubscribe(request, sessionId);
-
-  if (method == MCP::Method::ResourcesUnsubscribe)
-    return handleResourcesUnsubscribe(request, sessionId);
+  if (method == MCP::Method::ResourcesSubscribe || method == MCP::Method::ResourcesUnsubscribe)
+    return refuseSubscription(request);
 
   if (method == MCP::Method::PromptsList)
     return handlePromptsList(request);
@@ -220,6 +218,100 @@ API::MCP::MCPResponse API::MCPHandler::processRequest(const MCP::MCPRequest& req
 
   return MCP::MCPResponse::makeError(
     request.id, MCP::ErrorCode::MethodNotFound, QStringLiteral("Unknown method: %1").arg(method));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Tool result shaping (spec 0102)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief One MCP text content block.
+ */
+[[nodiscard]] static QJsonObject textBlock(const QString& text)
+{
+  return QJsonObject{
+    {QStringLiteral("type"), QStringLiteral("text")},
+    {QStringLiteral("text"),                   text}
+  };
+}
+
+/**
+ * @brief The JSON type name of @p value, as a tool's input schema spells it.
+ */
+[[nodiscard]] static QString jsonTypeName(const QJsonValue& value)
+{
+  switch (value.type()) {
+    case QJsonValue::String:
+      return QStringLiteral("string");
+    case QJsonValue::Double:
+      return QStringLiteral("number");
+    case QJsonValue::Bool:
+      return QStringLiteral("boolean");
+    case QJsonValue::Object:
+      return QStringLiteral("object");
+    case QJsonValue::Array:
+      return QStringLiteral("array");
+    default:
+      return QStringLiteral("null");
+  }
+}
+
+/**
+ * @brief Adds the parameter hint a "must be" validation failure has always carried: which argument,
+ *        what it received, and a nudge when a number arrived as a string.
+ */
+static void appendParameterHint(QJsonObject& detail,
+                                const QJsonObject& arguments,
+                                const QString& errorMessage)
+{
+  if (!errorMessage.contains(QStringLiteral("must be")) || arguments.isEmpty())
+    return;
+
+  const auto argKey                       = arguments.keys().first();
+  const auto argValue                     = arguments.value(argKey);
+  detail[QStringLiteral("parameter")]     = argKey;
+  detail[QStringLiteral("receivedValue")] = argValue;
+  detail[QStringLiteral("receivedType")]  = jsonTypeName(argValue);
+  if (argValue.isString())
+    detail[QStringLiteral("suggestion")] =
+      QStringLiteral("Parameter '%1' appears to be a string but may need to be a number. "
+                     "Try passing %2 as a number.")
+        .arg(argKey, argValue.toString());
+}
+
+/**
+ * @brief The tool result for a failed or refused command: the message first, then compact JSON
+ *        with the error code, the registry and gate diagnostics, the arguments and the parameter
+ *        hint, flagged isError so the model can reason about it (MCP reserves JSON-RPC errors for
+ *        protocol faults).
+ */
+[[nodiscard]] static QJsonObject toolErrorResult(const QString& name,
+                                                 const QJsonObject& arguments,
+                                                 const API::CommandResponse& response)
+{
+  QJsonObject error;
+  error[QStringLiteral("code")]    = response.errorCode;
+  error[QStringLiteral("message")] = response.errorMessage;
+  if (!response.errorData.isEmpty())
+    error[QStringLiteral("data")] = response.errorData;
+
+  QJsonObject detail;
+  detail[QStringLiteral("error")]             = error;
+  detail[QStringLiteral("tool")]              = name;
+  detail[QStringLiteral("providedArguments")] = arguments;
+  if (!response.result.isEmpty())
+    detail[QStringLiteral("result")] = response.result;
+
+  appendParameterHint(detail, arguments, response.errorMessage);
+
+  const auto message = response.errorMessage.isEmpty()
+                       ? QStringLiteral("Command failed: %1").arg(name)
+                       : response.errorMessage;
+  const auto json    = QString::fromUtf8(QJsonDocument(detail).toJson(QJsonDocument::Compact));
+  return QJsonObject{
+    {QStringLiteral("content"), QJsonArray{textBlock(message), textBlock(json)}},
+    {QStringLiteral("isError"),                                            true}
+  };
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -252,11 +344,9 @@ API::MCP::MCPResponse API::MCPHandler::handleInitialize(const MCP::MCPRequest& r
 
   QJsonObject capabilities;
   capabilities[QStringLiteral("tools")]     = QJsonObject();
-  capabilities[QStringLiteral("resources")] = QJsonObject{
-    {QStringLiteral("subscribe"), true}
-  };
-  capabilities[QStringLiteral("prompts")] = QJsonObject();
-  result[QStringLiteral("capabilities")]  = capabilities;
+  capabilities[QStringLiteral("resources")] = QJsonObject();
+  capabilities[QStringLiteral("prompts")]   = QJsonObject();
+  result[QStringLiteral("capabilities")]    = capabilities;
 
   return MCP::MCPResponse::makeSuccess(request.id, result);
 }
@@ -287,20 +377,38 @@ API::MCP::MCPResponse API::MCPHandler::handleToolsList(const MCP::MCPRequest& re
 }
 
 /**
- * @brief Handle tools/call request
+ * @brief Handle tools/call request. Protocol faults (bad arguments shape, missing or unknown name)
+ *        stay JSON-RPC errors; a command that fails or is refused by any gate is a tool result
+ *        flagged isError (spec 0102 R2). The verdict is untouched: only its envelope changes.
  */
 API::MCP::MCPResponse API::MCPHandler::handleToolsCall(const MCP::MCPRequest& request,
                                                        const QString& sessionId)
 {
   Q_UNUSED(sessionId);
 
-  const auto name      = request.params.value(QStringLiteral("name")).toString();
-  const auto arguments = request.params.value(QStringLiteral("arguments")).toObject();
+  const auto name    = request.params.value(QStringLiteral("name")).toString();
+  const auto rawArgs = request.params.value(QStringLiteral("arguments"));
+  if (!rawArgs.isUndefined() && !rawArgs.isNull() && !rawArgs.isObject()) {
+    return MCP::MCPResponse::makeError(request.id,
+                                       MCP::ErrorCode::InvalidParams,
+                                       QStringLiteral("Tool arguments must be an object"));
+  }
 
   if (name.isEmpty()) {
     return MCP::MCPResponse::makeError(
       request.id, MCP::ErrorCode::InvalidParams, QStringLiteral("Missing tool name"));
   }
+
+  if (Server::isConnectionCommand(name)) {
+    return MCP::MCPResponse::makeSuccess(
+      request.id,
+      QJsonObject{
+        {QStringLiteral("content"), QJsonArray{textBlock(QString(MCP::kPushRefusal))}},
+        {QStringLiteral("isError"),                                              true}
+    });
+  }
+
+  const auto arguments = rawArgs.toObject();
 
   static auto& registry = CommandRegistry::instance();
   if (!registry.hasCommand(name)) {
@@ -315,41 +423,15 @@ API::MCP::MCPResponse API::MCPHandler::handleToolsCall(const MCP::MCPRequest& re
     });
   const auto response = registry.execute(name, QString(), arguments);
 
-  QJsonObject contentObj;
-  contentObj[QStringLiteral("type")] = QStringLiteral("text");
-  contentObj[QStringLiteral("text")] =
+  if (!response.success)
+    return MCP::MCPResponse::makeSuccess(request.id, toolErrorResult(name, arguments, response));
+
+  const auto text =
     QString::fromUtf8(QJsonDocument(response.result).toJson(QJsonDocument::Compact));
-
-  QJsonObject result;
-  result[QStringLiteral("content")] = QJsonArray{contentObj};
-
-  if (!response.success) {
-    QJsonObject errorData;
-    errorData[QStringLiteral("tool")]              = name;
-    errorData[QStringLiteral("providedArguments")] = arguments;
-    errorData[QStringLiteral("commandResult")]     = response.result;
-
-    if (response.errorMessage.contains(QStringLiteral("must be")) && arguments.size() > 0) {
-      const auto argKey                          = arguments.keys().first();
-      const auto argValue                        = arguments.value(argKey);
-      errorData[QStringLiteral("parameter")]     = argKey;
-      errorData[QStringLiteral("receivedValue")] = argValue;
-      errorData[QStringLiteral("receivedType")] =
-        QString::fromUtf8(argValue.toVariant().typeName());
-
-      if (argValue.isString()) {
-        errorData[QStringLiteral("suggestion")] =
-          QStringLiteral(
-            "Parameter '%1' appears to be a string but may need to be a number. Try passing %2 as integer.")
-            .arg(argKey, argValue.toString());
-      }
-    }
-
-    return MCP::MCPResponse::makeError(
-      request.id, MCP::ErrorCode::InternalError, response.errorMessage, QJsonValue(errorData));
-  }
-
-  return MCP::MCPResponse::makeSuccess(request.id, result);
+  return MCP::MCPResponse::makeSuccess(request.id,
+                                       QJsonObject{
+                                         {QStringLiteral("content"), QJsonArray{textBlock(text)}}
+  });
 }
 
 /**
@@ -429,42 +511,21 @@ API::MCP::MCPResponse API::MCPHandler::handleResourcesRead(const MCP::MCPRequest
 }
 
 /**
- * @brief Handle resources/subscribe request
+ * @brief Answers resources/subscribe and resources/unsubscribe: the server never sends update
+ *        notifications, so it no longer advertises or accepts subscription (spec 0102 R3) and
+ *        names the polling paths instead.
  */
-API::MCP::MCPResponse API::MCPHandler::handleResourcesSubscribe(const MCP::MCPRequest& request,
-                                                                const QString& sessionId)
+API::MCP::MCPResponse API::MCPHandler::refuseSubscription(const MCP::MCPRequest& request)
 {
-  const auto uri = request.params.value(QStringLiteral("uri")).toString();
+  SS_ASSERT_LOG(request.method == MCP::Method::ResourcesSubscribe
+                || request.method == MCP::Method::ResourcesUnsubscribe);
 
-  if (uri.isEmpty()) {
-    return MCP::MCPResponse::makeError(
-      request.id, MCP::ErrorCode::InvalidParams, QStringLiteral("Missing resource URI"));
-  }
-
-  auto& session = m_sessions[sessionId];
-  if (!session.subscribedResources.contains(uri))
-    session.subscribedResources.append(uri);
-
-  return MCP::MCPResponse::makeSuccess(request.id, QJsonObject());
-}
-
-/**
- * @brief Handle resources/unsubscribe request
- */
-API::MCP::MCPResponse API::MCPHandler::handleResourcesUnsubscribe(const MCP::MCPRequest& request,
-                                                                  const QString& sessionId)
-{
-  const auto uri = request.params.value(QStringLiteral("uri")).toString();
-
-  if (uri.isEmpty()) {
-    return MCP::MCPResponse::makeError(
-      request.id, MCP::ErrorCode::InvalidParams, QStringLiteral("Missing resource URI"));
-  }
-
-  auto& session = m_sessions[sessionId];
-  session.subscribedResources.removeAll(uri);
-
-  return MCP::MCPResponse::makeSuccess(request.id, QJsonObject());
+  return MCP::MCPResponse::makeError(
+    request.id,
+    MCP::ErrorCode::MethodNotFound,
+    QStringLiteral("Resource subscription is not supported. Poll resources/read "
+                   "serialstudio://frame/current, or call dashboard.getData or "
+                   "dashboard.tailFrames."));
 }
 
 /**

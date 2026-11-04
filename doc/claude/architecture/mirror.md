@@ -47,7 +47,8 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
 - `mirror.subscribe` opts the connection out of the per-frame firehose;
   **`ConnectionState::streamFrames` defaults `true`** (the legacy-client guarantee) and only
   `mirror.subscribe` may flip it — unsubscribe must not reopen the firehose. Viewer ceiling:
-  `API/MaxViewers` QSetting (0 = refuse viewers, API otherwise usable).
+  `API/MaxViewers` QSetting (0 = refuse viewers, API otherwise usable). An MCP session is muted
+  through `ConnectionState::mcpSession` and the worker's `m_mcpSockets`, never through `streamFrames`.
 
 ## Viewer side — `MirrorSession`
 
