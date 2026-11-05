@@ -368,6 +368,7 @@ void DeviceDeclarationTest::refusedLines()
 
 /**
  * @brief Code, file paths, cross-dataset ids and code-bearing widgets never reach the structure.
+ *        The note names the first eight refused keys in parse order, which ends at connection.
  */
 void DeviceDeclarationTest::codeAndPathsAreStripped()
 {
@@ -403,8 +404,8 @@ void DeviceDeclarationTest::codeAndPathsAreStripped()
   QVERIFY(!d.source.frameParserParams.contains(QStringLiteral("script")));
 
   const auto notes = d.notes.join(' ');
+  QVERIFY(notes.contains(QStringLiteral("controlScriptCode")));
   QVERIFY(notes.contains(QStringLiteral("transformCode")));
-  QVERIFY(notes.contains(QStringLiteral("frameParserCode")));
   QVERIFY(notes.contains(QStringLiteral("connection")));
   QVERIFY(notes.contains(QStringLiteral("painter")));
 }
@@ -482,7 +483,7 @@ void DeviceDeclarationTest::sanitizerBoundsValues()
 {
   const auto d = DataModel::parseDeclaration(
     oneGroup("{\"title\":\"d\",\"fftSamples\":300,\"fftWindow\":99,\"decimalPoints\":99,"
-             "\"displayFormat\":\"%n\",\"formatWidth\":8,\"formatFractionBits\":12,"
+             "\"displayFormat\":\"%n\",\"format\":1,\"formatWidth\":8,\"formatFractionBits\":12,"
              "\"fftBallisticsRelease\":1,\"color\":\"not a colour\"}"));
   QVERIFY2(d.valid, qPrintable(d.reason));
 
