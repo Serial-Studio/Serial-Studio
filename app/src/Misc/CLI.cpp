@@ -25,6 +25,7 @@
 #include <cstring>
 #include <QApplication>
 #include <QFile>
+#include <QHash>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -78,6 +79,60 @@
 #endif
 
 namespace Misc {
+
+//---------------------------------------------------------------------------------------------------
+// One-run overrides
+//---------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The application's own persisted settings, without the platform fallbacks.
+ */
+[[nodiscard]] static QHash<QString, QVariant> settingsSnapshot()
+{
+  QSettings settings;
+  settings.setFallbacksEnabled(false);
+
+  QHash<QString, QVariant> values;
+  const auto keys = settings.allKeys();
+  values.reserve(keys.size());
+  for (const auto& key : keys)
+    values.insert(key, settings.value(key));
+
+  return values;
+}
+
+/**
+ * @brief Puts every persisted setting back to @p before. The API token is kept: --api-token
+ *        provisions the machine's credential, the one flag meant to outlive the run.
+ */
+static void restoreSettings(const QHash<QString, QVariant>& before)
+{
+  QSettings settings;
+  settings.setFallbacksEnabled(false);
+
+  const auto token = QStringLiteral("API/AuthToken");
+  const auto keys  = settings.allKeys();
+  for (const auto& key : keys)
+    if (key != token && !before.contains(key))
+      settings.remove(key);
+
+  for (auto it = before.cbegin(); it != before.cend(); ++it)
+    if (it.key() != token && settings.value(it.key()) != it.value())
+      settings.setValue(it.key(), it.value());
+}
+
+/**
+ * @brief Runs @p apply so the options it sets hold for this run only: the modules keep the new
+ *        values in memory while the settings file keeps the user's own, so a one-off headless or
+ *        CI launch never reconfigures the next interactive one.
+ */
+template<typename Apply>
+static void forThisRun(Apply&& apply)
+{
+  const auto before = settingsSnapshot();
+  apply();
+  restoreSettings(before);
+}
 
 //---------------------------------------------------------------------------------------------------
 // Construction & registration
@@ -729,7 +784,7 @@ QString CLI::deploymentTitle() const
  */
 bool CLI::applyProjectAndAutoConnect(QApplication& app)
 {
-  applyApiServerOptions();
+  forThisRun([this] { applyApiServerOptions(); });
 
 #ifdef BUILD_COMMERCIAL
   if (m_deployment && !m_deployment->loadProject())
@@ -803,10 +858,9 @@ QString CLI::resolveApiToken() const
 }
 
 /**
- * @brief Applies the API-server flags. The token is pinned before external connections are
- *        opened so a headless machine is provisioned with the operator's credential rather than
- *        a freshly generated one; each flag acts only when it was passed, so an omitted flag
- *        leaves the persisted settings and the bind address exactly as they were.
+ * @brief Applies the API-server flags for this run. The token is pinned before external
+ *        connections are opened so a headless machine is provisioned with the operator's
+ *        credential rather than a freshly generated one; each flag acts only when it was passed.
  */
 void CLI::applyApiServerOptions()
 {
@@ -866,38 +920,37 @@ CLI::ProcessResult CLI::runPostRootSelfTests(QQmlEngine& engine)
 }
 
 /**
- * @brief Applies CLI dashboard FPS and point-count options if set.
+ * @brief Applies CLI dashboard FPS and point-count options, if set, for this run.
  */
 void CLI::applyVisualizationOptions()
 {
-  if (m_parser.isSet(m_opts.fpsOpt)) {
-    bool ok;
-    auto fps = m_parser.value(m_opts.fpsOpt).toUInt(&ok);
-    if (ok) {
+  forThisRun([this] {
+    bool ok = false;
+    if (m_parser.isSet(m_opts.fpsOpt)) {
+      const auto fps           = m_parser.value(m_opts.fpsOpt).toUInt(&ok);
       static auto& timerEvents = Misc::TimerEvents::instance();
-      timerEvents.setFPS(fps);
+      if (ok)
+        timerEvents.setFPS(fps);
     }
-  }
 
-  if (m_parser.isSet(m_opts.pointsOpt)) {
-    bool ok;
-    auto points = m_parser.value(m_opts.pointsOpt).toUInt(&ok);
-    if (ok) {
+    if (m_parser.isSet(m_opts.pointsOpt)) {
+      const auto points      = m_parser.value(m_opts.pointsOpt).toUInt(&ok);
       static auto& dashboard = UI::Dashboard::instance();
-      dashboard.setPoints(points);
+      if (ok)
+        dashboard.setPoints(points);
     }
-  }
+  });
 }
 
 /**
- * @brief Dispatches CLI bus configuration to the stateless bus-configuration unit. The connection
- *        manager is resolved here rather than inside that unit: main() calls this only after the
- *        composition root is built, which is what makes a plain reference safe to hand down.
+ * @brief Dispatches CLI bus configuration, for this run, to the stateless bus-configuration unit.
+ *        The connection manager is resolved here rather than inside that unit: main() calls this
+ *        only after the composition root is built, which makes a plain reference safe to hand down.
  */
 void CLI::applyBusConfiguration()
 {
   static auto& connectionManager = IO::ConnectionManager::instance();
-  CliBusConfig::apply(connectionManager, m_parser, m_opts);
+  forThisRun([this] { CliBusConfig::apply(connectionManager, m_parser, m_opts); });
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -1058,7 +1111,7 @@ void CLI::applyOperatorTaskbarSettings(const RuntimeOptions& options)
 }
 
 /**
- * @brief Activates the theme named by --theme, if any.
+ * @brief Activates the theme named by --theme, if any, for this run.
  */
 void CLI::applyThemeOverride()
 {
@@ -1079,7 +1132,7 @@ void CLI::applyThemeOverride()
     tm.setSettingsPersistent(false);
 
   if (tm.theme() != idx)
-    tm.setTheme(idx);
+    forThisRun([idx] { tm.setTheme(idx); });
 }
 
 /**
@@ -1119,29 +1172,31 @@ void CLI::applyOperatorRuntimeSettings()
 }
 
 /**
- * @brief Enables CSV/MDF4/session/console exporters when their CLI flags are set.
+ * @brief Enables CSV/MDF4/session/console exporters, for this run, when their CLI flags are set.
  */
 void CLI::applyExportToggles()
 {
-  if (m_parser.isSet(m_opts.csvExportOpt)) {
-    static auto& csvExport = CSV::Export::instance();
-    csvExport.setExportEnabled(true);
-  }
+  forThisRun([this] {
+    if (m_parser.isSet(m_opts.csvExportOpt)) {
+      static auto& csvExport = CSV::Export::instance();
+      csvExport.setExportEnabled(true);
+    }
 
-  if (m_parser.isSet(m_opts.mdfExportOpt)) {
-    static auto& mdf4Export = MDF4::Export::instance();
-    mdf4Export.setExportEnabled(true);
-  }
+    if (m_parser.isSet(m_opts.mdfExportOpt)) {
+      static auto& mdf4Export = MDF4::Export::instance();
+      mdf4Export.setExportEnabled(true);
+    }
 
-  if (m_parser.isSet(m_opts.sessionExportOpt)) {
-    static auto& sessionsExport = Sessions::Export::instance();
-    sessionsExport.setExportEnabled(true);
-  }
+    if (m_parser.isSet(m_opts.sessionExportOpt)) {
+      static auto& sessionsExport = Sessions::Export::instance();
+      sessionsExport.setExportEnabled(true);
+    }
 
-  if (m_parser.isSet(m_opts.consoleExportOpt)) {
-    static auto& consoleExport = Console::Export::instance();
-    consoleExport.setExportEnabled(true);
-  }
+    if (m_parser.isSet(m_opts.consoleExportOpt)) {
+      static auto& consoleExport = Console::Export::instance();
+      consoleExport.setExportEnabled(true);
+    }
+  });
 }
 
 //---------------------------------------------------------------------------------------------------
