@@ -400,6 +400,9 @@ def test_disabled_finding_ignores_suppressed_bands(api_client, clean_state):
 @pytest.mark.integration
 @pytest.mark.project
 def test_disabled_finding_counts_visible_only_bands(api_client, clean_state):
+    if not api_client.command("ui.window.getStatus").get("sessionActive", True):
+        pytest.skip("No dashboard session active (headless mode)")
+
     _fresh(api_client)
     if _state(api_client)["enabled"]:
         pytest.skip("master enable is on and no API can switch it off")

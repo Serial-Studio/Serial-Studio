@@ -596,11 +596,18 @@ def _window_ids(api_client) -> list:
     return [row["id"] for row in rows if isinstance(row, dict) and "id" in row]
 
 
+def _require_session(api_client) -> None:
+    """Visibility is read off a dashboard session, which a headless app never creates."""
+    if not api_client.command("ui.window.getStatus").get("sessionActive", True):
+        pytest.skip("No dashboard session active (headless mode)")
+
+
 def _load_two_workspace_project(api_client, **band_kwargs) -> tuple:
     """Workspace A shows a second group's datagrid, workspace B the EGT gauge, and A
     is active, so the EGT dataset stays hidden until a test switches to B. The main
     window shows the dashboard while a device is connected, which is what makes B's
     tab count as on screen."""
+    _require_session(api_client)
     _load_band_project(api_client, **band_kwargs)
     api_client.command(
         "project.group.add", {"title": "Other", "widgetType": GROUP_DATA_GRID}
