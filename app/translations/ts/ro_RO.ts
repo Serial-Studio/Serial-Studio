@@ -16596,7 +16596,7 @@ Adăugați etichete de controler mai sus pentru a le interoga.</translation>
     <message>
         <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="593"/>
         <source>Expect %1 within %2 ms, continue if no reply</source>
-        <translation type="unfinished">Așteptă %1 în %2 ms, continuă dacă nu primești răspuns</translation>
+        <translation>Așteptare %1 în %2 ms, continuă dacă nu există răspuns</translation>
     </message>
     <message>
         <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="596"/>

@@ -2500,7 +2500,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="591"/>
         <source>A stage passes when it keeps up with the speed a fast device needs: about a million frames per second for the data pipeline and the built-in parsers, down to 64 thousand for JavaScript with mixed data. The export and dashboard rows are for information only.</source>
-        <translation type="unfinished">एक स्टेज पास होता है जब यह एक तेज़ डिवाइस की गति के साथ तालमेल रखता है: डेटा पाइपलाइन और बिल्ट-इन पार्सर के लिए लगभग एक मिलियन फ्रेम प्रति सेकंड, JavaScript के साथ मिश्रित डेटा के लिए 64 हज़ार तक। एक्सपोर्ट और डैशबोर्ड पंक्तियाँ केवल सूचना के लिए हैं।</translation>
+        <translation>एक चरण तब पास होता है जब वह उस गति के साथ तालमेल रखता है जो एक तेज़ डिवाइस को चाहिए: डेटा पाइपलाइन और अंतर्निहित पार्सर के लिए लगभग एक मिलियन फ्रेम प्रति सेकंड, JavaScript के साथ मिश्रित डेटा के लिए 64 हज़ार तक। निर्यात और डैशबोर्ड पंक्तियाँ केवल सूचना के लिए हैं।</translation>
     </message>
     <message>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
@@ -10081,7 +10081,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="109"/>
         <source>Text sends what is typed. Number reads it as a number and refuses a value outside Min to Max before the transmit function runs.</source>
-        <translation type="unfinished">पाठ जो टाइप किया गया है वह भेजता है। संख्या इसे एक संख्या के रूप में पढ़ता है और ट्रांसमिट फ़ंक्शन चलने से पहले Min से Max के बाहर एक मान को अस्वीकार करता है।</translation>
+        <translation>Text टाइप किए गए को भेजता है। Number इसे एक संख्या के रूप में पढ़ता है और ट्रांसमिट फ़ंक्शन चलने से पहले Min से Max के बाहर एक मान को अस्वीकार करता है।</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="124"/>
@@ -10111,7 +10111,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
         <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
-        <translation type="unfinished">Min से गिनी गई निकटतम Step के लिए एक टाइप किए गए मान को स्नैप करें, रेंज जांच से पहले</translation>
+        <translation>Min से गिने गए निकटतम Step के लिए एक टाइप किए गए मान को स्नैप करें, रेंज जांच से पहले।</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="367"/>
@@ -16595,7 +16595,7 @@ Add controller tags above to poll them.</source>
     <message>
         <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="593"/>
         <source>Expect %1 within %2 ms, continue if no reply</source>
-        <translation type="unfinished">%1 की प्रत्याशा करें %2 ms के भीतर, कोई उत्तर न मिले तो जारी रखें</translation>
+        <translation>%2 ms के भीतर %1 की प्रत्याशा करें, कोई उत्तर न आने पर जारी रखें।</translation>
     </message>
     <message>
         <location filename="../../../core/Core/IO/ConnectionSequence.cpp" line="596"/>

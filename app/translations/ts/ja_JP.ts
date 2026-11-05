@@ -2500,7 +2500,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/Benchmark.qml" line="591"/>
         <source>A stage passes when it keeps up with the speed a fast device needs: about a million frames per second for the data pipeline and the built-in parsers, down to 64 thousand for JavaScript with mixed data. The export and dashboard rows are for information only.</source>
-        <translation type="unfinished">ステージは、高速デバイスが必要とする速度に対応できる場合に合格します。データパイプラインと組み込みパーサーの場合は約100万フレーム/秒、JavaScriptと混合データの場合は64,000フレーム/秒まで低下します。エクスポートとダッシュボード行は参考情報のみです。</translation>
+        <translation>ステージが合格するのは、高速デバイスが必要とする速度に対応できる場合です。データパイプラインと組み込みパーサーの場合は約100万フレーム/秒、混合データを使用するJavaScriptの場合は64,000まで低下します。エクスポートおよびダッシュボード行は参考情報のみです。</translation>
     </message>
     <message>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
