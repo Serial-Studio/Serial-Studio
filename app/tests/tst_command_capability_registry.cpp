@@ -255,6 +255,7 @@ void TstCommandCapabilityRegistry::everyArgumentDependentEntryIsCovered()
     QStringLiteral("project.group.update"),
     QStringLiteral("project.outputWidget.update"),
     QStringLiteral("project.action.update"),
+    QStringLiteral("io.uart.setSequence"),
     QStringLiteral("project.source.setProperty"),
     QStringLiteral("project.source.setProperties"),
     QStringLiteral("io.setBusType"),
