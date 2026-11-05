@@ -234,30 +234,35 @@ def test_ble_characteristic_path_guards_index_before_at():
 
 
 def test_macos_native_window_validates_qwindow_before_winid():
-    """Every QWindow -> NSView bridge sits behind a null guard on both halves: winId() on
-    a destroyed window, or an NSView that is not yet realised, crashes the GUI thread.
+    """The one QWindow -> NSWindow bridge, nsWindowOf(), checks the window, its platform
+    handle and the Cocoa platform before winId(), and every caller handles its nil: winId()
+    on a destroyed window, or a non-Cocoa window id sent a message, crashes the GUI thread.
 
     retire when: the macOS native-window layer gets a ctest (it needs a live NSWindow,
     which is why it has none today).
     """
     text = _read("core/Ui/Platform/NativeWindow_macOS.mm")
 
-    bridges = 0
-    for fn in re.split(r"\n(?=[A-Za-z_][^\n]*NativeWindow::)", text):
-        for m in re.finditer(
-            r"NSView \*(\w+) = reinterpret_cast<NSView \*>\((\w+)->winId\(\)\);", fn
-        ):
-            bridges += 1
-            view, win = m.group(1), m.group(2)
-            assert re.search(
-                r"if \(!%s[\s)|]" % win, fn[: m.start()]
-            ), f"{win}->winId() must sit behind a null guard"
-            after = fn[m.end() : m.end() + 300]
-            assert re.search(r"if \(!%s\)" % view, after) or re.search(
-                r"\b%s \?" % view, after
-            ), f"{view} must be null-checked before it is used"
+    assert text.count("->winId()") == 1, "winId() is reached only through nsWindowOf()"
+    helper = re.search(
+        r"static NSWindow \*nsWindowOf\(QWindow \*win\)\n\{[\s\S]*?\n\}", text
+    )
+    assert helper, "expected the nsWindowOf() bridge"
 
-    assert bridges, "expected at least one QWindow -> NSView bridge"
+    body = helper.group(0)
+    bridge = body.index("->winId()")
+    assert "if (!win || !win->handle())" in body[:bridge]
+    assert 'platformName() != QStringLiteral("cocoa")' in body[:bridge]
+
+    for m in re.finditer(r"NSWindow \*(\w+) = nsWindowOf\(", text):
+        after = text[m.end() : m.end() + 120]
+        assert re.search(r"if \(!?%s\)" % m.group(1), after), f"{m.group(1)} may be nil"
+
+    for name in ("applyMacOSWindowStyleToNSWindow", "applyMacOSWindowAppearance"):
+        fn = re.search(
+            r"static void %s\(NSWindow \*w[^)]*\)\n\{\n\s*if \(!w\)" % name, text
+        )
+        assert fn, f"{name}() receives nsWindowOf() directly and must handle nil"
 
 
 def test_hotpath_byte_array_ptrs_are_null_guarded():
