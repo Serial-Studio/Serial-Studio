@@ -568,6 +568,7 @@ if(BUILD_COMMERCIAL)
     qml/Widgets/Dashboard/Output/DashboardTextField.qml
     qml/Widgets/Dashboard/Output/DashboardKnob.qml
     qml/Widgets/Dashboard/Output/OutputSectionLabel.qml
+    qml/Widgets/Dashboard/Output/OutputValueControl.qml
     qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml
     qml/AI/AssistantPanel.qml
     qml/AI/AssistantPanel/AssistantTopBar.qml
