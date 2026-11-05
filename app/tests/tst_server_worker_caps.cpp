@@ -66,7 +66,9 @@ private:
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Brings up one loopback connection and hands the server side to a worker.
+ * @brief Brings up one loopback connection and hands the server side to a worker, once: adopting
+ *        a live socket twice doubles its disconnect hook, so teardown would remove it twice. The
+ *        unauthenticated-hold test is adopted unauthenticated here for that reason.
  */
 void TstServerWorkerCaps::init()
 {
@@ -82,7 +84,9 @@ void TstServerWorkerCaps::init()
 
   m_queue  = new moodycamel::ReaderWriterQueue<DataModel::DataBlockPtr>(16);
   m_worker = new API::ServerWorker(m_queue, &m_enabled, &m_queueSize);
-  m_worker->addSocket(m_serverSide, QStringLiteral("s1"), true);
+  const bool held =
+    qstrcmp(QTest::currentTestFunction(), "unauthenticatedSocketReceivesRepliesOnly") == 0;
+  m_worker->addSocket(m_serverSide, QStringLiteral("s1"), !held);
 }
 
 /**
@@ -215,8 +219,6 @@ void TstServerWorkerCaps::responsesDropTheClientOverTheCap()
  */
 void TstServerWorkerCaps::unauthenticatedSocketReceivesRepliesOnly()
 {
-  m_worker->addSocket(m_serverSide, QStringLiteral("s1"), false);
-
   QJsonObject event;
   event.insert(QStringLiteral("event"), QStringLiteral("connected"));
   const qint64 held = m_serverSide->bytesToWrite();
