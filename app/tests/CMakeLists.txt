@@ -441,7 +441,6 @@ qt_add_resources(SS_TEST_DECLARED_CONTROLS_RCC
 
 ss_add_unit_test(tst_device_declaration
   SOURCES tst_device_declaration.cpp
-          ${SS_TEST_DECLARED_CONTROLS_RCC}
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/QuickPlotFormatState.cpp
@@ -454,6 +453,7 @@ ss_add_unit_test(tst_device_declaration
           Qt6::Qml
           SerialStudio::Core
 )
+target_sources(tst_device_declaration PRIVATE ${SS_TEST_DECLARED_CONTROLS_RCC})
 target_compile_definitions(tst_device_declaration PRIVATE
   SS_DECLARATION_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/tests/golden")
 
@@ -469,7 +469,6 @@ target_compile_definitions(tst_declaration_inert PRIVATE
 
 ss_add_unit_test(tst_declared_roundtrip
   SOURCES tst_declared_roundtrip.cpp
-          ${SS_TEST_DECLARED_CONTROLS_RCC}
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/QuickPlotFormatState.cpp
@@ -484,6 +483,7 @@ ss_add_unit_test(tst_declared_roundtrip
   LIBS    Qt6::Core
           SerialStudio::Core
 )
+target_sources(tst_declared_roundtrip PRIVATE ${SS_TEST_DECLARED_CONTROLS_RCC})
 target_compile_definitions(tst_declared_roundtrip PRIVATE
   SS_DECLARATION_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/tests/golden")
 
