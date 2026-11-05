@@ -54,6 +54,7 @@ REGISTER_WAIT_SECONDS = 3.0
 TABLE_NAME = "InertTable"
 REGISTER_NAME = "level"
 REGISTER_BASELINE = 5
+REGISTER_SENTINEL = 7
 ATTACK_VALUE = 999
 
 MARKER_SNIPPET = "import sys; open(sys.argv[1], 'a').write('x')"
@@ -226,11 +227,15 @@ class Sandbox:
 
     def adopt_loaded_project(self) -> None:
         """Re-baseline after a project load; the table (if any) came with the project. The load
-        compiles the parser in the LIVE engine, where a consented launch really runs, so the
-        marker is let settle first or that launch's late write is blamed on what follows.
+        compiles the parser in the LIVE engine, where a consented launch and the attack's table
+        write really run, so the marker is let settle and the register pinned to a sentinel:
+        otherwise that write lands after the baseline, or becomes the baseline and hides a leak.
         """
-        self.has_table = self._wait_for_register()
         self._wait_for_marker_to_settle()
+        self.has_table = self._pin_register()
+        assert (
+            self.has_table or self._read_register() is None
+        ), "the sentinel never took"
         self.baseline()
 
     def _wait_for_marker_to_settle(self) -> None:
@@ -276,6 +281,27 @@ class Sandbox:
         while time.monotonic() < deadline:
             if self._read_register() == REGISTER_BASELINE:
                 return True
+
+            time.sleep(0.1)
+
+        return False
+
+    def _pin_register(self) -> bool:
+        """Writes the sentinel until it reads back, which a layout rebuild may first undo."""
+        params = {
+            "table": TABLE_NAME,
+            "name": REGISTER_NAME,
+            "value": REGISTER_SENTINEL,
+        }
+        deadline = time.monotonic() + REGISTER_WAIT_SECONDS
+        while time.monotonic() < deadline:
+            if self._read_register() == REGISTER_SENTINEL:
+                return True
+
+            try:
+                self.client.command("project.dataTable.setValue", params)
+            except APIError:
+                pass
 
             time.sleep(0.1)
 
