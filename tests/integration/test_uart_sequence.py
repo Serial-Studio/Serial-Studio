@@ -351,7 +351,7 @@ def test_sequence_round_trips_through_a_project(api_client, clean_state, temp_di
         api_client.set_operation_mode("project")
         api_client.create_new_project(title="Sequence Round Trip")
         api_client.source_update(0, busType=0)
-        api_client.source_set_property(0, "connectionSequence", PROBE_SEQUENCE)
+        api_client.command("io.uart.setSequence", {"sequence": PROBE_SEQUENCE})
 
         path = Path(temp_dir) / "sequence.ssproj"
         api_client.command("project.save", {"filePath": str(path)})
