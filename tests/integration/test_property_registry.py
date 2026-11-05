@@ -119,10 +119,12 @@ def strip_live_connection(config):
     live device discovery (BLE scan results, enumerated ports), so they are
     environment state, not document state. `treeExpansion` goes with them: the
     editor rewrites it on a debounced rebuild, keyed by the project title in
-    effect at that moment, so it depends on load timing rather than the file."""
+    effect at that moment, so it depends on load timing rather than the file.
+    `writerVersion` is the running app's version, so every release bump moved it."""
     for source in config.get("sources", []):
         source.pop("connection", None)
     config.pop("treeExpansion", None)
+    config.pop("writerVersion", None)
     return config
 
 
