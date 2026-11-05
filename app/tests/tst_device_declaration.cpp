@@ -19,12 +19,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
+#include <QColor>
 #include <QFile>
 #include <QJSEngine>
 #include <QJsonArray>
 #include <QTest>
 
 #include "Core/DataModel/FrameKeys.h"
+#include "Core/DataModel/PropertyValidators.h"
 #include "DataModel/Project/DeclaredControls.h"
 #include "DataModel/Project/DeviceDeclaration.h"
 
@@ -100,11 +102,14 @@ private slots:
 };
 
 /**
- * @brief Takes the SS_ASSERT recovery branch instead of aborting.
+ * @brief Takes the SS_ASSERT recovery branch instead of aborting, and installs the colour parser
+ *        the composition root installs, without which the sanitizer accepts any colour.
  */
 void DeviceDeclarationTest::initTestCase()
 {
   qputenv("SS_ASSERT_NONFATAL", "1");
+  DataModel::PropertyHooks::setColorValidator(
+    [](const QString& color) { return QColor::fromString(color).isValid(); });
 }
 
 /**

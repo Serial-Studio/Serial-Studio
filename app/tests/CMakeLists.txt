@@ -450,6 +450,7 @@ ss_add_unit_test(tst_device_declaration
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
   LIBS    Qt6::Core
+          Qt6::Gui
           Qt6::Qml
           SerialStudio::Core
 )
