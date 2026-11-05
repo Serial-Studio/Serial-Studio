@@ -72,7 +72,7 @@ Install **SerialStudio** from the Arduino Library Manager, or copy `firmware/ard
 #error This sketch needs version 1 of the SerialStudio library
 #endif
 
-SerialStudio studio(Serial, F("TinyGPS"));
+SerialStudio studio(Serial, "TinyGPS");
 
 void setup() { Serial.begin(115200); }
 

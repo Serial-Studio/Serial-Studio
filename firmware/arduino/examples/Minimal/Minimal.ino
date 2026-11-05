@@ -9,7 +9,7 @@
 
 #include <SerialStudio.h>
 
-SerialStudio studio(Serial, F("Minimal"));
+SerialStudio studio(Serial, "Minimal");
 
 void setup()
 {

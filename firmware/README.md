@@ -35,7 +35,7 @@ transport-agnostic: it writes bytes through a callable and takes input with `fee
 ```cpp
 #include <SerialStudio.h>
 
-SerialStudio studio(Serial, F("MPU6050"));
+SerialStudio studio(Serial, "MPU6050");
 
 void loop()
 {

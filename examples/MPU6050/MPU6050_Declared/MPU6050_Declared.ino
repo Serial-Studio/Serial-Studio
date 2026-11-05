@@ -31,7 +31,7 @@
 #endif
 
 Adafruit_MPU6050 mpu;
-SerialStudio studio(Serial, F("MPU6050"));
+SerialStudio studio(Serial, "MPU6050");
 
 void setup(void) {
   Serial.begin(115200);

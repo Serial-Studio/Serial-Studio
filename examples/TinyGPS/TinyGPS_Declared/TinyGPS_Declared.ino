@@ -31,7 +31,7 @@
 #endif
 
 TinyGPS gps;
-SerialStudio studio(Serial, F("TinyGPS"));
+SerialStudio studio(Serial, "TinyGPS");
 
 //HardwareSerial &gpsSerial = Serial1;
 SoftwareSerial gpsSerial(2, 3); // For Arduino UNO/Nano

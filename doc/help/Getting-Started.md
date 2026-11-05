@@ -109,7 +109,7 @@ If you write the firmware, the shortest path is to let the device describe its o
 ```cpp
 #include <SerialStudio.h>
 
-SerialStudio studio(Serial, F("Minimal"));
+SerialStudio studio(Serial, "Minimal");
 
 void setup() {
   Serial.begin(115200);
