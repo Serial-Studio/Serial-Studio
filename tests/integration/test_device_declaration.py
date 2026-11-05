@@ -116,7 +116,11 @@ class TestDeviceDeclaration:
         assert wait_until(api_client.is_connected), "the app never connected"
         declared_device.declare_due = True  # a device booting after the link opens
 
-        groups = wait_for_groups(api_client, 3)
+        declared = {"Accelerometer", "Gyroscope", "Temperature"}
+        wait_until(
+            lambda: declared <= {g.get("title") for g in dashboard_groups(api_client)}
+        )
+        groups = dashboard_groups(api_client)
         api_client.disconnect_device()
 
         by_title = {g.get("title"): g for g in groups}
@@ -417,6 +421,8 @@ def declared_mpu_values(api_client, binary):
         api_client.configure_network(host="127.0.0.1", port=PORT, socket_type="tcp")
         time.sleep(0.3)
         api_client.connect_device()
+        assert wait_until(api_client.is_connected), "the app never connected"
+        device.declare_due = True
 
         def seen():
             out = {}
@@ -426,7 +432,8 @@ def declared_mpu_values(api_client, binary):
             return out
 
         assert wait_until(
-            lambda: len(seen()) >= 7
+            lambda: "Temperature" in seen()
+            and len(seen()) >= 7
             and all(d.get("value") not in (None, "") for d in seen().values()),
             15.0,
         ), f"the declared dashboard never filled: {seen()}"
