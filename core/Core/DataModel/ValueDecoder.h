@@ -107,6 +107,7 @@ struct ValueDecoderSpec {
 
 namespace detail {
 
+inline constexpr double kTwoPow53 = 9007199254740992.0;
 inline constexpr double kTwoPow63 = 9223372036854775808.0;
 inline constexpr double kTwoPow64 = 18446744073709551616.0;
 
@@ -194,12 +195,22 @@ inline constexpr double kTwoPow64 = 18446744073709551616.0;
 
 /**
  * @brief Renders @p value as the shortest decimal that reads back bit-identically, straight into
- *        @p dst's buffer. Apple ships float std::to_chars only from macOS 13.3, so older targets
- *        print 15 significant digits through the C locale, the transform tail's precision.
+ *        @p dst's buffer. An exact integer prints as one on every platform, since libstdc++'s
+ *        general form writes 4000000001 as 4.000000001e+09. Apple ships float std::to_chars only
+ *        from macOS 13.3, so older targets print 15 significant digits through the C locale.
  */
 SS_FORCE_INLINE void render_number_in_place(QString& dst, double value)
 {
   char buf[32];
+  const double magnitude = std::fabs(value);
+  if (magnitude >= 1.0 && magnitude < detail::kTwoPow53 && value == std::trunc(value)) {
+    const auto res = std::to_chars(buf, buf + sizeof(buf), static_cast<long long>(value));
+    SS_ASSERT_HOTPATH(res.ec == std::errc());
+    SS_ASSERT_HOTPATH(res.ptr > buf);
+    assign_utf8_in_place(dst, QByteArrayView(buf, static_cast<qsizetype>(res.ptr - buf)));
+    return;
+  }
+
 #ifdef SS_APPLE_NO_FLOAT_TO_CHARS
   const int len = snprintf_l(buf, sizeof(buf), nullptr, "%.15g", value);
   SS_ASSERT_HOTPATH(len > 0);
