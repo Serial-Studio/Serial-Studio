@@ -106,9 +106,11 @@ static std::vector<DataModel::Group> readGroups(const QJsonObject& project)
   DataModel::Source source;
   const auto sources = project.value(Keys::Sources).toArray();
   SS_ASSERT_LOG(!sources.isEmpty());
-  if (!sources.isEmpty())
-    DataModel::read(source, sources.first().toObject());
+  if (sources.isEmpty())
+    return source;
 
+  const bool read = DataModel::read(source, sources.first().toObject());
+  SS_ASSERT_LOG(read);
   return source;
 }
 

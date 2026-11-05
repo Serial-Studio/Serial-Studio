@@ -41,13 +41,13 @@ struct Fmt {
 };
 
 struct Expect {
-  QList<QByteArray> lines;
-  QList<Outcome> outcomes;
-  int channels = -1;
-  QStringList titles;
-  QList<double> numbers;
-  QList<QByteArray> units;
-  Fmt fmt;
+  QList<QByteArray> lines = {};
+  QList<Outcome> outcomes = {};
+  int channels            = -1;
+  QStringList titles      = {};
+  QList<double> numbers   = {};
+  QList<QByteArray> units = {};
+  Fmt fmt                 = {};
 };
 
 struct StreamResult {
