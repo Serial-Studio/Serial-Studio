@@ -412,9 +412,12 @@ static void inspectStateBindings(QList<Finding>& out)
       datasetIds.insert(dataset.uniqueId);
 
   QSet<QString> variables;
-  for (const auto& table : project.tables())
+  for (const auto& table : project.tables()) {
+    const auto path =
+      DataModel::tableFullPath(project.editorTableFolders(), table.parentFolderId, table.name);
     for (const auto& reg : table.registers)
-      variables.insert(table.name + QStringLiteral("/") + reg.name);
+      variables.insert(path + QStringLiteral("/") + reg.name);
+  }
 
   for (const auto& group : project.groups()) {
     for (const auto& widget : group.outputWidgets) {

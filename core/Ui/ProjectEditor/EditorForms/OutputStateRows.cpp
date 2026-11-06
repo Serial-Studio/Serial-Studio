@@ -26,6 +26,16 @@ using enum DataModel::ProjectEditor::EditorWidget;
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief The path the table store indexes @p table by, which is what a state binding stores: a
+ *        bare name resolves nothing for a table inside a folder and is ambiguous across folders.
+ */
+[[nodiscard]] static QString storePath(const DataModel::ProjectModel& project,
+                                       const DataModel::TableDef& table)
+{
+  return DataModel::tableFullPath(project.editorTableFolders(), table.parentFolderId, table.name);
+}
+
+/**
  * @brief Labels every table variable the project defines, in picker order.
  */
 [[nodiscard]] static QStringList tableCandidates(const DataModel::ProjectModel& project)
@@ -33,7 +43,7 @@ using enum DataModel::ProjectEditor::EditorWidget;
   QStringList out;
   for (const auto& table : project.tables())
     for (const auto& reg : table.registers)
-      out.append(QStringLiteral("%1 / %2").arg(table.name, reg.name));
+      out.append(QStringLiteral("%1 / %2").arg(storePath(project, table), reg.name));
 
   return out;
 }
@@ -60,9 +70,10 @@ using enum DataModel::ProjectEditor::EditorWidget;
 {
   int index = 0;
   for (const auto& table : project.tables()) {
+    const bool bound = storePath(project, table) == widget.stateTable;
     for (const auto& reg : table.registers) {
       ++index;
-      if (table.name == widget.stateTable && reg.name == widget.stateVariable)
+      if (bound && reg.name == widget.stateVariable)
         return index;
     }
   }
@@ -304,7 +315,7 @@ static void applyTableTarget(DataModel::OutputWidget& widget,
       if (++walked != index)
         continue;
 
-      widget.stateTable    = table.name;
+      widget.stateTable    = storePath(project, table);
       widget.stateVariable = reg.name;
       return;
     }
