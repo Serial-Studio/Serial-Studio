@@ -91,8 +91,17 @@ A tier is missing between two that exist (`scripts/icon-report.py`, tier holes):
   control type, the toggle and knob hardware looks, consumers for the theme `styles` section,
   the `display` surface behind plots, the taskbar's open-tab indicator, the HDR boost on lit
   hardware, and the unit tests for AC2, AC3 and AC12.
+- [ ] A project source's live driver writes the Setup pane's saved defaults: opening a project
+  whose Modbus source uses port 5521 left `ModbusDriver/port` at 5521 for the next Quick Plot
+  session (seen 2026-11-06). The driver setters persist whoever calls them, and
+  `applyConnectionSettings` on a `DriverFactory` instance goes through those setters. Map which
+  drivers do this before choosing a fix.
 
 ## Maintainer steps
+
+- [ ] Build, then run `ctest -R tst_consent_gate` (three cases added 2026-11-06, syntax-checked
+  only), and check a second instance: with one app on 7777, `--headless --api-server --api-port
+  7801` should listen on 7801 and leave `API/Enabled` as it was.
 
 - [ ] Spec 0113: first build of the uncompiled C++ (the syntax check could not run, the compile
   database names a removed SDK), then `--dump-api-schema` and `scripts/generate-sdk.py` once
