@@ -1,0 +1,152 @@
+---
+spec: 0113-material-themes-panel-hardware
+phase: tasks
+status: draft        # not reviewed on its own; see the note under the title
+updated: 2026-11-06
+---
+
+# Tasks 0113 — Material Themes, the Millennium Theme and Panel-Hardware Controls
+
+> **Phase 3 of 4 — the ordered checklist.** Decompose [`plan.md`](./plan.md) into units that
+> are small, ordered, and *individually verifiable* — each one a coherent diff a reviewer
+> could read in isolation. `/ss-implement` works this list top to bottom and keeps the status
+> boxes current. Gate: do not start `/ss-implement` until a human marks this `approved`.
+
+> **Gate note, 2026-11-06.** The maintainer approved the spec and asked for plan, tasks and
+> implementation in one pass; that instruction reached the authoring session through its
+> coordinator. This document was not reviewed on its own before the code was written, the
+> code is uncommitted, and the design here can still be vetoed before anything lands.
+
+## Conventions
+
+- One task = one focused, reviewable change.
+- **Verify** is how the unit was confirmed in the authoring session. No C++ here was compiled:
+  `scripts/syntax-check.py` fails on untouched files too, because the compile database under
+  `build/` names an SDK directory that no longer exists. Every C++ task is therefore
+  **unverified by a compiler** until the maintainer's first build.
+- QML was checked with `qmllint`, with `code-verify.py --check --no-report`, and, for the new
+  components and the button control, by loading the real files in an offscreen Qt Quick
+  harness outside the repository with stub context objects.
+- No hotpath: no task touches the pipeline, the display tick or a cached flag.
+
+## Tasks
+
+### Stage A — theme format and the Millennium theme
+
+- [x] **T1** Theme file `app/rcc/themes/millennium.json`: complete colour table plus `fonts`,
+  `materials`, `surfaces`, `styles`, `widgets`; listed in `rcc.qrc`.
+  Verify: `pytest scripts/tests/test_material_theme.py` (30 pass).
+- [x] **T2** `ThemeCatalog`: `millennium` appended after the three existing bundled themes, and
+  a selection still stored as a list index is shifted past it in the `ThemeManager`
+  constructor, so a legacy "System" choice does not open as Millennium (R11).
+  Verify: read-back; unverified by a compiler.
+- [x] **T3** `ThemeManager`: five map properties, `applyThemeSections`, `lettering`, the
+  unknown-name warnings (R3). Verify: `clang-format`, `code-verify`; unverified by a compiler.
+- [x] **T4** Typeface: bundled, then removed on the maintainer's 2026-11-06 amendment. The
+  theme names no lettering role; `ThemeManager::lettering` stays for themes that do.
+- [x] **T5** Grain: `scripts/generate-material-tiles.py` and four PNGs (a rows tile and a
+  streaks tile, each with `@2x`); two tiles of unrelated sizes replaced the first single tile,
+  which repeated visibly. Verify: `--check` exits 0; rendered at 1400x800 in the harness.
+- [x] **T6** `MaterialSurface.qml`; `widget` surface in `WidgetDelegate.qml`, `dashboard`
+  surface in `DashboardCanvas.qml`. Verify: lint; rendered in the harness.
+- [x] **T7** Lettering on the dashboard widget caption (`MiniWindow.qml`).
+- [ ] **T8** Style rules (R8) have no consumer yet: `styles` is read and published, and no
+  control applies a radius, border, face or indicator colour from it.
+- [ ] **T9** `display` surface (black glass behind plots): declared in the theme, consumed
+  nowhere; plots need a second text colour first. The terminal is black glass by colour table.
+- [ ] **T10** `toolbar` and `taskbar` surfaces are colour-table gradients, not `MaterialSurface`
+  sites; the open-tab indicator bar and its glow are not drawn.
+- [ ] **T11** `app/tests` unit for AC2 and AC3 (catalog plus section check).
+- [x] **T11b** Colour table reworked after the maintainer's first run (2026-11-06) against the
+  three bundled and eleven published themes: pane captions dark at the top, steel table and
+  frozen headers, a lighter secondary toolbar, steel buttons, deeper alarm and series inks.
+  Verify: the theme test (22 contrast pairs). Not seen in the app: it needs a rebuild.
+- [x] **T11d** Second live pass on a running build (2026-11-06): pale console with dark text,
+  darker pressed buttons on the toolbar and the taskbar, window borders matched to the frozen
+  titles, softer grain, lighter unlit lamps, lighter cards, a brighter plot area, and
+  `PlotWidget.qml` leaves the graph background clear when the widget body has a material.
+  Verify: seen in the running app on four dashboard workspaces and the audio quick plot.
+- [x] **T11e** Third live pass (2026-11-06, maintainer watching the build): dark-steel toolbar,
+  taskbar and pane captions; steel frozen titles with bevelled edges (`widget-header`
+  surface); an `instrument` style rule (dial and bar-well face apart from the plot area,
+  stronger alarm bands) read by `InstrumentBase.qml`, `Gauge.qml`, `Meter.qml`, `Bar.qml` and
+  `BarPanel.qml`; a `flat-face` button rule read by `IconButton.qml`; a code editor theme;
+  brighter push-button enamel and lit lamps; softer near-white surfaces.
+- [x] **T11f** Hardware push buttons are the default look for a standard output button under
+  every theme (maintainer's decision, 2026-11-06); a theme opts out with
+  `"widgets": {"output": "plain"}`. This changes the three older themes' output buttons.
+- [x] **T11g** Fourth live pass: plates a little lighter, floating window captions in steel
+  (active) and aluminium (inactive), frozen titles a touch darker, borders graded after the
+  default theme's pattern (caption and toolbar borders match the toolbar separator), and the
+  bar's value mark takes `instrument.marker` instead of white.
+- [x] **T11h** Borders derived from the surface they sit on, by the rule the Mint-Y theme
+  uses (about 18 points of lightness darker on a light surface, 10 for a separator, 24 for a
+  hard edge, 6 on a dark strip); the toolbar separator and the pane caption border are set by
+  eye after the maintainer's notes. Surfaces other than toolbars and panes lifted 3 points;
+  green start-menu gradient.
+- [x] **T11i** Captions: per-device caption colours regenerated as faintly tinted steel (a
+  multi-device project paints window captions from them), and a `caption.active-lift` rule in
+  `MiniWindow.qml` makes the focused caption the lighter one over a shared bottom colour.
+  Bevel edges dropped from the dashboard plates and headers (`bevel: false` on the material);
+  pane and code editor backgrounds lifted; one colour for the toolbar and pane caption seam.
+- [x] **T11j** Neutral aluminium pass against the default theme's lightness relations; plates
+  flat (`shade`) so panels of different heights match; checked toolbar buttons take
+  `button.checked-face` and `button.checked-edge` (`IconButton.qml`,
+  `DashboardToolButton.qml`); finer, more dimensional bezels, domed push-button heads and
+  lamp lenses; a two-position selector toggles on any click.
+- [ ] **T11c** What that rework could not reach from the colour table: the command palette
+  header paints with the main toolbar keys; gauge face, bezel and plot grid all derive from
+  `widget_base` and
+  `widget_border`; a dark taskbar menu needs the `text` sites in the layout picker and the
+  annunciator moved to `start_menu_text`; the alarm flash fill hardcodes white.
+
+### Stage B — LED panel lamps
+
+- [x] **T12** `PanelBezel.qml`, `PanelLensFacets.qml`. Verify: lint; rendered in the harness.
+- [x] **T13** `LEDPanel.qml`: bezel and static halo under the existing disc, facets and
+  highlight over it, lamp tint when off; the disc stays the bloom source and the HDR target.
+  Verify: lint. Not rendered in the harness (the panel needs its C++ model).
+- [x] **T13b** Lamp rows take the control box's cell: radius 4, group box colours, 42 px tall.
+- [ ] **T14** `LedIndicator.qml` (two Project Editor views) keeps the disc.
+
+### Stage C — output controls
+
+- [x] **T15** Data model: `OutputWidgetStyle`, `OutputWidget::style`, `Keys::OutputStyle`
+  (`"outputStyle"`, written only when non-zero), `normalize` (button-only; an emergency stop
+  is always checkable). Unverified by a compiler.
+- [x] **T16** `Base::presentation` carries `style`; `Base::sendValueNow` and `submitValue`;
+  `Button` sends an emergency-stop press unpaced and starts it released. Unverified by a
+  compiler.
+- [x] **T17** `PanelLayout::minSize`: a cell tall enough for a round part.
+- [x] **T18** Project Editor: the Button Style row with the R27 notice, commit, multi-select.
+- [x] **T19** API: `style` in `project.outputWidget.get` and accepted by the update command.
+- [x] **T20** `HardwarePushButton.qml`, `HardwareEmergencyStop.qml`, `DashboardButton.qml`
+  routing. Verify: lint; the real `DashboardButton.qml` loaded in the harness, press and
+  latch exercised through a stub model.
+- [x] **T21** Help: `Output-Controls.md` (styles, R27), `Extensions.md` (theme sections),
+  `app/rcc/ai/skills/output_widgets.md`. Verify: `documentation-verify`, `term-verify`.
+- [ ] **T22** Regenerate `app/rcc/api/api-schema.json` with `--dump-api-schema` after adding
+  `style` to the two commands' descriptions, then `scripts/generate-sdk.py`. Needs a build.
+- [ ] **T23** Units for AC12 (latch, guard, unpaced press) and a `style` case in
+  `tst_frame_serialization`.
+- [ ] **T24** Lit illuminated button and emergency stop are not `HdrBoost` targets yet.
+- [ ] **T25** Toggle styles (Lever switch, Rotary selector) and the knob's hardware look.
+- [x] **T26** Selector, built as a knob style instead of a new control type (maintainer asked
+  for selector knobs with two, three or n labelled positions, 2026-11-06): `Selector` style,
+  `positionLabels` (`"outputLabels"`), one detent per Step from Min to Max, the position's
+  value goes to the transmit function; `HardwareSelector.qml`, `DashboardKnob.qml`, the Knob
+  Style and Position Labels editor rows, `style` and `labels` in the API. Compiled in the
+  maintainer's Qt Creator build; rendered in the harness with 2, 3 and 6 positions. Not yet
+  seen in the app on a real control.
+- [ ] **T26b** Selector leftovers: spring return to centre (R22), per-position state feedback
+  beyond the knob's numeric feedback (R23), unit tests (AC10, AC11), help page text.
+- [ ] **T27** The hardware looks are plain `Item`s: confirm the automation catalogue reports
+  them as buttons, or pin a role for them (`tst_ui_automation`).
+- [ ] **T28** Translations for the new strings (maintainer's `lupdate` pass).
+
+## Definition of Done
+
+- [ ] The tree builds with zero warnings and `ctest` passes.
+- [ ] AC1 screenshots match for the three older themes.
+- [ ] `sanitize-commit.py` is clean; the spec, plan and tasks land in their own commit first.
+- [ ] Every unchecked task above is done or moved to `doc/claude/TODO.md`.
