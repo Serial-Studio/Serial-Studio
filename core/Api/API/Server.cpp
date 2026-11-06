@@ -217,7 +217,9 @@ int API::Server::port() const noexcept
 }
 
 /**
- * @brief Persists a new listening port and rebinds a running server to it.
+ * @brief Persists a new listening port and binds the server to it: a running server is rebound,
+ *        and one the saved setting wants on but whose port was taken (a second instance beside
+ *        the first) comes up here, since moving off the busy port is how that is fixed.
  */
 void API::Server::setPort(const int port)
 {
@@ -228,14 +230,16 @@ void API::Server::setPort(const int port)
   m_settings.setValue("API/Port", m_port);
   Q_EMIT portChanged();
 
-  if (!m_enabled.load(std::memory_order_relaxed))
+  const bool wasEnabled = m_enabled.load(std::memory_order_relaxed);
+  if (!wasEnabled && !m_settings.value("API/Enabled", false).toBool())
     return;
 
   dropConnections();
-  if (startListening())
+  const bool listening = startListening();
+  if (listening == wasEnabled)
     return;
 
-  m_enabled.store(false, std::memory_order_relaxed);
+  m_enabled.store(listening, std::memory_order_relaxed);
   Q_EMIT enabledChanged();
 }
 
@@ -305,7 +309,9 @@ void API::Server::dropConnections()
 }
 
 /**
- * @brief Enables or disables the TCP API server.
+ * @brief Enables or disables the TCP API server. The setting records what was asked for, never a
+ *        listen that failed: a port held by another instance used to save "disabled", which
+ *        turned the API off for every later launch.
  */
 void API::Server::setEnabled(const bool enabled)
 {
@@ -341,7 +347,8 @@ void API::Server::setEnabled(const bool enabled)
   } else if (enabled != effectiveEnabled)
     Q_EMIT enabledChanged();
 
-  m_settings.setValue("API/Enabled", effectiveEnabled);
+  if (enabled == effectiveEnabled)
+    m_settings.setValue("API/Enabled", enabled);
 }
 
 /**

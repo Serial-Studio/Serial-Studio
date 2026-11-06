@@ -861,11 +861,14 @@ QString CLI::resolveApiToken() const
  * @brief Applies the API-server flags for this run. The token is pinned before external
  *        connections are opened so a headless machine is provisioned with the operator's
  *        credential rather than a freshly generated one; each flag acts only when it was passed.
+ *        The port moves before the server is enabled, so a run beside another instance never
+ *        tries the busy default first.
  */
 void CLI::applyApiServerOptions()
 {
-  const auto token = resolveApiToken();
-  if (!apiServerEnabled() && !apiExternalEnabled() && token.isEmpty())
+  const auto token   = resolveApiToken();
+  const bool hasPort = m_parser.isSet(m_opts.apiPortOpt);
+  if (!apiServerEnabled() && !apiExternalEnabled() && token.isEmpty() && !hasPort)
     return;
 
   static auto& apiServer = API::Server::instance();
@@ -876,10 +879,7 @@ void CLI::applyApiServerOptions()
   if (apiExternalEnabled())
     apiServer.allowExternalConnections();
 
-  if (apiServerEnabled())
-    apiServer.setEnabled(true);
-
-  if (m_parser.isSet(m_opts.apiPortOpt)) {
+  if (hasPort) {
     bool ok        = false;
     const int port = m_parser.value(m_opts.apiPortOpt).toInt(&ok);
     if (!ok || port < 1 || port > 65535)
@@ -888,6 +888,9 @@ void CLI::applyApiServerOptions()
     else
       apiServer.setPort(port);
   }
+
+  if (apiServerEnabled())
+    apiServer.setEnabled(true);
 }
 
 /**
