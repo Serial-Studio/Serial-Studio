@@ -43,6 +43,7 @@ API::ConsentGate::ConsentGate(QSettings& settings,
   , m_title(title)
   , m_question(question)
   , m_promptPosted(false)
+  , m_generation(0)
   , m_state(State::Unset)
 {
   rebind(settingsKey);
@@ -83,10 +84,12 @@ void API::ConsentGate::grant()
 
 /**
  * @brief Forgets the decision under the bound key, a persisted "yes" included, so the next
- *        authorize() asks again (spec 0098 R13). An empty key touches no setting.
+ *        authorize() asks again (spec 0098 R13). An empty key touches no setting. A question still
+ *        open belongs to what was revoked, so its answer is discarded.
  */
 void API::ConsentGate::revoke()
 {
+  ++m_generation;
   m_state = State::Unset;
   m_detail.clear();
 
@@ -96,10 +99,12 @@ void API::ConsentGate::revoke()
 
 /**
  * @brief Points the gate at another settings key and forgets the current decision, restoring
- *        whatever that key persisted. An empty key keeps the next decision session-only.
+ *        whatever that key persisted. An empty key keeps the next decision session-only. A
+ *        question still open was asked for the previous key, so its answer is discarded.
  */
 void API::ConsentGate::rebind(const QString& settingsKey)
 {
+  ++m_generation;
   m_key   = settingsKey;
   m_state = State::Unset;
   m_detail.clear();
@@ -148,7 +153,9 @@ API::ConsentVerdict API::ConsentGate::authorize(const QString& detail)
  * @brief Asks the user from the event loop rather than from the requesting path, and records the
  *        answer for every later request. The posted latch holds until the question is answered:
  *        the modal spins a nested event loop, and a request arriving inside it would otherwise
- *        post a second question on top of the open one.
+ *        post a second question on top of the open one. An answer counts only for the question
+ *        that was asked: a rebind, a revoke or a grant landing inside the modal discards it, or a
+ *        "yes" given to one project's request would be recorded under another's key.
  */
 void API::ConsentGate::showPrompt()
 {
@@ -157,6 +164,7 @@ void API::ConsentGate::showPrompt()
     return;
   }
 
+  const quint32 asked = m_generation;
   QString informative = m_question;
   if (!m_detail.isEmpty())
     informative += QStringLiteral("\n\n") + m_detail;
@@ -169,6 +177,9 @@ void API::ConsentGate::showPrompt()
                                                    Core::Prompt::No);
 
   m_promptPosted = false;
+  if (asked != m_generation || m_state != State::Unset)
+    return;
+
   if (answer != Core::Prompt::Yes) {
     m_state = State::Denied;
     return;

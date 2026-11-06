@@ -94,6 +94,8 @@ private slots:
   void yesOnAnEmptyKeyIsSessionOnly();
   void grantIsInMemoryAndSignals();
   void rebindForgetsTheDecision();
+  void aYesGivenAfterARebindIsDiscarded();
+  void aYesGivenAfterARevokeIsDiscarded();
   void persistedYesRestoresOnConstruction();
   void revokeForgetsAPersistedYes();
   void revokeOnAnEmptyKeyTouchesNoSetting();
@@ -295,6 +297,66 @@ void TstConsentGate::rebindForgetsTheDecision()
 
   gate.rebind(first);
   QCOMPARE(gate.authorize(), API::ConsentVerdict::Allowed);
+}
+
+/**
+ * @brief A "yes" answers the question that was asked. When the gate is rebound while the question
+ *        is open (the API loads another project), the answer grants and persists nothing, under
+ *        either key, and the next request asks again for the project now bound.
+ */
+void TstConsentGate::aYesGivenAfterARebindIsDiscarded()
+{
+  QSettings settings;
+  const auto first  = freshKey();
+  const auto second = freshKey();
+  API::ConsentGate gate(settings, first, QStringLiteral("Allow?"), QStringLiteral("Why."));
+  QSignalSpy granted(&gate, &API::ConsentGate::granted);
+
+  m_prompter.answer    = Core::Prompt::Yes;
+  m_prompter.whileOpen = [&gate, &second] {
+    gate.rebind(second);
+  };
+  QCOMPARE(gate.authorize(), API::ConsentVerdict::ConsentRequired);
+  QCoreApplication::processEvents();
+
+  QCOMPARE(m_prompter.prompts, 1);
+  QVERIFY(!gate.isGranted());
+  QVERIFY(!settings.contains(first));
+  QVERIFY(!settings.contains(second));
+  QCOMPARE(granted.count(), 0);
+
+  m_prompter.whileOpen = nullptr;
+  QCOMPARE(gate.authorize(), API::ConsentVerdict::ConsentRequired);
+  QCoreApplication::processEvents();
+  QCOMPARE(m_prompter.prompts, 2);
+  QVERIFY(gate.isGranted());
+  QVERIFY(!settings.contains(first));
+  QVERIFY(settings.value(second).toBool());
+  QCOMPARE(granted.count(), 1);
+}
+
+/**
+ * @brief A revoke landing while the question is open (a remote edit of what the project runs,
+ *        spec 0098 R13) discards the answer too: the "yes" was given to the script as it stood.
+ */
+void TstConsentGate::aYesGivenAfterARevokeIsDiscarded()
+{
+  QSettings settings;
+  const auto key = freshKey();
+  API::ConsentGate gate(settings, key, QStringLiteral("Allow?"), QStringLiteral("Why."));
+  QSignalSpy granted(&gate, &API::ConsentGate::granted);
+
+  m_prompter.answer    = Core::Prompt::Yes;
+  m_prompter.whileOpen = [&gate] {
+    gate.revoke();
+  };
+  QCOMPARE(gate.authorize(), API::ConsentVerdict::ConsentRequired);
+  QCoreApplication::processEvents();
+
+  QVERIFY(!gate.isGranted());
+  QVERIFY(!settings.contains(key));
+  QCOMPARE(granted.count(), 0);
+  QCOMPARE(gate.authorize(), API::ConsentVerdict::ConsentRequired);
 }
 
 /**

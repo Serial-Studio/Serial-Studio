@@ -81,6 +81,7 @@ private:
   QString m_detail;
   QString m_question;
   bool m_promptPosted;
+  quint32 m_generation;
   State m_state;
 };
 
