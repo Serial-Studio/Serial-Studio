@@ -374,7 +374,7 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
 <context>
     <name>API::ConsentGate</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="164"/>
+        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="175"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
@@ -526,17 +526,17 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="256"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="260"/>
         <source>Unable to start API TCP server</source>
         <translation>Kan inte starta API TCP-server</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="357"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="364"/>
         <source>Allow External API Connections?</source>
         <translation>Tillåt Externa API-anslutningar?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="358"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="365"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -561,12 +561,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1104"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1111"/>
         <source>API server</source>
         <translation>API-server</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1104"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1111"/>
         <source>Invalid pending connection</source>
         <translation>Ogiltig väntande anslutning</translation>
     </message>
@@ -9946,9 +9946,9 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Canvas-widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="122"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="186"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="270"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="133"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="281"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
@@ -10267,87 +10267,87 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Redigera Utmatningswidget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="260"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="271"/>
         <source>State Feedback</source>
         <translation>Tillståndsåterkoppling</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="271"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="282"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="272"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="283"/>
         <source>Table Variable</source>
         <translation>Tabellvariabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="276"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="287"/>
         <source>State Source</source>
         <translation>Tillståndskälla</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="278"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="289"/>
         <source>Where this control reads the state it displays. Unbound, it shows what you last set rather than what the equipment reports.</source>
         <translation>Var denna kontroll läser tillståndet den visar. Obunden visar den vad du senast angav snarare än vad utrustningen rapporterar.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="208"/>
         <source>Source</source>
         <translation>Källa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="148"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="159"/>
         <source>Reply Token</source>
         <translation>Svarstoken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="149"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="160"/>
         <source>The dataset where the device echoes the token this control sent. Leave it unbound and the control does not wait for a reply.</source>
         <translation>Datamängden där enheten ekar tillbaka den token som denna kontroll skickade. Lämna den obunden så väntar kontrollen inte på något svar.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="160"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="171"/>
         <source>Result Code</source>
         <translation>Resultatskod</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="161"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="172"/>
         <source>The dataset carrying the device's result: 0 acknowledges, anything else refuses. A reply needs both a token and a code.</source>
         <translation>Datamängden som innehåller enhetens resultat: 0 bekräftar, allt annat vägrar. Ett svar kräver både en token och en kod.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="170"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="181"/>
         <source>Reply Message</source>
         <translation>Svarsmeddelande</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="171"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="182"/>
         <source>Optional dataset with the device's text, shown beside a refusal</source>
         <translation>Valfri datamängd med enhetens text, visad bredvid ett vägrat svar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="200"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="211"/>
         <source>The dataset or table variable this control follows</source>
         <translation>Datasetet eller tabellvariabeln som denna kontroll följer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="213"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="224"/>
         <source>On Value</source>
         <translation>På-värde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="215"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="226"/>
         <source>Value that means on. Leave it empty and any non-zero number means on, which a device reporting text like RUN can never satisfy. Anything needing a threshold or a bitmask belongs in the dataset transform.</source>
         <translation>Värde som betyder på. Lämna det tomt så betyder vilket icke-noll-tal som helst på, vilket en enhet som rapporterar text som RUN aldrig kan uppfylla. Allt som behöver ett tröskelvärde eller en bitmask hör hemma i datamängdstransformeringen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="236"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="247"/>
         <source>Confirm Within (ms)</source>
         <translation>Bekräfta Inom (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="237"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="248"/>
         <source>How long the control shows a request as outstanding: the wait for the state source and for a reply to end, then it goes back to displaying what the source reports</source>
         <translation>Hur länge kontrollen visar en begäran som väntande: väntan på tillståndskällan och på att ett svar slutar, sedan återgår den till att visa vad källan rapporterar</translation>
     </message>
@@ -29164,12 +29164,12 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Varning</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="979"/>
+        <location filename="../../src/Misc/CLI.cpp" line="982"/>
         <source>Project file not found</source>
         <translation>Projektfilen hittades inte</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="980"/>
+        <location filename="../../src/Misc/CLI.cpp" line="983"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -29178,17 +29178,17 @@ Separatorparametern behövs inte längre.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="983"/>
+        <location filename="../../src/Misc/CLI.cpp" line="986"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Vill du ta bort denna genväg?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="987"/>
+        <location filename="../../src/Misc/CLI.cpp" line="990"/>
         <source>Delete Shortcut</source>
         <translation>Ta Bort Genväg</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="989"/>
+        <location filename="../../src/Misc/CLI.cpp" line="992"/>
         <source>Quit</source>
         <translation>Avsluta</translation>
     </message>

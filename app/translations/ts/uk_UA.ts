@@ -374,7 +374,7 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::ConsentGate</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="164"/>
+        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="175"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
@@ -526,17 +526,17 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="256"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="260"/>
         <source>Unable to start API TCP server</source>
         <translation>Не вдалося запустити TCP-сервер API</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="357"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="364"/>
         <source>Allow External API Connections?</source>
         <translation>Дозволити Зовнішні Підключення до API?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="358"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="365"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -561,12 +561,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1104"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1111"/>
         <source>API server</source>
         <translation>API-сервер</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1104"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1111"/>
         <source>Invalid pending connection</source>
         <translation>Недійсне очікуване підключення</translation>
     </message>
@@ -9946,9 +9946,9 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Віджет Полотна</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="122"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="186"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="270"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="133"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="281"/>
         <source>None</source>
         <translation>Немає</translation>
     </message>
@@ -10267,87 +10267,87 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Редагувати Віджет Виводу</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="260"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="271"/>
         <source>State Feedback</source>
         <translation>Зворотний Зв'язок Стану</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="271"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="282"/>
         <source>Dataset</source>
         <translation>Набір Даних</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="272"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="283"/>
         <source>Table Variable</source>
         <translation>Змінна Таблиці</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="276"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="287"/>
         <source>State Source</source>
         <translation>Джерело Стану</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="278"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="289"/>
         <source>Where this control reads the state it displays. Unbound, it shows what you last set rather than what the equipment reports.</source>
         <translation>Звідки цей елемент керування зчитує стан, який відображає. Без прив'язки показує останнє встановлене значення, а не те, що повідомляє обладнання.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="208"/>
         <source>Source</source>
         <translation>Джерело</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="148"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="159"/>
         <source>Reply Token</source>
         <translation>Токен Відповіді</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="149"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="160"/>
         <source>The dataset where the device echoes the token this control sent. Leave it unbound and the control does not wait for a reply.</source>
         <translation>Набір даних, у якому пристрій повертає токен, який надіслав цей елемент керування. Залиште його незв'язаним, і елемент керування не чекатиме відповіді.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="160"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="171"/>
         <source>Result Code</source>
         <translation>Код Результату</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="161"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="172"/>
         <source>The dataset carrying the device's result: 0 acknowledges, anything else refuses. A reply needs both a token and a code.</source>
         <translation>Набір даних, що містить результат пристрою: 0 підтверджує, будь-що інше відхиляє. Відповідь потребує як токена, так і коду.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="170"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="181"/>
         <source>Reply Message</source>
         <translation>Повідомлення Відповіді</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="171"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="182"/>
         <source>Optional dataset with the device's text, shown beside a refusal</source>
         <translation>Необов'язковий набір даних з текстом пристрою, показаний поряд із відхиленням</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="200"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="211"/>
         <source>The dataset or table variable this control follows</source>
         <translation>Набір даних або змінна таблиці, за якою слідує цей елемент керування</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="213"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="224"/>
         <source>On Value</source>
         <translation>Значення Увімкнення</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="215"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="226"/>
         <source>Value that means on. Leave it empty and any non-zero number means on, which a device reporting text like RUN can never satisfy. Anything needing a threshold or a bitmask belongs in the dataset transform.</source>
         <translation>Значення, яке означає увімкнення. Залиште порожнім, і будь-яке ненульове число означатиме увімкнення, що ніколи не задовольнить пристрій, який повідомляє текст на кшталт RUN. Все, що потребує порогу або бітової маски, належить до перетворення набору даних.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="236"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="247"/>
         <source>Confirm Within (ms)</source>
         <translation>Підтвердити Протягом (мс)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="237"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="248"/>
         <source>How long the control shows a request as outstanding: the wait for the state source and for a reply to end, then it goes back to displaying what the source reports</source>
         <translation>Як довго елемент керування показує запит як очікуваний: очікування завершення джерела стану та завершення відповіді, потім повернення до відображення того, що повідомляє джерело</translation>
     </message>
@@ -29166,12 +29166,12 @@ function parse(%1) { ... }
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="979"/>
+        <location filename="../../src/Misc/CLI.cpp" line="982"/>
         <source>Project file not found</source>
         <translation>Файл проєкту не знайдено</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="980"/>
+        <location filename="../../src/Misc/CLI.cpp" line="983"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -29180,17 +29180,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="983"/>
+        <location filename="../../src/Misc/CLI.cpp" line="986"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Видалити цей ярлик?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="987"/>
+        <location filename="../../src/Misc/CLI.cpp" line="990"/>
         <source>Delete Shortcut</source>
         <translation>Видалити Ярлик</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="989"/>
+        <location filename="../../src/Misc/CLI.cpp" line="992"/>
         <source>Quit</source>
         <translation>Вийти</translation>
     </message>

@@ -374,7 +374,7 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::ConsentGate</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="164"/>
+        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="175"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
@@ -526,17 +526,17 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="256"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="260"/>
         <source>Unable to start API TCP server</source>
         <translation>API TCP सर्वर प्रारंभ करने में असमर्थ</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="357"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="364"/>
         <source>Allow External API Connections?</source>
         <translation>बाहरी API कनेक्शन की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="358"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="365"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -561,12 +561,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1104"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1111"/>
         <source>API server</source>
         <translation>API सर्वर</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1104"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1111"/>
         <source>Invalid pending connection</source>
         <translation>अमान्य लंबित कनेक्शन</translation>
     </message>
@@ -9946,9 +9946,9 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">कैनवास विजेट</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="122"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="186"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="270"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="133"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="281"/>
         <source>None</source>
         <translation>कोई नहीं</translation>
     </message>
@@ -10267,87 +10267,87 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">आउटपुट विजेट संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="260"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="271"/>
         <source>State Feedback</source>
         <translation>स्टेट फ़ीडबैक</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="271"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="282"/>
         <source>Dataset</source>
         <translation>डेटासेट</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="272"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="283"/>
         <source>Table Variable</source>
         <translation>टेबल वेरिएबल</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="276"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="287"/>
         <source>State Source</source>
         <translation>स्टेट सोर्स</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="278"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="289"/>
         <source>Where this control reads the state it displays. Unbound, it shows what you last set rather than what the equipment reports.</source>
         <translation>यह कंट्रोल जो स्टेट प्रदर्शित करता है वह कहाँ से पढ़ता है। अनबाउंड होने पर, यह वह दिखाता है जो आपने अंतिम बार सेट किया था न कि जो उपकरण रिपोर्ट करता है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="208"/>
         <source>Source</source>
         <translation>स्रोत</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="148"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="159"/>
         <source>Reply Token</source>
         <translation>Reply Token</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="149"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="160"/>
         <source>The dataset where the device echoes the token this control sent. Leave it unbound and the control does not wait for a reply.</source>
         <translation>वह डेटासेट जहां डिवाइस इस कंट्रोल द्वारा भेजे गए टोकन को प्रतिध्वनित करता है। इसे अनबाउंड छोड़ें और कंट्रोल रिप्लाई की प्रतीक्षा नहीं करता।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="160"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="171"/>
         <source>Result Code</source>
         <translation>परिणाम कोड</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="161"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="172"/>
         <source>The dataset carrying the device's result: 0 acknowledges, anything else refuses. A reply needs both a token and a code.</source>
         <translation>डिवाइस के परिणाम को ले जाने वाली डेटासेट: 0 स्वीकार करता है, कुछ भी अन्य अस्वीकार करता है। एक रिप्लाई के लिए टोकन और कोड दोनों की आवश्यकता होती है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="170"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="181"/>
         <source>Reply Message</source>
         <translation>रिप्लाई संदेश</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="171"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="182"/>
         <source>Optional dataset with the device's text, shown beside a refusal</source>
         <translation>डिवाइस के टेक्स्ट के साथ वैकल्पिक डेटासेट, अस्वीकार के बगल में दिखाया गया</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="200"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="211"/>
         <source>The dataset or table variable this control follows</source>
         <translation>डेटासेट या टेबल वेरिएबल जिसे यह कंट्रोल फ़ॉलो करता है</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="213"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="224"/>
         <source>On Value</source>
         <translation>ऑन मान</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="215"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="226"/>
         <source>Value that means on. Leave it empty and any non-zero number means on, which a device reporting text like RUN can never satisfy. Anything needing a threshold or a bitmask belongs in the dataset transform.</source>
         <translation>मान जिसका अर्थ ऑन है। इसे खाली छोड़ें और कोई भी नॉन-ज़ीरो नंबर ऑन का अर्थ रखता है, जिसे RUN जैसे टेक्स्ट रिपोर्ट करने वाला डिवाइस कभी संतुष्ट नहीं कर सकता। थ्रेशोल्ड या बिटमास्क की आवश्यकता वाली कोई भी चीज़ डेटासेट ट्रांसफ़ॉर्म में होनी चाहिए।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="236"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="247"/>
         <source>Confirm Within (ms)</source>
         <translation>कन्फ़र्म विदिन (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="237"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="248"/>
         <source>How long the control shows a request as outstanding: the wait for the state source and for a reply to end, then it goes back to displaying what the source reports</source>
         <translation>कंट्रोल कितने समय तक एक रिक्वेस्ट को आउटस्टैंडिंग के रूप में दिखाता है: स्टेट सोर्स की प्रतीक्षा और रिप्लाई के अंत तक, फिर यह वापस सोर्स द्वारा रिपोर्ट की गई चीज़ को प्रदर्शित करता है</translation>
     </message>
@@ -29164,12 +29164,12 @@ function parse(%1) { ... }
         <translation>चेतावनी</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="979"/>
+        <location filename="../../src/Misc/CLI.cpp" line="982"/>
         <source>Project file not found</source>
         <translation>प्रोजेक्ट फ़ाइल नहीं मिली</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="980"/>
+        <location filename="../../src/Misc/CLI.cpp" line="983"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -29178,17 +29178,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="983"/>
+        <location filename="../../src/Misc/CLI.cpp" line="986"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>क्या आप यह शॉर्टकट डिलीट करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="987"/>
+        <location filename="../../src/Misc/CLI.cpp" line="990"/>
         <source>Delete Shortcut</source>
         <translation>शॉर्टकट डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="989"/>
+        <location filename="../../src/Misc/CLI.cpp" line="992"/>
         <source>Quit</source>
         <translation>बंद करें</translation>
     </message>
