@@ -16414,7 +16414,7 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -16423,69 +16423,74 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">네트워크 소켓</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Network</source>
         <translation>네트워크</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Audio</source>
         <translation>오디오</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>USB Device</source>
         <translation>USB 장치</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>HID Device</source>
         <translation>HID 장치</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Process</source>
         <translation>프로세스</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT 구독자</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="252"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>EtherNet/IP</source>
         <translation>EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="252"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="879"/>
+        <source>The device did not open</source>
+        <translation>장치가 열려 있지 않습니다</translation>
     </message>
     <message>
         <source>Your trial period has ended.</source>
@@ -16496,7 +16501,7 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">Serial Studio를 계속 사용하려면 라이선스를 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="659"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="658"/>
         <source>connection attempt failed</source>
         <translation>연결 시도 실패</translation>
     </message>
@@ -16535,6 +16540,16 @@ Add controller tags above to poll them.</source>
     <message>
         <source>Device %1</source>
         <translation type="vanished">장치 %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/ConnectionManager/BusBridge.cpp" line="216"/>
+        <source>"%1" did not connect</source>
+        <translation>"%1"이(가) 연결되지 않았습니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/ConnectionManager/BusBridge.cpp" line="217"/>
+        <source>%1. The other devices keep running.</source>
+        <translation>%1. 다른 장치들은 계속 실행 중입니다.</translation>
     </message>
 </context>
 <context>

@@ -16314,7 +16314,7 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -16323,69 +16323,74 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
         <translation type="vanished">Network Socket</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Network</source>
         <translation>Mạng</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Audio</source>
         <translation>Âm Thanh</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>USB Device</source>
         <translation>Thiết Bị USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>HID Device</source>
         <translation>Thiết Bị HID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Process</source>
         <translation>Tiến Trình</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>MQTT Subscriber</source>
         <translation>Subscriber MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="252"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="252"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="879"/>
+        <source>The device did not open</source>
+        <translation>Thiết bị không mở được</translation>
     </message>
     <message>
         <source>Your trial period has ended.</source>
@@ -16396,7 +16401,7 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
         <translation type="vanished">Để tiếp tục sử dụng Serial Studio, vui lòng kích hoạt giấy phép.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="659"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="658"/>
         <source>connection attempt failed</source>
         <translation>Nỗ lực kết nối thất bại</translation>
     </message>
@@ -16435,6 +16440,16 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
     <message>
         <source>Device %1</source>
         <translation type="vanished">Thiết Bị %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/ConnectionManager/BusBridge.cpp" line="216"/>
+        <source>"%1" did not connect</source>
+        <translation>"%1" không kết nối được</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/ConnectionManager/BusBridge.cpp" line="217"/>
+        <source>%1. The other devices keep running.</source>
+        <translation>%1. Các thiết bị khác tiếp tục chạy.</translation>
     </message>
 </context>
 <context>

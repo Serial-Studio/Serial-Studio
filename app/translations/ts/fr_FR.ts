@@ -16415,7 +16415,7 @@ Ajoutez des balises de contrôleur ci-dessus pour les interroger.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -16424,69 +16424,74 @@ Ajoutez des balises de contrôleur ci-dessus pour les interroger.</translation>
         <translation type="vanished">Socket Réseau</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Network</source>
         <translation>Réseau</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>CAN Bus</source>
         <translation>Bus CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>USB Device</source>
         <translation>Périphérique USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>HID Device</source>
         <translation>Périphérique HID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Process</source>
         <translation>Processus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>MQTT Subscriber</source>
         <translation>Abonné MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="252"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="252"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="879"/>
+        <source>The device did not open</source>
+        <translation>Le périphérique n'a pas pu s'ouvrir</translation>
     </message>
     <message>
         <source>Your trial period has ended.</source>
@@ -16497,7 +16502,7 @@ Ajoutez des balises de contrôleur ci-dessus pour les interroger.</translation>
         <translation type="vanished">Pour continuer à utiliser Serial Studio, veuillez activer votre licence.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="659"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="658"/>
         <source>connection attempt failed</source>
         <translation>échec de la tentative de connexion</translation>
     </message>
@@ -16536,6 +16541,16 @@ Ajoutez des balises de contrôleur ci-dessus pour les interroger.</translation>
     <message>
         <source>Device %1</source>
         <translation type="vanished">Périphérique %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/ConnectionManager/BusBridge.cpp" line="216"/>
+        <source>"%1" did not connect</source>
+        <translation>« %1 » n'a pas pu se connecter</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/ConnectionManager/BusBridge.cpp" line="217"/>
+        <source>%1. The other devices keep running.</source>
+        <translation>%1. Les autres périphériques continuent de fonctionner.</translation>
     </message>
 </context>
 <context>
