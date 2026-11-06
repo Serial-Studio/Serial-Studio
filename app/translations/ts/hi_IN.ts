@@ -4,7 +4,7 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="376"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="379"/>
         <source>Mixed</source>
         <translation>मिश्रित</translation>
     </message>
@@ -6504,18 +6504,21 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>%1 (फ़ॉलबैक)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="225"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="303"/>
         <source>LED Panel (%1)</source>
-        <translation>LED पैनल (%1)</translation>
+        <translation type="vanished">LED पैनल (%1)</translation>
     </message>
 </context>
 <context>
     <name>DashboardButton</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="101"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="93"/>
         <source>Send</source>
         <translation>भेजें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="140"/>
+        <source>EMERGENCY STOP</source>
+        <translation>आपातकालीन स्टॉप</translation>
     </message>
     <message>
         <source>No transmit function defined</source>
@@ -6567,17 +6570,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">फ़ॉलबैक विजेट सक्रिय हैं। पूर्ण कार्यक्षमता के लिए लाइसेंस खरीदें।</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="809"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="817"/>
         <source>Empty Workspace</source>
         <translation>खाली कार्यस्थान</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="823"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="831"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>विजेट खोजने और जोड़ने के लिए खोज बार का उपयोग करें, या किसी अन्य कार्यस्थान में विजेट पर राइट-क्लिक करके इसे यहाँ जोड़ें।</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="840"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="848"/>
         <source>Search Widgets</source>
         <translation>विजेट खोजें</translation>
     </message>
@@ -6640,32 +6643,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">कमांड दर्ज करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="156"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="157"/>
         <source>refused: %1</source>
         <translation>अस्वीकृत: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="158"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="159"/>
         <source>acknowledged</source>
         <translation>स्वीकृत</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="159"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="160"/>
         <source>unanswered</source>
         <translation>अनुत्तरित</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="160"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="161"/>
         <source>no data</source>
         <translation>कोई डेटा नहीं</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="161"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="162"/>
         <source>waiting…</source>
         <translation>प्रतीक्षा में…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="162"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="163"/>
         <source>live</source>
         <translation>लाइव</translation>
     </message>
@@ -6680,12 +6683,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="88"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="102"/>
         <source>Enter command…</source>
         <translation>कमांड दर्ज करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="128"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="152"/>
         <source>Send</source>
         <translation>भेजें</translation>
     </message>
@@ -9219,6 +9222,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
         <source>Automatic</source>
         <translation>स्वचालित</translation>
     </message>
@@ -10029,8 +10033,9 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">डिस्प्ले लेबल</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="235"/>
         <source>Button Icon</source>
-        <translation type="vanished">बटन आइकन</translation>
+        <translation>बटन आइकन</translation>
     </message>
     <message>
         <source>Colorize Icon</source>
@@ -10112,6 +10117,71 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
         <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
         <translation>Min से गिने गए निकटतम Step के लिए एक टाइप किए गए मान को स्नैप करें, रेंज जांच से पहले।</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="190"/>
+        <source>Standard</source>
+        <translation>मानक</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="191"/>
+        <source>Rotary Selector</source>
+        <translation>रोटरी सिलेक्टर</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="195"/>
+        <source>Knob Style</source>
+        <translation>नॉब शैली</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
+        <source>A rotary selector has one labelled position per Step from Min to Max</source>
+        <translation>एक रोटरी सिलेक्टर में न्यूनतम से अधिकतम तक प्रत्येक चरण के लिए एक लेबल किया गया स्थान होता है</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="208"/>
+        <source>Position Labels</source>
+        <translation>स्थान लेबल</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="209"/>
+        <source>Comma-separated, one per position (Off, Low, High)</source>
+        <translation>अल्पविराम से अलग किए गए, प्रत्येक स्थान के लिए एक (बंद, कम, उच्च)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="224"/>
+        <source>Placeholder Text</source>
+        <translation>प्लेसहोल्डर टेक्स्ट</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="225"/>
+        <source>Shown while the field is empty</source>
+        <translation>फ़ील्ड खाली होने पर दिखाया जाता है</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="229"/>
+        <source>Button Text</source>
+        <translation>बटन टेक्स्ट</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="230"/>
+        <source>Send</source>
+        <translation>भेजें</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <source>Button Color</source>
+        <translation>बटन रंग</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="261"/>
+        <source>Show Title</source>
+        <translation>शीर्षक दिखाएं</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="262"/>
+        <source>Draw the control's title and frame; turn off for a control that stands alone</source>
+        <translation>नियंत्रण का शीर्षक और फ्रेम ड्रॉ करें; अकेले खड़े नियंत्रण के लिए बंद करें</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="367"/>
@@ -12606,7 +12676,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>डेटासेट संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1460"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1482"/>
         <source>Edit Output Widget</source>
         <translation>आउटपुट विजेट संपादित करें</translation>
     </message>
@@ -13066,7 +13136,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="801"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1250"/>
         <source>Text Encoding</source>
         <translation>टेक्स्ट एन्कोडिंग</translation>
     </message>
@@ -13269,42 +13339,72 @@ Valid format: 01 A2 FF 3C</source>
         <translation>बटन, उसके आइकन और उसके कैप्शन को स्केल करता है</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1169"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Standard</source>
+        <translation>मानक</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Illuminated Push Button</source>
+        <translation>प्रकाशित पुश बटन</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Emergency Stop</source>
+        <translation>आपातकालीन रोकें</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Selector Switch</source>
+        <translation>सेलेक्टर स्विच</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1174"/>
+        <source>Button Style</source>
+        <translation>बटन शैली</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1176"/>
+        <source>What the button is. An emergency stop latches on one press and is released by a second, deliberate action. It is a command sent over the data link and never a substitute for a hardwired emergency stop. Selector Switch turns the control into a rotary selector with labelled positions.</source>
+        <translation>बटन क्या है। एक आपातकालीन रोकें एक दबाव पर लैच करता है और दूसरी, जानबूझकर कार्रवाई द्वारा जारी किया जाता है। यह डेटा लिंक पर भेजा गया एक आदेश है और कभी भी हार्डवायर्ड आपातकालीन रोकें का विकल्प नहीं है। सेलेक्टर स्विच नियंत्रण को लेबल किए गए पदों के साथ एक रोटरी सेलेक्टर में बदल देता है।</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1189"/>
         <source>Toggle Button</source>
         <translation>टॉगल बटन</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1190"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>दबा रहता है और एकल क्लिक के बजाय 1 (ऑन) / 0 (ऑफ) ट्रांसमिट करता है</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1212"/>
         <source>On Label</source>
         <translation>ऑन लेबल</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1193"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1213"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>लैच होने पर दिखाया जाने वाला कैप्शन (डिफ़ॉल्ट रूप से लेबल)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1202"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1222"/>
         <source>Off Label</source>
         <translation>ऑफ लेबल</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1203"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>रिलीज़ होने पर दिखाया जाने वाला कैप्शन (डिफ़ॉल्ट रूप से लेबल)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1239"/>
         <source>Initial Value</source>
         <translation>प्रारंभिक मान</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1251"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>कैरेक्टर एन्कोडिंग जब transmit() स्ट्रिंग मान लौटाता है</translation>
     </message>
@@ -13722,22 +13822,22 @@ Valid format: 01 A2 FF 3C</source>
     <name>EditorMultiSelect</name>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="213"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="331"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="334"/>
         <source>(multiple)</source>
         <translation>(एकाधिक)</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="227"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="345"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="348"/>
         <source>Mixed</source>
         <translation>मिश्रित</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="439"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="440"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="502"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="503"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="559"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="442"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="443"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="505"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="506"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="562"/>
         <source>Edit Selection</source>
         <translation>चयन एडिट करें</translation>
     </message>
@@ -16227,6 +16327,19 @@ Add controller tags above to poll them.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="151"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>HID उपयोग तालिकाएं (USB.org)</translation>
+    </message>
+</context>
+<context>
+    <name>HardwareEmergencyStop</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="23"/>
+        <source>EMERGENCY STOP</source>
+        <translation>आपातकालीन रोकें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="308"/>
+        <source>NOT SENT</source>
+        <translation>भेजा नहीं गया</translation>
     </message>
 </context>
 <context>
@@ -23562,7 +23675,7 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::ThemeManager</name>
     <message>
-        <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="187"/>
+        <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="190"/>
         <source>System</source>
         <translation>सिस्टम</translation>
     </message>
@@ -25961,7 +26074,7 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="845"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="853"/>
         <source>Time</source>
         <translation>समय</translation>
     </message>
@@ -26034,17 +26147,17 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">रद्द करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="846"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="854"/>
         <source>%1 from zero</source>
         <translation>शून्य से %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="872"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="880"/>
         <source>Click to place cursor</source>
         <translation>कर्सर रखने के लिए क्लिक करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="874"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="882"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>दूसरा कर्सर रखने के लिए क्लिक करें — खींचने के लिए ड्रैग करें</translation>
     </message>
@@ -29051,12 +29164,12 @@ function parse(%1) { ... }
         <translation>चेतावनी</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="926"/>
+        <location filename="../../src/Misc/CLI.cpp" line="979"/>
         <source>Project file not found</source>
         <translation>प्रोजेक्ट फ़ाइल नहीं मिली</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="927"/>
+        <location filename="../../src/Misc/CLI.cpp" line="980"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -29065,17 +29178,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="930"/>
+        <location filename="../../src/Misc/CLI.cpp" line="983"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>क्या आप यह शॉर्टकट डिलीट करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="934"/>
+        <location filename="../../src/Misc/CLI.cpp" line="987"/>
         <source>Delete Shortcut</source>
         <translation>शॉर्टकट डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="936"/>
+        <location filename="../../src/Misc/CLI.cpp" line="989"/>
         <source>Quit</source>
         <translation>बंद करें</translation>
     </message>
@@ -36545,7 +36658,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>विजेट नहीं बनाया जा सका।</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="734"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="753"/>
         <source>Device Disconnected</source>
         <translation>डिवाइस डिस्कनेक्ट हो गया</translation>
     </message>
@@ -36716,22 +36829,22 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>अस्वीकृत: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="564"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="584"/>
         <source>Enter a number from %1 to %2%3</source>
         <translation>%1 से %2%3 तक एक संख्या दर्ज करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="565"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="585"/>
         <source>Allowed range: %1 to %2%3</source>
         <translation>अनुमत रेंज: %1 से %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="642"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="662"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>ट्रांसमिट स्क्रिप्ट %1 ms के बाद टाइमआउट हो गई</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="658"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="678"/>
         <source>Payload exceeds maximum size</source>
         <translation>पेलोड अधिकतम साइज़ से अधिक है</translation>
     </message>

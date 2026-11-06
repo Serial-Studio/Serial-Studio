@@ -4,7 +4,7 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="376"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="379"/>
         <source>Mixed</source>
         <translation>מעורב</translation>
     </message>
@@ -6492,18 +6492,21 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>%1 (גיבוי)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="225"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="303"/>
         <source>LED Panel (%1)</source>
-        <translation>לוח LED (%1)</translation>
+        <translation type="vanished">לוח LED (%1)</translation>
     </message>
 </context>
 <context>
     <name>DashboardButton</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="101"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="93"/>
         <source>Send</source>
         <translation>שליחה</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="140"/>
+        <source>EMERGENCY STOP</source>
+        <translation>עצירה חירום</translation>
     </message>
     <message>
         <source>No transmit function defined</source>
@@ -6555,17 +6558,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">ווידג'טים חלופיים פעילים. רכוש רישיון לפונקציונליות מלאה.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="809"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="817"/>
         <source>Empty Workspace</source>
         <translation>סביבת עבודה ריקה</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="823"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="831"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>השתמש בשורת החיפוש כדי למצוא ולהוסיף ווידג'טים, או לחץ לחיצה ימנית על ווידג'ט בסביבת עבודה אחרת כדי להוסיף אותו לכאן.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="840"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="848"/>
         <source>Search Widgets</source>
         <translation>חיפוש ווידג'טים</translation>
     </message>
@@ -6628,32 +6631,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">הזן פקודה…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="156"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="157"/>
         <source>refused: %1</source>
         <translation>נדחה: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="158"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="159"/>
         <source>acknowledged</source>
         <translation>אושר</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="159"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="160"/>
         <source>unanswered</source>
         <translation>ללא תשובה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="160"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="161"/>
         <source>no data</source>
         <translation>אין נתונים</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="161"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="162"/>
         <source>waiting…</source>
         <translation>ממתין…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="162"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="163"/>
         <source>live</source>
         <translation>חי</translation>
     </message>
@@ -6668,12 +6671,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="88"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="102"/>
         <source>Enter command…</source>
         <translation>הזן פקודה…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="128"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="152"/>
         <source>Send</source>
         <translation>שלח</translation>
     </message>
@@ -9153,6 +9156,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
         <source>Automatic</source>
         <translation>אוטומטי</translation>
     </message>
@@ -9845,8 +9849,9 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">הצג תווית</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="235"/>
         <source>Button Icon</source>
-        <translation type="vanished">סמל כפתור</translation>
+        <translation>סמל כפתור</translation>
     </message>
     <message>
         <source>Colorize Icon</source>
@@ -9928,6 +9933,71 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
         <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
         <translation>הצמד ערך שהוקלד לה-Step הקרוב ביותר שנספר מ-Min לפני בדיקת הטווח</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="190"/>
+        <source>Standard</source>
+        <translation>סטנדרטי</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="191"/>
+        <source>Rotary Selector</source>
+        <translation>בורר סיבובי</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="195"/>
+        <source>Knob Style</source>
+        <translation>סגנון כפתור סיבוב</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
+        <source>A rotary selector has one labelled position per Step from Min to Max</source>
+        <translation>לבורר סיבובי יש עמדה אחת עם תווית לכל Step מ-Min ל-Max</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="208"/>
+        <source>Position Labels</source>
+        <translation>תוויות עמדה</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="209"/>
+        <source>Comma-separated, one per position (Off, Low, High)</source>
+        <translation>מופרדות בפסיקים, אחת לכל עמדה (Off, Low, High)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="224"/>
+        <source>Placeholder Text</source>
+        <translation>טקסט מציין מקום</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="225"/>
+        <source>Shown while the field is empty</source>
+        <translation>מוצג כאשר השדה ריק</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="229"/>
+        <source>Button Text</source>
+        <translation>טקסט כפתור</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="230"/>
+        <source>Send</source>
+        <translation>שלח</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <source>Button Color</source>
+        <translation>צבע כפתור</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="261"/>
+        <source>Show Title</source>
+        <translation>הצג כותרת</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="262"/>
+        <source>Draw the control's title and frame; turn off for a control that stands alone</source>
+        <translation>צייר את הכותרת והמסגרת של הפקד; כבה עבור פקד עצמאי</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="367"/>
@@ -12510,7 +12580,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>עריכת מערך נתונים</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1460"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1482"/>
         <source>Edit Output Widget</source>
         <translation>עריכת ווידג'ט פלט</translation>
     </message>
@@ -12970,7 +13040,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="801"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1250"/>
         <source>Text Encoding</source>
         <translation>קידוד טקסט</translation>
     </message>
@@ -13173,42 +13243,72 @@ Valid format: 01 A2 FF 3C</source>
         <translation>משנה את גודל הכפתור, הסמל שלו והכיתוב שלו</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1169"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Standard</source>
+        <translation>סטנדרטי</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Illuminated Push Button</source>
+        <translation>כפתור דחיפה מוארה</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Emergency Stop</source>
+        <translation>עצירה חירום</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Selector Switch</source>
+        <translation>מתג בורר</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1174"/>
+        <source>Button Style</source>
+        <translation>סגנון כפתור</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1176"/>
+        <source>What the button is. An emergency stop latches on one press and is released by a second, deliberate action. It is a command sent over the data link and never a substitute for a hardwired emergency stop. Selector Switch turns the control into a rotary selector with labelled positions.</source>
+        <translation type="unfinished">עצירת חירום נעולה בלחיצה אחת ומשוחררת בפעולה שנייה מכוונת. זהו פקודה המשודרת דרך קישור הנתונים ולעולם לא תחליף לעצירת חירום קשוחה. מתג בורר הופך את הפקד לבורר סיבובי עם מיקומים מתויגים.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1189"/>
         <source>Toggle Button</source>
         <translation>כפתור מתג</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1190"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>נשאר לחוץ ושולח 1 (דלוק) / 0 (כבוי) במקום לחיצה בודדת</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1212"/>
         <source>On Label</source>
         <translation>תווית דלוק</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1193"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1213"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>כיתוב המוצג כאשר נעול (ברירת מחדל לתווית)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1202"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1222"/>
         <source>Off Label</source>
         <translation>תווית כבוי</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1203"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>כיתוב בעת שחרור (ברירת מחדל: התווית)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1239"/>
         <source>Initial Value</source>
         <translation>ערך התחלתי</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1251"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>קידוד תווים המשמש כאשר transmit() מחזירה ערך מחרוזת</translation>
     </message>
@@ -13626,22 +13726,22 @@ Valid format: 01 A2 FF 3C</source>
     <name>EditorMultiSelect</name>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="213"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="331"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="334"/>
         <source>(multiple)</source>
         <translation>(מרובים)</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="227"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="345"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="348"/>
         <source>Mixed</source>
         <translation>מעורב</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="439"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="440"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="502"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="503"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="559"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="442"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="443"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="505"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="506"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="562"/>
         <source>Edit Selection</source>
         <translation>ערוך בחירה</translation>
     </message>
@@ -16127,6 +16227,19 @@ Add controller tags above to poll them.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="151"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>טבלאות שימוש HID (USB.org)</translation>
+    </message>
+</context>
+<context>
+    <name>HardwareEmergencyStop</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="23"/>
+        <source>EMERGENCY STOP</source>
+        <translation>עצירה חירום</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="308"/>
+        <source>NOT SENT</source>
+        <translation>לא נשלח</translation>
     </message>
 </context>
 <context>
@@ -23064,7 +23177,7 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::ThemeManager</name>
     <message>
-        <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="187"/>
+        <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="190"/>
         <source>System</source>
         <translation>מערכת</translation>
     </message>
@@ -25443,7 +25556,7 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="845"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="853"/>
         <source>Time</source>
         <translation>זמן</translation>
     </message>
@@ -25516,17 +25629,17 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">ביטול</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="846"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="854"/>
         <source>%1 from zero</source>
         <translation>%1 מאפס</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="872"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="880"/>
         <source>Click to place cursor</source>
         <translation>לחץ למיקום סמן</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="874"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="882"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>לחץ למיקום סמן שני — גרור להזזה</translation>
     </message>
@@ -28188,12 +28301,12 @@ Reload it?</source>
         <translation>אזהרה</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="926"/>
+        <location filename="../../src/Misc/CLI.cpp" line="979"/>
         <source>Project file not found</source>
         <translation>קובץ הפרויקט לא נמצא</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="927"/>
+        <location filename="../../src/Misc/CLI.cpp" line="980"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -28202,17 +28315,17 @@ Reload it?</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="930"/>
+        <location filename="../../src/Misc/CLI.cpp" line="983"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>האם למחוק את קיצור הדרך?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="934"/>
+        <location filename="../../src/Misc/CLI.cpp" line="987"/>
         <source>Delete Shortcut</source>
         <translation>מחק קיצור דרך</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="936"/>
+        <location filename="../../src/Misc/CLI.cpp" line="989"/>
         <source>Quit</source>
         <translation>יציאה</translation>
     </message>
@@ -35857,7 +35970,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>לא ניתן היה ליצור את ה-Widget.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="734"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="753"/>
         <source>Device Disconnected</source>
         <translation>התקן מנותק</translation>
     </message>
@@ -36028,22 +36141,22 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>סורב: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="564"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="584"/>
         <source>Enter a number from %1 to %2%3</source>
         <translation>הזן מספר בין %1 ל-%2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="565"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="585"/>
         <source>Allowed range: %1 to %2%3</source>
         <translation>טווח מותר: %1 עד %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="642"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="662"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>תסריט שידור פג זמן לאחר %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="658"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="678"/>
         <source>Payload exceeds maximum size</source>
         <translation>מטען חורג מהגודל המרבי</translation>
     </message>

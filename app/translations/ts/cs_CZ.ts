@@ -4,7 +4,7 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="376"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="379"/>
         <source>Mixed</source>
         <translation>Smíšené</translation>
     </message>
@@ -6504,18 +6504,21 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>%1 (Záložní)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="225"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="303"/>
         <source>LED Panel (%1)</source>
-        <translation>LED Panel (%1)</translation>
+        <translation type="vanished">LED Panel (%1)</translation>
     </message>
 </context>
 <context>
     <name>DashboardButton</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="101"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="93"/>
         <source>Send</source>
         <translation>Odeslat</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="140"/>
+        <source>EMERGENCY STOP</source>
+        <translation>NOUZOVÉ ZASTAVENÍ</translation>
     </message>
     <message>
         <source>No transmit function defined</source>
@@ -6567,17 +6570,17 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Aktivní jsou záložní widgety. Zakupte licenci pro plnou funkčnost.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="809"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="817"/>
         <source>Empty Workspace</source>
         <translation>Prázdný Pracovní Prostor</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="823"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="831"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Použijte vyhledávací lištu k nalezení a přidání widgetů, nebo klikněte pravým tlačítkem na widget v jiném pracovním prostoru a přidejte jej sem.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="840"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="848"/>
         <source>Search Widgets</source>
         <translation>Hledat Widgety</translation>
     </message>
@@ -6640,32 +6643,32 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Zadejte příkaz…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="156"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="157"/>
         <source>refused: %1</source>
         <translation>odmítnuto: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="158"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="159"/>
         <source>acknowledged</source>
         <translation>potvrzeno</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="159"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="160"/>
         <source>unanswered</source>
         <translation>bez odpovědi</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="160"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="161"/>
         <source>no data</source>
         <translation>žádná data</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="161"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="162"/>
         <source>waiting…</source>
         <translation>čekání…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="162"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="163"/>
         <source>live</source>
         <translation>živě</translation>
     </message>
@@ -6680,12 +6683,12 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="88"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="102"/>
         <source>Enter command…</source>
         <translation>Zadejte příkaz…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="128"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="152"/>
         <source>Send</source>
         <translation>Odeslat</translation>
     </message>
@@ -9219,6 +9222,7 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
         <source>Automatic</source>
         <translation>Automaticky</translation>
     </message>
@@ -10029,8 +10033,9 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Zobrazit popisek</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="235"/>
         <source>Button Icon</source>
-        <translation type="vanished">Ikona Tlačítka</translation>
+        <translation>Ikona Tlačítka</translation>
     </message>
     <message>
         <source>Colorize Icon</source>
@@ -10112,6 +10117,71 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
         <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
         <translation>Přichytit zadanou hodnotu na nejbližší Krok počítaný od Min před kontrolou rozsahu</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="190"/>
+        <source>Standard</source>
+        <translation>Standardní</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="191"/>
+        <source>Rotary Selector</source>
+        <translation>Otočný Výběr</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="195"/>
+        <source>Knob Style</source>
+        <translation>Styl Otočného Ovladače</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
+        <source>A rotary selector has one labelled position per Step from Min to Max</source>
+        <translation>Otočný výběr má jednu označenou pozici na Krok od Min do Max</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="208"/>
+        <source>Position Labels</source>
+        <translation>Označení Pozic</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="209"/>
+        <source>Comma-separated, one per position (Off, Low, High)</source>
+        <translation>Odděleno čárkami, jedno na pozici (Vypnuto, Nízko, Vysoko)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="224"/>
+        <source>Placeholder Text</source>
+        <translation>Text Zástupného Symbolu</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="225"/>
+        <source>Shown while the field is empty</source>
+        <translation>Zobrazeno, když je pole prázdné</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="229"/>
+        <source>Button Text</source>
+        <translation>Text Tlačítka</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="230"/>
+        <source>Send</source>
+        <translation>Odeslat</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <source>Button Color</source>
+        <translation>Barva Tlačítka</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="261"/>
+        <source>Show Title</source>
+        <translation>Zobrazit Název</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="262"/>
+        <source>Draw the control's title and frame; turn off for a control that stands alone</source>
+        <translation>Nakreslit název ovládacího prvku a rámec; vypnout pro ovládací prvek, který stojí samostatně</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="367"/>
@@ -12606,7 +12676,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Upravit Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1460"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1482"/>
         <source>Edit Output Widget</source>
         <translation>Upravit Výstupní Widget</translation>
     </message>
@@ -13066,7 +13136,7 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="801"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1250"/>
         <source>Text Encoding</source>
         <translation>Kódování Textu</translation>
     </message>
@@ -13269,42 +13339,72 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Škáluje tlačítko, jeho ikonu a popisek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1169"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Standard</source>
+        <translation>Standardní</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Illuminated Push Button</source>
+        <translation>Osvětlené Tlačítko</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Emergency Stop</source>
+        <translation>NOUZOVÉ ZASTAVENÍ</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Selector Switch</source>
+        <translation>Přepínač Voliče</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1174"/>
+        <source>Button Style</source>
+        <translation>Styl Tlačítka</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1176"/>
+        <source>What the button is. An emergency stop latches on one press and is released by a second, deliberate action. It is a command sent over the data link and never a substitute for a hardwired emergency stop. Selector Switch turns the control into a rotary selector with labelled positions.</source>
+        <translation>Co tlačítko dělá. Nouzové zastavení se aktivuje jedním stisknutím a uvolní se druhým, záměrným působením. Jedná se o příkaz odeslaný přes datový spoj a nikdy není náhradou za pevně zapojeného nouzového zastavení. Přepínač Voliče změní ovládací prvek na rotační volič s označenými pozicemi.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1189"/>
         <source>Toggle Button</source>
         <translation>Přepínací Tlačítko</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1190"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>Zůstat stisknuté a přenášet 1 (zap) / 0 (vyp) místo jednoho kliknutí</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1212"/>
         <source>On Label</source>
         <translation>Popisek Zap</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1193"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1213"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>Popisek zobrazený při zajištění (výchozí je popisek)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1202"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1222"/>
         <source>Off Label</source>
         <translation>Popisek Vyp</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1203"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>Titulek zobrazený při uvolnění (výchozí je popisek)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1239"/>
         <source>Initial Value</source>
         <translation>Počáteční Hodnota</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1251"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Kódování znaků použité, když transmit() vrací řetězcovou hodnotu</translation>
     </message>
@@ -13722,22 +13822,22 @@ Platný formát: 01 A2 FF 3C</translation>
     <name>EditorMultiSelect</name>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="213"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="331"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="334"/>
         <source>(multiple)</source>
         <translation>(více)</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="227"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="345"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="348"/>
         <source>Mixed</source>
         <translation>Smíšené</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="439"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="440"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="502"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="503"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="559"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="442"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="443"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="505"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="506"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="562"/>
         <source>Edit Selection</source>
         <translation>Upravit Výběr</translation>
     </message>
@@ -16228,6 +16328,19 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="151"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>Tabulky Použití HID (USB.org)</translation>
+    </message>
+</context>
+<context>
+    <name>HardwareEmergencyStop</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="23"/>
+        <source>EMERGENCY STOP</source>
+        <translation>NOUZOVÉ ZASTAVENÍ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="308"/>
+        <source>NOT SENT</source>
+        <translation>NEODESLANO</translation>
     </message>
 </context>
 <context>
@@ -23563,7 +23676,7 @@ Chcete otevřít stránku pro stažení?</translation>
 <context>
     <name>Misc::ThemeManager</name>
     <message>
-        <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="187"/>
+        <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="190"/>
         <source>System</source>
         <translation>Systém</translation>
     </message>
@@ -25962,7 +26075,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="845"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="853"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
@@ -26035,17 +26148,17 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation type="vanished">Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="846"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="854"/>
         <source>%1 from zero</source>
         <translation>%1 od nuly</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="872"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="880"/>
         <source>Click to place cursor</source>
         <translation>Kliknutím umístit kurzor</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="874"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="882"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>Kliknutím umístit druhý kurzor — Přetažením posunout</translation>
     </message>
@@ -29053,12 +29166,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="926"/>
+        <location filename="../../src/Misc/CLI.cpp" line="979"/>
         <source>Project file not found</source>
         <translation>Soubor projektu nenalezen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="927"/>
+        <location filename="../../src/Misc/CLI.cpp" line="980"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -29067,17 +29180,17 @@ Parametr oddělovače již není potřeba.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="930"/>
+        <location filename="../../src/Misc/CLI.cpp" line="983"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Chcete tento zástupce smazat?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="934"/>
+        <location filename="../../src/Misc/CLI.cpp" line="987"/>
         <source>Delete Shortcut</source>
         <translation>Smazat Zástupce</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="936"/>
+        <location filename="../../src/Misc/CLI.cpp" line="989"/>
         <source>Quit</source>
         <translation>Ukončit</translation>
     </message>
@@ -36549,7 +36662,7 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
         <translation>Widget nelze vytvořit.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="734"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="753"/>
         <source>Device Disconnected</source>
         <translation>Zařízení Odpojeno</translation>
     </message>
@@ -36720,22 +36833,22 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
         <translation>Odmítnuto: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="564"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="584"/>
         <source>Enter a number from %1 to %2%3</source>
         <translation>Zadejte číslo od %1 do %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="565"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="585"/>
         <source>Allowed range: %1 to %2%3</source>
         <translation>Povolený rozsah: %1 až %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="642"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="662"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>Časový limit skriptu přenosu vypršel po %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="658"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="678"/>
         <source>Payload exceeds maximum size</source>
         <translation>Datová část překračuje maximální velikost</translation>
     </message>

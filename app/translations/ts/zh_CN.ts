@@ -4,7 +4,7 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="376"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="379"/>
         <source>Mixed</source>
         <translation>混合</translation>
     </message>
@@ -6504,18 +6504,21 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>%1(备用)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="225"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="303"/>
         <source>LED Panel (%1)</source>
-        <translation>LED 面板 (%1)</translation>
+        <translation type="vanished">LED 面板 (%1)</translation>
     </message>
 </context>
 <context>
     <name>DashboardButton</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="101"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="93"/>
         <source>Send</source>
         <translation>发送</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="140"/>
+        <source>EMERGENCY STOP</source>
+        <translation>紧急停止</translation>
     </message>
     <message>
         <source>No transmit function defined</source>
@@ -6567,17 +6570,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">后备控件已激活。购买许可证以获得完整功能。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="809"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="817"/>
         <source>Empty Workspace</source>
         <translation>空工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="823"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="831"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>使用搜索栏查找并添加控件,或右键单击其他工作区中的控件以将其添加到此处。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="840"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="848"/>
         <source>Search Widgets</source>
         <translation>搜索控件</translation>
     </message>
@@ -6640,32 +6643,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">输入命令…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="156"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="157"/>
         <source>refused: %1</source>
         <translation>已拒绝：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="158"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="159"/>
         <source>acknowledged</source>
         <translation>已确认</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="159"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="160"/>
         <source>unanswered</source>
         <translation>未应答</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="160"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="161"/>
         <source>no data</source>
         <translation>无数据</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="161"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="162"/>
         <source>waiting…</source>
         <translation>等待中…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="162"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="163"/>
         <source>live</source>
         <translation>实时</translation>
     </message>
@@ -6680,12 +6683,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="88"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="102"/>
         <source>Enter command…</source>
         <translation>输入命令…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="128"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="152"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
@@ -9219,6 +9222,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
         <source>Automatic</source>
         <translation>自动</translation>
     </message>
@@ -10029,8 +10033,9 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">显示标签</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="235"/>
         <source>Button Icon</source>
-        <translation type="vanished">按钮图标</translation>
+        <translation>按钮图标</translation>
     </message>
     <message>
         <source>Colorize Icon</source>
@@ -10112,6 +10117,71 @@ Add %4 dataset(s) using the template's defaults?</source>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
         <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
         <translation>将键入的值对齐到从最小值开始计数的最近步长，然后进行范围检查</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="190"/>
+        <source>Standard</source>
+        <translation>标准</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="191"/>
+        <source>Rotary Selector</source>
+        <translation>旋转选择器</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="195"/>
+        <source>Knob Style</source>
+        <translation>旋钮样式</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
+        <source>A rotary selector has one labelled position per Step from Min to Max</source>
+        <translation>旋转选择器在从最小值到最大值的每个步长处有一个标记位置</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="208"/>
+        <source>Position Labels</source>
+        <translation>位置标签</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="209"/>
+        <source>Comma-separated, one per position (Off, Low, High)</source>
+        <translation>逗号分隔，每个位置一个（关闭、低、高）</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="224"/>
+        <source>Placeholder Text</source>
+        <translation>占位符文本</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="225"/>
+        <source>Shown while the field is empty</source>
+        <translation>在字段为空时显示</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="229"/>
+        <source>Button Text</source>
+        <translation>按钮文本</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="230"/>
+        <source>Send</source>
+        <translation>发送</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <source>Button Color</source>
+        <translation>按钮颜色</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="261"/>
+        <source>Show Title</source>
+        <translation>显示标题</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="262"/>
+        <source>Draw the control's title and frame; turn off for a control that stands alone</source>
+        <translation>绘制控件的标题和边框；对于独立的控件，请关闭此选项</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="367"/>
@@ -12606,7 +12676,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>编辑数据集</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1460"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1482"/>
         <source>Edit Output Widget</source>
         <translation>编辑输出组件</translation>
     </message>
@@ -13066,7 +13136,7 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="801"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1250"/>
         <source>Text Encoding</source>
         <translation>文本编码</translation>
     </message>
@@ -13269,42 +13339,72 @@ Valid format: 01 A2 FF 3C</source>
         <translation>缩放按钮、其图标及其标题</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1169"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Standard</source>
+        <translation>标准</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Illuminated Push Button</source>
+        <translation>照明按钮</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Emergency Stop</source>
+        <translation>紧急停止</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <source>Selector Switch</source>
+        <translation>选择器开关</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1174"/>
+        <source>Button Style</source>
+        <translation>按钮样式</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1176"/>
+        <source>What the button is. An emergency stop latches on one press and is released by a second, deliberate action. It is a command sent over the data link and never a substitute for a hardwired emergency stop. Selector Switch turns the control into a rotary selector with labelled positions.</source>
+        <translation>控件的功能。紧急停止在按下一次时锁定，需要第二次刻意操作才能释放。它是通过数据链路发送的命令，绝不能替代硬接线紧急停止。选择器开关将控件转换为带标记位置的旋转选择器。</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1189"/>
         <source>Toggle Button</source>
         <translation>开关按钮</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1170"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1190"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>保持按下状态并传输 1(开)/0(关)而非单次点击</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1212"/>
         <source>On Label</source>
         <translation>开启标签</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1193"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1213"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>锁定时显示的标题(默认为标签)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1202"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1222"/>
         <source>Off Label</source>
         <translation>关闭标签</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1203"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>释放时显示的标题(默认为标签)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1239"/>
         <source>Initial Value</source>
         <translation>初始值</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1251"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>transmit() 返回字符串值时使用的字符编码</translation>
     </message>
@@ -13722,22 +13822,22 @@ Valid format: 01 A2 FF 3C</source>
     <name>EditorMultiSelect</name>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="213"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="331"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="334"/>
         <source>(multiple)</source>
         <translation>(多个)</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="227"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="345"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="348"/>
         <source>Mixed</source>
         <translation>混合</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="439"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="440"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="502"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="503"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="559"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="442"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="443"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="505"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="506"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="562"/>
         <source>Edit Selection</source>
         <translation>编辑选择</translation>
     </message>
@@ -16226,6 +16326,19 @@ Add controller tags above to poll them.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="151"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>HID 用途表 (USB.org)</translation>
+    </message>
+</context>
+<context>
+    <name>HardwareEmergencyStop</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="23"/>
+        <source>EMERGENCY STOP</source>
+        <translation>紧急停止</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="308"/>
+        <source>NOT SENT</source>
+        <translation>未发送</translation>
     </message>
 </context>
 <context>
@@ -23561,7 +23674,7 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::ThemeManager</name>
     <message>
-        <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="187"/>
+        <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="190"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
@@ -25960,7 +26073,7 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="845"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="853"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
@@ -26033,17 +26146,17 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">取消</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="846"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="854"/>
         <source>%1 from zero</source>
         <translation>距零点 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="872"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="880"/>
         <source>Click to place cursor</source>
         <translation>单击以放置光标</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="874"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="882"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>单击以放置第二个光标 — 拖动以移动</translation>
     </message>
@@ -29049,12 +29162,12 @@ function parse(%1) { ... }
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="926"/>
+        <location filename="../../src/Misc/CLI.cpp" line="979"/>
         <source>Project file not found</source>
         <translation>未找到项目文件</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="927"/>
+        <location filename="../../src/Misc/CLI.cpp" line="980"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -29063,17 +29176,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="930"/>
+        <location filename="../../src/Misc/CLI.cpp" line="983"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>是否删除此快捷方式？</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="934"/>
+        <location filename="../../src/Misc/CLI.cpp" line="987"/>
         <source>Delete Shortcut</source>
         <translation>删除快捷方式</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="936"/>
+        <location filename="../../src/Misc/CLI.cpp" line="989"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
@@ -36513,7 +36626,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>无法创建控件。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="734"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="753"/>
         <source>Device Disconnected</source>
         <translation>设备已断开连接</translation>
     </message>
@@ -36684,22 +36797,22 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>已拒绝：%1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="564"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="584"/>
         <source>Enter a number from %1 to %2%3</source>
         <translation>输入 %1 到 %2%3 之间的数字</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="565"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="585"/>
         <source>Allowed range: %1 to %2%3</source>
         <translation>允许范围：%1 到 %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="642"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="662"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>传输脚本在 %1 毫秒后超时</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="658"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="678"/>
         <source>Payload exceeds maximum size</source>
         <translation>有效载荷超出最大大小</translation>
     </message>
