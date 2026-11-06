@@ -293,8 +293,8 @@ InstrumentBase {
               anchors.margins: parent.border.width
               border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.40)
               gradient: Gradient {
-                GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.18) }
-                GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.06) }
+                GradientStop { position: 0.0; color: Qt.lighter(root.faceBase, 1.18) }
+                GradientStop { position: 1.0; color: Qt.lighter(root.faceBase, 1.06) }
               }
             }
 

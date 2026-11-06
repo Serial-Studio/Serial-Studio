@@ -1312,6 +1312,20 @@ void EditorCommit::syncDatasetItemCache(int groupId, int datasetId)
 }
 
 /**
+ * @brief Applies the presentation-only fields added with the hardware looks (spec 0113): whether
+ *        the title is drawn, and a selector's position labels.
+ */
+static void applyPresentationField(const OutputWidgetItem id,
+                                   const QVariant& value,
+                                   DataModel::OutputWidget& widget)
+{
+  if (id == kOutputWidget_ShowTitle)
+    widget.hideTitle = !value.toBool();
+  else
+    widget.positionLabels = value.toString().simplified();
+}
+
+/**
  * @brief Applies one output-widget form field from @p item onto @p widget; pure field mutation with
  *        no side effects, shared by the single-selection and multi-selection edit paths.
  */
@@ -1339,6 +1353,13 @@ void EditorCommit::applyOutputWidgetField(QStandardItem* item, DataModel::Output
     case kOutputWidget_Size:
       widget.size = static_cast<DataModel::OutputWidgetSize>(
         qBound(0, value.toInt(), static_cast<int>(DataModel::OutputWidgetSize::ExtraLarge)));
+      break;
+    case kOutputWidget_Style:
+      DataModel::applyStyleChoice(widget, value.toInt());
+      break;
+    case kOutputWidget_ShowTitle:
+    case kOutputWidget_PositionLabels:
+      applyPresentationField(static_cast<OutputWidgetItem>(id.toInt()), value, widget);
       break;
     case kOutputWidget_OnLabel:
       widget.onLabel = value.toString();
@@ -1430,7 +1451,8 @@ void EditorCommit::onOutputWidgetItemChanged(QStandardItem* item)
   } else {
     applyOutputWidgetField(item, m_editor.m_selectedOutputWidget);
     if (param == kOutputWidget_Checkable || param == kOutputWidget_StateSource
-        || param == kOutputWidget_InputKind || param == kOutputWidget_ReplyToken)
+        || param == kOutputWidget_InputKind || param == kOutputWidget_ReplyToken
+        || param == kOutputWidget_Style)
       m_editor.m_forms.buildOutputWidgetModel(m_editor.m_selectedOutputWidget);
   }
 

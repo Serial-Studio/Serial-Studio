@@ -129,6 +129,9 @@ typedef enum {
   kOutputWidget_ReplyToken,
   kOutputWidget_ReplyCode,
   kOutputWidget_ReplyMessage,
+  kOutputWidget_Style,
+  kOutputWidget_PositionLabels,
+  kOutputWidget_ShowTitle,
 } OutputWidgetItem;
 
 /**

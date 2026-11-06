@@ -438,10 +438,13 @@ set(QML_SOURCES
   qml/Widgets/IconButton.qml
   qml/Widgets/MarkdownIcons.js
   qml/Widgets/MarkdownTextView.qml
+  qml/Widgets/MaterialSurface.qml
   qml/Widgets/MenuButton.qml
   qml/Widgets/MiniWindow.qml
   qml/Widgets/Pane.qml
   qml/Widgets/PaneSplitter.qml
+  qml/Widgets/PanelBezel.qml
+  qml/Widgets/PanelLensFacets.qml
   qml/Widgets/RibbonToolbar.qml
   qml/Widgets/RibbonSection.qml
   qml/Widgets/RibbonSpacer.qml
@@ -563,6 +566,9 @@ if(BUILD_COMMERCIAL)
     qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml
     qml/ProjectEditor/Dialogs/PainterTestDialog.qml
     qml/Widgets/Dashboard/Output/DashboardButton.qml
+    qml/Widgets/Dashboard/Output/HardwarePushButton.qml
+    qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml
+    qml/Widgets/Dashboard/Output/HardwareSelector.qml
     qml/Widgets/Dashboard/Output/DashboardSlider.qml
     qml/Widgets/Dashboard/Output/DashboardToggle.qml
     qml/Widgets/Dashboard/Output/DashboardTextField.qml

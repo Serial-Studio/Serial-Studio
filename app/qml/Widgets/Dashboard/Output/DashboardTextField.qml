@@ -34,6 +34,15 @@ Item {
                                       : ""
 
   //
+  // Dress of the field (spec 0113): placeholder, send caption and icon come from the control's
+  // off label, on label and icon; a Number field with zero decimals takes whole numbers only
+  //
+  readonly property string hint: root.widget ? (root.widget.offLabel || "") : ""
+  readonly property string sendIcon: root.widget ? (root.widget.icon || "") : ""
+  readonly property bool wholeNumbers: root.numeric && root.widget.decimals === 0
+  readonly property string caption: root.widget ? (root.widget.onLabel || "") : ""
+
+  //
   // Parses the typed text the way the C++ rule does for a plain number; an empty or unreadable
   // field counts from Min. The control, not this file, decides what is in range.
   //
@@ -73,6 +82,7 @@ Item {
     OutputSectionLabel {
       text: root.title
       labelColor: root.color
+      visible: !(root.widget && root.widget.hideTitle === true)
     }
 
     RowLayout {
@@ -85,7 +95,20 @@ Item {
         Layout.fillWidth: true
         font: Cpp_Misc_CommonFonts.customMonoFont(0.8, false)
         objectName: root.idPrefix.length > 0 ? root.idPrefix + ".input" : ""
-        placeholderText: root.numeric ? root.rangeHint : qsTr("Enter command…")
+        placeholderText: {
+          if (root.hint.length > 0)
+            return root.hint
+
+          return root.numeric ? root.rangeHint : qsTr("Enter command…")
+        }
+        validator: RegularExpressionValidator {
+          regularExpression: {
+            if (!root.numeric)
+              return /.*/
+
+            return root.wholeNumbers ? /^-?[0-9]*$/ : /^-?[0-9]*[.,]?[0-9]*$/
+          }
+        }
         inputMethodHints: root.numeric ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
 
         palette.highlight: root.color
@@ -125,9 +148,9 @@ Item {
         id: sendButton
 
         iconSize: 16
-        text: qsTr("Send")
-        icon.source: "qrc:/icons/buttons/send.svg"
         font: Cpp_Misc_CommonFonts.customUiFont(0.8, false)
+        text: root.caption.length > 0 ? root.caption : qsTr("Send")
+        icon.source: root.sendIcon.length > 0 ? root.sendIcon : "qrc:/icons/buttons/send.svg"
 
         palette.button: root.color
         palette.buttonText: Cpp_ThemeManager.colors["highlighted_text"]

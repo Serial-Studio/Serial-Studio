@@ -37,6 +37,24 @@ Item {
   required property BarPanelModel model
 
   //
+  // Theme instrument rule: a well colour apart from the plot area and stronger alarm bands
+  //
+  readonly property var instrumentRule: Cpp_ThemeManager.styles["instrument"]
+  readonly property real wellEdge: root.instrumentRule ? 0.45 : 0.25
+  readonly property bool markerLevel: root.instrumentRule !== undefined
+                                      && root.instrumentRule.marker === "level"
+  readonly property color markerColor: root.instrumentRule && root.instrumentRule.marker
+                                       && !root.markerLevel
+                                       ? root.instrumentRule.marker
+                                       : Cpp_ThemeManager.colors["bright_text"]
+  readonly property color faceBase: root.instrumentRule && root.instrumentRule.face
+                                    ? root.instrumentRule.face
+                                    : Cpp_ThemeManager.colors["widget_base"]
+  readonly property real bandOpacity: root.instrumentRule && root.instrumentRule["band-opacity"]
+                                      ? root.instrumentRule["band-opacity"]
+                                      : 0.32
+
+  //
   // Freeze-mode title gate (same contract as the other painted-title widgets)
   //
   readonly property bool titleFrozenOut: windowRoot && windowRoot.frozen === true
@@ -207,8 +225,8 @@ Item {
                 border.width: 1
                 antialiasing: true
                 anchors.fill: parent
-                border.color: Qt.rgba(0, 0, 0, 0.25)
-                color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.12)
+                color: Qt.lighter(root.faceBase, 1.1)
+                border.color: Qt.rgba(0, 0, 0, root.wellEdge)
               }
 
               Repeater {
@@ -222,7 +240,7 @@ Item {
                   Rectangle {
                     id: hBandZone
 
-                    opacity: 0.32
+                    opacity: root.bandOpacity
                     y: hWell.y + 1
                     antialiasing: true
                     height: hWell.height - 2
@@ -289,7 +307,7 @@ Item {
                   anchors.top: parent.top
                   anchors.right: parent.right
                   anchors.bottom: parent.bottom
-                  color: Cpp_ThemeManager.colors["bright_text"]
+                  color: root.markerLevel ? Qt.darker(parent.color, 1.7) : root.markerColor
                 }
               }
 
@@ -484,10 +502,10 @@ Item {
                 border.width: 1
                 antialiasing: true
                 height: parent.height
-                border.color: Qt.rgba(0, 0, 0, 0.25)
+                color: Qt.lighter(root.faceBase, 1.1)
                 width: Math.min(parent.width * 0.55, 40)
+                border.color: Qt.rgba(0, 0, 0, root.wellEdge)
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.12)
               }
 
               Repeater {
@@ -501,7 +519,7 @@ Item {
                   Rectangle {
                     id: vBandZone
 
-                    opacity: 0.32
+                    opacity: root.bandOpacity
                     x: vWell.x + 1
                     antialiasing: true
                     width: vWell.width - 2
@@ -570,7 +588,7 @@ Item {
                   anchors.top: parent.top
                   anchors.left: parent.left
                   anchors.right: parent.right
-                  color: Cpp_ThemeManager.colors["bright_text"]
+                  color: root.markerLevel ? Qt.darker(parent.color, 1.7) : root.markerColor
                 }
               }
 

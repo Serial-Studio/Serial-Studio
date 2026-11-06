@@ -38,6 +38,17 @@ Item {
   required property color color
   required property var windowRoot
   required property BarModel model
+
+  //
+  // Theme instrument rule: a well colour apart from the plot area and stronger alarm bands
+  //
+  readonly property var instrumentRule: Cpp_ThemeManager.styles["instrument"]
+  readonly property color faceBase: root.instrumentRule && root.instrumentRule.face
+                                    ? root.instrumentRule.face
+                                    : Cpp_ThemeManager.colors["widget_base"]
+  readonly property real bandOpacity: root.instrumentRule && root.instrumentRule["band-opacity"]
+                                      ? root.instrumentRule["band-opacity"]
+                                      : 0.32
   required property string widgetId
 
   //
@@ -255,9 +266,9 @@ Item {
               border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.2)
               gradient: Gradient {
                 orientation: isHorizontal ? Gradient.Vertical : Gradient.Horizontal
-                GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.15) }
-                GradientStop { position: 0.5; color: Cpp_ThemeManager.colors["widget_base"] }
-                GradientStop { position: 1.0; color: Qt.darker(Cpp_ThemeManager.colors["widget_base"], 1.10) }
+                GradientStop { position: 0.0; color: Qt.lighter(root.faceBase, 1.15) }
+                GradientStop { position: 0.5; color: root.faceBase }
+                GradientStop { position: 1.0; color: Qt.darker(root.faceBase, 1.10) }
               }
             }
 
@@ -276,8 +287,8 @@ Item {
               border.color: Qt.rgba(0, 0, 0, 0.18)
               gradient: Gradient {
                 orientation: isHorizontal ? Gradient.Vertical : Gradient.Horizontal
-                GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.20) }
-                GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.06) }
+                GradientStop { position: 0.0; color: Qt.lighter(root.faceBase, 1.20) }
+                GradientStop { position: 1.0; color: Qt.lighter(root.faceBase, 1.06) }
               }
 
               //
@@ -288,7 +299,7 @@ Item {
                 model: root.model.alarmBands
                 delegate: Rectangle {
                   required property var modelData
-                  opacity: 0.32
+                  opacity: root.bandOpacity
                   antialiasing: true
                   readonly property real innerW: innerWell.width - innerWell.border.width * 2
                   readonly property real innerH: innerWell.height - innerWell.border.width * 2

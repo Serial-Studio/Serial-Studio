@@ -193,6 +193,41 @@ Widgets add a `widget` block declaring the entity scope, the QML entry file, wha
 | `grpc`        | Plugins  | `true` if the plugin uses gRPC streaming (port 8888) instead of TCP/JSON. |
 | `platforms`   | Plugins  | Per-platform overrides for `entry`, `runtime`, and `files`. |
 
+### Theme materials and lettering
+
+A theme file is a color table: `title`, `translations`, `parameters` and `colors`. It may
+also carry five optional sections. A theme without them looks exactly as it always did,
+and an older Serial Studio reads the same file as a color-only theme, so keep the color
+table complete.
+
+```json
+{
+  "fonts": {
+    "engraving": { "family": "DIN Alternate", "scale": 0.9, "capitals": true, "spacing": 0.8 }
+  },
+  "materials": {
+    "panel": { "recipe": "brushed-metal", "color": "#B7BDB7", "grain": 0.6 },
+    "frame": { "recipe": "gradient", "top": "#7A8189", "bottom": "#5C636B" },
+    "well":  { "recipe": "glass", "top": "#0C0E10", "bottom": "#1C2025" }
+  },
+  "surfaces": { "dashboard": "frame", "widget": "panel" },
+  "widgets": { "led": "lamp", "output": "hardware" }
+}
+```
+
+| Section | What it does |
+|---------|--------------|
+| `fonts` | Named lettering roles. `engraving` is used for dashboard widget titles and control legends. The family must already be installed on the computer; when it is not, or for text it has no glyphs for, the interface font is used. Leave the section out to keep the interface fonts. |
+| `materials` | Named surfaces. `recipe` is `flat` (`color`), `gradient` (`top`, `bottom`), `brushed-metal` (`color`, `grain` from 0 to 1, `shade` from 0 to 1 for the top-to-bottom lighting, `bevel` true or false for the edge lines) or `glass` (`top`, `bottom`). |
+| `surfaces` | Which material a part of the window is made of: `dashboard` (behind the widgets) and `widget` (the body of a dashboard widget). |
+| `styles` | Per-control rules. `instrument.face` is the dial and bar-well color, apart from the plot area, and `instrument.band-opacity` (0 to 1) is the strength of alarm bands on bars, and `instrument.marker` is the color of a bar's value mark (`"level"` takes a darker shade of the bar's current color). `caption.active-lift` (for example 1.14) makes the focused dashboard window's caption lighter at the top while both states share the bottom color. |
+| `widgets` | `"led": "lamp"` draws LED Panel indicators as panel lamps. Standard output buttons are drawn as panel push buttons; `"output": "plain"` keeps the flat button. |
+
+A theme is data. It selects recipes Serial Studio already has and cannot load a file or
+run anything. A name Serial Studio does not know is skipped with a warning in the log.
+The bundled **Millennium** theme uses `materials`, `surfaces` and `widgets`, and keeps the
+interface fonts.
+
 ### Hosting
 
 **GitHub.** Create a repository and share the raw manifest URL:

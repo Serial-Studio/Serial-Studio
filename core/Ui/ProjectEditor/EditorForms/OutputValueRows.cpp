@@ -149,3 +149,123 @@ void DataModel::appendOutputValueRows(QStandardItemModel* model, const OutputWid
                 "DataModel::ProjectEditor",
                 "Snap a typed value to the nearest Step counted from Min before the range check"));
 }
+
+//--------------------------------------------------------------------------------------------------
+// Presentation rows
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Appends one text row with a placeholder shown while it is empty.
+ */
+static void appendTextRow(QStandardItemModel* model,
+                          const QString& value,
+                          const int parameter,
+                          const QString& name,
+                          const QString& placeholder)
+{
+  auto* item = new QStandardItem();
+  item->setEditable(true);
+  item->setData(true, Active);
+  item->setData(TextField, WidgetType);
+  item->setData(value, EditableValue);
+  item->setData(parameter, ParameterType);
+  item->setData(name, ParameterName);
+  item->setData(placeholder, PlaceholderValue);
+  model->appendRow(item);
+}
+
+/**
+ * @brief Appends the knob's style row and, for a selector, its position labels. A selector has
+ *        one detent per Step from Min to Max, so three positions are Min 0, Max 2, Step 1.
+ */
+static void appendSelectorRows(QStandardItemModel* model, const DataModel::OutputWidget& widget)
+{
+  const bool selector = widget.style == DataModel::OutputWidgetStyle::Selector;
+
+  auto* item = new QStandardItem();
+  item->setEditable(true);
+  item->setData(true, Active);
+  item->setData(ComboBox, WidgetType);
+  item->setData(
+    QStringList{QCoreApplication::translate("DataModel::ProjectEditor", "Standard"),
+                QCoreApplication::translate("DataModel::ProjectEditor", "Rotary Selector")},
+    ComboBoxData);
+  item->setData(selector ? 1 : 0, EditableValue);
+  item->setData(kOutputWidget_Style, ParameterType);
+  item->setData(QCoreApplication::translate("DataModel::ProjectEditor", "Knob Style"),
+                ParameterName);
+  item->setData(QCoreApplication::translate(
+                  "DataModel::ProjectEditor",
+                  "A rotary selector has one labelled position per Step from Min to Max"),
+                ParameterDescription);
+  model->appendRow(item);
+
+  if (selector)
+    appendTextRow(
+      model,
+      widget.positionLabels,
+      kOutputWidget_PositionLabels,
+      QCoreApplication::translate("DataModel::ProjectEditor", "Position Labels"),
+      QCoreApplication::translate("DataModel::ProjectEditor",
+                                  "Comma-separated, one per position (Off, Low, High)"));
+}
+
+/**
+ * @brief Appends what a text field lets the user dress: the placeholder, and the send button's
+ *        caption, icon and colour. They reuse the off label, on label, icon and colour a button
+ *        already stores, so the project file gains no key.
+ */
+static void appendTextFieldRows(QStandardItemModel* model, const DataModel::OutputWidget& widget)
+{
+  appendTextRow(
+    model,
+    widget.offLabel,
+    kOutputWidget_OffLabel,
+    QCoreApplication::translate("DataModel::ProjectEditor", "Placeholder Text"),
+    QCoreApplication::translate("DataModel::ProjectEditor", "Shown while the field is empty"));
+  appendTextRow(model,
+                widget.onLabel,
+                kOutputWidget_OnLabel,
+                QCoreApplication::translate("DataModel::ProjectEditor", "Button Text"),
+                QCoreApplication::translate("DataModel::ProjectEditor", "Send"));
+  appendRow(model,
+            IconPicker,
+            widget.icon,
+            kOutputWidget_Icon,
+            QCoreApplication::translate("DataModel::ProjectEditor", "Button Icon"));
+
+  auto* item = new QStandardItem();
+  item->setEditable(true);
+  item->setData(true, Active);
+  item->setData(ColorPicker, WidgetType);
+  item->setData(widget.color, EditableValue);
+  item->setData(kOutputWidget_Color, ParameterType);
+  item->setData(QCoreApplication::translate("DataModel::ProjectEditor", "Automatic"),
+                PlaceholderValue);
+  item->setData(QCoreApplication::translate("DataModel::ProjectEditor", "Button Color"),
+                ParameterName);
+  model->appendRow(item);
+}
+
+/**
+ * @brief Appends the presentation rows of spec 0113; see the header.
+ */
+void DataModel::appendOutputPresentationRows(QStandardItemModel* model, const OutputWidget& widget)
+{
+  SS_ASSERT_LOG(model != nullptr);
+
+  appendRow(model,
+            CheckBox,
+            !widget.hideTitle,
+            kOutputWidget_ShowTitle,
+            QCoreApplication::translate("DataModel::ProjectEditor", "Show Title"),
+            QCoreApplication::translate(
+              "DataModel::ProjectEditor",
+              "Draw the control's title and frame; turn off for a control that stands alone"));
+
+  if (widget.type == OutputWidgetType::Knob)
+    appendSelectorRows(model, widget);
+
+  if (widget.type == OutputWidgetType::TextField)
+    appendTextFieldRows(model, widget);
+}

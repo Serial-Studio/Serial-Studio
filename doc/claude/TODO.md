@@ -87,9 +87,16 @@ A tier is missing between two that exist (`scripts/icon-report.py`, tier holes):
     can decode once as wrong values;
   - a missed connect edge can leave the Quick Plot builder in binary mode;
   - the binary lane converts each value to text and back, and has no benchmark row.
+- [ ] Spec 0113 (material themes, panel hardware), open tasks in its `tasks.md`: the Selector
+  control type, the toggle and knob hardware looks, consumers for the theme `styles` section,
+  the `display` surface behind plots, the taskbar's open-tab indicator, the HDR boost on lit
+  hardware, and the unit tests for AC2, AC3 and AC12.
 
 ## Maintainer steps
 
+- [ ] Spec 0113: first build of the uncompiled C++ (the syntax check could not run, the compile
+  database names a removed SDK), then `--dump-api-schema` and `scripts/generate-sdk.py` once
+  `style` is in the two output-widget command descriptions, then the AC1 screenshots.
 - [ ] Build, then run `ctest` for the specs 0102 to 0111 suites, and `--benchmark-hotpath`.
 - [ ] Integration tests with the app up: `tests/integration/test_device_declaration.py`,
   `test_uart_sequence.py`, `test_fixed_length_frames.py`, `test_dataset_formats.py`,

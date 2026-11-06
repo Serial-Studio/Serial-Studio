@@ -520,6 +520,26 @@ void Widgets::Output::Base::applyStateVerdict(const StateBinding::Verdict& verdi
  */
 void Widgets::Output::Base::sendValue(const QVariant& value)
 {
+  submitValue(value, true);
+}
+
+/**
+ * @brief Sends @p value at once, past the pacing window, dropping any value the window was
+ *        holding. The one caller is an emergency-stop press (spec 0113 R26): a stop held back
+ *        behind the release that preceded it is a stop that arrives late. Every gate
+ *        sendValue() applies still applies.
+ */
+void Widgets::Output::Base::sendValueNow(const QVariant& value)
+{
+  submitValue(value, false);
+}
+
+/**
+ * @brief The one path an operator action takes to the transmit script: license gates, admission,
+ *        then pacing when @p paced, then delivery.
+ */
+void Widgets::Output::Base::submitValue(const QVariant& value, const bool paced)
+{
   if (!SS_LICENSE_GUARD())
     return;
 
@@ -534,7 +554,7 @@ void Widgets::Output::Base::sendValue(const QVariant& value)
 
   const auto interval = static_cast<qint64>(m_target.minIntervalMs);
   const auto elapsed  = m_rateLimiter.elapsed();
-  if (interval > 0 && elapsed < interval) {
+  if (paced && interval > 0 && elapsed < interval) {
     m_pendingValue = admitted;
     m_hasPending   = true;
     m_flushTimer.start(static_cast<int>(interval - elapsed));
@@ -683,6 +703,9 @@ QVariantMap Widgets::Output::Base::presentation(const DataModel::OutputWidget& c
   map[QStringLiteral("initialValue")] = config.initialValue;
   map[QStringLiteral("monoIcon")]     = config.monoIcon;
   map[QStringLiteral("checkable")]    = config.checkable;
+  map[QStringLiteral("style")]        = static_cast<int>(config.style);
+  map[QStringLiteral("labels")]       = config.positionLabels;
+  map[QStringLiteral("hideTitle")]    = config.hideTitle;
   map[QStringLiteral("color")]        = config.color;
   map[QStringLiteral("sizeScale")]    = DataModel::outputSizeScale(config.size);
   map[QStringLiteral("onLabel")]      = config.onLabel;

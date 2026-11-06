@@ -222,7 +222,7 @@ void UI::WidgetMapBuilder::buildWidgetGroups(const DataModel::Frame& frame, bool
       ledPanel.widget   = "led-panel";
       ledPanel.groupId  = group.groupId;
       ledPanel.uniqueId = group.uniqueId;
-      ledPanel.title    = Dashboard::tr("LED Panel (%1)").arg(group.title);
+      ledPanel.title    = group.title;
       m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
     }
   }
@@ -298,10 +298,7 @@ void UI::WidgetMapBuilder::applyDisplayTitles()
       }
 
       const auto scoped = widgetOverride(token, group.uniqueId);
-      group.title =
-        scoped.isEmpty()
-          ? Dashboard::tr("LED Panel (%1)").arg(entityResolve(group.uniqueId, group.title))
-          : scoped;
+      group.title       = scoped.isEmpty() ? entityResolve(group.uniqueId, group.title) : scoped;
     }
   }
 

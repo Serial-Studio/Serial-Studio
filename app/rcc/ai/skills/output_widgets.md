@@ -38,6 +38,12 @@ Each widget has:
 
 - `title`, `icon`: UI labels
 - `checkable`: button latches on/off instead of pulsing a single value
+- `style`: button only. 0 = standard, 1 = illuminated push button, 2 = emergency
+  stop (always latches; one press sends `1` at once, a later press sends `0`).
+  An on-screen emergency stop is a command over the data link, never a
+  substitute for a hardwired one
+- `style` 3 on a knob is a rotary selector: one position per `stepSize` from
+  `minValue` to `maxValue`, named by `labels` (comma-separated)
 - `color`: hex fill override for the control; empty = group accent color
 - `size`: 0 = small, 1 = normal, 2 = large, 3 = extra large
 - `onLabel`, `offLabel`: captions for a latching button or a toggle

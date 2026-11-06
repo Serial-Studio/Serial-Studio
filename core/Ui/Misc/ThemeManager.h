@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QColor>
+#include <QFont>
 #include <QObject>
 #include <QPalette>
 #include <QQmlPropertyMap>
@@ -79,6 +80,21 @@ class ThemeManager : public QObject {
   Q_PROPERTY(QVariantMap parameters
              READ parameters
              NOTIFY themeChanged)
+  Q_PROPERTY(QVariantMap fonts
+             READ fonts
+             NOTIFY themeChanged)
+  Q_PROPERTY(QVariantMap materials
+             READ materials
+             NOTIFY themeChanged)
+  Q_PROPERTY(QVariantMap surfaces
+             READ surfaces
+             NOTIFY themeChanged)
+  Q_PROPERTY(QVariantMap styles
+             READ styles
+             NOTIFY themeChanged)
+  Q_PROPERTY(QVariantMap widgetLooks
+             READ widgetLooks
+             NOTIFY themeChanged)
   Q_PROPERTY(QStringList availableThemes
              READ availableThemes
              NOTIFY languageChanged)
@@ -104,12 +120,18 @@ public:
   [[nodiscard]] const QVariantMap& colors() const;
   [[nodiscard]] QQmlPropertyMap* colorMap();
   [[nodiscard]] const QVariantMap& parameters() const;
+  [[nodiscard]] const QVariantMap& fonts() const;
+  [[nodiscard]] const QVariantMap& materials() const;
+  [[nodiscard]] const QVariantMap& surfaces() const;
+  [[nodiscard]] const QVariantMap& styles() const;
+  [[nodiscard]] const QVariantMap& widgetLooks() const;
   [[nodiscard]] const QVector<QColor>& widgetColors() const;
   [[nodiscard]] const QVector<QPair<QColor, QColor>>& deviceColors() const;
 
   [[nodiscard]] const QStringList& availableThemes() const;
   [[nodiscard]] QColor getColor(const QString& name) const;
   [[nodiscard]] Q_INVOKABLE QColor alarmColorForSeverity(int severity) const;
+  [[nodiscard]] Q_INVOKABLE QFont lettering(const QString& role, const QFont& base) const;
 
   [[nodiscard]] const QPalette& palette() const { return m_palette; }
 
@@ -129,12 +151,22 @@ protected:
   bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
+  void applyThemeSections(const QJsonObject& data);
+
+private:
   int m_theme;
   QPalette m_palette;
   QString m_themeName;
   QSettings m_settings;
   QVariantMap m_colors;
   QVariantMap m_parameters;
+
+  // Optional sections of a material theme (spec 0113); each is empty for a colour-only theme
+  QVariantMap m_fonts;
+  QVariantMap m_materials;
+  QVariantMap m_surfaces;
+  QVariantMap m_styles;
+  QVariantMap m_widgetLooks;
 
   // Per-key view of m_colors for QML: one read costs one lookup, and a theme switch notifies
   QQmlPropertyMap* m_colorMap;

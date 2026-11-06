@@ -222,6 +222,16 @@ static void applyOutputWidgetFields(DataModel::OutputWidget& w,
   if (take(QStringLiteral("checkable")))
     w.checkable = params.value(QStringLiteral("checkable")).toBool();
 
+  if (take(QStringLiteral("showTitle")))
+    w.hideTitle = !params.value(QStringLiteral("showTitle")).toBool();
+
+  if (take(QStringLiteral("labels")))
+    w.positionLabels = params.value(QStringLiteral("labels")).toString();
+
+  if (take(QStringLiteral("style")))
+    w.style =
+      static_cast<DataModel::OutputWidgetStyle>(params.value(QStringLiteral("style")).toInt());
+
   if (take(QStringLiteral("color")))
     w.color = params.value(QStringLiteral("color")).toString();
 

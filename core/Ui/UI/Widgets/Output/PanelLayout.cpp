@@ -47,7 +47,8 @@ PanelLayout::SizeClass PanelLayout::classify(OWT type)
 
 /**
  * @brief Returns the minimum size (width, height) a widget needs, including the button size class:
- *        an extra-large button that keeps a normal-sized cell is clipped by the packer.
+ *        an extra-large button that keeps a normal-sized cell is clipped by the packer. A button
+ *        drawn as panel hardware (spec 0113) is round, so its cell is as tall as the part.
  */
 QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
 {
@@ -72,6 +73,12 @@ QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
 
   const qreal m = 8;
   const qreal s = 4;
+  if (widget.style == DataModel::OutputWidgetStyle::EmergencyStop)
+    return {96 * scale + 2 * m, 2 * m + 96 * scale + s + fontH};
+
+  if (widget.style == DataModel::OutputWidgetStyle::Illuminated)
+    return {charW * 14 * scale + 2 * m, 2 * m + 52 * scale + s + fontH};
+
   switch (type) {
     case OWT::Button:
       return {charW * 14 * scale + 2 * m, 2 * m + btnH};

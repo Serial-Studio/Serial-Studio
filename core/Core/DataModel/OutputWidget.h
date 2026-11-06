@@ -61,6 +61,19 @@ enum class OutputWidgetSize : quint8 {
 };
 
 /**
+ * @brief What a control is, chosen per control in the project and independent of the theme (spec
+ *        0113 R17). Standard is every control written before styles existed. Illuminated and
+ *        EmergencyStop are button styles (an emergency stop always latches); Selector is a knob
+ *        style with one labelled detent per Step from Min to Max.
+ */
+enum class OutputWidgetStyle : quint8 {
+  Standard      = 0,
+  Illuminated   = 1,
+  EmergencyStop = 2,
+  Selector      = 3,
+};
+
+/**
  * @brief Ceiling for an output control's confirm-within window. A window longer than this
  *        describes no real equipment, and every millisecond past it is one where the control
  *        latches "request outstanding" and refuses to adopt what the plant reports.
@@ -114,18 +127,20 @@ enum class OutputInputKind : quint8 {
  * @brief Represents an interactive output widget that sends data to the device.
  */
 struct alignas(8) OutputWidget {
-  int widgetId          = -1;                        ///< Unique widget ID within the group
-  int groupId           = -1;                        ///< Owning group ID
-  int sourceId          = 0;                         ///< Target source/device ID
-  int txEncoding        = 0;                         ///< Encoding used for transmit payload
-  OutputWidgetType type = OutputWidgetType::Button;  ///< Widget presentation/behavior type
-  bool monoIcon         = false;                     ///< Use monochrome icon styling
-  bool checkable        = false;                     ///< Button latches on/off instead of pulsing
-  OutputWidgetSize size = OutputWidgetSize::Normal;  ///< Presentation size class
-  double minValue       = 0;                         ///< Minimum allowed value
-  double maxValue       = 100;                       ///< Maximum allowed value
-  double stepSize       = 1;                         ///< Value increment step
-  double initialValue   = 0;                         ///< Initial widget value
+  int widgetId            = -1;                        ///< Unique widget ID within the group
+  int groupId             = -1;                        ///< Owning group ID
+  int sourceId            = 0;                         ///< Target source/device ID
+  int txEncoding          = 0;                         ///< Encoding used for transmit payload
+  OutputWidgetType type   = OutputWidgetType::Button;  ///< Widget presentation/behavior type
+  bool monoIcon           = false;                     ///< Use monochrome icon styling
+  bool checkable          = false;                     ///< Button latches on/off instead of pulsing
+  bool hideTitle          = false;                     ///< Draw without title and frame
+  OutputWidgetSize size   = OutputWidgetSize::Normal;  ///< Presentation size class
+  OutputWidgetStyle style = OutputWidgetStyle::Standard;  ///< What the control is (spec 0113)
+  double minValue         = 0;                            ///< Minimum allowed value
+  double maxValue         = 100;                          ///< Maximum allowed value
+  double stepSize         = 1;                            ///< Value increment step
+  double initialValue     = 0;                            ///< Initial widget value
   QString icon;
   QString color;  ///< Optional hex fill override; empty -> group accent colour
   QString title;
@@ -139,6 +154,7 @@ struct alignas(8) OutputWidget {
   QString stateTable;                    ///< Data table holding the state variable
   QString stateVariable;                 ///< Variable within stateTable
   QString stateOnValue;                  ///< Empty -> any non-zero value means on
+  QString positionLabels;                ///< Selector: comma-separated labels, one per position
 
   int replyTokenDatasetId   = -1;  ///< Dataset uniqueId echoing the command token, -1 = none
   int replyCodeDatasetId    = -1;  ///< Dataset uniqueId carrying the result code, -1 = none
@@ -170,6 +186,13 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
  *        a negative source id or an inverted min/max reached the widgets through the other.
  */
 void normalize(OutputWidget& w);
+
+/**
+ * @brief Applies the Project Editor's style choice @p index to @p w: a knob offers Standard and
+ *        Selector; a button Standard, Illuminated, EmergencyStop and Selector Switch, the last
+ *        of which turns it into a two-position selector knob labelled from its captions.
+ */
+void applyStyleChoice(OutputWidget& w, int index);
 
 /**
  * @brief True when the control waits for a device reply (spec 0110): token and code both bound.

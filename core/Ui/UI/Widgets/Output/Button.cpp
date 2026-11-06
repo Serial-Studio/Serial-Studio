@@ -26,7 +26,11 @@ Widgets::Output::Button::Button(const DataModel::OutputWidget& config,
   : Base(config, std::move(target), parent)
   , m_checked(config.checkable && config.initialValue != 0)
   , m_checkable(config.checkable)
-{}
+  , m_emergencyStop(config.style == DataModel::OutputWidgetStyle::EmergencyStop)
+{
+  if (m_emergencyStop)
+    m_checked = false;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Property getters
@@ -62,9 +66,9 @@ void Widgets::Output::Button::click()
 
 /**
  * @brief Latches the button and transmits 1 (on) or 0 (off). The operator is acting, so it
- *        always transmits: once feedback moved the latch to the reported state, guarding the send
- *        on a change swallowed the re-assert of a state the plant already claims. Only the notify
- *        is guarded; feedback assigns through applyStateVerdict instead (spec 0080 R3).
+ *        always transmits, even a state the plant already claims; only the notify is guarded,
+ *        and feedback assigns through applyStateVerdict instead (spec 0080 R3). An
+ *        emergency-stop press skips the pacing window (spec 0113 R26); its release stays paced.
  */
 void Widgets::Output::Button::setChecked(bool checked)
 {
@@ -73,7 +77,10 @@ void Widgets::Output::Button::setChecked(bool checked)
     Q_EMIT checkedChanged();
   }
 
-  sendValue(m_checked ? 1 : 0);
+  if (m_emergencyStop && m_checked)
+    sendValueNow(1);
+  else
+    sendValue(m_checked ? 1 : 0);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -1160,9 +1160,29 @@ void EditorForms::buildOutputWidgetCommonRows(const DataModel::OutputWidget& wid
     sizeItem->setData(tr("Scales the button, its icon and its caption"), ParameterDescription);
     m_editor.m_outputWidgetModel->appendRow(sizeItem);
 
+    const bool emergencyStop = widget.style == DataModel::OutputWidgetStyle::EmergencyStop;
+    auto* styleItem          = new QStandardItem();
+    styleItem->setEditable(true);
+    styleItem->setData(true, Active);
+    styleItem->setData(ComboBox, WidgetType);
+    styleItem->setData(
+      QStringList{
+        tr("Standard"), tr("Illuminated Push Button"), tr("Emergency Stop"), tr("Selector Switch")},
+      ComboBoxData);
+    styleItem->setData(static_cast<int>(widget.style), EditableValue);
+    styleItem->setData(kOutputWidget_Style, ParameterType);
+    styleItem->setData(tr("Button Style"), ParameterName);
+    styleItem->setData(
+      tr("What the button is. An emergency stop latches on one press and is released by a "
+         "second, deliberate action. It is a command sent over the data link and never a "
+         "substitute for a hardwired emergency stop. Selector Switch turns the control into a "
+         "rotary selector with labelled positions."),
+      ParameterDescription);
+    m_editor.m_outputWidgetModel->appendRow(styleItem);
+
     auto* latchItem = new QStandardItem();
     latchItem->setEditable(true);
-    latchItem->setData(true, Active);
+    latchItem->setData(!emergencyStop, Active);
     latchItem->setData(CheckBox, WidgetType);
     latchItem->setData(widget.checkable, EditableValue);
     latchItem->setData(kOutputWidget_Checkable, ParameterType);
@@ -1256,6 +1276,7 @@ void EditorForms::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
   m_editor.m_outputWidgetModel = new CustomModel(&m_editor);
 
   buildOutputWidgetCommonRows(widget);
+  appendOutputPresentationRows(m_editor.m_outputWidgetModel, widget);
   buildOutputWidgetTransmitRow(widget);
   buildOutputWidgetValueRows(widget);
   appendOutputStateRows(m_editor.m_outputWidgetModel, widget, m_model);

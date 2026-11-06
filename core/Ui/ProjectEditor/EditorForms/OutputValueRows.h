@@ -22,4 +22,10 @@ namespace DataModel {
  */
 void appendOutputValueRows(QStandardItemModel* model, const OutputWidget& widget);
 
+/**
+ * @brief Appends the presentation rows of spec 0113: Show Title for every control, Knob Style and
+ *        Position Labels for a knob, and a text field's placeholder and send-button dress.
+ */
+void appendOutputPresentationRows(QStandardItemModel* model, const OutputWidget& widget);
+
 }  // namespace DataModel

@@ -904,6 +904,10 @@
         <file>images/driver.svg</file>
         <file>images/hammer.svg</file>
         <file>images/locked.svg</file>
+        <file>images/materials/brushed-rows.png</file>
+        <file>images/materials/brushed-rows@2x.png</file>
+        <file>images/materials/brushed-streaks.png</file>
+        <file>images/materials/brushed-streaks@2x.png</file>
         <file>images/multi-device.svg</file>
         <file>images/no-bluetooth.svg</file>
         <file>images/no-mic.svg</file>
@@ -1225,9 +1229,11 @@
         <file>themes/code-editor/default.xml</file>
         <file>themes/code-editor/fluent-dark.xml</file>
         <file>themes/code-editor/fluent-light.xml</file>
+        <file>themes/code-editor/millennium.xml</file>
         <file>themes/default.json</file>
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
+        <file>themes/millennium.json</file>
         <file>vendor/highlight-github-dark.min.css</file>
         <file>vendor/highlight-github.min.css</file>
         <file>vendor/highlight.LICENSE</file>

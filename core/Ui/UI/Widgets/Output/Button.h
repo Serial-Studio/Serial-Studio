@@ -52,6 +52,7 @@ protected:
 private:
   bool m_checked;
   bool m_checkable;
+  bool m_emergencyStop;
 };
 
 }  // namespace Output

@@ -42,6 +42,7 @@ Sends a single command on click, or latches on and off when **Toggle Button** is
 | Colorize Icon | off | Tint the icon with the button color |
 | Button Color | Automatic | Custom fill color; automatic uses the group accent color |
 | Button Size | Normal | Small, Normal, Large or Extra Large |
+| Button Style | Standard | Standard, Illuminated Push Button or Emergency Stop |
 | Toggle Button | off | Stay pressed between clicks and send `1` (on) / `0` (off) |
 | On Label | (empty) | Caption while latched; falls back to the widget label |
 | Off Label | (empty) | Caption while released; falls back to the widget label |
@@ -54,6 +55,28 @@ Button Size scales the button, its icon and its caption together, and the panel 
 reserves a proportionally larger cell for it, so a large button is never clipped by its
 neighbours. When a custom Button Color is set, the caption switches between black and
 white to stay readable on that fill.
+
+#### Button Style
+
+Button Style sets what the button is. It is stored in the project and works under every
+theme; the theme only decides how a Standard button is painted.
+
+| Style | Behavior |
+|-------|----------|
+| Standard | The button described above. |
+| Illuminated Push Button | A round colored head in a metal ring. It sends what a Standard button sends, and its head is lit while a latching button is on. |
+| Emergency Stop | A red mushroom head on a yellow ring. One press latches it and sends `1`. A second, separate press releases it and sends `0`. |
+
+An Emergency Stop always latches, so Toggle Button is fixed on. Its press is sent at
+once, without the short pacing delay other control changes get. A release is ignored for
+a moment after the press, so a double-click cannot press and release it. If the transmit
+function returns nothing for `0`, the release sends nothing. With no state source the
+button starts released each time the dashboard opens; bound to one, it shows what the
+equipment reports. When there is no connection to send on, the head shows **NOT SENT**.
+
+> **An on-screen emergency stop is a command sent over the data link.** It reaches the
+> equipment only if the computer, Serial Studio, the connection and the device firmware
+> are all working. It is never a substitute for a hardwired emergency-stop circuit.
 
 ### Slider
 
@@ -109,6 +132,14 @@ With the field focused, Up and Down edit its text by one Step (ten with Shift) a
 ### Knob
 
 Rotary dial for continuous setpoint adjustment. Same numeric properties as Slider (Min, Max, Step, Decimals, Units, Initial Value) but displayed as a circular dial.
+
+#### Knob Style
+
+Set **Knob Style** to **Rotary Selector** to draw the knob as a selector switch with one
+labelled position per Step from Min to Max. Three positions are Min 0, Max 2, Step 1;
+**Position Labels** takes their names, separated by commas (`Off, Low, High`). The transmit
+function receives the selected position's value, so a `switch` on it gives each position its
+own payload.
 
 ## Limits
 

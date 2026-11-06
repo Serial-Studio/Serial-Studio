@@ -47,6 +47,7 @@ Item {
     OutputSectionLabel {
       text: root.title
       labelColor: root.color
+      visible: !(root.widget && root.widget.hideTitle === true)
     }
 
     Item { Layout.fillHeight: true }

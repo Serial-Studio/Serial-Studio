@@ -55,6 +55,17 @@ void DataModel::normalize(OutputWidget& w)
     qBound(0, static_cast<int>(w.type), static_cast<int>(OutputWidgetType::Knob)));
   w.size = static_cast<OutputWidgetSize>(
     qBound(0, static_cast<int>(w.size), static_cast<int>(OutputWidgetSize::ExtraLarge)));
+  w.style = static_cast<OutputWidgetStyle>(
+    qBound(0, static_cast<int>(w.style), static_cast<int>(OutputWidgetStyle::Selector)));
+  const bool knobStyle = w.style == OutputWidgetStyle::Selector;
+  const bool buttonStyle =
+    w.style == OutputWidgetStyle::Illuminated || w.style == OutputWidgetStyle::EmergencyStop;
+  if ((buttonStyle && w.type != OutputWidgetType::Button)
+      || (knobStyle && w.type != OutputWidgetType::Knob))
+    w.style = OutputWidgetStyle::Standard;
+
+  if (w.style == OutputWidgetStyle::EmergencyStop)
+    w.checkable = true;
 
   const int encoding = w.txEncoding;
   w.txEncoding       = qBound(0, encoding, static_cast<int>(SerialStudio::EncEucKr));
@@ -86,6 +97,37 @@ void DataModel::normalize(OutputWidget& w)
     qBound(0, static_cast<int>(w.inputKind), static_cast<int>(OutputInputKind::Number)));
   w.decimals = qBound(-1, w.decimals, kMaxOutputDecimals);
   w.units    = w.units.simplified();
+}
+
+/**
+ * @brief Maps the style combo's @p index onto @p w; see the header. The Selector Switch entry
+ *        sits in the button's list because that is where a user looks for a selector first.
+ */
+void DataModel::applyStyleChoice(OutputWidget& w, const int index)
+{
+  if (w.type == OutputWidgetType::Knob) {
+    w.style = index == 1 ? OutputWidgetStyle::Selector : OutputWidgetStyle::Standard;
+    return;
+  }
+
+  if (index == 3) {
+    const auto off   = w.offLabel.isEmpty() ? QStringLiteral("OFF") : w.offLabel;
+    const auto on    = w.onLabel.isEmpty() ? QStringLiteral("ON") : w.onLabel;
+    w.type           = OutputWidgetType::Knob;
+    w.style          = OutputWidgetStyle::Selector;
+    w.checkable      = false;
+    w.minValue       = 0;
+    w.maxValue       = 1;
+    w.stepSize       = 1;
+    w.initialValue   = 0;
+    w.positionLabels = off + QStringLiteral(", ") + on;
+    return;
+  }
+
+  w.style = static_cast<OutputWidgetStyle>(
+    qBound(0, index, static_cast<int>(OutputWidgetStyle::EmergencyStop)));
+  if (w.style == OutputWidgetStyle::EmergencyStop)
+    w.checkable = true;
 }
 
 /**
@@ -166,9 +208,11 @@ bool DataModel::read(OutputWidget& w, const QJsonObject& obj)
   w.initialValue = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputInitialValue, 0));
   w.monoIcon     = ss_jsr(obj, Keys::OutputMonoIcon, false).toBool();
   w.checkable    = ss_jsr(obj, Keys::OutputCheckable, false).toBool();
+  w.hideTitle    = ss_jsr(obj, Keys::OutputHideTitle, false).toBool();
   w.color        = ss_jsr(obj, Keys::OutputColor, "").toString().simplified();
   w.size         = static_cast<OutputWidgetSize>(
     ss_jsr(obj, Keys::OutputSize, static_cast<int>(OutputWidgetSize::Normal)).toInt());
+  w.style            = static_cast<OutputWidgetStyle>(ss_jsr(obj, Keys::OutputStyle, 0).toInt());
   w.onLabel          = ss_jsr(obj, Keys::OutputOnLabel, "").toString().simplified();
   w.offLabel         = ss_jsr(obj, Keys::OutputOffLabel, "").toString().simplified();
   w.transmitFunction = obj.value(Keys::TransmitFunction).toString();
@@ -178,6 +222,7 @@ bool DataModel::read(OutputWidget& w, const QJsonObject& obj)
   w.stateTable            = ss_jsr(obj, Keys::OutputStateTable, "").toString().simplified();
   w.stateVariable         = ss_jsr(obj, Keys::OutputStateVariable, "").toString().simplified();
   w.stateOnValue          = ss_jsr(obj, Keys::OutputStateOnValue, "").toString();
+  w.positionLabels        = ss_jsr(obj, Keys::OutputPositionLabels, "").toString().simplified();
   w.stateConfirmMs        = ss_jsr(obj, Keys::OutputStateConfirmMs, 3000).toInt();
   w.replyTokenDatasetId   = ss_jsr(obj, Keys::OutputReplyTokenId, -1).toInt();
   w.replyCodeDatasetId    = ss_jsr(obj, Keys::OutputReplyCodeId, -1).toInt();
@@ -217,11 +262,20 @@ QJsonObject DataModel::serialize(const OutputWidget& w)
   if (w.checkable)
     obj.insert(Keys::OutputCheckable, true);
 
+  if (w.hideTitle)
+    obj.insert(Keys::OutputHideTitle, true);
+
   if (!w.color.isEmpty())
     obj.insert(Keys::OutputColor, w.color);
 
   if (w.size != OutputWidgetSize::Normal)
     obj.insert(Keys::OutputSize, static_cast<int>(w.size));
+
+  if (w.style != OutputWidgetStyle::Standard)
+    obj.insert(Keys::OutputStyle, static_cast<int>(w.style));
+
+  if (!w.positionLabels.isEmpty())
+    obj.insert(Keys::OutputPositionLabels, w.positionLabels);
 
   obj.insert(Keys::TransmitFunction, w.transmitFunction);
   obj.insert(Keys::OutputTxEncoding, w.txEncoding);

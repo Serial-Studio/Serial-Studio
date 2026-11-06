@@ -282,9 +282,9 @@ InstrumentBase {
               x2: meterArea.faceCx
               y1: meterArea.faceCy - meterArea.faceR
               y2: meterArea.faceCy + faceShape.bottomExtension
-              GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.28) }
-              GradientStop { position: 0.5; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.20) }
-              GradientStop { position: 1.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_base"], 1.10) }
+              GradientStop { position: 0.0; color: Qt.lighter(root.faceBase, 1.28) }
+              GradientStop { position: 0.5; color: Qt.lighter(root.faceBase, 1.20) }
+              GradientStop { position: 1.0; color: Qt.lighter(root.faceBase, 1.10) }
             }
 
             startY: meterArea.faceCy

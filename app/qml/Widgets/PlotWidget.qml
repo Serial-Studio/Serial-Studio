@@ -163,6 +163,14 @@ Item {
   }
 
   //
+  // Around the plot area: clear when the theme gives the widget body a material, so the
+  // material shows through; the flat widget colour otherwise
+  //
+  readonly property color graphBackground: Cpp_ThemeManager.surfaces["widget"] !== undefined
+                                           ? "transparent"
+                                           : Cpp_ThemeManager.colors["widget_window"]
+
+  //
   // Minor grid lines sit between the plot background and the border color so the fine
   // subdivisions read as texture instead of competing with the majors
   //
@@ -471,7 +479,7 @@ Item {
       borderColors: [Cpp_ThemeManager.colors["widget_border"]]
       plotAreaBackgroundVisible: true
       theme: GraphsTheme.Theme.UserDefined
-      backgroundColor: Cpp_ThemeManager.colors["widget_window"]
+      backgroundColor: root.graphBackground
       plotAreaBackgroundColor: Cpp_ThemeManager.colors["widget_base"]
 
       //
@@ -515,7 +523,7 @@ Item {
       //
       function refreshColors() {
         _theme.borderColors = [Cpp_ThemeManager.colors["widget_border"]]
-        _theme.backgroundColor = Cpp_ThemeManager.colors["widget_window"]
+        _theme.backgroundColor = root.graphBackground
         _theme.plotAreaBackgroundColor = Cpp_ThemeManager.colors["widget_base"]
         _theme.axisX.subColor = root.fadedGrid(0.4)
         _theme.axisY.subColor = root.fadedGrid(0.4)

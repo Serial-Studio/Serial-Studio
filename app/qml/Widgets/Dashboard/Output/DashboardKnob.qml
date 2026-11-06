@@ -15,6 +15,18 @@ import SerialStudio
 OutputValueControl {
   id: root
 
+  //
+  // Selector style (spec 0113): a labelled rotary switch in place of the dial
+  //
+  readonly property bool selector: root.widget ? root.widget.style === 3 : false
+  readonly property var positionLabels: {
+    const text = root.widget && root.widget.labels ? root.widget.labels : ""
+    if (text.length === 0)
+      return []
+
+    return text.split(",").map((label) => label.trim())
+  }
+
   ColumnLayout {
     spacing: 4
     anchors.margins: 8
@@ -23,10 +35,32 @@ OutputValueControl {
     OutputSectionLabel {
       text: root.title
       labelColor: root.color
+      visible: !(root.widget && root.widget.hideTitle === true)
+    }
+
+    Loader {
+      active: root.selector
+      Layout.fillWidth: true
+      visible: root.selector
+      Layout.fillHeight: true
+
+      sourceComponent: HardwareSelector {
+        to: root.to
+        from: root.from
+        step: root.step
+        dimmed: root.unknown
+        value: root.desiredValue
+        labels: root.positionLabels
+        objectName: root.idPrefix.length > 0 ? root.idPrefix + ".knob" : ""
+
+        onMoved: (value) => root.commitMove(value)
+      }
     }
 
     Dial {
       id: control
+
+      visible: !root.selector
 
       to: root.to
       from: root.from
@@ -39,7 +73,7 @@ OutputValueControl {
       Layout.alignment: Qt.AlignHCenter
       opacity: root.unknown ? 0.45 : 1.0
 
-      objectName: root.idPrefix.length > 0 ? root.idPrefix + ".knob" : ""
+      objectName: !root.selector && root.idPrefix.length > 0 ? root.idPrefix + ".knob" : ""
 
       Keys.onPressed: (event) => root.handleKey(event)
 
@@ -71,6 +105,7 @@ OutputValueControl {
     Label {
       color: root.color
       text: root.valueText
+      visible: !root.selector
       Layout.alignment: Qt.AlignHCenter
       font: Cpp_Misc_CommonFonts.customMonoFont(0.8, true)
     }

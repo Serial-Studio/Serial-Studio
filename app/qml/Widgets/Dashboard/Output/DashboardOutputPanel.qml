@@ -70,13 +70,14 @@ Item {
         height: geo ? geo.h : 0
 
         radius: 4
-        color: Cpp_ThemeManager.colors["groupbox_background"]
-        border.width: (cell.txError || cell.statePending) ? 2 : 1
+        color: cell.bare ? "transparent" : Cpp_ThemeManager.colors["groupbox_background"]
+        border.width: (cell.txError || cell.statePending) ? 2 : (cell.bare ? 0 : 1)
         border.color: cell.txError ? Cpp_ThemeManager.colors["alarm"]
                       : cell.statePending ? cell.accentColor
                       : Cpp_ThemeManager.colors["groupbox_border"]
 
         property var owData: root.model ? root.model.widgets[index] : null
+        property bool bare: cell.owData ? cell.owData.hideTitle === true : false
         property var owModel: root.model ? root.model.models[index] : null
 
         property int owType: owData ? owData.type : 0

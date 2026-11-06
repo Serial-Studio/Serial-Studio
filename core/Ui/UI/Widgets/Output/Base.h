@@ -159,6 +159,7 @@ protected:
   [[nodiscard]] QByteArray evaluateTransmitFunction(const QVariant& value, const int token);
   virtual void applyStateVerdict(const StateBinding::Verdict& verdict);
   void noteOperatorRequest(const QVariant& value, const int token, const bool bytesSent);
+  void sendValueNow(const QVariant& value);
 
 private slots:
   void flushPendingValue();
@@ -166,6 +167,7 @@ private slots:
 private:
   void armWindowTimer();
   void refreshOutcome(const qint64 nowMs);
+  void submitValue(const QVariant& value, const bool paced);
   [[nodiscard]] bool admit(QVariant& value);
   void setRangeMessage(const QString& message);
   void deliverValue(const QVariant& value);

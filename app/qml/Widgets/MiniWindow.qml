@@ -81,6 +81,15 @@ Item {
   // Colors
   //
   property color backgroundColor: Cpp_ThemeManager.colors["widget_base"]
+
+  //
+  // Theme caption rule: the focused window keeps the bottom colour and lifts only its top,
+  // so the selected caption is the lighter one; zero keeps the per-device rule below
+  //
+  readonly property real captionLift: {
+    const rule = Cpp_ThemeManager.styles["caption"]
+    return rule && rule["active-lift"] ? rule["active-lift"] : 0
+  }
   property color captionTopColor: {
     const _t = Cpp_ThemeManager.theme
     const singleDevice = Cpp_JSON_ProjectModel.sourceCount <= 1
@@ -90,6 +99,9 @@ Item {
                           : Cpp_ThemeManager.colors["window_caption_inactive_top"]
 
     const top = SerialStudioHelpers.getDeviceTopColor(root.deviceIndex + 1)
+    if (root.captionLift > 0)
+      return root.focused ? Qt.lighter(top, root.captionLift) : top
+
     if (root.focused)
       return top
 
@@ -104,7 +116,7 @@ Item {
                           : Cpp_ThemeManager.colors["window_caption_inactive_bottom"]
 
     const bot = SerialStudioHelpers.getDeviceBottomColor(root.deviceIndex + 1)
-    if (root.focused)
+    if (root.focused || root.captionLift > 0)
       return bot
 
     return Qt.hsla(bot.hslHue, bot.hslSaturation * 0.45, bot.hslLightness, 1.0)
@@ -494,7 +506,8 @@ Item {
           visible: root.showTitleLabel
           Layout.alignment: Qt.AlignVCenter
           horizontalAlignment: Qt.AlignLeft
-          font: Cpp_Misc_CommonFonts.boldUiFont
+          font: (Cpp_ThemeManager.themeName,
+                 Cpp_ThemeManager.lettering("engraving", Cpp_Misc_CommonFonts.boldUiFont))
           color: root.focused ? Cpp_ThemeManager.colors["window_caption_active_text"] :
                                 Cpp_ThemeManager.colors["window_caption_inactive_text"]
         }

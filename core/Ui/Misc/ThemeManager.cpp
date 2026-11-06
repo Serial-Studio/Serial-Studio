@@ -21,12 +21,15 @@
 
 #include "ThemeManager.h"
 
+#include <QDebug>
+#include <QFontDatabase>
 #include <QGuiApplication>
 #include <QJsonArray>
 #include <QPalette>
 #include <QStyleHints>
 #include <QTimer>
 
+#include "Core/SerialStudio.h"
 #include "Core/Services.h"
 #include "Core/Translator.h"
 #include "Core/WorkspaceManager.h"
@@ -35,6 +38,14 @@
 //--------------------------------------------------------------------------------------------------
 // Utility functions
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief How many themes were bundled while the selection was still stored as a list index. A
+ *        fourth bundled theme now sits after them, so a stored index at or past this count moves
+ *        up by one: without that, a legacy "System" or extension choice would open as the new
+ *        theme, which spec 0113 R11 forbids.
+ */
+static constexpr int kLegacyBuiltInThemes = 3;
 
 /**
  * @brief Converts a QJsonObject to a QVariantMap.
@@ -90,6 +101,57 @@ static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& col
   return result;
 }
 
+/**
+ * @brief Warns once per name a material theme uses and this build does not know (spec 0113 R3):
+ *        a top-level section, a recipe, a surface pointing at a material the theme never
+ *        defines, a widget look. The theme still applies; every consumer ignores what it cannot
+ *        resolve and draws what a colour-only theme draws.
+ */
+static void warnUnknownThemeNames(const QString& theme,
+                                  const QJsonObject& data,
+                                  const QVariantMap& materials,
+                                  const QVariantMap& surfaces,
+                                  const QVariantMap& looks)
+{
+  static const QStringList kSections = {QStringLiteral("title"),
+                                        QStringLiteral("parameters"),
+                                        QStringLiteral("translations"),
+                                        QStringLiteral("colors"),
+                                        QStringLiteral("fonts"),
+                                        QStringLiteral("materials"),
+                                        QStringLiteral("surfaces"),
+                                        QStringLiteral("styles"),
+                                        QStringLiteral("widgets")};
+  static const QStringList kRecipes  = {QStringLiteral("flat"),
+                                        QStringLiteral("gradient"),
+                                        QStringLiteral("brushed-metal"),
+                                        QStringLiteral("glass")};
+  static const QStringList kLooks    = {
+    QStringLiteral("lamp"), QStringLiteral("hardware"), QStringLiteral("plain")};
+
+  const auto sections = data.keys();
+  for (const auto& section : sections)
+    if (!kSections.contains(section))
+      qWarning() << "[Theme]" << theme << "has an unknown section" << section << "; ignored";
+
+  for (auto it = materials.cbegin(); it != materials.cend(); ++it) {
+    const auto recipe = it.value().toMap().value(QStringLiteral("recipe")).toString();
+    if (!kRecipes.contains(recipe))
+      qWarning() << "[Theme]" << theme << "material" << it.key() << "names an unknown recipe"
+                 << recipe << "; ignored";
+  }
+
+  for (auto it = surfaces.cbegin(); it != surfaces.cend(); ++it)
+    if (!materials.contains(it.value().toString()))
+      qWarning() << "[Theme]" << theme << "surface" << it.key() << "names an unknown material"
+                 << it.value().toString() << "; ignored";
+
+  for (auto it = looks.cbegin(); it != looks.cend(); ++it)
+    if (!kLooks.contains(it.value().toString()))
+      qWarning() << "[Theme]" << theme << "widget look" << it.key()
+                 << "is unknown:" << it.value().toString() << "; ignored";
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
@@ -115,6 +177,9 @@ Misc::ThemeManager::ThemeManager()
 
   else {
     themeIndex = m_settings.value("ApplicationTheme", 0).toInt();
+    if (themeIndex >= kLegacyBuiltInThemes)
+      ++themeIndex;
+
     if (themeIndex < 0 || themeIndex >= m_catalog.count())
       themeIndex = 0;
 
@@ -200,6 +265,47 @@ const QVariantMap& Misc::ThemeManager::parameters() const
 }
 
 /**
+ * @brief Returns the theme's lettering roles (spec 0113), empty for a colour-only theme.
+ */
+const QVariantMap& Misc::ThemeManager::fonts() const
+{
+  return m_fonts;
+}
+
+/**
+ * @brief Returns the theme's named materials: a recipe plus its parameters, by name.
+ */
+const QVariantMap& Misc::ThemeManager::materials() const
+{
+  return m_materials;
+}
+
+/**
+ * @brief Returns which material each part of the window is made of, by surface name.
+ */
+const QVariantMap& Misc::ThemeManager::surfaces() const
+{
+  return m_surfaces;
+}
+
+/**
+ * @brief Returns the theme's per-control style rules, by control class.
+ */
+const QVariantMap& Misc::ThemeManager::styles() const
+{
+  return m_styles;
+}
+
+/**
+ * @brief Returns the looks the theme selects for the LED panel ("led") and the output controls
+ *        ("output"); an absent key means the look every theme had before spec 0113.
+ */
+const QVariantMap& Misc::ThemeManager::widgetLooks() const
+{
+  return m_widgetLooks;
+}
+
+/**
  * @brief Returns the list of widget accent colors defined in the current theme.
  */
 const QVector<QColor>& Misc::ThemeManager::widgetColors() const
@@ -251,9 +357,62 @@ QColor Misc::ThemeManager::alarmColorForSeverity(int severity) const
   }
 }
 
+/**
+ * @brief Returns @p base dressed in the theme's lettering role @p role: its family at its one
+ *        weight, a size scale, capitals, letter spacing. The base family stays second so a
+ *        script the typeface lacks falls back to it (spec 0113 R10); a theme without the role
+ *        returns @p base untouched, which keeps the older themes identical.
+ */
+QFont Misc::ThemeManager::lettering(const QString& role, const QFont& base) const
+{
+  const auto rule = m_fonts.value(role).toMap();
+  if (rule.isEmpty())
+    return base;
+
+  QFont font(base);
+  const auto family = rule.value(QStringLiteral("family")).toString();
+  if (!family.isEmpty() && QFontDatabase::hasFamily(family)) {
+    font.setFamilies(QStringList{family, base.family()});
+    font.setWeight(QFont::Normal);
+  }
+
+  bool scaled        = false;
+  const double asked = SerialStudio::toDouble(rule.value(QStringLiteral("scale")), &scaled);
+  const double scale = scaled ? qBound(0.5, asked, 2.0) : 1.0;
+  if (font.pixelSize() > 0)
+    font.setPixelSize(qMax(1, qRound(font.pixelSize() * scale)));
+  else if (font.pointSizeF() > 0)
+    font.setPointSizeF(font.pointSizeF() * scale);
+
+  if (rule.value(QStringLiteral("capitals")).toBool())
+    font.setCapitalization(QFont::AllUppercase);
+
+  const double spacing = SerialStudio::toDouble(rule.value(QStringLiteral("spacing")));
+  if (!qFuzzyIsNull(spacing))
+    font.setLetterSpacing(QFont::AbsoluteSpacing, qBound(-2.0, spacing, 8.0));
+
+  return font;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Theme loading
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Copies the optional sections of a material theme out of @p data. A section the file
+ *        does not carry becomes an empty map, so switching from a material theme back to a
+ *        colour-only one clears every material, rule and look.
+ */
+void Misc::ThemeManager::applyThemeSections(const QJsonObject& data)
+{
+  m_fonts       = data.value(QStringLiteral("fonts")).toObject().toVariantMap();
+  m_materials   = data.value(QStringLiteral("materials")).toObject().toVariantMap();
+  m_surfaces    = data.value(QStringLiteral("surfaces")).toObject().toVariantMap();
+  m_styles      = data.value(QStringLiteral("styles")).toObject().toVariantMap();
+  m_widgetLooks = data.value(QStringLiteral("widgets")).toObject().toVariantMap();
+
+  warnUnknownThemeNames(m_themeName, data, m_materials, m_surfaces, m_widgetLooks);
+}
 
 /**
  * @brief Sets the current theme to the theme at the specified index.
@@ -281,6 +440,7 @@ void Misc::ThemeManager::setTheme(const int index)
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
   m_deviceColors = extractDeviceColors(data.value("colors").toObject());
   m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
+  applyThemeSections(data);
   Misc::syncColorMap(*m_colorMap, m_colors);
 
   m_palette.setColor(QPalette::Mid, getColor("mid"));
@@ -361,6 +521,7 @@ void Misc::ThemeManager::loadSystemTheme()
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
   m_deviceColors = extractDeviceColors(data.value("colors").toObject());
   m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
+  applyThemeSections(data);
   Misc::syncColorMap(*m_colorMap, m_colors);
 
   Q_EMIT themeChanged();

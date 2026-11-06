@@ -476,6 +476,14 @@ Item {
   }
 
   //
+  // Theme material behind the windows; loads nothing for a colour-only theme
+  //
+  Widgets.MaterialSurface {
+    surface: "dashboard"
+    anchors.fill: parent
+  }
+
+  //
   // Window canvas
   //
   Item {

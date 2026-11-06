@@ -41,7 +41,10 @@ static const QString kFallbackTheme = QStringLiteral("Fallback");
  */
 static QStringList builtInThemeFiles()
 {
-  return {QStringLiteral("default"), QStringLiteral("fluent-light"), QStringLiteral("fluent-dark")};
+  return {QStringLiteral("default"),
+          QStringLiteral("fluent-light"),
+          QStringLiteral("fluent-dark"),
+          QStringLiteral("millennium")};
 }
 
 //--------------------------------------------------------------------------------------------------

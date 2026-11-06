@@ -520,6 +520,16 @@ Widgets.MiniWindow {
     anchors.topMargin: Math.max(0, root.captionHeight + (root.hasToolbar ? 48 : 0) - 1)
 
     //
+    // Theme material over the flat body colour; loads nothing for a colour-only theme
+    //
+    Widgets.MaterialSurface {
+      surface: "widget"
+      anchors.margins: 1
+      anchors.fill: parent
+      radius: Math.max(0, _body.radius - 1)
+    }
+
+    //
     // Seam cover: hides this widget's own leading border where the neighbour above or to the
     // left already draws that line. Painted inside the widget, never over the neighbour.
     //
@@ -577,6 +587,15 @@ Widgets.MiniWindow {
       top: parent.top
       left: parent.left
       right: parent.right
+    }
+
+    //
+    // Theme material over the gradient; loads nothing for a colour-only theme
+    //
+    Widgets.MaterialSurface {
+      z: 0
+      anchors.fill: parent
+      surface: "widget-header"
     }
 
     gradient: Gradient {

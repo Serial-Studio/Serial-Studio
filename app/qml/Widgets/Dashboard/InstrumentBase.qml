@@ -29,6 +29,14 @@ Item {
   id: root
 
   //
+  // Dial face base: the theme's instrument rule when it has one, else the widget base
+  //
+  readonly property var instrumentRule: Cpp_ThemeManager.styles["instrument"]
+  readonly property color faceBase: root.instrumentRule && root.instrumentRule.face
+                                    ? root.instrumentRule.face
+                                    : Cpp_ThemeManager.colors["widget_base"]
+
+  //
   // Theme-aware chrome stops that adapt lighten/darken amounts to widget_base luminance
   //
   readonly property bool darkBg: {

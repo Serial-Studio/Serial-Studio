@@ -40,6 +40,16 @@ Item {
   required property LEDPanelModel model
 
   //
+  // Panel-lamp look, selected by the theme (spec 0113); every other theme keeps the disc
+  //
+  readonly property bool lampLook: Cpp_ThemeManager.widgetLooks["led"] === "lamp"
+
+  //
+  // A lamp row is taller than a disc row: the bezel needs the room
+  //
+  readonly property int cellHeight: root.lampLook ? 42 : 32
+
+  //
   // Create scrollable grid view with LED states
   //
   Flickable {
@@ -63,7 +73,7 @@ Item {
       id: grid
 
       columns: {
-        const itemHeight = 32 + 4
+        const itemHeight = root.cellHeight + 4
         const availableHeight = root.height - 16
         const itemsPerColumn = Math.floor(availableHeight / itemHeight)
         return (root.model.count <= itemsPerColumn) ? 1 : 2
@@ -87,11 +97,30 @@ Item {
 
           border.width: 1
           Layout.fillWidth: true
-          Layout.minimumHeight: 32
-          Layout.maximumHeight: 32
-          color: Cpp_ThemeManager.colors["widget_base"]
+          radius: root.lampLook ? 4 : 0
+          Layout.minimumHeight: root.cellHeight
+          Layout.maximumHeight: root.cellHeight
           Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-          border.color: Cpp_ThemeManager.colors["widget_border"]
+          color: root.lampLook ? Cpp_ThemeManager.colors["base"]
+                               : Cpp_ThemeManager.colors["widget_base"]
+          border.color: root.lampLook ? Cpp_ThemeManager.colors["groupbox_border"]
+                                      : Cpp_ThemeManager.colors["widget_border"]
+
+          //
+          // Lamp bezel under the lens; its halo is what a lit lamp shows with effects off
+          //
+          Loader {
+            height: width
+            active: root.lampLook
+            width: Math.round(led.width * 1.45)
+            x: layout.x + led.x + (led.width - width) / 2
+            y: layout.y + led.y + (led.height - height) / 2
+
+            sourceComponent: PanelBezel {
+              halo: led.showLit
+              haloColor: led.ledColor
+            }
+          }
 
           RowLayout {
             id: layout
@@ -111,16 +140,32 @@ Item {
               readonly property color ledColor: root.model.colors[index]
               readonly property bool flashing: led.lit && root.model.blinks[index]
               readonly property bool showLit: led.lit && (!led.flashing || led.flashOn)
+              readonly property color litColor: {
+                if (!root.lampLook)
+                  return led.ledColor
+
+                return Qt.hsva(Math.max(0, led.ledColor.hsvHue), led.ledColor.hsvSaturation,
+                               Math.max(0.96, led.ledColor.hsvValue), 1)
+              }
+              readonly property color offColor: {
+                if (!root.lampLook)
+                  return Qt.darker(led.ledColor)
+
+                return Qt.hsva(Math.max(0, led.ledColor.hsvHue),
+                               led.ledColor.hsvSaturation * 0.7,
+                               Math.min(1, led.ledColor.hsvValue * 0.55 + 0.12), 1)
+              }
 
               property bool flashOn: true
 
               border.width: 1
-              implicitWidth: Math.round(18 * cell.uiScale)
-              implicitHeight: Math.round(18 * cell.uiScale)
+              implicitWidth: Math.round((root.lampLook ? 20 : 18) * cell.uiScale)
+              implicitHeight: Math.round((root.lampLook ? 20 : 18) * cell.uiScale)
               radius: implicitWidth / 2
               Layout.alignment: Qt.AlignVCenter
-              border.color: Cpp_ThemeManager.colors["widget_border"]
-              color: led.showLit ? led.ledColor : Qt.darker(led.ledColor)
+              border.color: root.lampLook ? Cpp_ThemeManager.colors["window_border"]
+                                          : Cpp_ThemeManager.colors["widget_border"]
+              color: led.showLit ? led.litColor : led.offColor
 
               Behavior on color {ColorAnimation{}}
 
@@ -196,6 +241,21 @@ Item {
               widgets: root.model.widgets[index]
               Layout.alignment: Qt.AlignVCenter
               buttonSize: Math.max(22, Math.round(24 * cell.uiScale))
+            }
+          }
+
+          //
+          // Lamp facets and highlight over the lens, under the bloom so the glow covers them
+          //
+          Loader {
+            width: led.width
+            height: led.height
+            x: layout.x + led.x
+            y: layout.y + led.y
+            active: root.lampLook
+
+            sourceComponent: PanelLensFacets {
+              lit: led.showLit
             }
           }
 

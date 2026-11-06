@@ -254,6 +254,9 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetGet
   result[QStringLiteral("icon")]             = w.icon;
   result[QStringLiteral("monoIcon")]         = w.monoIcon;
   result[QStringLiteral("checkable")]        = w.checkable;
+  result[QStringLiteral("style")]            = static_cast<int>(w.style);
+  result[QStringLiteral("labels")]           = w.positionLabels;
+  result[QStringLiteral("showTitle")]        = !w.hideTitle;
   result[QStringLiteral("color")]            = w.color;
   result[QStringLiteral("size")]             = static_cast<int>(w.size);
   result[QStringLiteral("onLabel")]          = w.onLabel;
