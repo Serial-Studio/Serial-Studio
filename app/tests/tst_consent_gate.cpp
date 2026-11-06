@@ -19,6 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
+#include <functional>
 #include <QCoreApplication>
 #include <QSettings>
 #include <QSignalSpy>
@@ -50,6 +51,9 @@ public:
     ++prompts;
     lastText        = text;
     lastInformative = informativeText;
+    if (whileOpen)
+      whileOpen();
+
     return answer;
   }
 
@@ -68,6 +72,7 @@ public:
   int answer  = Core::Prompt::No;
   QString lastText;
   QString lastInformative;
+  std::function<void()> whileOpen;
 };
 
 /**
@@ -83,6 +88,7 @@ private slots:
   void cleanupTestCase();
 
   void unansweredRefusesAndPromptsOnce();
+  void askedWhileThePromptIsOpenDoesNotStackASecond();
   void noIsRememberedForTheSessionOnly();
   void yesPersistsUnderTheKey();
   void yesOnAnEmptyKeyIsSessionOnly();
@@ -116,6 +122,7 @@ void TstConsentGate::init()
   m_prompter.answer  = Core::Prompt::No;
   m_prompter.lastText.clear();
   m_prompter.lastInformative.clear();
+  m_prompter.whileOpen = nullptr;
 
   QSettings settings;
   settings.clear();
@@ -160,6 +167,36 @@ void TstConsentGate::unansweredRefusesAndPromptsOnce()
   QVERIFY(m_prompter.lastInformative.startsWith(QStringLiteral("Why.")));
   QVERIFY(m_prompter.lastInformative.contains(QStringLiteral("first")));
   QVERIFY(!m_prompter.lastInformative.contains(QStringLiteral("second")));
+}
+
+/**
+ * @brief A request that arrives while the question is open (the modal spins a nested event loop)
+ *        is refused without a second question on top of the first, and the gate asks again only
+ *        after a later revoke; found 2026-11-06 as three stacked prompts behind another dialog.
+ */
+void TstConsentGate::askedWhileThePromptIsOpenDoesNotStackASecond()
+{
+  QSettings settings;
+  API::ConsentGate gate(settings, freshKey(), QStringLiteral("Allow?"), QStringLiteral("Why."));
+
+  auto nested          = API::ConsentVerdict::Allowed;
+  m_prompter.whileOpen = [&gate, &nested] {
+    nested = gate.authorize(QStringLiteral("again"));
+    QCoreApplication::processEvents();
+  };
+
+  QCOMPARE(gate.authorize(QStringLiteral("first")), API::ConsentVerdict::ConsentRequired);
+  QCoreApplication::processEvents();
+  QCoreApplication::processEvents();
+  QCOMPARE(nested, API::ConsentVerdict::ConsentRequired);
+  QCOMPARE(m_prompter.prompts, 1);
+  QCOMPARE(gate.authorize(), API::ConsentVerdict::Denied);
+
+  m_prompter.whileOpen = nullptr;
+  gate.revoke();
+  QCOMPARE(gate.authorize(), API::ConsentVerdict::ConsentRequired);
+  QCoreApplication::processEvents();
+  QCOMPARE(m_prompter.prompts, 2);
 }
 
 /**

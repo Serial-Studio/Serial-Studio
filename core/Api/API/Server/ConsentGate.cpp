@@ -146,13 +146,16 @@ API::ConsentVerdict API::ConsentGate::authorize(const QString& detail)
 
 /**
  * @brief Asks the user from the event loop rather than from the requesting path, and records the
- *        answer for every later request. A second prompt is refused: the first one already decided.
+ *        answer for every later request. The posted latch holds until the question is answered:
+ *        the modal spins a nested event loop, and a request arriving inside it would otherwise
+ *        post a second question on top of the open one.
  */
 void API::ConsentGate::showPrompt()
 {
-  m_promptPosted = false;
-  if (m_state != State::Unset)
+  if (m_state != State::Unset) {
+    m_promptPosted = false;
     return;
+  }
 
   QString informative = m_question;
   if (!m_detail.isEmpty())
@@ -165,6 +168,7 @@ void API::ConsentGate::showPrompt()
                                                    Core::Prompt::Yes | Core::Prompt::No,
                                                    Core::Prompt::No);
 
+  m_promptPosted = false;
   if (answer != Core::Prompt::Yes) {
     m_state = State::Denied;
     return;
