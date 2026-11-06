@@ -184,8 +184,12 @@ void API::Handlers::IOManagerHandler::registerQueryCommands()
     QStringLiteral("Returns the current connection state: isConnected, paused, "
                    "busType + busTypeLabel, configurationOk (true when the active "
                    "bus has enough config to call io.connect), readOnly/readWrite "
-                   "capability flags and linkState (connected, connecting or idle; "
-                   "connecting means a dial is in flight). Call this first when the "
+                   "capability flags, linkState (connected, connecting or idle; "
+                   "connecting means a dial is in flight) and sources: one entry per "
+                   "source with sourceId, title, busType, state (connected, connecting, "
+                   "failed or idle) and, when failed, error. In a project with several "
+                   "sources isConnected is true while ANY of them is open, so read "
+                   "sources to see which ones are down. Call this first when the "
                    "user reports a connection issue. Reconnection is each driver's "
                    "own business, so no attempt counter is reported: poll "
                    "isConnected to watch a link that keeps dropping."),
@@ -388,6 +392,38 @@ API::CommandResponse API::Handlers::IOManagerHandler::writeData(const QString& i
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Renders the per-source link list for io.getStatus and collects in @p down a label for
+ *        every source that is not connected, so the summary of a live session can name them.
+ */
+[[nodiscard]] static QJsonArray sourceLinksJson(const IO::ConnectionManager& manager,
+                                                QStringList& down)
+{
+  QJsonArray sources;
+  for (const auto& link : manager.sourceLinks()) {
+    const QString bus = API::EnumLabels::busTypeLabel(link.busType);
+
+    QJsonObject entry;
+    entry[QStringLiteral("sourceId")]     = link.sourceId;
+    entry[QStringLiteral("title")]        = link.title;
+    entry[Keys::BusType]                  = link.busType;
+    entry[QStringLiteral("busTypeLabel")] = bus;
+    entry[QStringLiteral("state")]        = link.state;
+    if (!link.error.isEmpty())
+      entry[QStringLiteral("error")] = link.error;
+
+    sources.append(entry);
+    if (link.state == QLatin1String("connected"))
+      continue;
+
+    const QString name = link.title.isEmpty() ? bus : link.title;
+    down.append(link.error.isEmpty() ? QStringLiteral("\"%1\"").arg(name)
+                                     : QStringLiteral("\"%1\" (%2)").arg(name, link.error));
+  }
+
+  return sources;
+}
+
+/**
  * @brief Get current connection status and configuration
  */
 API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& id,
@@ -413,6 +449,9 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
   result[QStringLiteral("readWrite")]       = manager.readWrite();
   result[QStringLiteral("linkState")]       = link;
 
+  QStringList down;
+  result[QStringLiteral("sources")] = sourceLinksJson(manager, down);
+
   const auto& availableBuses = manager.availableBuses();
   if (busInt >= 0 && busInt < availableBuses.count())
     result[QStringLiteral("busTypeName")] = availableBuses.at(busInt);
@@ -433,6 +472,9 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
     summary = QStringLiteral("Not connected. %1 is configured and ready "
                              "to open.")
                 .arg(API::EnumLabels::busTypeLabel(busInt));
+
+  if (live && !down.isEmpty())
+    summary += QStringLiteral(" Not connected: %1.").arg(down.join(QStringLiteral(", ")));
 
   result[QStringLiteral("_summary")] = summary;
 

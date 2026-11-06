@@ -102,6 +102,9 @@ A tier is missing between two that exist (`scripts/icon-report.py`, tier holes):
 - [ ] Build, then run `ctest -R tst_consent_gate` (three cases added 2026-11-06, syntax-checked
   only), and check a second instance: with one app on 7777, `--headless --api-server --api-port
   7801` should listen on 7801 and leave `API/Enabled` as it was.
+- [ ] With the app up: `pytest tests/integration/test_connection_verdicts.py -k source_list`, then
+  connect a project with several devices while one endpoint is down and check the notification
+  and the `sources` list of `io.getStatus` (added 2026-11-06, never run).
 
 - [ ] Spec 0113: first build of the uncompiled C++ (the syntax check could not run, the compile
   database names a removed SDK), then `--dump-api-schema` and `scripts/generate-sdk.py` once

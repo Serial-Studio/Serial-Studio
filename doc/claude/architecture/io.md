@@ -148,6 +148,18 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   member) and `concludeConnectRequest()` survives only to
   settle the wait cursor and to make `toggleConnection()` treat an in-flight request as
   "connected" so the button aborts instead of stacking a second attempt.
+- **A device that fails to open beside others that opened is named, not only logged.**
+  `onDeviceOpenFinished()` keeps the failure text in `ConnectFanOut` (`noteOpenOutcome`) and
+  hands the outcome to `ConnectionBusBridge::publishOpenOutcome()`, which publishes the
+  diagnostics message and, in a project with more than one source, a `NotificationRaised` naming
+  the device. `io.getStatus` lists every source through `ConnectionManager::sourceLinks()`
+  (`connected`, `connecting`, `failed`, `idle`), because `isConnected()` is true while ANY device
+  is open. The text is forgotten by a new attempt, a success, a user disconnect (`endSession`)
+  and a device rebuild (`forgetDevice`); the by-id `disconnectDevice` does NOT clear it, since
+  the failure path closes the device before it reports. A link that drops mid-session reads
+  `idle`: the drivers raise their own notification for a drop. `logDriverError` is console-only,
+  so before 2026-11-06 a dead Modbus source beside a live CAN one read "Connected via CAN bus"
+  to the user, the API and the control script alike.
 - **Async dials are visible through `HAL_Driver::isConnecting()`** (default `false`). Twelve
   classes override it: `Network` (`m_dialPending`, now true for TCP as well as WebSocket and
   HTTP; only UDP settles synchronously), `Iec104` (`m_dial.active()`), `Modbus`, `MQTT`,

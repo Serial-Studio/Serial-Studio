@@ -140,6 +140,31 @@ def test_network_dead_port_settles_with_one_verdict(api_client, clean_state):
 
 
 @pytest.mark.network
+def test_failed_dial_is_named_in_the_source_list(api_client, clean_state):
+    """A refused dial leaves its source 'failed' with the reason, until the next attempt."""
+    if not refusal_is_observable():
+        pytest.skip("this host swallows the RST for closed loopback ports")
+
+    api_client.set_operation_mode("quickplot")
+    api_client.configure_network(
+        host=REFUSED_HOST, port=REFUSED_PORT, socket_type="tcp"
+    )
+    time.sleep(0.3)
+
+    before = _status(api_client).get("sources")
+    assert isinstance(before, list) and len(before) == 1
+    assert before[0].get("sourceId") == 0
+    assert before[0].get("state") == "idle"
+    assert "error" not in before[0]
+
+    st = _connect_and_settle(api_client)
+    sources = st.get("sources")
+    assert isinstance(sources, list) and len(sources) == 1
+    assert sources[0].get("state") == "failed"
+    assert sources[0].get("error")
+
+
+@pytest.mark.network
 def test_modbus_dead_port_settles_with_one_verdict(api_client, clean_state):
     """AC1/AC2: a refused Modbus TCP dial resolves; 'connecting' cannot persist."""
     if not refusal_is_observable():

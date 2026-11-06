@@ -25,6 +25,7 @@
 #include "Core/DataModel/FrameSupport.h"
 #include "Core/IO/HAL_Driver.h"
 #include "Core/SSAssert.h"
+#include "IO/ConnectionManager/ConnectFanOut.h"
 #include "IO/DeviceManager.h"
 
 /**
@@ -216,4 +217,51 @@ std::vector<int> IO::DeviceTableQuery::deviceIdSnapshot(bool projectSourcesOnly)
       ids.push_back(id);
 
   return ids;
+}
+
+/**
+ * @brief Names one device's link for sourceLinks(): open wins, then a dial in flight, then the
+ *        failure its last attempt left behind.
+ */
+[[nodiscard]] static QString linkStateOf(IO::DeviceManager* dm, const QString& failure)
+{
+  if (dm && dm->isOpen())
+    return QStringLiteral("connected");
+
+  if (dm && dm->driver() && dm->driver()->isConnecting())
+    return QStringLiteral("connecting");
+
+  return failure.isEmpty() ? QStringLiteral("idle") : QStringLiteral("failed");
+}
+
+/**
+ * @brief Lists every source's link, in project order, so a session that is up on one source and
+ *        dead on another says so. Outside ProjectFile mode there is one source, device 0 on
+ *        @p busType. Command rate only: the API status command reads it.
+ */
+std::vector<IO::DeviceTableQuery::SourceLink> IO::DeviceTableQuery::sourceLinks(
+  SerialStudio::BusType busType,
+  SerialStudio::OperationMode mode,
+  const ConnectFanOut& attempts) const
+{
+  std::vector<SourceLink> links;
+  const auto append = [this, &attempts, &links](int id, int bus, const QString& title) {
+    const auto it      = m_devices.find(id);
+    auto* dm           = it != m_devices.end() ? it->second.get() : nullptr;
+    const auto failure = attempts.openFailure(id);
+    const auto state   = linkStateOf(dm, failure);
+    const bool failed  = state == QLatin1String("failed");
+    links.push_back({id, bus, title, state, failed ? failure : QString()});
+  };
+
+  if (mode != SerialStudio::ProjectFile || !m_project) {
+    append(0, static_cast<int>(busType), QString());
+    return links;
+  }
+
+  links.reserve(m_project->sources.size());
+  for (const auto& src : m_project->sources)
+    append(src.sourceId, src.busType, src.title);
+
+  return links;
 }

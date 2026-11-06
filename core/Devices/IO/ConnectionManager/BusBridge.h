@@ -36,6 +36,7 @@ struct ProjectStructureSnapshot;
 namespace IO {
 
 class ConnectionManager;
+class HAL_Driver;
 
 /**
  * @brief The connection manager's seam to the message bus (spec 0077): mirrors the retained
@@ -72,6 +73,7 @@ public:
   void wire(ConnectionManager& facade, Reactions reactions);
   void publishConnectionState(
     int sourceId, bool connected, bool paused, bool connecting, int busType);
+  void publishOpenOutcome(HAL_Driver* driver, int deviceId, bool ok, const QString& reason);
 
 private:
   Core::Bus::MessageBus& m_bus;

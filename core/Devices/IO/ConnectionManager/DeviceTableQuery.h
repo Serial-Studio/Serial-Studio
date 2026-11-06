@@ -39,6 +39,7 @@ struct ProContentSummary;
 
 namespace IO {
 
+class ConnectFanOut;
 class DeviceManager;
 class HAL_Driver;
 
@@ -59,6 +60,18 @@ public:
     ProBus,
     MultiSource,
     ProContent,
+  };
+
+  /**
+   * @brief One source's link as a client reads it: connected, connecting, failed (its last open
+   *        attempt in this session did not succeed; error says why) or idle.
+   */
+  struct SourceLink {
+    int sourceId;
+    int busType;
+    QString title;
+    QString state;
+    QString error;
   };
 
   DeviceTableQuery(const DeviceTable& devices,
@@ -83,6 +96,9 @@ public:
     SerialStudio::OperationMode mode) const;
   [[nodiscard]] int deviceIdForDriver(const HAL_Driver* driver) const;
   [[nodiscard]] std::vector<int> deviceIdSnapshot(bool projectSourcesOnly) const;
+  [[nodiscard]] std::vector<SourceLink> sourceLinks(SerialStudio::BusType busType,
+                                                    SerialStudio::OperationMode mode,
+                                                    const ConnectFanOut& attempts) const;
 
   [[nodiscard]] static QString linkState(bool connected, bool connecting);
 

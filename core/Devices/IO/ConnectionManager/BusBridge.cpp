@@ -21,10 +21,12 @@
 
 #include "IO/ConnectionManager/BusBridge.h"
 
+#include <QCoreApplication>
 #include <utility>
 
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
+#include "Core/DiagnosticsTypes.h"
 #include "Core/SSAssert.h"
 #include "IO/ConnectionManager.h"
 
@@ -168,4 +170,50 @@ void IO::ConnectionBusBridge::publishConnectionState(const int sourceId,
   SS_ASSERT_LOG(sourceId >= 0);
   m_bus.publishState<Core::Bus::ConnectionStateChanged>(
     sourceId, connected, paused, connecting, busType);
+}
+
+/**
+ * @brief Publishes how @p deviceId's open attempt ended. The connection diagnostics hear every
+ *        attempt on a bus they cover. A failure in a project with several devices is also raised
+ *        as a notification naming the device: the others keep the session up, so the connect
+ *        button reads connected and nothing else would say one of them is missing.
+ */
+void IO::ConnectionBusBridge::publishOpenOutcome(HAL_Driver* driver,
+                                                 const int deviceId,
+                                                 const bool ok,
+                                                 const QString& reason)
+{
+  SS_ASSERT_LOG(deviceId >= 0);
+  SS_ASSERT_LOG(ok || !reason.isEmpty());
+
+  Misc::Diagnostics::Bus bus = Misc::Diagnostics::Bus::Serial;
+  if (DriverFactory::diagnosticsBus(driver, bus))
+    m_bus.publish<Core::Bus::DeviceOpenAttempted>(static_cast<int>(bus), ok, reason);
+
+  if (ok || m_operationMode != SerialStudio::ProjectFile || !m_project)
+    return;
+
+  const auto& sources = m_project->sources;
+  if (sources.size() < 2)
+    return;
+
+  QString title;
+  for (const auto& src : sources)
+    if (src.sourceId == deviceId)
+      title = src.title;
+
+  QString why = reason;
+  while (why.endsWith(QLatin1Char('.')))
+    why.chop(1);
+
+  if (!why.isEmpty())
+    why[0] = why.at(0).toUpper();
+
+  m_bus.publish<Core::Bus::NotificationRaised>(
+    Core::Bus::kSeverityWarning,
+    QStringLiteral("Connection"),
+    QStringLiteral("device-open-failed/%1").arg(deviceId),
+    QCoreApplication::translate("IO::ConnectionManager", "\"%1\" did not connect").arg(title),
+    QCoreApplication::translate("IO::ConnectionManager", "%1. The other devices keep running.")
+      .arg(why));
 }

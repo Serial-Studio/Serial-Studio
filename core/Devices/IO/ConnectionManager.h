@@ -174,6 +174,11 @@ public:
   [[nodiscard]] QString linkState() const;
   [[nodiscard]] LinkStats linkStats() const;
 
+  [[nodiscard]] std::vector<DeviceTableQuery::SourceLink> sourceLinks() const
+  {
+    return m_query.sourceLinks(m_busType, m_operationMode, m_fanOut);
+  }
+
   [[nodiscard]] SerialStudio::BusType busType() const noexcept;
 
   [[nodiscard]] const QByteArray& startSequence() const noexcept;

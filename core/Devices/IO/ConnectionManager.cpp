@@ -27,7 +27,6 @@
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/DataModel/Frame.h"
-#include "Core/DiagnosticsTypes.h"
 #include "Core/IO/StreamConfig.h"
 #include "Core/License.h"
 #include "Core/ModuleConstruction.h"
@@ -683,7 +682,7 @@ void IO::ConnectionManager::disconnectDevice()
   m_binder.resetQuickPlotHeaders();
 
   concludeConnectRequest();
-  m_fanOut.endWaitCursor();
+  m_fanOut.endSession();
 
   Q_EMIT driverChanged();
   notifyConnectedStateChanged();
@@ -877,7 +876,7 @@ void IO::ConnectionManager::openDevice(int deviceId, ResumePolicy policy)
   if (halDriver)
     halDriver->disarmOpenReport();
 
-  onDeviceOpenFinished(deviceId, ok, ok ? QString() : QStringLiteral("device did not open"));
+  onDeviceOpenFinished(deviceId, ok, ok ? QString() : tr("The device did not open"));
 }
 
 /**
@@ -1196,19 +1195,18 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
 }
 
 /**
- * @brief Settles the pending connect request when a device finishes opening, and publishes the
- *        outcome as DeviceOpenAttempted for the connection diagnostics: a failure diagnoses that
- *        bus only, a success clears what the previous failure reported. Every open reports its
- *        outcome here exactly once, and the connected state is published idempotently afterwards.
+ * @brief Settles the pending connect request when a device finishes opening: the outcome is kept
+ *        for the per-source link list and published (the diagnostics for its bus, a notification
+ *        when it failed beside other devices). Every open reports its outcome here exactly once,
+ *        and the connected state is published idempotently afterwards.
  */
 void IO::ConnectionManager::onDeviceOpenFinished(int deviceId, bool ok, const QString& reason)
 {
   SS_ASSERT_LOG(deviceId >= 0);
   SS_ASSERT_LOG(ok || !reason.isEmpty());
 
-  Misc::Diagnostics::Bus bus = Misc::Diagnostics::Bus::Serial;
-  if (DriverFactory::diagnosticsBus(driver(deviceId), bus))
-    m_bus.publish<Core::Bus::DeviceOpenAttempted>(static_cast<int>(bus), ok, reason);
+  m_fanOut.noteOpenOutcome(deviceId, ok, reason);
+  m_busBridge.publishOpenOutcome(driver(deviceId), deviceId, ok, reason);
 
   concludeConnectRequest();
   notifyConnectedStateChanged();
@@ -1381,7 +1379,7 @@ void IO::ConnectionManager::rebuildDevices()
       continue;
     }
 
-    (void)m_fanOut.takePendingDial(it->first);
+    m_fanOut.forgetDevice(it->first);
     if (it->second) {
       if (it->second->driver())
         it->second->driver()->disarmOpenReport();

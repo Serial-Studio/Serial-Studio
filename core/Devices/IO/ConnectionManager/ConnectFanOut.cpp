@@ -122,13 +122,15 @@ void IO::ConnectFanOut::endWaitCursor()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Records that @p deviceId owes an asynchronous dial verdict through openFinished().
+ * @brief Records that @p deviceId owes an asynchronous dial verdict through openFinished(). A new
+ *        attempt is under way, so what the previous one failed with no longer describes it.
  */
 void IO::ConnectFanOut::notePendingDial(int deviceId)
 {
   SS_ASSERT(deviceId >= 0, return);
 
   m_pendingDialVerdicts.insert(deviceId);
+  m_openFailures.remove(deviceId);
 }
 
 /**
@@ -140,6 +142,55 @@ void IO::ConnectFanOut::notePendingDial(int deviceId)
 bool IO::ConnectFanOut::takePendingDial(int deviceId)
 {
   return m_pendingDialVerdicts.remove(deviceId);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Open failures
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Keeps why @p deviceId's last open attempt failed, or forgets it once the device opened.
+ *        A device that fails beside others that opened leaves a live session with a dead member,
+ *        and this text is the only place that says which one and why.
+ */
+void IO::ConnectFanOut::noteOpenOutcome(int deviceId, bool ok, const QString& reason)
+{
+  SS_ASSERT(deviceId >= 0, return);
+  SS_ASSERT_LOG(ok || !reason.isEmpty());
+
+  if (ok)
+    m_openFailures.remove(deviceId);
+  else
+    m_openFailures.insert(deviceId, reason);
+}
+
+/**
+ * @brief Why @p deviceId's last open attempt failed; empty when it opened, was never tried, or
+ *        the session it failed in is over.
+ */
+QString IO::ConnectFanOut::openFailure(int deviceId) const
+{
+  return m_openFailures.value(deviceId);
+}
+
+/**
+ * @brief Drops everything held for @p deviceId, which is being destroyed: a verdict it still owes
+ *        is a cancel, and a failure text must not outlive the device it described.
+ */
+void IO::ConnectFanOut::forgetDevice(int deviceId)
+{
+  m_pendingDialVerdicts.remove(deviceId);
+  m_openFailures.remove(deviceId);
+}
+
+/**
+ * @brief Settles a user disconnect: the wait cursor it raised is restored, and no device reads as
+ *        failed any more, because the session those attempts belonged to has ended.
+ */
+void IO::ConnectFanOut::endSession()
+{
+  endWaitCursor();
+  m_openFailures.clear();
 }
 
 //--------------------------------------------------------------------------------------------------

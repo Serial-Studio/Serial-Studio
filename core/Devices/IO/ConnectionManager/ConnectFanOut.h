@@ -21,15 +21,18 @@
 
 #pragma once
 
+#include <QHash>
 #include <QSet>
+#include <QString>
 
 namespace IO {
 
 /**
  * @brief Bookkeeping for one connect request: the in-flight and fan-out flags, the devices that
- *        owe an asynchronous dial verdict, the wait cursor, and the last connected/connecting
- *        state published. It queries no device and emits nothing -- ConnectionManager keeps the
- *        device map and every Q_EMIT, so the spec-0050 verdict lands where the drivers are wired.
+ *        owe an asynchronous dial verdict, the wait cursor, the last connected/connecting state
+ *        published, and why each device's last open attempt failed. It queries no device and
+ *        emits nothing -- ConnectionManager keeps the device map and every Q_EMIT, so the
+ *        spec-0050 verdict lands where the drivers are wired.
  */
 class ConnectFanOut {
 public:
@@ -41,14 +44,18 @@ public:
 
   void endFanOut() noexcept;
   void beginRequest() noexcept;
+  void forgetDevice(int deviceId);
   void notePendingDial(int deviceId);
+  void noteOpenOutcome(int deviceId, bool ok, const QString& reason);
 
+  void endSession();
   void endWaitCursor();
   void beginWaitCursor();
 
   [[nodiscard]] bool concludeRequest() noexcept;
   [[nodiscard]] bool takePendingDial(int deviceId);
   [[nodiscard]] bool requestPending() const noexcept;
+  [[nodiscard]] QString openFailure(int deviceId) const;
 
   [[nodiscard]] bool noteConnecting(bool connecting) noexcept;
   [[nodiscard]] bool noteConnected(bool connected, int deviceCount) noexcept;
@@ -61,6 +68,7 @@ private:
   bool m_lastConnectingState;
   int m_lastConnectedCount;
   QSet<int> m_pendingDialVerdicts;
+  QHash<int, QString> m_openFailures;
 };
 
 }  // namespace IO
