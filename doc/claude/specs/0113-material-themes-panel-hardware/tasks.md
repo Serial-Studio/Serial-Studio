@@ -143,6 +143,16 @@ updated: 2026-11-06
 - [ ] **T27** The hardware looks are plain `Item`s: confirm the automation catalogue reports
   them as buttons, or pin a role for them (`tst_ui_automation`).
 - [ ] **T28** Translations for the new strings (maintainer's `lupdate` pass).
+- [x] **T29** (2026-11-07) **Millennium Dark**: a fifth bundled theme, black anodized plates on a
+  darker frame with the same materials, looks and green indicators; its own editor scheme;
+  `ThemeCatalog::builtInCount()` widens the legacy stored-index migration so a pre-0113 "System"
+  or extension choice still resolves. Verify: `scripts/tests/test_material_theme.py`.
+- [x] **T30** (2026-11-07) **Get Themes…** beside the theme selector in Preferences opens the
+  Extension Manager filtered to themes (`main.qml` `showThemeExtensions`).
+- [x] **T31** (2026-11-07) Default theme, at the maintainer's request and amending the "Default
+  unchanged" non-goal: a lit toolbar gradient, a `frame` gradient behind the dashboard, grain-free
+  `plate` and `header` shading (shade 0.5, no bevel) and a 1.06 caption lift. AC1 now binds the
+  two Fluent themes only.
 
 ## Definition of Done
 

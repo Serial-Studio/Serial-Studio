@@ -225,8 +225,9 @@ table complete.
 
 A theme is data. It selects recipes Serial Studio already has and cannot load a file or
 run anything. A name Serial Studio does not know is skipped with a warning in the log.
-The bundled **Millennium** theme uses `materials`, `surfaces` and `widgets`, and keeps the
-interface fonts.
+The bundled **Millennium** and **Millennium Dark** themes use `materials`, `surfaces` and
+`widgets`, and keep the interface fonts. **Get Themes…** beside the theme selector in
+Preferences opens this catalog filtered to themes.
 
 ### Hosting
 
