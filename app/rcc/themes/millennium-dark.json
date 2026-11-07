@@ -1,0 +1,263 @@
+{
+  "title": "Millennium Dark",
+  "parameters": {
+    "code-editor-theme": "millennium-dark",
+    "start-icon": "qrc:/logo/start-dark.svg"
+  },
+  "translations": {
+    "en_US": "Millennium Dark",
+    "es_MX": "Milenio Oscuro",
+    "de_DE": "Millennium Dunkel",
+    "fr_FR": "Millénaire Sombre",
+    "it_IT": "Millennio Scuro",
+    "ja_JP": "ミレニアム ダーク",
+    "ko_KR": "밀레니엄 다크",
+    "pl_PL": "Milenium Ciemny",
+    "pt_BR": "Milênio Escuro",
+    "ru_RU": "Миллениум Тёмная",
+    "tr_TR": "Milenyum Karanlık",
+    "zh_CN": "千禧 深色",
+    "cs_CZ": "Milénium Tmavý",
+    "uk_UA": "Міленіум Темна",
+    "hi_IN": "मिलेनियम डार्क",
+    "nl_NL": "Millennium Donker",
+    "ro_RO": "Mileniu Întunecat",
+    "sv_SE": "Millennium Mörkt",
+    "ar_SA": "الألفية داكن",
+    "he_IL": "מילניום כהה",
+    "vi_VN": "Thiên niên kỷ Tối"
+  },
+  "colors": {
+    "groupbox_border": "#464C53",
+    "groupbox_background": "#2A2F34",
+    "groupbox_hard_border": "#5A6168",
+
+    "pane_background": "#22262A",
+    "pane_section_label": "#E6E8EA",
+    "pane_caption_bg_top": "#1A1D20",
+    "pane_caption_border": "#3F454B",
+    "pane_caption_bg_bottom": "#2A2F34",
+    "pane_caption_foreground": "#E6E8EA",
+
+    "setup_border": "#464C53",
+    "toolbar_top": "#3A4047",
+    "titlebar_text": "#E6E8EA",
+    "toolbar_text": "#D8DCE0",
+    "toolbar_bottom": "#272C31",
+    "toolbar_border": "#4C535A",
+    "toolbar_separator": "#4C535A",
+    "toolbar_checked_button_opacity": 0.7,
+    "toolbar_checked_button_border": "#0F1113",
+    "toolbar_checked_button_background": "#15181B",
+
+    "error": "#E0574B",
+    "alarm": "#E0574B",
+    "alarm_info": "#5B9BE0",
+    "alarm_ok": "#35AE55",
+    "alarm_warning": "#E0A52E",
+    "alarm_critical": "#E0574B",
+    "dashboard_background": "#1C1F22",
+
+    "notebox_text": "#E6E8EA",
+    "notebox_border": "#4A5057",
+    "notebox_background": "#2E3A31",
+
+    "mid": "#3F454B",
+    "dark": "#1A1D20",
+    "text": "#E6E8EA",
+    "base": "#23272B",
+    "link": "#6CB6E0",
+    "light": "#363B41",
+    "window": "#2A2F34",
+    "shadow": "#0A0C0E",
+    "accent": "#1F7A33",
+    "button": "#363B41",
+    "midlight": "#31363C",
+    "highlight": "#1F7A33",
+    "window_text": "#E6E8EA",
+    "bright_text": "#FFFFFF",
+    "button_text": "#E6E8EA",
+    "tooltip_base": "#3A3F45",
+    "tooltip_text": "#F2F4F5",
+    "link_visited": "#B2A6E0",
+    "alternate_base": "#282D32",
+    "placeholder_text": "#9AA1A8",
+    "highlighted_text": "#FFFFFF",
+    "switch_highlight": "#35AE55",
+
+    "console_text": "#D8DCE0",
+    "console_base": "#15181B",
+    "console_border": "#3F454B",
+    "console_highlight": "#2E5A3B",
+
+    "widget_text": "#E6E8EA",
+    "widget_base": "#2E3338",
+    "widget_button": "#363B41",
+    "widget_border": "#4A5057",
+    "widget_window": "#2A2F34",
+    "widget_highlight": "#1F7A33",
+    "widget_button_text": "#E6E8EA",
+    "widget_highlighted_text": "#FFFFFF",
+    "widget_placeholder_text": "#9AA1A8",
+
+    "window_border": "#4A5057",
+    "window_toolbar_background": "#30353B",
+    "window_caption_active_top": "#3A4047",
+    "window_caption_active_text": "#F2F4F5",
+    "window_caption_inactive_top": "#30353B",
+    "window_caption_inactive_text": "#A9B0B8",
+    "window_caption_active_bottom": "#30353B",
+    "window_caption_inactive_bottom": "#2A2F34",
+
+    "taskbar_top": "#3A4047",
+    "taskbar_text": "#D8DCE0",
+    "taskbar_bottom": "#272C31",
+    "taskbar_border": "#15181B",
+    "taskbar_separator": "#4C535A",
+    "taskbar_highlight": "#35AE55",
+    "taskbar_indicator_active": "#FFFFFF",
+    "taskbar_indicator_inactive": "#8A9199",
+    "taskbar_checked_button_top": "#15181B",
+    "taskbar_checked_button_border": "#0F1113",
+    "taskbar_checked_button_bottom": "#1C2024",
+
+    "start_menu_text": "#E6E8EA",
+    "start_menu_border": "#4A5057",
+    "start_menu_highlight": "#1F7A33",
+    "start_menu_background": "#23272B",
+    "start_menu_gradient_top": "#1A1D20",
+    "start_menu_version_text": "#FFFFFF",
+    "start_menu_gradient_bottom": "#1F7A33",
+    "start_menu_highlighted_text": "#FFFFFF",
+    "start_menu_button_gradient_enabled": false,
+
+    "snap_indicator_border": "#35AE55",
+    "snap_indicator_background": "#4035AE55",
+    "canvas_grid": "#3DE6E8EA",
+
+    "table_text": "#E6E8EA",
+    "table_cell_bg": "#23272B",
+    "table_fg_header": "#E6E8EA",
+    "table_separator": "#3A4047",
+    "table_border_header": "#4A5057",
+    "table_bg_header_top": "#3A4047",
+    "table_bg_header_bottom": "#2A2F34",
+    "table_separator_header": "#4A5057",
+
+    "polar_indicator": "#E0574B",
+    "polar_background": "#1C2024",
+    "polar_foreground": "#D8DCE0",
+
+    "plot3d_x_axis": "#E0574B",
+    "plot3d_y_axis": "#35AE55",
+    "plot3d_z_axis": "#5B9BE0",
+    "plot3d_axis_text": "#FFFFFF",
+    "plot3d_grid_major": "#5A6168",
+    "plot3d_grid_minor": "#3A4047",
+    "plot3d_background_inner": "#22262A",
+    "plot3d_background_outer": "#15181B",
+
+    "plot_cursor_a": "#E6E8EA",
+    "plot_cursor_b": "#E0574B",
+
+    "widget_colors": [
+      "#35AE55",
+      "#5B9BE0",
+      "#E0574B",
+      "#2BB5B8",
+      "#E0A52E",
+      "#A277D6",
+      "#E06A8A",
+      "#8CC63F",
+      "#4F8FD6",
+      "#E07A3C",
+      "#3BA7D6",
+      "#D69A2E",
+      "#8A91E6",
+      "#2FB37A",
+      "#D66AA8",
+      "#A8C83C",
+      "#D6575E",
+      "#A99FE0",
+      "#E08A2E",
+      "#B06AA4"
+    ],
+
+    "device_colors": [
+      { "top": "#353C39", "bottom": "#2B312E" },
+      { "top": "#353A3E", "bottom": "#2B2F33" },
+      { "top": "#3B3936", "bottom": "#302E2B" },
+      { "top": "#353C3C", "bottom": "#2B3131" },
+      { "top": "#38363C", "bottom": "#2D2B31" },
+      { "top": "#383C36", "bottom": "#2D312B" },
+      { "top": "#35373C", "bottom": "#2B2D31" },
+      { "top": "#3C3836", "bottom": "#312D2B" },
+      { "top": "#353B3C", "bottom": "#2B3031" },
+      { "top": "#3B363C", "bottom": "#302B31" }
+    ]
+  },
+  "materials": {
+    "panel": {
+      "recipe": "brushed-metal",
+      "color": "#2E3338",
+      "grain": 0.45,
+      "bevel": false,
+      "shade": 0.3
+    },
+    "frame": {
+      "recipe": "gradient",
+      "top": "#1F2226",
+      "bottom": "#15181B"
+    },
+    "strip": {
+      "recipe": "gradient",
+      "top": "#3A4047",
+      "bottom": "#272C31"
+    },
+    "well": {
+      "recipe": "glass",
+      "top": "#050607",
+      "bottom": "#101316"
+    },
+    "header": {
+      "recipe": "brushed-metal",
+      "color": "#363B41",
+      "grain": 0.35,
+      "bevel": false,
+      "shade": 0.35
+    }
+  },
+  "surfaces": {
+    "dashboard": "frame",
+    "widget": "panel",
+    "toolbar": "strip",
+    "taskbar": "strip",
+    "display": "well",
+    "widget-header": "header"
+  },
+  "styles": {
+    "button": {
+      "radius": 3
+    },
+    "tab": {
+      "indicator": "#35AE55"
+    },
+    "input": {
+      "radius": 3,
+      "border": 1,
+      "focus": "#35AE55"
+    },
+    "instrument": {
+      "face": "#1C2024",
+      "band-opacity": 0.5,
+      "marker": "level"
+    },
+    "caption": {
+      "active-lift": 1.12
+    }
+  },
+  "widgets": {
+    "led": "lamp",
+    "output": "hardware"
+  }
+}

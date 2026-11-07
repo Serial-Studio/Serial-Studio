@@ -44,12 +44,21 @@ static QStringList builtInThemeFiles()
   return {QStringLiteral("default"),
           QStringLiteral("fluent-light"),
           QStringLiteral("fluent-dark"),
-          QStringLiteral("millennium")};
+          QStringLiteral("millennium"),
+          QStringLiteral("millennium-dark")};
 }
 
 //--------------------------------------------------------------------------------------------------
 // Loading
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief How many themes the binary bundles, for the stored-index migration in ThemeManager.
+ */
+int Misc::ThemeCatalog::builtInCount()
+{
+  return static_cast<int>(builtInThemeFiles().size());
+}
 
 /**
  * @brief Reads the bundled themes out of the resource tree. A theme that fails to open, parse, or

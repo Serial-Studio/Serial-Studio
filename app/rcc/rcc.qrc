@@ -1229,10 +1229,12 @@
         <file>themes/code-editor/default.xml</file>
         <file>themes/code-editor/fluent-dark.xml</file>
         <file>themes/code-editor/fluent-light.xml</file>
+        <file>themes/code-editor/millennium-dark.xml</file>
         <file>themes/code-editor/millennium.xml</file>
         <file>themes/default.json</file>
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
+        <file>themes/millennium-dark.json</file>
         <file>themes/millennium.json</file>
         <file>vendor/highlight-github-dark.min.css</file>
         <file>vendor/highlight-github.min.css</file>

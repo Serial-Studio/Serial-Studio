@@ -40,10 +40,10 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief How many themes were bundled while the selection was still stored as a list index. A
- *        fourth bundled theme now sits after them, so a stored index at or past this count moves
- *        up by one: without that, a legacy "System" or extension choice would open as the new
- *        theme, which spec 0113 R11 forbids.
+ * @brief How many themes were bundled while the selection was still stored as a list index. Every
+ *        theme bundled since sits after them, so a stored index at or past this count moves up by
+ *        that many: without it, a legacy "System" or extension choice would open as a new theme,
+ *        which spec 0113 R11 forbids.
  */
 static constexpr int kLegacyBuiltInThemes = 3;
 
@@ -178,7 +178,7 @@ Misc::ThemeManager::ThemeManager()
   else {
     themeIndex = m_settings.value("ApplicationTheme", 0).toInt();
     if (themeIndex >= kLegacyBuiltInThemes)
-      ++themeIndex;
+      themeIndex += ThemeCatalog::builtInCount() - kLegacyBuiltInThemes;
 
     if (themeIndex < 0 || themeIndex >= m_catalog.count())
       themeIndex = 0;

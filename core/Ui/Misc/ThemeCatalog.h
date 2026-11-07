@@ -53,6 +53,7 @@ public:
   [[nodiscard]] const QStringList& localizedNames() const noexcept;
 
   [[nodiscard]] static QString systemTitle();
+  [[nodiscard]] static int builtInCount();
 
 private:
   void scanUserThemes(const QString& themesDir);
