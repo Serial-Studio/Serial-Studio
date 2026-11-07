@@ -3,10 +3,10 @@
   <!-- General Colors -->
   <style name="Text" foreground="#1A1C1E" background="#F4F5F5"/>
   <style name="Selection" background="#CDE8D4" foreground="#1A1C1E"/>
-  <style name="LineNumber" foreground="#5F666D" background="#E8E9E9"/>
+  <style name="LineNumber" foreground="#5F6469" background="#E8E9E9"/>
   <style name="CurrentLine" background="#E8E9E9"/>
   <style name="CurrentLineNumber" foreground="#1F7A33" bold="true"/>
-  <style name="Occurrences" background="#C9CACC"/>
+  <style name="Occurrences" background="#CBCCCE"/>
   <style name="SearchResult" background="#EBD98F" foreground="#1A1C1E"/>
 
   <!-- Syntax Highlighting (Visual Studio palette) -->
@@ -29,12 +29,12 @@
   <!-- Errors and Warnings -->
   <style name="Warning" underlineColor="#C17700" underlineStyle="SingleUnderline"/>
   <style name="Error" underlineColor="#CB2E1E" underlineStyle="SingleUnderline"/>
-  <style name="DisabledCode" foreground="#7D858B" italic="true"/>
+  <style name="DisabledCode" foreground="#7C7F83" italic="true"/>
 
   <!-- Diff Highlighting -->
   <style name="AddedLine" foreground="#1F7A33"/>
   <style name="RemovedLine" foreground="#CB2E1E"/>
-  <style name="DiffContextLine" background="#D6D7D8"/>
+  <style name="DiffContextLine" background="#DADBDC"/>
   <style name="DiffSourceLine" background="#EBD98F"/>
   <style name="DiffDestLine" background="#BFE3C8"/>
 </style-scheme>
