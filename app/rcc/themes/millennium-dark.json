@@ -34,7 +34,7 @@
 
     "pane_background": "#22262A",
     "pane_section_label": "#E6E8EA",
-    "pane_caption_bg_top": "#1A1D20",
+    "pane_caption_bg_top": "#22262A",
     "pane_caption_border": "#3F454B",
     "pane_caption_bg_bottom": "#2A2F34",
     "pane_caption_foreground": "#E6E8EA",
@@ -85,7 +85,7 @@
     "highlighted_text": "#FFFFFF",
     "switch_highlight": "#35AE55",
 
-    "console_text": "#D8DCE0",
+    "console_text": "#00BF4C",
     "console_base": "#15181B",
     "console_border": "#3F454B",
     "console_highlight": "#2E5A3B",
