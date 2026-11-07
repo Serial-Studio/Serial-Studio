@@ -1,7 +1,7 @@
 ---
 spec: 0115-icon-packs
 title: Icon Packs, switchable artwork for command and colour icons with fixed mono glyphs
-status: draft
+status: approved  # 2026-11-07, maintainer, through the session's question dialog
 created: 2026-11-07
 author: Alex Spataru
 ---
@@ -237,26 +237,38 @@ the holes, so the review and the pack mechanism are one piece of work.
   millisecond per icon. Two of the three candidate styles cover the metaphors well enough that a
   pack is mostly its own artwork; Deco needs the coverage gate to decide. The payload is bounded.
 
+## Resolved Decisions
+
+Settled with the maintainer on 2026-11-07, each on the recommended option, through the working
+session's question dialog.
+
+- **Absent metaphors.** NASA keeps the house brand mark in every pack; X and Y are drawn as
+  letter glyphs per pack; encoding takes Fluent's ASC text file.
+- **Signal widgets keep house art** in every pack: sweep, waterfall and barpanel, where the
+  nearest Icons8 icons change the instrument metaphor.
+- **Six metaphor swaps accepted**: freeze is a snowflake, webview an Earth planet, uuid a
+  fingerprint, mqtt and mqtt-publisher Wi-Fi arcs, mf4 a labelled generic file, audio-file a
+  musical note composed onto a file.
+- **Editor picks**: widget is square Brackets, project-title is Edit Property, workspace is one
+  Application Window, actions is the bare lightning bolt (shared with editor/action).
+- **Licence record lands with the first pack commit** (R14): a `LicenseRef-Icons8` annotation
+  over the Icons8 artwork and the licence text in `LICENSES/`.
+- **Icons8 is asked in writing** about the public repository before the second pack lands; the
+  first pack proceeds, since the Office set has been public under the same terms for years.
+- **Pack order**: Fluent, Outline (mono), Glass, then Deco if it clears the coverage gate.
+- **Composites are composed at build time** from the pack's own base icon and one badge set per
+  pack, never searched as pre-badged icons.
+- **A mono pack is a launch pack** (maintainer, same day): users who prefer the flat look get
+  the whole interface in Windows 11 Outline, tinted (R21).
+
 ## Open Questions
 
-- **The public repository.** The Office set has been in the public tree for years and the
-  licence pages do not address a GPL application whose source exposes licensed SVGs; the 2019
-  staff answer conditions approval on users not being able to extract the icons as stand-alone
-  files. Recommendation: ask Icons8 in writing before the second pack lands, and record the
-  answer in the licence annotation (R14).
 - **Default under *Follow theme*.** Recommendation: Default → Glass, Fluent Light/Dark →
   Fluent, Millennium → Deco if it clears the gate, else Office. The alternative, every theme on
   Office until the user chooses, keeps AC3 trivially but hides the feature.
-- **A mono pack.** A fourth style of pack where colour icons become tinted outline glyphs
-  (Icons8 "Windows 11 Outline", the button set's own style) would suit a high-contrast or
-  reduced-colour setting and costs the same mechanism. Recommendation: not at launch; note it.
 - **Coverage gate value** for R5. Recommendation: 85 % of themed ids drawn in the pack's own
   style, the rest falling back, measured by the AC1 report. Deco's probe suggests about two
   thirds without hand-drawn fill-ins.
-- **Composites.** Forty-one ids are a base plus a badge (green plus, red cross, arrow, pencil,
-  warning) or a text label (CSV, TXT, MF4, X, Y). Recommendation: the pack build composes them
-  from the pack's own base icon and one badge set per pack, as the house set already does, rather
-  than searching for pre-badged icons that exist for only a few bases.
 - **Where the review artwork comes from.** The twelve missing command icons and the ladder
   holes can be drawn in Office style through the same MCP (the Office family has 16, 30, 40 and
   80 px variants); whether the 30 and 40 px drawings may stand in for the 24 and 32 px tiers is a
