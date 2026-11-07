@@ -14,7 +14,10 @@
 - **Work on master, in the main checkout.** No branches and no worktrees, yours or a subagent's
   (`isolation: "worktree"`): the maintainer builds and tests what master holds, and
   `.claude/settings.json` denies `git branch`, `git worktree add` and `EnterWorktree`. Commit as
-  soon as a change verifies, in one `sanitize-commit.py` and one `commit-batch.py` run.
+  soon as a change verifies: ONE commit per change (spec, code, tests, docs together), one
+  `git add` plus `git commit -m` with the `Co-Authored-By` trailer. The commit hooks lint the
+  staged files; a whole-tree `sanitize-commit.py` is for generator inputs and before a push,
+  never a per-commit tax.
 - **No preamble, no trailing summary** — except a one-line statement of
   intent before non-trivial work, and one or two sentences naming what
   changed (and what's next) when you stop. Skip both on trivial edits.
@@ -78,9 +81,8 @@ text and the incidents behind each rule:
   the choice was non-obvious. One sentence.
 - **State the plan before non-trivial work** — visible *before* execution, not a summary
   after. Operationalized as `/ss-spec`, whose premise check measures the one number that
-  would kill the spec. Spec and plan land in their own commit before the code;
-  `scripts/commit-shape.py` refuses that mix, a protected surface staged with other code, and
-  bulk without a `Mechanical:` trailer. Never cite the archive as proof of gating.
+  would kill the spec. `scripts/commit-shape.py` refuses a protected surface staged with other
+  code and bulk without a `Mechanical:` trailer. Never cite the archive as proof of gating.
 - **Self-review before handoff.** Re-read the diff: is this *what was asked, and only that*?
 - **Security-sensitive surfaces are decision-visible.** `app/src/Licensing/`,
   `core/Core/Licensing/`, `MachineID`, and the API Server auth/consent files: any
@@ -123,8 +125,11 @@ advises, cheaper executors type.
 
 All scripts in `scripts/` are CWD-independent and write LF endings; run from anywhere. The
 per-script table lives in [doc/claude/scripts.md](doc/claude/scripts.md). What binds you:
-**run `sanitize-commit.py` before every commit** (sanitize only — it never commits or
-pushes), then land a multi-commit series with one `commit-batch.py PLAN.json` run; `code-verify.py` is the structural linter (`--fix` rewrites, `--check` regenerates
+the commit hooks run `code-verify.py --check` and the pinned clang-format over the staged
+files, so a commit needs no pre-run; **run `sanitize-commit.py`** (sanitize only — it never
+commits or pushes) when you touched a generator input (`api-schema.json`, `dataset.json`, a
+command manifest, `command_safety.json`, doc/help) and before a push, never per commit;
+`code-verify.py` is the structural linter (`--fix` rewrites, `--check` regenerates
 `.code-report`; errors block CI). Suppression: `// code-verify off` / `// code-verify on`
 (C++/QML), `<!-- doc-verify off -->` / `<!-- doc-verify on -->` (Markdown) — suppressions
 are a code-review trigger. `.code-report` / `.doc-report` / `.claim-report` / `.tidy-report` are the cleanup

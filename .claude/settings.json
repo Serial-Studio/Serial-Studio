@@ -14,7 +14,6 @@
       "Bash(nc -z *)"
     ],
     "ask": [
-      "Bash(git commit *)",
       "Bash(git push *)",
       "Edit(app/translations/**)"
     ],

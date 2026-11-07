@@ -1,36 +1,54 @@
 #!/usr/bin/env python3
-"""Claude Code PreToolUse hook: gate `git commit` behind a fresh sanitize run.
+"""Claude Code PreToolUse hook: lint the files a `git commit` carries, and only those.
 
-CLAUDE.md's contract is "run scripts/sanitize-commit.py before every commit".
-This hook enforces the observable half mechanically: sanitize's last run is
-marked by the .code-report / .doc-report files it regenerates, so a commit
-whose staged files are newer than the matching report is blocked (exit 2)
-with instructions to run sanitize and retry.
+Until 2026-11-07 this hook demanded a fresh whole-tree `sanitize-commit.py` run (minutes
+of clang-format, code-verify --fix and every generator over the entire tree) before any
+commit, judged by the mtime of .code-report. That made a one-line commit cost a full
+sanitize, and the sanitize rewrote files the developer had in progress. CI runs every one
+of those checks on the pushed tree anyway, so the pre-commit gate now does the cheap,
+scoped half: the staged C++/QML files go through `code-verify.py --check --no-report` and,
+when the pinned clang-format is on PATH, `clang-format --dry-run --Werror`. Blocking
+errors refuse the commit (exit 2) with the linter's own lines, which name the fix.
 
 Design choices specific to this repo:
-  - Staged files (`git diff --cached --name-only`) are the commit's payload;
-    `-a`/`--all` commits also fold in modified tracked files.
-  - Source staleness is judged against .code-report; doc staleness (the
-    documentation-verify targets: README.md, AGENTS.md, doc/help/**,
-    examples/**/README.md) against .doc-report. A missing report counts as
-    fresh: the linters delete their report when there is nothing to flag, so
-    absence means a clean tree, not a tree sanitize never saw.
-  - Fail-open on any internal error, silent for non-commit commands: only a
-    genuinely stale commit attempt is ever blocked.
+  - Staged files (`git diff --cached --name-only`) are the commit's payload; `-a`/`--all`
+    and a pathspec commit (`git commit -- a.cpp`) also fold in modified tracked files.
+  - Only blocking errors refuse; advisories are baseline debt (CLAUDE.md).
+  - clang-format runs only at the exact version tests/requirements.txt pins, so a stray
+    system clang-format never judges the tree against a different style.
+  - Fail-open on any internal error, silent for non-commit commands.
   - The repo root honors CLAUDE_PROJECT_DIR for tests, falling back to the file location.
 """
 
 import json
 import os
 import re
+import shlex
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 GIT_TIMEOUT_S = 10
+LINT_TIMEOUT_S = 120
+MAX_OUTPUT_CHARS = 6000
 COMMIT_RE = re.compile(r"\bgit(\s+-\S+)*\s+commit\b")
 ALL_FLAG_RE = re.compile(r"\s(-a|-am|--all)\b")
-SOURCE_SUFFIXES = {".c", ".cpp", ".cc", ".cxx", ".c++", ".h", ".hpp", ".hh", ".hxx", ".qml"}
+SHELL_OPERATORS = {"&&", "||", ";", "|", ">", ">>", "<"}
+SOURCE_SUFFIXES = {
+    ".c",
+    ".cpp",
+    ".cc",
+    ".cxx",
+    ".c++",
+    ".h",
+    ".hpp",
+    ".hh",
+    ".hxx",
+    ".qml",
+}
+CXX_SUFFIXES = {".c", ".cpp", ".cc", ".cxx", ".c++", ".h", ".hpp", ".hh", ".hxx"}
+FORMAT_SKIP = {"miniaudio.h", "fast_float.h"}
 
 
 def repo_root() -> Path:
@@ -55,36 +73,89 @@ def git_lines(root: Path, args: list[str]) -> list[str]:
     return [line.strip('"') for line in result.stdout.splitlines() if line]
 
 
+def pathspecs(command: str) -> list[str]:
+    """The pathspecs after `--`, up to the next shell operator; empty when there are none."""
+    try:
+        tokens = shlex.split(command)
+    except ValueError:
+        return []
+    if "--" not in tokens:
+        return []
+    specs = []
+    for token in tokens[tokens.index("--") + 1 :]:
+        if token in SHELL_OPERATORS:
+            break
+        specs.append(token.rstrip("/"))
+    return specs
+
+
 def commit_payload(root: Path, command: str) -> list[str]:
-    """Files this commit would carry: the index, plus the worktree for -a/--all."""
+    """Files this commit would carry: the index, plus the worktree for -a or the pathspecs."""
     files = git_lines(root, ["diff", "--cached", "--name-only"])
+    worktree = git_lines(root, ["diff", "--name-only"])
     if ALL_FLAG_RE.search(command):
-        files += git_lines(root, ["diff", "--name-only"])
+        files += worktree
+    else:
+        specs = pathspecs(command)
+        files += [
+            f for f in worktree if any(f == s or f.startswith(s + "/") for s in specs)
+        ]
     return sorted(set(files))
 
 
-def is_doc_target(rel: str) -> bool:
-    """Match the documentation-verify.py target set."""
-    if rel in ("README.md", "AGENTS.md"):
-        return True
-    if rel.startswith("doc/help/") and rel.endswith(".md"):
-        return True
-    return rel.startswith("examples/") and rel.endswith("README.md")
+def pinned_clang_format(root: Path) -> str | None:
+    """The clang-format on PATH, only when it is the exact release the repo pins."""
+    manifest = root / "tests" / "requirements.txt"
+    if not manifest.is_file():
+        return None
+    pin = re.search(r"^clang-format==(\S+)", manifest.read_text(encoding="utf-8"), re.M)
+    binary = shutil.which("clang-format")
+    if pin is None or binary is None:
+        return None
+    probe = subprocess.run(
+        [binary, "--version"], capture_output=True, text=True, timeout=GIT_TIMEOUT_S
+    )
+    return binary if f"version {pin.group(1)}" in probe.stdout else None
 
 
-def stale_files(root: Path, files: list[str], report: str) -> list[str]:
-    """Files newer than the report (none when it is absent: the tree is clean)."""
-    marker = root / report
-    if not files or not marker.is_file():
-        return []
+def lint_errors(root: Path, sources: list[str]) -> str:
+    """code-verify's blocking errors over the staged sources; empty when clean or advisory-only."""
+    verify = root / "scripts" / "code-verify.py"
+    if not verify.is_file():
+        return ""
+    result = subprocess.run(
+        [sys.executable, str(verify), "--check", "--no-report", *sources],
+        capture_output=True,
+        text=True,
+        timeout=LINT_TIMEOUT_S,
+        cwd=str(root),
+    )
+    if result.returncode == 0:
+        return ""
+    return ((result.stdout or "") + "\n" + (result.stderr or "")).strip()
 
-    threshold = marker.stat().st_mtime
-    stale: list[str] = []
-    for rel in files:
-        candidate = root / rel
-        if candidate.is_file() and candidate.stat().st_mtime > threshold:
-            stale.append(rel)
-    return stale
+
+def format_errors(root: Path, sources: list[str]) -> str:
+    """clang-format drift over the staged C++; empty when clean or the pin is not on PATH."""
+    files = [
+        s
+        for s in sources
+        if Path(s).suffix in CXX_SUFFIXES and Path(s).name not in FORMAT_SKIP
+    ]
+    binary = pinned_clang_format(root) if files else None
+    if binary is None:
+        return ""
+    result = subprocess.run(
+        [binary, "--dry-run", "--Werror", *files],
+        capture_output=True,
+        text=True,
+        timeout=LINT_TIMEOUT_S,
+        cwd=str(root),
+    )
+    if result.returncode == 0:
+        return ""
+    fix = "clang-format -i " + " ".join(files)
+    return f"clang-format drift (fix: {fix})\n" + result.stderr.strip()
 
 
 def main() -> None:
@@ -96,24 +167,25 @@ def main() -> None:
 
         root = repo_root()
         payload = commit_payload(root, command)
-        sources = [f for f in payload if Path(f).suffix.lower() in SOURCE_SUFFIXES]
-        docs = [f for f in payload if is_doc_target(f)]
-
-        stale_src = stale_files(root, sources, ".code-report")
-        stale_doc = stale_files(root, docs, ".doc-report")
-        if not stale_src and not stale_doc:
+        sources = [
+            f
+            for f in payload
+            if Path(f).suffix.lower() in SOURCE_SUFFIXES and (root / f).is_file()
+        ]
+        if not sources:
             sys.exit(0)
 
-        parts = []
-        if stale_src:
-            parts.append(f"{len(stale_src)} source file(s) newer than .code-report")
-        if stale_doc:
-            parts.append(f"{len(stale_doc)} doc file(s) newer than .doc-report")
+        checks = (lint_errors(root, sources), format_errors(root, sources))
+        problems = [p for p in checks if p]
+        if not problems:
+            sys.exit(0)
+
+        body = "\n\n".join(problems)
+        if len(body) > MAX_OUTPUT_CHARS:
+            body = body[:MAX_OUTPUT_CHARS] + "\n... (truncated)"
         sys.stderr.write(
-            "Commit blocked: sanitize is stale for this commit ("
-            + "; ".join(parts)
-            + "). Run `python3 scripts/sanitize-commit.py`, then retry the commit "
-            "(CLAUDE.md: run sanitize-commit.py before every commit).\n"
+            "Commit blocked: the staged source files have blocking lint or format errors. "
+            "Fix them and retry the commit.\n\n" + body + "\n"
         )
         sys.exit(2)
     except SystemExit:

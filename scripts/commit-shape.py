@@ -14,9 +14,11 @@ This judges the shape of a commit, not its content, before it lands:
   isolation   a commit touching an isolated surface (licensing, API auth and
               consent, the CI workflows) carries only that surface, its tests
               and its docs, so the reviewer reads one thing; no trailer lifts it
-  spec-born   a commit that creates a spec.md or plan.md carries nothing
-              outside that spec directory: the plan is born before the code,
-              and git shows the order
+  spec-born   a commit that creates one of `spec_born_files` carries nothing
+              outside that spec directory. The shipped rule table leaves that
+              list empty since 2026-11-07: a feature lands as ONE commit, spec
+              and code together, because the split cost the maintainer half a
+              day of committing per feature
   ci-fix      a `fix(ci)` commit cites the failing run it answers
               (github.com/<owner>/<repo>/actions/runs/<id>)
   coauthor    with --require-coauthor, the message carries a

@@ -11,8 +11,11 @@ sentences, which name the fix.
 Design choices specific to this repo:
   - The engine is loaded from the project's scripts/ dir (CLAUDE_PROJECT_DIR
     honored for tests), so the hook and the CLI can never disagree.
-  - A command that stages and commits in one step is refused: a PreToolUse
-    hook sees only the index that exists before the command runs.
+  - A command that stages and commits in one step (`git add x && git commit`)
+    is judged against the index plus the worktree, a superset of what it will
+    carry, because a PreToolUse hook sees only the index that exists before
+    the command runs. Refusing it outright (until 2026-11-07) cost a second
+    tool call and a second permission prompt per commit.
   - Fail-open on any internal error (missing engine, git failure) and silent
     for non-commit commands: only a genuinely mis-shaped commit is blocked.
 """
@@ -26,11 +29,6 @@ from pathlib import Path
 
 COMMIT_RE = re.compile(r"\bgit(\s+-\S+)*\s+commit\b")
 STAGE_RE = re.compile(r"\bgit(\s+-\S+)*\s+(add|rm|mv|stage)\b")
-STAGING_FINDING = (
-    "staging: this command stages and commits in one step, so the gate would judge an "
-    "index that does not exist yet. Run the `git add` in one command and the `git commit` "
-    "in the next"
-)
 
 
 def repo_root() -> Path:
@@ -64,8 +62,9 @@ def main() -> None:
         if engine is None:
             sys.exit(0)
 
-        findings = [STAGING_FINDING] if STAGE_RE.search(command) else []
-        findings += engine.judge_command(root, command, require_coauthor=True)
+        if STAGE_RE.search(command):
+            command += " -a"
+        findings = engine.judge_command(root, command, require_coauthor=True)
         if not findings:
             sys.exit(0)
 

@@ -35,7 +35,7 @@
     }
   ],
   "spec_dir": "doc/claude/specs/",
-  "spec_born_files": ["spec.md", "plan.md"],
+  "spec_born_files": [],
   "ci_fix_subject": "^fix\\(ci\\)",
   "run_url": "github\\.com/\\S+/actions/runs/\\d+"
 }

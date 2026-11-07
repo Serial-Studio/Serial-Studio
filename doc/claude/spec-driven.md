@@ -64,18 +64,18 @@ earlier one was wrong (planning exposes a bad requirement, implementation expose
 task), **go back, amend the earlier document, and re-confirm** — do not silently diverge. The
 artifacts must stay true; a stale spec is worse than none.
 
-## Landing — the spec is born before the code
+## Landing — one commit per feature
 
-The spec and plan land in their own commit (`docs(spec): NNNN <slug>`) before any
-implementation commit, so `git log` shows the order the gate requires. This is mechanical:
-`scripts/commit-shape.py`, which `.claude/hooks/commit-shape-gate.py` runs on every commit
-Claude issues, refuses a commit that creates a `spec.md` or `plan.md` alongside anything
-outside that spec directory. Later edits to the three files (ticking `tasks.md`, setting
-`status: done`) ride with the implementation as before. The same gate keeps a
-security-sensitive surface in a commit of its own and caps unexplained commits at 60 paths,
-because both 2026 user-facing failures were a change inside a package too large to read. The
-archive still cannot prove a plan was *approved* before the code; the review conversation
-does that, so never cite the archive as proof of gating.
+A feature lands as ONE commit: `spec.md`, `plan.md`, `tasks.md`, the code, its tests and
+docs together. Until 2026-11-07 the spec and plan had to land first in their own
+`docs(spec):` commit, and every feature became a planned multi-commit series; that cost the
+maintainer tokens and half a day of committing per feature for an ordering `git log` could
+show but never prove. `scripts/commit-shape.py`, which `.claude/hooks/commit-shape-gate.py`
+runs on every commit Claude issues, still keeps a security-sensitive surface in a commit of
+its own and caps unexplained commits at 60 paths (a `Mechanical:` trailer naming the
+generator lifts the cap), because both 2026 user-facing failures were a change inside a
+package too large to read. The archive cannot prove a plan was *approved* before the code;
+the review conversation does that, so never cite the archive as proof of gating.
 
 ## When to use it — and when to skip
 
@@ -95,8 +95,9 @@ obvious, and a reviewer could not reasonably prefer a different approach, just m
 - **Hotpath** — `/ss-plan` requires an explicit hotpath/threading answer and pulls in
   `ss-hotpath`; `/ss-implement` reads the hotpath files in full and routes `--benchmark-hotpath`
   to the maintainer.
-- **Verify** — `/ss-implement` runs `code-verify --check` per task and `sanitize-commit.py` at
-  the end (via `ss-verify`); `qt-cpp-review` runs on the C++ diff before handoff.
+- **Verify** — `/ss-implement` runs `code-verify --check` per task; the commit hooks lint the
+  staged files, and `sanitize-commit.py` runs only when a generator input changed;
+  `qt-cpp-review` runs on the C++ diff before handoff.
 - **Trust Contract** — the plan's file list *is* the lane. Anything outside it is named in chat,
   not slipped into the diff. Foreign working-tree files are never touched. Nothing is committed
   without explicit per-turn permission. A self-review ("what was asked, and only that") is part

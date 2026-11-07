@@ -74,5 +74,5 @@ is measured against; an unreviewed spec poisons the plan and the build.
 - This file is the only thing you create. No code, no plan, no scaffolding yet.
 - The Premise Check section never keeps its template text: `/ss-plan` refuses a spec without a
   recorded measurement or an explicit one-sentence "unmeasurable" verdict.
-- When the maintainer asks for a commit, the spec directory goes in its own `docs(spec):` commit
-  before any implementation; `scripts/commit-shape.py` refuses the mix.
+- The spec rides in the feature's single commit with the code; a spec approved but not yet
+  implemented may land alone as `docs(spec): NNNN <slug>` so it survives the session.

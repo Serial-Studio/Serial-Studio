@@ -24,9 +24,11 @@ python scripts/code-verify.py --check <files...>
 baseline debt — new code must still clear them.** Hotpath violations (see [ss-hotpath]) are
 always blockers. To auto-fix formatting in place: `python scripts/code-verify.py --fix <files...>`.
 
-## Full pre-commit pipeline
+## Whole-tree sanitize (generator inputs and pre-push, not per commit)
 
-Before any commit, run the top-level driver, which chains: chmod (POSIX) → expand-doxygen →
+The commit hooks already lint the staged files. Run the top-level driver when a generator
+input changed (`api-schema.json`, `dataset.json`, a command manifest, `command_safety.json`,
+doc/help) and before a push; it chains: chmod (POSIX) → expand-doxygen →
 clang-format → code-verify --fix → clang-format → code-verify --check → singleton-census gate
 (spec 0039, blocking) → tu-census gate (blocking) → black (Python) → documentation-verify →
 claim-verify gate (blocking) → generate-sdk (regenerates
@@ -55,4 +57,4 @@ a restructure was due, a renamed symbol that still leaks the design problem).
   `.doc-report`); CLAUDE.md is exempt.
 - Touching `core/` or a source that could move there: also run `python scripts/layer-verify.py`
   (spec 0076) — it is not in the `sanitize-commit.py` chain but is a hard CI lint-job gate.
-- Only commit or push when the developer explicitly asks.
+- Commit as soon as the change verifies, as one commit; push only when the developer asks.

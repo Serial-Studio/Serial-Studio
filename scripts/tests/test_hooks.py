@@ -15,7 +15,6 @@ import json
 import os
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 import pytest
@@ -346,36 +345,43 @@ def test_read_gate_bash_cat_denied_targeted_allowed(run_hook, project):
         assert out == "", command
 
 
-def _stage(project, name, newer):
-    """Stage a source file whose mtime is after (newer) or before .code-report."""
+def _stage(project, name):
+    """Stage a throwaway source file."""
     source = project / name
     source.write_text("int x;\n", encoding="utf-8")
-    report = project / ".code-report"
-    now = time.time()
-    os.utime(report, (now, now))
-    stamp = now + 100 if newer else now - 100
-    os.utime(source, (stamp, stamp))
     _git(project, "add", name)
 
 
-def test_commit_gate_blocks_stale(run_hook, project):
-    """A commit carrying a source newer than .code-report exits 2 with guidance."""
-    _stage(project, "a.cpp", newer=True)
+def test_commit_gate_blocks_lint_errors(run_hook, project):
+    """A staged source the linter rejects exits 2 with the linter's own lines."""
+    _stage(project, "a.cpp")
+    _stub(project, 1, "a.cpp:1: error: cxx-thing\n")
     code, _, err = run_hook("commit-sanitize-gate.py", COMMIT)
     assert code == 2
-    assert "sanitize" in err
+    assert "cxx-thing" in err
 
 
-def test_commit_gate_fresh_commit_silent(run_hook, project):
-    """A staged source older than .code-report passes."""
-    _stage(project, "a.cpp", newer=False)
+def test_commit_gate_clean_commit_silent(run_hook, project):
+    """A staged source the linter accepts passes without a whole-tree sanitize."""
+    _stage(project, "a.cpp")
+    _stub(project, 0)
+    code, out, err = run_hook("commit-sanitize-gate.py", COMMIT)
+    assert (code, out, err) == (0, "", "")
+
+
+def test_commit_gate_lints_only_staged_sources(run_hook, project):
+    """A commit with no C++/QML payload never spawns the linter."""
+    (project / "notes.md").write_text("x\n", encoding="utf-8")
+    _git(project, "add", "notes.md")
+    _stub(project, 1, "would have failed\n")
     code, out, err = run_hook("commit-sanitize-gate.py", COMMIT)
     assert (code, out, err) == (0, "", "")
 
 
 def test_commit_gate_non_commit_silent(run_hook, project):
-    """A non-commit command is ignored even with a stale file staged."""
-    _stage(project, "a.cpp", newer=True)
+    """A non-commit command is ignored even with a failing file staged."""
+    _stage(project, "a.cpp")
+    _stub(project, 1, "error\n")
     code, out, err = run_hook(
         "commit-sanitize-gate.py", {"tool_input": {"command": "ls"}}
     )
@@ -430,13 +436,32 @@ def test_shape_gate_blocks_a_mixed_licensing_commit(run_hook, project):
     assert "commit-shape.py" in err
 
 
-def test_shape_gate_blocks_staging_in_the_commit_command(run_hook, project):
-    """A `git add && git commit` chain hides the real index from a PreToolUse hook."""
+def test_shape_gate_judges_a_stage_and_commit_chain_against_the_worktree(
+    run_hook, project
+):
+    """`git add && git commit` is judged on index plus worktree, never refused for its shape."""
     _install_shape_engine(project)
-    event = {"tool_input": {"command": 'git add a.cpp && git commit -m "feat: x"'}}
-    code, _, err = run_hook("commit-shape-gate.py", event)
+    _stage_paths(project, "app/src/Licensing/MachineID.cpp", "core/A.cpp")
+    _git(project, "commit", "-q", "-m", "seed")
+    (project / "app/src/Licensing/MachineID.cpp").write_text("y\n", encoding="utf-8")
+    (project / "core/A.cpp").write_text("y\n", encoding="utf-8")
+    trailer = "Co-Authored-By: Claude <noreply@anthropic.com>"
+    mixed = {
+        "tool_input": {
+            "command": f'git add core/A.cpp && git commit -m "feat: x" -m "{trailer}"'
+        }
+    }
+    code, _, err = run_hook("commit-shape-gate.py", mixed)
     assert code == 2
-    assert "staging" in err
+    assert "isolation" in err
+    assert "staging" not in err
+    clean = {
+        "tool_input": {
+            "command": f'git add core/A.cpp && git commit -m "feat: x" -m "{trailer}"'
+        }
+    }
+    (project / "app/src/Licensing/MachineID.cpp").write_text("x\n", encoding="utf-8")
+    assert run_hook("commit-shape-gate.py", clean) == (0, "", "")
 
 
 def test_shape_gate_fails_open_without_the_engine(run_hook, project):

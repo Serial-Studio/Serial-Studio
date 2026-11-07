@@ -55,20 +55,22 @@ When every task is done, run the Definition of Done in `tasks.md`:
    evidence it doesn't?" Name the rule and the evidence — not a generic pass
    (`doc/claude/j-space.md`, counterfactual self-check). If either answer is weak, say so
    before claiming completion.
-4. **Sanitize:** run `python scripts/sanitize-commit.py` (it sanitizes only — never commits).
-5. **Land the spec first.** When the maintainer asks for a commit, `spec.md`/`plan.md`/`tasks.md`
-   go in their own `docs(spec): NNNN <slug>` commit before any implementation commit.
-   `scripts/commit-shape.py`, run by the commit hook, refuses a commit that creates a spec
-   alongside code, a security-sensitive surface staged with other paths, more than 60 paths
-   without a `Mechanical:` trailer, or a `fix(ci)` without the failing run's URL.
+4. **Sanitize only if a generator input changed** (`api-schema.json`, `dataset.json`, a
+   command manifest, `command_safety.json`, doc/help): `python scripts/sanitize-commit.py`.
+   Otherwise the commit hooks lint the staged files and nothing runs over the whole tree.
+5. **Land it as one commit.** `spec.md`, `plan.md`, `tasks.md`, code, tests and docs together:
+   one `git add`, one `git commit -m` with the `Co-Authored-By` trailer, a `Mechanical:`
+   trailer when the commit passes 60 paths. `scripts/commit-shape.py`, run by the commit hook,
+   refuses a security-sensitive surface staged with other paths, more than 60 paths without a
+   `Mechanical:` trailer, or a `fix(ci)` without the failing run's URL.
 6. **Identify the `pytest` targets** from `plan.md` for the maintainer to run (the app must be
    up with the API server enabled).
 7. Set `spec.md` `status: done`.
 
 ## Rules
 
-- **Never build or run the app**, and **never commit or push without explicit per-turn
-  permission** — earlier authorizations do not carry over.
+- **Never build or run the app.** Commit as soon as the change verifies (CLAUDE.md); never
+  push without explicit per-turn permission.
 - The spec is the contract: every acceptance criterion must end up satisfied and checked off in
   `spec.md`. If reality diverges from the plan mid-build, stop and amend `plan.md`/`tasks.md`
   (re-confirm) rather than silently improvising.

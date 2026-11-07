@@ -109,15 +109,23 @@ def test_mechanical_trailer_never_lifts_isolation():
     assert _rules(cs.evaluate(_payload(*paths), swept, CONFIG)) == ["isolation"]
 
 
-def test_spec_born_lands_alone():
+def test_spec_born_rule_is_off_in_the_shipped_table():
+    """One commit per feature (2026-11-07): a new spec rides with its implementation."""
     born = [("A", "doc/claude/specs/0104-thing/spec.md"), ("M", "core/Ui/A.cpp")]
-    assert _rules(cs.evaluate(born, MESSAGE, CONFIG)) == ["spec-born"]
+    assert CONFIG["spec_born_files"] == []
+    assert cs.evaluate(born, MESSAGE, CONFIG) == []
+
+
+def test_spec_born_rule_still_works_when_enabled():
+    enabled = dict(CONFIG, spec_born_files=["spec.md", "plan.md"])
+    born = [("A", "doc/claude/specs/0104-thing/spec.md"), ("M", "core/Ui/A.cpp")]
+    assert _rules(cs.evaluate(born, MESSAGE, enabled)) == ["spec-born"]
     docs_only = [
         ("A", "doc/claude/specs/0104-thing/spec.md"),
         ("A", "doc/claude/specs/0104-thing/plan.md"),
         ("A", "doc/claude/specs/0104-thing/tasks.md"),
     ]
-    assert cs.evaluate(docs_only, MESSAGE, CONFIG) == []
+    assert cs.evaluate(docs_only, MESSAGE, enabled) == []
 
 
 def test_spec_edits_may_ride_with_the_implementation():
