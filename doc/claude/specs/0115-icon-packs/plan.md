@@ -1,7 +1,7 @@
 ---
 spec: 0115-icon-packs
 phase: plan
-status: draft        # draft -> approved (gate before /ss-tasks)
+status: approved     # 2026-11-07, maintainer
 updated: 2026-11-07
 ---
 
