@@ -51,6 +51,7 @@ class IconRegistry : public QObject {
 
 signals:
   void packChanged();
+  void revisionChanged();
 
 private:
   explicit IconRegistry();

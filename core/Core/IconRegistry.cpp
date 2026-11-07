@@ -216,11 +216,13 @@ void Misc::IconRegistry::setPack(const QString& id)
       m_mono = info.mono;
 
   Q_EMIT packChanged();
+  Q_EMIT revisionChanged();
 }
 
 /**
  * @brief Sets the two tints a mono pack is drawn in, as RRGGBB without the hash: @p text for
- *        pane and dialog surfaces, @p strip for the dark toolbar and taskbar gradients.
+ *        pane and dialog surfaces, @p strip for the dark toolbar and taskbar gradients. A change
+ *        announces a revision, since every mono URL carries the tint.
  */
 void Misc::IconRegistry::setTints(const QString& text, const QString& strip)
 {
@@ -231,8 +233,14 @@ void Misc::IconRegistry::setTints(const QString& text, const QString& strip)
     return kHex.match(hex).hasMatch() ? hex : QStringLiteral("000000");
   };
 
-  m_textTint  = clean(text);
-  m_stripTint = clean(strip);
+  const auto nextText  = clean(text);
+  const auto nextStrip = clean(strip);
+  if (nextText == m_textTint && nextStrip == m_stripTint)
+    return;
+
+  m_textTint  = nextText;
+  m_stripTint = nextStrip;
+  Q_EMIT revisionChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

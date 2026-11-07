@@ -31,6 +31,7 @@
 #include <QTimer>
 
 #include "Core/Checksum.h"
+#include "Core/IconRegistry.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
 #include "Core/Translator.h"
@@ -63,7 +64,9 @@ EditorWiring::EditorWiring(ProjectEditor& editor, ProjectModel& model)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Wires the basic ProjectModel rebuild signals into the tree-rebuild scheduler.
+ * @brief Wires the basic ProjectModel rebuild signals into the tree-rebuild scheduler, and the
+ *        icon registry's revision (a pack or tint change) into the same rebuild plus the open
+ *        form, because the tree and form models bake resolved icon URLs (spec 0115).
  */
 void EditorWiring::wireProjectModelRebuilds()
 {
@@ -133,6 +136,16 @@ void EditorWiring::wireProjectModelRebuilds()
     if (m_editor.m_currentView == ProjectView)
       m_editor.m_forms.buildProjectModel();
   });
+  QObject::connect(
+    &Core::services().iconRegistry, &Misc::IconRegistry::revisionChanged, &m_editor, [this] {
+      m_editor.m_tree.scheduleTreeRebuild();
+      if (m_editor.m_currentView == ProjectView)
+        m_editor.m_forms.buildProjectModel();
+      else if (m_editor.m_currentView == GroupView)
+        m_editor.m_forms.buildGroupModel(m_editor.m_selectedGroup);
+      else if (m_editor.m_currentView == DatasetView)
+        m_editor.m_forms.buildDatasetModel(m_editor.m_selectedDataset);
+    });
   wireProjectFileSignals();
 }
 

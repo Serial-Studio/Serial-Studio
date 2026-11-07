@@ -129,6 +129,10 @@ updated: 2026-11-07
   already re-evaluates: its binding reads the notifying `iconById` property through
   `MarkdownIcons.js`). `Taskbar.cpp` needs no change: every palette and taskbar consumer
   prefers the `iconId` role over the resolved URL, so the switch is live there already.
+  Maintainer's run, 2026-11-07: the Project Editor tree still showed Office under Fluent. Two
+  causes, both fixed: the facade was created after `restoreLastProject()` (now `bindIconPacks()`
+  right after `composeSession`), and the tree and form models bake URLs, so `EditorWiring` now
+  rebuilds them on the registry's new `revisionChanged` (pack or tint).
 - **Verify:** `syntax-check.py` on `Taskbar.cpp`; `code-verify.py --check`.
 - **Deps:** T2
 - [x] done
@@ -292,9 +296,11 @@ updated: 2026-11-07
 - **Does:** Same names as Fluent (`fluent-systems-regular`), `"mono": true`; composites with a
   mono badge set; `check` and sheet. The maintainer's first look is the retina check (AC10): if
   soft, T3's provider renders at `requestedSize × dpr` and sets the image's DPR.
-- **Verify:** `icon-packs.py check`; AC10 observation under each bundled theme.
+- **Verify:** `icon-packs.py check`; AC10 observation under each bundled theme. Dry run
+  2026-11-07: the recolour mirrored in Python over the first 47 Outline files (plain black paths,
+  no fill attribute) renders pale on the dark strip and ink on the light pane, every file valid.
 - **Deps:** T18
-- [ ] done
+- [ ] done (45 of 161 downloaded; the allowance reopens hourly)
 
 ### Stage G — the Glass pack
 

@@ -117,6 +117,7 @@ private:
   static void instantiateCoreModules();
   static void bindInterfaces();
   void setupCrossModuleConnections();
+  void bindIconPacks();
   void registerCoreContextProperties(QQmlContext* ctx);
   void registerAppMetadataProperties(QQmlContext* ctx, bool grpcAvailable);
   void registerImageProvidersAndLoadQml();

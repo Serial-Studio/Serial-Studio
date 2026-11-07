@@ -992,6 +992,16 @@ void Misc::ModuleManager::composeSession(const BindMode mode)
 }
 
 /**
+ * @brief Builds the icon-pack facade right after the modules and before restoreLastProject(), so
+ *        the theme's pack is in effect when the Project Editor first bakes its icon URLs.
+ */
+void Misc::ModuleManager::bindIconPacks()
+{
+  m_iconPacks = std::make_unique<Misc::IconPacks>(
+    m_engine, Misc::IconRegistry::instance(), Misc::ThemeManager::instance());
+}
+
+/**
  * @brief Binds the seams every root needs before any wiring or the first device open (spec 0077):
  *        block sinks (two read-only observers named by slot), raw-byte taps and the per-frame tap.
  *        ONE list for the GUI, headless and benchmark roots: a sink missing here never reaches
@@ -1199,6 +1209,7 @@ void Misc::ModuleManager::wireTrialGate()
 void Misc::ModuleManager::setupCrossModuleConnections()
 {
   composeSession(BindMode::Full);
+  bindIconPacks();
   registerApiHandlers();
 
   auto* appState             = &AppState::instance();
@@ -1343,8 +1354,7 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   registry.add("Cpp_HelpCenter", &Misc::HelpCenter::instance());
   registry.add("Cpp_ExtensionManager", &Misc::ExtensionManager::instance());
   registry.add("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());
-  m_iconPacks = std::make_unique<Misc::IconPacks>(
-    m_engine, Misc::IconRegistry::instance(), Misc::ThemeManager::instance());
+  SS_ASSERT_LOG(m_iconPacks != nullptr);
   registry.add("Cpp_Misc_IconRegistry", m_iconPacks.get());
   registry.add("Cpp_Misc_ProblemCenter", &Misc::ProblemCenter::instance());
   registry.add("Cpp_Misc_ConnectionDiagnostics", &Misc::ConnectionDiagnostics::instance());
