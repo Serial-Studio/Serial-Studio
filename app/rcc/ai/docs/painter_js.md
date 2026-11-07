@@ -103,7 +103,7 @@ datasets[0].fftMin / .fftMax         // FFT bounds
 datasets[0].alarmLow / .alarmHigh    // legacy alarm thresholds (derived; see below)
 datasets[0].alarmBands               // [{min,max,severity,color,label,blink}, ...] (see below)
 datasets[0].ledHigh                  // LED activation threshold
-datasets[0].hasPlot / .hasFft / .hasLed
+datasets[0].hasPlot / .hasFft
 datasets.length
 
 // group -- the host group's project metadata

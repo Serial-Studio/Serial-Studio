@@ -56,7 +56,6 @@ KEY_EXTREME_HOLD = "extremeHold"
 KEY_SUPPRESS_ALARMS = "suppressAlarms"
 KEY_ALARMS_WHILE_VISIBLE = "alarmsWhileVisible"
 KEY_ALARM_DEADBAND = "alarmDeadband"
-KEY_LED = "led"
 KEY_LED_HIGH = "ledHigh"
 KEY_OVERVIEW_DISPLAY = "overviewDisplay"
 KEY_FORMAT = "format"
@@ -142,7 +141,6 @@ DATASET_KEYS = (
     "suppressAlarms",
     "alarmsWhileVisible",
     "alarmDeadband",
-    "led",
     "ledHigh",
     "overviewDisplay",
     "format",
@@ -220,6 +218,7 @@ GROUP_WIDGETS = (
     "gps",
     "plot3d",
     "barpanel",
+    "ledpanel",
 )
 
 DATASET_WIDGETS = (

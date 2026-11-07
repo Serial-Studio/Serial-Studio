@@ -127,8 +127,9 @@ void TstProtoImporter::contextIsTheProcessDefaultShape()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief One group per top-level message plus one per resolved message-typed field; the nested
- *        group takes the field name, not the message name.
+ * @brief One group per top-level message plus one per resolved message-typed field, and an LED
+ *        Panel group right after a group with a boolean field; the nested group takes the field
+ *        name, not the message name.
  */
 void TstProtoImporter::groupsFollowTopLevelAndNestedMessages()
 {
@@ -138,10 +139,11 @@ void TstProtoImporter::groupsFollowTopLevelAndNestedMessages()
   const auto project = importer.projectFromProtoFile(m_fixture);
   const auto groups  = project[Keys::Groups].toArray();
 
-  QCOMPARE(groups.size(), 3);
+  QCOMPARE(groups.size(), 4);
   QCOMPARE(groups.at(0).toObject()[Keys::Title].toString(), QStringLiteral("Attitude"));
   QCOMPARE(groups.at(1).toObject()[Keys::Title].toString(), QStringLiteral("Telemetry"));
-  QCOMPARE(groups.at(2).toObject()[Keys::Title].toString(), QStringLiteral("attitude"));
+  QCOMPARE(groups.at(2).toObject()[Keys::Widget].toString(), QStringLiteral("ledpanel"));
+  QCOMPARE(groups.at(3).toObject()[Keys::Title].toString(), QStringLiteral("attitude"));
   QCOMPARE(project[Keys::Title].toString(), QStringLiteral("telemetry"));
 }
 
@@ -155,7 +157,7 @@ void TstProtoImporter::datasetsCoverEveryScalarField()
 
   const auto project = importer.projectFromProtoFile(m_fixture);
   const auto groups  = project[Keys::Groups].toArray();
-  QCOMPARE(groups.size(), 3);
+  QCOMPARE(groups.size(), 4);
 
   const auto attitude = groups.at(0).toObject()[Keys::Datasets].toArray();
   QCOMPARE(attitude.size(), 3);
@@ -168,14 +170,15 @@ void TstProtoImporter::datasetsCoverEveryScalarField()
   QCOMPARE(telemetry.at(0).toObject()[Keys::Title].toString(), QStringLiteral("timestamp"));
   QCOMPARE(telemetry.at(3).toObject()[Keys::Title].toString(), QStringLiteral("status"));
 
-  QCOMPARE(groups.at(2).toObject()[Keys::Datasets].toArray().size(), 3);
+  QCOMPARE(groups.at(3).toObject()[Keys::Datasets].toArray().size(), 3);
   QCOMPARE(importer.messageCount(), 2);
   QCOMPARE(importer.fieldCount(), 10);
 }
 
 /**
- * @brief Dataset indices are the parser's dispatch slots: they run 1..N across every group in
- *        emission order, so a gap or a repeat silently misroutes a field at runtime.
+ * @brief Dataset indices are the parser's dispatch slots: they run 1..N across every source group
+ *        in emission order, so a gap or a repeat silently misroutes a field at runtime. A derived
+ *        LED Panel group reuses its source's indices and is skipped here.
  */
 void TstProtoImporter::datasetIndicesAreDenseAndOrdered()
 {
@@ -187,6 +190,9 @@ void TstProtoImporter::datasetIndicesAreDenseAndOrdered()
 
   int expected = 1;
   for (const auto& group : groups) {
+    if (group.toObject()[Keys::Widget].toString() == QStringLiteral("ledpanel"))
+      continue;
+
     const auto datasets = group.toObject()[Keys::Datasets].toArray();
     for (const auto& dataset : datasets) {
       QCOMPARE(dataset.toObject()[Keys::Index].toInt(), expected);
@@ -198,7 +204,8 @@ void TstProtoImporter::datasetIndicesAreDenseAndOrdered()
 }
 
 /**
- * @brief A proto3 bool maps to an LED dataset, a string to a plain readout; neither is plotted.
+ * @brief A proto3 bool is a light in the LED Panel group derived from its message, a string a
+ *        plain readout; neither is plotted.
  */
 void TstProtoImporter::booleanFieldsBecomeLeds()
 {
@@ -207,21 +214,23 @@ void TstProtoImporter::booleanFieldsBecomeLeds()
 
   const auto project   = importer.projectFromProtoFile(m_fixture);
   const auto telemetry = project[Keys::Groups].toArray().at(1).toObject();
+  const auto panel     = project[Keys::Groups].toArray().at(2).toObject();
   const auto datasets  = telemetry[Keys::Datasets].toArray();
   QCOMPARE(datasets.size(), 4);
 
   const auto armed  = datasets.at(2).toObject();
   const auto status = datasets.at(3).toObject();
-
   QCOMPARE(armed[Keys::Title].toString(), QStringLiteral("armed"));
-  QVERIFY(armed[Keys::LED].toBool());
   QVERIFY(!armed[Keys::Graph].toBool());
-
   QCOMPARE(status[Keys::Title].toString(), QStringLiteral("status"));
-  QVERIFY(!status[Keys::LED].toBool());
   QVERIFY(!status[Keys::Graph].toBool());
-
   QVERIFY(datasets.at(1).toObject()[Keys::Graph].toBool());
+
+  const auto lights = panel[Keys::Datasets].toArray();
+  QCOMPARE(panel[Keys::Widget].toString(), QStringLiteral("ledpanel"));
+  QCOMPARE(lights.size(), 1);
+  QCOMPARE(lights.at(0).toObject()[Keys::Title].toString(), QStringLiteral("armed"));
+  QCOMPARE(lights.at(0).toObject()[Keys::Index].toInt(), armed[Keys::Index].toInt());
 }
 
 /**

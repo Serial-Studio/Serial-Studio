@@ -193,11 +193,9 @@ struct ParsedWidgetId {
                             "(clears Bar/Gauge/Compass).")
         .arg(gid);
     case SerialStudio::DashboardLED:
-      return QStringLiteral(" To enable widgetType=8 (LED), set DatasetOption "
-                            "bit 32 via project.dataset.setOptions{groupId:%1, "
-                            "datasetId:<n>, options:<currentBitfield|32>} or "
-                            "project.dataset.update{groupId:%1, datasetId:<n>, "
-                            "led:true}.")
+      return QStringLiteral(" To enable widgetType=8 (LED Panel), set the group's widget to "
+                            "\"ledpanel\" via project.group.update{groupId:%1, "
+                            "widget:\"ledpanel\"}; every dataset in the group becomes a light.")
         .arg(gid);
 #ifdef BUILD_COMMERCIAL
     case SerialStudio::DashboardWaterfall:
@@ -285,7 +283,7 @@ struct ParsedWidgetId {
     return QStringLiteral("widgetType=0 is DashboardTerminal/Console, not a workspace tile. "
                           "Common cause: confusing the DatasetOption bitflag (used by "
                           "project.dataset.setOptions: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, "
-                          "16=Compass, 32=LED, 64=Waterfall) with the DashboardWidget enum "
+                          "16=Compass, 64=Waterfall) with the DashboardWidget enum "
                           "(used here: 9=Plot, 7=FFT, 10=Bar, 11=Gauge, 12=Compass, 8=LED, "
                           "21=Waterfall, 1=DataGrid, 2=MultiPlot, 5=GPS). The numbers do not "
                           "line up. Pick a value from the group's compatibleWidgetTypes "
@@ -353,7 +351,6 @@ struct ParsedWidgetId {
  */
 [[nodiscard]] static int groupContribution(const DataModel::Group& group,
                                            SerialStudio::DashboardWidget wtype,
-                                           bool isLed,
                                            bool isGroupShape,
                                            bool isDatasetShape,
                                            bool pro)
@@ -366,17 +363,6 @@ struct ParsedWidgetId {
     if (key == wtype && SerialStudio::groupWidgetEligibleForWorkspace(key))
       return 1;
 
-    return 0;
-  }
-
-  if (isLed) {
-    for (const auto& ds : group.datasets) {
-      if (ds.hideOnDashboard)
-        continue;
-
-      if (ds.led)
-        return 1;
-    }
     return 0;
   }
 
@@ -418,9 +404,8 @@ struct ParsedWidgetId {
                                                    int targetDatasetId = -1)
 {
   const bool pro      = Core::License::activated();
-  const bool isLed    = (wtype == SerialStudio::DashboardLED);
   const bool isExt    = (wtype == SerialStudio::DashboardExtension);
-  bool isGroupShape   = SerialStudio::isGroupWidget(wtype) && !isLed;
+  bool isGroupShape   = SerialStudio::isGroupWidget(wtype);
   bool isDatasetShape = SerialStudio::isDatasetWidget(wtype);
 
   int counter = 0;
@@ -431,11 +416,11 @@ struct ParsedWidgetId {
   }
   for (const auto& group : groups) {
     if (group.uniqueId != targetGroupUniqueId) {
-      counter += groupContribution(group, wtype, isLed, isGroupShape, isDatasetShape, pro);
+      counter += groupContribution(group, wtype, isGroupShape, isDatasetShape, pro);
       continue;
     }
 
-    if (isGroupShape || isLed)
+    if (isGroupShape)
       return counter;
 
     if (isDatasetShape)

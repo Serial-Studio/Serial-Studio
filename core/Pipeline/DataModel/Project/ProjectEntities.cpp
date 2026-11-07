@@ -620,6 +620,7 @@ bool DataModel::ProjectEntities::acceptsDatasets(const Group& group)
     case SerialStudio::MultiPlot:
     case SerialStudio::DataGrid:
     case SerialStudio::BarPanel:
+    case SerialStudio::LEDPanel:
     case SerialStudio::NoGroupWidget:
       return true;
     default:
@@ -705,10 +706,6 @@ void DataModel::ProjectEntities::addDataset(const SerialStudio::DatasetOption op
     case SerialStudio::DatasetMeter:
       title          = ProjectModel::tr("New Meter");
       dataset.widget = QStringLiteral("meter");
-      break;
-    case SerialStudio::DatasetLED:
-      title       = ProjectModel::tr("New LED Indicator");
-      dataset.led = true;
       break;
     case SerialStudio::DatasetWaterfall:
       title             = ProjectModel::tr("New Waterfall");
@@ -817,9 +814,6 @@ void DataModel::ProjectEntities::changeDatasetOption(const SerialStudio::Dataset
       break;
     case SerialStudio::DatasetMeter:
       selected.widget = checked ? QStringLiteral("meter") : "";
-      break;
-    case SerialStudio::DatasetLED:
-      selected.led = checked;
       break;
     case SerialStudio::DatasetWaterfall:
       selected.waterfall = checked;
@@ -976,10 +970,11 @@ bool DataModel::ProjectEntities::confirmGroupWidgetChange(DataModel::Group& grp,
 
   const bool compatibleTarget =
     (widget == SerialStudio::DataGrid || widget == SerialStudio::MultiPlot
-     || widget == SerialStudio::BarPanel || widget == SerialStudio::NoGroupWidget);
+     || widget == SerialStudio::BarPanel || widget == SerialStudio::LEDPanel
+     || widget == SerialStudio::NoGroupWidget);
   const bool compatibleSource =
     (grp.widget == "multiplot" || grp.widget == "datagrid" || grp.widget == "barpanel"
-     || grp.widget == "painter" || grp.widget == "");
+     || grp.widget == "ledpanel" || grp.widget == "painter" || grp.widget == "");
   if (compatibleTarget && compatibleSource) {
     grp.widget = "";
     return true;
@@ -1017,6 +1012,11 @@ bool DataModel::ProjectEntities::applyGroupWidget(DataModel::Group& grp,
 
   if (widget == SerialStudio::BarPanel) {
     grp.widget = "barpanel";
+    return true;
+  }
+
+  if (widget == SerialStudio::LEDPanel) {
+    grp.widget = "ledpanel";
     return true;
   }
 

@@ -23,7 +23,9 @@ hand-written one it replaces:
     doc/claude/specs/0036-property-registry/baseline-manifest.json, so a
     baseline captured on a different corpus can never be compared silently.
 
-Capture must run against the pre-change build (spec 0036, T1).
+Capture must run against the pre-change build (spec 0036, T1). Recaptured once after spec
+0114 (LED Panel as a group widget): the corpus lost the per-dataset `led` key and the seven
+examples that used it gained an LED Panel group next to each group that had lights.
 
 On top of the corpus round trip it pins the rest of the declaration contract:
 AC3 (both declared defect fixes), AC6 (the update verb's prose no longer

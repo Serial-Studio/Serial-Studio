@@ -61,7 +61,7 @@
     {    SerialStudio::DashboardGyroscope,          QStringLiteral("gyro")},
     {          SerialStudio::DashboardGPS,           QStringLiteral("gps")},
     {      SerialStudio::DashboardWebView,       QStringLiteral("webview")},
-    {          SerialStudio::DashboardLED,     QStringLiteral("led-panel")},
+    {          SerialStudio::DashboardLED,      QStringLiteral("ledpanel")},
     {          SerialStudio::DashboardBar,           QStringLiteral("bar")},
     {     SerialStudio::DashboardBarPanel,      QStringLiteral("barpanel")},
     {        SerialStudio::DashboardGauge,         QStringLiteral("gauge")},

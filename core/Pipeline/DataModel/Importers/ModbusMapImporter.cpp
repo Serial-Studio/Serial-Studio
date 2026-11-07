@@ -342,6 +342,15 @@ QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporte
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Whether a register entry is shown as a light: a boolean block, a declared bool, or one
+ *        bit cut out of a word.
+ */
+static bool isLedEntry(const DataModel::ModbusMap::RegisterEntry& entry, bool boolBlock)
+{
+  return boolBlock || entry.dataType == QLatin1String("bool") || entry.bitIndex >= 0;
+}
+
+/**
  * @brief Builds a complete .ssproj JSON from the parsed registers.
  */
 QJsonObject DataModel::ModbusMapImporter::buildProject() const
@@ -404,6 +413,7 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
     group.widget  = QStringLiteral("datagrid");
     group.title   = table_names.at(b);
 
+    std::vector<int> leds;
     DataModel::TableDef table;
     table.name = table_names.at(b);
 
@@ -425,11 +435,14 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
         table.registers.push_back(word);
       }
 
+      const bool is_led = isLedEntry(entry, is_bool);
       group.datasets.push_back(
-        buildDatasetFromEntry(entry, is_bool, table.name, reg_name, dataset_index++));
+        buildDatasetFromEntry(entry, is_led, table.name, reg_name, dataset_index++));
+      if (is_led)
+        leds.push_back(static_cast<int>(group.datasets.size()) - 1);
     }
 
-    groups.push_back(group);
+    DataModel::appendGroupWithLedPanel(groups, std::move(group), leds);
     tables.push_back(table);
   }
 
@@ -581,7 +594,7 @@ QString DataModel::ModbusMapImporter::controlTransmitScript(const RegisterBlock&
  */
 DataModel::Dataset DataModel::ModbusMapImporter::buildDatasetFromEntry(
   const ModbusMap::RegisterEntry& entry,
-  bool isBool,
+  bool isLed,
   const QString& tableName,
   const QString& regName,
   int datasetIndex) const
@@ -593,8 +606,7 @@ DataModel::Dataset DataModel::ModbusMapImporter::buildDatasetFromEntry(
   dataset.log   = true;
   applyTableTransform(dataset, tableName, regName);
 
-  if (isBool || entry.dataType == QLatin1String("bool") || entry.bitIndex >= 0) {
-    dataset.led     = true;
+  if (isLed) {
     dataset.ledHigh = 1;
     dataset.wgtMin  = 0;
     dataset.wgtMax  = 1;

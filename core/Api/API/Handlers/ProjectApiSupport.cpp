@@ -92,9 +92,6 @@ int API::Handlers::ProjectApiSupport::datasetOptionsBitflag(const DataModel::Dat
   if (ds.fft)
     flags |= SerialStudio::DatasetFFT;
 
-  if (ds.led)
-    flags |= SerialStudio::DatasetLED;
-
   if (ds.waterfall)
     flags |= SerialStudio::DatasetWaterfall;
 
@@ -128,9 +125,6 @@ QJsonObject API::Handlers::ProjectApiSupport::buildDatasetObject(const DataModel
 
   if (dataset.fft)
     enabled.append(QStringLiteral("FFT"));
-
-  if (dataset.led)
-    enabled.append(QStringLiteral("LED"));
 
   if (dataset.log)
     enabled.append(QStringLiteral("log"));

@@ -326,8 +326,8 @@ data...]` — bit 7 of byte 0 selects the form, `write()` mirrors it, and the ge
 Summary-first projects. Every group is a
 DataGrid (DBC still detects GPS / accelerometer / gyroscope groups), analog datasets carry
 plot + bar/gauge/meter toggles disclosed on demand via the data grid's pop-out buttons,
-boolean signals are LEDs with an explicit `[0.5, 1]` Ok alarm band (no reliance on the
-runtime `ledHigh` synthesis), DBC `VAL_` value tables become the dataset's `labels` (only
+boolean signals light a derived LED Panel group with an explicit `[0.5, 1]` Ok alarm band (no
+reliance on the runtime `ledHigh` synthesis), DBC `VAL_` value tables become the dataset's `labels` (only
 when factor = 1 / offset = 0; spec 0108 retired the Lua label chunk, so the signal keeps the
 numeric table read and the widget/plot policy of any other), and `displayFormat` decimals derive from
 the scaling factor. Generated bar/gauge/meter datasets get the analog display policy
@@ -335,7 +335,7 @@ the scaling factor. Generated bar/gauge/meter datasets get the analog display po
 ticks, 0-150 → 7) and integer labels once the range spans more than one unit. Both
 importers seed **customized workspaces** — a leading Overview
 aggregating every group's refs (multi-group projects only), then one workspace per group,
-each holding only the group-widget ref (+ LED panel ref), user-range IDs (≥ 5000 so the
+each holding only the group-widget ref (a derived LED Panel group joins its source's workspace), user-range IDs (≥ 5000 so the
 load-time auto-range remap never fires) — through
 `Importers/ImporterCommon.h::finalizeImportedProject`, which also assigns group uniqueIds,
 serializes the data tables, and stamps `schemaVersion` + `nextUniqueId`: omit those stamps

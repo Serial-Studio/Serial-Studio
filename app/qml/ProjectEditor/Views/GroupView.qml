@@ -261,17 +261,6 @@ Widgets.Pane {
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-meter", 24)
               onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetMeter)
             }
-
-            Widgets.ToolbarButton {
-              iconSize: 24
-              text: qsTr("LED")
-              toolbarButton: false
-              Layout.alignment: Qt.AlignVCenter
-              enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-              icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-led", 24)
-              ToolTip.text: qsTr("Add an LED indicator for binary status signals")
-              onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
-            }
           }
 
           //

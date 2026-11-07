@@ -97,7 +97,7 @@ ring nodes, so cached pointers would dangle): `plotIndexes`, `multiplotCurves`, 
 
 ## Alarm Bands — Central Tracking in `UI::AlarmMonitor`
 
-**Contract (moved verbatim from CLAUDE.md, 2026-11-04):** Whether a dataset's bands are drawn has ONE home, `SerialStudio::datasetRendersAlarmBands` (Bar, Gauge, Meter, LED or a Bar Panel member); whether they alarm is `datasetRaisesBandAlarms` beside it (drawn, non-empty, `suppressAlarms` off) and, with `alarmsWhileVisible`, `datasetAlarmsNow` (a widget on screen). A second copy of one lets a band drawn nowhere sound while the editor refuses to open it. Bands on other datasets are kept and ignored, never cleared.
+**Contract (moved verbatim from CLAUDE.md, 2026-11-04):** Whether a dataset's bands are drawn has ONE home, `SerialStudio::datasetRendersAlarmBands` (Bar, Gauge, Meter, or a Bar Panel / LED Panel member); whether they alarm is `datasetRaisesBandAlarms` beside it (drawn, non-empty, `suppressAlarms` off) and, with `alarmsWhileVisible`, `datasetAlarmsNow` (a widget on screen). A second copy of one lets a band drawn nowhere sound while the editor refuses to open it. Bands on other datasets are kept and ignored, never cleared.
 
 Alarm-band *notifications* are dataset-level, not widget-level. `UI::AlarmMonitor` (singleton,
 wired in `ModuleManager::setupCrossModuleConnections`) rebuilds per-dataset trackers from
@@ -109,8 +109,8 @@ so cached pointers would dangle. Consequences:
 - **Applicability has one home (spec 0093).** Two functions in
   `core/Pipeline/DataModel/WidgetResolution.cpp`, both built on `getDashboardWidget` /
   `getDashboardWidgets`. `datasetRendersAlarmBands(dataset, group)` says whether a widget draws
-  the bands: true for any member of a Bar Panel group, or for a dataset that is not
-  `hideOnDashboard` and resolves to Bar, Gauge, Meter or LED. The Project Editor's
+  the bands: true for any member of a Bar Panel or LED Panel group, or for a dataset that is
+  not `hideOnDashboard` and resolves to Bar, Gauge or Meter. The Project Editor's
   `alarmBandsApplicable` property and its multi-selection filter ask it.
   `datasetRaisesBandAlarms(dataset, group)` adds "has bands" and "`suppressAlarms` is off" (the
   per-dataset opt-out; suppressed bands stay drawn and editable). `rebuildTrackers` walks
@@ -136,8 +136,16 @@ so cached pointers would dangle. Consequences:
   re-arms a revealed one and evaluates it at once as a fresh band entry under the cooldown.
   Never read `alarmsWhileVisible` or ask a taskbar for visibility anywhere else.
 - `Bar` / `Gauge` / `Meter` / `LEDPanel` are display-only band consumers; do not re-add
-  per-widget `NotificationCenter` posts (that double-fires when a dataset is both a band
-  widget and `led: true`).
+  per-widget `NotificationCenter` posts (that double-fired when a dataset was both a band
+  widget and an LED).
+- **The LED Panel is a group widget (spec 0114):** `"ledpanel"` resolves to the persisted
+  `DashboardLED` type, so `UI::Widgets::LEDPanel`, saved layouts and workspace refs are
+  unchanged, and the dataset `led` flag is gone. `ProjectLoader::migrateLegacyLedFlags` turns a
+  pre-0114 file's flagged datasets into a derived `<title> LEDs` group right after the source
+  (hidden flagged datasets skipped, LED refs retargeted) through
+  `DataModel::insertLegacyLedPanels` in `core/Core/DataModel/LedPanelGroup.*`; the boolean-tag
+  project generators and importers emit the same shape through `appendGroupWithLedPanel`. The
+  gate is the flag's presence, never a schema bump: the older-schema path clears workspaces.
 - **A band consumer reports nothing until its first finite sample (spec 0075 N3).**
   `Widgets::Bar` (which `Gauge` and `Meter` derive from) latches `hasData` on the first sample it
   applies through `applySample()` and clears it only on `Dashboard::dataReset`, which also drops the
@@ -154,7 +162,7 @@ so cached pointers would dangle. Consequences:
 - The value is clamped to the dataset's widget range before band lookup (mirrors analog-widget
   semantics); 3 s per-dataset, per-severity-tier cooldown.
 - `AlarmBand.blink` (`Keys::Blink`, JSON `blink`, default false) is rendering-only: LED panels
-  flash while the band is active. LED datasets with no bands synthesize a runtime
+  flash while the band is active. LED Panel members with no bands synthesize a runtime
   `[ledHigh, +inf)` band inside `LEDPanel` (severity -1 = dataset color); nothing is migrated
   in the project file — the editor only pre-fills a band from `ledHigh` when the dialog opens.
 - `AlarmBand.sound` (`Keys::Sound`, JSON `sound`, omitted when empty) is the per-band WAV

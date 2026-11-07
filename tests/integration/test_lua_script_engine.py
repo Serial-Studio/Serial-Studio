@@ -234,7 +234,6 @@ def test_lua_language_persists_through_loadFromJSON(api_client, clean_state):
                         "graph": True,
                         "log": False,
                         "fft": False,
-                        "led": False,
                         "min": 0,
                         "max": 100,
                         "alarm": 0,

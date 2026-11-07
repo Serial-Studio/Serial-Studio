@@ -37,6 +37,7 @@
 #include "AppState.h"
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
+#include "Core/DataModel/LedPanelGroup.h"
 #include "Core/JsonValidator.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/Runtime.h"
@@ -434,6 +435,25 @@ void DataModel::ProjectLoader::migrateLegacyDashboardLayout(const QJsonObject& j
 }
 
 /**
+ * @brief Pre-0114 LED flags become LED Panel groups (Core::insertLegacyLedPanels). Keyed on the
+ *        flag's presence, never on the schema version: the older-schema path clears every
+ *        workspace, and the writer no longer emits the key, so a migrated save is inert here.
+ */
+bool DataModel::ProjectLoader::migrateLegacyLedFlags(const QJsonObject& json)
+{
+  const auto rawGroups = json.value(Keys::Groups).toArray();
+  const auto allocate  = [this]() {
+    return m_model.allocateUniqueId();
+  };
+  auto& workspaces = m_model.m_workspaces.mutableList();
+  if (!insertLegacyLedPanels(m_model.m_groups, workspaces, rawGroups, allocate))
+    return false;
+
+  m_model.m_entities.renumberGroupIds();
+  return true;
+}
+
+/**
  * @brief Rewrites a legacy parse(frame, separator) function into the modern split-by-string form.
  *        Migrated projects save to disk inside this call, so the caller skips
  *        persistLegacyMigration() but must still run the normal load tail (snapshot, loaded
@@ -725,6 +745,13 @@ bool DataModel::ProjectLoader::loadFromJsonDocument(const QJsonDocument& documen
 
   m_model.setModified(false);
   m_model.m_persistence.watchProjectFile();
+  if (flags.ledPanelsMigrated) {
+    m_model.setModified(true);
+    if (!sourcePath.isEmpty())
+      postLoadNotice(ProjectModel::tr("LED panels are now groups"),
+                     ProjectModel::tr("Each group that showed LEDs gained an LED Panel group next "
+                                      "to it. Save the project to keep the new layout."));
+  }
 
   const bool separatorMigrated = migrateLegacySeparator(json);
 
@@ -746,13 +773,21 @@ bool DataModel::ProjectLoader::loadFromJsonDocument(const QJsonDocument& documen
                        "the update.")
         .arg(loadedSchema)
         .arg(DataModel::kSchemaVersion);
-    QTimer::singleShot(0, &m_model, [title, body] {
-      static auto& nc = DataModel::NotificationCenter::instance();
-      nc.postInfo(QStringLiteral("ProjectModel"), title, body);
-    });
+    postLoadNotice(title, body);
   }
 
   return true;
+}
+
+/**
+ * @brief Posts a load-time notice once the event loop runs, after the project signals went out.
+ */
+void DataModel::ProjectLoader::postLoadNotice(const QString& title, const QString& body)
+{
+  QTimer::singleShot(0, &m_model, [title, body] {
+    static auto& nc = DataModel::NotificationCenter::instance();
+    nc.postInfo(QStringLiteral("ProjectModel"), title, body);
+  });
 }
 
 /**
@@ -773,9 +808,10 @@ DataModel::ProjectLoader::DocumentLoadFlags DataModel::ProjectLoader::applyJsonD
   const QString legacyParserCode = json.value(QLatin1StringView("frameParser")).toString();
 
   DocumentLoadFlags flags;
-  flags.legacyUniqueIds = !json.contains(Keys::NextUniqueId);
-  flags.loadedSchema    = ss_jsr(json, Keys::SchemaVersion, 0).toInt();
-  flags.olderSchema     = flags.loadedSchema < DataModel::kSchemaVersion;
+  flags.legacyUniqueIds   = !json.contains(Keys::NextUniqueId);
+  flags.loadedSchema      = ss_jsr(json, Keys::SchemaVersion, 0).toInt();
+  flags.olderSchema       = flags.loadedSchema < DataModel::kSchemaVersion;
+  flags.ledPanelsMigrated = false;
 
   m_model.m_controlScriptCode  = ss_jsr(json, Keys::ControlScriptCode, "").toString();
   m_model.m_transformLibrary   = ss_jsr(json, Keys::TransformLibrary, "").toString();
@@ -803,6 +839,7 @@ DataModel::ProjectLoader::DocumentLoadFlags DataModel::ProjectLoader::applyJsonD
   }
 
   migrateLegacyWaterfallYAxisIds();
+  flags.ledPanelsMigrated = migrateLegacyLedFlags(json);
 
   loadPointCount(json);
   loadPlotTimeRange(json);
@@ -999,6 +1036,15 @@ bool DataModel::ProjectLoader::mergeImportedProject(const QJsonObject& project,
     return false;
   }
 
+  for (auto& group : merged.groups)
+    group.groupId -= base.groupCount;
+
+  const auto allocate = [&merged]() {
+    return merged.nextUniqueId++;
+  };
+  (void)insertLegacyLedPanels(
+    merged.groups, merged.workspaces, project.value(Keys::Groups).toArray(), allocate);
+
   const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Add Import to Project")};
 
   auto& sources = m_model.m_sources;
@@ -1007,6 +1053,7 @@ bool DataModel::ProjectLoader::mergeImportedProject(const QJsonObject& project,
   auto& groups          = m_model.m_groups;
   const size_t firstNew = groups.size();
   groups.insert(groups.end(), merged.groups.begin(), merged.groups.end());
+  m_model.m_entities.renumberGroupIds();
 
   auto& tables = m_model.m_tables.mutableList();
   tables.insert(tables.end(), merged.tables.begin(), merged.tables.end());

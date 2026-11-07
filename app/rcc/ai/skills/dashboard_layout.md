@@ -110,7 +110,6 @@ APIs, which is why slugs exist.)
 | Bar           | `"bar"`         | `widget: "bar"`        | `4`              | `10`             |
 | Gauge         | `"gauge"`       | `widget: "gauge"`      | `8`              | `11`             |
 | Compass       | `"compass"`     | `widget: "compass"`    | `16`             | `12`             |
-| LED           | `"led"`         | `led: true`            | `32`             | `8`              |
 | Waterfall     | `"waterfall"`   | `waterfall: true`      | `64`             | `21` (Pro)       |
 | Meter         | `"meter"`       | `widget: "meter"`      | `128`            | `13`             |
 
@@ -130,7 +129,7 @@ Notes:
   dataset's `widget` string holds at most one of them. `setOptions`
   enforces this: if more than one of those bits is set, the highest bit
   wins.
-- Plot / FFT / LED / Waterfall are **independent**: a dataset can
+- Plot / FFT / Waterfall are **independent**: a dataset can
   have Plot + FFT + Waterfall all on at once, and the group's
   `compatibleWidgetTypes` will list all three.
 - The integer bitflag for `setOptions` and the integer enum for
@@ -177,13 +176,13 @@ See `api_semantics` for the full alias list.
 | `"meter"`            | `wgtMin` / `wgtMax`                        | Half-arc analog meter; needs bounds to draw scale and to size the digital-page value box. |
 | `"fft"`              | `fftMin` / `fftMax`                        | Expected raw signal range for input normalization (NOT a dB axis). Also tune `fftSamples` + `fftSamplingRate` + `fftWindow`. |
 | `"waterfall"` (Pro)  | `fftMin` / `fftMax`                        | Reuses the dataset's FFT settings, including the input-normalization range and `fftWindow`. |
-| `"led"`              | (none; uses `ledHigh` threshold)           | `ledHigh` is on/off boundary.                     |
+| `"led"`              | `ledHigh` or `alarmBands` per dataset      | Group widget `"ledpanel"`: every dataset in the group is a light; there is no per-dataset option. |
 | `"datagrid"`         | (none)                                     | Shows raw values.                                 |
 | `"barpanel"`         | `wgtMin` / `wgtMax` per dataset            | One band-zoned bar per dataset; fill takes the active alarm band's color; `barPanelStyle` (group key) picks auto/horizontal/vertical; `extremeHold` per dataset adds min/max hold markers. |
 
 Alarm bands (`alarmBands`) notify and sound only on a dataset with a `bar`,
-`gauge` or `meter` widget or the `led` option (and `hideOnDashboard` off), or on
-any dataset in a `barpanel` group. On any other dataset, a plot-only one
+`gauge` or `meter` widget (and `hideOnDashboard` off), or on any dataset in a
+`barpanel` or `ledpanel` group. On any other dataset, a plot-only one
 included, they are stored and ignored, so give the dataset one of those widgets
 when the user asks for an alarm. Set `suppressAlarms: true` to keep a dataset's
 bands drawn without notifications or sound, for a zone the user wants to see
@@ -275,8 +274,8 @@ Reading the API:
   is the GroupWidget enum (the int column above).
 - `project.group.update` accepts `{title, widget, columns, sourceId,
   painterCode}`. **It does NOT accept `widgetType`.** Pass `widget` as
-  a STRING ("datagrid", "barpanel", "multiplot", "accelerometer", "gyro",
-  "map", "plot3d", "image", "painter", "webview") or `""` to clear. Sending
+  a STRING ("datagrid", "barpanel", "ledpanel", "multiplot", "accelerometer",
+  "gyro", "map", "plot3d", "image", "painter", "webview") or `""` to clear. Sending
   `widgetType: 4` to `update` is silently dropped. You'll see no
   error, and `compatibleWidgetTypes` won't change. If you wrote that
   call and saw nothing happen, that's why.
@@ -466,7 +465,7 @@ the result, and figure out why **before** issuing another addWidget.
 
 Mutations that affect `compatibleWidgetTypes`:
 - `project.dataset.setOptions` / `setOption` / `update{graph, fft,
-  led, waterfall, widget}`
+  waterfall, widget}`
 - `project.dataset.add` (new datasets seed the union)
 - `project.dataset.delete` (shrinks the union)
 - `project.group.update{widget: "..."}`  (string, see next bullet)
@@ -548,7 +547,7 @@ When the user asks for "an overview" or "executive dashboard":
    - Compass (12) for headings: no min/max (fixed 0–360)
    - Bar (10) for bounded levels: needs `wgtMin`/`wgtMax`
    - Meter (13) for analog half-arc readouts: needs `wgtMin`/`wgtMax`
-   - LED (8) for booleans/alarms: uses `ledHigh` threshold
+   - LED Panel (8) for booleans/alarms: a group with `widget: "ledpanel"`, every dataset a light (`ledHigh` or bands)
    - Plot (9) for single time-series: needs `pltMin`/`pltMax`
    - FFT (7) for spectra of audio / vibration / signals: needs `fftMin`/`fftMax` (expected raw input range, used for normalization)
    - Waterfall (21, Pro) for spectrograms: needs `fftMin`/`fftMax` (same input-normalization range)
@@ -727,7 +726,7 @@ Gauge is bound to, using `wgtMin`/`wgtMax`.
   silently drops `widgetType`.
 - **`setOption` (singular) is deprecated for agent use.** Always
   `setOptions` (plural) with the full slug array, or `dataset.update`
-  with named booleans (`graph`, `fft`, `led`, `waterfall`).
+  with named booleans (`graph`, `fft`, `waterfall`).
 - **Prefer string slugs** (`widgetType: "plot"`,
   `options: ["plot","fft"]`) over integers. The bitflag (`setOptions`)
   and enum (`addWidget`) integer numbering systems were a 3.x

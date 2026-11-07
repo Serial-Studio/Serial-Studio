@@ -297,11 +297,6 @@ public:
     return put(F(SS_KEY_LOG), v, 1);
   }
 
-  SerialStudioT& led(bool v)
-  {
-    return put(F(SS_KEY_LED), v, 1);
-  }
-
   SerialStudioT& ledHigh(double v)
   {
     return put(F(SS_KEY_LED_HIGH), v, 1);

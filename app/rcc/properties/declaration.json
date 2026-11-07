@@ -70,6 +70,7 @@
     "gyro",
     "gps",
     "plot3d",
-    "barpanel"
+    "barpanel",
+    "ledpanel"
   ]
 }

@@ -81,6 +81,12 @@ def _textfield(device, row):
     device.control("Frequency", "text", min=0, max=50, units="Hz", decimals=1)
 
 
+def _ledpanel(device, row):
+    device.group("Doors", "ledpanel")
+    device.channel("Front Left", row[0], led_high=1, graph=False)
+    device.channel("Trunk", row[1], led_high=1, graph=False)
+
+
 def _tuner_command(name, value):
     return (2, "out of range") if value > 50 else None
 
@@ -104,6 +110,7 @@ SKETCHES = {
     "mpu6050_bin": ("MPU6050", {}, _mpu6050, None),
     "textfield": ("Tuner", {"on_control": _tuner_command}, _textfield,
                   [[1.5], [1.6], [1.7], [1.8]]),
+    "ledpanel": ("Body Control", {}, _ledpanel, [[1, 0], [0, 1], [1, 1]]),
 }
 
 SETUP = {"mpu6050_bin": _binary_mpu}

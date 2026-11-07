@@ -45,7 +45,7 @@ struct RefAnchor {
   int widgetType;
   int sourceGid;
   int datasetFrameIndex;
-  bool isGroupOrLed;
+  bool isGroupRef;
 };
 
 /**

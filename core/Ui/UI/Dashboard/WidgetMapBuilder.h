@@ -128,8 +128,7 @@ private:
   void appendExtremePush(int sourceId, const DataModel::Dataset& dataset);
   void relabelGroupAsMultiplotFallback(int groupId, const QString& newTitle);
   void addExtensionStringTargets(QSet<const DataModel::Dataset*>& targets) const;
-  void processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
-                                    DataModel::Group& ledPanel);
+  void processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn);
   [[nodiscard]] ValuePush makeValuePush(const DataModel::Dataset& dataset,
                                         const QSet<const DataModel::Dataset*>& stringTargets) const;
 

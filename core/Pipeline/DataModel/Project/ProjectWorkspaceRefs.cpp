@@ -68,7 +68,7 @@ static RefAnchor anchorRef(const WidgetRef& r, const std::vector<Group>& groups)
   a.widgetType        = r.widgetType;
   a.sourceGid         = r.groupUniqueId;
   a.datasetFrameIndex = -1;
-  a.isGroupOrLed      = false;
+  a.isGroupRef        = false;
 
   auto git = std::find_if(groups.begin(), groups.end(), [uid = r.groupUniqueId](const auto& g) {
     return g.uniqueId == uid;
@@ -81,9 +81,8 @@ static RefAnchor anchorRef(const WidgetRef& r, const std::vector<Group>& groups)
   const bool emptyOutPanel = g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();
   const bool groupRef = SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !emptyOutPanel
                      && static_cast<int>(groupKey) == r.widgetType;
-  const bool ledAggregate = (r.widgetType == static_cast<int>(SerialStudio::DashboardLED));
-  if (groupRef || ledAggregate) {
-    a.isGroupOrLed = true;
+  if (groupRef) {
+    a.isGroupRef = true;
     return a;
   }
 
@@ -153,7 +152,7 @@ static void resolveOneWorkspaceRefs(Workspace& ws,
     auto& r       = ws.widgetRefs[i];
     const auto& a = src[i];
 
-    if (a.sourceGid < 0 || a.isGroupOrLed)
+    if (a.sourceGid < 0 || a.isGroupRef)
       continue;
 
     auto git = std::find_if(groups.begin(), groups.end(), [uid = r.groupUniqueId](const auto& g) {
@@ -223,26 +222,15 @@ QMap<int, int> widgetTypeCountsForGroup(const Group& group)
   if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel)
     counts[static_cast<int>(groupKey)] += 1;
 
-  bool groupHasLed = false;
   for (const auto& ds : group.datasets) {
     if (ds.hideOnDashboard)
       continue;
 
     const auto keys = SerialStudio::getDashboardWidgets(ds);
-    for (const auto& k : keys) {
-      if (k == SerialStudio::DashboardLED) {
-        groupHasLed = true;
-        continue;
-      }
-      if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
-        continue;
-
-      counts[static_cast<int>(k)] += 1;
-    }
+    for (const auto& k : keys)
+      if (SerialStudio::datasetWidgetEligibleForWorkspace(k))
+        counts[static_cast<int>(k)] += 1;
   }
-
-  if (groupHasLed)
-    counts[static_cast<int>(SerialStudio::DashboardLED)] += 1;
 
   return counts;
 }

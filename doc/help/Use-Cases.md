@@ -63,7 +63,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 
 **Solution:** Serial Studio's HID driver reads gamepad axis and button data via hidapi:
 - Joystick X/Y axes displayed as plots
-- Button states shown as LED indicators
+- Button states shown as lights in an LED Panel
 - Robot IMU and motor feedback received over BLE in the same multi-device project
 - All data logged to CSV for post-match analysis
 

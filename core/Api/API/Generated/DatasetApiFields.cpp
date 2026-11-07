@@ -471,12 +471,6 @@ static QString applyDatasetFlagFields3(DataModel::Dataset& d,
     rebuildTree = true;
   }
 
-  const auto key_led = takeDatasetField(params, consumed, {Keys::LED});
-  if (!key_led.isEmpty()) {
-    d.led = params.value(key_led).toBool();
-    rebuildTree = true;
-  }
-
   const auto key_overview_display = takeDatasetField(params, consumed, {Keys::Overview});
   if (!key_overview_display.isEmpty()) {
     d.overviewDisplay = params.value(key_overview_display).toBool();
@@ -836,9 +830,10 @@ static void datasetSchemaPart3(QJsonObject& props)
                                      "value that hovers at a limit from alarming over and over. "
                                      "Use 0 for none.",
                                      QJsonArray()));
-  props.insert(Keys::LED,
-               datasetSchemaProperty("boolean",
-                                     "Shows this dataset as a light in the LED panel.",
+  props.insert(Keys::LedHigh,
+               datasetSchemaProperty("number",
+                                     "The LED turns on when the value reaches this level. Use "
+                                     "alarm bands for more than two states.",
                                      QJsonArray()));
 }
 
@@ -849,11 +844,6 @@ static void datasetSchemaPart3(QJsonObject& props)
  */
 static void datasetSchemaPart4(QJsonObject& props)
 {
-  props.insert(Keys::LedHigh,
-               datasetSchemaProperty("number",
-                                     "The LED turns on when the value reaches this level. Use "
-                                     "alarm bands for more than two states.",
-                                     QJsonArray()));
   props.insert(Keys::Overview,
                datasetSchemaProperty("boolean",
                                      "Show this dataset in the project overview panel",
@@ -905,6 +895,11 @@ static void datasetSchemaPart4(QJsonObject& props)
                datasetSchemaProperty("number",
                                      "Added to the value after it is multiplied by the scale.",
                                      QJsonArray()));
+  props.insert(Keys::LabelsDefault,
+               datasetSchemaProperty("string",
+                                     "Text shown for a value no label row matches; empty shows "
+                                     "the number",
+                                     QJsonArray()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -914,11 +909,6 @@ static void datasetSchemaPart4(QJsonObject& props)
  */
 static void datasetSchemaPart5(QJsonObject& props)
 {
-  props.insert(Keys::LabelsDefault,
-               datasetSchemaProperty("string",
-                                     "Text shown for a value no label row matches; empty shows "
-                                     "the number",
-                                     QJsonArray()));
   props.insert(Keys::SourceId,
                datasetSchemaProperty("integer",
                                      "Source (device) this dataset belongs to",

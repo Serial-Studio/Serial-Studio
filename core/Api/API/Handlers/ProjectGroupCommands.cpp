@@ -83,7 +83,7 @@ void API::Handlers::ProjectGroupCommands::registerCommands()
        QStringLiteral("GroupWidget enum -- see command description for decision "
        "guidance. 0=DataGrid, 1=Accelerometer, 2=Gyroscope, 3=GPS, "
        "4=MultiPlot, 5=NoGroupWidget, 6=Plot3D, 7=ImageView, 8=Painter, "
-       "9=WebView, 10=BarPanel")                                                           }
+       "9=WebView, 10=BarPanel, 11=LEDPanel")                                              }
   }),
     &groupAdd);
 
@@ -139,15 +139,16 @@ API::CommandResponse API::Handlers::ProjectGroupCommands::groupAdd(const QString
   }
 
   const int widget_type = params.value(QStringLiteral("widgetType")).toInt();
-  if (widget_type < 0 || widget_type > static_cast<int>(SerialStudio::BarPanel)) {
+  if (widget_type < 0 || widget_type > static_cast<int>(SerialStudio::LEDPanel)) {
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
       QStringLiteral("Invalid widgetType: must be 0..%1 "
                      "(see GroupWidget enum: 0=DataGrid, 1=Accelerometer, "
                      "2=Gyroscope, 3=GPS, 4=MultiPlot, 5=NoGroupWidget, "
-                     "6=Plot3D, 7=ImageView, 8=Painter, 9=WebView, 10=BarPanel)")
-        .arg(static_cast<int>(SerialStudio::BarPanel)));
+                     "6=Plot3D, 7=ImageView, 8=Painter, 9=WebView, 10=BarPanel, "
+                     "11=LEDPanel)")
+        .arg(static_cast<int>(SerialStudio::LEDPanel)));
   }
 
   const auto widget  = static_cast<SerialStudio::GroupWidget>(widget_type);

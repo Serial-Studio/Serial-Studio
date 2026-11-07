@@ -75,6 +75,7 @@ QtObject {
     "editor.menu.addGroup.generic": root.cmdAddGroupGeneric,
     "editor.menu.addGroup.dataGrid": root.cmdAddGroupDataGrid,
     "editor.menu.addGroup.barPanel": root.cmdAddGroupBarPanel,
+    "editor.menu.addGroup.ledPanel": root.cmdAddGroupLEDPanel,
     "editor.menu.addGroup.multiPlot": root.cmdAddGroupMultiPlot,
     "editor.menu.addGroup.plot3D": root.cmdAddGroupPlot3D,
     "editor.menu.addGroup.accelerometer": root.cmdAddGroupAccelerometer,
@@ -90,7 +91,6 @@ QtObject {
     "editor.menu.addDataset.bar": root.cmdAddDatasetBar,
     "editor.menu.addDataset.compass": root.cmdAddDatasetCompass,
     "editor.menu.addDataset.meter": root.cmdAddDatasetMeter,
-    "editor.menu.addDataset.led": root.cmdAddDatasetLED,
     "editor.menu.addOutput.panel": root.cmdAddOutputPanel,
     "editor.menu.addOutput.slider": root.cmdAddOutputSlider,
     "editor.menu.addOutput.toggle": root.cmdAddOutputToggle,
@@ -126,7 +126,6 @@ QtObject {
     "editor.menu.dataset.gauge": root.cmdDatasetGauge,
     "editor.menu.dataset.compass": root.cmdDatasetCompass,
     "editor.menu.dataset.meter": root.cmdDatasetMeter,
-    "editor.menu.dataset.led": root.cmdDatasetLED,
     "editor.expandTree": root.cmdExpandTree,
     "editor.collapseTree": root.cmdCollapseTree
   })
@@ -412,6 +411,11 @@ QtObject {
     function run() { root.addGroup(qsTr("Bar Panel"), SerialStudio.BarPanel) }
   }
 
+  readonly property QtObject cmdAddGroupLEDPanel: QtObject {
+    readonly property bool visible: root.singleTarget
+    function run() { root.addGroup(qsTr("LED Panel"), SerialStudio.LEDPanel) }
+  }
+
   readonly property QtObject cmdAddGroupMultiPlot: QtObject {
     readonly property bool visible: root.singleTarget
     function run() { root.addGroup(qsTr("Multi-Plot"), SerialStudio.MultiPlot) }
@@ -488,11 +492,6 @@ QtObject {
   readonly property QtObject cmdAddDatasetMeter: QtObject {
     readonly property bool visible: root.singleTarget
     function run() { root.addDataset(SerialStudio.DatasetMeter) }
-  }
-
-  readonly property QtObject cmdAddDatasetLED: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addDataset(SerialStudio.DatasetLED) }
   }
 
   //
@@ -931,11 +930,5 @@ QtObject {
     readonly property bool visible: root.datasetVisualsVisible
     readonly property bool checked: root.datasetOptionOn(SerialStudio.DatasetMeter)
     function run() { root.toggleDatasetOption(SerialStudio.DatasetMeter) }
-  }
-
-  readonly property QtObject cmdDatasetLED: QtObject {
-    readonly property bool visible: root.datasetVisualsVisible
-    readonly property bool checked: root.datasetOptionOn(SerialStudio.DatasetLED)
-    function run() { root.toggleDatasetOption(SerialStudio.DatasetLED) }
   }
 }

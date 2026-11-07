@@ -63,7 +63,7 @@ Every frame is stamped on the poll thread, at the moment the tick started, befor
 
 - One source of type EtherNet/IP carrying the gateway, CIP path, controller family, interval and the tag list, so reopening the project reconnects without retyping the tags.
 - One group per program scope (`Program:MainProgram`), plus one **Controller Tags** group for controller-scoped tags.
-- One dataset per tag: the channel name as the title, LED widget for booleans, plotting enabled for numeric types, strings routed to the data grid.
+- One dataset per tag: the channel name as the title, booleans become lights in an LED Panel group placed after the group, plotting enabled for numeric types, strings routed to the data grid.
 - A Built-In frame parser using the **EtherNet/IP tags** template. Its schema parameter is regenerated with the project; edit the tag list and generate again rather than editing the schema by hand.
 
 The project opens in the Project Editor for customization. The headless API command `io.eip.generateProject` performs the same generation without a save dialog.

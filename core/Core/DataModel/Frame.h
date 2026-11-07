@@ -195,7 +195,6 @@ struct alignas(8) Dataset {
   bool fft                 = false;  ///< Enables FFT processing
   bool fftLogX             = false;  ///< Logarithmic frequency axis (FFT widget)
   bool fftBallistics       = false;  ///< Display ballistics: instant attack, timed release
-  bool led                 = false;  ///< Enables LED widget
   bool log                 = false;  ///< Enables logging
   bool plt                 = false;  ///< Enables plotting
   bool pltLogX             = false;  ///< Logarithmic X axis (plot widget, non-time X only)

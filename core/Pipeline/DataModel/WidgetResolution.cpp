@@ -116,6 +116,9 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
   if (widget == QStringLiteral("barpanel"))
     return DashboardBarPanel;
 
+  if (widget == QStringLiteral("ledpanel"))
+    return DashboardLED;
+
 #ifdef BUILD_COMMERCIAL
   if (widget == QStringLiteral("image"))
     return DashboardImageView;
@@ -163,9 +166,6 @@ QList<SerialStudio::DashboardWidget> SerialStudio::getDashboardWidgets(
   if (dataset.fft)
     list.append(DashboardFFT);
 
-  if (dataset.led)
-    list.append(DashboardLED);
-
 #ifdef BUILD_COMMERCIAL
   if (dataset.waterfall)
     list.append(DashboardWaterfall);
@@ -191,15 +191,16 @@ int SerialStudio::extensionGroupWidgetCount(const std::vector<DataModel::Group>&
 }
 
 /**
- * @brief Whether a band-drawing widget is configured for @p dataset: its group renders a bar
- *        panel, or the dataset is not hidden and resolves to a bar, gauge, meter or LED. The one
+ * @brief Whether a band-drawing widget is configured for @p dataset: its group is a bar or LED
+ *        panel, or the dataset is not hidden and resolves to a bar, gauge or meter. The one
  *        alarm-band applicability rule (spec 0093), built on the two resolvers above so it cannot
  *        drift from the dashboard. Rebuild and command rate only: the dataset resolver allocates.
  */
 bool SerialStudio::datasetRendersAlarmBands(const DataModel::Dataset& dataset,
                                             const DataModel::Group& group)
 {
-  if (getDashboardWidget(group) == DashboardBarPanel)
+  const auto groupKey = getDashboardWidget(group);
+  if (groupKey == DashboardBarPanel || groupKey == DashboardLED)
     return true;
 
   if (dataset.hideOnDashboard)
@@ -207,7 +208,7 @@ bool SerialStudio::datasetRendersAlarmBands(const DataModel::Dataset& dataset,
 
   const auto widgets = getDashboardWidgets(dataset);
   return widgets.contains(DashboardBar) || widgets.contains(DashboardGauge)
-      || widgets.contains(DashboardMeter) || widgets.contains(DashboardLED);
+      || widgets.contains(DashboardMeter);
 }
 
 /**

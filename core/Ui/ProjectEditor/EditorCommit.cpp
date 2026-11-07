@@ -611,6 +611,7 @@ bool EditorCommit::applyGroupWidgetEdit(int widgetIdx, int groupId)
     {          "map",           SerialStudio::GPS},
     {     "datagrid",      SerialStudio::DataGrid},
     {     "barpanel",      SerialStudio::BarPanel},
+    {     "ledpanel",      SerialStudio::LEDPanel},
     {       "plot3d",        SerialStudio::Plot3D},
     {        "image",     SerialStudio::ImageView},
     {      "painter",       SerialStudio::Painter},

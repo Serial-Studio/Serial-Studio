@@ -191,13 +191,13 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 | **Gauge** | <img src="cmd:editor.addGauge" alt="Add Gauge" width="16" height="16"> | A gauge. |
 | **Bar** | <img src="cmd:editor.addBar" alt="Add Level Indicator" width="16" height="16"> | A bar. |
 | **Compass** | <img src="cmd:editor.addCompass" alt="Add Compass" width="16" height="16"> | A compass. |
-| **LED Indicator** | <img src="cmd:editor.addLED" alt="Add LED Indicator" width="16" height="16"> | An LED. |
 
 ### Add groups
 
 | Button | Icon | Adds a group shown as |
 |--------|------|-----------------------|
 | **Group** | <img src="cmd:editor.addGroup" alt="Add Group" width="16" height="16"> | A generic dataset group. |
+| **LED Panel** | <img src="cmd:editor.addLEDPanel" alt="Add LED Panel" width="16" height="16"> | A panel with one light per dataset. |
 | **Image** | <img src="icon:widgets/image" alt="image" width="16" height="16"> | An [Image View](Widget-Reference.md#image-view-pro) (Pro). |
 | **Web View** | <img src="cmd:editor.addWebView" alt="Add Web View" width="16" height="16"> | A web viewer. |
 | **Canvas** | <img src="cmd:editor.addPainter" alt="Add Canvas" width="16" height="16"> | A [Canvas](Canvas-Widget.md) widget (Pro). |

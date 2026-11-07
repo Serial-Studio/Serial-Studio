@@ -268,21 +268,6 @@ Widgets.Pane {
                 Cpp_JSON_ProjectEditor.changeDatasetOptionForSelection(option, !value)
               }
             }
-
-            Widgets.ToolbarButton {
-              iconSize: 24
-              text: qsTr("LED")
-              toolbarButton: false
-              Layout.alignment: Qt.AlignVCenter
-              ToolTip.text: qsTr("Toggle LED for every selected dataset")
-              icon.source: Cpp_Misc_IconRegistry.icon("editor", "led", 24)
-              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetLED
-              onClicked: {
-                const option = SerialStudio.DatasetLED
-                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-                Cpp_JSON_ProjectEditor.changeDatasetOptionForSelection(option, !value)
-              }
-            }
           }
 
           //

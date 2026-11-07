@@ -50,6 +50,7 @@
         "stopwatch",
         "notification-log",
         "led-panel",
+        "ledpanel",
         "bar",
         "gauge",
         "compass",

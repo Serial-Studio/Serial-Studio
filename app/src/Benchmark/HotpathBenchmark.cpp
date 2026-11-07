@@ -357,7 +357,6 @@ QJsonObject HotpathBenchmark::buildDashboardProjectJson(int language, bool withS
 
   QJsonObject led = makeDataset(6, QStringLiteral("LED"));
   led.insert(Keys::Graph, true);
-  led.insert(Keys::LED, true);
 
   QJsonObject waterfall = makeDataset(7, QStringLiteral("Waterfall"));
   waterfall.insert(Keys::FFT, true);

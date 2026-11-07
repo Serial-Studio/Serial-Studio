@@ -5,6 +5,7 @@
         {"type": "command", "id": "editor.menu.addGroup.generic"},
         {"type": "command", "id": "editor.menu.addGroup.dataGrid"},
         {"type": "command", "id": "editor.menu.addGroup.barPanel"},
+        {"type": "command", "id": "editor.menu.addGroup.ledPanel"},
         {"type": "command", "id": "editor.menu.addGroup.multiPlot"},
         {"type": "command", "id": "editor.menu.addGroup.plot3D"},
         {"type": "command", "id": "editor.menu.addGroup.accelerometer"},
@@ -21,8 +22,7 @@
         {"type": "command", "id": "editor.menu.addDataset.gauge"},
         {"type": "command", "id": "editor.menu.addDataset.bar"},
         {"type": "command", "id": "editor.menu.addDataset.compass"},
-        {"type": "command", "id": "editor.menu.addDataset.meter"},
-        {"type": "command", "id": "editor.menu.addDataset.led"}
+        {"type": "command", "id": "editor.menu.addDataset.meter"}
     ] },
     { "name": "add-output", "items": [
         {"type": "command", "id": "editor.menu.addOutput.panel"},
@@ -46,8 +46,7 @@
         {"type": "command", "id": "editor.menu.dataset.bar"},
         {"type": "command", "id": "editor.menu.dataset.gauge"},
         {"type": "command", "id": "editor.menu.dataset.compass"},
-        {"type": "command", "id": "editor.menu.dataset.meter"},
-        {"type": "command", "id": "editor.menu.dataset.led"}
+        {"type": "command", "id": "editor.menu.dataset.meter"}
     ] },
     { "name": "move-to-folder", "items": [
         {"type": "command", "id": "editor.menu.moveToTopLevel"},

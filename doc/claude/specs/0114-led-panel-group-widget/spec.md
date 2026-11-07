@@ -1,7 +1,7 @@
 ---
 spec: 0114-led-panel-group-widget
 title: LED Panel as a Group Widget
-status: approved     # draft -> approved -> in-progress -> done | shelved
+status: in-progress  # draft -> approved -> in-progress -> done | shelved
 created: 2026-11-07
 author: Alex Spataru
 ---

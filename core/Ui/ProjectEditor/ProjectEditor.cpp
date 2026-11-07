@@ -260,7 +260,7 @@ bool DataModel::ProjectEditor::currentGroupIsEditable() const
   if (m_currentView == GroupView) {
     const auto& widget = m_selectedGroup.widget;
     if (widget != "" && widget != "multiplot" && widget != "datagrid" && widget != "painter"
-        && widget != "barpanel")
+        && widget != "barpanel" && widget != "ledpanel")
       return false;
   }
 
@@ -290,7 +290,7 @@ bool DataModel::ProjectEditor::datasetWidgetEditable(const DataModel::Dataset& d
   if (groupId >= 0 && static_cast<size_t>(groupId) < groups.size()) {
     const auto& widget = groups[groupId].widget;
     if (widget != "" && widget != "multiplot" && widget != "datagrid" && widget != "painter"
-        && widget != "barpanel")
+        && widget != "barpanel" && widget != "ledpanel")
       return false;
   }
 
@@ -403,9 +403,6 @@ quint16 DataModel::ProjectEditor::datasetOptions() const
 
   if (m_selectedDataset.fft)
     option |= SerialStudio::DatasetFFT;
-
-  if (m_selectedDataset.led)
-    option |= SerialStudio::DatasetLED;
 
   if (m_selectedDataset.waterfall)
     option |= SerialStudio::DatasetWaterfall;

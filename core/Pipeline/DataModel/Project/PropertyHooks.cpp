@@ -532,7 +532,7 @@ bool DataModel::PropertyHooks::widgetSelectable(const Dataset& d, const ProjectM
   if (d.groupId >= 0 && static_cast<size_t>(d.groupId) < groups.size()) {
     const auto& widget = groups[d.groupId].widget;
     if (widget != "" && widget != "multiplot" && widget != "datagrid" && widget != "painter"
-        && widget != "barpanel")
+        && widget != "barpanel" && widget != "ledpanel")
       return false;
   }
 
@@ -580,12 +580,15 @@ bool DataModel::PropertyHooks::alarmBandsDrawn(const Dataset& d, const ProjectMo
 }
 
 /**
- * @brief Returns true when the dataset appears in the LED panel.
+ * @brief Returns true when the owning group is an LED Panel, so the dataset is one of its lights.
  */
 bool DataModel::PropertyHooks::ledEnabled(const Dataset& d, const ProjectModel& pm)
 {
-  Q_UNUSED(pm);
-  return d.led;
+  const auto& groups = pm.groups();
+  if (d.groupId < 0 || static_cast<size_t>(d.groupId) >= groups.size())
+    return false;
+
+  return SerialStudio::getDashboardWidget(groups[d.groupId]) == SerialStudio::DashboardLED;
 }
 
 /**

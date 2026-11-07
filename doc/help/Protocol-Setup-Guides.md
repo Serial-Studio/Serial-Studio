@@ -264,7 +264,7 @@ CSV is the most common format for Modbus register maps. Most PLC vendors, SCADA 
 The last four columns describe how the device is wired rather than what a register holds:
 
 - **`slave`**: the unit the register lives on. Registers from different units become separate polled blocks, each read from its own unit, and the generated parser tells the replies apart by the unit byte they carry. Leave it empty for a single-device bus. (`unit` alone still means the units column.)
-- **`bit`**: a bit index inside a holding or input register (0 = least significant). The row becomes an LED dataset that follows that bit; the rest of the word stays untouched.
+- **`bit`**: a bit index inside a holding or input register (0 = least significant). The row becomes a light in the block's LED Panel group, following that bit; the rest of the word stays untouched.
 - **`rw`**: `w`, `rw`, `write`, `yes` or `true` marks the register writable. A writable row also produces an output control in a generated Controls panel that writes the register (a toggle for coils and bit rows, a slider for numeric registers) and reads its state back from the block's table.
 - **`order`**: the word/byte order of a 32-bit or 64-bit value: `abcd` (big-endian, the default), `cdab` (word swap), `badc` (byte swap) or `dcba` (little-endian). `big`/`little`/`swap` are accepted as aliases.
 

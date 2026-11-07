@@ -11,7 +11,6 @@
     "Fft",
     "Waterfall",
     "WaterfallYAxis",
-    "Led",
     "LedHigh",
     "Plt",
     "FftMin",
@@ -661,7 +660,7 @@
     },
     {
       "id": "led",
-      "title": "LED Display Settings",
+      "title": "LED Panel",
       "iconCategory": "editor",
       "iconName": "led"
     }
@@ -811,7 +810,6 @@
         "signature": "model+dataset",
         "section": "led",
         "rows": [
-          "Led",
           "LedHigh"
         ]
       }
@@ -1895,35 +1893,6 @@
       "api": {
         "expose": true,
         "name": "alarmDeadband",
-        "rebuildTree": true
-      }
-    },
-    {
-      "id": "Led",
-      "wire": {
-        "include": true
-      },
-      "field": "led",
-      "jsonKey": "LED",
-      "formId": "kDatasetView_LED",
-      "type": "bool",
-      "default": false,
-      "scope": "document",
-      "persist": "always",
-      "section": "led",
-      "widget": "CheckBox",
-      "label": "Show in LED Panel",
-      "description": "Shows this dataset as a light in the LED panel.",
-      "placeholder": 0,
-      "onCommit": "onReshape",
-      "undo": {
-        "label": "Edit Dataset",
-        "coalesce": false
-      },
-      "rebuildTree": true,
-      "api": {
-        "expose": true,
-        "name": "led",
         "rebuildTree": true
       }
     },

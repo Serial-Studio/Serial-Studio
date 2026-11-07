@@ -350,21 +350,6 @@ Widgets.Pane {
                 Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
               }
             }
-
-            Widgets.ToolbarButton {
-              iconSize: 24
-              text: qsTr("LED")
-              toolbarButton: false
-              Layout.alignment: Qt.AlignVCenter
-              icon.source: Cpp_Misc_IconRegistry.icon("editor", "led", 24)
-              ToolTip.text: qsTr("Show or hide a light that turns on above a level.")
-              checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetLED
-              onClicked: {
-                const option = SerialStudio.DatasetLED
-                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-              }
-            }
           }
 
           //

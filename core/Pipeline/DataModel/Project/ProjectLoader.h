@@ -51,6 +51,7 @@ public:
     int loadedSchema;
     bool olderSchema;
     bool legacyUniqueIds;
+    bool ledPanelsMigrated;
   };
 
   explicit ProjectLoader(ProjectModel& model);
@@ -102,6 +103,8 @@ private:
   void migrateLegacyWaterfallYAxisIds();
   void migrateLegacyLayoutKeys();
   void migrateLegacyDashboardLayout(const QJsonObject& json);
+  [[nodiscard]] bool migrateLegacyLedFlags(const QJsonObject& json);
+  void postLoadNotice(const QString& title, const QString& body);
   [[nodiscard]] bool migrateLegacySeparator(const QJsonObject& json);
   void persistLegacyMigration();
   void serveGeneratedProject(const Core::Bus::LoadGeneratedProjectRequested& request);

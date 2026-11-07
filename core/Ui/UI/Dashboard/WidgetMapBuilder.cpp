@@ -98,8 +98,7 @@ int UI::WidgetMapBuilder::datasetBucketBase(const SerialStudio::DashboardWidget 
 /**
  * @brief Registers a dataset's index and per-widget-key mappings.
  */
-void UI::WidgetMapBuilder::processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn,
-                                                        DataModel::Group& ledPanel)
+void UI::WidgetMapBuilder::processDatasetIntoWidgetMaps(const DataModel::Dataset& datasetIn)
 {
   SS_ASSERT(datasetIn.index >= 0, return);
   SS_ASSERT(datasetIn.uniqueId >= 0, return);
@@ -133,10 +132,6 @@ void UI::WidgetMapBuilder::processDatasetIntoWidgetMaps(const DataModel::Dataset
 
   auto keys = SerialStudio::getDashboardWidgets(dataset);
   for (const auto& widgetKey : std::as_const(keys)) {
-    if (widgetKey == SerialStudio::DashboardLED) {
-      ledPanel.datasets.push_back(dataset);
-      continue;
-    }
     if (widgetKey == SerialStudio::DashboardExtension)
       m_extensionDatasetIds.append(dataset.widget);
 
@@ -214,17 +209,8 @@ void UI::WidgetMapBuilder::buildWidgetGroups(const DataModel::Frame& frame, bool
     if (key == SerialStudio::DashboardGyroscope)
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
 
-    DataModel::Group ledPanel;
     for (const auto& dataset : group.datasets)
-      processDatasetIntoWidgetMaps(dataset, ledPanel);
-
-    if (ledPanel.datasets.size() > 0) {
-      ledPanel.widget   = "led-panel";
-      ledPanel.groupId  = group.groupId;
-      ledPanel.uniqueId = group.uniqueId;
-      ledPanel.title    = group.title;
-      m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
-    }
+      processDatasetIntoWidgetMaps(dataset);
   }
 }
 
@@ -292,13 +278,7 @@ void UI::WidgetMapBuilder::applyDisplayTitles()
     for (int j = 0; j < i.value().count(); ++j) {
       auto& group      = i.value()[j];
       const auto token = typeToken(i.key(), true, j);
-      if (group.widget != QLatin1String("led-panel")) {
-        group.title = resolve(token, group.uniqueId, group.title);
-        continue;
-      }
-
-      const auto scoped = widgetOverride(token, group.uniqueId);
-      group.title       = scoped.isEmpty() ? entityResolve(group.uniqueId, group.title) : scoped;
+      group.title      = resolve(token, group.uniqueId, group.title);
     }
   }
 

@@ -131,7 +131,6 @@ static Dataset populatedDataset()
   d.fftBallisticsRelease = 450;
   d.pltLogX              = true;
   d.pltLogY              = true;
-  d.led                  = true;
   d.log                  = true;
   d.plt                  = true;
   d.ledHigh              = 75;
@@ -869,7 +868,6 @@ void TstFrameSerialization::datasetRoundTripsConfiguration()
   QCOMPARE(restored->fftBallisticsRelease, d.fftBallisticsRelease);
   QCOMPARE(restored->pltLogX, d.pltLogX);
   QCOMPARE(restored->pltLogY, d.pltLogY);
-  QCOMPARE(restored->led, d.led);
   QCOMPARE(restored->log, d.log);
   QCOMPARE(restored->plt, d.plt);
   QCOMPARE(restored->ledHigh, d.ledHigh);

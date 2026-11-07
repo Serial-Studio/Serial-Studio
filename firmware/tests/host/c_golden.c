@@ -24,6 +24,7 @@ static const char* adc_rows[3][6] = {{"0,25", "1,50", "2,75", "3,00", "4,25", "4
 static const double ctl_rows[3][3] = {{3, 87.5, 1.2}, {3, 92.0, 1.25}, {1, 0.0, 1.25}};
 static const long fmt_rows[3][3] = {{16384, 8, 1200}, {8192, 0, 1210}, {-4096, 8, 1190}};
 static const double level_rows[4] = {1.5, 1.6, 1.7, 1.8};
+static const long door_rows[3][2] = {{1, 0}, {0, 1}, {1, 1}};
 static const char* adc_names[6] = {"ADC 0", "ADC 1", "ADC 2", "ADC 3", "ADC 4", "ADC 5"};
 
 static int hex_mode;
@@ -201,21 +202,32 @@ static int on_tuner(void* user, const char* name, double value)
   return 0;
 }
 
+static void ledpanel(ss_t* ss, int row)
+{
+  ss_group(ss, "Doors", SS_GROUP_WIDGET_LEDPANEL);
+  ss_channel_int(ss, "Front Left", door_rows[row][0]);
+  ss_led_high(ss, 1);
+  ss_graph(ss, 0);
+  ss_channel_int(ss, "Trunk", door_rows[row][1]);
+  ss_led_high(ss, 1);
+  ss_graph(ss, 0);
+}
+
 int main(int argc, char** argv)
 {
   static const char* titles[] = {"MPU6050", "TinyGPS", "Hexadecimal ADC", "Pump Controller",
-                                 "Formats", "MPU6050", "Tuner"};
+                                 "Formats", "MPU6050", "Tuner", "Body Control"};
   static const char* names[] = {"mpu6050", "tinygps", "hexadc", "controls",
-                                "formats", "mpu6050_bin", "textfield"};
+                                "formats", "mpu6050_bin", "textfield", "ledpanel"};
   static void (*sketches[])(ss_t*, int) = {mpu6050, tinygps, hexadc, controls,
-                                           formats, mpu6050, textfield};
+                                           formats, mpu6050, textfield, ledpanel};
   static const uint8_t start[2] = {0xAA, 0x55};
   ss_t ss;
   int pick = -1;
   int rows = 3;
   int i;
 
-  for (i = 0; i < 7 && argc > 1; ++i)
+  for (i = 0; i < 8 && argc > 1; ++i)
     if (strcmp(argv[1], names[i]) == 0)
       pick = i;
 

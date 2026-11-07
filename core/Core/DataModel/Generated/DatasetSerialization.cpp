@@ -73,7 +73,6 @@ static void writeDatasetFlags(QJsonObject& obj, const Dataset& d)
   if (d.alarmsWhileVisible)
     obj.insert(Keys::AlarmsWhileVisible, true);
 
-  obj.insert(Keys::LED, d.led);
   if (d.overviewDisplay)
     obj.insert(Keys::Overview, true);
 
@@ -228,7 +227,6 @@ static void readDatasetFlags(Dataset& d, const QJsonObject& obj)
   d.extremeHold = ss_jsr(obj, Keys::ExtremeHold, false).toBool();
   d.suppressAlarms = ss_jsr(obj, Keys::SuppressAlarms, false).toBool();
   d.alarmsWhileVisible = ss_jsr(obj, Keys::AlarmsWhileVisible, false).toBool();
-  d.led = ss_jsr(obj, Keys::LED, false).toBool();
   d.overviewDisplay = ss_jsr(obj, Keys::Overview, false).toBool();
   d.formatSigned = ss_jsr(obj, Keys::FormatSigned, false).toBool();
   d.enabled = !ss_jsr(obj, Keys::Disabled, false).toBool();

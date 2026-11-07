@@ -21,8 +21,6 @@
 
 #include "DataModel/Project/WorkspaceKeys.h"
 
-#include <algorithm>
-
 #include "Core/DataModel/Frame.h"
 #include "Core/License.h"
 #include "Core/SerialStudio.h"
@@ -204,25 +202,6 @@ QHash<qint64, ResolvedWidget> buildResolvedWidgetLookup(const std::vector<Group>
 
     for (const auto& ds : g.datasets)
       walkDatasetWidgets(ds);
-
-    const bool groupHasLed =
-      std::any_of(g.datasets.begin(), g.datasets.end(), [](const DataModel::Dataset& ds) {
-        return !ds.hideOnDashboard && ds.led;
-      });
-    if (groupHasLed) {
-      const int typeKey = static_cast<int>(SerialStudio::DashboardLED);
-      const int relIdx  = groupRunning.value(typeKey, 0);
-      groupRunning.insert(typeKey, relIdx + 1);
-
-      ResolvedWidget entry;
-      entry.groupTitle    = g.title;
-      entry.datasetTitle  = QString();
-      entry.uniqueId      = g.uniqueId;
-      entry.groupUniqueId = g.uniqueId;
-      entry.isGroupWidget = true;
-      entry.isLedPanel    = true;
-      lookup.insert(workspaceWidgetKey(typeKey, g.uniqueId, relIdx), entry);
-    }
   }
 
   return lookup;

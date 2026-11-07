@@ -53,6 +53,7 @@ QtObject {
     "editor.addPainter": root.cmdEditorAddPainter,
     "editor.addDataGrid": root.cmdEditorAddDataGrid,
     "editor.addBarPanel": root.cmdEditorAddBarPanel,
+    "editor.addLEDPanel": root.cmdEditorAddLEDPanel,
     "editor.addMultiPlot": root.cmdEditorAddMultiPlot,
     "editor.addPlot3D": root.cmdEditorAddPlot3D,
     "editor.addAccelerometer": root.cmdEditorAddAccelerometer,
@@ -64,7 +65,6 @@ QtObject {
     "editor.addGauge": root.cmdEditorAddGauge,
     "editor.addBar": root.cmdEditorAddBar,
     "editor.addCompass": root.cmdEditorAddCompass,
-    "editor.addLED": root.cmdEditorAddLED,
     "editor.addAction": root.cmdEditorAddAction,
     "editor.addOutputPanel": root.cmdEditorAddOutputPanel,
     "editor.addOutputSlider": root.cmdEditorAddOutputSlider,
@@ -183,6 +183,10 @@ QtObject {
     function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Bar Panel"), SerialStudio.BarPanel) }
   }
 
+  readonly property QtObject cmdEditorAddLEDPanel: QtObject {
+    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("LED Panel"), SerialStudio.LEDPanel) }
+  }
+
   readonly property QtObject cmdEditorAddMultiPlot: QtObject {
     function run() {
       Cpp_JSON_ProjectModel.addGroup(qsTr("Multi-Plot"), SerialStudio.MultiPlot)
@@ -229,10 +233,6 @@ QtObject {
 
   readonly property QtObject cmdEditorAddCompass: QtObject {
     function run() { Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass) }
-  }
-
-  readonly property QtObject cmdEditorAddLED: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED) }
   }
 
   readonly property QtObject cmdEditorAddAction: QtObject {

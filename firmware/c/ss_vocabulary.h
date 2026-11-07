@@ -66,7 +66,6 @@
 #define SS_KEY_SUPPRESS_ALARMS "suppressAlarms"
 #define SS_KEY_ALARMS_WHILE_VISIBLE "alarmsWhileVisible"
 #define SS_KEY_ALARM_DEADBAND "alarmDeadband"
-#define SS_KEY_LED "led"
 #define SS_KEY_LED_HIGH "ledHigh"
 #define SS_KEY_OVERVIEW_DISPLAY "overviewDisplay"
 #define SS_KEY_FORMAT "format"
@@ -126,6 +125,7 @@
 #define SS_GROUP_WIDGET_GPS "gps"
 #define SS_GROUP_WIDGET_PLOT3D "plot3d"
 #define SS_GROUP_WIDGET_BARPANEL "barpanel"
+#define SS_GROUP_WIDGET_LEDPANEL "ledpanel"
 
 #define SS_DATASET_WIDGET_BAR "bar"
 #define SS_DATASET_WIDGET_COMPASS "compass"

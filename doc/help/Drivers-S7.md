@@ -70,7 +70,7 @@ Every frame is stamped on the poll thread, at the moment the tick started, befor
 
 - One source of type Siemens S7 carrying the host, rack, slot, interval and the variable list, so reopening the project reconnects without retyping the addresses.
 - One group per data block (`DB5`), plus one **Memory** group for the `I`, `Q` and `M` areas.
-- One dataset per variable: the variable's name as the title, LED widget for bits, plotting enabled for numeric types, strings routed to the data grid.
+- One dataset per variable: the variable's name as the title, bits become lights in an LED Panel group placed after the group, plotting enabled for numeric types, strings routed to the data grid.
 - A Built-In frame parser using the **Siemens S7 variables** template. Its schema parameter is regenerated with the project; edit the variable list and generate again rather than editing the schema by hand.
 
 The project opens in the Project Editor for customization. The headless API command `io.s7.generateProject` performs the same generation without a save dialog.

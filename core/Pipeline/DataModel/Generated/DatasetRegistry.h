@@ -43,7 +43,6 @@ typedef enum {
   kDatasetView_FFT,
   kDatasetView_Waterfall,
   kDatasetView_WaterfallYAxis,
-  kDatasetView_LED,
   kDatasetView_LED_High,
   kDatasetView_Plot,
   kDatasetView_FFTMin,
@@ -222,8 +221,6 @@ inline constexpr DatasetProperty kDatasetProperties[] = {
   {"AlarmDeadband", "alarmDeadband", "alarmDeadband", "Edit Dataset", "dataset",
    kDatasetView_AlarmDeadband, PropertyType::Double, PropertyWidget::FloatField,
    PersistRule::WhenPositive, true, true, true, false},
-  {"Led", "led", "led", "Edit Dataset", "dataset", kDatasetView_LED, PropertyType::Bool,
-   PropertyWidget::CheckBox, PersistRule::Always, true, false, true, false},
   {"LedHigh", "ledHigh", "ledHigh", "Edit Dataset", "dataset", kDatasetView_LED_High,
    PropertyType::Double, PropertyWidget::FloatField, PersistRule::Always, true, true, false,
    false},
@@ -278,7 +275,7 @@ inline constexpr DatasetProperty kDatasetProperties[] = {
 /**
  * @brief Number of declared dataset properties.
  */
-inline constexpr int kDatasetPropertyCount = 54;
+inline constexpr int kDatasetPropertyCount = 53;
 
 /**
  * @brief Returns the property bound to a form-field id, or null when none is.

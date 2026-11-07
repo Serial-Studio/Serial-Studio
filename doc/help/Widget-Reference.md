@@ -90,12 +90,14 @@ flowchart TD
 
 ### LED Panel
 
-- Group widget (auto-created for datasets with `led: true`).
-- Multiple multi-state indicator LEDs, one per dataset.
-- With alarm bands defined, each LED lights in the color of the band the value sits in, shows the band's `label` next to the dataset title, and flashes while a band marked `blink` is active. Outside every band, the LED is off (annunciator-panel behavior).
-- Without bands, the LED falls back to the legacy single threshold: on (dataset color) when the value meets or exceeds `ledHigh` (default 80).
+- Widget key: `"ledpanel"`.
+- One multi-state indicator light per dataset in the group, with the dataset title beside it.
+- With alarm bands defined, each light takes the color of the band the value sits in, shows the band's `label` next to the title, and flashes while a band marked `blink` is active. Outside every band, the light is off (annunciator-panel behavior).
+- Without bands, the light falls back to a single threshold: on (dataset color) when the value meets or exceeds `ledHigh` (default 80).
+- Every dataset in the group is a light, **Hide on Dashboard** included, exactly as every dataset in a Bar Panel group is a row. To show a value both in a Data Grid and as a light, add it to both groups; datasets may share a Frame Index.
 - Best for: status flags, limit indicators, digital I/O states, annunciator panels.
-- Configuration: set `led: true` on each dataset, then either define `alarmBands` (see [Alarm bands](#alarm-bands)) or set `ledHigh`.
+- Configuration: set the group widget to **LED Panel**, then either define `alarmBands` (see [Alarm bands](#alarm-bands)) or set `ledHigh` on each dataset.
+- Projects saved by an earlier version flagged individual datasets with `led: true` instead. On load, each group that had lights gains a `<Group> LEDs` group right after it holding copies of those datasets, saved workspaces keep pointing at the panel, and the project is marked modified so you can save the new form. A flagged dataset that was also hidden showed no light and is not copied.
 
 ### Terminal
 
@@ -231,7 +233,7 @@ flowchart TD
 
 Bar, Gauge, Meter, Bar Panel, and LED Panel widgets render one or more **alarm bands**. Each band is a contiguous value range with a color and a severity tier. The bands are always drawn in full — muted zones along the bar track (Bar / Bar Panel) or arc segments on the dial rim (Gauge / Meter) — and the fill or needle takes the active band's color at all times, so a value in the normal range reads as a positive green signal. A value outside every band clamps to the nearest band's severity, so overrange data always renders as critical rather than unclassified; LED Panel entries light in the active band's color. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
 
-Bands take effect only on a dataset that one of these widgets shows: a dataset with a Bar, Gauge, or Meter widget, a dataset shown in the LED Panel, or any dataset in a Bar Panel group. **Hide on Dashboard** removes the first two cases, because a hidden dataset gets no widget of its own; Bar Panel rows are unaffected. On any other dataset (a plot-only dataset, for example) the bands are kept in the project file but are not drawn, post no notification, and raise no [alarm point](Aural-Alerts.md). Assigning one of the widgets again brings them back.
+Bands take effect only on a dataset that one of these widgets shows: a dataset with a Bar, Gauge, or Meter widget, or any dataset in a Bar Panel or LED Panel group. **Hide on Dashboard** removes the first case, because a hidden dataset gets no widget of its own; Bar Panel rows and LED Panel lights are unaffected. On any other dataset (a plot-only dataset, for example) the bands are kept in the project file but are not drawn, post no notification, and raise no [alarm point](Aural-Alerts.md). Assigning one of the widgets again brings them back.
 
 To keep a dataset's bands on screen without alerting, turn on **Suppress Alarms** in the dataset's Widget Settings (`suppressAlarms: true` in the project file). The widgets draw the bands exactly as before, but the dataset posts no band notification and raises no alarm point. A tachometer redline that should be seen but not heard is the usual case.
 
@@ -286,7 +288,7 @@ Clock and Stopwatch are dashboard-level utility widgets. They are not attached t
 | GPS Map       | Group   | `map`          | 2-3          | lat, lon, (alt) datasets                     |
 | Gyroscope     | Group   | `gyro`         | 3            | yaw, pitch, roll                             |
 | Accelerometer | Group   | `accelerometer`| 3            | x, y, z accel                                |
-| LED Panel     | Group   | auto           | 1+           | `led: true`, `alarmBands[]` or legacy `ledHigh` |
+| LED Panel     | Group   | `ledpanel`     | 1+           | `alarmBands[]` or `ledHigh` per dataset       |
 | 3D Plot       | Group   | `plot3d`       | 0+           | x, y, z coords (Pro)                         |
 | Image View    | Group   | `image`        | 0            | binary stream (Pro)                          |
 | Canvas        | Group   | `painter`      | 0+           | user `paint(ctx, w, h)` JS script (Pro)      |
@@ -315,7 +317,6 @@ Every dataset in a project file supports these visualization-related fields:
 | `fft`              | bool   | false   | Enable FFT spectrum plot. |
 | `waterfall`        | bool   | false   | Enable waterfall (spectrogram) plot. Pro. |
 | `waterfallYAxis`   | int    | 0       | Waterfall Y-axis source: 0 = time, otherwise the `uniqueId` of another dataset (order tracking). |
-| `led`              | bool   | false   | Enable LED indicator. |
 | `log`              | bool   | false   | Enable logging to file. |
 | `overviewDisplay`  | bool   | false   | Show in the overview/status bar. |
 | `plotMin`          | double | 0       | Plot Y-axis minimum (0 = auto-scale). C++ field `pltMin`. |
@@ -326,7 +327,7 @@ Every dataset in a project file supports these visualization-related fields:
 | `displayFormat`    | string | `"0d"`  | Decimal places on analog widget ticks and captions; Hexadecimal and Binary apply wherever the value is shown as text. Editor label "Label Format". |
 | `decimalPoints`    | int    | -1      | Fixed decimal places for the value display; overrides `displayFormat` (-1 = auto). Editor label "Decimal Points". |
 | `extremeHold`      | bool   | false   | Shows tick marks at the lowest and highest values observed since the last data reset. Editor label "Hold Min/Max Markers". |
-| `ledHigh`          | double | 80      | LED activation threshold (used only when `alarmBands` is empty). |
+| `ledHigh`          | double | 80      | Light-on threshold for a dataset in an LED Panel group (used only when `alarmBands` is empty). |
 | `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets, LED panels, and bar panels; ignored on any other dataset. Each entry: `{min, max, severity, color?, label?, blink?}`; see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from older releases are still read and migrated to bands on load, but no longer written. |
 | `suppressAlarms`   | bool   | false   | Keeps the dataset's alarm bands drawn but stops its band notifications, alarm points, and sounds. Written only when true. Editor label "Suppress Alarms". |
 | `alarmsWhileVisible` | bool | false   | The dataset's alarm bands notify, raise alarm points, and sound only while a widget showing it is on screen (see [Alarm bands](#alarm-bands)); `suppressAlarms` wins when both are set. Written only when true. Editor label "Alarms only while visible". |

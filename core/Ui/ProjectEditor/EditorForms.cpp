@@ -40,6 +40,7 @@
 #include "Core/Services.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/PipelineModules.h"
+#include "DataModel/Project/PropertyHooks.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/WidgetResolution.h"
 #include "IO/ConnectionManager.h"
@@ -956,7 +957,8 @@ void EditorForms::buildDatasetModel(const DataModel::Dataset& dataset)
   m_editor.addPlotSection(m_editor.m_datasetModel, dataset);
   m_editor.addFFTSection(m_editor.m_datasetModel, dataset);
   m_editor.addWidgetSection(m_editor.m_datasetModel, dataset);
-  m_editor.addLEDSection(m_editor.m_datasetModel, dataset);
+  if (DataModel::PropertyHooks::ledEnabled(dataset, m_editor.m_projectModelRef))
+    m_editor.addLEDSection(m_editor.m_datasetModel, dataset);
 
   QObject::connect(m_editor.m_datasetModel,
                    &CustomModel::itemChanged,
@@ -971,9 +973,9 @@ void EditorForms::buildDatasetModel(const DataModel::Dataset& dataset)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Emits openAlarmBandsEditor for the currently-selected dataset. LED-only datasets
+ * @brief Emits openAlarmBandsEditor for the currently-selected dataset. LED Panel members
  *        often leave the widget range unset, so the scale falls back to the plot range and
- *        then to 0-100; an LED dataset with no bands is pre-filled from its ledHigh threshold.
+ *        then to 0-100; a member with no bands is pre-filled from its ledHigh threshold.
  */
 void EditorForms::openAlarmBandsEditorForSelection()
 {
@@ -995,9 +997,10 @@ void EditorForms::openAlarmBandsEditorForSelection()
     range_max = 100;
   }
 
+  const bool ledMember =
+    DataModel::PropertyHooks::ledEnabled(m_editor.m_selectedDataset, m_editor.m_projectModelRef);
   QVariantList bands = bandsToVariantList(m_editor.m_selectedDataset.alarmBands);
-  if (bands.isEmpty() && m_editor.m_selectedDataset.led
-      && m_editor.m_selectedDataset.ledHigh < range_max) {
+  if (bands.isEmpty() && ledMember && m_editor.m_selectedDataset.ledHigh < range_max) {
     QVariantMap entry;
     entry.insert(QStringLiteral("min"), qMax(range_min, m_editor.m_selectedDataset.ledHigh));
     entry.insert(QStringLiteral("max"), range_max);

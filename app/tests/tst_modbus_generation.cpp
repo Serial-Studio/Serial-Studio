@@ -155,7 +155,8 @@ void TstModbusGeneration::registerGroupsBecomeDataGrids()
 }
 
 /**
- * @brief Coils and discrete inputs become LED datasets bounded to a single bit.
+ * @brief Coils and discrete inputs are bounded to a single bit and the group is followed by an LED
+ *        Panel group that lights them (spec 0114).
  */
 void TstModbusGeneration::coilGroupsBecomeLedDatasets()
 {
@@ -163,12 +164,17 @@ void TstModbusGeneration::coilGroupsBecomeLedDatasets()
   const auto array    = projectGroups(ModbusProjectGenerator(groups).buildProject({}));
   const auto datasets = array.at(0).toObject().value(Keys::Datasets).toArray();
 
+  QCOMPARE(array.count(), 2);
   QCOMPARE(datasets.count(), 2);
 
   const auto dataset = datasets.at(0).toObject();
-  QCOMPARE(dataset.value(Keys::LED).toBool(), true);
   QCOMPARE(dataset.value(Keys::WgtMax).toVariant().toInt(), 1);
   QVERIFY(!dataset.value(Keys::Graph).toBool());
+
+  const auto panel = array.at(1).toObject();
+  QCOMPARE(panel.value(Keys::Widget).toString(), QStringLiteral("ledpanel"));
+  QCOMPARE(panel.value(Keys::Datasets).toArray().count(), 2);
+  QCOMPARE(panel.value(Keys::Datasets).toArray().at(1).toObject().value(Keys::Index).toInt(), 2);
 }
 
 /**

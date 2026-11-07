@@ -26,7 +26,6 @@ QString optionSlugForWidget(const QString& widgetType)
     {      QStringLiteral("bar"),       QStringLiteral("bar")},
     {    QStringLiteral("gauge"),     QStringLiteral("gauge")},
     {  QStringLiteral("compass"),   QStringLiteral("compass")},
-    {      QStringLiteral("led"),       QStringLiteral("led")},
     {QStringLiteral("waterfall"), QStringLiteral("waterfall")},
   };
   return kMap.value(widgetType);

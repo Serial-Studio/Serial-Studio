@@ -34,6 +34,7 @@
 #include "Core/SerialStudio.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/WidgetResolution.h"
 #include "Misc/ProblemCenter.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -623,13 +624,18 @@ static void checkFftRange(const DataModel::Dataset& dataset, QList<Finding>& out
 }
 
 /**
- * @brief Flags an LED threshold that sits outside the dataset's own value range, which leaves the
- *        indicator permanently on or permanently off. Datasets with alarm bands are exempt: the
- *        LED panel drives its states from the bands and ledHigh is dead data (the form hides it).
+ * @brief Flags an LED Panel member whose threshold sits outside its own value range, which leaves
+ *        the light permanently on or off. Members with alarm bands are exempt: the panel drives
+ *        its states from the bands and ledHigh is dead data (the form hides it).
  */
-static void checkLedThreshold(const DataModel::Dataset& dataset, QList<Finding>& out)
+static void checkLedThreshold(const DataModel::Group& group,
+                              const DataModel::Dataset& dataset,
+                              QList<Finding>& out)
 {
-  if (!dataset.led || dataset.wgtMin >= dataset.wgtMax || !dataset.alarmBands.empty())
+  if (SerialStudio::getDashboardWidget(group) != SerialStudio::DashboardLED)
+    return;
+
+  if (dataset.wgtMin >= dataset.wgtMax || !dataset.alarmBands.empty())
     return;
 
   if (dataset.ledHigh >= dataset.wgtMin && dataset.ledHigh <= dataset.wgtMax)
@@ -689,7 +695,7 @@ static void checkNumericRanges(QList<Finding>& out)
       checkPlotRange(dataset, out);
       checkWidgetRange(dataset, out);
       checkFftRange(dataset, out);
-      checkLedThreshold(dataset, out);
+      checkLedThreshold(group, dataset, out);
       checkAlarmBands(dataset, out);
     }
   }

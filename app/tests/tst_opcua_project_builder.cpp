@@ -45,6 +45,7 @@ private slots:
   void wireSchemaIsOneEntryPerElement();
   void wireSchemaStopsAtTheSlotCeiling();
   void booleanTagsBecomeLedDatasets();
+  void booleanTagsDeriveAnLedPanelGroup();
   void numericTagsBecomePlotsWithRanges();
   void arrayElementsCarryIndexedTitles();
   void projectSkeleton();
@@ -147,7 +148,7 @@ void TstOpcUaProjectBuilder::wireSchemaStopsAtTheSlotCeiling()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief A boolean tag becomes an LED dataset, never a plot.
+ * @brief A boolean tag becomes a light: threshold one, range zero to one, never a plot.
  */
 void TstOpcUaProjectBuilder::booleanTagsBecomeLedDatasets()
 {
@@ -155,11 +156,32 @@ void TstOpcUaProjectBuilder::booleanTagsBecomeLedDatasets()
   const auto set = OpcUaProjectBuilder::datasetFor(tag, 0, 1);
 
   QCOMPARE(set.index, 1);
-  QVERIFY(set.led);
   QVERIFY(!set.plt);
   QCOMPARE(set.ledHigh, 1.0);
   QCOMPARE(set.wgtMax, 1.0);
   QCOMPARE(set.title, QStringLiteral("Running"));
+}
+
+/**
+ * @brief A group with boolean tags is followed by an LED Panel group holding copies of them, the
+ *        shape the loader's migration produces for a pre-0114 project (spec 0114).
+ */
+void TstOpcUaProjectBuilder::booleanTagsDeriveAnLedPanelGroup()
+{
+  const QList<OpcUaTag> tags = {
+    makeTag("ns=2;i=7", "Running", IO::Drivers::OpcUaWire::Type::Bool),
+    makeTag("ns=2;i=8", "Torque", IO::Drivers::OpcUaWire::Type::F32),
+  };
+  const auto project = OpcUaProjectBuilder(tags).buildProject({});
+  const auto groups  = projectGroups(project);
+  QCOMPARE(groups.count(), 2);
+  QCOMPARE(groups.at(0).toObject().value(Keys::Widget).toString(), QStringLiteral("datagrid"));
+  QCOMPARE(groups.at(1).toObject().value(Keys::Widget).toString(), QStringLiteral("ledpanel"));
+  QCOMPARE(groupDatasets(project, 0).count(), 2);
+  QCOMPARE(groupDatasets(project, 1).count(), 1);
+  QCOMPARE(groupDatasets(project, 1).at(0).toObject().value(Keys::Title).toString(),
+           QStringLiteral("Running"));
+  QCOMPARE(groupDatasets(project, 1).at(0).toObject().value(Keys::Index).toInt(), 1);
 }
 
 /**
@@ -174,7 +196,6 @@ void TstOpcUaProjectBuilder::numericTagsBecomePlotsWithRanges()
   const auto set = OpcUaProjectBuilder::datasetFor(tag, 0, 4);
 
   QVERIFY(set.plt);
-  QVERIFY(!set.led);
   QCOMPARE(set.units, QStringLiteral("Nm"));
   QCOMPARE(set.wgtMin, -5.0);
   QCOMPARE(set.wgtMax, 25.0);
@@ -184,7 +205,7 @@ void TstOpcUaProjectBuilder::numericTagsBecomePlotsWithRanges()
   const auto plain = OpcUaProjectBuilder::datasetFor(
     makeTag("ns=2;i=9", "Text", IO::Drivers::OpcUaWire::Type::Str), 0, 5);
   QVERIFY(!plain.plt);
-  QVERIFY(!plain.led);
+  QCOMPARE(plain.ledHigh, 80.0);
 }
 
 /**

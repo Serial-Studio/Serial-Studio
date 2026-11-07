@@ -31,6 +31,7 @@
 #include <QTextStream>
 
 #include "Core/DataModel/Frame.h"
+#include "Core/DataModel/LedPanelGroup.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/Importers/ProtoParser.h"
@@ -418,6 +419,7 @@ void DataModel::ProtoImporter::buildGroups(const ProtoMessage& message,
 {
   visited.insert(&message);
   Group group;
+  std::vector<int> leds;
   group.groupId  = groupIdCounter++;
   group.sourceId = sourceId;
   group.title    = parentFieldName.isEmpty() ? message.name : parentFieldName;
@@ -448,14 +450,12 @@ void DataModel::ProtoImporter::buildGroups(const ProtoMessage& message,
     d.units  = QString();
     d.fft    = false;
     d.log    = true;
-    d.led    = false;
     d.widget = QString();
 
     const bool isNumeric = isNumericScalar(field.scalar) && field.scalar != ProtoScalar::Bool;
     const bool isText = (field.scalar == ProtoScalar::String || field.scalar == ProtoScalar::Bytes);
 
     if (field.scalar == ProtoScalar::Bool) {
-      d.led     = true;
       d.ledHigh = 1;
       d.plt     = false;
     } else if (isText) {
@@ -473,9 +473,11 @@ void DataModel::ProtoImporter::buildGroups(const ProtoMessage& message,
     d.fftMax         = range.max;
 
     group.datasets.push_back(d);
+    if (field.scalar == ProtoScalar::Bool)
+      leds.push_back(static_cast<int>(group.datasets.size()) - 1);
   }
 
-  groupsOut.append(serialize(group));
+  appendGroupWithLedPanel(groupsOut, group, leds);
 
   for (const auto& field : message.fields) {
     if (field.scalar != ProtoScalar::MessageRef)

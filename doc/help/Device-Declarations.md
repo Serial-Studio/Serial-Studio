@@ -36,7 +36,7 @@ A declaration is a single line ending in a newline:
 
 - `#ss` is the reserved prefix. The digit after it is the wire version, currently `1`. An unknown version is ignored with a console message.
 - The rest of the line is a JSON object with a `title` and a `groups` array.
-- A group has a `title`, an optional `widget` (`datagrid`, `multiplot`, `accelerometer`, `gyro`, `gps`, `plot3d` or `barpanel`) and a `datasets` array. A group whose datasets do not fit its widget is shown as a data grid, with a console note.
+- A group has a `title`, an optional `widget` (`datagrid`, `multiplot`, `accelerometer`, `gyro`, `gps`, `plot3d`, `barpanel` or `ledpanel`) and a `datasets` array. A group whose datasets do not fit its widget is shown as a data grid, with a console note.
 - A dataset takes the same properties the Project Editor shows for a dataset: `title`, `units`, `widget`, `plotMin`, `plotMax`, `widgetMin`, `widgetMax`, `fft`, `alarmBands`, `labels`, and the rest. A property that is not a dataset property does not exist on the wire; unknown keys are dropped and listed in the console.
 - Dataset order is frame order. A dataset takes the next frame position, unless it names an `index`, which reuses that position so two groups can show the same channel.
 - Frames after a declaration are plain values in declared order, `1.5,2.5,3.5`, or named values, `Latitude:48.8584`, which map by name.

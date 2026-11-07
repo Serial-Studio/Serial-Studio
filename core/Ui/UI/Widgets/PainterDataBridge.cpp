@@ -337,14 +337,6 @@ bool Widgets::PainterDataBridge::dsHasFft(int i) const
   return valid(i) ? m_group->datasets[i].fft : false;
 }
 
-/**
- * @brief Returns true when this dataset has an LED tile enabled.
- */
-bool Widgets::PainterDataBridge::dsHasLed(int i) const
-{
-  return valid(i) ? m_group->datasets[i].led : false;
-}
-
 //--------------------------------------------------------------------------------------------------
 // Frame metadata
 //--------------------------------------------------------------------------------------------------

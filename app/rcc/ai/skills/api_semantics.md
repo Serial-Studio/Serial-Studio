@@ -232,7 +232,6 @@ and avoid the string-key arithmetic.
 | `"bar"`       | 4   | `widget: "bar"` (one-of)           |
 | `"gauge"`     | 8   | `widget: "gauge"` (one-of)         |
 | `"compass"`   | 16  | `widget: "compass"` (one-of)       |
-| `"led"`       | 32  | `led: true`                        |
 | `"waterfall"` | 64  | `waterfall: true` (Pro)            |
 | `"meter"`     | 128 | `widget: "meter"` (one-of)         |
 
@@ -405,9 +404,8 @@ project.dataset.addMany {
   count:        40,
   options:      32,                  // bitfield, OR an array of slugs
                                      //   ["plot","fft"]  -> 1|2 = 3
-                                     //   ["led"]         -> 32
                                      // bits: 1=Plot, 2=FFT, 4=Bar, 8=Gauge,
-                                     //       16=Compass, 32=LED, 64=Waterfall (Pro)
+                                     //       16=Compass, 64=Waterfall (Pro)
   titlePattern: "LED {n}",           // {n} -> startNumber + i, {i} -> 0-based
   startNumber:  1,                   // optional, default 1
   startIndex:   1                    // optional: -1 = auto-assign next slot,

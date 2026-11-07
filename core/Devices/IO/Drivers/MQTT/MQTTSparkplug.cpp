@@ -32,6 +32,7 @@
 #include <utility>
 
 #include "Core/DataModel/Frame.h"
+#include "Core/DataModel/LedPanelGroup.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
@@ -165,7 +166,6 @@ static DataModel::Dataset sparkplugDataset(const IO::Drivers::SparkplugSession::
   dataset.title = slot.name;
 
   if (slot.kind == Sparkplug::ValueKind::Boolean) {
-    dataset.led     = true;
     dataset.ledHigh = 1;
     dataset.wgtMax  = 1;
   } else if (slot.kind == Sparkplug::ValueKind::Numeric)
@@ -211,6 +211,7 @@ static QJsonArray sparkplugGroups(
 
   QStringList order;
   QHash<QString, DataModel::Group> groups;
+  QHash<QString, std::vector<int>> leds;
   for (const auto& slot : slotTable) {
     const QString key = slot.group + QLatin1Char('/') + slot.node + QLatin1Char('/') + slot.device;
     if (!groups.contains(key)) {
@@ -224,13 +225,15 @@ static QJsonArray sparkplugGroups(
 
     auto& group = groups[key];
     group.datasets.push_back(sparkplugDataset(slot));
+    if (slot.kind == Sparkplug::ValueKind::Boolean)
+      leds[key].push_back(static_cast<int>(group.datasets.size()) - 1);
   }
 
   QJsonArray array;
   for (const auto& key : order)
-    array.append(DataModel::serialize(groups.value(key)));
+    DataModel::appendGroupWithLedPanel(array, groups.value(key), leds.value(key));
 
-  SS_ASSERT_LOG(array.size() == order.size());
+  SS_ASSERT_LOG(array.size() >= order.size());
   return array;
 }
 

@@ -137,9 +137,9 @@ QStringList UI::WidgetExtensions::reservedIds()
     QStringLiteral("webview"),       QStringLiteral("barpanel"),
     QStringLiteral("terminal"),      QStringLiteral("clock"),
     QStringLiteral("stopwatch"),     QStringLiteral("notification-log"),
-    QStringLiteral("led-panel"),     QStringLiteral("bar"),
-    QStringLiteral("gauge"),         QStringLiteral("compass"),
-    QStringLiteral("meter"),
+    QStringLiteral("led-panel"),     QStringLiteral("ledpanel"),
+    QStringLiteral("bar"),           QStringLiteral("gauge"),
+    QStringLiteral("compass"),       QStringLiteral("meter"),
   };
   return ids;
 }

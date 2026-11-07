@@ -369,6 +369,8 @@ QString SerialStudio::groupWidgetId(const GroupWidget widget)
       return QStringLiteral("webview");
     case BarPanel:
       return QStringLiteral("barpanel");
+    case LEDPanel:
+      return QStringLiteral("ledpanel");
 #ifdef BUILD_COMMERCIAL
     case ImageView:
       return QStringLiteral("image");
@@ -408,6 +410,9 @@ SerialStudio::GroupWidget SerialStudio::groupWidgetFromId(const QString& id)
 
   if (id == QStringLiteral("barpanel"))
     return BarPanel;
+
+  if (id == QStringLiteral("ledpanel"))
+    return LEDPanel;
 
 #ifdef BUILD_COMMERCIAL
   if (id == QStringLiteral("image"))
@@ -455,6 +460,7 @@ SerialStudio::GroupWidgetRequirement SerialStudio::groupWidgetRequirement(const 
     case DataGrid:
     case MultiPlot:
     case BarPanel:
+    case LEDPanel:
       return {1, -1, {}};
     case NoGroupWidget:
     case ImageView:
@@ -512,6 +518,7 @@ QString SerialStudio::groupWidgetRequirementText(const GroupWidget widget)
     case DataGrid:
     case MultiPlot:
     case BarPanel:
+    case LEDPanel:
       return QCoreApplication::translate("SerialStudio", "Needs at least one dataset.");
     case NoGroupWidget:
     case ImageView:

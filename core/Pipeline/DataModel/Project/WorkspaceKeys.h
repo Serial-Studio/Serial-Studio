@@ -47,7 +47,6 @@ struct ResolvedWidget {
   int uniqueId       = -1;  ///< Dataset.uniqueId for dataset scope, Group.uniqueId otherwise
   int groupUniqueId  = -1;
   bool isGroupWidget = false;
-  bool isLedPanel    = false;
 };
 
 [[nodiscard]] qint64 workspaceWidgetKey(int widgetType, int groupId, int relIdx);

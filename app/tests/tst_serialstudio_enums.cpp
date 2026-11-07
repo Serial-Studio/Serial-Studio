@@ -57,14 +57,19 @@ void TstSerialStudioEnums::fftWindowOrdinalsAreStable()
 }
 
 /**
- * @brief BarPanel and Extension keep their explicit values in both build configurations.
+ * @brief BarPanel and Extension keep their explicit values in both build configurations, the LED
+ *        Panel group widget rides the persisted LED dashboard type, and its GroupWidget ordinal
+ *        (the JSON API's widgetType) stays appended after BarPanel.
  */
 void TstSerialStudioEnums::dashboardWidgetPinsAreStable()
 {
   QCOMPARE(static_cast<int>(SerialStudio::DashboardTerminal), 0);
+  QCOMPARE(static_cast<int>(SerialStudio::DashboardLED), 8);
   QCOMPARE(static_cast<int>(SerialStudio::DashboardNoWidget), 17);
   QCOMPARE(static_cast<int>(SerialStudio::DashboardBarPanel), 90);
   QCOMPARE(static_cast<int>(SerialStudio::DashboardExtension), 100);
+  QCOMPARE(static_cast<int>(SerialStudio::BarPanel), 10);
+  QCOMPARE(static_cast<int>(SerialStudio::LEDPanel), 11);
 }
 
 /**

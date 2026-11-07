@@ -104,7 +104,6 @@ DUAL_SENSOR_PROJECT = {
                     "graph": True,
                     "fft": False,
                     "log": False,
-                    "led": False,
                     "widget": "",
                 },
                 {
@@ -115,7 +114,6 @@ DUAL_SENSOR_PROJECT = {
                     "graph": True,
                     "fft": False,
                     "log": False,
-                    "led": False,
                     "widget": "",
                 },
                 {
@@ -126,7 +124,6 @@ DUAL_SENSOR_PROJECT = {
                     "graph": True,
                     "fft": False,
                     "log": False,
-                    "led": False,
                     "widget": "",
                 },
             ],
@@ -144,7 +141,6 @@ DUAL_SENSOR_PROJECT = {
                     "graph": True,
                     "fft": False,
                     "log": False,
-                    "led": False,
                     "widget": "",
                 },
                 {
@@ -155,7 +151,6 @@ DUAL_SENSOR_PROJECT = {
                     "graph": True,
                     "fft": False,
                     "log": False,
-                    "led": False,
                     "widget": "",
                 },
                 {
@@ -166,7 +161,6 @@ DUAL_SENSOR_PROJECT = {
                     "graph": True,
                     "fft": False,
                     "log": False,
-                    "led": False,
                     "widget": "",
                 },
             ],

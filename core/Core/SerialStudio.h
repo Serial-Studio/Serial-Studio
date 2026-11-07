@@ -212,6 +212,7 @@ enum GroupWidget {
   Painter,
   WebView,
   BarPanel,
+  LEDPanel,
 };
 Q_ENUM_NS(GroupWidget)
 
@@ -310,7 +311,6 @@ enum DatasetOption
   DatasetBar       = 0b00000100,
   DatasetGauge     = 0b00001000,
   DatasetCompass   = 0b00010000,
-  DatasetLED       = 0b00100000,
   DatasetWaterfall = 0b01000000,
   DatasetMeter     = 0b10000000,
 };

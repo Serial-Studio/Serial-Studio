@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "Core/DataModel/Frame.h"
+#include "Core/DataModel/LedPanelGroup.h"
 #include "Core/IconRegistry.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
@@ -152,9 +153,9 @@ inline void applyTableTransform(Dataset& dataset, const QString& table, const QS
 
 /**
  * @brief Builds the summary-first workspace list for an imported project: one workspace per
- *        group holding only the group-level widget (plus the LED panel when the group has LED
- *        datasets), so per-dataset plots/gauges stay disclosed-on-demand via the data grid.
- *        Multi-group projects get a leading Overview workspace aggregating those refs.
+ *        group holding only the group-level widget, so per-dataset widgets stay disclosed on
+ *        demand via the data grid. An LED Panel group joins the workspace of the group right
+ *        before it, which derived it (spec 0114). Multi-group projects get a leading Overview.
  */
 [[nodiscard]] inline QJsonArray buildImportedWorkspaces(const std::vector<Group>& groups,
                                                         const QString& overviewTitle)
@@ -173,6 +174,7 @@ inline void applyTableTransform(Dataset& dataset, const QString& table, const QS
     };
 
   int workspaceId = WorkspaceIds::UserStart + 1;
+  bool joinable   = false;
   for (const auto& group : groups) {
     Workspace ws;
     ws.workspaceId = workspaceId;
@@ -182,18 +184,20 @@ inline void applyTableTransform(Dataset& dataset, const QString& table, const QS
     if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey))
       appendRef(ws, groupKey, group.uniqueId);
 
-    bool hasLed = false;
-    for (const auto& dataset : group.datasets)
-      hasLed |= dataset.led;
-
-    if (hasLed)
-      appendRef(ws, SerialStudio::DashboardLED, group.uniqueId);
-
-    if (ws.widgetRefs.empty())
+    if (ws.widgetRefs.empty()) {
+      joinable = false;
       continue;
+    }
+
+    if (groupKey == SerialStudio::DashboardLED && joinable) {
+      perGroup.back().widgetRefs.push_back(ws.widgetRefs.front());
+      joinable = false;
+      continue;
+    }
 
     perGroup.push_back(std::move(ws));
     ++workspaceId;
+    joinable = (groupKey != SerialStudio::DashboardLED);
   }
 
   QJsonArray workspaces;

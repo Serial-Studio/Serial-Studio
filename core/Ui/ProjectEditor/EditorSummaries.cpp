@@ -634,7 +634,6 @@ QVariantList EditorSummaries::widgetsForWorkspace(int workspaceId) const
     row["datasetTitle"]        = QString();
     row[Keys::UniqueId]        = -1;
     row["isGroupWidget"]       = false;
-    row["isLedPanel"]          = false;
     row["displayTitle"]        = QString();
     row["fallbackTitle"]       = QString();
     row["freezeTitleMode"]     = SerialStudio::dashboardWidgetPaintsTitle(
@@ -649,7 +648,6 @@ QVariantList EditorSummaries::widgetsForWorkspace(int workspaceId) const
       row["datasetTitle"]  = it->datasetTitle;
       row[Keys::UniqueId]  = it->uniqueId;
       row["isGroupWidget"] = it->isGroupWidget;
-      row["isLedPanel"]    = it->isLedPanel;
       if (it->uniqueId >= 0) {
         const auto entity      = pm.displayTitle(it->uniqueId);
         row["displayTitle"]    = pm.widgetDisplayTitle(ref.widgetType, it->uniqueId);
@@ -823,25 +821,6 @@ QVariantList EditorSummaries::allWidgetsSummary() const
 
     for (const auto& ds : group.datasets)
       walkDatasetWidgets(ds);
-
-    const bool groupHasLed =
-      std::any_of(group.datasets.begin(), group.datasets.end(), [](const DataModel::Dataset& ds) {
-        return !ds.hideOnDashboard && ds.led;
-      });
-    if (groupHasLed) {
-      const auto ledKey = SerialStudio::DashboardLED;
-      QVariantMap row;
-      row["widgetType"]          = static_cast<int>(ledKey);
-      row["groupId"]             = group.uniqueId;
-      row["relativeIndex"]       = groupIdx.value(ledKey, 0);
-      row[Keys::DatasetUniqueId] = -1;
-      row["groupTitle"]          = group.title;
-      row["datasetTitle"]        = QString();
-      row["isGroupWidget"]       = true;
-      row["widgetLabel"]         = SerialStudio::dashboardWidgetTitle(ledKey);
-      groupIdx[ledKey]           = row["relativeIndex"].toInt() + 1;
-      result.append(row);
-    }
   }
 
   return result;

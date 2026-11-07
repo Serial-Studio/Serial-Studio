@@ -27,6 +27,7 @@ const char* const adcRows[3][6] = {{"0,25", "1,50", "2,75", "3,00", "4,25", "4,9
 const double ctlRows[3][3] = {{3, 87.5, 1.2}, {3, 92.0, 1.25}, {1, 0.0, 1.25}};
 const long fmtRows[3][3] = {{16384, 8, 1200}, {8192, 0, 1210}, {-4096, 8, 1190}};
 const double levelRows[4] = {1.5, 1.6, 1.7, 1.8};
+const long doorRows[3][2] = {{1, 0}, {0, 1}, {1, 1}};
 const char* const adcNames[6] = {"ADC 0", "ADC 1", "ADC 2", "ADC 3", "ADC 4", "ADC 5"};
 
 class HostStream : public Stream
@@ -177,12 +178,19 @@ int onTuner(const char*, double value)
   return 0;
 }
 
+void ledpanel(SerialStudio& ss, int row)
+{
+  ss.group(F("Doors"), F(SS_GROUP_WIDGET_LEDPANEL));
+  ss.channel(F("Front Left"), doorRows[row][0]).ledHigh(1).graph(false);
+  ss.channel(F("Trunk"), doorRows[row][1]).ledHigh(1).graph(false);
+}
+
 void (*const sketches[])(SerialStudio&, int) = {mpu6050, tinygps, hexadc, controls,
-                                                 formats, mpu6050, textfield};
+                                                 formats, mpu6050, textfield, ledpanel};
 const char* const names[] = {"mpu6050", "tinygps", "hexadc", "controls",
-                             "formats", "mpu6050_bin", "textfield"};
+                             "formats", "mpu6050_bin", "textfield", "ledpanel"};
 const char* const titles[] = {"MPU6050", "TinyGPS", "Hexadecimal ADC", "Pump Controller",
-                              "Formats", "MPU6050", "Tuner"};
+                              "Formats", "MPU6050", "Tuner", "Body Control"};
 class FeedStream : public HostStream
 {
 public:
@@ -203,7 +211,7 @@ public:
 int main(int argc, char** argv)
 {
   int pick = -1;
-  for (int i = 0; i < 7 && argc > 1; ++i)
+  for (int i = 0; i < 8 && argc > 1; ++i)
     if (strcmp(argv[1], names[i]) == 0)
       pick = i;
 

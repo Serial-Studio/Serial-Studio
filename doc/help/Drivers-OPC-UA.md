@@ -75,7 +75,7 @@ Every frame is stamped with the earliest source timestamp it carries, mapped ont
 
 - One source of type OPC UA carrying the endpoint, authentication mode, username, interval and the tag list, so reopening the project reconnects without browsing again.
 - One group per folder the selected tags live in, titled after the folder.
-- One dataset per channel: the tag's display name as the title (`name[i]` for array elements), LED widget for booleans, plotting enabled for numeric types, string tags routed to the data grid. `EngineeringUnits` becomes the dataset unit and `EURange` its widget and plot range, read from the ticked tags' properties.
+- One dataset per channel: the tag's display name as the title (`name[i]` for array elements), booleans become lights in an LED Panel group placed after the group, plotting enabled for numeric types, string tags routed to the data grid. `EngineeringUnits` becomes the dataset unit and `EURange` its widget and plot range, read from the ticked tags' properties.
 - A Built-In frame parser using the **OPC UA tag frames** template. The template's schema parameter lists each channel's wire type and is regenerated with the project; edit the tag selection and generate again rather than editing the schema by hand.
 
 The project opens in the Project Editor for customization, like any other generated project. The headless API command `io.opcua.generateProject` performs the same generation without a save dialog.

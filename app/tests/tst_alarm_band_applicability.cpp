@@ -47,13 +47,14 @@ private slots:
 };
 
 /**
- * @brief One row per dataset shape: group widget, dataset widget, LED, plot, hidden, expectation.
+ * @brief One row per dataset shape: group widget, dataset widget, LED Panel group, plot, hidden,
+ *        expectation. The LED Panel column overrides the group widget (spec 0114).
  */
 void AlarmBandApplicabilityTest::rule_data()
 {
   QTest::addColumn<QString>("groupWidget");
   QTest::addColumn<QString>("datasetWidget");
-  QTest::addColumn<bool>("led");
+  QTest::addColumn<bool>("ledPanel");
   QTest::addColumn<bool>("plot");
   QTest::addColumn<bool>("hidden");
   QTest::addColumn<bool>("applicable");
@@ -70,7 +71,7 @@ void AlarmBandApplicabilityTest::rule_data()
   QTest::newRow("bar") << none << bar << false << false << false << true;
   QTest::newRow("gauge") << none << gauge << false << false << false << true;
   QTest::newRow("meter") << none << meter << false << false << false << true;
-  QTest::newRow("led") << none << none << true << false << false << true;
+  QTest::newRow("led panel member") << none << none << true << false << false << true;
   QTest::newRow("gauge in a datagrid group")
     << dataGrid << gauge << false << false << false << true;
 
@@ -78,7 +79,8 @@ void AlarmBandApplicabilityTest::rule_data()
   QTest::newRow("compass") << none << compass << false << false << false << false;
   QTest::newRow("plot only") << none << none << false << true << false << false;
   QTest::newRow("hidden gauge") << none << gauge << false << false << true << false;
-  QTest::newRow("hidden led") << none << none << true << false << true << false;
+  QTest::newRow("hidden led panel member") << none << none << true << false << true << true;
+  QTest::newRow("former led panel member") << dataGrid << none << false << false << false << false;
   QTest::newRow("canvas member") << painter << none << false << false << false << false;
   QTest::newRow("datagrid member") << dataGrid << none << false << true << false << false;
 
@@ -93,17 +95,16 @@ void AlarmBandApplicabilityTest::rule()
 {
   QFETCH(QString, groupWidget);
   QFETCH(QString, datasetWidget);
-  QFETCH(bool, led);
+  QFETCH(bool, ledPanel);
   QFETCH(bool, plot);
   QFETCH(bool, hidden);
   QFETCH(bool, applicable);
 
   DataModel::Group group;
-  group.widget = groupWidget;
+  group.widget = ledPanel ? QStringLiteral("ledpanel") : groupWidget;
 
   DataModel::Dataset dataset;
   dataset.widget          = datasetWidget;
-  dataset.led             = led;
   dataset.plt             = plot;
   dataset.hideOnDashboard = hidden;
 
@@ -111,14 +112,14 @@ void AlarmBandApplicabilityTest::rule()
 }
 
 /**
- * @brief One row per alarm-side shape: group widget, dataset widget, LED, plot, suppressed, has
- *        bands, whether the bands are drawn, and whether they raise alarms.
+ * @brief One row per alarm-side shape: group widget, dataset widget, LED Panel group, plot,
+ *        suppressed, has bands, whether the bands are drawn, and whether they raise alarms.
  */
 void AlarmBandApplicabilityTest::raises_data()
 {
   QTest::addColumn<QString>("groupWidget");
   QTest::addColumn<QString>("datasetWidget");
-  QTest::addColumn<bool>("led");
+  QTest::addColumn<bool>("ledPanel");
   QTest::addColumn<bool>("plot");
   QTest::addColumn<bool>("suppressed");
   QTest::addColumn<bool>("banded");
@@ -133,10 +134,13 @@ void AlarmBandApplicabilityTest::raises_data()
     << none << gauge << false << false << false << true << true << true;
   QTest::newRow("bar panel member with bands")
     << barPanel << none << false << false << false << true << true << true;
+  QTest::newRow("led panel member with bands")
+    << none << none << true << false << false << true << true << true;
 
   QTest::newRow("suppressed gauge")
     << none << gauge << false << false << true << true << true << false;
-  QTest::newRow("suppressed led") << none << none << true << false << true << true << true << false;
+  QTest::newRow("suppressed led panel member")
+    << none << none << true << false << true << true << true << false;
   QTest::newRow("suppressed bar panel member")
     << barPanel << none << false << false << true << true << true << false;
 
@@ -153,7 +157,7 @@ void AlarmBandApplicabilityTest::raises()
 {
   QFETCH(QString, groupWidget);
   QFETCH(QString, datasetWidget);
-  QFETCH(bool, led);
+  QFETCH(bool, ledPanel);
   QFETCH(bool, plot);
   QFETCH(bool, suppressed);
   QFETCH(bool, banded);
@@ -161,11 +165,10 @@ void AlarmBandApplicabilityTest::raises()
   QFETCH(bool, alarms);
 
   DataModel::Group group;
-  group.widget = groupWidget;
+  group.widget = ledPanel ? QStringLiteral("ledpanel") : groupWidget;
 
   DataModel::Dataset dataset;
   dataset.widget         = datasetWidget;
-  dataset.led            = led;
   dataset.plt            = plot;
   dataset.suppressAlarms = suppressed;
   if (banded) {

@@ -461,6 +461,8 @@ QString API::EnumLabels::groupWidgetSlug(int value)
       return QStringLiteral("web-view");
     case SerialStudio::BarPanel:
       return QStringLiteral("bar-panel");
+    case SerialStudio::LEDPanel:
+      return QStringLiteral("led-panel");
   }
   return QStringLiteral("unknown");
 }
@@ -493,6 +495,8 @@ QString API::EnumLabels::groupWidgetLabel(int value)
       return QStringLiteral("Web view (embedded browser)");
     case SerialStudio::BarPanel:
       return QStringLiteral("Bar panel (multi-channel bars)");
+    case SerialStudio::LEDPanel:
+      return QStringLiteral("LED panel (one light per dataset)");
   }
   return QStringLiteral("Unknown");
 }
@@ -565,9 +569,6 @@ QString API::EnumLabels::datasetOptionsLabel(int value)
 
   if (value & SerialStudio::DatasetCompass)
     parts.append(QStringLiteral("compass"));
-
-  if (value & SerialStudio::DatasetLED)
-    parts.append(QStringLiteral("LED"));
 
   if (value & SerialStudio::DatasetWaterfall)
     parts.append(QStringLiteral("waterfall"));
@@ -677,7 +678,8 @@ int API::EnumLabels::dashboardWidgetFromSlug(const QString& slug)
   if (s == QLatin1String("fft"))
     return SerialStudio::DashboardFFT;
 
-  if (s == QLatin1String("led"))
+  if (s == QLatin1String("led") || s == QLatin1String("ledpanel")
+      || s == QLatin1String("led-panel"))
     return SerialStudio::DashboardLED;
 
   if (s == QLatin1String("plot"))
@@ -751,8 +753,6 @@ QString API::EnumLabels::datasetOptionSlug(int singleBitValue)
       return QStringLiteral("gauge");
     case SerialStudio::DatasetCompass:
       return QStringLiteral("compass");
-    case SerialStudio::DatasetLED:
-      return QStringLiteral("led");
     case SerialStudio::DatasetWaterfall:
       return QStringLiteral("waterfall");
     case SerialStudio::DatasetMeter:
@@ -781,9 +781,6 @@ int API::EnumLabels::datasetOptionFromSlug(const QString& slug)
 
   if (s == QLatin1String("compass"))
     return SerialStudio::DatasetCompass;
-
-  if (s == QLatin1String("led"))
-    return SerialStudio::DatasetLED;
 
   if (s == QLatin1String("waterfall"))
     return SerialStudio::DatasetWaterfall;
@@ -814,9 +811,6 @@ QStringList API::EnumLabels::datasetOptionsBitsToSlugs(int value)
 
   if (value & SerialStudio::DatasetCompass)
     out.append(QStringLiteral("compass"));
-
-  if (value & SerialStudio::DatasetLED)
-    out.append(QStringLiteral("led"));
 
   if (value & SerialStudio::DatasetWaterfall)
     out.append(QStringLiteral("waterfall"));

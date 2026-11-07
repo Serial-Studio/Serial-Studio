@@ -67,7 +67,6 @@ public slots:
   [[nodiscard]] double dsLedHigh(int i) const;
   [[nodiscard]] bool dsHasPlot(int i) const;
   [[nodiscard]] bool dsHasFft(int i) const;
-  [[nodiscard]] bool dsHasLed(int i) const;
 
   [[nodiscard]] qulonglong frameNumber() const;
   [[nodiscard]] qint64 frameTimestampMs() const;

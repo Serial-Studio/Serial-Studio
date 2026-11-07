@@ -127,7 +127,6 @@ void ss_feed(ss_t* ss, const char* data, size_t len);
 #define ss_fft(ss, v) ss_set_bool((ss), SS_KEY_FFT, (v))
 #define ss_fft_sampling_rate(ss, v) ss_set_num((ss), SS_KEY_FFT_SAMPLING_RATE, (v))
 #define ss_log(ss, v) ss_set_bool((ss), SS_KEY_LOG, (v))
-#define ss_led(ss, v) ss_set_bool((ss), SS_KEY_LED, (v))
 #define ss_led_high(ss, v) ss_set_num((ss), SS_KEY_LED_HIGH, (v))
 #define ss_decimal_points(ss, v) ss_set_num((ss), SS_KEY_DECIMAL_POINTS, (v))
 #define ss_hide_on_dashboard(ss, v) ss_set_bool((ss), SS_KEY_HIDE_ON_DASHBOARD, (v))

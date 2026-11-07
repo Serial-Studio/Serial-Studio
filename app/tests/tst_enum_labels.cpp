@@ -488,6 +488,9 @@ void TstEnumLabels::groupWidgetFullSweep_data()
   QTest::newRow("BarPanel") << static_cast<int>(SerialStudio::BarPanel)
                             << QStringLiteral("bar-panel")
                             << QStringLiteral("Bar panel (multi-channel bars)");
+  QTest::newRow("LEDPanel") << static_cast<int>(SerialStudio::LEDPanel)
+                            << QStringLiteral("led-panel")
+                            << QStringLiteral("LED panel (one light per dataset)");
 }
 
 /**
@@ -569,13 +572,14 @@ void TstEnumLabels::groupWidgetSlugsAreWellFormedAndUnique()
                      SerialStudio::ImageView,
                      SerialStudio::Painter,
                      SerialStudio::WebView,
-                     SerialStudio::BarPanel}) {
+                     SerialStudio::BarPanel,
+                     SerialStudio::LEDPanel}) {
     const auto slug = API::EnumLabels::groupWidgetSlug(static_cast<int>(value));
     QVERIFY(isWellFormedSlug(slug));
     slugs.insert(slug);
   }
 
-  QCOMPARE(slugs.size(), qsizetype(11));
+  QCOMPARE(slugs.size(), qsizetype(12));
 }
 
 void TstEnumLabels::groupWidgetOutOfRange_data()
@@ -747,6 +751,10 @@ void TstEnumLabels::dashboardWidgetFromSlugAcceptsAliasesCaseAndWhitespace_data(
                                   << static_cast<int>(SerialStudio::DashboardWebView);
   QTest::newRow("bar-panel-alias")
     << QStringLiteral("bar-panel") << static_cast<int>(SerialStudio::DashboardBarPanel);
+  QTest::newRow("ledpanel-alias") << QStringLiteral("ledpanel")
+                                  << static_cast<int>(SerialStudio::DashboardLED);
+  QTest::newRow("led-panel-alias")
+    << QStringLiteral("led-panel") << static_cast<int>(SerialStudio::DashboardLED);
   QTest::newRow("mixed-case") << QStringLiteral("DataGrid")
                               << static_cast<int>(SerialStudio::DashboardDataGrid);
   QTest::newRow("padded-whitespace")
@@ -813,7 +821,6 @@ void TstEnumLabels::datasetOptionSingleBitSweep_data()
   QTest::newRow("Gauge") << static_cast<int>(SerialStudio::DatasetGauge) << QStringLiteral("gauge");
   QTest::newRow("Compass") << static_cast<int>(SerialStudio::DatasetCompass)
                            << QStringLiteral("compass");
-  QTest::newRow("LED") << static_cast<int>(SerialStudio::DatasetLED) << QStringLiteral("led");
   QTest::newRow("Waterfall") << static_cast<int>(SerialStudio::DatasetWaterfall)
                              << QStringLiteral("waterfall");
   QTest::newRow("Meter") << static_cast<int>(SerialStudio::DatasetMeter) << QStringLiteral("meter");
@@ -843,7 +850,6 @@ void TstEnumLabels::datasetOptionSingleBitRoundTrip()
                    SerialStudio::DatasetBar,
                    SerialStudio::DatasetGauge,
                    SerialStudio::DatasetCompass,
-                   SerialStudio::DatasetLED,
                    SerialStudio::DatasetWaterfall,
                    SerialStudio::DatasetMeter}) {
     const auto value = static_cast<int>(bit);
@@ -901,7 +907,7 @@ void TstEnumLabels::datasetOptionsSlugsToBitsIsTheInverse()
   const auto fullMask =
     static_cast<int>(SerialStudio::DatasetPlot) | static_cast<int>(SerialStudio::DatasetFFT)
     | static_cast<int>(SerialStudio::DatasetBar) | static_cast<int>(SerialStudio::DatasetGauge)
-    | static_cast<int>(SerialStudio::DatasetCompass) | static_cast<int>(SerialStudio::DatasetLED)
+    | static_cast<int>(SerialStudio::DatasetCompass)
     | static_cast<int>(SerialStudio::DatasetWaterfall)
     | static_cast<int>(SerialStudio::DatasetMeter);
 
@@ -930,12 +936,11 @@ void TstEnumLabels::datasetOptionsLabelHumanReadable_data()
   const auto fullMask =
     static_cast<int>(SerialStudio::DatasetPlot) | static_cast<int>(SerialStudio::DatasetFFT)
     | static_cast<int>(SerialStudio::DatasetBar) | static_cast<int>(SerialStudio::DatasetGauge)
-    | static_cast<int>(SerialStudio::DatasetCompass) | static_cast<int>(SerialStudio::DatasetLED)
+    | static_cast<int>(SerialStudio::DatasetCompass)
     | static_cast<int>(SerialStudio::DatasetWaterfall)
     | static_cast<int>(SerialStudio::DatasetMeter);
   QTest::newRow("all-bits") << fullMask
-                            << QStringLiteral(
-                                 "plot, FFT, bar, gauge, compass, LED, waterfall, meter");
+                            << QStringLiteral("plot, FFT, bar, gauge, compass, waterfall, meter");
 }
 
 /**

@@ -111,10 +111,11 @@ void GroupWidgetRequirementTest::listWidgetsNeedOneDataset_data()
   QTest::newRow("datagrid") << static_cast<int>(SerialStudio::DataGrid);
   QTest::newRow("multiplot") << static_cast<int>(SerialStudio::MultiPlot);
   QTest::newRow("barpanel") << static_cast<int>(SerialStudio::BarPanel);
+  QTest::newRow("ledpanel") << static_cast<int>(SerialStudio::LEDPanel);
 }
 
 /**
- * @brief Data grid, multi-plot and bar panel need at least one dataset, of any tag.
+ * @brief Data grid, multi-plot, bar panel and LED panel need at least one dataset, of any tag.
  */
 void GroupWidgetRequirementTest::listWidgetsNeedOneDataset()
 {

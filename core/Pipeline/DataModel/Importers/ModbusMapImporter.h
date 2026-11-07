@@ -109,7 +109,7 @@ private:
                                                      const QString& tableName,
                                                      const QString& regName);
   [[nodiscard]] Dataset buildDatasetFromEntry(const ModbusMap::RegisterEntry& entry,
-                                              bool isBool,
+                                              bool isLed,
                                               const QString& tableName,
                                               const QString& regName,
                                               int datasetIndex) const;

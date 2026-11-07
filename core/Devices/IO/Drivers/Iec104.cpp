@@ -30,6 +30,7 @@
 #include <QTimer>
 #include <utility>
 
+#include "Core/DataModel/LedPanelGroup.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
@@ -1352,7 +1353,6 @@ DataModel::Dataset IO::Drivers::Iec104::datasetFor(const Iec104Point& point, int
   dataset.title = pointName(point);
 
   if (point.kind == PointKind::Single) {
-    dataset.led     = true;
     dataset.ledHigh = 1;
     dataset.wgtMax  = 1;
   } else if (point.kind != PointKind::Invalid && point.kind != PointKind::Double)
@@ -1399,6 +1399,7 @@ QJsonObject IO::Drivers::Iec104::buildProject() const
 
   QStringList order;
   QHash<QString, DataModel::Group> groups;
+  QHash<QString, std::vector<int>> leds;
   for (int i = 0; i < table.size(); ++i) {
     const auto& point = table.at(i);
     const QString key = point.kind == PointKind::Single || point.kind == PointKind::Double
@@ -1414,11 +1415,13 @@ QJsonObject IO::Drivers::Iec104::buildProject() const
     }
 
     groups[key].datasets.push_back(datasetFor(point, i + 1));
+    if (point.kind == PointKind::Single)
+      leds[key].push_back(static_cast<int>(groups[key].datasets.size()) - 1);
   }
 
   QJsonArray groupArray;
   for (const auto& key : order)
-    groupArray.append(DataModel::serialize(groups.value(key)));
+    DataModel::appendGroupWithLedPanel(groupArray, groups.value(key), leds.value(key));
 
   project[Keys::Groups] = groupArray;
   return project;

@@ -175,7 +175,7 @@ QJsonObject executeAssistantTool(const QString& name, const QJsonObject& args)
       executeAssistantTool(QStringLiteral("assistant.snapshot"), {});
     out[QStringLiteral("hint")] =
       QStringLiteral("Choose widgetType slugs already present in each group's "
-                     "compatibleWidgetTypes. For plot/fft/bar/gauge/compass/led/waterfall on a "
+                     "compatibleWidgetTypes. For plot/fft/bar/gauge/compass/waterfall on a "
                      "specific dataset, use assistant.workspace.addTile so options are enabled "
                      "before the tile is pinned.");
     return out;

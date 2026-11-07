@@ -57,8 +57,8 @@ File actions sit on the left; the rest of the toolbar is "add" buttons grouped b
 - **Lock.** Set a password and lock the editor. See [Project Lock](Project-Lock.md).
 - **Add Device** (Pro). Add another device for multi-device projects.
 - **Output / Action / Slider / Toggle / Knob / Text Field / Button.** Add an [output control](Output-Controls.md) panel or an [action](Actions.md).
-- **Dataset / Plot / FFT Plot / Gauge / Bar / Compass / LED Indicator.** Add a dataset to the selected group, pre-configured for that widget.
-- **Group / Image / Web View / Canvas / Table / Multi-Plot / 3D Plot / Accelerometer / Gyroscope / GPS Map.** Add a group with the matching group widget (Image, Canvas, and 3D Plot are Pro).
+- **Dataset / Plot / FFT Plot / Gauge / Bar / Compass.** Add a dataset to the selected group, pre-configured for that widget.
+- **Group / Image / Web View / Canvas / Table / Bar Panel / LED Panel / Multi-Plot / 3D Plot / Accelerometer / Gyroscope / GPS Map.** Add a group with the matching group widget (Image, Canvas, and 3D Plot are Pro).
 
 Every button, with its icon, is listed in the [Toolbar & Button Reference](Toolbar-Reference.md#project-editor-toolbar).
 
@@ -286,7 +286,7 @@ Groups organize related datasets and determine which group-level widget is used 
 Datasets map to individual data fields in your device's output.
 
 1. Select a group in the tree.
-2. Click **Dataset** in the toolbar (or one of the dataset widget buttons next to it: **Plot**, **FFT Plot**, **Gauge**, **Bar**, **Compass**, **LED Indicator**).
+2. Click **Dataset** in the toolbar (or one of the dataset widget buttons next to it: **Plot**, **FFT Plot**, **Gauge**, **Bar**, **Compass**).
 3. Configure the dataset properties:
 
 **General**
@@ -325,14 +325,13 @@ Formats and labels (below) are not Pro content: a project that uses them without
 - **Enable Waterfall Plot.** Show a scrolling time-frequency plot (spectrogram) for this dataset. Reuses the FFT settings above (samples, sampling rate, range).
 - **Waterfall Y Axis.** Source for the vertical axis. Default is **Time** (older spectra scroll down). Pick another dataset here to drive the Y axis from that dataset's value instead — typically used for order tracking (for example RPM vs. frequency).
 
-**LED**
+**LED Panel**
 
-- **Show in LED Panel.** Show this dataset in the LED panel.
-- **LED On Threshold (required).** Threshold above which the LED lights up. Shown only while the dataset has no alarm bands; once bands are defined, they drive the LED's color, label, and blink state instead.
+- **LED On Threshold (required).** Shown for a dataset in an LED Panel group that has no alarm bands: the light turns on when the value reaches this level. Once bands are defined, they drive the light's color, label, and blink state instead. A dataset becomes a light by being in an LED Panel group; there is no per-dataset switch.
 
 **Alarm bands**
 
-- **Alarm Bands** (dataset toolbar, next to **Transform**). Opens a dialog to define colored value ranges with severity tiers for Bar, Gauge, Meter, and LED datasets and for any dataset in a Bar Panel group. The button is disabled for every other dataset, and for a dataset with **Hide on Dashboard** on outside a Bar Panel, because bands there are ignored (see [Alarm bands](Widget-Reference.md#alarm-bands)). With several datasets selected, the button applies one set of bands to the selected datasets that qualify and leaves the rest unchanged. Each band has a min/max range, a severity (Info / OK / Warning / Critical), an optional color override and label, and a blink toggle for LED panels. Opening the dialog for an LED dataset with no bands pre-fills one band from the **LED On Threshold** so existing setups migrate in place. To keep a dataset's bands on screen without alerting, turn on **Suppress Alarms** under **Widget Settings**.
+- **Alarm Bands** (dataset toolbar, next to **Transform**). Opens a dialog to define colored value ranges with severity tiers for Bar, Gauge, and Meter datasets and for any dataset in a Bar Panel or LED Panel group. The button is disabled for every other dataset, and for a dataset with **Hide on Dashboard** on outside a Bar Panel or LED Panel, because bands there are ignored (see [Alarm bands](Widget-Reference.md#alarm-bands)). With several datasets selected, the button applies one set of bands to the selected datasets that qualify and leaves the rest unchanged. Each band has a min/max range, a severity (Info / OK / Warning / Critical), an optional color override and label, and a blink toggle for LED panels. Opening the dialog for an LED Panel member with no bands pre-fills one band from the **LED On Threshold** so existing setups migrate in place. To keep a dataset's bands on screen without alerting, turn on **Suppress Alarms** under **Widget Settings**.
 
 **Labels**
 

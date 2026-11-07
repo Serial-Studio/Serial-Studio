@@ -1518,6 +1518,17 @@ ss_add_unit_test(tst_value_format
 )
 
 #
+# The one definition of an LED Panel split off a group (spec 0114): the loader's legacy migration
+# and the boolean-tag project generators share it, so copy fidelity and the unassigned-identity
+# sentinel are pinned here once.
+#
+ss_add_unit_test(tst_led_panel_group
+  SOURCES tst_led_panel_group.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # Pins the persisted ordinals and the id/name round trips of the SerialStudio vocabulary now that
 # it is a Core namespace (spec 0077): header-only enums plus the Core helpers, nothing else.
 #

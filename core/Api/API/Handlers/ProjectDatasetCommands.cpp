@@ -49,7 +49,6 @@ static SerialStudio::DatasetOption pickHeadlineDatasetOption(int options)
                           SerialStudio::DatasetBar,
                           SerialStudio::DatasetGauge,
                           SerialStudio::DatasetCompass,
-                          SerialStudio::DatasetLED,
                           SerialStudio::DatasetWaterfall,
                           SerialStudio::DatasetMeter}) {
     if (options & cand)
@@ -158,12 +157,14 @@ void API::Handlers::ProjectDatasetCommands::registerCreateCommands()
                    "  4 = Bar\n"
                    "  8 = Gauge (radial dial; needs widgetMin/widgetMax)\n"
                    "  16 = Compass (heading 0-360)\n"
-                   "  32 = LED (binary indicator with ledHigh threshold)\n"
                    "  64 = Waterfall (Pro; spectrogram, FFT-driven)\n"
+                   "  Lights are not a dataset option: put the dataset in a group whose "
+                   "widgetType is 11 (LEDPanel).\n"
                    "  0 = no widget (raw column for export only)\n"
                    "Combine: 1|8 = 9 = plot AND gauge. After creation, set title, "
                    "units, ranges, and transformCode via project.dataset.update.\n"
-                   "Only plain, Multi-Plot, Data Grid and Bar Panel groups accept datasets; "
+                   "Only plain, Multi-Plot, Data Grid, Bar Panel and LED Panel groups accept "
+                   "datasets; "
                    "a widget that fixes its layout (Plot3D, Gyroscope, GPS, ...) refuses."),
     makeSchema({
       {QStringLiteral("groupId"),
@@ -257,7 +258,7 @@ void API::Handlers::ProjectDatasetCommands::registerOptionCommands()
                    "Kept for backward compatibility with existing scripts. Toggles one "
                    "DatasetOption flag on a dataset and updates the group's "
                    "compatibleWidgetTypes immediately. option values (DatasetOption "
-                   "bitflag): 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 32=LED, "
+                   "bitflag): 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, "
                    "64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive. "
                    "NOTE: this is a DatasetOption bitflag, NOT a DashboardWidget enum -- "
                    "the numbers do not line up with project.workspace.addWidget's "
@@ -268,8 +269,8 @@ void API::Handlers::ProjectDatasetCommands::registerOptionCommands()
       { QStringLiteral("option"),
        QStringLiteral("string|integer"),
        QStringLiteral("PREFERRED: a slug -- 'plot', 'fft', 'bar', 'gauge', 'compass', "
-       "'led', 'waterfall'. Integer DatasetOption bitflag still accepted "
-       "(1, 2, 4, 8, 16, 32, 64).")                                                                       },
+       "'waterfall'. Integer DatasetOption bitflag still accepted "
+       "(1, 2, 4, 8, 16, 64).")                                                                           },
       {QStringLiteral("enabled"),
        QStringLiteral("boolean"),
        QStringLiteral("Whether to enable or disable the option")                                          }
@@ -281,7 +282,7 @@ void API::Handlers::ProjectDatasetCommands::registerOptionCommands()
     QStringLiteral("Apply several DatasetOption flags at once (plural form of "
                    "project.dataset.setOption). Pass `options` as the bitwise OR of the "
                    "flags you want enabled; any flag NOT set in the value is disabled. "
-                   "Bits: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 32=LED, "
+                   "Bits: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, "
                    "64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive -- if "
                    "more than one is set, the highest bit wins. Updates the group's "
                    "compatibleWidgetTypes immediately. NOTE: these are DatasetOption "
@@ -294,7 +295,7 @@ void API::Handlers::ProjectDatasetCommands::registerOptionCommands()
        QStringLiteral("array|integer"),
        QStringLiteral("PREFERRED: an array of slugs (e.g. ['plot','fft','waterfall']). "
        "Integer bitflag still accepted (Plot=1, FFT=2, Bar=4, Gauge=8, "
-       "Compass=16, LED=32, Waterfall=64).")                                                              }
+       "Compass=16, Waterfall=64).")                                                                      }
   }),
     &datasetSetOptions);
 }
@@ -322,7 +323,7 @@ namespace API::Handlers {
 }
 
 /**
- * @brief Sets plt/fft/led/waterfall/widget on @p d from a DatasetOption bitfield.
+ * @brief Sets plt/fft/waterfall/widget on @p d from a DatasetOption bitfield.
  */
 static void applyDatasetVisualizationFlags(DataModel::Dataset& d, int options)
 {
@@ -331,9 +332,6 @@ static void applyDatasetVisualizationFlags(DataModel::Dataset& d, int options)
 
   if (options & SerialStudio::DatasetFFT)
     d.fft = true;
-
-  if (options & SerialStudio::DatasetLED)
-    d.led = true;
 
   if (options & SerialStudio::DatasetWaterfall)
     d.waterfall = true;
@@ -380,7 +378,6 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetAdd(const QSt
                           SerialStudio::DatasetBar,
                           SerialStudio::DatasetGauge,
                           SerialStudio::DatasetCompass,
-                          SerialStudio::DatasetLED,
                           SerialStudio::DatasetWaterfall,
                           SerialStudio::DatasetMeter}) {
     if (options & cand) {
@@ -675,10 +672,17 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetSetOption(
         id,
         ErrorCode::InvalidParam,
         QStringLiteral("Unknown option slug '%1'. Use one of: plot, fft, bar, gauge, "
-                       "compass, led, waterfall.")
+                       "compass, waterfall.")
           .arg(optionJson.toString()));
   } else {
     option = optionJson.toInt();
+    if (API::EnumLabels::datasetOptionSlug(option).isEmpty())
+      return CommandResponse::makeError(
+        id,
+        ErrorCode::InvalidParam,
+        QStringLiteral("Unknown option %1. Lights are not a dataset option: put the dataset "
+                       "in a group whose widget is \"ledpanel\".")
+          .arg(option));
   }
 
   auto& project      = DataModel::pipelineModules().projectModel;
@@ -738,6 +742,18 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetSetOptions(
     options = optionsJson.toInt();
   }
 
+  constexpr int kKnownOptions = SerialStudio::DatasetPlot | SerialStudio::DatasetFFT
+                              | SerialStudio::DatasetBar | SerialStudio::DatasetGauge
+                              | SerialStudio::DatasetCompass | SerialStudio::DatasetWaterfall
+                              | SerialStudio::DatasetMeter;
+  if ((options & ~kKnownOptions) != 0)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Unknown option bit(s) in %1. Lights are not a dataset option: put the "
+                     "dataset in a group whose widget is \"ledpanel\".")
+        .arg(options));
+
   auto& project      = DataModel::pipelineModules().projectModel;
   const auto& groups = project.groups();
   if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
@@ -753,7 +769,6 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetSetOptions(
   DataModel::Dataset d = groups[groupId].datasets[datasetId];
   d.plt                = (options & SerialStudio::DatasetPlot) != 0;
   d.fft                = (options & SerialStudio::DatasetFFT) != 0;
-  d.led                = (options & SerialStudio::DatasetLED) != 0;
   d.waterfall          = (options & SerialStudio::DatasetWaterfall) != 0;
 
   const QString chosen = widgetForDatasetOptions(options);

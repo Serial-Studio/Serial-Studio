@@ -1862,6 +1862,7 @@ _UNDO_SCOPE_WHITELIST = frozenset(
         "setModified",
         "applyHistorySnapshot",
         "loadGeneratedProject",
+        "loadFromJsonDocument",
         "lockProject",
         "unlockProject",
         # Presentation-state setters (outside undo history by spec 0031)

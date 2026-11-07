@@ -1,0 +1,57 @@
+{
+  "title": "Legacy LED Flags",
+  "schemaVersion": 3,
+  "nextUniqueId": 200,
+  "frameStart": "$",
+  "frameEnd": ";",
+  "groups": [
+    {
+      "title": "Doors",
+      "widget": "datagrid",
+      "uniqueId": 5,
+      "datasets": [
+        {
+          "title": "Front",
+          "index": 1,
+          "led": true,
+          "ledHigh": 1,
+          "uniqueId": 100
+        },
+        {
+          "title": "Rear",
+          "index": 2,
+          "led": true,
+          "ledHigh": 1,
+          "hideOnDashboard": true,
+          "uniqueId": 101
+        },
+        {
+          "title": "Speed",
+          "index": 3,
+          "graph": true,
+          "uniqueId": 102
+        }
+      ]
+    }
+  ],
+  "actions": [],
+  "customizeWorkspaces": true,
+  "workspaces": [
+    {
+      "workspaceId": 5000,
+      "title": "Doors",
+      "widgetRefs": [
+        {
+          "widgetType": 1,
+          "groupId": 5,
+          "relativeIndex": 0
+        },
+        {
+          "widgetType": 8,
+          "groupId": 5,
+          "relativeIndex": 0
+        }
+      ]
+    }
+  ]
+}

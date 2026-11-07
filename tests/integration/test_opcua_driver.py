@@ -305,19 +305,14 @@ class TestOpcUaSession:
         ]
         _configure(api_client, opcua_simulator["url"], tags=tags)
         result = _generate(api_client)
-        assert result["groups"] == 3
-        assert result["datasets"] == 4 + 6
-        titles = [
-            ds["title"] for g in result["project"]["groups"] for ds in g["datasets"]
-        ]
+        groups = result["project"]["groups"]
+        panels = [g for g in groups if g.get("widget") == "ledpanel"]
+        assert result["groups"] == 3 + len(panels)
+        assert len(panels) == 1
+        titles = [ds["title"] for g in groups for ds in g["datasets"]]
         assert "Zones[0]" in titles and "Zones[5]" in titles
-        leds = {
-            ds["title"]: ds.get("led")
-            for g in result["project"]["groups"]
-            for ds in g["datasets"]
-        }
-        assert leds["Running"] is True
-        assert leds["Level"] in (False, None)
+        assert [ds["title"] for ds in panels[0]["datasets"]] == ["Running"]
+        assert groups.index(panels[0]) == 1
 
         _connect(api_client)
         try:

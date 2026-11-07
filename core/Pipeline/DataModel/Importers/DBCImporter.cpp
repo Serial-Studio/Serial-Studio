@@ -358,7 +358,6 @@ DataModel::Dataset DataModel::DBCImporter::buildDatasetFromSignal(
   applyTableTransform(dataset, tableName, signal.name());
 
   if (signal.bitLength() == 1) {
-    dataset.led     = true;
     dataset.ledHigh = 1;
     applyBooleanLedBand(dataset, tr("Active"));
     return dataset;
@@ -399,11 +398,15 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
     const auto tableName = tableNameFor(message);
     const auto msgLabels = m_valueDescriptions.value(message.uniqueId());
 
-    for (const auto& entry : DBCMux::orderedSignals(message))
+    std::vector<int> leds;
+    for (const auto& entry : DBCMux::orderedSignals(message)) {
       group.datasets.push_back(buildDatasetFromSignal(
         entry, group.widget, tableName, msgLabels.value(entry.signal.name()), datasetIndex++));
+      if (entry.signal.bitLength() == 1)
+        leds.push_back(static_cast<int>(group.datasets.size()) - 1);
+    }
 
-    groups.push_back(group);
+    DataModel::appendGroupWithLedPanel(groups, std::move(group), leds);
     ++groupId;
   }
 

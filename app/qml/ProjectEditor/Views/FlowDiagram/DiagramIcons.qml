@@ -60,6 +60,8 @@ QtObject {
       case "datagrid":
       case "barpanel":
         return Cpp_Misc_IconRegistry.icon("widgets", w, 16)
+      case "ledpanel":
+        return Cpp_Misc_IconRegistry.icon("widgets", "led", 16)
       default:
         return Cpp_Misc_IconRegistry.icon("widgets", "group", 16)
     }

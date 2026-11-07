@@ -33,6 +33,7 @@
 #include <QSet>
 #include <QThread>
 
+#include "Core/DataModel/LedPanelGroup.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
@@ -1321,7 +1322,6 @@ DataModel::Dataset IO::Drivers::EthernetIp::datasetFor(const EipTag& tag, int in
   dataset.title = tag.name;
 
   if (tag.type == OpcUaWire::Type::Bool) {
-    dataset.led     = true;
     dataset.ledHigh = 1;
     dataset.wgtMax  = 1;
   } else if (tag.type != OpcUaWire::Type::Str && tag.type != OpcUaWire::Type::Invalid)
@@ -1366,6 +1366,7 @@ QJsonObject IO::Drivers::EthernetIp::buildProject() const
 
   QStringList order;
   QHash<QString, DataModel::Group> groups;
+  QHash<QString, std::vector<int>> leds;
   for (int i = 0; i < m_tags.size(); ++i) {
     const auto& tag   = m_tags.at(i);
     const QString key = tag.tag.startsWith(QLatin1String("Program:"))
@@ -1381,11 +1382,13 @@ QJsonObject IO::Drivers::EthernetIp::buildProject() const
     }
 
     groups[key].datasets.push_back(datasetFor(tag, i + 1));
+    if (tag.type == OpcUaWire::Type::Bool)
+      leds[key].push_back(static_cast<int>(groups[key].datasets.size()) - 1);
   }
 
   QJsonArray groupArray;
   for (const auto& key : order)
-    groupArray.append(DataModel::serialize(groups.value(key)));
+    DataModel::appendGroupWithLedPanel(groupArray, groups.value(key), leds.value(key));
 
   project[Keys::Groups] = groupArray;
   return project;

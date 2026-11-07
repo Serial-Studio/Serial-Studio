@@ -113,7 +113,7 @@ An array-like view of the group's datasets. `datasets.length` returns the count,
 | `alarmLow`, `alarmHigh`  | number | Alarm thresholds. Derived from `alarmBands`: the lower edge of the first, and the upper edge of the last, Warning-or-higher band. `NaN` when no such band exists. |
 | `alarmBands`             | array of object | The dataset's alarm bands: `{min, max, severity, color, label, blink}`. `severity` is 0=Info, 1=OK, 2=Warning, 3=Critical. `alarmLow`/`alarmHigh` are a legacy view of this same data. |
 | `ledHigh`                | number | LED activation threshold. |
-| `hasPlot`, `hasFft`, `hasLed` | boolean | Visualization flags from the project. |
+| `hasPlot`, `hasFft`     | boolean | Visualization flags from the project. |
 
 `datasets` is implemented as a Proxy. Out-of-range indices return `undefined`; entries cannot be added or removed.
 

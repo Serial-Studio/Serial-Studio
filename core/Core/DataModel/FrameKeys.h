@@ -73,6 +73,7 @@ inline constexpr KeyView SourceStreamLane("streamLane");
 
 // Dataset keys
 inline constexpr KeyView FFT("fft");
+// Pre-0114 per-dataset flag: written by no one, read by the loader's LED Panel migration only.
 inline constexpr KeyView LED("led");
 inline constexpr KeyView Log("log");
 inline constexpr KeyView Waterfall("waterfall");

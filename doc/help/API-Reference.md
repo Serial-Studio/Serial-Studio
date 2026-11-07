@@ -2816,7 +2816,7 @@ Add a dataset to a group.
 **Parameters:**
 - `groupId` (int, required): Group to attach the dataset to
 - `options` (int, required): Dataset options (bit flags 0-127): 1=Plot, 2=FFT, 4=Bar,
-  8=Gauge, 16=Compass, 32=LED, 64=Waterfall
+  8=Gauge, 16=Compass, 64=Waterfall
 
 **Errors:**
 - `INVALID_PARAM`: Unknown `groupId`, or a group whose widget fixes its own dataset layout
@@ -2838,7 +2838,7 @@ Bulk-create multiple datasets on a group in one call (1-1024).
 **Parameters:**
 - `groupId` (int): Group to attach the datasets to
 - `count` (int): How many datasets to create (1-1024)
-- `options` (int): Visualization bit flags applied to every created dataset (same bits as `project.dataset.add`): 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 32=LED, 64=Waterfall
+- `options` (int): Visualization bit flags applied to every created dataset (same bits as `project.dataset.add`): 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 64=Waterfall
 - `titlePattern` (string, optional): Title template, e.g. `"LED {n}"`. `{n}` is replaced with `startNumber + i`, `{i}` with the zero-based index. Omit to keep the auto-generated title.
 - `startNumber` (int, optional): First `{n}` value. Default `1`.
 - `startIndex` (int, optional): First parser-slot index to assign. Default `-1` (auto-assign the next free slot); `0` leaves the index unset; `1+` assigns consecutive slots starting there.
@@ -2916,7 +2916,7 @@ Patch any subset of dataset fields by group id and dataset id. Changing `transfo
   string (e.g. `"bar"`, `"gauge"`)
 - `alias` (string, optional): Stable user-chosen dataset name used for script and API
   lookups. Must be unique across the project; an empty string clears it
-- `graph`, `fft`, `led`, `waterfall` (bool, optional): Toggle the same flags as
+- `graph`, `fft`, `waterfall` (bool, optional): Toggle the same flags as
   `project.dataset.setOption`; use here when patching multiple fields at once
 - `index` (int, optional): 1-based parser-output slot (`0` = unassigned); must be `>= 0`
 - `sourceId` (int, optional)
@@ -3042,7 +3042,7 @@ Toggle a single dataset option flag.
 - `groupId` (int, required): Owning group id
 - `datasetId` (int, required): Dataset id within the group
 - `option` (string or int, required): Preferred form is a slug (`"plot"`,
-  `"fft"`, `"bar"`, `"gauge"`, `"compass"`, `"led"`, `"waterfall"`). An
+  `"fft"`, `"bar"`, `"gauge"`, `"compass"`, `"waterfall"`). An
   integer `DatasetOption` bitflag is also accepted (1, 2, 4, 8, 16, 32, 64).
 - `enabled` (bool, required): Enable or disable
 
@@ -3063,7 +3063,7 @@ Apply several `DatasetOption` flags at once (plural form of `project.dataset.set
 **Parameters:**
 - `groupId` (int): Owning group id
 - `datasetId` (int): Dataset id within the group
-- `options` (array or int): Preferred form is an array of slugs, e.g. `["plot", "fft", "waterfall"]`. An integer bitfield is also accepted: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 32=LED, 64=Waterfall (Pro).
+- `options` (array or int): Preferred form is an array of slugs, e.g. `["plot", "fft", "waterfall"]`. An integer bitfield is also accepted: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 64=Waterfall (Pro).
 
 Any flag not present in `options` is disabled on the dataset. Bar/Gauge/Compass are mutually exclusive; if more than one is set, the highest bit wins. Updates the group's `compatibleWidgetTypes` immediately. Note: these are `DatasetOption` bitflags, not `DashboardWidget` enum values; the numbers do not line up with `project.workspace.addWidget`'s `widgetType`.
 
@@ -3201,7 +3201,7 @@ Get a dataset's coloured alarm bands.
   "rangeMax": 100
 }
 ```
-`rangeMin`/`rangeMax` are the dataset's `wgtMin`/`wgtMax`, returned so callers can validate band ranges before writing them back. An empty project (no bands configured) returns an empty `alarmBands` array. Bands are drawn, notified, and alarmed only when the dataset has a Bar, Gauge, or Meter widget or is an LED Panel member (and is not hidden from the dashboard), or belongs to a Bar Panel group. On any other dataset they are stored and ignored, and this call still returns them. A dataset with `suppressAlarms` set still draws its bands but never notifies or alarms; one with `alarmsWhileVisible` set alarms only while a widget showing it is on screen (`suppressAlarms` wins).
+`rangeMin`/`rangeMax` are the dataset's `wgtMin`/`wgtMax`, returned so callers can validate band ranges before writing them back. An empty project (no bands configured) returns an empty `alarmBands` array. Bands are drawn, notified, and alarmed only when the dataset has a Bar, Gauge, or Meter widget (and is not hidden from the dashboard), or belongs to a Bar Panel or LED Panel group. On any other dataset they are stored and ignored, and this call still returns them. A dataset with `suppressAlarms` set still draws its bands but never notifies or alarms; one with `alarmsWhileVisible` set alarms only while a widget showing it is on screen (`suppressAlarms` wins).
 
 #### 🟢 `project.dataset.setAlarmBands`
 Atomically replace a dataset's alarm-band array.
@@ -4387,7 +4387,7 @@ widget of the given `widgetType` fed by the given `groupId`. Requires
 - `groupId` (int, required): `Group.uniqueId` from `project.group.list`
   (stable across reorders), not the positional array index and not `Group.groupId`
 - `widgetType` (string or int, required): Widget kind. Preferred form is a
-  string slug: `"plot"`, `"fft"`, `"bar"`, `"gauge"`, `"compass"`, `"led"`,
+  string slug: `"plot"`, `"fft"`, `"bar"`, `"gauge"`, `"compass"`,
   `"datagrid"`, `"multiplot"`, `"accelerometer"`, `"gyroscope"`, `"gps"`,
   `"plot3d"`, `"imageview"` (Pro), `"output-panel"` (Pro),
   `"notification-log"` (Pro), `"waterfall"` (Pro), `"painter"` (Pro). An

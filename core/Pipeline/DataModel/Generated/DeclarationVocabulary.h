@@ -76,7 +76,7 @@ inline constexpr Keys::KeyView kDatasetKeys[] = {
   Keys::Waterfall, Keys::FFTBallistics, Keys::FFTBallisticsRelease, Keys::FFTSamples,
   Keys::FFTWindow, Keys::FFTSamplingRate, Keys::FFTLogX, Keys::FFTMin, Keys::FFTMax, Keys::Widget,
   Keys::DisplayTickCount, Keys::DisplayFormat, Keys::DecimalPoints, Keys::WgtMin, Keys::WgtMax,
-  Keys::ExtremeHold, Keys::SuppressAlarms, Keys::AlarmsWhileVisible, Keys::AlarmDeadband, Keys::LED,
+  Keys::ExtremeHold, Keys::SuppressAlarms, Keys::AlarmsWhileVisible, Keys::AlarmDeadband,
   Keys::LedHigh, Keys::Overview, Keys::Format, Keys::FormatWidth, Keys::FormatSigned,
   Keys::FormatFractionBits, Keys::FormatBitOffset, Keys::FormatBitWidth, Keys::FormatScale,
   Keys::FormatOffset, Keys::LabelsDefault, Keys::Min, Keys::Max,
@@ -162,7 +162,7 @@ inline constexpr Keys::KeyView kControlKeys[] = {
 inline constexpr QLatin1StringView kGroupWidgets[] = {
   QLatin1StringView("datagrid"), QLatin1StringView("multiplot"), QLatin1StringView("accelerometer"),
   QLatin1StringView("gyro"), QLatin1StringView("gps"), QLatin1StringView("plot3d"),
-  QLatin1StringView("barpanel"),
+  QLatin1StringView("barpanel"), QLatin1StringView("ledpanel"),
 };
 
 /**

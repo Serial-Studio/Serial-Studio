@@ -44,19 +44,16 @@
 namespace DataModel {
 
 /**
- * @brief Appends a dataset widget ref unless the widget type is the LED aggregator.
+ * @brief Appends a dataset widget ref when the widget type is workspace-eligible.
  */
-static bool appendDatasetRef(SerialStudio::DashboardWidget k,
+static void appendDatasetRef(SerialStudio::DashboardWidget k,
                              int groupUniqueId,
                              QMap<SerialStudio::DashboardWidget, int>& datasetIdx,
                              std::vector<DataModel::WidgetRef>& groupRefs,
                              std::vector<DataModel::WidgetRef>& allRefs)
 {
-  if (k == SerialStudio::DashboardLED)
-    return true;
-
   if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
-    return false;
+    return;
 
   DataModel::WidgetRef r;
   r.widgetType    = static_cast<int>(k);
@@ -66,28 +63,24 @@ static bool appendDatasetRef(SerialStudio::DashboardWidget k,
 
   groupRefs.push_back(r);
   allRefs.push_back(r);
-  return false;
 }
 
 /**
- * @brief Collects per-dataset widget refs for a group, returning whether any LED is present.
+ * @brief Collects per-dataset widget refs for a group.
  */
-static bool collectGroupDatasetRefs(const DataModel::Group& group,
+static void collectGroupDatasetRefs(const DataModel::Group& group,
                                     QMap<SerialStudio::DashboardWidget, int>& datasetIdx,
                                     std::vector<DataModel::WidgetRef>& groupRefs,
                                     std::vector<DataModel::WidgetRef>& allRefs)
 {
-  bool groupHasLed = false;
   for (const auto& ds : group.datasets) {
     if (ds.hideOnDashboard)
       continue;
 
     const auto keys = SerialStudio::getDashboardWidgets(ds);
     for (const auto& k : keys)
-      if (appendDatasetRef(k, group.uniqueId, datasetIdx, groupRefs, allRefs))
-        groupHasLed = true;
+      appendDatasetRef(k, group.uniqueId, datasetIdx, groupRefs, allRefs);
   }
-  return groupHasLed;
 }
 
 /**
@@ -139,12 +132,7 @@ static std::vector<DataModel::WidgetRef> buildAutoRefsForGroup(
   if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel)
     pushTrackedRef(groupKey, group.uniqueId, groupIdx, groupRefs, allRefs, overviewRefs);
 
-  const bool groupHasLed = collectGroupDatasetRefs(group, datasetIdx, groupRefs, allRefs);
-
-  if (groupHasLed)
-    pushTrackedRef(
-      SerialStudio::DashboardLED, group.uniqueId, groupIdx, groupRefs, allRefs, overviewRefs);
-
+  collectGroupDatasetRefs(group, datasetIdx, groupRefs, allRefs);
   return groupRefs;
 }
 

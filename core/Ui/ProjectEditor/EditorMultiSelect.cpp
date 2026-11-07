@@ -34,6 +34,7 @@
 #include "Core/Checksum.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/Project/PropertyHooks.h"
 #include "DataModel/ProjectModel.h"
 #include "ProjectEditor/ProjectEditor.h"
 #include "ProjectEditorItemIds.h"
@@ -189,7 +190,8 @@ void EditorMultiSelect::buildMultiDatasetModel()
   m_editor.addPlotSection(m_editor.m_datasetModel, m_editor.m_selectedDataset);
   m_editor.addFFTSection(m_editor.m_datasetModel, m_editor.m_selectedDataset);
   m_editor.addWidgetSection(m_editor.m_datasetModel, m_editor.m_selectedDataset);
-  m_editor.addLEDSection(m_editor.m_datasetModel, m_editor.m_selectedDataset);
+  if (DataModel::PropertyHooks::ledEnabled(m_editor.m_selectedDataset, m_editor.m_projectModelRef))
+    m_editor.addLEDSection(m_editor.m_datasetModel, m_editor.m_selectedDataset);
 
   const int rows = m_editor.m_datasetModel->rowCount();
   for (int r = 0; r < rows; ++r) {
@@ -581,9 +583,6 @@ void EditorMultiSelect::changeDatasetOptionForSelection(int option, bool checked
         break;
       case SerialStudio::DatasetMeter:
         ds.widget = checked ? QStringLiteral("meter") : QString();
-        break;
-      case SerialStudio::DatasetLED:
-        ds.led = checked;
         break;
       case SerialStudio::DatasetWaterfall:
         ds.waterfall = checked;

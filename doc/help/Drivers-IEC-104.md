@@ -68,7 +68,7 @@ A point that carries a CP56Time2a stamp is published with the **station's** own 
 
 - One source of type IEC 60870-5-104 carrying the host, port, common address, protocol parameters and the discovered point table, so reopening the project reconnects with the same slot layout.
 - Three groups by type class: **Status Points** (single and double points), **Measurements** (normalized, scaled and float measurands) and **Counters** (integrated totals). A group appears only when the station reported something for it.
-- One dataset per point, titled by its information object address: an LED widget for single points, plotting enabled for the measured values.
+- One dataset per point, titled by its information object address: single points become lights in an LED Panel group placed after the group, plotting enabled for the measured values.
 - A Built-In frame parser using the **IEC 60870-5-104 points** template. Its schema parameter is regenerated with the project; connect again to discover new points and generate again rather than editing the schema by hand.
 
 The project opens in the Project Editor for customization. The headless API command `io.iec104.generateProject` performs the same generation without a save dialog.

@@ -288,10 +288,9 @@ API::CommandResponse API::Handlers::AssistantHandler::workspacePlan(const QStrin
 
   if (rows.isEmpty() && !widgetFilterSlug.isEmpty())
     result[QStringLiteral("hint")] =
-      QStringLiteral(
-        "No group currently exposes widgetType '%1'. Flip the matching dataset option "
-        "(project.dataset.setOptions / .setOption / .update {graph|fft|led|waterfall}) "
-        "on a dataset in the target group, then re-plan.")
+      QStringLiteral("No group currently exposes widgetType '%1'. Flip the matching dataset option "
+                     "(project.dataset.setOptions / .setOption / .update {graph|fft|waterfall}) "
+                     "on a dataset in the target group, then re-plan.")
         .arg(widgetFilterSlug);
 
   return CommandResponse::makeSuccess(id, result);
@@ -476,9 +475,6 @@ static int datasetOptionBitForSlug(const QString& slug)
 
   if (slug == QStringLiteral("compass"))
     return 16;
-
-  if (slug == QStringLiteral("led"))
-    return 32;
 
   if (slug == QStringLiteral("waterfall"))
     return 64;

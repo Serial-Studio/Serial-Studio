@@ -27,6 +27,7 @@
 #include <utility>
 
 #include "Core/DataModel/Frame.h"
+#include "Core/DataModel/LedPanelGroup.h"
 #include "Core/SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -173,6 +174,7 @@ QJsonObject IO::Drivers::ModbusProjectGenerator::buildProject(
                                                   QString::number(reg_group.startAddress));
 
     const bool is_reg = (reg_group.registerType <= 1);
+    std::vector<int> leds;
 
     for (quint16 i = 0; i < reg_group.count; ++i) {
       DataModel::Dataset dataset;
@@ -191,16 +193,17 @@ QJsonObject IO::Drivers::ModbusProjectGenerator::buildProject(
       } else {
         dataset.title   = (reg_group.registerType == 2) ? trModbus("Coil %1").arg(addr)
                                                         : trModbus("Discrete %1").arg(addr);
-        dataset.led     = true;
         dataset.ledHigh = 1;
         dataset.wgtMin  = 0;
         dataset.wgtMax  = 1;
       }
 
       group.datasets.push_back(dataset);
+      if (!is_reg)
+        leds.push_back(static_cast<int>(group.datasets.size()) - 1);
     }
 
-    group_array.append(DataModel::serialize(group));
+    DataModel::appendGroupWithLedPanel(group_array, group, leds);
     ++group_id;
   }
 

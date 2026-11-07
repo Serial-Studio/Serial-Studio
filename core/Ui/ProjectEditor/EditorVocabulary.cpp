@@ -155,6 +155,7 @@ void EditorVocabulary::generateWidgetMaps()
 {
   m_editor.m_groupWidgets.clear();
   m_editor.m_groupWidgets.insert(QStringLiteral("barpanel"), tr("Bar Panel"));
+  m_editor.m_groupWidgets.insert(QStringLiteral("ledpanel"), tr("LED Panel"));
   m_editor.m_groupWidgets.insert(QStringLiteral("datagrid"), tr("Data Grid"));
   m_editor.m_groupWidgets.insert(QStringLiteral("map"), tr("GPS Map"));
   m_editor.m_groupWidgets.insert(QStringLiteral("gyro"), tr("Gyroscope"));

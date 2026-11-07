@@ -26,6 +26,7 @@
 #include <QHash>
 #include <QStringList>
 
+#include "Core/DataModel/LedPanelGroup.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
 #include "Protocols/OpcUa/OpcUaWire.h"
@@ -96,7 +97,6 @@ DataModel::Dataset IO::Drivers::OpcUaProjectBuilder::datasetFor(const OpcUaTag& 
                   : tag.name;
 
   if (type == OpcUaWire::Type::Bool) {
-    dataset.led     = true;
     dataset.ledHigh = 1;
     dataset.wgtMax  = 1;
   } else if (type != OpcUaWire::Type::Str) {
@@ -146,6 +146,7 @@ QJsonObject IO::Drivers::OpcUaProjectBuilder::buildProject(
 
   QStringList order;
   QHash<QString, DataModel::Group> groups;
+  QHash<QString, std::vector<int>> leds;
   int index = 0;
   for (const auto& tag : m_tags) {
     const QString key = tag.path.isEmpty() ? trOpcUaProject("Tags") : tag.path;
@@ -158,14 +159,18 @@ QJsonObject IO::Drivers::OpcUaProjectBuilder::buildProject(
       order.append(key);
     }
 
-    auto& group = groups[key];
-    for (int i = 0; i < qMax(1, tag.arrayLen); ++i, ++index)
+    auto& group      = groups[key];
+    const bool isLed = wireTypeFor(tag) == OpcUaWire::Type::Bool;
+    for (int i = 0; i < qMax(1, tag.arrayLen); ++i, ++index) {
       group.datasets.push_back(datasetFor(tag, i, index + 1));
+      if (isLed)
+        leds[key].push_back(static_cast<int>(group.datasets.size()) - 1);
+    }
   }
 
   QJsonArray groupArray;
   for (const auto& key : order)
-    groupArray.append(DataModel::serialize(groups.value(key)));
+    DataModel::appendGroupWithLedPanel(groupArray, groups.value(key), leds.value(key));
 
   project[Keys::Groups] = groupArray;
   return project;

@@ -86,6 +86,8 @@ qt_add_library(
   DataModel/FrameConsumer.cpp
   DataModel/FrameSupport.h
   DataModel/FrameSupport.cpp
+  DataModel/LedPanelGroup.h
+  DataModel/LedPanelGroup.cpp
   DataModel/IBlockSink.h
   DataModel/IBlockSink.cpp
   DataModel/PropertyValidators.h

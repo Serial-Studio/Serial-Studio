@@ -200,11 +200,6 @@
               "type": "command",
               "id": "editor.addCompass",
               "title": "Compass"
-            },
-            {
-              "type": "command",
-              "id": "editor.addLED",
-              "title": "LED Indicator"
             }
           ]
         }
@@ -257,6 +252,11 @@
               "type": "command",
               "id": "editor.addBarPanel",
               "title": "Bar Panel"
+            },
+            {
+              "type": "command",
+              "id": "editor.addLEDPanel",
+              "title": "LED Panel"
             },
             {
               "type": "command",

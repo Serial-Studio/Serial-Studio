@@ -124,4 +124,14 @@ A tier is missing between two that exist (`scripts/icon-report.py`, tier holes):
 - [ ] Spec 0111 publishing (T46): PyPI trusted publisher for `serialstudio`, the Arduino mirror
   repository (`ARDUINO_MIRROR_REPO`, `ARDUINO_MIRROR_TOKEN`), then set `FIRMWARE_PUBLISH`.
 - [ ] Spec 0111 T60: build, schema, benchmark and observations.
+- [ ] Spec 0114 (LED Panel as a group widget, landed 2026-11-07 unbuilt): build, then
+  `ctest -R "tst_led_panel_group|tst_alarm_band_applicability|tst_group_widget_requirement|tst_enum_labels|tst_serialstudio_enums|tst_frame_serialization|tst_opcua_project_builder|tst_modbus_generation|tst_proto_importer|tst_tool_compact"`;
+  `--dump-api-schema` then `scripts/generate-sdk.py` (and drop `led: 32` / add `ledpanel: 11`
+  in `app/rcc/api/SerialStudio.js` and `prelude.js`); with the app up,
+  `pytest tests/integration/test_led_panel_migration.py` (AC2) and
+  `SS_CAPTURE_BASELINES=1 pytest tests/integration/test_property_registry.py` to recapture the
+  baselines; `tests/fixtures/mirror/generate_fixtures.py`; CAN Bus example before/after
+  screenshots (AC4); `--benchmark-hotpath` as a no-change check (AC9). The C and Arduino
+  golden halves (`ledpanel` sketch) run in the firmware CI job. Then the Arduino registry PR
+  (spec 0111 T46).
 - [ ] Translation update for the 2026-11-04 plain-language text pass.

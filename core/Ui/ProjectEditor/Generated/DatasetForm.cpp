@@ -967,29 +967,18 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Appends the LED Display Settings section rows to the dataset form model.
+ * @brief Appends the LED Panel section rows to the dataset form model.
  */
 void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const Dataset& dataset)
 {
   auto& registry = Core::services().iconRegistry;
   auto* header = new QStandardItem();
   header->setData(SectionHeader, WidgetType);
-  header->setData(tr("LED Display Settings"), PlaceholderValue);
+  header->setData(tr("LED Panel"), PlaceholderValue);
   header->setData(registry.icon(QStringLiteral("editor"),
                                 QStringLiteral("led"), 16),
                   ParameterIcon);
   model->appendRow(header);
-
-  auto* item_led = new QStandardItem();
-  item_led->setEditable(true);
-  item_led->setData(true, Active);
-  item_led->setData(CheckBox, WidgetType);
-  item_led->setData(dataset.led, EditableValue);
-  item_led->setData(kDatasetView_LED, ParameterType);
-  item_led->setData(0, PlaceholderValue);
-  item_led->setData(tr("Show in LED Panel"), ParameterName);
-  item_led->setData(tr("Shows this dataset as a light in the LED panel."), ParameterDescription);
-  model->appendRow(item_led);
 
   if (PropertyHooks::ledBandsAbsent(dataset, m_projectModelRef)) {
     const bool on_led_high = PropertyHooks::ledEnabled(dataset, m_projectModelRef);
@@ -1189,9 +1178,6 @@ static bool applyDatasetFlagEdit(int formId, const QVariant& value, DataModel::D
     case kDatasetView_AlarmsWhileVisible:
       d.alarmsWhileVisible = value.toBool();
       return true;
-    case kDatasetView_LED:
-      d.led = value.toBool();
-      return true;
     case kDatasetView_FormatSigned:
       d.formatSigned = value.toBool();
       return true;
@@ -1223,8 +1209,6 @@ static RebuildHint datasetCommitHook(int formId, DataModel::Dataset& d)
     case kDatasetView_Widget:
       return PropertyHooks::onWidgetChanged(d);
     case kDatasetView_ExtremeHold:
-      return PropertyHooks::onReshape(d);
-    case kDatasetView_LED:
       return PropertyHooks::onReshape(d);
     case kDatasetView_Format:
       return PropertyHooks::onReshape(d);
@@ -1393,8 +1377,6 @@ QVariant Registry::datasetFormValue(int formId,
       return d.alarmsWhileVisible;
     case kDatasetView_AlarmDeadband:
       return d.alarmDeadband;
-    case kDatasetView_LED:
-      return d.led;
     case kDatasetView_LED_High:
       return d.ledHigh;
     default:

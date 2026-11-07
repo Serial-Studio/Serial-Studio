@@ -35,6 +35,7 @@
 #include <QTcpSocket>
 #include <QTimer>
 
+#include "Core/DataModel/LedPanelGroup.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
@@ -1350,7 +1351,6 @@ DataModel::Dataset IO::Drivers::S7::datasetFor(const S7Variable& variable,
   dataset.title = variable.name;
 
   if (type == S7Address::Type::Bool) {
-    dataset.led     = true;
     dataset.ledHigh = 1;
     dataset.wgtMax  = 1;
   } else if (type != S7Address::Type::Str && type != S7Address::Type::Invalid)
@@ -1395,6 +1395,7 @@ QJsonObject IO::Drivers::S7::buildProject() const
 
   QStringList order;
   QHash<QString, DataModel::Group> groups;
+  QHash<QString, std::vector<int>> leds;
   for (int i = 0; i < m_variables.size(); ++i) {
     QString error;
     const auto parsed = S7Address::parse(m_variables.at(i).address, error);
@@ -1410,11 +1411,13 @@ QJsonObject IO::Drivers::S7::buildProject() const
     }
 
     groups[key].datasets.push_back(datasetFor(m_variables.at(i), parsed.type, i + 1));
+    if (parsed.type == S7Address::Type::Bool)
+      leds[key].push_back(static_cast<int>(groups[key].datasets.size()) - 1);
   }
 
   QJsonArray groupArray;
   for (const auto& key : order)
-    groupArray.append(DataModel::serialize(groups.value(key)));
+    DataModel::appendGroupWithLedPanel(groupArray, groups.value(key), leds.value(key));
 
   project[Keys::Groups] = groupArray;
   return project;

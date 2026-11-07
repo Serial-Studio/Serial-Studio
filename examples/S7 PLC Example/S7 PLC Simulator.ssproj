@@ -20,7 +20,6 @@
                     "graph": true,
                     "groupId": 0,
                     "index": 1,
-                    "led": false,
                     "ledHigh": 1,
                     "log": true,
                     "numericValue": 0,
@@ -48,7 +47,6 @@
                     "graph": true,
                     "groupId": 0,
                     "index": 2,
-                    "led": false,
                     "ledHigh": 1,
                     "log": true,
                     "numericValue": 0,
@@ -76,7 +74,6 @@
                     "graph": false,
                     "groupId": 0,
                     "index": 3,
-                    "led": true,
                     "ledHigh": 1,
                     "log": true,
                     "numericValue": 0,
@@ -95,6 +92,40 @@
             "title": "DB1",
             "uniqueId": 0,
             "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": false,
+                    "groupId": 1,
+                    "index": 3,
+                    "ledHigh": 1,
+                    "log": true,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Pump_Running",
+                    "uniqueId": 5,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 1,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "DB1 LEDs",
+            "uniqueId": 4,
+            "widget": "ledpanel"
         }
     ],
     "hexadecimalDelimiters": false,
@@ -135,7 +166,7 @@
         "sslProtocol": 5,
         "topicBase": ""
     },
-    "nextUniqueId": 4,
+    "nextUniqueId": 6,
     "plotTimeRange": 10,
     "pointCount": 500,
     "schemaVersion": 3,
