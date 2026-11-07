@@ -40,10 +40,10 @@
     "pane_caption_foreground": "#ffffff",
 
     "setup_border": "#9aa0a6",
-    "toolbar_top": "#475057",
+    "toolbar_top": "#4F5860",
     "titlebar_text": "#ffffff",
     "toolbar_text": "#ffffff",
-    "toolbar_bottom": "#475057",
+    "toolbar_bottom": "#40474E",
     "toolbar_border": "#595E63",
     "toolbar_separator": "#595E63",
     "toolbar_checked_button_opacity": 0.7,
@@ -195,5 +195,36 @@
       { "top": "#fdebd5", "bottom": "#f7d8bb" },
       { "top": "#d5e0f0", "bottom": "#c0d2e8" }
     ]
+  },
+  "materials": {
+    "frame": {
+      "recipe": "gradient",
+      "top": "#E4E7EA",
+      "bottom": "#D9DDE1"
+    },
+    "plate": {
+      "recipe": "brushed-metal",
+      "color": "#F6F7F9",
+      "grain": 0,
+      "bevel": false,
+      "shade": 0.5
+    },
+    "header": {
+      "recipe": "brushed-metal",
+      "color": "#F3F4F6",
+      "grain": 0,
+      "bevel": false,
+      "shade": 0.5
+    }
+  },
+  "surfaces": {
+    "dashboard": "frame",
+    "widget": "plate",
+    "widget-header": "header"
+  },
+  "styles": {
+    "caption": {
+      "active-lift": 1.06
+    }
   }
 }
