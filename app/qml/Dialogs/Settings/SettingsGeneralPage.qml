@@ -90,23 +90,35 @@ Item {
     Label {
       text: qsTr("Theme")
       color: Cpp_ThemeManager.colors["text"]
-    } Widgets.Combo {
-      id: _themeCombo
+    } RowLayout {
+      spacing: 4
 
-      objectName: "settings.general.theme"
+      Widgets.Combo {
+        id: _themeCombo
 
-      Layout.fillWidth: true
-      currentIndex: Cpp_ThemeManager.theme
-      model: Cpp_ThemeManager.availableThemes
-      onActivated: {
-        Cpp_ThemeManager.theme = currentIndex
+        objectName: "settings.general.theme"
+
+        Layout.fillWidth: true
+        currentIndex: Cpp_ThemeManager.theme
+        model: Cpp_ThemeManager.availableThemes
+        onActivated: {
+          Cpp_ThemeManager.theme = currentIndex
+        }
+
+        Connections {
+          target: Cpp_ThemeManager
+          function onThemeChanged() {
+            _themeCombo.currentIndex = Cpp_ThemeManager.theme
+          }
+        }
       }
 
-      Connections {
-        target: Cpp_ThemeManager
-        function onThemeChanged() {
-          _themeCombo.currentIndex = Cpp_ThemeManager.theme
-        }
+      Widgets.PushButton {
+        objectName: "settings.general.getThemes"
+
+        text: qsTr("Get Themes…")
+        Layout.alignment: Qt.AlignVCenter
+        onClicked: app.showThemeExtensions()
       }
     }
 

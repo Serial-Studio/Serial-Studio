@@ -708,6 +708,17 @@ Item {
   }
 
   //
+  // Extension manager opened on the theme catalog (the Settings "Get Themes..." button)
+  //
+  function showThemeExtensions() {
+    if (app.runtimeMode)
+      return
+
+    extensionManager.activate()
+    Cpp_ExtensionManager.setFilterType("theme")
+  }
+
+  //
   // Project editor: author-only
   //
   function showProjectEditor() {
