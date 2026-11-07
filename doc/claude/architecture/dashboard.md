@@ -207,6 +207,16 @@ executable (both see `SoundPlayer.h`), and the miniaudio implementation compiles
 (it used to sit under `BUILD_COMMERCIAL` with the Audio driver). Nothing here runs
 per frame: evaluation stays on `Dashboard::updated`, the 1 Hz tick only polls device health.
 
+## External Dashboard Windows — Layout Scope
+
+Each external dashboard window saves and restores layouts under its own key,
+`Keys::layoutKey(windowId, groupId)` (`Taskbar::layoutScope`, bound to the window's persisted
+id), so two windows on one workspace can hold different geometry. A scope that has never saved a
+group inherits the main window's entry through `ProjectPresentation::groupLayout(scope, id)` and
+`layoutChoice(scope, id)` (2026-11-06): before that, opening a workspace the main window laid out
+by hand in an external window came back auto-tiled with the default pattern. The first save in
+that window writes its own key; nothing ever writes back to the unscoped one.
+
 ## Dashboard Tools — External Windows Only
 
 The four tools (terminal/Console, notification log [Pro], clock, stopwatch) are **never canvas

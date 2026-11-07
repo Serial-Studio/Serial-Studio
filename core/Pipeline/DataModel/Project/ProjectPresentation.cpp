@@ -217,23 +217,31 @@ QJsonObject DataModel::ProjectPresentation::groupLayout(int groupId) const
 }
 
 /**
- * @brief Returns the persisted layout for the given group within a window scope.
+ * @brief Returns the persisted layout for the given group within a window scope. A scope that
+ *        never saved the group (an external window opened on a workspace the main window laid
+ *        out by hand) inherits the main window's layout, so the workspace does not come back
+ *        auto-tiled there; the window's first save then diverges under its own key.
  */
 QJsonObject DataModel::ProjectPresentation::groupLayout(const QString& scope, int groupId) const
 {
-  const auto key = Keys::layoutKey(scope, groupId);
-  return m_widgetSettings.value(key).toObject().value("data").toObject();
+  const auto entry = m_widgetSettings.value(Keys::layoutKey(scope, groupId)).toObject();
+  if (scope.isEmpty() || entry.contains(QStringLiteral("data")))
+    return entry.value(QStringLiteral("data")).toObject();
+
+  return groupLayout(groupId);
 }
 
 /**
  * @brief Returns the auto-layout pattern and split ratio stored for a group or workspace, as
  *        "pattern" and "ratio". These live beside the manual geometry under the same layout
- *        key, which is what keeps the choice out of the workspace list: no customize mode, and
- *        group tabs carry one just like user workspaces do.
+ *        key, which keeps the choice out of the workspace list; a window scope without a
+ *        choice of its own takes the main window's, like groupLayout().
  */
 QJsonObject DataModel::ProjectPresentation::layoutChoice(const QString& scope, int groupId) const
 {
-  const auto entry = m_widgetSettings.value(Keys::layoutKey(scope, groupId)).toObject();
+  auto entry = m_widgetSettings.value(Keys::layoutKey(scope, groupId)).toObject();
+  if (!scope.isEmpty() && !entry.contains(QStringLiteral("pattern")))
+    entry = m_widgetSettings.value(Keys::layoutKey(groupId)).toObject();
 
   QJsonObject out;
   out.insert(QStringLiteral("pattern"), entry.value(QStringLiteral("pattern")).toString());
