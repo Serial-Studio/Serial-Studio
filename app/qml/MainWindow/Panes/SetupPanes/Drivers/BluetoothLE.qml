@@ -235,7 +235,7 @@ Item {
     Image {
       sourceSize: Qt.size(96, 96)
       Layout.alignment: Qt.AlignHCenter
-      source: "qrc:/images/no-bluetooth.svg"
+      source: Cpp_Misc_IconRegistry.icon("illustrations", "no-bluetooth", 48)
     }
 
     Item {
@@ -272,8 +272,8 @@ Item {
 
     Image {
       sourceSize: Qt.size(96, 96)
-      source: "qrc:/images/hammer.svg"
       Layout.alignment: Qt.AlignVCenter
+      source: Cpp_Misc_IconRegistry.icon("illustrations", "hammer", 48)
     }
 
     Item {

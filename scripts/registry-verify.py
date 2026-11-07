@@ -54,6 +54,7 @@ CATEGORIES = {
     "licensing",
     "notifications",
     "commands",
+    "illustrations",
     "system",
 }
 TIERS = {"16", "24", "32", "48"}

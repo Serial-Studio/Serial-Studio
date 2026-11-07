@@ -79,8 +79,8 @@ Item {
 
     Image {
       sourceSize: Qt.size(96, 96)
-      source: "qrc:/images/no-mic.svg"
       Layout.alignment: Qt.AlignHCenter
+      source: Cpp_Misc_IconRegistry.icon("illustrations", "no-mic", 48)
     }
 
     Item {

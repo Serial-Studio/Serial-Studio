@@ -24,6 +24,7 @@ path = [
   "app/rcc/icons/code/**",
   "app/rcc/icons/licensing/**",
   "app/rcc/icons/notifications/**",
+  "app/rcc/icons/illustrations/**",
   "app/rcc/iconpacks/*/**/*.svg",
 ]
 precedence = "override"

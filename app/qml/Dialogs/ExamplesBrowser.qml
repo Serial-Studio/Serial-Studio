@@ -819,7 +819,7 @@ Widgets.SmartDialog {
         Image {
           sourceSize: Qt.size(96, 96)
           Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/images/no-results.svg"
+          source: Cpp_Misc_IconRegistry.icon("illustrations", "no-results", 48)
         }
 
         Item {

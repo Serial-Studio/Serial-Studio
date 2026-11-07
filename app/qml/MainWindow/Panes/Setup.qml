@@ -507,7 +507,7 @@ Widgets.Pane {
                 Image {
                   fillMode: Image.PreserveAspectFit
                   Layout.alignment: Qt.AlignHCenter
-                  source: "qrc:/images/multi-device.svg"
+                  source: Cpp_Misc_IconRegistry.icon("illustrations", "multi-device", 48)
                 }
 
                 Item {

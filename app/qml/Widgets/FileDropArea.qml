@@ -127,7 +127,7 @@ DropArea {
       Image {
         sourceSize: Qt.size(128, 128)
         Layout.alignment: Qt.AlignHCenter
-        source: "qrc:/images/drag-and-drop.svg"
+        source: Cpp_Misc_IconRegistry.icon("illustrations", "drag-and-drop", 48)
       }
 
       Label {

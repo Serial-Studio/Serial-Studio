@@ -43,8 +43,8 @@ Item {
 
     Image {
       sourceSize: Qt.size(96, 96)
-      source: "qrc:/images/driver.svg"
       Layout.alignment: Qt.AlignHCenter
+      source: Cpp_Misc_IconRegistry.icon("illustrations", "driver", 48)
     }
 
     Item {
@@ -408,8 +408,8 @@ Item {
 
       Image {
         sourceSize: Qt.size(96, 96)
-        source: "qrc:/images/driver.svg"
         Layout.alignment: Qt.AlignHCenter
+        source: Cpp_Misc_IconRegistry.icon("illustrations", "driver", 48)
       }
 
       Item {

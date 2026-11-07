@@ -810,6 +810,17 @@
         <file>icons/editor/48/open.svg</file>
         <file>icons/editor/48/show.svg</file>
         <file>icons/editor/48/workspace.svg</file>
+        <file>icons/illustrations/48/drag-and-drop.svg</file>
+        <file>icons/illustrations/48/driver.svg</file>
+        <file>icons/illustrations/48/hammer.svg</file>
+        <file>icons/illustrations/48/locked.svg</file>
+        <file>icons/illustrations/48/multi-device.svg</file>
+        <file>icons/illustrations/48/no-bluetooth.svg</file>
+        <file>icons/illustrations/48/no-mic.svg</file>
+        <file>icons/illustrations/48/no-results.svg</file>
+        <file>icons/illustrations/48/project-mode-required.svg</file>
+        <file>icons/illustrations/48/shortcut.svg</file>
+        <file>icons/illustrations/48/tip.svg</file>
         <file>icons/licensing/16/devices.svg</file>
         <file>icons/licensing/16/email.svg</file>
         <file>icons/licensing/16/key.svg</file>
@@ -978,25 +989,14 @@
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
         <file>images/dialog-banner.svg</file>
-        <file>images/drag-and-drop.svg</file>
-        <file>images/driver.svg</file>
-        <file>images/hammer.svg</file>
-        <file>images/locked.svg</file>
         <file>images/materials/brushed-rows.png</file>
         <file>images/materials/brushed-rows@2x.png</file>
         <file>images/materials/brushed-streaks.png</file>
         <file>images/materials/brushed-streaks@2x.png</file>
-        <file>images/multi-device.svg</file>
-        <file>images/no-bluetooth.svg</file>
-        <file>images/no-mic.svg</file>
-        <file>images/no-results.svg</file>
         <file>images/no-usb.svg</file>
-        <file>images/project-mode-required.svg</file>
         <file>images/shortcut.icns</file>
         <file>images/shortcut.ico</file>
-        <file>images/shortcut.svg</file>
         <file>images/spinner.svg</file>
-        <file>images/tip.svg</file>
         <file>images/usb.svg</file>
         <file>instruments/attitude_crosshair.svg</file>
         <file>instruments/attitude_dial.svg</file>

@@ -436,8 +436,8 @@ Widgets.SmartWindow {
           sourceSize: Qt.size(144, 144)
           Layout.alignment: Qt.AlignHCenter
           source: editorOverlay.lockMode
-                  ? "qrc:/images/locked.svg"
-                  : "qrc:/images/project-mode-required.svg"
+                  ? Cpp_Misc_IconRegistry.icon("illustrations", "locked", 48)
+                  : Cpp_Misc_IconRegistry.icon("illustrations", "project-mode-required", 48)
         }
 
         Item {

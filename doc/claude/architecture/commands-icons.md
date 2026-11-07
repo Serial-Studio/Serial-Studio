@@ -10,7 +10,8 @@ QML surface rewrite.
 
 **Tree:** `app/rcc/icons/<category>/<tier>/<name>.svg`. Tiers are `16 24 32 48` (design
 px). Categories: `widgets window editor devices panes console database code licensing
-notifications commands system`. The `buttons/` folder is exempt (kept as-is, direct
+notifications commands illustrations system` (`illustrations` holds the empty-state pictures,
+drawn at 48 and rendered large; they follow the icon pack like every themed category). The `buttons/` folder is exempt (kept as-is, direct
 paths). The `system` category holds `missing.svg` (the placeholder).
 
 **Resolve, never hardcode a path:**

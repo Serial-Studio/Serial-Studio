@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/iconpacks">
+        <file>deco/pack.json</file>
         <file>fluent/code/48/copy.svg</file>
         <file>fluent/code/48/cut.svg</file>
         <file>fluent/code/48/help.svg</file>
@@ -231,6 +232,11 @@
         <file>fluent/editor/48/tx-data.svg</file>
         <file>fluent/editor/48/widget.svg</file>
         <file>fluent/editor/48/workspace.svg</file>
+        <file>fluent/illustrations/48/locked.svg</file>
+        <file>fluent/illustrations/48/multi-device.svg</file>
+        <file>fluent/illustrations/48/no-bluetooth.svg</file>
+        <file>fluent/illustrations/48/project-mode-required.svg</file>
+        <file>fluent/illustrations/48/shortcut.svg</file>
         <file>fluent/licensing/48/devices.svg</file>
         <file>fluent/licensing/48/email.svg</file>
         <file>fluent/licensing/48/key.svg</file>
@@ -274,5 +280,51 @@
         <file>fluent/widgets/48/terminal.svg</file>
         <file>fluent/widgets/48/webview.svg</file>
         <file>fluent/widgets/48/workspace.svg</file>
+        <file>outline/commands/48/about.svg</file>
+        <file>outline/commands/48/abscissa.svg</file>
+        <file>outline/commands/48/actions.svg</file>
+        <file>outline/commands/48/ai.svg</file>
+        <file>outline/commands/48/anaglyph.svg</file>
+        <file>outline/commands/48/archive.svg</file>
+        <file>outline/commands/48/area.svg</file>
+        <file>outline/commands/48/audio-file.svg</file>
+        <file>outline/commands/48/auto-layout.svg</file>
+        <file>outline/commands/48/camcoder.svg</file>
+        <file>outline/commands/48/center.svg</file>
+        <file>outline/commands/48/clear.svg</file>
+        <file>outline/commands/48/color.svg</file>
+        <file>outline/commands/48/command-palette.svg</file>
+        <file>outline/commands/48/connect.svg</file>
+        <file>outline/commands/48/console.svg</file>
+        <file>outline/commands/48/csv.svg</file>
+        <file>outline/commands/48/deepwiki.svg</file>
+        <file>outline/commands/48/deploy.svg</file>
+        <file>outline/commands/48/device-setup.svg</file>
+        <file>outline/commands/48/diagnostics.svg</file>
+        <file>outline/commands/48/disconnect.svg</file>
+        <file>outline/commands/48/examples.svg</file>
+        <file>outline/commands/48/export.svg</file>
+        <file>outline/commands/48/extensions.svg</file>
+        <file>outline/commands/48/external-window.svg</file>
+        <file>outline/commands/48/file-transmission.svg</file>
+        <file>outline/commands/48/filter.svg</file>
+        <file>outline/commands/48/freeze.svg</file>
+        <file>outline/commands/48/front-view.svg</file>
+        <file>outline/commands/48/full-screen.svg</file>
+        <file>outline/commands/48/help.svg</file>
+        <file>outline/commands/48/interpolate-off.svg</file>
+        <file>outline/commands/48/interpolate-on.svg</file>
+        <file>outline/commands/48/invert.svg</file>
+        <file>outline/commands/48/macro.svg</file>
+        <file>outline/commands/48/map.svg</file>
+        <file>outline/commands/48/normal-screen.svg</file>
+        <file>outline/commands/48/open-project.svg</file>
+        <file>outline/commands/48/orbit.svg</file>
+        <file>outline/editor/48/code.svg</file>
+        <file>outline/editor/48/influx.svg</file>
+        <file>outline/editor/48/plot.svg</file>
+        <file>outline/editor/48/protobuf.svg</file>
+        <file>outline/licensing/48/key.svg</file>
+        <file>outline/pack.json</file>
     </qresource>
 </RCC>

@@ -44,12 +44,12 @@ script-window|window with a script or macro|macro;script;automation script|comma
 map|folded paper map|map;world map;treasure map|commands/map
 mf4-file|document labelled MF4|mf4 file;file;document|commands/mf4;commands/mf4-log+arrow
 nasa|NASA meatball logo|nasa|commands/nasa
-folder|plain folder|folder;opened folder|commands/open-project;editor/add-folder+plus;editor/open;widgets/folder;database/open;code/open
+folder|plain folder|folder;opened folder|commands/open-project;editor/add-folder+plus;editor/open;widgets/folder;database/open;code/open;illustrations/locked+lock
 orbit|orbit rings around a dot|orbit;3d rotate;planet orbit;rotate 3d|commands/orbit
 hand|open hand|hand;pan;drag;hand cursor|commands/pan
 pause|pause bars|pause|commands/pause
 pictures-folder|folder with a picture|pictures folder;image folder;photo folder|commands/pictures-folder
-blueprint|ruler with pencil on blue grid|blueprint;ruler pencil;design;drafting|commands/project-setup;editor/customize;editor/project
+blueprint|ruler with pencil on blue grid|blueprint;ruler pencil;design;drafting|commands/project-setup;editor/customize;editor/project;illustrations/project-mode-required
 close-circle|red circle with white x|cancel;close;exit;shutdown|commands/quit;database/close
 router|wireless router or antenna box|router;wifi router;remote access;antenna|commands/remote-attach
 reset|two circular arrows|reset;restart;refresh;synchronize|commands/reset;editor/control-script;code/reload;commands/alarm-reset
@@ -99,7 +99,7 @@ table|spreadsheet grid|table;spreadsheet;grid table|editor/add-table+plus;editor
 spectrogram|colour gradient bands|heat map;gradient;spectrogram;rainbow|editor/add-waterfall+plus;editor/waterfall;widgets/waterfall
 globe|globe with meridians|globe;internet;web;world|editor/add-webview+plus;widgets/webview
 siren|red siren light|siren;alarm;emergency light|editor/alarm
-flow-chart|boxes joined by lines|flow chart;org chart;tree structure;hierarchy|editor/change-group;editor/expand;editor/project-structure;devices/opcua
+flow-chart|boxes joined by lines|flow chart;org chart;tree structure;hierarchy|editor/change-group;editor/expand;editor/project-structure;devices/opcua;illustrations/multi-device
 code-file|document with code brackets|code file;source code;code|editor/code;editor/edit-code;code/template
 dashboard-charts|bar and line chart combo|dashboard;analytics;statistics;combo chart|editor/dashboard-widgets;panes/dashboard
 binary|101 010 digits|binary code;binary file;bits|editor/data-conversion
@@ -123,7 +123,7 @@ folder-arrow|folder with an arrow|move folder;move to folder;folder arrow;move h
 server|server tower with screens|server;broker;network server;data center|editor/mqtt-broker
 signal|radio waves|wifi;signal;broadcast;rss|editor/mqtt-publisher;devices/mqtt
 document-gear|document with a gear or star|new document;add file;document settings|editor/new
-scroll-gear|scroll or document with gear|settings document;configuration;project settings|editor/project-setup
+scroll-gear|scroll or document with gear|settings document;configuration;project settings|editor/project-setup;illustrations/shortcut
 document-key|document with a key or title mark|document title;rename document;document key|editor/project-title
 document-eye|document with an eye|read only;view file;preview document|editor/read-only
 document-pencil|document with a pencil|edit file;edit document;write|editor/read-write
@@ -140,7 +140,7 @@ braces|curly brace with x|widget;code brackets;variable;curly braces|editor/widg
 clock|wall clock|clock;time|widgets/clock
 pulse-monitor|window with a heartbeat line|activity log;heart monitor;pulse;event log|widgets/notification-log
 windows|stacked application windows|windows;multiple windows;cascade windows|widgets/workspace
-bluetooth|bluetooth rune in blue oval|bluetooth|devices/bluetooth
+bluetooth|bluetooth rune in blue oval|bluetooth|devices/bluetooth;illustrations/no-bluetooth+no
 engine|car engine block|engine;car engine;motor|devices/canbus
 ethernet|ethernet plug on cable|ethernet;network cable;lan;rj45|devices/ethernetip
 barcode-scanner|barcode with scanner|barcode scanner;barcode;scanner|devices/hid
@@ -178,3 +178,9 @@ speaker|speaker with sound waves|speaker;audio;sound|commands/sound-unmute
 speaker-off|speaker crossed out|mute;no audio;speaker off|commands/sound-mute
 window-x|application window with a close cross|close window;close program|commands/window-close
 window-minimize|application window minimizing|minimize window;collapse window|commands/window-minimize
+import-file|document with a down arrow, dropped in|import;add file;place file|illustrations/drag-and-drop
+software-box|software box with a disc|software installer;software;driver|illustrations/driver
+hammer|claw hammer|hammer;tools|illustrations/hammer
+microphone|studio microphone|microphone|illustrations/no-mic+no
+nothing-found|magnifier with a cross, nothing found|nothing found;no results;search|illustrations/no-results
+light-bulb|glowing light bulb, a tip|light bulb;idea;light|illustrations/tip

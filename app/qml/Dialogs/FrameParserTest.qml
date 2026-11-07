@@ -404,8 +404,8 @@ Widgets.SmartDialog {
           Image {
             opacity: 0.7
             sourceSize: Qt.size(16, 16)
-            source: "qrc:/images/tip.svg"
             Layout.alignment: Qt.AlignVCenter
+            source: Cpp_Misc_IconRegistry.icon("illustrations", "tip", 48)
           }
 
           Label {

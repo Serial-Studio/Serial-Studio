@@ -54,7 +54,7 @@ TIERS = {16, 24, 32, 48}
 FIXED = {"buttons", "window", "system"}
 THEMED = {
     "commands", "editor", "widgets", "devices", "panes", "console", "database", "code",
-    "licensing", "notifications",
+    "licensing", "notifications", "illustrations",
 }
 BASES_DIR = "_bases"
 NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
@@ -63,7 +63,7 @@ STYLE_COLUMN = {"fluent": "fluent_id", "liquid-glass": "glass_id", "deco": "deco
                 "fluent-systems-regular": "outline_id", "liquid-glass-color": "glasscolor_id",
                 "deco-color": "decocolor_id", "clr-gls": "clrgls_id"}
 BADGE_FILL = {"plus": "#43A047", "x": "#E53935", "arrow": "#1E88E5", "arrow-up": "#1E88E5",
-              "pencil": "#FB8C00", "warning": "#FB8C00"}
+              "pencil": "#FB8C00", "warning": "#FB8C00", "no": "#E53935", "lock": "#78909C"}
 ARROW_UP_IDS = {"editor/import-table"}
 LABELS = {
     "commands/mf4": ("mf4-file", "MF4", None),
@@ -477,6 +477,37 @@ def badge_group(kind: str, tier: int) -> ET.Element:
         body.set("rx", f"{thick / 4:.3f}")
         body.set("fill", glyph)
         body.set("transform", f"rotate(45 {cx:.3f} {cy:.3f})")
+    elif kind == "no":
+        ring = ET.SubElement(group, f"{{{SVG_NS}}}circle")
+        ring.set("cx", f"{cx:.3f}")
+        ring.set("cy", f"{cy:.3f}")
+        ring.set("r", f"{size * 0.3:.3f}")
+        ring.set("fill", "none")
+        ring.set("stroke", glyph)
+        ring.set("stroke-width", f"{thick * 0.9:.3f}")
+        slash = ET.SubElement(group, f"{{{SVG_NS}}}rect")
+        slash.set("x", f"{cx - thick * 0.45:.3f}")
+        slash.set("y", f"{cy - size * 0.3:.3f}")
+        slash.set("width", f"{thick * 0.9:.3f}")
+        slash.set("height", f"{size * 0.6:.3f}")
+        slash.set("fill", glyph)
+        slash.set("transform", f"rotate(45 {cx:.3f} {cy:.3f})")
+    elif kind == "lock":
+        body = ET.SubElement(group, f"{{{SVG_NS}}}rect")
+        body.set("x", f"{cx - size * 0.24:.3f}")
+        body.set("y", f"{cy - size * 0.02:.3f}")
+        body.set("width", f"{size * 0.48:.3f}")
+        body.set("height", f"{size * 0.36:.3f}")
+        body.set("rx", f"{size * 0.06:.3f}")
+        body.set("fill", glyph)
+        shackle = ET.SubElement(group, f"{{{SVG_NS}}}path")
+        r = size * 0.16
+        shackle.set("d", f"M {cx - r:.3f} {cy - size * 0.02:.3f} V {cy - size * 0.16:.3f} "
+                         f"A {r:.3f} {r:.3f} 0 0 1 {cx + r:.3f} {cy - size * 0.16:.3f} "
+                         f"V {cy - size * 0.02:.3f}")
+        shackle.set("fill", "none")
+        shackle.set("stroke", glyph)
+        shackle.set("stroke-width", f"{thick * 0.8:.3f}")
     elif kind == "warning":
         mark = ET.SubElement(group, f"{{{SVG_NS}}}rect")
         mark.set("x", f"{cx - thick / 2:.3f}")
