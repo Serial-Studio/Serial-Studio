@@ -27,6 +27,7 @@
 #include "Core/Bus/Subscription.h"
 #include "Core/IO/FrameConfig.h"
 #include "Core/SerialStudio.h"
+#include "IO/ConnectionManager/ConnectFanOut.h"
 
 namespace Core::Bus {
 class MessageBus;
@@ -73,7 +74,11 @@ public:
   void wire(ConnectionManager& facade, Reactions reactions);
   void publishConnectionState(
     int sourceId, bool connected, bool paused, bool connecting, int busType);
-  void publishOpenOutcome(HAL_Driver* driver, int deviceId, bool ok, const QString& reason);
+  void publishOpenOutcome(HAL_Driver* driver,
+                          int deviceId,
+                          bool ok,
+                          const QString& reason,
+                          ConnectFanOut::OutcomeNews news);
 
 private:
   Core::Bus::MessageBus& m_bus;

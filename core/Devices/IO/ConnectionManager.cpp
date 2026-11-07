@@ -1192,6 +1192,7 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
           &IO::ConnectionManager::onConsoleDataReceived,
           Qt::DirectConnection);
   m_io.watchSentBytes(dm, this);
+  DeviceIoRouter::watchRecovery(dm->driver(), this);
 }
 
 /**
@@ -1205,8 +1206,8 @@ void IO::ConnectionManager::onDeviceOpenFinished(int deviceId, bool ok, const QS
   SS_ASSERT_LOG(deviceId >= 0);
   SS_ASSERT_LOG(ok || !reason.isEmpty());
 
-  m_fanOut.noteOpenOutcome(deviceId, ok, reason);
-  m_busBridge.publishOpenOutcome(driver(deviceId), deviceId, ok, reason);
+  const auto news = m_fanOut.noteOpenOutcome(deviceId, ok, reason);
+  m_busBridge.publishOpenOutcome(driver(deviceId), deviceId, ok, reason, news);
 
   concludeConnectRequest();
   notifyConnectedStateChanged();

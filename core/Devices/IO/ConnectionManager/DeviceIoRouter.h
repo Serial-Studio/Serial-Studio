@@ -38,6 +38,7 @@ class QObject;
 
 namespace IO {
 
+class ConnectionManager;
 class DeviceManager;
 class FileTransmission;
 class IIngestBinder;
@@ -69,6 +70,7 @@ public:
 
   void bindRawTaps(std::span<IRawByteTap* const> taps);
   void watchSentBytes(DeviceManager* device, QObject* context);
+  static void watchRecovery(HAL_Driver* driver, ConnectionManager* manager);
 
   void onRawDataSent(int deviceId, const QByteArray& data);
   void onRawDataReceived(int deviceId, const CapturedDataPtr& data);

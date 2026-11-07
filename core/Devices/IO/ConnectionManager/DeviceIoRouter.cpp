@@ -26,6 +26,7 @@
 #include "Core/IO/IRawByteTap.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
+#include "IO/ConnectionManager.h"
 #include "IO/ConnectionManager/ReplyCapture.h"
 #include "IO/DeviceManager.h"
 #include "IO/FileTransmission.h"
@@ -89,6 +90,27 @@ void IO::DeviceIoRouter::watchSentBytes(DeviceManager* device, QObject* context)
     context,
     [this](int deviceId, const QByteArray& data) { onRawDataSent(deviceId, data); },
     Qt::DirectConnection);
+}
+
+/**
+ * @brief Hands a driver's own recovery to the manager without the driver reaching for it: a
+ *        drop closes the one device, and a reopen request is honored only while another device
+ *        still holds the session, so a sole source that failed stays failed as the user saw it.
+ *        The driver is the sender, so its destruction ends both connections.
+ */
+void IO::DeviceIoRouter::watchRecovery(HAL_Driver* driver, ConnectionManager* manager)
+{
+  SS_ASSERT(driver != nullptr, return);
+  SS_ASSERT(manager != nullptr, return);
+
+  QObject::connect(driver, &HAL_Driver::linkDropped, manager, [manager, driver] {
+    manager->disconnectDevice(driver);
+  });
+
+  QObject::connect(driver, &HAL_Driver::reopenRequested, manager, [manager, driver] {
+    if (manager->isConnected() && !driver->isOpen() && !driver->isConnecting())
+      manager->connectDevice(driver);
+  });
 }
 
 //--------------------------------------------------------------------------------------------------

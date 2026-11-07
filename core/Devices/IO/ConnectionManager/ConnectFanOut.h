@@ -36,6 +36,12 @@ namespace IO {
  */
 class ConnectFanOut {
 public:
+  enum class OutcomeNews {
+    Quiet,
+    FirstFailure,
+    Recovered
+  };
+
   ConnectFanOut();
   ConnectFanOut(ConnectFanOut&&)                 = delete;
   ConnectFanOut(const ConnectFanOut&)            = delete;
@@ -46,7 +52,7 @@ public:
   void beginRequest() noexcept;
   void forgetDevice(int deviceId);
   void notePendingDial(int deviceId);
-  void noteOpenOutcome(int deviceId, bool ok, const QString& reason);
+  [[nodiscard]] OutcomeNews noteOpenOutcome(int deviceId, bool ok, const QString& reason);
 
   void endSession();
   void endWaitCursor();
@@ -67,6 +73,7 @@ private:
   bool m_lastConnectedState;
   bool m_lastConnectingState;
   int m_lastConnectedCount;
+  QSet<int> m_announcedFailures;
   QSet<int> m_pendingDialVerdicts;
   QHash<int, QString> m_openFailures;
 };

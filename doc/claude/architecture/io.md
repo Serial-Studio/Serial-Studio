@@ -138,7 +138,14 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   recover too — the timer belongs to the instance, not the UI driver's 1 Hz rescan), matches
   the returned port by name, and `close()` disarms both so a manual disconnect is always final.
   MQTT funnels every configuration change and error into `scheduleReconnectIfActive()`. Modbus
-  and Network TCP dial asynchronously with driver-local timer retries (below). A new driver
+  and Network TCP dial asynchronously with driver-local timer retries (below). Modbus TCP also
+  re-dials (2026-11-06): a refused dial (`failDial`) or a dropped link (`ModbusRedial::reportDrop`,
+  which also raises the drop notification) arms `ModbusRedial`, one 10 s single-shot that
+  `close()` cancels. The driver never reaches for the manager: the sub-object's `due()` and
+  `dropped()` forward to `HAL_Driver::reopenRequested` and `HAL_Driver::linkDropped`, which
+  `DeviceIoRouter::watchRecovery` (called from `wireDevice`) answers with `connectDevice(driver)`
+  only while another device keeps `isConnected()` true, so a sole source
+  that failed stays failed as the user saw it and a healthy link is never bounced. A new driver
   that needs recovery adds it locally — there is no shared supervisor to inherit.
 - **The connected state is published idempotently.** Every lifecycle path funnels into the
   private `notifyConnectedStateChanged()`, which emits `connectedChanged()` only when the
@@ -152,7 +159,10 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   `onDeviceOpenFinished()` keeps the failure text in `ConnectFanOut` (`noteOpenOutcome`) and
   hands the outcome to `ConnectionBusBridge::publishOpenOutcome()`, which publishes the
   diagnostics message and, in a project with more than one source, a `NotificationRaised` naming
-  the device. `io.getStatus` lists every source through `ConnectionManager::sourceLinks()`
+  the device. The notice is per outage, not per attempt: `noteOpenOutcome` returns
+  `ConnectFanOut::OutcomeNews`, the Warning goes out on the first failure and an Info on the
+  success that ends it, and a re-dialing driver in between stays quiet (`forgetDevice` and
+  `endSession` reset the story). `io.getStatus` lists every source through `ConnectionManager::sourceLinks()`
   (`connected`, `connecting`, `failed`, `idle`), because `isConnected()` is true while ANY device
   is open. The text is forgotten by a new attempt, a success, a user disconnect (`endSession`)
   and a device rebuild (`forgetDevice`); the by-id `disconnectDevice` does NOT clear it, since
@@ -245,7 +255,8 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   those verdicts and wedged the connect button. The prior async retry/watchdog stack
   (10x300 ms + 15 s + peerPort validation) bounced healthy links and earned a telehack.com
   IP ban; do not reintroduce it. An ESTABLISHED link that errors reports once and stays
-  down — post-drop auto-recovery exists only as UART's opt-in auto-reconnect checkbox, and an
+  down — post-drop auto-recovery exists only as UART's opt-in auto-reconnect checkbox and
+  Modbus TCP's slow re-dial beside other live devices (`ModbusRedial`, above), and an
   auto-reconnect **keeps the session pause**: `ConnectionManager::ResumePolicy` is `Resume` for a
   user connect and `KeepPause` for a driver's own recovery, because an adapter blip is not a
   request to start streaming again into a session the user deliberately paused.

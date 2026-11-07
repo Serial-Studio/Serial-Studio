@@ -149,19 +149,29 @@ bool IO::ConnectFanOut::takePendingDial(int deviceId)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Keeps why @p deviceId's last open attempt failed, or forgets it once the device opened.
- *        A device that fails beside others that opened leaves a live session with a dead member,
- *        and this text is the only place that says which one and why.
+ * @brief Keeps why @p deviceId's last open attempt failed, or forgets it once the device opened,
+ *        and says whether the outcome is news: the first failure since the device last opened
+ *        and the success that ends it are announced once. A driver re-dialing every few seconds
+ *        is not a new story each time, and notePendingDial() clearing the text does not reset it.
  */
-void IO::ConnectFanOut::noteOpenOutcome(int deviceId, bool ok, const QString& reason)
+IO::ConnectFanOut::OutcomeNews IO::ConnectFanOut::noteOpenOutcome(int deviceId,
+                                                                  bool ok,
+                                                                  const QString& reason)
 {
-  SS_ASSERT(deviceId >= 0, return);
+  SS_ASSERT(deviceId >= 0, return OutcomeNews::Quiet);
   SS_ASSERT_LOG(ok || !reason.isEmpty());
 
-  if (ok)
+  if (ok) {
     m_openFailures.remove(deviceId);
-  else
-    m_openFailures.insert(deviceId, reason);
+    return m_announcedFailures.remove(deviceId) ? OutcomeNews::Recovered : OutcomeNews::Quiet;
+  }
+
+  m_openFailures.insert(deviceId, reason);
+  if (m_announcedFailures.contains(deviceId))
+    return OutcomeNews::Quiet;
+
+  m_announcedFailures.insert(deviceId);
+  return OutcomeNews::FirstFailure;
 }
 
 /**
@@ -180,6 +190,7 @@ QString IO::ConnectFanOut::openFailure(int deviceId) const
 void IO::ConnectFanOut::forgetDevice(int deviceId)
 {
   m_pendingDialVerdicts.remove(deviceId);
+  m_announcedFailures.remove(deviceId);
   m_openFailures.remove(deviceId);
 }
 
@@ -190,6 +201,7 @@ void IO::ConnectFanOut::forgetDevice(int deviceId)
 void IO::ConnectFanOut::endSession()
 {
   endWaitCursor();
+  m_announcedFailures.clear();
   m_openFailures.clear();
 }
 

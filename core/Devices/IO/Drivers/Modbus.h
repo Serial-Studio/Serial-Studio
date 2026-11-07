@@ -36,6 +36,7 @@
 #include "Core/IO/HAL_Driver.h"
 #include "IO/AsyncTcpDial.h"
 #include "IO/Drivers/GeneratedProjectRequest.h"
+#include "IO/Drivers/Modbus/ModbusRedial.h"
 #include "IO/Drivers/Modbus/ModbusRegisterGroups.h"
 
 namespace DataModel {
@@ -228,6 +229,7 @@ private:
   bool m_connecting;
   QString m_dialTarget;
   AsyncTcpDial m_probe;
+  ModbusRedial m_redial;
   QTimer* m_pollTimer;
   QModbusClient* m_device;
   QModbusReply* m_lastReply;

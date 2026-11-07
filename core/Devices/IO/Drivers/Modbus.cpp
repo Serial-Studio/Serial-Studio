@@ -49,60 +49,10 @@ static constexpr int kMaxWriteRegisters = 123;
 #include "Core/TimerEvents.h"
 #include "Core/Translator.h"
 #include "IO/Drivers/Modbus/ModbusProjectGenerator.h"
+#include "IO/Drivers/Modbus/ModbusSerialParams.h"
 #include "IO/Drivers/Modbus/ModbusWritePayload.h"
 #include "IO/Drivers/SerialPortIdentity.h"
 #include "Protocols/Modbus/ModbusRtuCodec.h"
-
-/**
- * @brief Maps the UI parity index to the corresponding QSerialPort::Parity enum.
- */
-[[nodiscard]] static QSerialPort::Parity parityFromIndex(quint8 index) noexcept
-{
-  if (index == 1)
-    return QSerialPort::EvenParity;
-
-  if (index == 2)
-    return QSerialPort::OddParity;
-
-  if (index == 3)
-    return QSerialPort::SpaceParity;
-
-  if (index == 4)
-    return QSerialPort::MarkParity;
-
-  return QSerialPort::NoParity;
-}
-
-/**
- * @brief Maps the UI data-bits index to the corresponding QSerialPort::DataBits enum.
- */
-[[nodiscard]] static QSerialPort::DataBits dataBitsFromIndex(quint8 index) noexcept
-{
-  if (index == 0)
-    return QSerialPort::Data5;
-
-  if (index == 1)
-    return QSerialPort::Data6;
-
-  if (index == 2)
-    return QSerialPort::Data7;
-
-  return QSerialPort::Data8;
-}
-
-/**
- * @brief Maps the UI stop-bits index to the corresponding QSerialPort::StopBits enum.
- */
-[[nodiscard]] static QSerialPort::StopBits stopBitsFromIndex(quint8 index) noexcept
-{
-  if (index == 1)
-    return QSerialPort::OneAndHalfStop;
-
-  if (index == 2)
-    return QSerialPort::TwoStop;
-
-  return QSerialPort::OneStop;
-}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
@@ -114,6 +64,7 @@ static constexpr int kMaxWriteRegisters = 123;
 IO::Drivers::Modbus::Modbus()
   : m_generatedProject(this)
   , m_connecting(false)
+  , m_redial(this)
   , m_pollTimer(new QTimer(this))
   , m_device(nullptr)
   , m_lastReply(nullptr)
@@ -150,6 +101,8 @@ IO::Drivers::Modbus::Modbus()
 
   wireConfigurationSignals();
   connect(&m_probe, &IO::AsyncTcpDial::finished, this, &IO::Drivers::Modbus::onProbeFinished);
+  connect(&m_redial, &IO::Drivers::ModbusRedial::due, this, &IO::HAL_Driver::reopenRequested);
+  connect(&m_redial, &IO::Drivers::ModbusRedial::dropped, this, &IO::HAL_Driver::linkDropped);
 }
 
 /**
@@ -200,6 +153,7 @@ void IO::Drivers::Modbus::close()
 {
   m_connecting = false;
   m_probe.cancel();
+  m_redial.cancel();
   doClose();
 
   Q_EMIT configurationChanged();
@@ -363,11 +317,11 @@ bool IO::Drivers::Modbus::configureRtuClient(QString& target)
   m_device->setConnectionParameter(QModbusDevice::SerialPortNameParameter, portName);
   m_device->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, m_baudRate);
   m_device->setConnectionParameter(QModbusDevice::SerialParityParameter,
-                                   parityFromIndex(m_parityIndex));
+                                   ModbusSerialParams::parityFromIndex(m_parityIndex));
   m_device->setConnectionParameter(QModbusDevice::SerialDataBitsParameter,
-                                   dataBitsFromIndex(m_dataBitsIndex));
+                                   ModbusSerialParams::dataBitsFromIndex(m_dataBitsIndex));
   m_device->setConnectionParameter(QModbusDevice::SerialStopBitsParameter,
-                                   stopBitsFromIndex(m_stopBitsIndex));
+                                   ModbusSerialParams::stopBitsFromIndex(m_stopBitsIndex));
 
   target = ports.value(portId);
   return true;
@@ -482,6 +436,8 @@ void IO::Drivers::Modbus::failDial(const QString& error)
                    : tr("\"%1\": %2").arg(target, error));
 
   reportOpenFinished(false, error);
+  if (m_protocolIndex == 1)
+    m_redial.arm();
 
   Q_EMIT configurationChanged();
 }
@@ -1197,7 +1153,11 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
     if (m_pollTimer)
       m_pollTimer->stop();
 
-    handleDialSetback();
+    if (m_connecting)
+      handleDialSetback();
+    else
+      m_redial.reportDrop(
+        messageBus(), m_dialTarget, m_device->errorString(), m_protocolIndex == 1);
   }
 
   Q_EMIT configurationChanged();
@@ -1206,7 +1166,7 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
 /**
  * @brief Fails a dial whose attempt fell back to UnconnectedState. The endpoint pre-probe has
  *        already waited out any server-bind race, so a setback here is a real failure for both
- *        protocols: report once, never re-dial on a timer.
+ *        protocols: report once; failDial() then arms the slow TCP re-dial, never a fast retry.
  */
 void IO::Drivers::Modbus::handleDialSetback()
 {

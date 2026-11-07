@@ -181,7 +181,8 @@ void IO::ConnectionBusBridge::publishConnectionState(const int sourceId,
 void IO::ConnectionBusBridge::publishOpenOutcome(HAL_Driver* driver,
                                                  const int deviceId,
                                                  const bool ok,
-                                                 const QString& reason)
+                                                 const QString& reason,
+                                                 const ConnectFanOut::OutcomeNews news)
 {
   SS_ASSERT_LOG(deviceId >= 0);
   SS_ASSERT_LOG(ok || !reason.isEmpty());
@@ -190,7 +191,8 @@ void IO::ConnectionBusBridge::publishOpenOutcome(HAL_Driver* driver,
   if (DriverFactory::diagnosticsBus(driver, bus))
     m_bus.publish<Core::Bus::DeviceOpenAttempted>(static_cast<int>(bus), ok, reason);
 
-  if (ok || m_operationMode != SerialStudio::ProjectFile || !m_project)
+  const bool quiet = news == ConnectFanOut::OutcomeNews::Quiet;
+  if (quiet || m_operationMode != SerialStudio::ProjectFile || !m_project)
     return;
 
   const auto& sources = m_project->sources;
@@ -201,6 +203,17 @@ void IO::ConnectionBusBridge::publishOpenOutcome(HAL_Driver* driver,
   for (const auto& src : sources)
     if (src.sourceId == deviceId)
       title = src.title;
+
+  if (ok) {
+    m_bus.publish<Core::Bus::NotificationRaised>(
+      Core::Bus::kSeverityInfo,
+      QStringLiteral("Connection"),
+      QStringLiteral("device-open-failed/%1").arg(deviceId),
+      QCoreApplication::translate("IO::ConnectionManager", "\"%1\" connected").arg(title),
+      QCoreApplication::translate("IO::ConnectionManager",
+                                  "The device answered after an earlier attempt failed."));
+    return;
+  }
 
   QString why = reason;
   while (why.endsWith(QLatin1Char('.')))

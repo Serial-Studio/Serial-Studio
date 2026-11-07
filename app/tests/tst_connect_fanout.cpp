@@ -46,6 +46,11 @@ private slots:
   void pendingDialsAreIndependent();
   void unknownPendingDialIsNotClaimed();
 
+  void firstFailureIsNewsOnce();
+  void recoveryIsNewsOnce();
+  void forgettingADeviceResetsItsNews();
+  void endingTheSessionResetsTheNews();
+
   void connectedStateReportsOnlyTransitions();
   void connectedCountIsPartOfTheState();
   void connectingStateReportsOnlyTransitions();
@@ -150,6 +155,78 @@ void TstConnectFanOut::unknownPendingDialIsNotClaimed()
   IO::ConnectFanOut fanOut;
 
   QVERIFY(!fanOut.takePendingDial(7));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Open outcomes
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief A device that keeps failing (a driver re-dialing every few seconds) is announced on its
+ *        first failure only; a new attempt clearing the failure text does not restart the story.
+ */
+void TstConnectFanOut::firstFailureIsNewsOnce()
+{
+  IO::ConnectFanOut fanOut;
+  using News = IO::ConnectFanOut::OutcomeNews;
+
+  QCOMPARE(fanOut.noteOpenOutcome(3, false, "refused"), News::FirstFailure);
+  QCOMPARE(fanOut.openFailure(3), QString("refused"));
+  QCOMPARE(fanOut.noteOpenOutcome(3, false, "refused"), News::Quiet);
+
+  fanOut.notePendingDial(3);
+  QVERIFY(fanOut.openFailure(3).isEmpty());
+  QCOMPARE(fanOut.noteOpenOutcome(3, false, "timed out"), News::Quiet);
+  QCOMPARE(fanOut.openFailure(3), QString("timed out"));
+}
+
+/**
+ * @brief The success that ends an announced failure is news once; a success with nothing to
+ *        recover from (the session's first open) is not.
+ */
+void TstConnectFanOut::recoveryIsNewsOnce()
+{
+  IO::ConnectFanOut fanOut;
+  using News = IO::ConnectFanOut::OutcomeNews;
+
+  QCOMPARE(fanOut.noteOpenOutcome(3, true, QString()), News::Quiet);
+  QCOMPARE(fanOut.noteOpenOutcome(3, false, "refused"), News::FirstFailure);
+  QCOMPARE(fanOut.noteOpenOutcome(3, true, QString()), News::Recovered);
+  QVERIFY(fanOut.openFailure(3).isEmpty());
+  QCOMPARE(fanOut.noteOpenOutcome(3, true, QString()), News::Quiet);
+  QCOMPARE(fanOut.noteOpenOutcome(3, false, "refused"), News::FirstFailure);
+}
+
+/**
+ * @brief A rebuilt device starts its story over, and another device's story is untouched.
+ */
+void TstConnectFanOut::forgettingADeviceResetsItsNews()
+{
+  IO::ConnectFanOut fanOut;
+  using News = IO::ConnectFanOut::OutcomeNews;
+
+  QCOMPARE(fanOut.noteOpenOutcome(3, false, "refused"), News::FirstFailure);
+  QCOMPARE(fanOut.noteOpenOutcome(4, false, "refused"), News::FirstFailure);
+
+  fanOut.forgetDevice(3);
+  QCOMPARE(fanOut.noteOpenOutcome(3, false, "refused"), News::FirstFailure);
+  QCOMPARE(fanOut.noteOpenOutcome(4, false, "refused"), News::Quiet);
+}
+
+/**
+ * @brief A user disconnect ends every story with the session it belonged to.
+ */
+void TstConnectFanOut::endingTheSessionResetsTheNews()
+{
+  IO::ConnectFanOut fanOut;
+  using News = IO::ConnectFanOut::OutcomeNews;
+
+  QCOMPARE(fanOut.noteOpenOutcome(3, false, "refused"), News::FirstFailure);
+  fanOut.endSession();
+
+  QVERIFY(fanOut.openFailure(3).isEmpty());
+  QCOMPARE(fanOut.noteOpenOutcome(3, true, QString()), News::Quiet);
+  QCOMPARE(fanOut.noteOpenOutcome(3, false, "refused"), News::FirstFailure);
 }
 
 //--------------------------------------------------------------------------------------------------

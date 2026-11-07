@@ -211,6 +211,8 @@ signals:
   void consoleDataReceived(const IO::CapturedDataPtr& data);
   void sampleBlockReceived(const IO::SampleBlockPtr& block);
   void openFinished(bool ok, const QString& reason);
+  void linkDropped();
+  void reopenRequested();
 
 public:
   explicit HAL_Driver(QObject* parent = nullptr)
