@@ -9,7 +9,8 @@ to the house file per icon, so a pack may be partial; this script says how parti
 
 Subcommands:
   check                 the gate: layout, fixed categories refused, ids inside the house set,
-                        tiers in the ladder, pack.json shape, coverage at or above --gate,
+                        tiers in the ladder, pack.json shape, coverage at or above --gate (or
+                        the pack's own "gate" when pack.json carries one),
                         mapping <-> tree consistency, qrc <-> disk. Exit 1 on any error.
   report [PACK]         per-pack fallbacks and missing tiers; --sheet renders pack art beside
                         house art (PySide6) into --out.
@@ -21,6 +22,9 @@ Subcommands:
                         base artwork, and copy that artwork to every other plain id the base
                         serves; an id whose base the pack lacks is skipped.
   qrc                   regenerate app/rcc/iconpacks/iconpacks.qrc from disk.
+  house-sync            after new house icons land: normalize every house SVG git does not
+                        track yet (a fresh Icons8 download; committed files are never rewritten)
+                        and add every house file missing from app/rcc/rcc.qrc to its icon block.
 
 Usage: python3 scripts/icon-packs.py <subcommand> [options]
 """
@@ -31,6 +35,7 @@ import csv
 import json
 import re
 import shutil
+import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from collections import defaultdict
@@ -40,6 +45,7 @@ ROOT = Path(__file__).resolve().parent.parent
 ICONS = ROOT / "app" / "rcc" / "icons"
 PACKS = ROOT / "app" / "rcc" / "iconpacks"
 QRC = PACKS / "iconpacks.qrc"
+HOUSE_QRC = ROOT / "app" / "rcc" / "rcc.qrc"
 SPEC = ROOT / "doc" / "claude" / "specs" / "0115-icon-packs"
 MAPPING = SPEC / "icons8-map.csv"
 BASES = SPEC / "icon-bases.txt"
@@ -54,7 +60,8 @@ BASES_DIR = "_bases"
 NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 SVG_NS = "http://www.w3.org/2000/svg"
 STYLE_COLUMN = {"fluent": "fluent_id", "liquid-glass": "glass_id", "deco": "deco_id",
-                "fluent-systems-regular": "outline_id"}
+                "fluent-systems-regular": "outline_id", "liquid-glass-color": "glasscolor_id",
+                "deco-color": "decocolor_id", "clr-gls": "clrgls_id"}
 BADGE_FILL = {"plus": "#43A047", "x": "#E53935", "arrow": "#1E88E5", "arrow-up": "#1E88E5",
               "pencil": "#FB8C00", "warning": "#FB8C00"}
 ARROW_UP_IDS = {"editor/import-table"}
@@ -198,6 +205,9 @@ def check_pack(folder: Path, house: dict[str, set[int]], gate: float, errors: li
 
     covered = sum(1 for icon in house if icon in pack_files(folder))
     coverage = covered / len(house) if house else 0.0
+    own_gate = meta.get("gate")
+    if isinstance(own_gate, (int, float)) and 0 < own_gate <= 1:
+        gate = float(own_gate)
     if coverage < gate:
         errors.append(
             f"{where_pack}: coverage {coverage:.1%} ({covered}/{len(house)}) is under the gate "
@@ -224,7 +234,8 @@ def check_qrc(errors: list[str]) -> None:
     on_disk = set()
     for folder in pack_dirs():
         for path in folder.rglob("*"):
-            if path.is_file() and path.relative_to(folder).parts[0] != BASES_DIR:
+            if (path.is_file() and path.relative_to(folder).parts[0] != BASES_DIR
+                    and path.name != ".DS_Store"):
                 on_disk.add(path.relative_to(PACKS).as_posix())
     listed = set(re.findall(r"<file>([^<]+)</file>", QRC.read_text(encoding="utf-8")))
     for missing in sorted(on_disk - listed):
@@ -636,13 +647,51 @@ def cmd_qrc(_: argparse.Namespace) -> int:
     entries = []
     for folder in pack_dirs():
         for path in sorted(folder.rglob("*")):
-            if path.is_file() and path.relative_to(folder).parts[0] != BASES_DIR:
+            if (path.is_file() and path.relative_to(folder).parts[0] != BASES_DIR
+                    and path.name != ".DS_Store"):
                 entries.append(path.relative_to(PACKS).as_posix())
     lines = ["<RCC>", '    <qresource prefix="/iconpacks">']
     lines += [f"        <file>{entry}</file>" for entry in sorted(entries)]
     lines += ["    </qresource>", "</RCC>", ""]
     QRC.write_text("\n".join(lines), encoding="utf-8", newline="\n")
     print(f"qrc: {len(entries)} file(s) listed")
+    return 0
+
+
+# ------------------------------------------------------------------------------------------------
+# house-sync
+# ------------------------------------------------------------------------------------------------
+
+
+def cmd_house_sync(_: argparse.Namespace) -> int:
+    """Only files git does not track are normalized: the committed house set is never rewritten."""
+    tracked = set(subprocess.run(["git", "ls-files", "--", str(ICONS)], capture_output=True,
+                                 text=True, check=False, cwd=ROOT).stdout.split())
+    normalized = 0
+    for path in sorted(ICONS.rglob("*.svg")):
+        parts = path.relative_to(ICONS).parts
+        if len(parts) != 3 or not parts[1].isdigit():
+            continue
+        if path.relative_to(ROOT).as_posix() in tracked:
+            continue
+        if normalize_svg(path, int(parts[1])):
+            normalized += 1
+    text = HOUSE_QRC.read_text(encoding="utf-8")
+    listed = set(re.findall(r"<file>(icons/[^<]+)</file>", text))
+    on_disk = {f"icons/{p.relative_to(ICONS).as_posix()}" for p in ICONS.rglob("*.svg")}
+    missing = sorted(on_disk - listed)
+    if missing:
+        lines = text.split("\n")
+        for entry in missing:
+            new_line = f"        <file>{entry}</file>"
+            index = next((i for i, line in enumerate(lines)
+                          if line.strip().startswith("<file>icons/") and line.strip() > new_line.strip()),
+                         None)
+            if index is None:
+                index = max(i for i, line in enumerate(lines) if "<file>icons/" in line) + 1
+            lines.insert(index, new_line)
+        HOUSE_QRC.write_text("\n".join(lines), encoding="utf-8", newline="\n")
+    print(f"house-sync: {normalized} file(s) normalized, {len(missing)} qrc entr{'y' if len(missing) == 1 else 'ies'} added")
     return 0
 
 
@@ -674,6 +723,8 @@ def main() -> int:
     comp.set_defaults(func=cmd_compose)
     qrc = sub.add_parser("qrc")
     qrc.set_defaults(func=cmd_qrc)
+    house = sub.add_parser("house-sync")
+    house.set_defaults(func=cmd_house_sync)
     args = parser.parse_args()
     return args.func(args)
 

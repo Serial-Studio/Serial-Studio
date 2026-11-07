@@ -207,7 +207,7 @@ updated: 2026-11-07
   manifests point at them; the TODO rows go. Downloads: about 12.
 - **Verify:** `registry-verify.py`; `icon-report.py` shows no blank command.
 - **Deps:** none
-- [ ] done
+- [x] done (alarm-silence is Office "Do Not Disturb"; alarm-test and sound-unmute share one speaker, window-clear the broom, the editor navigate commands the existing chevrons: the house tree forbids byte-identical copies)
 
 ### T13 — Borrowed icons and the missing 32 px tiers
 
@@ -219,7 +219,7 @@ updated: 2026-11-07
   `commands/return`, the 15 editor ids). Downloads: about 21.
 - **Verify:** `icon-report.py` gaps list empty; `registry-verify.py`.
 - **Deps:** none
-- [ ] done
+- [x] done (19 of the 32 px tiers landed; widget and workspace at 32 were dropped for changing metaphor; frequency-markers and the 16 px dataset-values stay in TODO)
 
 ### T14 — Ladder holes and single-tier categories
 
@@ -231,7 +231,7 @@ updated: 2026-11-07
   stating that one size is all that is drawn (R18). Downloads: about 35.
 - **Verify:** `icon-report.py` holes list empty; `registry-verify.py`.
 - **Deps:** none
-- [ ] done
+- [x] done (the leftovers are listed in TODO.md: Office has no drawing for them)
 
 ### Stage E — the Fluent pack (first pack commit, with A–D)
 
@@ -282,7 +282,7 @@ updated: 2026-11-07
   own 90-download allowance window and lands in the commit after this one.
 - **Verify:** commit hooks green; `git status` shows no foreign file touched.
 - **Deps:** T1–T17
-- [ ] done
+- [x] done (13d246a1f, 2026-11-07)
 
 ### Stage F — the Outline pack (mono)
 
@@ -298,7 +298,12 @@ updated: 2026-11-07
 
 ### Stage G — the Glass pack
 
-### T20 — Fetch, compose and ship Glass; Default names it
+### T20 — Glass: on hold (maintainer, 2026-11-07)
+
+No glass style clears the gate (Color Glass 75.9 %, Liquid Glass Color 68.2 %); the probe columns
+stay in the mapping for a later run and Default keeps the Office set.
+
+### T20 (superseded) — Fetch, compose and ship Glass; Default names it
 
 - **Files:** `app/rcc/iconpacks/glass/**`, `iconpacks.qrc`, `app/rcc/themes/default.json`,
   `icons8-map.csv`
@@ -311,7 +316,12 @@ updated: 2026-11-07
 
 ### Stage H — Deco, gated
 
-### T21 — Deco coverage gate and, if it passes, the pack
+### T21 — Deco Color for Millennium at a 75 % pack gate (maintainer, 2026-11-07)
+
+Deco Color (78.0 % by id) replaces Deco Duotone; `pack.json` carries `"gate": 0.75` and the two
+Millennium themes name it.
+
+### T21 (superseded) — Deco coverage gate and, if it passes, the pack
 
 - **Files:** `app/rcc/iconpacks/deco/**`, `iconpacks.qrc`, `app/rcc/themes/millennium.json`,
   `millennium-dark.json`, `icons8-map.csv`

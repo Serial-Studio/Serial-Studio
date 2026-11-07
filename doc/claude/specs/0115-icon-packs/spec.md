@@ -261,6 +261,11 @@ session's question dialog.
   pack, never searched as pre-badged icons.
 - **A mono pack is a launch pack** (maintainer, same day): users who prefer the flat look get
   the whole interface in Windows 11 Outline, tinted (R21).
+- **Glass is on hold, Deco ships at a 75 % gate** (maintainer, 2026-11-07, after the colour-variant
+  probes): no glass style clears 85 % (Color Glass 75.9 %, Liquid Glass Color 68.2 %, plain Liquid
+  Glass is near-white on light panes), so the Default theme keeps the Office set and the Glass slot
+  stays open. Deco Color (78.0 %) replaces Deco Duotone for the industrial pack and ships for the
+  two Millennium themes with a per-pack gate of 75 %, the Office fallbacks accepted on their plates.
 
 ## Open Questions
 

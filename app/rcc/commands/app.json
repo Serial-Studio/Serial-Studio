@@ -336,6 +336,7 @@
     },
     {
       "id": "workspace.next",
+      "icon": "commands/workspace-next",
       "title": "Next Workspace",
       "kind": "action",
       "contexts": [],
@@ -346,6 +347,7 @@
     },
     {
       "id": "workspace.previous",
+      "icon": "commands/workspace-previous",
       "title": "Previous Workspace",
       "kind": "action",
       "contexts": [],
@@ -356,6 +358,7 @@
     },
     {
       "id": "window.closeActive",
+      "icon": "commands/window-close",
       "title": "Close Window",
       "kind": "action",
       "contexts": [],
@@ -366,6 +369,7 @@
     },
     {
       "id": "window.minimizeActive",
+      "icon": "commands/window-minimize",
       "title": "Minimize Window",
       "kind": "action",
       "contexts": [],
@@ -376,6 +380,7 @@
     },
     {
       "id": "window.clearActive",
+      "icon": "commands/clear",
       "title": "Clear Window",
       "kind": "action",
       "contexts": [],
@@ -587,6 +592,7 @@
     },
     {
       "id": "alarms.acknowledge",
+      "icon": "commands/alarm-acknowledge",
       "title": "Acknowledge Alarms",
       "tooltip": "Acknowledge every alerting alarm point (ISA-18.1)",
       "kind": "action",
@@ -602,6 +608,7 @@
     },
     {
       "id": "alarms.silence",
+      "icon": "commands/alarm-silence",
       "title": "Silence Alarms",
       "tooltip": "Stop the alarm sound; points stay unacknowledged and a new alarm re-sounds",
       "kind": "action",
@@ -617,6 +624,7 @@
     },
     {
       "id": "alarms.reset",
+      "icon": "commands/alarm-reset",
       "title": "Reset Alarms",
       "tooltip": "Clear return-to-normal alarm points (sequences M and R)",
       "kind": "action",
@@ -632,6 +640,7 @@
     },
     {
       "id": "alarms.test",
+      "icon": "commands/sound-unmute",
       "title": "Test Alarm Sounds",
       "tooltip": "Play every alarm priority sound and walk the annunciator",
       "kind": "action",
@@ -647,6 +656,8 @@
     },
     {
       "id": "alarms.mute",
+      "icon": "commands/sound-mute",
+      "iconChecked": "commands/sound-unmute",
       "title": "Mute Sounds",
       "titleChecked": "Unmute Sounds",
       "tooltip": "Silence every alarm and event sound",

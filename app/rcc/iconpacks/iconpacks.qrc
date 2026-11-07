@@ -17,6 +17,7 @@
         <file>fluent/commands/48/activate.svg</file>
         <file>fluent/commands/48/add-workspace.svg</file>
         <file>fluent/commands/48/ai.svg</file>
+        <file>fluent/commands/48/alarm-reset.svg</file>
         <file>fluent/commands/48/anaglyph.svg</file>
         <file>fluent/commands/48/archive.svg</file>
         <file>fluent/commands/48/area.svg</file>
@@ -80,6 +81,8 @@
         <file>fluent/commands/48/top-view.svg</file>
         <file>fluent/commands/48/trigger.svg</file>
         <file>fluent/commands/48/weather.svg</file>
+        <file>fluent/commands/48/workspace-next.svg</file>
+        <file>fluent/commands/48/workspace-previous.svg</file>
         <file>fluent/commands/48/workspaces.svg</file>
         <file>fluent/commands/48/x.svg</file>
         <file>fluent/commands/48/y.svg</file>

@@ -276,9 +276,14 @@
         <file>icons/code/24/template.svg</file>
         <file>icons/code/24/test.svg</file>
         <file>icons/code/24/undo.svg</file>
+        <file>icons/code/32/redo.svg</file>
+        <file>icons/code/32/undo.svg</file>
         <file>icons/commands/16/abscissa.svg</file>
         <file>icons/commands/16/add-workspace.svg</file>
         <file>icons/commands/16/ai.svg</file>
+        <file>icons/commands/16/alarm-acknowledge.svg</file>
+        <file>icons/commands/16/alarm-reset.svg</file>
+        <file>icons/commands/16/alarm-silence.svg</file>
         <file>icons/commands/16/anaglyph.svg</file>
         <file>icons/commands/16/archive.svg</file>
         <file>icons/commands/16/area.svg</file>
@@ -327,23 +332,42 @@
         <file>icons/commands/16/sessions.svg</file>
         <file>icons/commands/16/settings.svg</file>
         <file>icons/commands/16/sound-folder.svg</file>
+        <file>icons/commands/16/sound-mute.svg</file>
+        <file>icons/commands/16/sound-unmute.svg</file>
         <file>icons/commands/16/sweep.svg</file>
         <file>icons/commands/16/top-view.svg</file>
         <file>icons/commands/16/trigger.svg</file>
         <file>icons/commands/16/weather.svg</file>
+        <file>icons/commands/16/window-close.svg</file>
+        <file>icons/commands/16/window-minimize.svg</file>
+        <file>icons/commands/16/workspace-next.svg</file>
+        <file>icons/commands/16/workspace-previous.svg</file>
         <file>icons/commands/16/x.svg</file>
         <file>icons/commands/16/y.svg</file>
         <file>icons/commands/16/zoom-in.svg</file>
         <file>icons/commands/16/zoom-out.svg</file>
         <file>icons/commands/24/ai.svg</file>
+        <file>icons/commands/24/alarm-acknowledge.svg</file>
+        <file>icons/commands/24/alarm-reset.svg</file>
+        <file>icons/commands/24/alarm-silence.svg</file>
         <file>icons/commands/24/anaglyph.svg</file>
+        <file>icons/commands/24/audio-file.svg</file>
         <file>icons/commands/24/auto-layout.svg</file>
+        <file>icons/commands/24/camcoder.svg</file>
+        <file>icons/commands/24/center.svg</file>
         <file>icons/commands/24/command-palette.svg</file>
         <file>icons/commands/24/console-log.svg</file>
         <file>icons/commands/24/console.svg</file>
         <file>icons/commands/24/crosshair.svg</file>
+        <file>icons/commands/24/csv-log.svg</file>
+        <file>icons/commands/24/csv.svg</file>
+        <file>icons/commands/24/database-export.svg</file>
+        <file>icons/commands/24/deepwiki.svg</file>
+        <file>icons/commands/24/deploy.svg</file>
         <file>icons/commands/24/diagnostics.svg</file>
+        <file>icons/commands/24/examples.svg</file>
         <file>icons/commands/24/export.svg</file>
+        <file>icons/commands/24/extensions.svg</file>
         <file>icons/commands/24/external-window.svg</file>
         <file>icons/commands/24/file-transmission.svg</file>
         <file>icons/commands/24/freeze.svg</file>
@@ -359,17 +383,29 @@
         <file>icons/commands/24/mf4.svg</file>
         <file>icons/commands/24/nasa.svg</file>
         <file>icons/commands/24/normal-screen.svg</file>
+        <file>icons/commands/24/open-project.svg</file>
         <file>icons/commands/24/orbit.svg</file>
         <file>icons/commands/24/orthogonal-view.svg</file>
+        <file>icons/commands/24/pause.svg</file>
+        <file>icons/commands/24/pictures-folder.svg</file>
         <file>icons/commands/24/poliline.svg</file>
         <file>icons/commands/24/quit.svg</file>
         <file>icons/commands/24/remote-attach.svg</file>
         <file>icons/commands/24/reset.svg</file>
+        <file>icons/commands/24/resume.svg</file>
+        <file>icons/commands/24/sessions.svg</file>
         <file>icons/commands/24/settings.svg</file>
+        <file>icons/commands/24/sound-folder.svg</file>
+        <file>icons/commands/24/sound-mute.svg</file>
+        <file>icons/commands/24/sound-unmute.svg</file>
         <file>icons/commands/24/tools.svg</file>
         <file>icons/commands/24/top-view.svg</file>
         <file>icons/commands/24/trigger.svg</file>
         <file>icons/commands/24/weather.svg</file>
+        <file>icons/commands/24/window-close.svg</file>
+        <file>icons/commands/24/window-minimize.svg</file>
+        <file>icons/commands/24/workspace-next.svg</file>
+        <file>icons/commands/24/workspace-previous.svg</file>
         <file>icons/commands/24/workspaces.svg</file>
         <file>icons/commands/24/zoom-in.svg</file>
         <file>icons/commands/24/zoom-out.svg</file>
@@ -378,10 +414,14 @@
         <file>icons/commands/32/activate.svg</file>
         <file>icons/commands/32/add-workspace.svg</file>
         <file>icons/commands/32/ai.svg</file>
+        <file>icons/commands/32/alarm-acknowledge.svg</file>
+        <file>icons/commands/32/alarm-reset.svg</file>
+        <file>icons/commands/32/alarm-silence.svg</file>
         <file>icons/commands/32/audio-file.svg</file>
         <file>icons/commands/32/auto-layout.svg</file>
         <file>icons/commands/32/camcoder.svg</file>
         <file>icons/commands/32/center.svg</file>
+        <file>icons/commands/32/clear.svg</file>
         <file>icons/commands/32/command-palette.svg</file>
         <file>icons/commands/32/connect.svg</file>
         <file>icons/commands/32/console-log.svg</file>
@@ -407,15 +447,23 @@
         <file>icons/commands/32/mf4.svg</file>
         <file>icons/commands/32/open-project.svg</file>
         <file>icons/commands/32/pause.svg</file>
+        <file>icons/commands/32/pictures-folder.svg</file>
         <file>icons/commands/32/project-setup.svg</file>
         <file>icons/commands/32/quit.svg</file>
         <file>icons/commands/32/remote-attach.svg</file>
         <file>icons/commands/32/reset.svg</file>
         <file>icons/commands/32/resume.svg</file>
+        <file>icons/commands/32/return.svg</file>
         <file>icons/commands/32/sessions.svg</file>
         <file>icons/commands/32/settings.svg</file>
         <file>icons/commands/32/sound-folder.svg</file>
+        <file>icons/commands/32/sound-mute.svg</file>
+        <file>icons/commands/32/sound-unmute.svg</file>
         <file>icons/commands/32/tools.svg</file>
+        <file>icons/commands/32/window-close.svg</file>
+        <file>icons/commands/32/window-minimize.svg</file>
+        <file>icons/commands/32/workspace-next.svg</file>
+        <file>icons/commands/32/workspace-previous.svg</file>
         <file>icons/commands/32/workspaces.svg</file>
         <file>icons/commands/48/activate.svg</file>
         <file>icons/commands/48/ai.svg</file>
@@ -439,6 +487,13 @@
         <file>icons/console/32/settings.svg</file>
         <file>icons/console/32/utilities.svg</file>
         <file>icons/console/48/annotations.svg</file>
+        <file>icons/database/16/close.svg</file>
+        <file>icons/database/16/delete.svg</file>
+        <file>icons/database/16/export-pdf.svg</file>
+        <file>icons/database/16/lock.svg</file>
+        <file>icons/database/16/open.svg</file>
+        <file>icons/database/16/replay.svg</file>
+        <file>icons/database/16/unlock.svg</file>
         <file>icons/database/32/close.svg</file>
         <file>icons/database/32/delete.svg</file>
         <file>icons/database/32/export-pdf.svg</file>
@@ -610,7 +665,9 @@
         <file>icons/editor/24/compress.svg</file>
         <file>icons/editor/24/control-script.svg</file>
         <file>icons/editor/24/customize.svg</file>
+        <file>icons/editor/24/dashboard-widgets.svg</file>
         <file>icons/editor/24/dataset-values.svg</file>
+        <file>icons/editor/24/dataset.svg</file>
         <file>icons/editor/24/delete-register.svg</file>
         <file>icons/editor/24/delete-table.svg</file>
         <file>icons/editor/24/delete.svg</file>
@@ -620,6 +677,7 @@
         <file>icons/editor/24/expand.svg</file>
         <file>icons/editor/24/export-table.svg</file>
         <file>icons/editor/24/fft.svg</file>
+        <file>icons/editor/24/group.svg</file>
         <file>icons/editor/24/help.svg</file>
         <file>icons/editor/24/import-table.svg</file>
         <file>icons/editor/24/influx.svg</file>
@@ -629,6 +687,7 @@
         <file>icons/editor/24/meter.svg</file>
         <file>icons/editor/24/move-down.svg</file>
         <file>icons/editor/24/move-up.svg</file>
+        <file>icons/editor/24/mqtt-publisher.svg</file>
         <file>icons/editor/24/output-button.svg</file>
         <file>icons/editor/24/output-knob.svg</file>
         <file>icons/editor/24/output-slider.svg</file>
@@ -636,7 +695,9 @@
         <file>icons/editor/24/output-toggle.svg</file>
         <file>icons/editor/24/plot.svg</file>
         <file>icons/editor/24/rename-table.svg</file>
+        <file>icons/editor/24/save-as.svg</file>
         <file>icons/editor/24/save-warning.svg</file>
+        <file>icons/editor/24/save.svg</file>
         <file>icons/editor/24/shared-memory.svg</file>
         <file>icons/editor/24/shared-table.svg</file>
         <file>icons/editor/24/test-connection.svg</file>
@@ -678,18 +739,27 @@
         <file>icons/editor/32/clear.svg</file>
         <file>icons/editor/32/compress.svg</file>
         <file>icons/editor/32/control-script.svg</file>
+        <file>icons/editor/32/dashboard-widgets.svg</file>
         <file>icons/editor/32/dataset-values.svg</file>
         <file>icons/editor/32/dataset.svg</file>
+        <file>icons/editor/32/delete.svg</file>
+        <file>icons/editor/32/device.svg</file>
+        <file>icons/editor/32/duplicate.svg</file>
+        <file>icons/editor/32/edit-code.svg</file>
         <file>icons/editor/32/expand.svg</file>
         <file>icons/editor/32/export-table.svg</file>
         <file>icons/editor/32/group.svg</file>
         <file>icons/editor/32/help.svg</file>
+        <file>icons/editor/32/hide.svg</file>
+        <file>icons/editor/32/import-table.svg</file>
         <file>icons/editor/32/influx.svg</file>
         <file>icons/editor/32/insert-constant.svg</file>
         <file>icons/editor/32/load-ca-certs.svg</file>
         <file>icons/editor/32/lock.svg</file>
+        <file>icons/editor/32/move-up.svg</file>
         <file>icons/editor/32/mqtt-publisher.svg</file>
         <file>icons/editor/32/new.svg</file>
+        <file>icons/editor/32/open.svg</file>
         <file>icons/editor/32/output-button.svg</file>
         <file>icons/editor/32/output-knob.svg</file>
         <file>icons/editor/32/output-slider.svg</file>
@@ -697,8 +767,10 @@
         <file>icons/editor/32/output-toggle.svg</file>
         <file>icons/editor/32/protobuf.svg</file>
         <file>icons/editor/32/recover-backup.svg</file>
+        <file>icons/editor/32/rename.svg</file>
         <file>icons/editor/32/save-as.svg</file>
         <file>icons/editor/32/save.svg</file>
+        <file>icons/editor/32/show.svg</file>
         <file>icons/editor/32/transform.svg</file>
         <file>icons/editor/48/action.svg</file>
         <file>icons/editor/48/add-accelerometer.svg</file>
@@ -744,6 +816,11 @@
         <file>icons/licensing/16/plan.svg</file>
         <file>icons/licensing/16/user.svg</file>
         <file>icons/licensing/16/uuid.svg</file>
+        <file>icons/licensing/24/devices.svg</file>
+        <file>icons/licensing/24/email.svg</file>
+        <file>icons/licensing/24/key.svg</file>
+        <file>icons/licensing/24/user.svg</file>
+        <file>icons/licensing/24/uuid.svg</file>
         <file>icons/licensing/48/license.svg</file>
         <file>icons/notifications/16/critical.svg</file>
         <file>icons/notifications/16/info.svg</file>
@@ -834,6 +911,7 @@
         <file>icons/widgets/24/notification-log.svg</file>
         <file>icons/widgets/24/output-panel.svg</file>
         <file>icons/widgets/24/output.svg</file>
+        <file>icons/widgets/24/painter.svg</file>
         <file>icons/widgets/24/plot.svg</file>
         <file>icons/widgets/24/plot3d.svg</file>
         <file>icons/widgets/24/stopwatch.svg</file>

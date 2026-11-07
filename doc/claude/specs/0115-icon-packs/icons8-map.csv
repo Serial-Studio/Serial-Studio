@@ -1,174 +1,180 @@
-base,status,fluent_id,fluent_name,fluent_common,outline_id,outline_name,glass_id,glass_name,deco_id,deco_name,note,ids
-3d-glasses,found,VdCJlCi1qG3C,3D Glasses,3d-glasses,?,?,Azh7NYut9taL,3D Glasses,Ac6nbAmM53jF,3D Glasses,,commands/anaglyph
-alpha,found,p03EZMcmuZH5,Alpha,alpha,?,?,Bnsp36IiORVM,Alpha,XWFSeFRFwWck,Alpha,,editor/add-dataset+plus;editor/dataset;editor/add-output-button+plus;editor/output-button
-archive,found,TQGqvNhu0EcG,Archive,archive,?,?,BiSZheXf9voO,Open Archive,iU9qXwgeR0Yf,Archive,,commands/archive
-area-chart,found,CCbP79v7S6NQ,Area Chart,area-chart,?,?,vVEDrcJgKi6Z,Area Chart,EUyIAUVkotwD,Area Chart,,commands/area;editor/add-multiplot+plus;widgets/multiplot
-at-sign,found,JeO1Kv9jsmLr,At sign,email,?,?,J3t5dbcmLAUN,At sign,Ud9aSgz1IQOI,At sign,,licensing/email
-audio-file,weak,W1UrWn4kSdmD,Musical Note,musical-notes,?,?,?,?,?,?,Note alone; compose onto a file like the house icon; glass/deco to re-check,commands/audio-file
-axis,found,zsCf4URsznk1,Abscissa,abscissa,?,?,SWkToKL3SYWN,Abscissa,bDmHuecFxgw1,Abscissa,Fluent also has Gyroscope; abscissa is the coordinate-system icon,commands/abscissa;editor/add-accelerometer+plus;widgets/accelerometer
-barcode-scanner,found,moFYdZPkWQLg,Barcode Scanner,barcode-scanner,?,?,3fnsTsQ4imj1,Barcode Scanner,aEgGOb0d8bAr,Barcode Scanner,,devices/hid
-binary,weak,UVQTFk728g0D,Online Binary Code,online-coding,?,?,NONE,NONE,NONE,NONE,Binary code in a browser window; glass/deco only QR or code,editor/data-conversion
-blueprint,found,hgzHCaJDrf1p,Blueprint,blueprint,?,?,5CjtvIRr2vyu,Blueprint,NONE,NONE,"Blueprint paper, not ruler+pencil; deco has no blueprint",commands/project-setup;editor/customize;editor/project
-bluetooth,found,gRKbTQ67Dfhc,Bluetooth,bluetooth,?,?,QGcJuP3hyDsg,Bluetooth,NONE,NONE,Deco only has bluelock logo,devices/bluetooth
-books,found,ChugQlss1ohB,Books,books,?,?,1x6X1z7fd8t8,Books,fAsrxSrdxizP,Books,,commands/examples
-braces,weak,UJLmfQkJmi7d,Brackets,brackets,?,?,dMF9AHuMH0SY,Square Brackets,NONE,NONE,Square brackets only; no curly braces icon,editor/widget
-broom,found,Xnx8cxDef16O,Broom,broom,?,?,Zt02uBwjaB8I,Broom,vFP35YN4oAIS,Broom,,commands/clear;editor/clear;console/clear
-brush,found,jl5dhZdw5lZe,Paint Brush,paint-brush,?,?,MWTmGWPb2kRz,Paint Brush,OOEZqoHIjwhy,Paint Brush,,editor/add-painter+plus;widgets/painter
-cable,found,DyD2BVKX4UFQ,Network Cable,network-cable,?,?,fXAXhix1HL2d,Network Cable,MZ2emo1FJ3h6,Network Cable,,editor/test-connection
-camcorder,found,YLcatCx0HNZ6,Camcorder,camcorder,?,?,Lym96fFD92is,Camcorder,BmQJvJs0O77n,Camcorder,Deco only has camcorder-pro,commands/camcoder
-card-shield,found,9BO8KPzyjld9,Card Security,card-security,?,?,ZHf5x0SogRlj,Card Security,K4xMP41kI9FL,Card Security,,licensing/plan
-certificate,found,6PEs2EypZuRA,Certificate,certificate--v2,?,?,bTto4P116dOd,Certificate,pbljtAormB9w,Certificate,,licensing/license
-checklist,found,4TXcpUyYayG2,Checklist,checklist,?,?,pLEfaddrvpny,Checklist,NlI8bI1eXtNb,Checklist,,commands/diagnostics
-chevron-down,found,bGjmkh3zMHa0,Chevron Down,chevron-down,?,?,TRtXTJHl1aqn,Chevron Down,EL9BwAtydbnn,Chevron Down,,editor/indicator
-chevron-left,found,1kRMT1FNoGTw,Chevron Left,chevron-left,?,?,F6UZExnrceii,Chevron Left,foHZDp7nxISC,Chevron Left,,editor/left
-chevron-right,found,fnEt4uEKZjG3,Chevron Right,chevron-right,?,?,4i560BZBIJFF,Chevron Right,T7B1hcBDivAU,Chevron Right,,editor/right
-chip,found,mepX636gAP3u,Microchip,smartphone-cpu,?,?,OjhgtwqtODUk,Microchip,vweinXGW2BPo,Microchip,Processor alt: fluent aBK2UoN0jk4I,editor/add-device+plus;editor/device;devices/uart
-circle-down,found,oO5Q4IrkFmKn,Down Button,circled-chevron-down,?,?,NONE,NONE,NONE,NONE,Glass/deco lack circled down chevron; plain Chevron Down exists,editor/move-down
-circle-up,found,X0azPa7Q2toW,Slide Up,circled-chevron-up,?,?,N5FXK8El7Mhe,Slide Up,Xf5xHSzIVYlQ,Slide Up,,editor/move-up
-clipboard,found,rByZVfKrdkJo,Paste,paste,?,?,9XfRMf3lgdCh,Paste,uDqSUuW90k33,Paste,,code/paste
-clock,found,JrbE13EfhZWo,Clock,clock,?,?,4i5bTF9azXVR,Clock,SDdyT8X2D8iK,Clock,,widgets/clock
-clock-arrow,found,eeFIKavaLKPr,Restore,settings-backup-restore,?,?,oCWZJGzTjznj,Time Machine,i634xRk8BbXR,Time Machine,Fluent glyph unverified as clock with arrow,editor/recover-backup;database/restore
-close-circle,found,fYgQxDaH069W,Cancel,cancel,?,?,DXECg4JU1n2x,Cancel,2xlEjUnUxAg1,Cancel,,commands/quit;database/close
-code-file,found,mXRsZ8Xy4xvM,Code File,code-file,?,?,EZkUpWEGPUHl,Code File,KNA4y6DC1sFu,Code File,,editor/code;editor/edit-code;code/template
-collapse-arrows,found,s37vZw4gi8CE,Collapse,collapse,?,?,oXQVibFkysZg,Collapse,kNRCIhDDj4nc,Collapse,Deco also Normal Screen 494BgYGZdx51,commands/normal-screen;editor/compress
-color-wheel,found,SWQipIlNBkpv,Color Wheel,color-wheel-2,?,?,NONE,NONE,NONE,NONE,Glass/deco only Color Palette; fluent also RGB Color Wheel 1Ia1TnSUAVrK,commands/color;editor/alarm-bands
-command-window,found,9hLY0P1ixONa,Command Line,command-line,?,?,rYlrLd6pcRwI,Command Line,nEKfds7Bw1HB,Command Line,,commands/console;widgets/terminal
-compass,found,KmvY4BNIPn6d,Compass,compass,?,?,KJEnlVBql33z,Compass,ENSTMXEglLFW,Compass,,editor/add-compass+plus;editor/compass;widgets/compass
-control-panel,found,UD9nG7mgbuXZ,Control Panel,control-panel,?,?,flK6uLX9AUlc,Control Panel,hEPQrqGpNqD3,Control Panel,,editor/add-output-panel+plus;widgets/output;widgets/output-panel
-conveyor,found,sZDpzwlacLcR,Shipping Centre Loading Belt,shipping-centre-loading-belt,?,?,NONE,NONE,NONE,NONE,Glass/deco only Deployment production icon; fluent alt Deployment gc3EFfPcJEXt,commands/deploy
-csv-file,found,lb1nfipAhUam,CSV,csv,?,?,NONE,NONE,zphKKfiQ6wbk,CSV,Glass has no CSV icon,commands/csv;commands/csv-log+arrow;editor/export-table+arrow;editor/import-table+arrow
-cube,found,SSUo3NXORjah,Cube,left-view,?,?,4INWJzRAzm5Q,Cube,NONE,NONE,Fluent also Orthogonal View; deco has no cube,commands/front-view;commands/left-view;commands/orthogonal-view;commands/top-view
-curve,found,IDV5qY5bbaLk,Line Chart,line-chart,?,?,pUALrNFyZbef,Line Chart,zlIi95H2hWRU,Line Chart,,editor/add-plot+plus;editor/plot;widgets/plot
-dashboard-charts,found,4VdgitiyspJ9,Combo Chart,combo-chart,?,?,XyGPQvrH16Qo,Combo Chart,Op8lxzso6qJS,Combo Chart,,editor/dashboard-widgets;panes/dashboard
-data-arrow,found,vqyoQCZ3fPp5,Data Transfer,data-in-both-directions,?,?,Sp0dD1CUthYC,Data Transfer,ZwyCl0u6cb8k,Data Transfer,"Bidirectional arrows, not one arrow with bits",editor/tx-data
-database,found,KZHjwwenS7oK,Database,database,?,?,87bMYCFypMXe,Database,5Xc8CJ1vnVw6,Database,,commands/database-export+arrow;editor/influx
-devices,found,Y9eKbZgJIt4F,Multiple Devices,multiple-devices,?,?,wxaCyftlRBo8,Multiple Devices,9n8C5VlZSxLw,Multiple Devices,,licensing/devices
-document-eye,found,eu9j4NfsAalN,View,view-file,?,?,MY14tEpjK6W1,View,I7Z8X2g1kazJ,View,,editor/read-only
-document-gear,weak,8tcDgihugAYf,New Document,new-document,?,?,yvmSTfLcB37a,Create Document,apn7qQPSOT5d,New Document,New-document metaphor; no gear or star shown,editor/new
-document-key,weak,WwHcZxa9PFUq,Edit Property,edit-property,?,?,?,?,?,?,List with pencil for project title; glass/deco to re-check,editor/project-title
-document-pencil,found,OIR0Uk9Fhc35,Edit File,edit-file,?,?,uZxHK5sdBMFN,Edit File,oomQMHyouTHA,Edit File,,editor/read-write
-document-pencil2,found,OIR0Uk9Fhc35,Edit File,edit-file,?,?,uZxHK5sdBMFN,Edit File,oomQMHyouTHA,Edit File,,panes/details
-document-x,found,6NZ0qD9MkezO,Delete Document,delete-property,?,?,mAVCCaNvuK4F,Remove Document,qrsJWtA2fRPU,Delete File,,editor/delete+x
-documents,found,Hku9UaGJ7edj,Documents,documents,?,?,kmB6U7IuIYun,Documents,hOm5BvmcZS3D,Documents,,editor/duplicate;code/copy
-engine,found,QwEwqmJDk4Za,Engine,engine,?,?,NDp6qG7zwmZB,Engine,Cieyqy8uQbyH,Engine,,devices/canbus
-equalizer,weak,CWZOl3WNER6r,Audio Wave,audio-wave,?,?,2ZNWpp2TsApI,Audio Wave,jxzVpzF6niAL,Audio Wave,"Audio wave, not bars; fluent Adjust cLD2wO8b2ptf is vertical sliders",editor/add-fft+plus;editor/fft;widgets/fft;devices/audio
-ethernet,found,EeVp6yTJ9ayW,RJ45,rj45,?,?,QplQQnacCgmw,RJ45,NONE,NONE,Fluent alt Ethernet On; Network Cable,devices/ethernetip
-exclamation,found,HZhl4S0tHUuX,High Importance,high-importance,?,?,HS4xyx43cagc,High Importance,fnFHu7OrEzjd,High Importance,,panes/important
-expand-arrows,found,vVeXtryOB9eZ,Full Screen,full-screen,?,?,ctLIcb831aED,Full Screen,3L2VxG0iYycf,Full Screen,,commands/full-screen
-eye,found,CWkCzh9aKpqb,Eye,visible,?,?,74NRJjZyt5EM,Eye,Xu5Sxh6dMewZ,Eye,,editor/show
-eye-off,found,v0TeUKEbedvU,Invisible,invisible,?,?,wBTRq7UyZ8YX,Invisible,iKPuA3XddW6Z,Invisible,Verify glyph is a crossed eye,editor/hide
-field,found,worHcG8WKezd,Text Input Form,text-input-form,?,?,NONE,NONE,aaspuorXXDfE,Input,Glass none; deco Input (multiple-inputs) loosely,editor/add-register+plus;editor/delete-register+x
-floppy,found,yFBJCjFJpLXw,Save,save,?,?,3VO7xUNfMILv,Save,eaHcV8gDbQC4,Save,Glass Save is the Emoji set entry,editor/save;code/save
-floppy-pencil,found,wC9budkHyeKg,Save as,save-as,?,?,4qdpdL3J5pks,Save as,yPJTcf51AtAd,Save as,,commands/save-as;editor/save-as
-floppy-warning,weak,yFBJCjFJpLXw,Save,save,?,?,3VO7xUNfMILv,Save,eaHcV8gDbQC4,Save,"No save+warning icon; plain Save, badge must be composed",editor/save-warning+warning
-flow-chart,found,2jHmblEslKYm,Flow Chart,flow-chart,?,?,A5bT1cyFfulU,Flow Chart,5ZF3jE9D26oV,Flow Chart,,editor/change-group;editor/expand;editor/project-structure;devices/opcua
-folder,found,dINnkNb1FBl4,Folder,folder-invoices,?,?,nazeM3keVtFJ,Folder,iStIoVUnNAOT,Folder,Opened Folder: fluent zRCxfHhAkOiL glass iHTa5C9wd0Fi deco spBfBGxIu5gU,commands/open-project;editor/add-folder+plus;editor/open;widgets/folder;database/open;code/open
-folder-arrow,found,hkFlMzuC0WxN,Move To Folder,move-to-folder,?,?,NONE,NONE,NONE,NONE,Glass/deco only plain Folder or Move separately,editor/move-folder;editor/move-here;editor/top-level-folder
-folder-upload,found,VBiuMMXz1GNN,Send File,send-file,?,?,4BDoYlBAv77Z,Send File,TyfMpMtwBtc9,Send File,"File with send arrow, not folder with up arrow",commands/file-transmission
-font,found,1NfYIl0IYjOO,Choose Font,choose-font,?,?,qMk0tqWInQrf,Choose Font,NONE,NONE,Fluent alt Font Size,console/plain-text
-freeze,found,EHyUO6ZGSRkX,Lock,lock,?,?,KMH5Z5MJ0k30,Lock,Q59em2cA2WUS,Lock,"Maintainer 2026-11-07: Freeze Dashboard locks the layout, the padlock stays (snowflake withdrawn)",commands/freeze
-function,found,cyQQ5i8svboJ,Formula FX,formula-fx,?,?,dgU7RxOV7JtZ,Formula FX,NONE,NONE,fx formula; deco only Greek letters,editor/transform
-funnel,found,HjFb6s4aXAL2,Filter,filter,?,?,lIPVBw1hMKkS,Filter,jdr6MAfrmEE1,Filter,,commands/filter
-gauge,found,q6ZsCci8P1w4,Speedometer,speedometer,?,?,iR16SJrsFdE9,Speedometer,lKyQSfsjfuaA,Speedometer,Dashboard Gauge alt: fluent Qavl6FF79LJM,editor/add-gauge+plus;widgets/gauge
-gear,found,73FgXcRF4HNx,Gear,gear,?,?,TzmFKlMJTXIL,Gear,N1xaXJg6g2Eq,Settings,Deco is Settings gear,console/settings;editor/output-range
-globe,weak,rMF7T4f4fwKw,Earth Planet,earth-planet,?,?,TEcvhDoDbTkh,Globe,FxvhhxXnTxSW,Globe,Fluent has planet Earth only; no plain Globe,editor/add-webview+plus;widgets/webview
-grid-dots,found,j1EvONaCTNHF,Table,table-1,?,?,?,?,?,?,Grid of cells; glass/deco to re-check,editor/add-datagrid+plus;widgets/datagrid
-grid-layout,found,S5D5w5vFLhYp,Dashboard Layout,dashboard-layout,?,?,?,?,?,?,Tiled layout; glass/deco to re-check,commands/auto-layout
-group-frame,found,vn1zMUKstcPl,Group Objects,group-objects,?,?,clXnXlbe6iQJ,Group Objects,NONE,NONE,Deco has only user-group icons for this,editor/add-group+plus;editor/group;widgets/group
-gyroscope,found,3vqMy3Acanys,Gyroscope,gyroscope,?,?,NONE,NONE,NONE,NONE,Only fluent has gyroscope,editor/add-gyroscope+plus;widgets/gyroscope
-hand,found,KSMw5R43ZXyz,Hand,hand,?,?,vVPF6HAov059,Hand,BHaHYGM74Dj7,Hand,Hand Drag alt: fluent c4L9DrezNnrE glass h427Jjd7QBdl,commands/pan
-hex,found,wXJ2n1ORt4vR,Hexadecimal,hexadecimal,?,?,NONE,NONE,NONE,NONE,Fluent only,console/hexadecimal
-horizontal-bars,house,439i3V9ejb2W,Bar Chart,bar-chart,?,?,E1Si1cQP4u90,Bar Chart,dN7BQzCXml65,Bar Chart,Maintainer: house art in every pack (barpanel),editor/add-barpanel+plus;widgets/barpanel
-house,found,wFfu6zXx15Yk,Home,home,?,?,8xhovyHdOQzF,Home,jDwpGuHnarDq,Home,,panes/overview
-id-card,found,2UsFIjvcfU2e,Identification Documents,identification-documents,?,?,dGAwDTFCLptB,Identification Documents,NONE,NONE,Fluent alt Worker ID Card; deco none,licensing/user
-image,found,bjHuxcHTNosO,Image,image,?,?,gDjXL22pcTaA,Image,HpyvOG7LdXMD,Image,,editor/add-image+plus;widgets/image
-info-bubble,found,VQOfeAx5KWTK,Info,info,?,?,40JxrZB76JLv,Info,LdwEPFofzT9J,Info,,commands/about;notifications/info;panes/info
-invert,found,nyFlw2T0gyh5,Invert Colors,invert-colors,?,?,7QNqUZIyi7xs,Invert Colors,OYe5mBLlJJpI,Invert Colors,,commands/invert
-key,found,VYvOvJrZaC9T,Key,key,?,?,BEcSpiQoEA87,Key,oIjHj4RBAlXo,Key,,commands/activate+plus;editor/load-ca-certs+plus;licensing/key
-knob,found,DOnVbaJcKfsD,Potentiometer,potentiometer,?,?,?,?,?,?,Fluent Potentiometer is a panel knob; glass/deco to re-check,editor/add-output-knob+plus;editor/output-knob
-led,found,QnIqMNFphUcV,LED Diode,led-diode,?,?,Klwhxfh58XDF,LED Diode,NONE,NONE,Deco has no LED diode,editor/add-led+plus;editor/led;widgets/led
-letter-x,composed,uMPeWPkd86EF,X,x,?,?,3jLs1yEITK79,X,1YPlRU9DHSDN,X,"Maintainer: letter glyph composed per pack, X and Y alike",commands/x
-letter-y,composed,NONE,NONE,NONE,?,?,NONE,NONE,NONE,NONE,Maintainer: letter glyph composed per pack,commands/y
-lightning,found,GtgqQIYSqT50,Lightning Bolt,lightning-bolt,?,?,XTqUA8keYxec,Lightning Bolt,1id4D2zGtrSd,Lightning Bolt,,editor/action;editor/add-action+plus
-magnifier,found,KPmthqkeTgDN,Search,search,?,?,WwWusvLMTFd7,Search,9WTVD8ibjNf7,Search,,console/search
-map,found,LNECRgsrmC9Y,Paper Map,map,?,?,FUT3qjuSs6Hq,Paper Map,n7ATt6bWQNvb,Paper Map,,commands/map
-map-pin,found,2gsR2g07AQvu,Map Pin,map-pin,?,?,a3I9Bs8x1Jwc,Map Pin,wXWFjkjqFKB9,Map Pin,,editor/add-gps+plus;widgets/gps
-merge-lines,weak,wUTpyezlDsLQ,Compress,compress,?,?,O8HXRH0j3VSX,Compress,hJwoIrkaMmNP,Compress,Compress arrows; fluent alt Merge Vertical,console/collapse-duplicates
-meter,found,q6ZsCci8P1w4,Speedometer,speedometer,?,?,iR16SJrsFdE9,Speedometer,lKyQSfsjfuaA,Speedometer,Same icon as gauge; fluent Voltmeter ifNCynmGXOFJ alt,editor/add-meter+plus;editor/meter;widgets/meter
-mf4-file,weak,XWoSyGbnshH2,File,file,?,?,CoAutH1CZYoV,File,Pjo0BrMdm974,File,No MF4 icon in any style; generic file,commands/mf4;commands/mf4-log+arrow
-molecule,found,L0HGbKmWGjux,Molecule,peptide,?,?,dyPG3I70uPpq,Molecule,NONE,NONE,"Deco only Benzene Ring, not a node network",commands/deepwiki
-monitor-chart,found,MT51l0HSFpBZ,System Task,system-task,?,?,?,?,?,?,"Monitor with a pulse line, same metaphor as house; glass/deco to re-check",devices/process
-monitor-check,weak,NMhla7z24ciM,Fingerprint,fingerprint,?,?,?,?,?,?,Fingerprint as machine identity; glass/deco to re-check,licensing/uuid
-music-folder,found,QHf3TzLgHqqB,Music Folder,photos-folder,?,?,ocgoj7Btbvu1,Music Folder,HxdgpP7lITmo,Music Folder,commonName is photos-folder but name is Music Folder,commands/sound-folder
-nasa,house,NONE,NONE,NONE,?,?,NONE,NONE,NONE,NONE,Maintainer: house brand mark in every pack,commands/nasa
-network-port,weak,vstqh3NnJPro,Ethernet On,ethernet-on,?,?,QplQQnacCgmw,RJ45,NONE,NONE,Port connection-state icon; unsure it is a socket,devices/network
-notes-list,found,4brDa8Wu96MT,Logbook,logbook,?,?,?,?,?,?,Logbook for console annotations; glass/deco to re-check,console/annotations
-number-doc,found,qVHE2eoZHuG0,ASC,asc,?,?,?,?,?,?,Maintainer: ASC text file for encoding; glass/deco to re-check,editor/encoding
-open-box,found,fqW0I1a5TSxR,Open Box,open-box,?,?,4xcZGzia5Blf,Open Box,OKm8qDQFEI92,Open Box,,commands/export
-orbit,weak,yda9kQMbU5hk,3D Rotate,3d-rotate,?,?,QNhOJZGVto9I,3D Rotate,WVfJYjDsKTRM,Rotate,"Shows 3D rotate, not orbit rings; fluent Satellite in Orbit alt",commands/orbit
-oscilloscope,house,CWZOl3WNER6r,Audio Wave,audio-wave,?,?,2ZNWpp2TsApI,Audio Wave,jxzVpzF6niAL,Audio Wave,Maintainer: house art in every pack (sweep),commands/sweep
-padlock,found,EHyUO6ZGSRkX,Lock,lock,?,?,KMH5Z5MJ0k30,Lock,Q59em2cA2WUS,Lock,,editor/lock;editor/mqtt-ssl;database/lock
-padlock-open,found,bmqc7DrIxfXZ,Unlock,unlock-2,?,?,xC8s3Y9ozwjG,Unlock,fbv9wSpSd3DR,Unlock,,database/unlock
-pause,found,Z2aInWmsldJ6,Pause,pause,?,?,Wf72tFY1MCeV,Pause,YafkzRwtG4HH,Pause,,commands/pause
-pdf,found,LmcGmjPSQXSa,PDF,pdf,?,?,1JeOZOznuIHr,PDF,ctxOoTrUNgpE,PDF,No arrow variant,database/export-pdf
-pi,found,OphppcXFtsFO,Pi,pi,?,?,QQXAlldzdAOa,Pi,tavejx3aXS7q,Pi,,editor/insert-constant+plus
-pictures-folder,found,zqxl7tOwTyfM,Pictures Folder,pictures-folder,?,?,HY9JOmbKVo1m,Pictures Folder,RVHReJTdYef6,Pictures Folder,,commands/pictures-folder
-play,found,GwYlS5m5Goz6,Play,play,?,?,5GnFrcQmc9iB,Play,On84Yz0qyMki,Play,,commands/resume;database/replay
-plc,found,bQbX7tMYRcoT,Programming Logic Controller,programming-logic-controller,?,?,NONE,NONE,NONE,NONE,Fluent only,devices/s7
-plug-connected,found,yKx23wGkTvzu,Connected,connected,?,?,P52SjQirXDyY,Plug,SXssueJbqeJx,Connected,Glass is a single plug; fluent alt Plug fHjC1iwg7M3Z,commands/connect
-plug-disconnected,found,kF9cTiH2c0hR,Disconnected,disconnected,?,?,BRUY5qXfehkz,Disconnected,0wBCrwAYx0Ae,Disconnected,,commands/disconnect
-polyhedron,found,OoNzUoG3vzKd,Octahedron,octahedron,?,?,?,?,?,?,"Blue octahedron, same as house plot3d; glass/deco to re-check",editor/add-plot3d+plus;widgets/plot3d
-polyline,found,IDV5qY5bbaLk,Line Chart,line-chart,?,?,pUALrNFyZbef,Line Chart,zlIi95H2hWRU,Line Chart,Fluent alt Graph Gx5oU8RXXdta,commands/interpolate-on;commands/poliline
-pulse-monitor,weak,KUmai2ZEvrIX,Activity,activity,?,?,qjJFaJsfpFEH,Activity,D7p2guFArj6E,Heart Monitor,Medical activity pulse; no window with heartbeat line,widgets/notification-log
-puzzle,found,h4Ly5RazDdvK,Puzzle,puzzle,?,?,ZfgOOjxmscX6,Puzzle,NONE,NONE,Deco only Extensions Folder F8I4hpnHLxUD,commands/extensions
-pylon,found,Vxs9d2cRfS2W,Transmission Tower,transmission-tower,?,?,NONE,NONE,NONE,NONE,Glass and deco only Radio Tower,devices/iec104
-question,found,IchwUEgoxNcw,Help,help,?,?,osnYseY0Xola,Help,1wZEIUmDjhIr,Help,,commands/help;editor/help;code/help
-ram,found,1a4xnM8mLMqg,Memory Slot,memory-slot,?,?,5aUCMZVNo4pU,Memory Slot,pJZjZNC3iwQy,Memory Slot,,editor/shared-memory
-redo-arrow,found,spUwiojYWcaR,Redo,redo,?,?,iMlLxusmSGkj,Redo,ISlHBKyu13Su,Redo,,code/redo
-rename,found,oJQSZNne5Rp0,Rename,rename,?,?,3sPCRlXJHdBc,Rename,AaU0DnDMxpw4,Rename,,editor/rename
-reset,found,m8gRP2AQ4AOX,Refresh,refresh,?,?,dZLOhGn3OGtA,Refresh,1XvVjCCxAUBt,Refresh,Restart alt: glass e7byOBWx9eky deco SKKP0j2vtwae,commands/reset;editor/control-script;code/reload
-return-arrow,found,Ey9jEx96rxU0,Undo,undo,?,?,Hikdi0Wl69Nt,Undo,QjnjzAJfW54L,Undo,Return alt: fluent uOD7C4cyOCUv glass h1iCJZwyO6nM deco im7qhHjSZBMe,commands/return;code/undo
-robot,found,HQnR1CgGVnOy,Robot,ai-robot,?,?,WrYqjxAKhgxQ,Bot,E6zW0ZWoIV7A,Bot,,commands/ai;editor/ai
-robot-arm,found,J0G0sdvhY4kM,Robotic Arm,robot,?,?,UljVtcn0Qmkk,Robotic Arm,ZoKXeuSoqNDW,Robotic Arm,,devices/modbus
-router,found,zj3DcmZWeFJJ,Wi-Fi Router,wifi-router,?,?,bk70ommP9tqf,Wi-Fi Router,lGZIgKE5bwbr,Wi-Fi Router,,commands/remote-attach
-run-dialog,found,7XI6kQrF2s0K,Run Command,run-command,?,?,?,?,?,?,"Maintainer 2026-11-07: the palette is the Run dialog, not a console",commands/command-palette
-scatter,found,fQDapWwtoIzc,Scatter Plot,scatter-plot,?,?,NONE,NONE,NONE,NONE,Glass/deco have no scatter plot; only heat map/area,commands/interpolate-off
-schedule,found,CcnMefzl28xf,Schedule,overtime,?,?,6aCzIdNJIGom,Schedule,aNQZ0gIs0oBM,Schedule,Calendar+clock look unverified,commands/sessions;panes/sessions
-scissors,found,esjKLxKEq4OR,Cut,cut,?,?,SvVWZQsNIq27,Cut,5yZmFzfPmwSf,Cut,,code/cut
-script-window,weak,mXRsZ8Xy4xvM,Code File,code-file,?,?,EZkUpWEGPUHl,Code File,KNA4y6DC1sFu,Code File,"Code document, not a window with macro",commands/macro
-scroll-gear,found,w3dqKkXKFwQE,Project Setup,project-setup,?,?,jRc2ykfYqUt3,Project Setup,NONE,NONE,Deco only Page Setup dNceWLcYfXBx,editor/project-setup
-server,found,Zf6mA5BR1U2Z,Server,server,?,?,TxbvOG9IZePh,Server,zJgrVbADzqrJ,Server,,editor/mqtt-broker
-signal,weak,Nw9d0a7KroDU,Wi-Fi,wifi,?,?,EI66Wi29hy4c,Wi-Fi,obzTule23uOs,Wi-Fi,"Wi-Fi arcs, not radio-wave broadcast",editor/mqtt-publisher;devices/mqtt
-siren,found,72xTAy8tXrTD,Siren,siren,?,?,mIJfjkP0hVsi,Siren,xMt6hQGulUly,Siren,,editor/alarm
-skip-end,found,ltxgZ0vNvQJO,End,end,?,?,noGWilUx0lyp,End,Ip43nwzyBaC7,End,,editor/frame-end
-skip-start,found,wiziEZE0mBR5,Skip to Start,skip-to-start,?,?,1uR18UuFyYv6,Skip to Start,i1AMVq4NDCGf,Skip to Start,,editor/frame-start
-slider,found,sYBmCL26gfhP,Slider,sorting-options,?,?,b6eLSBnQN1Xl,Slider,nNYU5dzhHI5O,Slider,,editor/add-output-slider+plus;editor/output-slider
-spectrogram,house,oKyyU1jj8IJ2,Heat Map,heat-map,?,?,XH1S3IbYhNX4,Heat Map,Dbi2vF8401sh,Heat Map,Maintainer: house art in every pack (waterfall),editor/add-waterfall+plus;editor/waterfall;widgets/waterfall
-split-arrows,weak,tCgEu5Ggkfs2,Divider,split-horizontal,?,?,XvPzUw0mKLEx,Divider,bRXQ7FdlW3Al,Divider,Divider split icon; no diagonal arrows apart seen,editor/separator
-square-wave,found,yl2bVt0Mtvgu,Square Wave,square-wave,?,?,NONE,NONE,NONE,NONE,Glass/deco lack square wave; Audio Wave only (glass 2ZNWpp2TsApI),commands/trigger
-swatches,found,3S5sGwmzdVzW,Color Swatch,rgb-circle-2,?,?,NONE,NONE,NONE,NONE,Glass/deco only Color Palette (YDsYVSKV2bml / umcGvTls9FH7),commands/labels
-table,found,j1EvONaCTNHF,Table,table-1,?,?,5XSZDtWISTd2,Table,kTsGltFwodko,Table,,editor/add-table+plus;editor/delete-table+x;editor/rename-table+pencil;editor/shared-table;editor/shared-table-alt;editor/frame-detection
-tags,found,mqIpU1qUmyPe,Tags,tags,?,?,Fn5PUcR6hL2q,Tags,YmO6Zergf9fy,Tags,,editor/dataset-values
-target,found,nbBCL87roGNj,Target,define-location,?,?,LFt8YJgCzsAc,Target,r6IRIBRQjqL9,Target,,commands/center;commands/crosshair
-test-tube,found,XO5nRSypAbfH,Test Tube,test-tube,?,?,PHisKgEYGbvs,Test Tube,Hvs0JNtrOWIK,Test Tube,Thermometer alt: fluent e3LJkBOFiBL7,editor/add-bar+plus;editor/bar;widgets/bar
-text-cursor,found,zmGkWS4xQc6w,Text Box,text-box,?,?,tdMMTYOkVMZv,Text Box,NONE,NONE,Deco lacks Text Box; only plain Text 48sLlls3fuS4,editor/add-output-textfield+plus;editor/output-textfield
-timer,found,YlbPwaTGiD2X,Timer,timer,?,?,655LnEUAFYvk,Timer,isiHSH8q3dX7,Timer,Stopwatch also available,editor/timer;widgets/stopwatch
-toggle,found,5CMHPdWhmepX,Toggle On,toggle-on,?,?,rcVuiJyS5ZCW,Toggle On,KS9D26CXGGZU,Toggle On,,editor/add-output-toggle+plus;editor/output-toggle
-toolbox,found,2sWu6PtiXHWx,Toolbox,toolbox,?,?,fUl9O2zKS1Co,Toolbox,1wqNF9fFNgHc,Toolbox,,commands/device-setup;panes/setup
-tools,found,Vh44ppGKSLoR,Tools,maintenance,?,?,ISeBB5SFp53c,Tools,bcX5uir9v4n8,Tools,,commands/tools;console/utilities
-translate,found,mEjjp0oFPnvc,Translation,translation,?,?,Ej1Lem2AQ6Dv,Translation,NONE,NONE,No deco translation icon,editor/text-encoding
-txt-file,found,50nDvbuc0xFF,TXT,txt,?,?,NONE,NONE,okvM1RWJ4nOK,TXT,Glass has no TXT icon,commands/console-log+arrow;editor/protobuf
-usb,found,FlnYHAW3wYBn,USB Memory Stick,usb-memory-stick,?,?,a5JQ8fiXrx9u,USB Memory Stick,68AyQB62t5HD,USB Memory Stick,,devices/usb
-warning,found,EggHJUeUuU6C,General Warning Sign,general-warning-sign,?,?,5PexHbhSpPcd,Error,LNmmctG091Sx,Error,Glass and deco use Error sign,notifications/warning
-warning-red,found,51w77eaukGoV,High Priority,high-priority,?,?,?,?,?,?,Red diamond with exclamation; glass/deco to re-check,notifications/critical
-weather,found,zIVmoh4T8wh7,Partly Cloudy Day,partly-cloudy-day,?,?,keKAmpbcwTBM,Partly Cloudy Day,jfNm8EPJQIpV,Partly Cloudy Day,,commands/weather
-window-flash,weak,0ZNXJnXqu3Lh,Flash On,flash-on,?,?,3oAicrfEblv2,Flash On,EaCrRPuJH5dq,Flash On,Camera flash bolt only; no window; alt Quick Mode On,commands/actions
-window-gear,found,Fnme1aXsw34v,Window Settings,window-settings,?,?,NONE,NONE,NONE,NONE,Glass/deco have no window-settings; only laptop settings,commands/add-workspace+plus
-window-play,found,TPyG4ejO9nAC,Test,test,?,?,?,?,?,?,"Fluent Test glyph, so the palette keeps Run Command alone",code/test
-window-popout,found,57GgOxl1VjRW,External Link,external-link,?,?,QYd5yJnmjVdK,External Link,mxBy4vYrLUGT,External,,commands/external-window
-window-trash,weak,6NZ0qD9MkezO,Delete Document,delete-property,?,?,y6mKQSh49Y8n,Delete Document,f66J3WDqijag,Delete Document,"Document with delete, not a window",database/delete
-windows,weak,MdMvE4eOwipK,Application Window,application-window,?,?,NONE,NONE,NONE,NONE,Single window only; no stacked windows icon,widgets/workspace
-workspace-grid,weak,wHQD0ZPw91PK,View Module,view-module,?,?,FaHoKJCgervK,View Module,YzFJ39blowfI,Module,Four-squares match unverified; fluent Dashboard Layout S5D5w5vFLhYp alt,commands/workspaces;editor/workspace
-wrench,found,UogpVYM8jC0S,Wrench,wrench,?,?,OFYOzUGyiJJG,Wrench,iKWyX7rF7yR2,Wrench,Glass/deco ids are the 'support' wrench,commands/settings
-zoom-in,found,EdWowxx2Bj85,Zoom In,zoom-in,?,?,wRZmDbmIGMFE,Zoom In,mMUCNI8aXjdk,Zoom In,,commands/zoom-in
-zoom-out,found,4w43CC522O3S,Zoom Out,zoom-out,?,?,L69I8KnunB0x,Zoom Out,LFdczQzgUkMM,Zoom Out,,commands/zoom-out
+base,status,fluent_id,fluent_name,fluent_common,outline_id,outline_name,glass_id,glass_name,glasscolor_name,glasscolor_id,clrgls_id,clrgls_name,deco_id,deco_name,decocolor_name,decocolor_id,note,ids
+3d-glasses,found,VdCJlCi1qG3C,3D Glasses,3d-glasses,DPkNEf9NJRb3,3D Glasses,Azh7NYut9taL,3D Glasses,3D Glasses,ZTf5Y0AMJKJ2,gpQexbssIBrX,3D Glasses,Ac6nbAmM53jF,3D Glasses,3D Glasses,9RMzNZu0MoAq,,commands/anaglyph
+alpha,found,p03EZMcmuZH5,Alpha,alpha,IWkHqICic8V6,Alpha,Bnsp36IiORVM,Alpha,-,NONE,a5lX8dwSZfHp,Alpha,XWFSeFRFwWck,Alpha,Alpha,QB6uCOptuNR3,,editor/add-dataset+plus;editor/dataset;editor/add-output-button+plus;editor/output-button
+archive,found,TQGqvNhu0EcG,Archive,archive,g1sof3KN8iug,Archive,BiSZheXf9voO,Open Archive,-,NONE,Spby3Fk58oBp,Archive,iU9qXwgeR0Yf,Archive,Archive,A2aaX0b3tq31,,commands/archive
+area-chart,found,CCbP79v7S6NQ,Area Chart,area-chart,isqQvmaQ4rnM,Area Chart,vVEDrcJgKi6Z,Area Chart,Area Chart,nDjpgx5NUtWP,GU9qVE1eqXhk,Area Chart,EUyIAUVkotwD,Area Chart,Area Chart,5DW8XjlgWsaN,,commands/area;editor/add-multiplot+plus;widgets/multiplot
+at-sign,found,JeO1Kv9jsmLr,At sign,email,L9Mi606ZCOUt,At sign,J3t5dbcmLAUN,At sign,At sign,4UKmfeIJLNZx,D3RbYHtCQIO6,At sign,Ud9aSgz1IQOI,At sign,At sign,E2CWuDHhp76H,,licensing/email
+audio-file,weak,W1UrWn4kSdmD,Musical Note,musical-notes,aanJRSdBR4ug,Musical Note,?,?,Musical Note,tSba649Vmq4b,AP4tyRUo9gAh,Musical Note,?,?,Musical Note,0rldGxORKphG,Note alone; compose onto a file like the house icon; glass/deco to re-check,commands/audio-file
+axis,found,zsCf4URsznk1,Abscissa,abscissa,NMKS7a6DT1qj,Abscissa,SWkToKL3SYWN,Abscissa,-,NONE,OUgiBLDKzZN6,Abscissa,bDmHuecFxgw1,Abscissa,Abscissa,CgFAo09HV1X0,Fluent also has Gyroscope; abscissa is the coordinate-system icon,commands/abscissa;editor/add-accelerometer+plus;widgets/accelerometer
+barcode-scanner,found,moFYdZPkWQLg,Barcode Scanner,barcode-scanner,GiK4fdrZHIJn,Barcode Scanner,3fnsTsQ4imj1,Barcode Scanner,Barcode Scanner,6mCYYsm0ryZX,Nk2DF0gTZ9wp,Barcode Scanner,aEgGOb0d8bAr,Barcode Scanner,Barcode Scanner,4CVvE5jmw5XY,,devices/hid
+bell-off,pending,?,?,,?,?,?,?,?,?,?,?,?,?,?,?,House review 2026-11-07: pack ids still to search,commands/alarm-silence
+binary,weak,UVQTFk728g0D,Online Binary Code,online-coding,IfNbjWEncprV,Online Binary Code,NONE,NONE,-,NONE,RnevvJaIGyZH,Binary File,NONE,NONE,-,NONE,Binary code in a browser window; glass/deco only QR or code,editor/data-conversion
+blueprint,found,hgzHCaJDrf1p,Blueprint,blueprint,aQ3d8wZSeuXB,Blueprint,5CjtvIRr2vyu,Blueprint,Blueprint,8ZfVKA4NCoMJ,c5erENTqYvVV,Blueprint,NONE,NONE,-,NONE,"Blueprint paper, not ruler+pencil; deco has no blueprint",commands/project-setup;editor/customize;editor/project
+bluetooth,found,gRKbTQ67Dfhc,Bluetooth,bluetooth,yIDsUyGXBoVy,Bluetooth,QGcJuP3hyDsg,Bluetooth,Bluetooth,uHBz4GRRboa7,9bFqFDefnDJE,Bluetooth,NONE,NONE,-,NONE,Deco only has bluelock logo,devices/bluetooth
+books,found,ChugQlss1ohB,Books,books,jVSVLS6oEd5G,Books,1x6X1z7fd8t8,Books,Books,KD0pNVZyoVJr,zifmg7SvCQpv,Books,fAsrxSrdxizP,Books,Books,PJnLbxtMbfXZ,,commands/examples
+braces,weak,UJLmfQkJmi7d,Brackets,brackets,G3AzCuBhYMox,Square Brackets,dMF9AHuMH0SY,Square Brackets,-,NONE,NONE,-,NONE,NONE,-,NONE,Square brackets only; no curly braces icon,editor/widget
+broom,found,Xnx8cxDef16O,Broom,broom,PaGH5C5jnwMt,Broom,Zt02uBwjaB8I,Broom,Broom,TMo4DP9IGR54,0ywO04cBp8sg,Broom,vFP35YN4oAIS,Broom,Broom,zymSX9fFJ1r0,,commands/clear;editor/clear;console/clear
+brush,found,jl5dhZdw5lZe,Paint Brush,paint-brush,vsKVuffwB0Uc,Paint Brush,MWTmGWPb2kRz,Paint Brush,Paint Brush,Y3Q7VZOp37Ce,JQvmYu6E4Q2N,Paint Brush,OOEZqoHIjwhy,Paint Brush,Paint Brush,gVXF8E7HGXRL,,editor/add-painter+plus;widgets/painter
+cable,found,DyD2BVKX4UFQ,Network Cable,network-cable,PhIlS6TlWige,Network Cable,fXAXhix1HL2d,Network Cable,-,NONE,bXHtbTkUx0hu,Network Cable,MZ2emo1FJ3h6,Network Cable,Network Cable,n2AoujjDBdDi,,editor/test-connection
+camcorder,found,YLcatCx0HNZ6,Camcorder,camcorder,iwECvcRW3KQW,Camcorder,Lym96fFD92is,Camcorder,Camcorder,m8w2ERUyBTwv,eavjhpTPvWmf,Camcorder,BmQJvJs0O77n,Camcorder,Camcorder,vBHSAsoDzsmJ,Deco only has camcorder-pro,commands/camcoder
+card-shield,found,9BO8KPzyjld9,Card Security,card-security,fQYqxbppH7mV,Card Security,ZHf5x0SogRlj,Card Security,Card Security,LN39LZo8h8mq,tYjFfjjbhaJ0,Card Security,K4xMP41kI9FL,Card Security,Card Security,HoNqU11hSVEu,,licensing/plan
+certificate,found,6PEs2EypZuRA,Certificate,certificate--v2,li9nkFY9w6OJ,Certificate,bTto4P116dOd,Certificate,Certificate,L6Un7FjnjpyI,zfpbxzdOhFY8,Certificate,pbljtAormB9w,Certificate,Certificate,YzubIiG04fhm,,licensing/license
+check-mark,pending,?,?,,?,?,?,?,?,?,?,?,?,?,?,?,House review 2026-11-07: pack ids still to search,commands/alarm-acknowledge
+checklist,found,4TXcpUyYayG2,Checklist,checklist,2uHMuGxzVMjB,Checklist,pLEfaddrvpny,Checklist,Checklist,ApjdF3CLqjzt,yu7FMujO1ax2,Checklist,NlI8bI1eXtNb,Checklist,Checklist,b59luuVIoGSs,,commands/diagnostics
+chevron-down,found,bGjmkh3zMHa0,Chevron Down,chevron-down,uz03unbAxueT,Chevron Down,TRtXTJHl1aqn,Chevron Down,-,NONE,WJxZBPtQIdkL,Chevron Down,EL9BwAtydbnn,Chevron Down,Chevron Down,rWGeme3zsvRs,,editor/indicator
+chevron-left,found,1kRMT1FNoGTw,Chevron Left,chevron-left,p0obkj7Ql0sb,Chevron Left,F6UZExnrceii,Chevron Left,-,NONE,uYK3uqJzmKRl,Chevron Left,foHZDp7nxISC,Chevron Left,Chevron Left,FtTa0W03cmTe,,editor/left;commands/workspace-previous
+chevron-right,found,fnEt4uEKZjG3,Chevron Right,chevron-right,VFj7m3v2DSyJ,Chevron Right,4i560BZBIJFF,Chevron Right,Forward,cr068RmggYgi,1XGhbs3GqOGM,Chevron Right,T7B1hcBDivAU,Chevron Right,Chevron Right,fNsUptWtRRV9,,editor/right;commands/workspace-next
+chip,found,mepX636gAP3u,Microchip,smartphone-cpu,Qnr0dTu9saaX,Microchip,OjhgtwqtODUk,Microchip,Microchip,AjNt39mPVhEZ,RaDFKWhaOlSA,Microchip,vweinXGW2BPo,Microchip,Microchip,LC0Jx9u5imNm,Processor alt: fluent aBK2UoN0jk4I,editor/add-device+plus;editor/device;devices/uart
+circle-down,found,oO5Q4IrkFmKn,Down Button,circled-chevron-down,P9XeIgkp7d5b,Down Button,NONE,NONE,Down Button,n2UCw3onJiUc,3TA7d2I2wPYa,Down Button,NONE,NONE,Down Button,6ilSgLbY8GzQ,Glass/deco lack circled down chevron; plain Chevron Down exists,editor/move-down
+circle-up,found,X0azPa7Q2toW,Slide Up,circled-chevron-up,LEG3MmCrUFHI,Slide Up,N5FXK8El7Mhe,Slide Up,Slide Up,InQ9xLlTLspd,1a3qYiKMlVcY,Slide Up,Xf5xHSzIVYlQ,Slide Up,Slide Up,w3yQF5pRHVY4,,editor/move-up
+clipboard,found,rByZVfKrdkJo,Paste,paste,rUCpLPrTzIyY,Paste,9XfRMf3lgdCh,Paste,Paste,giC7c0b9kLEu,3I4i7j5ada3t,Clipboard,uDqSUuW90k33,Paste,Paste,pyl0ui6XCmpY,,code/paste
+clock,found,JrbE13EfhZWo,Clock,clock,6Z5IUAh18Fuc,Clock,4i5bTF9azXVR,Clock,Clock,pSIrWHfPdkxo,e10q6ksZqLMM,Clock,SDdyT8X2D8iK,Clock,Clock,JOYZvzju87O6,,widgets/clock
+clock-arrow,found,eeFIKavaLKPr,Restore,settings-backup-restore,7VWUK70A75EF,Restore,oCWZJGzTjznj,Time Machine,-,NONE,NONE,-,i634xRk8BbXR,Time Machine,Time Machine,sqYO4fgbGTkT,Fluent glyph unverified as clock with arrow,editor/recover-backup;database/restore
+close-circle,found,fYgQxDaH069W,Cancel,cancel,qGploNDhblOH,Cancel,DXECg4JU1n2x,Cancel,Close,cOmC8KvTkthk,6DQycfx1B82R,Cancel,2xlEjUnUxAg1,Cancel,Cancel,e5S6aouU9P0r,,commands/quit;database/close
+code-file,found,mXRsZ8Xy4xvM,Code File,code-file,LXhpSVCU82mF,Code File,EZkUpWEGPUHl,Code File,-,NONE,AffCdLn1BKM8,Code File,KNA4y6DC1sFu,Code File,Code File,rQcmj7YYNPl1,,editor/code;editor/edit-code;code/template
+collapse-arrows,found,s37vZw4gi8CE,Collapse,collapse,2Td09ZjK3z6T,Collapse,oXQVibFkysZg,Collapse,-,NONE,NONE,-,kNRCIhDDj4nc,Collapse,Collapse,ex4yg5MszcTu,Deco also Normal Screen 494BgYGZdx51,commands/normal-screen;editor/compress
+color-wheel,found,SWQipIlNBkpv,Color Wheel,color-wheel-2,OLzjlE9wFX9A,RGB Color Wheel,NONE,NONE,-,NONE,NONE,-,NONE,NONE,-,NONE,Glass/deco only Color Palette; fluent also RGB Color Wheel 1Ia1TnSUAVrK,commands/color;editor/alarm-bands
+command-window,found,9hLY0P1ixONa,Command Line,command-line,Eayl3jnSFaNs,Command Line,rYlrLd6pcRwI,Command Line,Command Line,hTQIRYJ2tWk3,xMsYNQf9N3HT,Command Line,nEKfds7Bw1HB,Command Line,Command Line,lHbV98iyyYsF,,commands/console;widgets/terminal
+compass,found,KmvY4BNIPn6d,Compass,compass,aBDIThwGtLKb,Compass,KJEnlVBql33z,Compass,Compass,71T1pu30Aimx,NUra0a75nweY,Compass,ENSTMXEglLFW,Compass,Compass,ZAryQ5LSU8B6,,editor/add-compass+plus;editor/compass;widgets/compass
+control-panel,found,UD9nG7mgbuXZ,Control Panel,control-panel,dCv9IevmTQKB,Control Panel,flK6uLX9AUlc,Control Panel,Control Panel,MqRO2PhIYow5,bf3uIIeYGULa,Control Panel,hEPQrqGpNqD3,Control Panel,Control Panel,4vdVce3bkhxJ,,editor/add-output-panel+plus;widgets/output;widgets/output-panel
+conveyor,found,sZDpzwlacLcR,Shipping Centre Loading Belt,shipping-centre-loading-belt,20D9GfA3HYGQ,Shipping Centre Loading Belt,NONE,NONE,Shipping Centre Loading Belt,BYwxrT5zRry8,hI4inYoCiJwU,Shipping Centre Loading Belt,NONE,NONE,Deployment,rJOLscqwx32M,Glass/deco only Deployment production icon; fluent alt Deployment gc3EFfPcJEXt,commands/deploy
+csv-file,found,lb1nfipAhUam,CSV,csv,wpFp6Kkhm43b,CSV,NONE,NONE,-,NONE,fMvocaz7K4rE,CSV,zphKKfiQ6wbk,CSV,CSV,HQPwMjsHo4KP,Glass has no CSV icon,commands/csv;commands/csv-log+arrow;editor/export-table+arrow;editor/import-table+arrow
+cube,found,SSUo3NXORjah,Cube,left-view,ffR3R5fFowhw,Cube,4INWJzRAzm5Q,Cube,-,NONE,NONE,-,NONE,NONE,-,NONE,Fluent also Orthogonal View; deco has no cube,commands/front-view;commands/left-view;commands/orthogonal-view;commands/top-view
+curve,found,IDV5qY5bbaLk,Line Chart,line-chart,ae1tFYleyxTq,Line Chart,pUALrNFyZbef,Line Chart,Line Chart,qlYfZwMKSqze,MUzrfFgK6i0O,Line Chart,zlIi95H2hWRU,Line Chart,Line Chart,nieWd43g2lZS,,editor/add-plot+plus;editor/plot;widgets/plot
+dashboard-charts,found,4VdgitiyspJ9,Combo Chart,combo-chart,aNmG2K59DPKJ,Combo Chart,XyGPQvrH16Qo,Combo Chart,Combo Chart,78TF1WsXY1kd,Sqs9Y7UXjrIv,Combo Chart,Op8lxzso6qJS,Combo Chart,Combo Chart,UtW1YJU7ugFk,,editor/dashboard-widgets;panes/dashboard
+data-arrow,found,vqyoQCZ3fPp5,Data Transfer,data-in-both-directions,FJ5UK7RNoMoB,Data Transfer,Sp0dD1CUthYC,Data Transfer,Data Transfer,WHSqHk4uirvh,gcZnteWuJnVz,Data Transfer,ZwyCl0u6cb8k,Data Transfer,Data Transfer,uHNekGI3hyaY,"Bidirectional arrows, not one arrow with bits",editor/tx-data
+database,found,KZHjwwenS7oK,Database,database,CL9FYPTHMfLp,Database,87bMYCFypMXe,Database,Database,8KIAHQnQOYyF,cA8JSUnx4bKC,Database,5Xc8CJ1vnVw6,Database,Database,HlvaYL3UbsQq,,commands/database-export+arrow;editor/influx
+devices,found,Y9eKbZgJIt4F,Multiple Devices,multiple-devices,gwCmus5W03wM,Multiple Devices,wxaCyftlRBo8,Multiple Devices,Multiple Devices,8ch1JIR6WxJL,UZZVwF0cAnNF,Multiple Devices,9n8C5VlZSxLw,Multiple Devices,Multiple Devices,dzj4fTtGK2Pg,,licensing/devices
+document-eye,found,eu9j4NfsAalN,View,view-file,w7BTyIceYKPP,View,MY14tEpjK6W1,View,-,NONE,8GdzorTg3Qr9,View,I7Z8X2g1kazJ,View,View,cEWrWZuqobCB,,editor/read-only
+document-gear,weak,8tcDgihugAYf,New Document,new-document,OQELAsXLdQGm,New Document,yvmSTfLcB37a,Create Document,-,NONE,TDsOCWXaM5tk,New File,apn7qQPSOT5d,New Document,New Document,R1gV70Lt90zD,New-document metaphor; no gear or star shown,editor/new
+document-key,weak,WwHcZxa9PFUq,Edit Property,edit-property,LWtVTYCpOSIW,Edit Property,?,?,Edit Property,XhUu2qdhhIUO,9TeXMSkdeJEa,Edit Property,?,?,Edit Property,48kE8Mk0upCk,List with pencil for project title; glass/deco to re-check,editor/project-title
+document-pencil,found,OIR0Uk9Fhc35,Edit File,edit-file,ZmyGRndHKpun,Edit File,uZxHK5sdBMFN,Edit File,Edit,elmuNJ2crwtu,4z3JjZix0lIT,Edit File,oomQMHyouTHA,Edit File,Edit File,5fuaJ4HA6SNX,,editor/read-write
+document-pencil2,found,OIR0Uk9Fhc35,Edit File,edit-file,ZmyGRndHKpun,Edit File,uZxHK5sdBMFN,Edit File,-,NONE,4z3JjZix0lIT,Edit File,oomQMHyouTHA,Edit File,Edit File,5fuaJ4HA6SNX,,panes/details
+document-x,found,6NZ0qD9MkezO,Delete Document,delete-property,vktFE8rU8Am0,Delete Document,mAVCCaNvuK4F,Remove Document,-,NONE,EjbkW1Zrd635,Delete Document,qrsJWtA2fRPU,Delete File,Delete Document,Pr3w8Q3Rw8yD,,editor/delete+x
+documents,found,Hku9UaGJ7edj,Documents,documents,Oxu559i6xgh8,Documents,kmB6U7IuIYun,Documents,Documents,dEVvWF3B4TUa,uezOhfHCC6gG,Documents,hOm5BvmcZS3D,Documents,Documents,IFYXBsUEBuBp,,editor/duplicate;code/copy
+engine,found,QwEwqmJDk4Za,Engine,engine,MlZI0yiQBUI5,Engine,NDp6qG7zwmZB,Engine,Engine,tFFptMXEhdZq,45PPRxojU608,Engine,Cieyqy8uQbyH,Engine,Engine,mPTCF2e1U5ge,,devices/canbus
+equalizer,weak,CWZOl3WNER6r,Audio Wave,audio-wave,Tbgcvv4rNlDl,Audio Wave,2ZNWpp2TsApI,Audio Wave,Audio Wave,YVZ9vDVDp0oh,AaPJKO2I4Q3h,Audio Wave,jxzVpzF6niAL,Audio Wave,Audio Wave,NumTHVucZgKZ,"Audio wave, not bars; fluent Adjust cLD2wO8b2ptf is vertical sliders",editor/add-fft+plus;editor/fft;widgets/fft;devices/audio
+ethernet,found,EeVp6yTJ9ayW,RJ45,rj45,UQ1OuEAq604D,RJ45,QplQQnacCgmw,RJ45,-,NONE,lZT2J6E3wkR4,RJ45,NONE,NONE,Network Cable,n2AoujjDBdDi,Fluent alt Ethernet On; Network Cable,devices/ethernetip
+exclamation,found,HZhl4S0tHUuX,High Importance,high-importance,HJMT3crrSiU0,High Importance,HS4xyx43cagc,High Importance,High Importance,TDliU8QhOIav,76MTnAV3b8gc,High Importance,fnFHu7OrEzjd,High Importance,High Importance,fn1hA5RSMWfN,,panes/important
+expand-arrows,found,vVeXtryOB9eZ,Full Screen,full-screen,ILoJv0kDQMWo,Full Screen,ctLIcb831aED,Full Screen,Full Screen,ivvw0GwHcZRh,9MG2DNLN3yLN,Full Screen,3L2VxG0iYycf,Full Screen,Full Screen,lvOSB9appvKH,,commands/full-screen
+eye,found,CWkCzh9aKpqb,Eye,visible,4y6r43dyjbzw,Eye,74NRJjZyt5EM,Eye,Eye,LQSl0neCjfVn,yGAbe3JvcTUc,Eye,Xu5Sxh6dMewZ,Eye,Eye,EQXurtBk4EKS,,editor/show
+eye-off,found,v0TeUKEbedvU,Invisible,invisible,nx1IDGruJph4,Invisible,wBTRq7UyZ8YX,Invisible,Hide,IVdpkLiVyE78,SBzWPIvrSLHk,Invisible,iKPuA3XddW6Z,Invisible,Invisible,Zqfi485D5630,Verify glyph is a crossed eye,editor/hide
+field,found,worHcG8WKezd,Text Input Form,text-input-form,KYAA3DcC10mN,Text Input Form,NONE,NONE,-,NONE,NONE,-,aaspuorXXDfE,Input,-,NONE,Glass none; deco Input (multiple-inputs) loosely,editor/add-register+plus;editor/delete-register+x
+floppy,found,yFBJCjFJpLXw,Save,save,78FI1reyhXx7,Save,3VO7xUNfMILv,Save,Save,TjYYJ7FsYIrZ,5KatrI6dG4mT,Save,eaHcV8gDbQC4,Save,Save,nKF4hxBLuTHk,Glass Save is the Emoji set entry,editor/save;code/save
+floppy-pencil,found,wC9budkHyeKg,Save as,save-as,EVJCkX8S4qX9,Save as,4qdpdL3J5pks,Save as,Save as,BeI96Ke4C9VV,xpGjDtmf5CUo,Save as,yPJTcf51AtAd,Save as,Save as,8WMsamRbYMfD,,commands/save-as;editor/save-as
+floppy-warning,weak,yFBJCjFJpLXw,Save,save,78FI1reyhXx7,Save,3VO7xUNfMILv,Save,Save,TjYYJ7FsYIrZ,5KatrI6dG4mT,Save,eaHcV8gDbQC4,Save,Save,nKF4hxBLuTHk,"No save+warning icon; plain Save, badge must be composed",editor/save-warning+warning
+flow-chart,found,2jHmblEslKYm,Flow Chart,flow-chart,pcy3dj5Jgop3,Flow Chart,A5bT1cyFfulU,Flow Chart,Flow Chart,XxUjzQ8GyMRL,z32LCX5hry1M,Flow Chart,5ZF3jE9D26oV,Flow Chart,Flow Chart,DPfJTznvmfNy,,editor/change-group;editor/expand;editor/project-structure;devices/opcua
+folder,found,dINnkNb1FBl4,Folder,folder-invoices,FVQqbNWLzhcc,Folder,nazeM3keVtFJ,Folder,Folder,3qwJMBaoFs5S,27jXcUu7jmug,Folder,iStIoVUnNAOT,Folder,Folder,mSddfykfrLK7,Opened Folder: fluent zRCxfHhAkOiL glass iHTa5C9wd0Fi deco spBfBGxIu5gU,commands/open-project;editor/add-folder+plus;editor/open;widgets/folder;database/open;code/open
+folder-arrow,found,hkFlMzuC0WxN,Move To Folder,move-to-folder,NONE,-,NONE,NONE,Move To Folder,EzFxygpC8OlQ,NONE,-,NONE,NONE,-,NONE,Glass/deco only plain Folder or Move separately,editor/move-folder;editor/move-here;editor/top-level-folder
+folder-upload,found,VBiuMMXz1GNN,Send File,send-file,yRb1rdC2RmqD,Send File,4BDoYlBAv77Z,Send File,-,NONE,J5GcO0cxj3KV,Send File,TyfMpMtwBtc9,Send File,Send File,KM9GnxZT4mw8,"File with send arrow, not folder with up arrow",commands/file-transmission
+font,found,1NfYIl0IYjOO,Choose Font,choose-font,4KsMTuijiRoR,Choose Font,qMk0tqWInQrf,Choose Font,-,NONE,NONE,-,NONE,NONE,Typography,9jD9IPXRCa6M,Fluent alt Font Size,console/plain-text
+freeze,found,EHyUO6ZGSRkX,Lock,lock,XkaSssewbJSt,Lock,KMH5Z5MJ0k30,Lock,Lock,xMob4E5hXpJS,PFEEYXgZVNHo,Lock,Q59em2cA2WUS,Lock,Lock,n1tNCA0ZH7f5,"Maintainer 2026-11-07: Freeze Dashboard locks the layout, the padlock stays (snowflake withdrawn)",commands/freeze
+function,found,cyQQ5i8svboJ,Formula FX,formula-fx,qeNFxeXjY53w,Formula FX,dgU7RxOV7JtZ,Formula FX,-,NONE,NONE,-,NONE,NONE,-,NONE,fx formula; deco only Greek letters,editor/transform
+funnel,found,HjFb6s4aXAL2,Filter,filter,ErgBpxkvZhKX,Filter,lIPVBw1hMKkS,Filter,Filter,Z1emWEi8khMu,Pohj4RQVOJYd,Filter,jdr6MAfrmEE1,Filter,Filter,S7fOylnnJcug,,commands/filter
+gauge,found,q6ZsCci8P1w4,Speedometer,speedometer,1emGctC2qn7E,Speedometer,iR16SJrsFdE9,Speedometer,Speedometer,iFRHiPgPdoJj,4ktdIVTsKvbY,Speedometer,lKyQSfsjfuaA,Speedometer,Speedometer,m6b4Odf5m8Rv,Dashboard Gauge alt: fluent Qavl6FF79LJM,editor/add-gauge+plus;widgets/gauge
+gear,found,73FgXcRF4HNx,Gear,gear,Q56fsXwqbPU5,Gear,TzmFKlMJTXIL,Gear,Gear,x0AbqORDA783,jMzQ4fFeslB6,Gear,N1xaXJg6g2Eq,Settings,Settings,EHYRINeSAUFT,Deco is Settings gear,console/settings;editor/output-range
+globe,weak,rMF7T4f4fwKw,Earth Planet,earth-planet,pM3fXkM633Lj,Earth Planet,TEcvhDoDbTkh,Globe,Earth Planet,3yhGNTA8v9RM,v65sQ1D5r9Q2,Earth Planet,FxvhhxXnTxSW,Globe,Globe,WvAeA2IRnkTQ,Fluent has planet Earth only; no plain Globe,editor/add-webview+plus;widgets/webview
+grid-dots,found,j1EvONaCTNHF,Table,table-1,M1CUd7LZginJ,Table,?,?,Table,nTqJsdzZIwhz,NONE,-,?,?,Table,Y5fQkVX2cPYz,Grid of cells; glass/deco to re-check,editor/add-datagrid+plus;widgets/datagrid
+grid-layout,found,S5D5w5vFLhYp,Dashboard Layout,dashboard-layout,sUJRwjfnGwbJ,Dashboard Layout,?,?,Dashboard Layout,vFmgFwi5ZQvd,NONE,-,?,?,-,NONE,Tiled layout; glass/deco to re-check,commands/auto-layout
+group-frame,found,vn1zMUKstcPl,Group Objects,group-objects,aJ4U0XdtaTwQ,Group Objects,clXnXlbe6iQJ,Group Objects,-,NONE,NONE,-,NONE,NONE,-,NONE,Deco has only user-group icons for this,editor/add-group+plus;editor/group;widgets/group
+gyroscope,found,3vqMy3Acanys,Gyroscope,gyroscope,NONE,-,NONE,NONE,-,NONE,NONE,-,NONE,NONE,-,NONE,Only fluent has gyroscope,editor/add-gyroscope+plus;widgets/gyroscope
+hand,found,KSMw5R43ZXyz,Hand,hand,adMzmSwdjNNE,Hand,vVPF6HAov059,Hand,-,NONE,mqFYnKLJ9i4Y,Hand,BHaHYGM74Dj7,Hand,Hand,BUDp3gIJNj3v,Hand Drag alt: fluent c4L9DrezNnrE glass h427Jjd7QBdl,commands/pan
+hex,found,wXJ2n1ORt4vR,Hexadecimal,hexadecimal,pwFCieTMDzCH,Hexadecimal,NONE,NONE,-,NONE,NONE,-,NONE,NONE,-,NONE,Fluent only,console/hexadecimal
+horizontal-bars,house,439i3V9ejb2W,Bar Chart,bar-chart,?,?,E1Si1cQP4u90,Bar Chart,?,?,?,?,dN7BQzCXml65,Bar Chart,?,?,Maintainer: house art in every pack (barpanel),editor/add-barpanel+plus;widgets/barpanel
+house,found,wFfu6zXx15Yk,Home,home,i6fZC6wuprSu,Home,8xhovyHdOQzF,Home,Home,EaHvBlFeXuaQ,ORAO5DF37nXq,Home,jDwpGuHnarDq,Home,Home,Vz8ODxEjtwEd,,panes/overview
+id-card,found,2UsFIjvcfU2e,Identification Documents,identification-documents,1ID4VZeuqGjf,Identification Documents,dGAwDTFCLptB,Identification Documents,Identification Documents,EWC0HIlrFcut,lU4R11HK8yS7,Identification Documents,NONE,NONE,-,NONE,Fluent alt Worker ID Card; deco none,licensing/user
+image,found,bjHuxcHTNosO,Image,image,cD26kdwTbCzt,Image,gDjXL22pcTaA,Image,Image,xA3QyJjq5F1H,3uVK4oBG53ja,Image,HpyvOG7LdXMD,Image,Image,shiyIcOUcXZT,,editor/add-image+plus;widgets/image
+info-bubble,found,VQOfeAx5KWTK,Info,info,lzICmAiUWSkI,Info,40JxrZB76JLv,Info,Info,WvjvTsPNABhO,65rWqdPty3vF,Info,LdwEPFofzT9J,Info,Info,3QN3WRjwZ9LR,,commands/about;notifications/info;panes/info
+invert,found,nyFlw2T0gyh5,Invert Colors,invert-colors,1cnauY3Gerhv,Invert Colors,7QNqUZIyi7xs,Invert Colors,-,NONE,bMIrz1GaQ9cp,Invert Colors,OYe5mBLlJJpI,Invert Colors,Invert Colors,y3OWc2He4Lfg,,commands/invert
+key,found,VYvOvJrZaC9T,Key,key,PU4roiu8ELp5,Key,BEcSpiQoEA87,Key,-,NONE,G2iYKhpdVsDd,Key,oIjHj4RBAlXo,Key,Key,4NmwCjMSoJc5,,commands/activate+plus;editor/load-ca-certs+plus;licensing/key
+knob,found,DOnVbaJcKfsD,Potentiometer,potentiometer,NONE,-,?,?,-,NONE,NONE,-,?,?,-,NONE,Fluent Potentiometer is a panel knob; glass/deco to re-check,editor/add-output-knob+plus;editor/output-knob
+led,found,QnIqMNFphUcV,LED Diode,led-diode,NONE,-,Klwhxfh58XDF,LED Diode,LED Diode,YXb7MdnYnzRF,uOOxxZWRbLeP,LED Diode,NONE,NONE,-,NONE,Deco has no LED diode,editor/add-led+plus;editor/led;widgets/led
+letter-x,composed,uMPeWPkd86EF,X,x,?,?,3jLs1yEITK79,X,?,?,?,?,1YPlRU9DHSDN,X,?,?,"Maintainer: letter glyph composed per pack, X and Y alike",commands/x
+letter-y,composed,NONE,NONE,NONE,?,?,NONE,NONE,?,?,?,?,NONE,NONE,?,?,Maintainer: letter glyph composed per pack,commands/y
+lightning,found,GtgqQIYSqT50,Lightning Bolt,lightning-bolt,ce15jJ99meTS,Lightning Bolt,XTqUA8keYxec,Lightning Bolt,Lightning Bolt,ZzJJDUNYvuO3,LGuzFFJr1J9a,Lightning Bolt,1id4D2zGtrSd,Lightning Bolt,Lightning Bolt,n81blIrhK6U3,,editor/action;editor/add-action+plus
+magnifier,found,KPmthqkeTgDN,Search,search,XU3XKgdpT0qG,Search,WwWusvLMTFd7,Search,-,NONE,NgYyTKlnn4kP,Search,9WTVD8ibjNf7,Search,Search,roItaMQB28m8,,console/search
+map,found,LNECRgsrmC9Y,Paper Map,map,46SSz0tLEkrY,Paper Map,FUT3qjuSs6Hq,Paper Map,Paper Map,zle3W6ryAiQx,tMpPUO6yWFpc,Paper Map,n7ATt6bWQNvb,Paper Map,Paper Map,BHepObkw9KAm,,commands/map
+map-pin,found,2gsR2g07AQvu,Map Pin,map-pin,66GjZiOuO037,Map Pin,a3I9Bs8x1Jwc,Map Pin,Map Pin,lqWdYn2r1Tjr,8YwswuMvenyp,Map Pin,wXWFjkjqFKB9,Map Pin,Map Pin,7U55MVPOVSCy,,editor/add-gps+plus;widgets/gps
+merge-lines,weak,wUTpyezlDsLQ,Compress,compress,uIGKL4D6sBp5,Compress,O8HXRH0j3VSX,Compress,Merge Vertical,K7nhTJYOUSHB,NONE,-,hJwoIrkaMmNP,Compress,Compress,iOhD0d2Vv1tX,Compress arrows; fluent alt Merge Vertical,console/collapse-duplicates
+meter,found,q6ZsCci8P1w4,Speedometer,speedometer,1emGctC2qn7E,Speedometer,iR16SJrsFdE9,Speedometer,Speedometer,iFRHiPgPdoJj,4ktdIVTsKvbY,Speedometer,lKyQSfsjfuaA,Speedometer,Speedometer,m6b4Odf5m8Rv,Same icon as gauge; fluent Voltmeter ifNCynmGXOFJ alt,editor/add-meter+plus;editor/meter;widgets/meter
+mf4-file,weak,XWoSyGbnshH2,File,file,jM97zjbpG515,File,CoAutH1CZYoV,File,-,NONE,pVplkbnBmjyJ,File,Pjo0BrMdm974,File,File,NTG1DYcVIaS5,No MF4 icon in any style; generic file,commands/mf4;commands/mf4-log+arrow
+molecule,found,L0HGbKmWGjux,Molecule,peptide,1mho4ZDIc2oy,Molecule,dyPG3I70uPpq,Molecule,-,NONE,NONE,-,NONE,NONE,-,NONE,"Deco only Benzene Ring, not a node network",commands/deepwiki
+monitor-chart,found,MT51l0HSFpBZ,System Task,system-task,Ia9eTJxIbPGf,System Task,?,?,System Task,5drjQMUn9tVu,igwhdSW2HpQh,System Task,?,?,System Task,Nssd21ITIkMQ,"Monitor with a pulse line, same metaphor as house; glass/deco to re-check",devices/process
+monitor-check,weak,NMhla7z24ciM,Fingerprint,fingerprint,3RlCu6GGhMC3,Fingerprint,?,?,Fingerprint,fyFHzE5eO97J,5lLA7jjUPr4c,Fingerprint,?,?,Fingerprint,6TQ51kR4opD9,Fingerprint as machine identity; glass/deco to re-check,licensing/uuid
+music-folder,found,QHf3TzLgHqqB,Music Folder,photos-folder,4ScLulXIfA17,Music Folder,ocgoj7Btbvu1,Music Folder,Music Folder,FWLCigIQ1fav,rVNZsoKNbTjp,Pictures Folder,HxdgpP7lITmo,Music Folder,Music Folder,f6qStt4kEBql,commonName is photos-folder but name is Music Folder,commands/sound-folder
+nasa,house,NONE,NONE,NONE,?,?,NONE,NONE,?,?,?,?,NONE,NONE,?,?,Maintainer: house brand mark in every pack,commands/nasa
+network-port,weak,vstqh3NnJPro,Ethernet On,ethernet-on,9EVb7zhJLTyF,Ethernet On,QplQQnacCgmw,RJ45,-,NONE,9zVr5yuxOrIx,Ethernet On,NONE,NONE,Ethernet On,7rI0CwIq0jBY,Port connection-state icon; unsure it is a socket,devices/network
+notes-list,found,4brDa8Wu96MT,Logbook,logbook,NpOhCzI6YqDp,Logbook,?,?,-,NONE,WoCkYMV7Dc9w,Logbook,?,?,-,NONE,Logbook for console annotations; glass/deco to re-check,console/annotations
+number-doc,found,qVHE2eoZHuG0,ASC,asc,fg9B6JjHlEs4,ASC,?,?,-,NONE,NONE,-,?,?,TXT,plHnfQcwGBDr,Maintainer: ASC text file for encoding; glass/deco to re-check,editor/encoding
+open-box,found,fqW0I1a5TSxR,Open Box,open-box,8U7gVs7h3UBU,Open Box,4xcZGzia5Blf,Open Box,Open Box,AgoMnA9XxfRF,Ym6OxFpP59eu,Open Box,OKm8qDQFEI92,Open Box,Open Box,G9igrZ7EMImI,,commands/export
+orbit,weak,yda9kQMbU5hk,3D Rotate,3d-rotate,PyulggxVPKYn,3D Rotate,QNhOJZGVto9I,3D Rotate,-,NONE,NONE,-,WVfJYjDsKTRM,Rotate,-,NONE,"Shows 3D rotate, not orbit rings; fluent Satellite in Orbit alt",commands/orbit
+oscilloscope,house,CWZOl3WNER6r,Audio Wave,audio-wave,?,?,2ZNWpp2TsApI,Audio Wave,?,?,?,?,jxzVpzF6niAL,Audio Wave,?,?,Maintainer: house art in every pack (sweep),commands/sweep
+padlock,found,EHyUO6ZGSRkX,Lock,lock,XkaSssewbJSt,Lock,KMH5Z5MJ0k30,Lock,Lock,xMob4E5hXpJS,PFEEYXgZVNHo,Lock,Q59em2cA2WUS,Lock,Lock,n1tNCA0ZH7f5,,editor/lock;editor/mqtt-ssl;database/lock
+padlock-open,found,bmqc7DrIxfXZ,Unlock,unlock-2,2bZ3pE7PXyHB,Unlock,xC8s3Y9ozwjG,Unlock,Unlock,LqJ2cleVZenB,IN4uxPXMK1u7,Unlock,fbv9wSpSd3DR,Unlock,Unlock,b0F1PoUomiAl,,database/unlock
+pause,found,Z2aInWmsldJ6,Pause,pause,AibrGCLNeCYz,Pause,Wf72tFY1MCeV,Pause,Pause,zKlE2dVurY0i,vINGJxMJLqrp,Pause,YafkzRwtG4HH,Pause,Pause,pAwpoKa1IMkT,,commands/pause
+pdf,found,LmcGmjPSQXSa,PDF,pdf,BHEB7fl4z8q7,PDF,1JeOZOznuIHr,PDF,PDF,cfMI8lpryFKi,0KClV0p63DOd,PDF,ctxOoTrUNgpE,PDF,PDF,8leH86JxHwvO,No arrow variant,database/export-pdf
+pi,found,OphppcXFtsFO,Pi,pi,P5ELX6gwo6z8,Pi,QQXAlldzdAOa,Pi,-,NONE,vFybJls2k5Z5,Pi,tavejx3aXS7q,Pi,Pi,2t7DjBjSe64Z,,editor/insert-constant+plus
+pictures-folder,found,zqxl7tOwTyfM,Pictures Folder,pictures-folder,eioNF5zSQiuC,Pictures Folder,HY9JOmbKVo1m,Pictures Folder,Pictures Folder,nmrWWAnheCsA,rVNZsoKNbTjp,Pictures Folder,RVHReJTdYef6,Pictures Folder,Pictures Folder,8rtYUsgqCAJo,,commands/pictures-folder
+play,found,GwYlS5m5Goz6,Play,play,LVtMPps1ASuP,Play,5GnFrcQmc9iB,Play,Play,pG2XGTw1ez0U,DMiRZMsS0Qsa,Play,On84Yz0qyMki,Play,Play,079xb2JUmr8J,,commands/resume;database/replay
+plc,found,bQbX7tMYRcoT,Programming Logic Controller,programming-logic-controller,NONE,-,NONE,NONE,-,NONE,NONE,-,NONE,NONE,-,NONE,Fluent only,devices/s7
+plug-connected,found,yKx23wGkTvzu,Connected,connected,NOMBEuDJxrui,Connected,P52SjQirXDyY,Plug,Connected,5mXsqE3XCzsZ,3zL0DM20tiuM,Connected,SXssueJbqeJx,Connected,Connected,kTijLnJ2LgNf,Glass is a single plug; fluent alt Plug fHjC1iwg7M3Z,commands/connect
+plug-disconnected,found,kF9cTiH2c0hR,Disconnected,disconnected,rkNtl8nOsiha,Disconnected,BRUY5qXfehkz,Disconnected,Disconnected,r7xNL1spOgDt,lRJ7U7MNBtE3,Disconnected,0wBCrwAYx0Ae,Disconnected,Disconnected,QdWU0JL0N5jn,,commands/disconnect
+polyhedron,found,OoNzUoG3vzKd,Octahedron,octahedron,54vgS3vBytFj,Octahedron,?,?,Octahedron,RUBvHSFo4A0H,NONE,-,?,?,-,NONE,"Blue octahedron, same as house plot3d; glass/deco to re-check",editor/add-plot3d+plus;widgets/plot3d
+polyline,found,IDV5qY5bbaLk,Line Chart,line-chart,ae1tFYleyxTq,Line Chart,pUALrNFyZbef,Line Chart,Line Chart,qlYfZwMKSqze,MUzrfFgK6i0O,Line Chart,zlIi95H2hWRU,Line Chart,Line Chart,nieWd43g2lZS,Fluent alt Graph Gx5oU8RXXdta,commands/interpolate-on;commands/poliline
+pulse-monitor,weak,KUmai2ZEvrIX,Activity,activity,cEPoeVNDqY8S,Activity,qjJFaJsfpFEH,Activity,Heart Monitor,60ByNnqZJkNY,NONE,-,D7p2guFArj6E,Heart Monitor,-,NONE,Medical activity pulse; no window with heartbeat line,widgets/notification-log
+puzzle,found,h4Ly5RazDdvK,Puzzle,puzzle,DIeM91hHQgc4,Puzzle,ZfgOOjxmscX6,Puzzle,-,NONE,b2JJMDXjytiO,Puzzle,NONE,NONE,-,NONE,Deco only Extensions Folder F8I4hpnHLxUD,commands/extensions
+pylon,found,Vxs9d2cRfS2W,Transmission Tower,transmission-tower,a2dJZWQCl6vx,Radio Tower,NONE,NONE,Radio Tower,dlunu2QEVftp,fGGrPxSsfkXo,Transmission Tower,NONE,NONE,Radio Tower,kryjlWJ9Dd3E,Glass and deco only Radio Tower,devices/iec104
+question,found,IchwUEgoxNcw,Help,help,QbUVCJcLUR8w,Help,osnYseY0Xola,Help,Help,dXPrtEV02glB,ITFrfoZGQfYj,Help,1wZEIUmDjhIr,Help,Help,ivtKHyH6DpMS,,commands/help;editor/help;code/help
+ram,found,1a4xnM8mLMqg,Memory Slot,memory-slot,6CLTLvFISTk7,Memory Slot,5aUCMZVNo4pU,Memory Slot,Memory Slot,jnD0U7p83doX,v20Kb8blpGYs,Memory Slot,pJZjZNC3iwQy,Memory Slot,Memory Slot,bY0RBCEpDm45,,editor/shared-memory
+redo-arrow,found,spUwiojYWcaR,Redo,redo,G2FNRGdbYCBF,Redo,iMlLxusmSGkj,Redo,Redo,tVZjrEPsMkA4,LRNswkPZVKIM,Redo,ISlHBKyu13Su,Redo,Redo,jzzcNrShMKFf,,code/redo
+rename,found,oJQSZNne5Rp0,Rename,rename,DqFY5OwPY5gJ,Rename,3sPCRlXJHdBc,Rename,-,NONE,NONE,-,AaU0DnDMxpw4,Rename,Rename,xkEilWu5XloP,,editor/rename
+reset,found,m8gRP2AQ4AOX,Refresh,refresh,dUT1e6ccW1yv,Refresh,dZLOhGn3OGtA,Refresh,Reset,fwV5iKDSF0Bs,9UDG4BFw8oxn,Refresh,1XvVjCCxAUBt,Refresh,Refresh,iT6znPVJHIOc,Restart alt: glass e7byOBWx9eky deco SKKP0j2vtwae,commands/reset;editor/control-script;code/reload;commands/alarm-reset
+return-arrow,found,Ey9jEx96rxU0,Undo,undo,NW43CciCALcq,Undo,Hikdi0Wl69Nt,Undo,Undo,BWsHDz1Lijs9,19topRv8XUsO,Undo,QjnjzAJfW54L,Undo,Undo,8F1wDUMKhSmY,Return alt: fluent uOD7C4cyOCUv glass h1iCJZwyO6nM deco im7qhHjSZBMe,commands/return;code/undo
+robot,found,HQnR1CgGVnOy,Robot,ai-robot,NpWB6GLVTcND,Bot,WrYqjxAKhgxQ,Bot,Bot,OinpqSk7y90z,HRqoDlVZAD8t,Bot,E6zW0ZWoIV7A,Bot,Bot,dWm6lLXTUhm1,,commands/ai;editor/ai
+robot-arm,found,J0G0sdvhY4kM,Robotic Arm,robot,hLP4Mw96O3c4,Robotic Arm,UljVtcn0Qmkk,Robotic Arm,Robotic Arm,b6cCJusNVTgF,Y0ZmcPktpMsy,Robotic Arm,ZoKXeuSoqNDW,Robotic Arm,Robotic Arm,sk2cLjny7wMF,,devices/modbus
+router,found,zj3DcmZWeFJJ,Wi-Fi Router,wifi-router,kLtP1gYYDAtr,Wi-Fi Router,bk70ommP9tqf,Wi-Fi Router,Wi-Fi Router,u46yzyJqKGCD,DwfC7ljTszgX,Wi-Fi Router,lGZIgKE5bwbr,Wi-Fi Router,Wi-Fi Router,sYdA4HwKt2U8,,commands/remote-attach
+run-dialog,found,7XI6kQrF2s0K,Run Command,run-command,3OQcoJyjHPXk,Run Command,?,?,-,NONE,XyswMpG7DhLm,Run Command,?,?,Run Command,v0dKkfvla94I,"Maintainer 2026-11-07: the palette is the Run dialog, not a console",commands/command-palette
+scatter,found,fQDapWwtoIzc,Scatter Plot,scatter-plot,HYZX5vuA7nXY,Scatter Plot,NONE,NONE,Scatter Plot,9QalUw2lNPv4,0FkQgcTV3cd1,Scatter Plot,NONE,NONE,-,NONE,Glass/deco have no scatter plot; only heat map/area,commands/interpolate-off
+schedule,found,CcnMefzl28xf,Schedule,overtime,PTVr218c3sJO,Schedule,6aCzIdNJIGom,Schedule,Schedule,BrubwIMxx8GE,NONE,-,aNQZ0gIs0oBM,Schedule,Schedule,4Aki2FUx4lqB,Calendar+clock look unverified,commands/sessions;panes/sessions
+scissors,found,esjKLxKEq4OR,Cut,cut,AtCItlaShkec,Cut,SvVWZQsNIq27,Cut,Cut,5vwNBb4UTg4u,ypvmtDWFqQWg,Cut,5yZmFzfPmwSf,Cut,Cut,GbPIeWjCcWXe,,code/cut
+script-window,weak,mXRsZ8Xy4xvM,Code File,code-file,LXhpSVCU82mF,Code File,EZkUpWEGPUHl,Code File,-,NONE,AffCdLn1BKM8,Code File,KNA4y6DC1sFu,Code File,Code File,rQcmj7YYNPl1,"Code document, not a window with macro",commands/macro
+scroll-gear,found,w3dqKkXKFwQE,Project Setup,project-setup,eLGKwBWGLwaq,Project Setup,jRc2ykfYqUt3,Project Setup,Page Setup,dPskLXyPcGks,MiBxYzZYVpxr,Project Setup,NONE,NONE,Page Setup,kkNDfx3N5YdZ,Deco only Page Setup dNceWLcYfXBx,editor/project-setup
+server,found,Zf6mA5BR1U2Z,Server,server,9w9fmzEjri3G,Server,TxbvOG9IZePh,Server,Server,SyfoXrVGxDSm,Yr5rYTx984oQ,Server,zJgrVbADzqrJ,Server,Server,1Zy0uSfXWNcX,,editor/mqtt-broker
+signal,weak,Nw9d0a7KroDU,Wi-Fi,wifi,PLlw4LevCJrl,Wi-Fi,EI66Wi29hy4c,Wi-Fi,Wi-Fi,xEQHxvmofHCb,GBW97YdASwjt,Wi-Fi,obzTule23uOs,Wi-Fi,Wi-Fi,TFDXtmyC0fNz,"Wi-Fi arcs, not radio-wave broadcast",editor/mqtt-publisher;devices/mqtt
+siren,found,72xTAy8tXrTD,Siren,siren,psUrr9RfrHB4,Siren,mIJfjkP0hVsi,Siren,Siren,MaexmczrMUjQ,yMYE6MfbbXxE,Siren,xMt6hQGulUly,Siren,Siren,P9y6liPgJ5Au,,editor/alarm
+skip-end,found,ltxgZ0vNvQJO,End,end,W6UXfm65Htdo,End,noGWilUx0lyp,End,End,wqAnN7nrvC7F,ppzs7UbH87iO,End,Ip43nwzyBaC7,End,End,EdX6j7AASiXs,,editor/frame-end
+skip-start,found,wiziEZE0mBR5,Skip to Start,skip-to-start,u4dnV8ffA3Gi,Skip to Start,1uR18UuFyYv6,Skip to Start,Skip to Start,wtLbhLYD7pJo,6zYA6XihLqxb,Skip to Start,i1AMVq4NDCGf,Skip to Start,Skip to Start,diOTy4BdKP0x,,editor/frame-start
+slider,found,sYBmCL26gfhP,Slider,sorting-options,wF3CsGwBWd8j,Slider,b6eLSBnQN1Xl,Slider,Slider,9DKqt33oskBA,fUP9KXxcszzz,Slider,nNYU5dzhHI5O,Slider,Slider,3l6A4kUbweN0,,editor/add-output-slider+plus;editor/output-slider
+speaker,pending,?,?,,?,?,?,?,?,?,?,?,?,?,?,?,House review 2026-11-07: pack ids still to search,commands/sound-unmute
+speaker-off,pending,?,?,,?,?,?,?,?,?,?,?,?,?,?,?,House review 2026-11-07: pack ids still to search,commands/sound-mute
+spectrogram,house,oKyyU1jj8IJ2,Heat Map,heat-map,?,?,XH1S3IbYhNX4,Heat Map,?,?,?,?,Dbi2vF8401sh,Heat Map,?,?,Maintainer: house art in every pack (waterfall),editor/add-waterfall+plus;editor/waterfall;widgets/waterfall
+split-arrows,weak,tCgEu5Ggkfs2,Divider,split-horizontal,xXu9XkNbwpgU,Divider,XvPzUw0mKLEx,Divider,Divider,L80sd7f3RsUl,NONE,-,bRXQ7FdlW3Al,Divider,Divider,FdnoRe3l00cd,Divider split icon; no diagonal arrows apart seen,editor/separator
+square-wave,found,yl2bVt0Mtvgu,Square Wave,square-wave,Jisg0iwqBu3S,Square Wave,NONE,NONE,-,NONE,Cl5bfUmeSilS,Square Wave,NONE,NONE,-,NONE,Glass/deco lack square wave; Audio Wave only (glass 2ZNWpp2TsApI),commands/trigger
+swatches,found,3S5sGwmzdVzW,Color Swatch,rgb-circle-2,NONE,-,NONE,NONE,Color Palette,ProylDqOjYuA,NONE,-,NONE,NONE,Color Palette,Qi99RJIvYEqv,Glass/deco only Color Palette (YDsYVSKV2bml / umcGvTls9FH7),commands/labels
+table,found,j1EvONaCTNHF,Table,table-1,M1CUd7LZginJ,Table,5XSZDtWISTd2,Table,Table,nTqJsdzZIwhz,NONE,-,kTsGltFwodko,Table,Table,Y5fQkVX2cPYz,,editor/add-table+plus;editor/delete-table+x;editor/rename-table+pencil;editor/shared-table;editor/shared-table-alt;editor/frame-detection
+tags,found,mqIpU1qUmyPe,Tags,tags,SVpzx3KP30o4,Tags,Fn5PUcR6hL2q,Tags,Tags,gAfpqdnsCtii,mNSUM9xGLHGQ,Tags,YmO6Zergf9fy,Tags,Tags,TxTW6AOCwS6H,,editor/dataset-values
+target,found,nbBCL87roGNj,Target,define-location,AYFSAzltJPA5,Target,LFt8YJgCzsAc,Target,Target,D0dyuthxsbVq,NONE,-,r6IRIBRQjqL9,Target,Target,pQLM5gCwuXMs,,commands/center;commands/crosshair
+test-tube,found,XO5nRSypAbfH,Test Tube,test-tube,9ZmP1ylpYlqn,Test Tube,PHisKgEYGbvs,Test Tube,Test Tube,YTL1DYkQg6PU,CIP68rnmhjLL,Test Tube,Hvs0JNtrOWIK,Test Tube,Test Tube,KipbvWobcG21,Thermometer alt: fluent e3LJkBOFiBL7,editor/add-bar+plus;editor/bar;widgets/bar
+text-cursor,found,zmGkWS4xQc6w,Text Box,text-box,eqRUtctjLQ1S,Text Box,tdMMTYOkVMZv,Text Box,-,NONE,NONE,-,NONE,NONE,-,NONE,Deco lacks Text Box; only plain Text 48sLlls3fuS4,editor/add-output-textfield+plus;editor/output-textfield
+timer,found,YlbPwaTGiD2X,Timer,timer,RdG9RHtfdFqQ,Timer,655LnEUAFYvk,Timer,Stopwatch,AuTs0TyOkr2H,tPtmOacA9TwY,Timer,isiHSH8q3dX7,Timer,Timer,4GRjwm4vPcvh,Stopwatch also available,editor/timer;widgets/stopwatch
+toggle,found,5CMHPdWhmepX,Toggle On,toggle-on,CGthcXCKOHK3,Toggle On,rcVuiJyS5ZCW,Toggle On,Toggle On,wVUzIcK1t0FA,kCi9ekKm2M2G,Toggle On,KS9D26CXGGZU,Toggle On,Toggle On,p9wKUvKTH3R8,,editor/add-output-toggle+plus;editor/output-toggle
+toolbox,found,2sWu6PtiXHWx,Toolbox,toolbox,JDfW9bMaRZ5A,Toolbox,fUl9O2zKS1Co,Toolbox,Toolbox,zxpCk4WfG8Ms,aUwOJCL3MOKA,Toolbox,1wqNF9fFNgHc,Toolbox,Toolbox,8vYWgXDttjDa,,commands/device-setup;panes/setup
+tools,found,Vh44ppGKSLoR,Tools,maintenance,JAjjXwutpp6u,Maintenance,ISeBB5SFp53c,Tools,Tools,75DmSuvHcYyA,Q4mQ50tco5Od,Tools,bcX5uir9v4n8,Tools,Tools,ywuET2ME1Txx,,commands/tools;console/utilities
+translate,found,mEjjp0oFPnvc,Translation,translation,ATyopqqrSNu8,Translation,Ej1Lem2AQ6Dv,Translation,Language,3UV8roKXP3Z6,rHnBbBAcEkIl,Translation,NONE,NONE,-,NONE,No deco translation icon,editor/text-encoding
+txt-file,found,50nDvbuc0xFF,TXT,txt,1R9ZQBnf2FQT,TXT,NONE,NONE,-,NONE,t9SGKWBgH6pJ,TXT,okvM1RWJ4nOK,TXT,TXT,plHnfQcwGBDr,Glass has no TXT icon,commands/console-log+arrow;editor/protobuf
+usb,found,FlnYHAW3wYBn,USB Memory Stick,usb-memory-stick,qHLY3Ha7FyeS,USB Memory Stick,a5JQ8fiXrx9u,USB Memory Stick,-,NONE,qbwM40lp2XJm,USB Memory Stick,68AyQB62t5HD,USB Memory Stick,USB Memory Stick,FBhL0xc2EopJ,,devices/usb
+warning,found,EggHJUeUuU6C,General Warning Sign,general-warning-sign,sWOXMMdMXpBD,Error,5PexHbhSpPcd,Error,Error,1DgDqF4LqPRO,NONE,-,LNmmctG091Sx,Error,Error,2FSM8ovFEqNs,Glass and deco use Error sign,notifications/warning
+warning-red,found,51w77eaukGoV,High Priority,high-priority,iiUA4lmXQNnG,High Priority,?,?,High Priority,eUQLSzhKv4xk,Uugf9kZ0JvP7,High Priority,?,?,-,NONE,Red diamond with exclamation; glass/deco to re-check,notifications/critical
+weather,found,zIVmoh4T8wh7,Partly Cloudy Day,partly-cloudy-day,vRCpyBKENl5l,Partly Cloudy Day,keKAmpbcwTBM,Partly Cloudy Day,Partly Cloudy Day,GOMYaLD1gQoU,R5QLDwYPNm1R,Partly Cloudy Day,jfNm8EPJQIpV,Partly Cloudy Day,Partly Cloudy Day,rSTxwmqmRyYT,,commands/weather
+window-flash,weak,0ZNXJnXqu3Lh,Flash On,flash-on,VXpZtycqaGqG,Flash On,3oAicrfEblv2,Flash On,Flash On,VsDZPjOK342V,cNi8BfWP5t2C,Flash On,EaCrRPuJH5dq,Flash On,Flash On,ul9IcEb6qLdS,Camera flash bolt only; no window; alt Quick Mode On,commands/actions
+window-gear,found,Fnme1aXsw34v,Window Settings,window-settings,PNtmKWakr57S,Window Settings,NONE,NONE,-,NONE,NONE,-,NONE,NONE,-,NONE,Glass/deco have no window-settings; only laptop settings,commands/add-workspace+plus
+window-minimize,pending,?,?,,?,?,?,?,?,?,?,?,?,?,?,?,House review 2026-11-07: pack ids still to search,commands/window-minimize
+window-play,found,TPyG4ejO9nAC,Test,test,LJ10Qr4TD9Y8,Test,?,?,-,NONE,VzEme0vRm6Aj,Test,?,?,-,NONE,"Fluent Test glyph, so the palette keeps Run Command alone",code/test
+window-popout,found,57GgOxl1VjRW,External Link,external-link,hUqP035cA2Bd,External Link,QYd5yJnmjVdK,External Link,-,NONE,f1PTlqCk1gd7,External Link,mxBy4vYrLUGT,External,External,MgBJHjR6NfwM,,commands/external-window
+window-trash,weak,6NZ0qD9MkezO,Delete Document,delete-property,vktFE8rU8Am0,Delete Document,y6mKQSh49Y8n,Delete Document,-,NONE,EjbkW1Zrd635,Delete Document,f66J3WDqijag,Delete Document,Delete Document,Pr3w8Q3Rw8yD,"Document with delete, not a window",database/delete
+window-x,pending,?,?,,?,?,?,?,?,?,?,?,?,?,?,?,House review 2026-11-07: pack ids still to search,commands/window-close
+windows,weak,MdMvE4eOwipK,Application Window,application-window,MgtWwuzU6wrH,Application Window,NONE,NONE,Application Window,2bgmRWbhJfTo,uvzsU7O4WeID,Application Window,NONE,NONE,-,NONE,Single window only; no stacked windows icon,widgets/workspace
+workspace-grid,weak,wHQD0ZPw91PK,View Module,view-module,T9zWw154ms5k,View Module,FaHoKJCgervK,View Module,Dashboard Layout,vFmgFwi5ZQvd,NONE,-,YzFJ39blowfI,Module,-,NONE,Four-squares match unverified; fluent Dashboard Layout S5D5w5vFLhYp alt,commands/workspaces;editor/workspace
+wrench,found,UogpVYM8jC0S,Wrench,wrench,VuNO5eSHIj35,Wrench,OFYOzUGyiJJG,Wrench,Wrench,9jqYfnMk3NkX,zQCANmsP9fha,Wrench,iKWyX7rF7yR2,Wrench,Wrench,3CnbewJMhnpj,Glass/deco ids are the 'support' wrench,commands/settings
+zoom-in,found,EdWowxx2Bj85,Zoom In,zoom-in,2vADHy9Z7ATx,Zoom In,wRZmDbmIGMFE,Zoom In,Zoom In,w6czJH4tjvJl,9NIhzj1QqU7V,Zoom In,mMUCNI8aXjdk,Zoom In,Zoom In,0piZZ8qZHSAb,,commands/zoom-in
+zoom-out,found,4w43CC522O3S,Zoom Out,zoom-out,B3rtongZbJz8,Zoom Out,L69I8KnunB0x,Zoom Out,Zoom Out,JQFEWijIVsVm,4heFQ86z7bCE,Zoom Out,LFdczQzgUkMM,Zoom Out,Zoom Out,DzQKQ8roVyMg,,commands/zoom-out

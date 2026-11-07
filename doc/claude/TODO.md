@@ -16,25 +16,6 @@ the tier size, with the artwork in a scale group.
 
 <!-- claim-verify off -->
 
-### Commands with no icon (added 2026-11-04)
-
-These commands render as a blank cell in the palette. Once an icon exists, point the command's
-`icon` field at it in `app/rcc/commands/app.json` or `projecteditor.json`.
-
-- [ ] `commands/alarm-acknowledge`: Acknowledge Alarms (`alarms.acknowledge`)
-- [ ] `commands/alarm-silence`: Silence Alarms (`alarms.silence`)
-- [ ] `commands/alarm-reset`: Reset Alarms (`alarms.reset`)
-- [ ] `commands/alarm-test`: Test Alarm Sounds (`alarms.test`)
-- [ ] `commands/sound-mute` and `commands/sound-unmute`: Mute Sounds (`alarms.mute`, a toggle;
-  the second is its `iconChecked`)
-- [ ] `commands/workspace-next`: Next Workspace (`workspace.next`)
-- [ ] `commands/workspace-previous`: Previous Workspace (`workspace.previous`)
-- [ ] `commands/window-close`: Close Window (`window.closeActive`)
-- [ ] `commands/window-minimize`: Minimize Window (`window.minimizeActive`)
-- [ ] `commands/window-clear`: Clear Window (`window.clearActive`)
-- [ ] `editor/navigate-back`: Navigate Back (`editor.navigateBack`)
-- [ ] `editor/navigate-forward`: Navigate Forward (`editor.navigateForward`)
-
 ### Borrowed icons
 
 - [ ] `editor/frequency-markers` (24, 32): the dataset toolbar's Frequency Markers button uses
@@ -44,27 +25,23 @@ These commands render as a blank cell in the palette. Once an icon exists, point
 
 ### Missing 32 px tier (blurry in the palette)
 
-Used at 32 px but drawn only smaller, or only at 16 and 48 (`scripts/icon-report.py`, gaps):
+Left after the 2026-11-07 Office sweep (spec 0115 T13), where Icons8 Office has no faithful
+drawing at 40 px:
 
-- [ ] `code/undo`, `code/redo`
-- [ ] `commands/clear`, `commands/return`
-- [ ] `editor/customize`, `editor/delete`, `editor/duplicate`, `editor/edit-code`,
-  `editor/hide`, `editor/import-table`, `editor/move-up`, `editor/move-down`,
-  `editor/move-folder`, `editor/rename`, `editor/top-level-folder`, `editor/widget`
-- [ ] `editor/open`, `editor/show`, `editor/workspace` (have 16 and 48 only)
+- [ ] `editor/customize`, `editor/move-down`, `editor/move-folder`, `editor/top-level-folder`
+- [ ] `editor/left`, `editor/right` (the chevrons; also serve `editor.navigateBack/Forward`)
+- [ ] `editor/widget` and `editor/workspace` at 32: the Office candidates (a JSON file, a flow
+  diagram) changed the metaphor and were not kept
 
 ### Gaps in a size ladder
 
-A tier is missing between two that exist (`scripts/icon-report.py`, tier holes):
+Left after the sweep (`scripts/icon-report.py`, tier holes):
 
-- [ ] Missing 24: `commands/add-workspace`, `commands/audio-file`, `commands/camcoder`,
-  `commands/center`, `commands/csv`, `commands/csv-log`, `commands/database-export`,
-  `commands/deepwiki`, `commands/deploy`, `commands/examples`, `commands/extensions`,
-  `commands/open-project`, `commands/pause`, `commands/resume`, `commands/sessions`,
-  `commands/sound-folder`, `editor/dataset`, `editor/group`, `editor/mqtt-publisher`,
-  `editor/save`, `editor/save-as`, `widgets/painter`
-- [ ] Missing 24 and 32: `commands/pictures-folder`, `editor/dashboard-widgets`
-- [ ] Missing 32: `editor/device`
+- [ ] Missing 24: `commands/add-workspace`, `commands/clear`, `commands/return`, `database/*`
+  (eight ids drawn at 16 and 32), `editor/hide`, `editor/open`, `editor/rename`, `editor/show`,
+  `editor/widget`, `editor/workspace`
+- [ ] Missing 32: `licensing/license` (the Office 40 px candidate is a rosette, not a certificate)
+- [ ] `licensing/plan` at 24 and `database/restore` at 16 have no Office drawing
 
 <!-- claim-verify on -->
 

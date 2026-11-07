@@ -52,7 +52,7 @@ pictures-folder|folder with a picture|pictures folder;image folder;photo folder|
 blueprint|ruler with pencil on blue grid|blueprint;ruler pencil;design;drafting|commands/project-setup;editor/customize;editor/project
 close-circle|red circle with white x|cancel;close;exit;shutdown|commands/quit;database/close
 router|wireless router or antenna box|router;wifi router;remote access;antenna|commands/remote-attach
-reset|two circular arrows|reset;restart;refresh;synchronize|commands/reset;editor/control-script;code/reload
+reset|two circular arrows|reset;restart;refresh;synchronize|commands/reset;editor/control-script;code/reload;commands/alarm-reset
 play|green play triangle|play;resume;start|commands/resume;database/replay
 return-arrow|curved back arrow|return;undo;back arrow;reply|commands/return;code/undo
 redo-arrow|curved forward arrow|redo;forward arrow|code/redo
@@ -113,8 +113,8 @@ eye-off|eye crossed out|hide;invisible;eye closed|editor/hide
 eye|eye|visible;eye;show;preview|editor/show
 chevron-down|downward chevron|expand arrow;chevron down;collapse arrow|editor/indicator
 pi|Greek letter pi|pi;math constant;pi symbol|editor/insert-constant+plus
-chevron-left|left chevron|chevron left;back;less than|editor/left
-chevron-right|right chevron|chevron right;forward;greater than|editor/right
+chevron-left|left chevron|chevron left;back;less than|editor/left;commands/workspace-previous
+chevron-right|right chevron|chevron right;forward;greater than|editor/right;commands/workspace-next
 padlock|closed padlock|lock;padlock;locked|editor/lock;editor/mqtt-ssl;database/lock
 padlock-open|open padlock|unlock;unlocked;open lock|database/unlock
 circle-down|circle with a down chevron|circled down;down arrow circle;collapse|editor/move-down
@@ -172,3 +172,9 @@ id-card|ID card with a user|user;id card;contact card|licensing/user
 monitor-check|monitor with a check mark|verified device;monitor check;fingerprint;approved|licensing/uuid
 warning-red|red triangle with exclamation|high priority;error;critical|notifications/critical
 warning|yellow triangle with exclamation|warning;error triangle;caution|notifications/warning
+check-mark|green check mark acknowledging an alert|checkmark;approval;acknowledge|commands/alarm-acknowledge
+bell-off|bell crossed out, alerts silenced|do not disturb;mute notifications;no bell|commands/alarm-silence
+speaker|speaker with sound waves|speaker;audio;sound|commands/sound-unmute
+speaker-off|speaker crossed out|mute;no audio;speaker off|commands/sound-mute
+window-x|application window with a close cross|close window;close program|commands/window-close
+window-minimize|application window minimizing|minimize window;collapse window|commands/window-minimize
