@@ -65,9 +65,11 @@ it is free. That fixes the order of work: this spec lands before the registry PR
 1. **R1 — Group widget.** The group widget list offers an LED Panel with its own key, chosen
    wherever Bar Panel can be chosen: the Project Editor's group widget selector, the add-widget
    dialog, the API's group commands and the firmware declaration vocabulary.
-2. **R2 — Membership is the group.** Every dataset in an LED Panel group is shown as an LED.
-   **Hide on Dashboard** on a member hides that LED only, the same as it hides a Bar Panel row.
-   No other property decides membership.
+2. **R2 — Membership is the group.** Every dataset in an LED Panel group is shown as an LED,
+   **Hide on Dashboard** included, exactly as every dataset in a Bar Panel group is a row (the
+   flag only removes a dataset's own widgets). No other property decides membership.
+   (Amended 2026-11-07 during planning: the first draft claimed Bar Panel hides a row, which it
+   does not.)
 3. **R3 — LED state.** A member with alarm bands lights in the active band's color, shows the
    band's label and blinks when the band says so, and is off outside every band. A member
    without bands lights in the dataset color when its value meets or exceeds its `ledHigh`
@@ -82,12 +84,14 @@ it is free. That fixes the order of work: this spec lands before the registry PR
 6. **R6 — Faithful migration.** On opening a project written before this change, every group
    that contains flagged datasets gains a new LED Panel group immediately after it, holding a
    copy of each flagged dataset (same frame index, title, units, threshold, bands and format).
-   The source group keeps its datasets, minus the flag. The new group's title is the source
+   A flagged dataset that is also hidden is not copied, since it showed no LED. The source group
+   keeps its datasets, minus the flag. The new group's title is the source
    group's title followed by a short, translated suffix. The migrated project is marked
    modified so the user is prompted to save it in the new form.
 7. **R7 — Migration is one-shot and idempotent.** A project saved after migration never
-   migrates again. A project with the old key and no flagged dataset changes only by dropping
-   the key.
+   migrates again, because the saved form no longer carries anything that triggers it. A project
+   with the old key and no flagged dataset changes only by dropping the key. Opening an
+   already-migrated save must leave every workspace intact.
 8. **R8 — Quick Plot and declarations.** A device declaration naming the LED Panel group
    widget produces an LED Panel group. The per-channel LED call and key are removed from the
    Arduino, C and Python declaration vocabularies; a stream that still sends the old key is
@@ -114,10 +118,10 @@ it is free. That fixes the order of work: this spec lands before the registry PR
       integration test passes with regenerated baselines.
 - [ ] **AC2 (R6, R7)** — For each of the seven examples, a scratchpad script that loads the
       pre-change file and the migrated save reports the same dashboard widget multiset
-      (one Data Grid plus one LED Panel per affected group, same member titles and thresholds).
-      Opening the migrated save again produces no further change. This runs as a pytest
-      integration test against the running app, loading the pre-change files from a fixture
-      directory.
+      (one Data Grid plus one LED Panel per affected group, same member titles and thresholds,
+      LED Panels in the same relative order). Opening the migrated save again produces no
+      further change and keeps its workspaces. This runs as a pytest integration test against
+      the running app, loading pre-change files from a fixture directory.
 - [ ] **AC3 (R3, R4)** — The alarm-band applicability unit test gains cases for an LED Panel
       member (bands draw and alarm), an LED Panel member with Hide on Dashboard (no widget, no
       alarm) and a dataset moved out of an LED Panel group (bands kept, inert). It passes under
