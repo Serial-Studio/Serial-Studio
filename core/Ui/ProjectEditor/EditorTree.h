@@ -57,6 +57,7 @@ public:
   [[nodiscard]] bool treeIndexExpanded(const QModelIndex& index) const;
   [[nodiscard]] bool treeIndexHasChildren(const QModelIndex& index) const;
   [[nodiscard]] static QString datasetTreeIcon(const DataModel::Dataset& dataset);
+  [[nodiscard]] static QString outputWidgetIcon(DataModel::OutputWidgetType type);
 
   void buildTreeModel();
   void expandAllTreeItems();

@@ -429,11 +429,8 @@ void EditorCommit::onGroupItemChanged(QStandardItem* item)
   auto& pm           = m_model;
   const auto groupId = m_editor.m_selectedGroup.groupId;
 
-  if (id == kGroupView_Dataset) {
-    const int datasetId = item->data(ParameterKey).toInt();
-    QTimer::singleShot(0, &m_editor, [this, groupId, datasetId] {
-      m_editor.m_selection.selectDataset(groupId, datasetId);
-    });
+  if (id == kGroupView_Dataset || id == kGroupView_OutputWidget) {
+    m_editor.m_selection.openGroupChildDeferred(groupId, id, item->data(ParameterKey).toInt());
     return;
   }
 

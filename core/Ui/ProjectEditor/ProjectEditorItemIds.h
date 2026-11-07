@@ -75,7 +75,8 @@ typedef enum {
   kGroupView_Dataset,
   kGroupView_LogX,
   kGroupView_LogY,
-  kGroupView_BarPanelStyle
+  kGroupView_BarPanelStyle,
+  kGroupView_OutputWidget
 } GroupItem;
 
 /**

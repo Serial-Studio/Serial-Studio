@@ -59,6 +59,7 @@ public:
   void displayFrameParserView(int sourceId);
   void selectDataset(int groupId, int datasetId);
   void selectOutputWidget(int groupId, int widgetId);
+  void openGroupChildDeferred(int groupId, int kind, int key);
   void onCurrentSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 
   [[nodiscard]] bool selectedDatasetComputed() const;

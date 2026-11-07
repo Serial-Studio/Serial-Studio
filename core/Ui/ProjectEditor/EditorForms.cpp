@@ -318,6 +318,36 @@ void EditorForms::buildGroupDatasetsSection(const DataModel::Group& group)
 }
 
 /**
+ * @brief Appends an "Output Controls" section header plus one navigable row per output control,
+ *        the same folder-style navigation the datasets section gives a data group.
+ */
+void EditorForms::buildGroupOutputWidgetsSection(const DataModel::Group& group)
+{
+  if (group.outputWidgets.empty())
+    return;
+
+  auto& registry = Core::services().iconRegistry;
+  auto* hdr      = new QStandardItem();
+  hdr->setData(SectionHeader, WidgetType);
+  hdr->setData(tr("Output Controls"), PlaceholderValue);
+  hdr->setData(registry.icon(QStringLiteral("widgets"), QStringLiteral("output-panel"), 16),
+               ParameterIcon);
+  m_editor.m_groupModel->appendRow(hdr);
+
+  for (const auto& ow : group.outputWidgets) {
+    auto* item = new QStandardItem();
+    item->setEditable(false);
+    item->setData(true, Active);
+    item->setData(NavRow, WidgetType);
+    item->setData(EditorTree::outputWidgetIcon(ow.type), ParameterIcon);
+    item->setData(ow.widgetId, ParameterKey);
+    item->setData(kGroupView_OutputWidget, ParameterType);
+    item->setData(ow.title, ParameterName);
+    m_editor.m_groupModel->appendRow(item);
+  }
+}
+
+/**
  * @brief Appends the multiplot X-Axis selector (Time or Samples) and the log-scale
  *        toggles to the group model.
  */
@@ -466,6 +496,7 @@ void EditorForms::buildGroupModel(const DataModel::Group& group)
 
   buildGroupImageSection(group);
   buildGroupDatasetsSection(group);
+  buildGroupOutputWidgetsSection(group);
 
   QObject::connect(m_editor.m_groupModel,
                    &CustomModel::itemChanged,

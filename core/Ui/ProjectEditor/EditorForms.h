@@ -68,6 +68,7 @@ public:
 private:
   void openAlarmBandsEditorForMultiSelection();
   void buildGroupXAxisRow(const DataModel::Group& group);
+  void buildGroupOutputWidgetsSection(const DataModel::Group& group);
   void buildGroupWebViewRow(const DataModel::Group& group);
   void buildGroupImageSection(const DataModel::Group& group);
   void buildGroupSourceSection(const DataModel::Group& group);

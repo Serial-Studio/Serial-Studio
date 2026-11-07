@@ -751,6 +751,21 @@ void EditorSelection::selectOutputWidget(int groupId, int widgetId)
 }
 
 /**
+ * @brief Opens a group form's navigation row on the next event-loop turn: @p kind is the row's
+ *        ParameterType (a dataset or an output control) and @p key its id. Deferred so the form
+ *        that emitted the click is not rebuilt under its own delegate.
+ */
+void EditorSelection::openGroupChildDeferred(const int groupId, const int kind, const int key)
+{
+  QTimer::singleShot(0, &m_editor, [this, groupId, kind, key] {
+    if (kind == kGroupView_Dataset)
+      selectDataset(groupId, key);
+    else if (kind == kGroupView_OutputWidget)
+      selectOutputWidget(groupId, key);
+  });
+}
+
+/**
  * @brief Selects the Frame Parser tree item for the given source, deferred.
  */
 void EditorSelection::displayFrameParserView(int sourceId)

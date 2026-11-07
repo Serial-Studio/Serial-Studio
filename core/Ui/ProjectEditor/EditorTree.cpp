@@ -414,6 +414,30 @@ void EditorTree::appendDatasetChildren(QStandardItem* groupItem, const DataModel
 }
 
 /**
+ * @brief The 16 px editor icon for an output control of @p type, shared by the tree and the group
+ *        form's navigation rows so the two never drift.
+ */
+QString EditorTree::outputWidgetIcon(const DataModel::OutputWidgetType type)
+{
+  auto& registry    = Core::services().iconRegistry;
+  const auto editor = QStringLiteral("editor");
+  switch (type) {
+    case DataModel::OutputWidgetType::Button:
+      return registry.icon(editor, QStringLiteral("output-button"), 16);
+    case DataModel::OutputWidgetType::Slider:
+      return registry.icon(editor, QStringLiteral("output-slider"), 16);
+    case DataModel::OutputWidgetType::Toggle:
+      return registry.icon(editor, QStringLiteral("output-toggle"), 16);
+    case DataModel::OutputWidgetType::TextField:
+      return registry.icon(editor, QStringLiteral("output-textfield"), 16);
+    case DataModel::OutputWidgetType::Knob:
+      return registry.icon(editor, QStringLiteral("output-knob"), 16);
+    default:
+      return registry.icon(editor, QStringLiteral("widget"), 16);
+  }
+}
+
+/**
  * @brief Appends output-widget children of a group. Skipped entirely when filtering.
  */
 void EditorTree::appendOutputWidgetChildren(QStandardItem* groupItem, const DataModel::Group& group)
@@ -422,33 +446,9 @@ void EditorTree::appendOutputWidgetChildren(QStandardItem* groupItem, const Data
   if (!m_editor.m_treeSearchQuery.trimmed().isEmpty())
     return;
 
-  auto& registry = Core::services().iconRegistry;
   for (const auto& ow : group.outputWidgets) {
     auto* owItem = new QStandardItem(ow.title);
-
-    QString owIcon;
-    switch (ow.type) {
-      case DataModel::OutputWidgetType::Button:
-        owIcon = registry.icon(QStringLiteral("editor"), QStringLiteral("output-button"), 16);
-        break;
-      case DataModel::OutputWidgetType::Slider:
-        owIcon = registry.icon(QStringLiteral("editor"), QStringLiteral("output-slider"), 16);
-        break;
-      case DataModel::OutputWidgetType::Toggle:
-        owIcon = registry.icon(QStringLiteral("editor"), QStringLiteral("output-toggle"), 16);
-        break;
-      case DataModel::OutputWidgetType::TextField:
-        owIcon = registry.icon(QStringLiteral("editor"), QStringLiteral("output-textfield"), 16);
-        break;
-      case DataModel::OutputWidgetType::Knob:
-        owIcon = registry.icon(QStringLiteral("editor"), QStringLiteral("output-knob"), 16);
-        break;
-      default:
-        owIcon = registry.icon(QStringLiteral("editor"), QStringLiteral("widget"), 16);
-        break;
-    }
-
-    owItem->setData(owIcon, TreeViewIcon);
+    owItem->setData(outputWidgetIcon(ow.type), TreeViewIcon);
     owItem->setData(ow.title, TreeViewText);
     owItem->setData(-2, TreeViewFrameIndex);
     owItem->setData(ow.sourceId, TreeViewSourceId);
