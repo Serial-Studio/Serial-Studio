@@ -665,3 +665,18 @@ Allen-Bradley CompactLogix and ControlLogix controllers. The library is built
 from unmodified upstream source fetched at build time; the build definition
 lives in `lib/libplctag` of the Serial Studio repository. Under section 3.2 of
 the License, that same source is available from the project page above.
+
+## Icons8
+
+The interface icons of the themed categories (commands, the Project Editor,
+widgets, devices, panes, the console, the database explorer, the code editor,
+licensing and notifications) and every bundled icon pack are by Icons8, used
+under the Icons8 Universal Multimedia License Agreement on a paid subscription.
+The button glyphs and the window controls are first-party drawings.
+
+Icons by Icons8: [https://icons8.com](https://icons8.com)
+
+The agreement is published at
+[https://intercom.help/icons8-7fb7577e8170/en/articles/5534926-universal-multimedia-license-agreement-for-icons8](https://intercom.help/icons8-7fb7577e8170/en/articles/5534926-universal-multimedia-license-agreement-for-icons8).
+The icons are not relicensed under the GPL or the Serial Studio Commercial
+License and may not be extracted for use as stand-alone files.

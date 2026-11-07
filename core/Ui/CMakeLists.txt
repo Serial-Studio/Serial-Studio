@@ -64,6 +64,8 @@ qt_add_library(
   Misc/Examples.cpp
   Misc/HelpCenter.cpp
   Misc/IconEngine.cpp
+  Misc/IconPacks.cpp
+  Misc/IconPackImageProvider.cpp
   Misc/IconRegistryLegacy.cpp
   UI/CommandRegistry.cpp
   UI/CommandStrings.cpp
@@ -187,6 +189,8 @@ qt_add_library(
   Misc/Examples.h
   Misc/HelpCenter.h
   Misc/IconEngine.h
+  Misc/IconPacks.h
+  Misc/IconPackImageProvider.h
   Misc/IconRegistryLegacy.h
   UI/CommandRegistry.h
   UI/Widgets/StrokeHdrMaterial.h

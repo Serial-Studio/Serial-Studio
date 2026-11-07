@@ -42,6 +42,7 @@ class TrialGate;
 #endif
 
 namespace Misc {
+class IconPacks;
 class SimdSettings;
 class ProblemCenter;
 
@@ -133,6 +134,7 @@ private:
   bool m_automaticUpdates;
   bool m_performanceMode;
   bool m_inhibitIdleSleep;
+  std::unique_ptr<IconPacks> m_iconPacks;
   NativeWindow m_nativeWindow;
   QQmlApplicationEngine m_engine;
 #ifdef BUILD_COMMERCIAL

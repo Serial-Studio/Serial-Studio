@@ -73,6 +73,13 @@ Item {
     }
   }
 
+  Connections {
+    target: Cpp_Misc_IconRegistry
+    function onRevisionChanged() {
+      root.pushContent()
+    }
+  }
+
   //
   // Spinner shown until Chromium finishes loading the viewer page. The view fades via
   // opacity (never visible: false) so layout constraints hold and the page loads eagerly.

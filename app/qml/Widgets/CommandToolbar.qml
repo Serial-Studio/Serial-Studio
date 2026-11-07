@@ -77,7 +77,10 @@ Item {
     iconSize: hints.iconSize !== undefined ? hints.iconSize : 32
     text: (isChecked && node.titleChecked !== undefined && node.titleChecked.length > 0)
             ? node.titleChecked : node.title
-    icon.source: iconRef.length > 0 ? Cpp_Misc_IconRegistry.iconById(iconRef, iconSize) : ""
+    icon.source: iconRef.length > 0
+                 ? Cpp_Misc_IconRegistry.iconByIdOn(root.secondaryToolbar ? "text" : "strip",
+                                                   iconRef, iconSize)
+                 : ""
     onClicked: {
       if (behavior !== null)
         behavior.run()

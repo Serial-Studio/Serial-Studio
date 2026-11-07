@@ -79,6 +79,10 @@ def load_demand() -> dict[tuple[str, str], dict[int, set[str]]]:
         r'(?:QStringLiteral\()?"([^"]+)"\)?\s*,\s*(\d+)\s*\)'
     )
     re_b = re.compile(r'\.iconById\(\s*"([a-z0-9]+)/([^"]+)"\s*,\s*(\d+)\s*\)')
+    re_d = re.compile(
+        r'\.iconOn\(\s*[^,]+,\s*"([a-z0-9]+)"\s*,\s*"([^"]+)"\s*,\s*(\d+)\s*\)'
+    )
+    re_e = re.compile(r'\.iconByIdOn\(\s*[^,]+,\s*"([a-z0-9]+)/([^"]+)"\s*,\s*(\d+)\s*\)')
     re_c = re.compile(
         r'\.iconById\([^,]*?"([a-z0-9]+)/([^"]+)"\s*:\s*"([a-z0-9]+)/([^"]+)"\s*,\s*(\d+)\s*\)'
     )
@@ -91,6 +95,10 @@ def load_demand() -> dict[tuple[str, str], dict[int, set[str]]]:
             for m in re_a.finditer(text):
                 demand[(m.group(1), m.group(2))][int(m.group(3))].add(label)
             for m in re_b.finditer(text):
+                demand[(m.group(1), m.group(2))][int(m.group(3))].add(label)
+            for m in re_d.finditer(text):
+                demand[(m.group(1), m.group(2))][int(m.group(3))].add(label)
+            for m in re_e.finditer(text):
                 demand[(m.group(1), m.group(2))][int(m.group(3))].add(label)
             for m in re_c.finditer(text):
                 px = int(m.group(5))

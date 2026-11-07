@@ -122,6 +122,29 @@ Item {
       }
     }
 
+    Label {
+      text: qsTr("Icon Pack")
+      color: Cpp_ThemeManager.colors["text"]
+    } Widgets.Combo {
+      id: _iconPackCombo
+
+      objectName: "settings.general.iconPack"
+
+      Layout.fillWidth: true
+      currentIndex: Cpp_Misc_IconRegistry.pack
+      model: Cpp_Misc_IconRegistry.availablePacks
+      onActivated: {
+        Cpp_Misc_IconRegistry.pack = currentIndex
+      }
+
+      Connections {
+        target: Cpp_Misc_IconRegistry
+        function onPackChanged() {
+          _iconPackCombo.currentIndex = Cpp_Misc_IconRegistry.pack
+        }
+      }
+    }
+
     Item {
       implicitHeight: 2
       Layout.columnSpan: 2

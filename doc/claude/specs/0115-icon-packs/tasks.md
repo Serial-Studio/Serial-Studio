@@ -1,7 +1,7 @@
 ---
 spec: 0115-icon-packs
 phase: tasks
-status: draft        # draft -> approved (gate before /ss-implement)
+status: approved     # 2026-11-07, maintainer
 updated: 2026-11-07
 ---
 
@@ -49,7 +49,7 @@ updated: 2026-11-07
 - **Verify:** `syntax-check.py` on both files; `code-verify.py --check`; header order rules
   (`Q_PROPERTY` none, `signals:` before ctor).
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T2 — Ui façade `Misc::IconPacks`
 
@@ -65,7 +65,7 @@ updated: 2026-11-07
 - **Verify:** `syntax-check.py`; `code-verify.py --check`; `layer-verify.py` (Ui includes
   Core only).
 - **Deps:** T1
-- [ ] done
+- [x] done
 
 ### T3 — Mono image provider
 
@@ -79,7 +79,7 @@ updated: 2026-11-07
 - **Verify:** `syntax-check.py`; `code-verify.py --check`; a PySide6 scratchpad render of one
   recoloured Outline SVG at 16 and 32 px, checked by eye.
 - **Deps:** T1
-- [ ] done
+- [x] done
 
 ### T4 — Composition root and resources
 
@@ -94,17 +94,19 @@ updated: 2026-11-07
   unchanged; `grep -n Cpp_Misc_IconRegistry app/src/Misc/ModuleManager.cpp` shows one
   registration.
 - **Deps:** T2, T3
-- [ ] done
+- [x] done
 
 ### T5 — Preferences row
 
 - **Files:** `app/qml/Dialogs/Settings/SettingsGeneralPage.qml`
 - **Does:** An **Icon Pack** combo under the Theme row (`objectName:
   "settings.general.iconPack"`), model `Cpp_Misc_IconRegistry.availablePacks`, index bound to
-  `pack`, the same `Connections` restore guard the Theme combo uses.
+  `pack`, the same `Connections` restore guard the Theme combo uses. Entries: *Follow theme*,
+  *Office (default)* (the house set pinned, stored as `office`; maintainer request 2026-11-07),
+  then the bundled packs.
 - **Verify:** `code-verify.py --check --no-report`; `term-verify.py` ("Icon pack").
 - **Deps:** T2
-- [ ] done
+- [x] done
 
 ### T6 — Strip tones on the dark surfaces
 
@@ -117,19 +119,19 @@ updated: 2026-11-07
 - **Verify:** `code-verify.py --check --no-report`; `registry-verify.py` render-size lint still
   matches every request.
 - **Deps:** T2
-- [ ] done
+- [x] done
 
 ### T7 — Help viewer and palette follow the pack
 
 - **Files:** `app/qml/Widgets/MarkdownIcons.js`, `app/qml/Widgets/MarkdownTextView.qml`,
-  `app/qml/Widgets/MarkdownWebView.qml`, `core/Ui/UI/Taskbar.cpp`
-- **Does:** The two viewers re-run the placeholder rewrite on `revisionChanged`; `Taskbar.cpp`
-  rebuilds the palette entries holding a resolved URL on `IconRegistry::packChanged`
-  (**signal-wiring rule:** read the existing connections in `Taskbar.cpp` first; direct
-  connection, same thread).
+  `app/qml/Widgets/MarkdownWebView.qml`
+- **Does:** The web viewer re-runs the placeholder rewrite on `revisionChanged` (the text viewer
+  already re-evaluates: its binding reads the notifying `iconById` property through
+  `MarkdownIcons.js`). `Taskbar.cpp` needs no change: every palette and taskbar consumer
+  prefers the `iconId` role over the resolved URL, so the switch is live there already.
 - **Verify:** `syntax-check.py` on `Taskbar.cpp`; `code-verify.py --check`.
 - **Deps:** T2
-- [ ] done
+- [x] done
 
 ### Stage B — tooling and tests
 
@@ -148,7 +150,7 @@ updated: 2026-11-07
 - **Verify:** `python3 scripts/icon-packs.py check` on an empty tree passes; `--help` lists the
   subcommands; `code-verify.py` has no Python rules, so `python3 -m pyflakes` if available.
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T9 — Lint hook and fixture tests
 
@@ -160,7 +162,7 @@ updated: 2026-11-07
   as AC1/AC11 say.
 - **Verify:** `pytest scripts/tests/test_icon_packs.py -q`; `python3 scripts/registry-verify.py`.
 - **Deps:** T8
-- [ ] done
+- [x] done
 
 ### T10 — ctest unit for the registry
 
@@ -169,10 +171,11 @@ updated: 2026-11-07
   pack; every house id at 16/24/32/48 resolves off the placeholder under each pack (AC2);
   `window`/`system` ignore the pack; the mono URL carries the tint and changes with `setTints`;
   an unknown id yields the placeholder.
-- **Verify:** `syntax-check.py` (borrow a same-library donor's compile entry for the new TU);
-  the maintainer's `ctest` run.
+- **Verify:** `syntax-check.py` reports SKIP (the unit-test tier is not in the Release compile
+  database), so the TU is **unverified by a compiler** until the maintainer's build; `ctest`
+  then runs it. Reviewed by read-back against `tst_theme_catalog.cpp`.
 - **Deps:** T1
-- [ ] done
+- [x] done
 
 ### Stage C — licence record
 
@@ -183,9 +186,13 @@ updated: 2026-11-07
   maintainer names) and `app/rcc/iconpacks/**` with `SPDX-FileCopyrightText = "Icons8 LLC"`
   and `SPDX-License-Identifier = "LicenseRef-Icons8"`; the licence text supplied by the
   maintainer from the account (never typed from memory). Lands in the first pack commit.
+  Done as a pointer file: `LicenseRef-Icons8.txt` cites the agreement's URL and the attribution
+  line, and `app/rcc/messages/Acknowledgements.txt` gains an Icons8 section (the maintainer's
+  2026-11-07 note: "basically we need to attribute"); the button, window and system folders stay
+  first-party.
 - **Verify:** `reuse lint` (AC8).
 - **Deps:** none (maintainer input: the licence text, the first-party exceptions)
-- [ ] done
+- [x] done
 
 ### Stage D — the house review
 
@@ -237,8 +244,11 @@ updated: 2026-11-07
   The decided metaphor swaps and house fallbacks (`sweep`, `waterfall`, `barpanel`, `nasa`)
   are honoured; `icons8-map.csv` status updated as files land.
 - **Verify:** `icon-packs.py check` coverage ≥ 85 %; `report --sheet` reviewed by eye.
+  Result 2026-11-07: 270 of 277 ids (97.5 %), the seven house fallbacks being the decided ones
+  (nasa, sweep, waterfall ×3, barpanel ×2); 166 downloads over four hourly batches, one SVG per
+  base at the 48 tier, spread to every plain id the base serves.
 - **Deps:** T8
-- [ ] done
+- [x] done
 
 ### T16 — Compose Fluent composites and generate the qrc
 
@@ -247,7 +257,7 @@ updated: 2026-11-07
   drawn from Fluent's own small symbols) and the X/Y letter glyphs; `qrc` regenerates the file.
 - **Verify:** `icon-packs.py check`; `registry-verify.py`; sheet reviewed.
 - **Deps:** T15
-- [ ] done
+- [x] done
 
 ### T17 — Themes name their pack; docs
 
@@ -261,14 +271,15 @@ updated: 2026-11-07
 - **Verify:** `documentation-verify.py` on the help pages; `claim-verify.py`; `term-verify.py`;
   `scripts/tests/test_material_theme.py` still passes (parameters are an existing section).
 - **Deps:** T15
-- [ ] done
+- [x] done
 
 ### T18 — First pack commit and the Icons8 letter
 
 - **Files:** everything in A–E; a short email draft in chat (not a repo file)
-- **Does:** One commit for the mechanism, tooling, tests, licence record, house review and the
-  Fluent pack (`Mechanical:` trailer for the artwork bulk); the maintainer sends the written
-  question to Icons8 about the public repository before Stage F lands.
+- **Does:** One commit for the mechanism, tooling, tests, licence record and the Fluent pack
+  (`Mechanical:` trailer for the artwork bulk); the maintainer sends the written question to
+  Icons8 about the public repository before Stage F lands. The house review (T12–T14) needs its
+  own 90-download allowance window and lands in the commit after this one.
 - **Verify:** commit hooks green; `git status` shows no foreign file touched.
 - **Deps:** T1–T17
 - [ ] done
@@ -326,7 +337,14 @@ updated: 2026-11-07
 
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.
 - [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `qt-cpp-review` run on the C++ diff (2026-11-07, six lenses): fixed the facade's
+      ownership (a `unique_ptr`; first declared after the engine, which made it die first and
+      flooded quit with "Cannot call method 'icon' of null" in the maintainer's run, then moved
+      before the engine: QV4's persistent-value pages keep a `QJSValue` valid past the engine), the duplicated root `fill` on stroke-style SVGs, tint and path validation in the
+      provider, a cached mono flag, a no-op rebind guard on theme changes, and an unread
+      `style` field; the verification pass also caught raw-string delimiters that had swallowed
+      the recolour regexes' opening parenthesis (patterns now `R"re(...)re"`, mirrored in Python
+      against real pack SVGs).
 - [ ] No hotpath touched (`--benchmark-hotpath` not required).
 - [ ] `pytest scripts/tests/test_icon_packs.py` and `test_material_theme.py` pass; `ctest`
       target `tst_icon_packs` identified for the maintainer.

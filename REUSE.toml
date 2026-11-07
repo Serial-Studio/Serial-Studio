@@ -8,6 +8,39 @@ SPDX-PackageDownloadLocation = "https://github.com/Serial-Studio/Serial-Studio"
 # trees (fonts/, vendor/) can never be swallowed by a wildcard: app/rcc/** would cover them too.
 # ------------------------------------------------------------------------------------------------
 
+# Icons8 artwork (the house icon set and every bundled icon pack) is used under the Icons8
+# Universal Multimedia License on the maintainer's paid plan; it is not relicensable under the
+# GPL. The exempt button glyphs and the window controls are first-party drawings and keep the
+# project licence below. Spec 0115 R14.
+[[annotations]]
+path = [
+  "app/rcc/icons/commands/**",
+  "app/rcc/icons/editor/**",
+  "app/rcc/icons/widgets/**",
+  "app/rcc/icons/devices/**",
+  "app/rcc/icons/panes/**",
+  "app/rcc/icons/console/**",
+  "app/rcc/icons/database/**",
+  "app/rcc/icons/code/**",
+  "app/rcc/icons/licensing/**",
+  "app/rcc/icons/notifications/**",
+  "app/rcc/iconpacks/*/**/*.svg",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Icons8 LLC <https://icons8.com>"
+SPDX-License-Identifier = "LicenseRef-Icons8"
+
+[[annotations]]
+path = [
+  "app/rcc/iconpacks/iconpacks.qrc",
+  "app/rcc/iconpacks/*/pack.json",
+  "app/rcc/icons/buttons/**",
+  "app/rcc/icons/window/**",
+  "app/rcc/icons/system/**",
+]
+SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
+SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+
 [[annotations]]
 path = [
   "app/rcc/actions/**",
@@ -17,7 +50,6 @@ path = [
   "app/rcc/commands/**",
   "app/rcc/demo/**",
   "app/rcc/extensions/**",
-  "app/rcc/icons/**",
   "app/rcc/images/**",
   "app/rcc/instruments/**",
   "app/rcc/logo/**",

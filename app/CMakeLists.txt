@@ -766,6 +766,7 @@ endif()
 #---------------------------------------------------------------------------------------------------
 
 qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
+qt_add_resources(PACKS_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/iconpacks/iconpacks.qrc)
 qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #---------------------------------------------------------------------------------------------------
@@ -868,6 +869,7 @@ qt_add_executable(
   ${HEADERS}
   ${QML_RCC}
   ${RES_RCC}
+  ${PACKS_RCC}
   ${SRC_RCC}
   ${QTR_RCC}
   ${QT_RCC_TRANSLATIONS}
@@ -1196,7 +1198,7 @@ if(SS_UNITY_BUILD)
     target_compile_options(${PROJECT_EXECUTABLE} PRIVATE /bigobj)
   endif()
 
-  set_source_files_properties(${RES_RCC} ${SRC_RCC} ${QTR_RCC}
+  set_source_files_properties(${RES_RCC} ${PACKS_RCC} ${SRC_RCC} ${QTR_RCC}
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
   )
 

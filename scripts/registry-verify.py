@@ -97,6 +97,22 @@ def check_tree(errors: list[str]) -> None:
             fail(errors, f"byte-identical duplicates: {', '.join(paths)}")
 
 
+def check_icon_packs(errors: list[str]) -> None:
+    """Spec 0115: the pack tree under app/rcc/iconpacks is judged by icon-packs.py (layout,
+    fixed categories, coverage gate, mapping and qrc consistency); its error lines join ours."""
+    run = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "icon-packs.py"), "check"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    for line in run.stdout.splitlines():
+        if line.startswith("error: "):
+            fail(errors, "icon-packs: " + line[len("error: "):])
+    if run.returncode not in (0, 1):
+        fail(errors, f"icon-packs.py check could not run: {run.stderr.strip()}")
+
+
 def qrc_entries() -> tuple[set[str], dict[str, str]]:
     text = QRC.read_text(encoding="utf-8")
     real = set(re.findall(r"<file>(icons/[^<]+)</file>", text))
@@ -333,7 +349,7 @@ RENDER_RES = (
     re.compile(r"\bsourceSize\.width\s*:\s*(\d+)\b"),
     re.compile(r"\bsourceSize\.height\s*:\s*(\d+)\b"),
 )
-REQUEST_RE = re.compile(r"IconRegistry\.icon(?:ById)?\([^)]*\b(\d+)\s*\)")
+REQUEST_RE = re.compile(r"IconRegistry\.icon(?:ById)?(?:On)?\([^)]*\b(\d+)\s*\)")
 ELEMENT_RE = re.compile(r"([A-Za-z_][A-Za-z0-9_.]*)\s*\{")
 SORTED_TIERS = (16, 24, 32, 48)
 
@@ -1881,6 +1897,7 @@ def main() -> int:
     errors: list[str] = []
     check_tree(errors)
     aliases = check_qrc(errors)
+    check_icon_packs(errors)
     ids = check_manifests(errors)
     check_layouts(errors, ids)
     check_menus(errors, ids)

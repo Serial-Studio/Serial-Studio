@@ -2174,6 +2174,16 @@ ss_add_unit_test(tst_theme_catalog
 )
 
 #
+# Spec 0115: the icon registry's pack side (catalog, per-icon fallback, fixed categories, the
+# mono tint URL) over a temporary tree; the registry is already in SerialStudio::Core.
+#
+ss_add_unit_test(tst_icon_packs
+  SOURCES tst_icon_packs.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # Extension catalog helpers (spec 0070): filter/platform/path-safety free functions split out
 # of ExtensionManager; the path-traversal KATs pin the install trust boundary.
 #

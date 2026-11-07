@@ -1,7 +1,7 @@
 ---
 spec: 0115-icon-packs
 title: Icon Packs, switchable artwork for command and colour icons with fixed mono glyphs
-status: approved  # 2026-11-07, maintainer, through the session's question dialog
+status: in-progress  # approved 2026-11-07 (maintainer, through the session's question dialog)
 created: 2026-11-07
 author: Alex Spataru
 ---
@@ -246,9 +246,10 @@ session's question dialog.
   letter glyphs per pack; encoding takes Fluent's ASC text file.
 - **Signal widgets keep house art** in every pack: sweep, waterfall and barpanel, where the
   nearest Icons8 icons change the instrument metaphor.
-- **Six metaphor swaps accepted**: freeze is a snowflake, webview an Earth planet, uuid a
-  fingerprint, mqtt and mqtt-publisher Wi-Fi arcs, mf4 a labelled generic file, audio-file a
-  musical note composed onto a file.
+- **Five metaphor swaps accepted**: webview is an Earth planet, uuid a fingerprint, mqtt and
+  mqtt-publisher Wi-Fi arcs, mf4 a labelled generic file, audio-file a musical note. The sixth,
+  freeze as a snowflake, was withdrawn the same day: Freeze Dashboard locks the layout, so the
+  padlock stays in every pack.
 - **Editor picks**: widget is square Brackets, project-title is Edit Property, workspace is one
   Application Window, actions is the bare lightning bolt (shared with editor/action).
 - **Licence record lands with the first pack commit** (R14): a `LicenseRef-Icons8` annotation

@@ -110,6 +110,8 @@
 #include "Misc/HelpCenter.h"
 #include "Misc/HighDpiScaling.h"
 #include "Misc/IconEngine.h"
+#include "Misc/IconPackImageProvider.h"
+#include "Misc/IconPacks.h"
 #include "Misc/ProblemCenter.h"
 #include "Misc/ProFeatureNotice.h"
 #include "Misc/SimdSettings.h"
@@ -314,8 +316,10 @@ Misc::ModuleManager::ModuleManager()
 }
 
 /**
- * @brief Out of line so the forward-declared SimdSettings behind the unique_ptr is complete where
- *        it is deleted, instead of relying on whichever TU happens to destroy the manager.
+ * @brief Out of line so the forward-declared SimdSettings and IconPacks behind their unique_ptrs
+ *        are complete where they are destroyed. IconPacks is declared before the QML engine and
+ *        outlives it like every Cpp_* context object (bindings re-evaluate during teardown); its
+ *        QJSValues stay valid past the engine, QV4's persistent-value pages being refcounted.
  */
 Misc::ModuleManager::~ModuleManager() = default;
 
@@ -1339,7 +1343,9 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   registry.add("Cpp_HelpCenter", &Misc::HelpCenter::instance());
   registry.add("Cpp_ExtensionManager", &Misc::ExtensionManager::instance());
   registry.add("Cpp_Misc_IconEngine", &Misc::IconEngine::instance());
-  registry.add("Cpp_Misc_IconRegistry", &Misc::IconRegistry::instance());
+  m_iconPacks = std::make_unique<Misc::IconPacks>(
+    m_engine, Misc::IconRegistry::instance(), Misc::ThemeManager::instance());
+  registry.add("Cpp_Misc_IconRegistry", m_iconPacks.get());
   registry.add("Cpp_Misc_ProblemCenter", &Misc::ProblemCenter::instance());
   registry.add("Cpp_Misc_ConnectionDiagnostics", &Misc::ConnectionDiagnostics::instance());
   registry.add("Cpp_UI_CommandRegistry", &UI::CommandRegistry::instance());
@@ -1451,6 +1457,7 @@ void Misc::ModuleManager::registerAppMetadataProperties(QQmlContext* ctx, bool g
 void Misc::ModuleManager::registerImageProvidersAndLoadQml()
 {
   m_engine.addImageProvider(QStringLiteral("actionicon"), new Misc::ActionIconProvider());
+  m_engine.addImageProvider(QStringLiteral("iconpack"), new Misc::IconPackImageProvider());
 
 #ifdef BUILD_COMMERCIAL
   auto* imgProvider = new UI::ImageProvider();

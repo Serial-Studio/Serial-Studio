@@ -14,7 +14,8 @@ camcorder|video camera|camcorder;video camera;camera|commands/camcoder
 target|crosshair target|center of gravity;target;crosshair;focus|commands/center;commands/crosshair
 broom|broom sweeping dust|broom;clear;clean|commands/clear;editor/clear;console/clear
 color-wheel|colour wheel|color wheel;color palette;rgb|commands/color;editor/alarm-bands
-command-window|window with a command prompt chevron|command line;terminal window;console|commands/command-palette;commands/console;widgets/terminal
+run-dialog|the Run dialog: a small window with a command field|run command;run dialog;execute|commands/command-palette
+command-window|window with a command prompt chevron|command line;terminal window;console|commands/console;widgets/terminal
 plug-connected|two plugs joined|connected;plug connected;plug|commands/connect
 plug-disconnected|two plugs apart|disconnected;unplugged;plug disconnected|commands/disconnect
 txt-file|document labelled TXT|txt;text file;document|commands/console-log+arrow;editor/protobuf

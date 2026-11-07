@@ -2,6 +2,7 @@
   "title":"Fluent Light",
   "parameters":{
     "code-editor-theme":"fluent-light",
+    "icon-pack": "fluent",
     "start-icon":"qrc:/logo/start.svg"
   },
   "translations":{

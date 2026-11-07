@@ -449,7 +449,8 @@ Item {
                         Layout.preferredHeight: 16
                         sourceSize: Qt.size(16, 16)
                         source: _tbRow.modelData.iconId && _tbRow.modelData.iconId.length
-                                ? Cpp_Misc_IconRegistry.iconById(_tbRow.modelData.iconId, 16)
+                                ? Cpp_Misc_IconRegistry.iconByIdOn("strip", _tbRow.modelData.iconId,
+                                                                   16)
                                 : _tbRow.modelData.icon
                       }
 
@@ -600,19 +601,26 @@ Item {
           }
 
           icon.source: {
+            const tone = "strip"
             switch (modelData) {
-            case "settings":          return Cpp_Misc_IconRegistry.icon("commands", "settings", 24)
-            case "console":           return Cpp_Misc_IconRegistry.icon("commands", "console", 24)
-            case "notifications":     return Cpp_Misc_IconRegistry.icon(
-                                             "widgets", "notification-log", 24)
-            case "clock":             return Cpp_Misc_IconRegistry.icon("widgets", "clock", 24)
-            case "stopwatch":         return Cpp_Misc_IconRegistry.icon("widgets", "stopwatch", 24)
-            case "file_transmission": return Cpp_Misc_IconRegistry.icon(
-                                             "commands", "file-transmission", 24)
-            case "ai_assistant":      return Cpp_Misc_IconRegistry.icon("commands", "ai", 24)
-            case "pause":             return Cpp_IO_Manager.paused
-                                             ? Cpp_Misc_IconRegistry.icon("commands", "resume", 24)
-                                             : Cpp_Misc_IconRegistry.icon("commands", "pause", 24)
+            case "settings":
+              return Cpp_Misc_IconRegistry.iconOn(tone, "commands", "settings", 24)
+            case "console":
+              return Cpp_Misc_IconRegistry.iconOn(tone, "commands", "console", 24)
+            case "notifications":
+              return Cpp_Misc_IconRegistry.iconOn(tone, "widgets", "notification-log", 24)
+            case "clock":
+              return Cpp_Misc_IconRegistry.iconOn(tone, "widgets", "clock", 24)
+            case "stopwatch":
+              return Cpp_Misc_IconRegistry.iconOn(tone, "widgets", "stopwatch", 24)
+            case "file_transmission":
+              return Cpp_Misc_IconRegistry.iconOn(tone, "commands", "file-transmission", 24)
+            case "ai_assistant":
+              return Cpp_Misc_IconRegistry.iconOn(tone, "commands", "ai", 24)
+            case "pause":
+              return Cpp_IO_Manager.paused
+                     ? Cpp_Misc_IconRegistry.iconOn(tone, "commands", "resume", 24)
+                     : Cpp_Misc_IconRegistry.iconOn(tone, "commands", "pause", 24)
             }
             return ""
           }

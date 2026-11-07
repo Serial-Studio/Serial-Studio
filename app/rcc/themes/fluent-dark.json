@@ -2,6 +2,7 @@
   "title": "Fluent Dark",
   "parameters":{
     "code-editor-theme":"fluent-dark",
+    "icon-pack": "fluent",
     "start-icon":"qrc:/logo/start-dark.svg"
   },
   "translations":{

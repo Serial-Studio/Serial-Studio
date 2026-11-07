@@ -41,6 +41,23 @@ a command, `<img src="icon:<category>/<name>" …>` for non-command buttons (wid
 `Cpp_Misc_IconRegistry.iconById()` before either markdown viewer renders; unknown ids serve
 the placeholder. On GitHub the unknown scheme degrades to the `alt` text.
 
+**Icon packs (spec 0115):** a pack is a second artwork root, `app/rcc/iconpacks/<pack>/
+<category>/<tier>/<name>.svg` plus `pack.json` (`id`, `title`, `translations`, `style`, `mono`),
+compiled in through the generated `app/rcc/iconpacks/iconpacks.qrc`. The Core registry consults
+the active pack before the house tree for the themed categories and never for `window`,
+`system` or the exempt `buttons`; a pack is partial by design and falls back per icon. In QML
+the `Cpp_Misc_IconRegistry` name is the Ui façade `Misc::IconPacks`, whose `icon`, `iconById`,
+`iconOn` and `iconByIdOn` are **function-valued properties with a NOTIFY**: every binding that
+calls them re-evaluates on a pack or theme change, so call sites never changed. Icons on the
+dark toolbar and taskbar gradients ask for the `"strip"` tone. A mono pack resolves to
+`image://iconpack/<pack>/<cat>/<tier>/<name>.svg?tint=RRGGBB` and `Misc::IconPackImageProvider`
+recolours the bytes; the tints are the theme's `text` and `toolbar_text`. The selection lives in
+the `IconPack` setting (empty = *Follow theme*, which reads the theme's `icon-pack` parameter;
+`office` pins the house set).
+`scripts/icon-packs.py check` is the gate (fixed categories refused, ids inside the house set,
+coverage, mapping and qrc consistency) and `registry-verify.py` runs it; the Icons8 mapping is
+`doc/claude/specs/0115-icon-packs/icons8-map.csv`.
+
 **Legacy paths:** old `qrc:/icons/…` URLs persisted in user project files are remapped by
 `Misc::legacyIconPath()` (generated table, consulted in `IconEngine::resolveActionIconSource`).
 Regenerate with `scripts/generate-legacy-icons.py` only if the migration manifest changes.

@@ -222,6 +222,7 @@ table complete.
 | `surfaces` | Which material a part of the window is made of: `dashboard` (behind the widgets) and `widget` (the body of a dashboard widget). |
 | `styles` | Per-control rules. `instrument.face` is the dial and bar-well color, apart from the plot area, and `instrument.band-opacity` (0 to 1) is the strength of alarm bands on bars, and `instrument.marker` is the color of a bar's value mark (`"level"` takes a darker shade of the bar's current color). `caption.active-lift` (for example 1.14) makes the focused dashboard window's caption lighter at the top while both states share the bottom color. |
 | `widgets` | `"led": "lamp"` draws LED Panel indicators as panel lamps. Standard output buttons are drawn as panel push buttons; `"output": "plain"` keeps the flat button. |
+| `parameters` | Beside `code-editor-theme` and `start-icon`, an optional `"icon-pack"` names the bundled icon pack the theme looks best with (`fluent`, `glass`, `outline`). It applies while the user's pack preference is *Follow theme*; a name this build does not bundle falls back to the standard set. A theme carries no icon artwork of its own. |
 
 A theme is data. It selects recipes Serial Studio already has and cannot load a file or
 run anything. A name Serial Studio does not know is skipped with a warning in the log.
