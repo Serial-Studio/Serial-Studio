@@ -1,0 +1,173 @@
+# base|depicts (what the current Office-style icon shows)|search terms in order (Icons8 common names)|our ids served (category/name), "+plus" "+x" "+arrow" marks a badge composite
+info-bubble|blue speech bubble with letter i|info;about;information|commands/about;notifications/info;panes/info
+axis|coordinate axis with arrows and a red origin dot|axis;coordinate system;x axis;accelerometer|commands/abscissa;editor/add-accelerometer+plus;widgets/accelerometer
+window-flash|application window with a lightning bolt|automation;flash on;lightning bolt;actions|commands/actions
+key|golden door key|key;password key|commands/activate+plus;editor/load-ca-certs+plus;licensing/key
+window-gear|application window with a gear badge|add window;new window;window settings|commands/add-workspace+plus
+robot|cute robot head|bot;robot;chatbot;artificial intelligence|commands/ai;editor/ai
+3d-glasses|red and blue anaglyph glasses|3d glasses;anaglyph glasses;cinema glasses|commands/anaglyph
+archive|zipped file or archive box|archive;zip;compressed file|commands/archive
+area-chart|green filled area chart|area chart;chart area|commands/area;editor/add-multiplot+plus;widgets/multiplot
+audio-file|document with a music note|audio file;music file;sound file|commands/audio-file
+grid-layout|monitor showing tiled windows|grid view;dashboard layout;tiles;windows layout|commands/auto-layout
+camcorder|video camera|camcorder;video camera;camera|commands/camcoder
+target|crosshair target|center of gravity;target;crosshair;focus|commands/center;commands/crosshair
+broom|broom sweeping dust|broom;clear;clean|commands/clear;editor/clear;console/clear
+color-wheel|colour wheel|color wheel;color palette;rgb|commands/color;editor/alarm-bands
+command-window|window with a command prompt chevron|command line;terminal window;console|commands/command-palette;commands/console;widgets/terminal
+plug-connected|two plugs joined|connected;plug connected;plug|commands/connect
+plug-disconnected|two plugs apart|disconnected;unplugged;plug disconnected|commands/disconnect
+txt-file|document labelled TXT|txt;text file;document|commands/console-log+arrow;editor/protobuf
+csv-file|document labelled CSV|csv;csv file;spreadsheet file|commands/csv;commands/csv-log+arrow;editor/export-table+arrow;editor/import-table+arrow
+database|database cylinder|database;data storage|commands/database-export+arrow;editor/influx
+molecule|network of nodes like a molecule|molecule;mind map;graph;network nodes|commands/deepwiki
+conveyor|conveyor belt carrying a box|conveyor belt;deployment;shipping;rocket|commands/deploy
+toolbox|red toolbox|toolbox;maintenance;tools box|commands/device-setup;panes/setup
+checklist|clipboard with ticks|checklist;inspection;diagnostics;clipboard check|commands/diagnostics
+books|row of books|books;library;bookshelf|commands/examples
+open-box|open cardboard box|export;open box;unboxing;package|commands/export
+puzzle|coloured puzzle pieces or squares|puzzle;plugin;extensions;add-ons|commands/extensions
+window-popout|window with an arrow leaving it|open in new window;external link;popout;new window|commands/external-window
+folder-upload|folder with an up arrow|upload folder;file transfer;send file;upload|commands/file-transmission
+funnel|funnel|filter;funnel|commands/filter
+freeze|padlock in blue, meaning frozen view|snowflake;freeze;frozen;lock|commands/freeze
+cube|3D cube, one face highlighted|cube;3d cube;isometric cube;orthogonal view|commands/front-view;commands/left-view;commands/orthogonal-view;commands/top-view
+expand-arrows|four arrows pointing outward|full screen;expand;fullscreen|commands/full-screen
+collapse-arrows|four arrows pointing inward|exit full screen;collapse;compress;normal screen|commands/normal-screen;editor/compress
+question|question mark in a circle|help;question mark;faq|commands/help;editor/help;code/help
+scatter|disconnected dots|scatter plot;dots;scatter chart|commands/interpolate-off
+polyline|dots joined by lines|polyline;line chart;connected dots;graph|commands/interpolate-on;commands/poliline
+invert|square half inverted|invert selection;invert colors;contrast;negative|commands/invert
+swatches|four colour squares|color swatch;tags;legend;labels|commands/labels
+script-window|window with a script or macro|macro;script;automation script|commands/macro
+map|folded paper map|map;world map;treasure map|commands/map
+mf4-file|document labelled MF4|mf4 file;file;document|commands/mf4;commands/mf4-log+arrow
+nasa|NASA meatball logo|nasa|commands/nasa
+folder|plain folder|folder;opened folder|commands/open-project;editor/add-folder+plus;editor/open;widgets/folder;database/open;code/open
+orbit|orbit rings around a dot|orbit;3d rotate;planet orbit;rotate 3d|commands/orbit
+hand|open hand|hand;pan;drag;hand cursor|commands/pan
+pause|pause bars|pause|commands/pause
+pictures-folder|folder with a picture|pictures folder;image folder;photo folder|commands/pictures-folder
+blueprint|ruler with pencil on blue grid|blueprint;ruler pencil;design;drafting|commands/project-setup;editor/customize;editor/project
+close-circle|red circle with white x|cancel;close;exit;shutdown|commands/quit;database/close
+router|wireless router or antenna box|router;wifi router;remote access;antenna|commands/remote-attach
+reset|two circular arrows|reset;restart;refresh;synchronize|commands/reset;editor/control-script;code/reload
+play|green play triangle|play;resume;start|commands/resume;database/replay
+return-arrow|curved back arrow|return;undo;back arrow;reply|commands/return;code/undo
+redo-arrow|curved forward arrow|redo;forward arrow|code/redo
+floppy|floppy disk|save;floppy disk|editor/save;code/save
+floppy-pencil|floppy disk with a pencil|save as;save edit|commands/save-as;editor/save-as
+floppy-warning|floppy disk with a warning triangle|save warning;unsaved;save error|editor/save-warning+warning
+schedule|calendar with a clock|schedule;calendar clock;history;sessions|commands/sessions;panes/sessions
+wrench|wrench|wrench;settings;maintenance;spanner|commands/settings
+music-folder|folder with a music note|music folder;audio folder;sound folder|commands/sound-folder
+oscilloscope|oscilloscope screen with a sine wave|oscilloscope;signal;waveform;sine wave|commands/sweep
+tools|crossed wrench and screwdriver|tools;maintenance;service;repair|commands/tools;console/utilities
+square-wave|signal edge or pulse|trigger;pulse;square wave;signal edge|commands/trigger
+weather|sun behind cloud|partly cloudy day;weather;sun cloud|commands/weather
+workspace-grid|four connected squares|workspace;grid;dashboard;connected squares|commands/workspaces;editor/workspace
+letter-x|letter X in a square|x coordinate;letter x;x|commands/x
+letter-y|letter Y in a square|y coordinate;letter y;y|commands/y
+zoom-in|magnifier with plus|zoom in;magnifier plus|commands/zoom-in
+zoom-out|magnifier with minus|zoom out;magnifier minus|commands/zoom-out
+lightning|yellow lightning bolt|lightning bolt;flash on;flash;energy|editor/action;editor/add-action+plus
+test-tube|test tube or thermometer level|test tube;thermometer;level indicator;vertical bar|editor/add-bar+plus;editor/bar;widgets/bar
+horizontal-bars|stacked horizontal bars|bar chart horizontal;progress bars;horizontal bar chart|editor/add-barpanel+plus;widgets/barpanel
+compass|compass rose with red needle|compass;navigation compass|editor/add-compass+plus;editor/compass;widgets/compass
+grid-dots|grid of green squares|grid;data grid;table grid;pixels|editor/add-datagrid+plus;widgets/datagrid
+alpha|Greek letter alpha|alpha;greek letter;variable;math symbol|editor/add-dataset+plus;editor/dataset;editor/add-output-button+plus;editor/output-button
+chip|microchip|processor;chip;electronics;integrated circuit|editor/add-device+plus;editor/device;devices/uart
+equalizer|vertical audio bars|audio wave;equalizer;sound bars;spectrum|editor/add-fft+plus;editor/fft;widgets/fft;devices/audio
+gauge|round gauge dial|speedometer;gauge;dashboard gauge;pressure gauge|editor/add-gauge+plus;widgets/gauge
+map-pin|map with a location pin|map marker;location;gps;map pin|editor/add-gps+plus;widgets/gps
+group-frame|selection frame around shapes|group objects;selection;group;select all|editor/add-group+plus;editor/group;widgets/group
+gyroscope|gyroscope rings|gyroscope|editor/add-gyroscope+plus;widgets/gyroscope
+image|landscape picture|image;picture;photo|editor/add-image+plus;widgets/image
+led|red LED diode with legs|led diode;led;light emitting diode;diode|editor/add-led+plus;editor/led;widgets/led
+meter|half-round speedometer|speedometer;dashboard gauge;meter|editor/add-meter+plus;editor/meter;widgets/meter
+knob|round knob with pointer|volume knob;knob;dial;rotary knob|editor/add-output-knob+plus;editor/output-knob
+control-panel|monitor with charts, control panel|control panel;dashboard;monitor chart;analytics monitor|editor/add-output-panel+plus;widgets/output;widgets/output-panel
+slider|horizontal slider|slider;range slider;horizontal slider|editor/add-output-slider+plus;editor/output-slider
+text-cursor|letter T with text cursor frame|text box;text cursor;typography;text field|editor/add-output-textfield+plus;editor/output-textfield
+toggle|toggle switch on|toggle on;switch;toggle|editor/add-output-toggle+plus;editor/output-toggle
+brush|paint brush|paint brush;brush;painting|editor/add-painter+plus;widgets/painter
+curve|chart with a red bell or sine curve|line chart;graph;sine wave;chart|editor/add-plot+plus;editor/plot;widgets/plot
+polyhedron|blue 3D polyhedron|3d object;octahedron;3d model;polygon|editor/add-plot3d+plus;widgets/plot3d
+field|single input field box|text input;input field;form field;rectangle|editor/add-register+plus;editor/delete-register+x
+table|spreadsheet grid|table;spreadsheet;grid table|editor/add-table+plus;editor/delete-table+x;editor/rename-table+pencil;editor/shared-table;editor/shared-table-alt;editor/frame-detection
+spectrogram|colour gradient bands|heat map;gradient;spectrogram;rainbow|editor/add-waterfall+plus;editor/waterfall;widgets/waterfall
+globe|globe with meridians|globe;internet;web;world|editor/add-webview+plus;widgets/webview
+siren|red siren light|siren;alarm;emergency light|editor/alarm
+flow-chart|boxes joined by lines|flow chart;org chart;tree structure;hierarchy|editor/change-group;editor/expand;editor/project-structure;devices/opcua
+code-file|document with code brackets|code file;source code;code|editor/code;editor/edit-code;code/template
+dashboard-charts|bar and line chart combo|dashboard;analytics;statistics;combo chart|editor/dashboard-widgets;panes/dashboard
+binary|101 010 digits|binary code;binary file;bits|editor/data-conversion
+tags|two price tags|tags;price tag;label tag|editor/dataset-values
+document-x|document with a red x|delete file;remove document|editor/delete+x
+documents|two overlapping documents|copy;duplicate;documents|editor/duplicate;code/copy
+number-doc|document with the number 10|number;numeric file;binary file;encoding|editor/encoding
+skip-end|bar with a right-pointing play|skip to end;end;last;next track|editor/frame-end
+skip-start|bar with a left-pointing play|skip to start;first;previous track;beginning|editor/frame-start
+eye-off|eye crossed out|hide;invisible;eye closed|editor/hide
+eye|eye|visible;eye;show;preview|editor/show
+chevron-down|downward chevron|expand arrow;chevron down;collapse arrow|editor/indicator
+pi|Greek letter pi|pi;math constant;pi symbol|editor/insert-constant+plus
+chevron-left|left chevron|chevron left;back;less than|editor/left
+chevron-right|right chevron|chevron right;forward;greater than|editor/right
+padlock|closed padlock|lock;padlock;locked|editor/lock;editor/mqtt-ssl;database/lock
+padlock-open|open padlock|unlock;unlocked;open lock|database/unlock
+circle-down|circle with a down chevron|circled down;down arrow circle;collapse|editor/move-down
+circle-up|circle with an up chevron|circled up;up arrow circle;expand|editor/move-up
+folder-arrow|folder with an arrow|move folder;move to folder;folder arrow;move here|editor/move-folder;editor/move-here;editor/top-level-folder
+server|server tower with screens|server;broker;network server;data center|editor/mqtt-broker
+signal|radio waves|wifi;signal;broadcast;rss|editor/mqtt-publisher;devices/mqtt
+document-gear|document with a gear or star|new document;add file;document settings|editor/new
+scroll-gear|scroll or document with gear|settings document;configuration;project settings|editor/project-setup
+document-key|document with a key or title mark|document title;rename document;document key|editor/project-title
+document-eye|document with an eye|read only;view file;preview document|editor/read-only
+document-pencil|document with a pencil|edit file;edit document;write|editor/read-write
+clock-arrow|clock with a circular arrow|restore;backup;time machine;history|editor/recover-backup;database/restore
+rename|text cursor between lines|rename;edit text;text cursor|editor/rename
+split-arrows|diagonal arrows apart|separator;split;resize;divider|editor/separator
+ram|RAM memory stick|memory slot;ram;memory|editor/shared-memory
+cable|network cable with plug|ethernet cable;cable;connection;lan cable|editor/test-connection
+translate|translation glyphs|translation;language;translate|editor/text-encoding
+timer|stopwatch dial|timer;stopwatch;time|editor/timer;widgets/stopwatch
+function|document with function f|function;math function;formula|editor/transform
+data-arrow|arrow with data bits|data transfer;send data;export data;transfer|editor/tx-data
+braces|curly brace with x|widget;code brackets;variable;curly braces|editor/widget
+clock|wall clock|clock;time|widgets/clock
+pulse-monitor|window with a heartbeat line|activity log;heart monitor;pulse;event log|widgets/notification-log
+windows|stacked application windows|windows;multiple windows;cascade windows|widgets/workspace
+bluetooth|bluetooth rune in blue oval|bluetooth|devices/bluetooth
+engine|car engine block|engine;car engine;motor|devices/canbus
+ethernet|ethernet plug on cable|ethernet;network cable;lan;rj45|devices/ethernetip
+barcode-scanner|barcode with scanner|barcode scanner;barcode;scanner|devices/hid
+pylon|electricity pylon|transmission tower;electricity;power line;pylon|devices/iec104
+robot-arm|industrial robot arm|robot arm;industrial robot;manufacturing|devices/modbus
+network-port|ethernet port socket|ethernet port;lan port;network;socket|devices/network
+monitor-chart|monitor showing a chart|monitor chart;process;activity;performance|devices/process
+plc|electrical cabinet or PLC|plc;programmable logic controller;electrical panel;control cabinet|devices/s7
+usb|USB stick|usb;usb memory;flash drive|devices/usb
+document-pencil2|document with pencil, details|notes;details;document edit|panes/details
+exclamation|exclamation in a yellow circle|exclamation;attention;important;high importance|panes/important
+house|house with door|home;house;overview|panes/overview
+notes-list|lined notes window|notes;annotations;list|console/annotations
+merge-lines|lines collapsing together|collapse;merge;compact|console/collapse-duplicates
+hex|0x digits|hexadecimal;hex;0x|console/hexadecimal
+font|letters Aa|font;text;typography;plain text|console/plain-text
+magnifier|magnifying glass|search;magnifier|console/search
+gear|single gear|settings;gear;cog|console/settings;editor/output-range
+window-trash|window with a trash can|delete;trash;remove window|database/delete
+pdf|PDF document with arrow|pdf;export pdf|database/export-pdf
+scissors|scissors|cut;scissors|code/cut
+clipboard|clipboard|paste;clipboard|code/paste
+window-play|window with a play arrow|run;test;play window;execute|code/test
+devices|phone, tablet and monitor|multiple devices;devices;responsive|licensing/devices
+at-sign|@ sign|email;at sign;mail|licensing/email
+certificate|certificate with a seal|certificate;diploma;license|licensing/license
+card-shield|credit card with a shield|subscription;premium;secure payment;plan|licensing/plan
+id-card|ID card with a user|user;id card;contact card|licensing/user
+monitor-check|monitor with a check mark|verified device;monitor check;fingerprint;approved|licensing/uuid
+warning-red|red triangle with exclamation|high priority;error;critical|notifications/critical
+warning|yellow triangle with exclamation|warning;error triangle;caution|notifications/warning
