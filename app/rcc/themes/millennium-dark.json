@@ -34,7 +34,7 @@
 
     "pane_background": "#22262A",
     "pane_section_label": "#E6E8EA",
-    "pane_caption_bg_top": "#22262A",
+    "pane_caption_bg_top": "#20252A",
     "pane_caption_border": "#3F454B",
     "pane_caption_bg_bottom": "#2A2F34",
     "pane_caption_foreground": "#E6E8EA",
@@ -85,13 +85,13 @@
     "highlighted_text": "#FFFFFF",
     "switch_highlight": "#35AE55",
 
-    "console_text": "#00BF4C",
+    "console_text": "#5DCB7A",
     "console_base": "#15181B",
     "console_border": "#3F454B",
     "console_highlight": "#2E5A3B",
 
     "widget_text": "#E6E8EA",
-    "widget_base": "#2E3338",
+    "widget_base": "#23272B",
     "widget_button": "#363B41",
     "widget_border": "#4A5057",
     "widget_window": "#2A2F34",
@@ -101,13 +101,13 @@
     "widget_placeholder_text": "#9AA1A8",
 
     "window_border": "#4A5057",
-    "window_toolbar_background": "#30353B",
-    "window_caption_active_top": "#3A4047",
+    "window_toolbar_background": "#363B41",
+    "window_caption_active_top": "#434A51",
     "window_caption_active_text": "#F2F4F5",
-    "window_caption_inactive_top": "#30353B",
+    "window_caption_inactive_top": "#363B41",
     "window_caption_inactive_text": "#A9B0B8",
-    "window_caption_active_bottom": "#30353B",
-    "window_caption_inactive_bottom": "#2A2F34",
+    "window_caption_active_bottom": "#363B41",
+    "window_caption_inactive_bottom": "#363B41",
 
     "taskbar_top": "#3A4047",
     "taskbar_text": "#D8DCE0",
@@ -161,7 +161,7 @@
     "plot_cursor_b": "#E0574B",
 
     "widget_colors": [
-      "#35AE55",
+      "#45C062",
       "#5B9BE0",
       "#E0574B",
       "#2BB5B8",
