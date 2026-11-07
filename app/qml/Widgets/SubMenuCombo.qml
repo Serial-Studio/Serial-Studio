@@ -164,11 +164,7 @@ Popup {
   //
   // Control background
   //
-  background: Rectangle {
-    border.width: 1
-    color: Cpp_ThemeManager.colors["start_menu_background"]
-    border.color: Cpp_ThemeManager.colors["start_menu_border"]
-  }
+  background: MenuSurface {}
 
   //
   // Place holder text
@@ -216,10 +212,10 @@ Popup {
       //
       Rectangle {
         visible: isSeparator
-        opacity: 0.5
+        opacity: 0.18
         implicitHeight: 1
-        width: parent.width
-        anchors.verticalCenter: parent.verticalCenter
+        width: parent.width - 12
+        anchors.centerIn: parent
         color: Cpp_ThemeManager.colors["start_menu_text"]
       }
 
@@ -227,6 +223,7 @@ Popup {
       // Hover highlight
       //
       Rectangle {
+        radius: 5
         anchors.fill: parent
         visible: opacity > 0
         color: Cpp_ThemeManager.colors["start_menu_highlight"]

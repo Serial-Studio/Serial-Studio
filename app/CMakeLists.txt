@@ -440,6 +440,7 @@ set(QML_SOURCES
   qml/Widgets/MarkdownTextView.qml
   qml/Widgets/MaterialSurface.qml
   qml/Widgets/MenuButton.qml
+  qml/Widgets/MenuSurface.qml
   qml/Widgets/MiniWindow.qml
   qml/Widgets/Pane.qml
   qml/Widgets/PaneSplitter.qml

@@ -31,8 +31,8 @@ Item {
   property alias text: _label.text
 
   opacity: enabled ? 1 : 0.5
-  implicitWidth: _layout.implicitWidth
-  implicitHeight: _layout.implicitHeight
+  implicitWidth: _layout.implicitWidth + 12
+  implicitHeight: _layout.implicitHeight + 4
 
   property bool checked: false
   property bool checkable: false
@@ -51,9 +51,9 @@ Item {
   // read as lag. The sheen is the row's light, fading with the highlight it sits on
   //
   Rectangle {
+    radius: 5
     anchors.fill: parent
     visible: opacity > 0
-    anchors.leftMargin: -6
     opacity: _mouseArea.containsMouse ? 1 : 0
     color: Cpp_ThemeManager.colors["start_menu_highlight"]
 
@@ -71,6 +71,7 @@ Item {
       readonly property color light: Cpp_ThemeManager.colors["start_menu_highlighted_text"]
 
       anchors.fill: parent
+      radius: parent.radius
 
       gradient: Gradient {
         orientation: Gradient.Horizontal
@@ -94,6 +95,8 @@ Item {
     spacing: 0
     anchors.fill: parent
     opacity: root.reveal
+    anchors.leftMargin: 6
+    anchors.rightMargin: 6
 
     transform: Translate {
       x: (1 - root.reveal) * (Cpp_Misc_Translator.rtl ? 10 : -10)

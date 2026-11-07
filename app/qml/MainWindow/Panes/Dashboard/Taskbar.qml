@@ -347,7 +347,7 @@ Item {
         id: searchPopup
 
         width: 320
-        padding: 4
+        padding: 8
         x: Cpp_Misc_Translator.rtl ? searchContainer.width - width : 0
         y: -height - searchContainer.y + 1
         visible: searchField.activeFocus
@@ -358,11 +358,7 @@ Item {
         enter: Widgets.PopupEnter {}
         exit: Widgets.PopupExit {}
 
-        background: Rectangle {
-          border.width: 1
-          color: Cpp_ThemeManager.colors["start_menu_background"]
-          border.color: Cpp_ThemeManager.colors["start_menu_border"]
-
+        background: Widgets.MenuSurface {
           MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.NoButton
@@ -436,6 +432,7 @@ Item {
                                                     || root.searchIndex === _tbRow.modelData._idx
 
                     Rectangle {
+                      radius: 5
                       anchors.fill: parent
                       visible: _tbRow.hovered
                       color: Cpp_ThemeManager.colors["start_menu_highlight"]
@@ -1035,10 +1032,8 @@ Item {
             enter: Widgets.PopupEnter {}
             exit: Widgets.PopupExit {}
 
-            background: Rectangle {
-              border.width: 1
-              color: Cpp_ThemeManager.colors["start_menu_background"]
-              border.color: Cpp_ThemeManager.colors["start_menu_border"]
+            background: Widgets.MenuSurface {
+              radius: 8
             }
 
             contentItem: ColumnLayout {

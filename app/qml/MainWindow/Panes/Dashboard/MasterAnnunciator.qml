@@ -189,11 +189,8 @@ Item {
     enter: Widgets.PopupEnter {}
     exit: Widgets.PopupExit {}
 
-    background: Rectangle {
-      radius: 10
-      border.width: 1
-      color: Cpp_ThemeManager.colors["start_menu_background"]
-      border.color: Cpp_ThemeManager.colors["start_menu_border"]
+    background: Widgets.MenuSurface {
+      radius: 8
     }
 
     property var rows: []

@@ -34,9 +34,9 @@ Popup {
 
   modal: true
   focus: true
-  width: _layout.implicitWidth + gradientWidth + 32
+  width: _layout.implicitWidth + gradientWidth + 36
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-  height: Math.max(gradientHeight, _layout.implicitHeight + 16)
+  height: Math.max(gradientHeight, _layout.implicitHeight + 20)
 
   Component.onCompleted: {
     contentItem.LayoutMirroring.enabled = Qt.binding(() => Cpp_Misc_Translator.rtl)
@@ -276,23 +276,18 @@ Popup {
     color: "transparent"
   }
 
-  background: Rectangle {
+  background: Widgets.MenuSurface {
     id: _bg
-
-    border.width: 1
-    color: Cpp_ThemeManager.colors["start_menu_background"]
-    border.color: Cpp_ThemeManager.colors["start_menu_border"]
 
     Rectangle {
       anchors {
-        top: _bg.top
-        left: _bg.left
-        bottom: _bg.bottom
+        top: parent.top
+        left: parent.left
+        bottom: parent.bottom
+        margins: _bg.panel.border.width
       }
 
       width: root.gradientWidth
-      border.width: _bg.border.width
-      border.color: _bg.border.color
 
       gradient: Gradient {
         GradientStop {
@@ -327,12 +322,12 @@ Popup {
     id: _layout
 
     anchors {
-      margins: 4
+      margins: 6
       fill: parent
-      leftMargin: root.gradientWidth + 4
+      leftMargin: root.gradientWidth + 6
     }
 
-    spacing: 4
+    spacing: 2
 
     Widgets.MenuButton {
       id: _groups
@@ -610,9 +605,13 @@ Popup {
     }
 
     Rectangle {
-      opacity: 0.5
+      opacity: 0.18
       implicitHeight: 1
       Layout.fillWidth: true
+      Layout.leftMargin: 6
+      Layout.rightMargin: 6
+      Layout.topMargin: 3
+      Layout.bottomMargin: 3
       color: Cpp_ThemeManager.colors["start_menu_text"]
     }
 
@@ -633,9 +632,13 @@ Popup {
     }
 
     Rectangle {
-      opacity: 0.5
+      opacity: 0.18
       implicitHeight: 1
       Layout.fillWidth: true
+      Layout.leftMargin: 6
+      Layout.rightMargin: 6
+      Layout.topMargin: 3
+      Layout.bottomMargin: 3
       color: Cpp_ThemeManager.colors["start_menu_text"]
       visible: _autoLayoutBt.visible || _freezeBt.visible
     }
@@ -649,9 +652,13 @@ Popup {
     }
 
     Rectangle {
-      opacity: 0.5
+      opacity: 0.18
       implicitHeight: 1
       Layout.fillWidth: true
+      Layout.leftMargin: 6
+      Layout.rightMargin: 6
+      Layout.topMargin: 3
+      Layout.bottomMargin: 3
       color: Cpp_ThemeManager.colors["start_menu_text"]
       visible: !(typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
     }
@@ -811,9 +818,13 @@ Popup {
     }
 
     Rectangle {
-      opacity: 0.5
+      opacity: 0.18
       implicitHeight: 1
       Layout.fillWidth: true
+      Layout.leftMargin: 6
+      Layout.rightMargin: 6
+      Layout.topMargin: 3
+      Layout.bottomMargin: 3
       color: Cpp_ThemeManager.colors["start_menu_text"]
     }
 
@@ -826,9 +837,13 @@ Popup {
     }
 
     Rectangle {
-      opacity: 0.5
+      opacity: 0.18
       implicitHeight: 1
       Layout.fillWidth: true
+      Layout.leftMargin: 6
+      Layout.rightMargin: 6
+      Layout.topMargin: 3
+      Layout.bottomMargin: 3
       color: Cpp_ThemeManager.colors["start_menu_text"]
     }
 
