@@ -288,6 +288,19 @@ updated: 2026-11-07
 - **Deps:** T1–T17
 - [x] done (13d246a1f, 2026-11-07)
 
+### T18b — Illustrations join the registry (2026-11-07, maintainer's screenshot)
+
+- **Files:** `app/rcc/icons/illustrations/48/*.svg` (ten, moved from `app/rcc/images`), ten QML
+  sites, `scripts/registry-verify.py`, `scripts/icon-packs.py` (category, `no` and `lock`
+  badges), `REUSE.toml`, the mapping and vocabulary
+- **Does:** The empty-state pictures resolve through the registry at 48 and follow the pack;
+  locked, no-bluetooth and no-mic compose from a base plus a badge, six new bases have Fluent
+  ids queued.
+- **Verify:** `registry-verify.py`, the Fluent gate (93.6 % until the six land), composites
+  checked by eye.
+- **Deps:** T18
+- [x] done (33f4457d1)
+
 ### Stage F — the Outline pack (mono)
 
 ### T19 — Fetch, compose and ship Outline

@@ -123,7 +123,7 @@ folder-arrow|folder with an arrow|move folder;move to folder;folder arrow;move h
 server|server tower with screens|server;broker;network server;data center|editor/mqtt-broker
 signal|radio waves|wifi;signal;broadcast;rss|editor/mqtt-publisher;devices/mqtt
 document-gear|document with a gear or star|new document;add file;document settings|editor/new
-scroll-gear|scroll or document with gear|settings document;configuration;project settings|editor/project-setup;illustrations/shortcut
+scroll-gear|scroll or document with gear|settings document;configuration;project settings|editor/project-setup
 document-key|document with a key or title mark|document title;rename document;document key|editor/project-title
 document-eye|document with an eye|read only;view file;preview document|editor/read-only
 document-pencil|document with a pencil|edit file;edit document;write|editor/read-write

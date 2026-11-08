@@ -534,7 +534,7 @@ Widgets.SmartDialog {
                 fillMode: Image.PreserveAspectFit
                 source: root.userPickedIcon
                         ? root.iconPathValue
-                        : Cpp_Misc_IconRegistry.icon("illustrations", "shortcut", 48)
+                        : "qrc:/images/shortcut.svg"
               }
 
               HoverHandler {

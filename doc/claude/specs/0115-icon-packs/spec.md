@@ -68,8 +68,8 @@ the holes, so the review and the pack mechanism are one piece of work.
    outside the pack mechanism. Every pack shows the same files there, and a pack that ships
    artwork for them is refused by the lint.
 2. **R2 — Themed categories.** The colour categories (`commands`, `editor`, `widgets`,
-   `devices`, `panes`, `console`, `database`, `code`, `licensing`, `notifications`) are what a
-   pack re-draws. The split is a list the maintainer owns, not a per-file flag.
+   `devices`, `panes`, `console`, `database`, `code`, `licensing`, `notifications`,
+   `illustrations`) are what a pack re-draws. The split is a list the maintainer owns, not a per-file flag.
 3. **R3 — A pack is a named, translated set.** It has an id, a title with translations like a
    theme, one source style, and artwork for some or all logical icons in the themed categories,
    in the same 16/24/32/48 tier ladder with the same nearest-at-or-above resolution rule.
@@ -261,6 +261,12 @@ session's question dialog.
   pack, never searched as pre-badged icons.
 - **A mono pack is a launch pack** (maintainer, same day): users who prefer the flat look get
   the whole interface in Windows 11 Outline, tinted (R21).
+- **The empty-state illustrations are a themed category** (maintainer, 2026-11-07, after seeing
+  the Office folder on the locked-project screen under Fluent): ten pictures that lived under
+  `app/rcc/images` and were loaded by path moved to `icons/illustrations/48`, every site resolves
+  them through the registry, and R2's themed list gains `illustrations`. The QR code, the spinner,
+  the dialog banner and the deployment shortcut icon stay where they are: branding, chrome and a
+  product asset copied into generated packages, not metaphors.
 - **Glass is on hold, Deco ships at a 75 % gate** (maintainer, 2026-11-07, after the colour-variant
   probes): no glass style clears 85 % (Color Glass 75.9 %, Liquid Glass Color 68.2 %, plain Liquid
   Glass is near-white on light panes), so the Default theme keeps the Office set and the Glass slot

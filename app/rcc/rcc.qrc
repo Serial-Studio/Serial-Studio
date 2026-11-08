@@ -819,7 +819,6 @@
         <file>icons/illustrations/48/no-mic.svg</file>
         <file>icons/illustrations/48/no-results.svg</file>
         <file>icons/illustrations/48/project-mode-required.svg</file>
-        <file>icons/illustrations/48/shortcut.svg</file>
         <file>icons/illustrations/48/tip.svg</file>
         <file>icons/licensing/16/devices.svg</file>
         <file>icons/licensing/16/email.svg</file>
@@ -996,6 +995,7 @@
         <file>images/no-usb.svg</file>
         <file>images/shortcut.icns</file>
         <file>images/shortcut.ico</file>
+        <file>images/shortcut.svg</file>
         <file>images/spinner.svg</file>
         <file>images/usb.svg</file>
         <file>instruments/attitude_crosshair.svg</file>
