@@ -100,7 +100,8 @@ def check_tree(errors: list[str]) -> None:
 
 def check_icon_packs(errors: list[str]) -> None:
     """Spec 0115: the pack tree under app/rcc/iconpacks is judged by icon-packs.py (layout,
-    fixed categories, coverage gate, mapping and qrc consistency); its error lines join ours."""
+    fixed categories, coverage gate, mapping and qrc consistency); its error lines join ours.
+    """
     run = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "icon-packs.py"), "check"],
         capture_output=True,
@@ -109,7 +110,7 @@ def check_icon_packs(errors: list[str]) -> None:
     )
     for line in run.stdout.splitlines():
         if line.startswith("error: "):
-            fail(errors, "icon-packs: " + line[len("error: "):])
+            fail(errors, "icon-packs: " + line[len("error: ") :])
     if run.returncode not in (0, 1):
         fail(errors, f"icon-packs.py check could not run: {run.stderr.strip()}")
 
@@ -350,7 +351,9 @@ RENDER_RES = (
     re.compile(r"\bsourceSize\.width\s*:\s*(\d+)\b"),
     re.compile(r"\bsourceSize\.height\s*:\s*(\d+)\b"),
 )
-REQUEST_RE = re.compile(r"IconRegistry\.(?:icon|monoIcon)(?:ById)?(?:On)?\([^)]*\b(\d+)\s*\)")
+REQUEST_RE = re.compile(
+    r"IconRegistry\.(?:icon|monoIcon)(?:ById)?(?:On)?\([^)]*\b(\d+)\s*\)"
+)
 GLYPH_RE = re.compile(r"\bglyph\s*:[^\n]*?\"([a-z]+/[a-z0-9-]+)\"")
 ELEMENT_RE = re.compile(r"([A-Za-z_][A-Za-z0-9_.]*)\s*\{")
 SORTED_TIERS = (16, 24, 32, 48)
@@ -408,7 +411,10 @@ def check_widget_glyphs(errors: list[str]) -> None:
         for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             for match in GLYPH_RE.finditer(line):
                 if not icon_ref_resolves(match.group(1)):
-                    fail(errors, f"{rel}:{number}: glyph '{match.group(1)}' does not resolve")
+                    fail(
+                        errors,
+                        f"{rel}:{number}: glyph '{match.group(1)}' does not resolve",
+                    )
 
 
 def check_icon_render_sizes(errors: list[str]) -> None:

@@ -42,7 +42,9 @@ def _lit_titles(group: dict) -> list:
 
 
 def _shape(config: dict) -> list:
-    return [(g["title"], g.get("widget", ""), len(g["datasets"])) for g in config["groups"]]
+    return [
+        (g["title"], g.get("widget", ""), len(g["datasets"])) for g in config["groups"]
+    ]
 
 
 @pytest.mark.project
@@ -64,11 +66,15 @@ def test_flagged_groups_gain_a_panel_right_after_them(api_client, clean_state, f
         assert panel["title"] == f"{source['title']} LEDs"
         assert [d["title"] for d in panel["datasets"]] == _lit_titles(source)
         lit = {d["title"]: d["index"] for d in source["datasets"]}
-        assert [d["index"] for d in panel["datasets"]] == [lit[t] for t in _lit_titles(source)]
+        assert [d["index"] for d in panel["datasets"]] == [
+            lit[t] for t in _lit_titles(source)
+        ]
         kept = config["groups"][position]
         assert len(kept["datasets"]) == len(source["datasets"])
 
-    assert sum(1 for g in config["groups"] if g.get("widget") == "ledpanel") == len(affected)
+    assert sum(1 for g in config["groups"] if g.get("widget") == "ledpanel") == len(
+        affected
+    )
     assert not any("led" in d for g in config["groups"] for d in g["datasets"])
 
 
@@ -95,12 +101,16 @@ def test_migration_is_one_shot(api_client, clean_state):
     """A migrated document carries nothing that triggers the migration again: reloading it
     through loadJson keeps every group and workspace as it was."""
     first = _open(api_client, "led-flag-mixed")
-    before = [(w["title"], len(w.get("widgetRefs", []))) for w in first.get("workspaces", [])]
+    before = [
+        (w["title"], len(w.get("widgetRefs", []))) for w in first.get("workspaces", [])
+    ]
 
     api_client.command("project.loadJson", {"config": first})
     time.sleep(0.3)
     second = api_client.command("project.exportJson")["config"]
 
     assert _shape(second) == _shape(first)
-    assert [(w["title"], len(w.get("widgetRefs", []))) for w in second.get("workspaces", [])] == before
+    assert [
+        (w["title"], len(w.get("widgetRefs", []))) for w in second.get("workspaces", [])
+    ] == before
     assert sum(1 for g in second["groups"] if g.get("widget") == "ledpanel") == 1

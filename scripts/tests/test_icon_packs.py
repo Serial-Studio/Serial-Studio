@@ -2,7 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """Tests for icon-packs.py's gate (spec 0115 AC1, AC11): a pack file in a fixed category, an id
 the house set lacks, a tier outside the ladder, a pack under the coverage gate and a mapping row
-without a house icon all fail; a complete pack passes, and the composer badges a base."""
+without a house icon all fail; a complete pack passes, and the composer badges a base.
+"""
+
 from __future__ import annotations
 
 import importlib.util
@@ -16,12 +18,16 @@ import pytest
 
 SCRIPTS = Path(__file__).resolve().parents[1]
 
-SVG = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">'
-       '<path fill="#123456" d="M0 0h48v48H0z"/></svg>')
+SVG = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">'
+    '<path fill="#123456" d="M0 0h48v48H0z"/></svg>'
+)
 
 
 def _load():
-    spec = importlib.util.spec_from_file_location("icon_packs", SCRIPTS / "icon-packs.py")
+    spec = importlib.util.spec_from_file_location(
+        "icon_packs", SCRIPTS / "icon-packs.py"
+    )
     module = importlib.util.module_from_spec(spec)
     sys.modules["icon_packs"] = module
     spec.loader.exec_module(module)
@@ -44,14 +50,18 @@ def tree(tmp_path, monkeypatch):
     _write(icons / "widgets" / "32" / "gauge.svg", SVG)
     _write(icons / "editor" / "32" / "add-gauge.svg", SVG)
     _write(icons / "system" / "16" / "missing.svg", SVG)
-    _write(tmp_path / "icon-bases.txt",
-           "# base|depicts|terms|ids\n"
-           "gauge|round gauge dial|speedometer;gauge|editor/add-gauge+plus;widgets/gauge\n")
-    _write(tmp_path / "icons8-map.csv",
-           "base,status,fluent_id,fluent_name,fluent_common,outline_id,outline_name,glass_id,"
-           "glass_name,deco_id,deco_name,note,ids\n"
-           "gauge,found,abc123,Speedometer,speedometer,?,?,NONE,NONE,NONE,NONE,,"
-           "editor/add-gauge+plus;widgets/gauge\n")
+    _write(
+        tmp_path / "icon-bases.txt",
+        "# base|depicts|terms|ids\n"
+        "gauge|round gauge dial|speedometer;gauge|editor/add-gauge+plus;widgets/gauge\n",
+    )
+    _write(
+        tmp_path / "icons8-map.csv",
+        "base,status,fluent_id,fluent_name,fluent_common,outline_id,outline_name,glass_id,"
+        "glass_name,deco_id,deco_name,note,ids\n"
+        "gauge,found,abc123,Speedometer,speedometer,?,?,NONE,NONE,NONE,NONE,,"
+        "editor/add-gauge+plus;widgets/gauge\n",
+    )
     packs.mkdir()
     monkeypatch.setattr(IP, "ICONS", icons)
     monkeypatch.setattr(IP, "PACKS", packs)
@@ -63,9 +73,18 @@ def tree(tmp_path, monkeypatch):
 
 def _pack(root: Path, name: str, mono: bool = False) -> Path:
     folder = root / "iconpacks" / name
-    _write(folder / "pack.json", json.dumps(
-        {"id": name, "title": name.title(), "style": "fluent", "mono": mono,
-         "translations": {}}))
+    _write(
+        folder / "pack.json",
+        json.dumps(
+            {
+                "id": name,
+                "title": name.title(),
+                "style": "fluent",
+                "mono": mono,
+                "translations": {},
+            }
+        ),
+    )
     return folder
 
 
@@ -116,9 +135,11 @@ def test_pack_under_the_gate_is_refused(tree):
 
 
 def test_mapping_row_without_a_house_icon_is_refused(tree):
-    _write(tree / "icon-bases.txt",
-           "gauge|round gauge dial|speedometer|editor/add-gauge+plus;widgets/gauge;"
-           "widgets/ghost\n")
+    _write(
+        tree / "icon-bases.txt",
+        "gauge|round gauge dial|speedometer|editor/add-gauge+plus;widgets/gauge;"
+        "widgets/ghost\n",
+    )
     assert any("widgets/ghost, which the house tree lacks" in e for e in _errors())
 
 
@@ -167,7 +188,9 @@ def _cpp_recolour():
     patterns = re.findall(r'QStringLiteral\(\s*R"re\((.*?)\)re"\)', text, re.S)
     assert len(patterns) == 2, patterns
     attr_pat, style_pat = patterns
-    replacements = re.findall(r'text\.replace\(k(Attribute|Style),\s*(.*?)\);', text, re.S)
+    replacements = re.findall(
+        r"text\.replace\(k(Attribute|Style),\s*(.*?)\);", text, re.S
+    )
     assert [name for name, _ in replacements] == ["Attribute", "Style"]
 
     def template(expr: str) -> str:

@@ -82,7 +82,9 @@ def load_demand() -> dict[tuple[str, str], dict[int, set[str]]]:
     re_d = re.compile(
         r'\.iconOn\(\s*[^,]+,\s*"([a-z0-9]+)"\s*,\s*"([^"]+)"\s*,\s*(\d+)\s*\)'
     )
-    re_e = re.compile(r'\.iconByIdOn\(\s*[^,]+,\s*"([a-z0-9]+)/([^"]+)"\s*,\s*(\d+)\s*\)')
+    re_e = re.compile(
+        r'\.iconByIdOn\(\s*[^,]+,\s*"([a-z0-9]+)/([^"]+)"\s*,\s*(\d+)\s*\)'
+    )
     re_c = re.compile(
         r'\.iconById\([^,]*?"([a-z0-9]+)/([^"]+)"\s*:\s*"([a-z0-9]+)/([^"]+)"\s*,\s*(\d+)\s*\)'
     )

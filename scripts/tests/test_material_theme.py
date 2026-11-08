@@ -27,7 +27,11 @@ RECIPES = {"flat", "gradient", "brushed-metal", "glass"}
 LOOKS = {"led": {"lamp"}, "output": {"hardware", "plain"}}
 OLDER_THEMES = ("fluent-light", "fluent-dark")
 BUNDLED_THEMES = ("millennium", "millennium-dark", "starliner")
-TITLES = {"millennium": "Millennium Light", "millennium-dark": "Millennium Dark", "starliner": "Starliner"}
+TITLES = {
+    "millennium": "Millennium Light",
+    "millennium-dark": "Millennium Dark",
+    "starliner": "Starliner",
+}
 MATERIAL_THEMES = ("default",) + BUNDLED_THEMES
 
 # Text colour over the surface it is drawn on (spec 0113 R13: at least 4.5 to 1)

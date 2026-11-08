@@ -31,6 +31,7 @@ Subcommands:
 
 Usage: python3 scripts/icon-packs.py <subcommand> [options]
 """
+
 from __future__ import annotations
 
 import argparse
@@ -56,17 +57,40 @@ BASES = SPEC / "icon-bases.txt"
 TIERS = {16, 24, 32, 48}
 FIXED = {"buttons", "window", "system"}
 THEMED = {
-    "commands", "editor", "widgets", "devices", "panes", "console", "database", "code",
-    "licensing", "notifications", "illustrations",
+    "commands",
+    "editor",
+    "widgets",
+    "devices",
+    "panes",
+    "console",
+    "database",
+    "code",
+    "licensing",
+    "notifications",
+    "illustrations",
 }
 BASES_DIR = "_bases"
 NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 SVG_NS = "http://www.w3.org/2000/svg"
-STYLE_COLUMN = {"fluent": "fluent_id", "liquid-glass": "glass_id", "deco": "deco_id",
-                "fluent-systems-regular": "outline_id", "liquid-glass-color": "glasscolor_id",
-                "deco-color": "decocolor_id", "clr-gls": "clrgls_id"}
-BADGE_FILL = {"plus": "#43A047", "x": "#E53935", "arrow": "#1E88E5", "arrow-up": "#1E88E5",
-              "pencil": "#FB8C00", "warning": "#FB8C00", "no": "#E53935", "lock": "#78909C"}
+STYLE_COLUMN = {
+    "fluent": "fluent_id",
+    "liquid-glass": "glass_id",
+    "deco": "deco_id",
+    "fluent-systems-regular": "outline_id",
+    "liquid-glass-color": "glasscolor_id",
+    "deco-color": "decocolor_id",
+    "clr-gls": "clrgls_id",
+}
+BADGE_FILL = {
+    "plus": "#43A047",
+    "x": "#E53935",
+    "arrow": "#1E88E5",
+    "arrow-up": "#1E88E5",
+    "pencil": "#FB8C00",
+    "warning": "#FB8C00",
+    "no": "#E53935",
+    "lock": "#78909C",
+}
 ARROW_UP_IDS = {"editor/import-table"}
 LABELS = {
     "commands/mf4": ("mf4-file", "MF4", None),
@@ -117,7 +141,9 @@ def read_mapping() -> dict[str, dict]:
 def pack_dirs() -> list[Path]:
     if not PACKS.is_dir():
         return []
-    return sorted(p for p in PACKS.iterdir() if p.is_dir() and (p / "pack.json").is_file())
+    return sorted(
+        p for p in PACKS.iterdir() if p.is_dir() and (p / "pack.json").is_file()
+    )
 
 
 def read_pack(folder: Path) -> dict:
@@ -166,7 +192,9 @@ def rel(path: Path) -> str:
 # ------------------------------------------------------------------------------------------------
 
 
-def check_pack(folder: Path, house: dict[str, set[int]], gate: float, errors: list[str]) -> float:
+def check_pack(
+    folder: Path, house: dict[str, set[int]], gate: float, errors: list[str]
+) -> float:
     where_pack = rel(folder)
     try:
         meta = read_pack(folder)
@@ -174,7 +202,9 @@ def check_pack(folder: Path, house: dict[str, set[int]], gate: float, errors: li
         errors.append(f"{where_pack}/pack.json: unreadable ({exc})")
         return 0.0
     if meta.get("id") != folder.name:
-        errors.append(f"{where_pack}/pack.json: id {meta.get('id')!r} does not match the folder")
+        errors.append(
+            f"{where_pack}/pack.json: id {meta.get('id')!r} does not match the folder"
+        )
     for key in ("title", "style"):
         if not isinstance(meta.get(key), str) or not meta.get(key):
             errors.append(f"{where_pack}/pack.json: missing string {key!r}")
@@ -196,7 +226,9 @@ def check_pack(folder: Path, house: dict[str, set[int]], gate: float, errors: li
             continue
         category, tier, name = parts
         if category in FIXED:
-            errors.append(f"{where}: a pack may not restyle the fixed category {category!r}")
+            errors.append(
+                f"{where}: a pack may not restyle the fixed category {category!r}"
+            )
         elif category not in THEMED:
             errors.append(f"{where}: unknown category {category!r}")
         if not tier.isdigit() or int(tier) not in TIERS:
@@ -204,7 +236,9 @@ def check_pack(folder: Path, house: dict[str, set[int]], gate: float, errors: li
         if not NAME_RE.match(path.stem):
             errors.append(f"{where}: name not kebab-case")
         if f"{category}/{path.stem}" not in house and category in THEMED:
-            errors.append(f"{where}: no house icon {category}/{path.stem}; packs re-draw, never add")
+            errors.append(
+                f"{where}: no house icon {category}/{path.stem}; packs re-draw, never add"
+            )
 
     covered = sum(1 for icon in house if icon in pack_files(folder))
     coverage = covered / len(house) if house else 0.0
@@ -237,8 +271,11 @@ def check_qrc(errors: list[str]) -> None:
     on_disk = set()
     for folder in pack_dirs():
         for path in folder.rglob("*"):
-            if (path.is_file() and path.relative_to(folder).parts[0] != BASES_DIR
-                    and path.name != ".DS_Store"):
+            if (
+                path.is_file()
+                and path.relative_to(folder).parts[0] != BASES_DIR
+                and path.name != ".DS_Store"
+            ):
                 on_disk.add(path.relative_to(PACKS).as_posix())
     listed = set(re.findall(r"<file>([^<]+)</file>", QRC.read_text(encoding="utf-8")))
     for missing in sorted(on_disk - listed):
@@ -277,8 +314,10 @@ def cmd_report(args: argparse.Namespace) -> int:
     for folder in folders:
         files = pack_files(folder)
         fallbacks = sorted(icon for icon in house if icon not in files)
-        print(f"== {folder.name}: {len(house) - len(fallbacks)}/{len(house)} drawn, "
-              f"{len(fallbacks)} fall back to the house set")
+        print(
+            f"== {folder.name}: {len(house) - len(fallbacks)}/{len(house)} drawn, "
+            f"{len(fallbacks)} fall back to the house set"
+        )
         for icon in fallbacks:
             print(f"   fallback  {icon}")
         if args.sheet:
@@ -286,8 +325,9 @@ def cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
-def render_sheet(folder: Path, files: dict[str, set[int]], house: dict[str, set[int]],
-                 out: Path) -> None:
+def render_sheet(
+    folder: Path, files: dict[str, set[int]], house: dict[str, set[int]], out: Path
+) -> None:
     """Pack art beside house art, one row per icon id, for the maintainer's eye (AC9)."""
     try:
         from PySide6.QtCore import QRectF, Qt
@@ -300,7 +340,9 @@ def render_sheet(folder: Path, files: dict[str, set[int]], house: dict[str, set[
     ids = sorted(house)
     cols, cell_w, cell_h, icon = 6, 190, 70, 40
     rows = (len(ids) + cols - 1) // cols
-    image = QImage(cols * cell_w, rows * cell_h + 24, QImage.Format_ARGB32_Premultiplied)
+    image = QImage(
+        cols * cell_w, rows * cell_h + 24, QImage.Format_ARGB32_Premultiplied
+    )
     image.fill(QColor("#f4f4f4"))
     painter = QPainter(image)
     painter.setRenderHint(QPainter.Antialiasing)
@@ -313,11 +355,13 @@ def render_sheet(folder: Path, files: dict[str, set[int]], house: dict[str, set[
         category, name = icon_id.split("/", 1)
         house_tier = max(house[icon_id])
         QSvgRenderer(str(ICONS / category / str(house_tier) / f"{name}.svg")).render(
-            painter, QRectF(x + 60, y + 4, icon, icon))
+            painter, QRectF(x + 60, y + 4, icon, icon)
+        )
         if icon_id in files:
             tier = max(files[icon_id])
             QSvgRenderer(str(folder / category / str(tier) / f"{name}.svg")).render(
-                painter, QRectF(x + 8, y + 4, icon, icon))
+                painter, QRectF(x + 8, y + 4, icon, icon)
+            )
         else:
             painter.drawText(QRectF(x + 8, y + 4, icon, icon), Qt.AlignCenter, "house")
         painter.drawText(QRectF(x, y + icon + 6, cell_w, 16), Qt.AlignHCenter, icon_id)
@@ -345,7 +389,13 @@ def cmd_fetch_list(args: argparse.Namespace) -> int:
     pending = 0
     for base, row in bases.items():
         entry = mapping.get(base)
-        if not entry or entry["status"] in ("house", "house-copy", "composed", "design", "none"):
+        if not entry or entry["status"] in (
+            "house",
+            "house-copy",
+            "composed",
+            "design",
+            "none",
+        ):
             continue
         icon8 = entry[column].strip()
         if not icon8 or icon8.upper() == "NONE" or icon8 == "?":
@@ -397,7 +447,9 @@ def normalize_svg(path: Path, tier: int) -> bool:
     root.set("width", str(tier))
     root.set("height", str(tier))
     root.set("viewBox", f"0 0 {tier} {tier}")
-    if abs(scale - 1.0) > 1e-6 and not (len(root) == 1 and root[0].get("data-ss-scale")):
+    if abs(scale - 1.0) > 1e-6 and not (
+        len(root) == 1 and root[0].get("data-ss-scale")
+    ):
         group = ET.Element(f"{{{SVG_NS}}}g")
         group.set("transform", f"scale({scale:.8f})")
         group.set("data-ss-scale", "1")
@@ -429,11 +481,13 @@ def cmd_normalize(args: argparse.Namespace) -> int:
 # ------------------------------------------------------------------------------------------------
 
 
-def badge_group(kind: str, tier: int, mono: bool = False,
-                palette: dict[str, str] | None = None) -> ET.Element:
+def badge_group(
+    kind: str, tier: int, mono: bool = False, palette: dict[str, str] | None = None
+) -> ET.Element:
     """A bottom-right badge, 44 % of the tier: a filled disc with a white glyph for a colour
     pack; for a mono pack the glyph alone in black (the tint, once recoloured), drawn into a hole
-    the caller cuts out of the base with knockout_mask(), the way outline icon sets badge."""
+    the caller cuts out of the base with knockout_mask(), the way outline icon sets badge.
+    """
     size = tier * 0.44
     cx = tier - size / 2
     cy = tier - size / 2
@@ -472,8 +526,11 @@ def badge_group(kind: str, tier: int, mono: bool = False,
         half = bar * 0.42
         tip = cy - bar / 2 if up else cy + bar / 2
         base_y = tip + half if up else tip - half
-        head.set("d", f"M {cx - half:.3f} {base_y:.3f} L {cx + half:.3f} {base_y:.3f} "
-                      f"L {cx:.3f} {tip:.3f} Z")
+        head.set(
+            "d",
+            f"M {cx - half:.3f} {base_y:.3f} L {cx + half:.3f} {base_y:.3f} "
+            f"L {cx:.3f} {tip:.3f} Z",
+        )
         head.set("fill", glyph)
     elif kind == "pencil":
         body = ET.SubElement(group, f"{{{SVG_NS}}}rect")
@@ -509,9 +566,12 @@ def badge_group(kind: str, tier: int, mono: bool = False,
         body.set("fill", glyph)
         shackle = ET.SubElement(group, f"{{{SVG_NS}}}path")
         r = size * 0.16
-        shackle.set("d", f"M {cx - r:.3f} {cy - size * 0.02:.3f} V {cy - size * 0.16:.3f} "
-                         f"A {r:.3f} {r:.3f} 0 0 1 {cx + r:.3f} {cy - size * 0.16:.3f} "
-                         f"V {cy - size * 0.02:.3f}")
+        shackle.set(
+            "d",
+            f"M {cx - r:.3f} {cy - size * 0.02:.3f} V {cy - size * 0.16:.3f} "
+            f"A {r:.3f} {r:.3f} 0 0 1 {cx + r:.3f} {cy - size * 0.16:.3f} "
+            f"V {cy - size * 0.02:.3f}",
+        )
         shackle.set("fill", "none")
         shackle.set("stroke", glyph)
         shackle.set("stroke-width", f"{thick * 0.8:.3f}")
@@ -531,9 +591,12 @@ def badge_group(kind: str, tier: int, mono: bool = False,
     return group
 
 
-def knockout_mask(root: ET.Element, tier: int, badge: bool, label_box: tuple | None) -> None:
+def knockout_mask(
+    root: ET.Element, tier: int, badge: bool, label_box: tuple | None
+) -> None:
     """Wraps the base artwork of a mono composite in a mask that cuts out the badge disc and the
-    label box, so the tinted glyph or text sits in a clean hole instead of over the base lines."""
+    label box, so the tinted glyph or text sits in a clean hole instead of over the base lines.
+    """
     mask_id = "ss-knockout"
     defs = ET.Element(f"{{{SVG_NS}}}defs")
     mask = ET.SubElement(defs, f"{{{SVG_NS}}}mask")
@@ -574,8 +637,9 @@ def label_box(tier: int, beside_badge: bool) -> tuple:
     return (tier * 0.08, tier * 0.56, width, tier * 0.3)
 
 
-def label_group(text: str, tier: int, band: bool, beside_badge: bool = False,
-                mono: bool = False) -> ET.Element:
+def label_group(
+    text: str, tier: int, band: bool, beside_badge: bool = False, mono: bool = False
+) -> ET.Element:
     """A text label: on a dark band across the lower third when @p band (narrowed to leave the
     bottom-right corner free when a badge sits there), else centred large."""
     group = ET.Element(f"{{{SVG_NS}}}g")
@@ -615,7 +679,9 @@ def letter_tile(tier: int, mono: bool = False) -> ET.Element:
     return tile
 
 
-def base_artwork(folder: Path, base: str, row: dict, files: dict[str, set[int]]) -> tuple[Path, int] | None:
+def base_artwork(
+    folder: Path, base: str, row: dict, files: dict[str, set[int]]
+) -> tuple[Path, int] | None:
     """Where the pack keeps a base's drawing: its plain id file, else the _bases scratch file."""
     plain = plain_id(row)
     if plain and plain in files:
@@ -628,9 +694,15 @@ def base_artwork(folder: Path, base: str, row: dict, files: dict[str, set[int]])
     return None
 
 
-def compose_one(source: Path | None, tier: int, target: Path, badge: str | None,
-                label: str | None, mono: bool = False,
-                palette: dict[str, str] | None = None) -> None:
+def compose_one(
+    source: Path | None,
+    tier: int,
+    target: Path,
+    badge: str | None,
+    label: str | None,
+    mono: bool = False,
+    palette: dict[str, str] | None = None,
+) -> None:
     if source is not None:
         tree = ET.parse(source)
         root = tree.getroot()
@@ -643,7 +715,8 @@ def compose_one(source: Path | None, tier: int, target: Path, badge: str | None,
         root.append(letter_tile(tier, mono))
     for child in list(root):
         own_defs = child.tag.endswith("defs") and any(
-            grand.get("id") == "ss-knockout" for grand in child)
+            grand.get("id") == "ss-knockout" for grand in child
+        )
         if child.get("data-ss-badge") or child.get("data-ss-label") or own_defs:
             root.remove(child)
         elif child.get("data-ss-masked"):
@@ -652,14 +725,22 @@ def compose_one(source: Path | None, tier: int, target: Path, badge: str | None,
                 root.append(grand)
     banded = source is not None
     if mono and (badge or (label and banded)):
-        knockout_mask(root, tier, bool(badge), label_box(tier, bool(badge)) if label and banded
-                      else None)
+        knockout_mask(
+            root,
+            tier,
+            bool(badge),
+            label_box(tier, bool(badge)) if label and banded else None,
+        )
     if label:
-        root.append(label_group(label, tier, band=banded, beside_badge=bool(badge), mono=mono))
+        root.append(
+            label_group(label, tier, band=banded, beside_badge=bool(badge), mono=mono)
+        )
     if badge:
         root.append(badge_group(badge, tier, mono, palette))
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_bytes(b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root) + b"\n")
+    target.write_bytes(
+        b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root) + b"\n"
+    )
 
 
 def normalize_root(root: ET.Element, tier: int) -> None:
@@ -673,7 +754,9 @@ def normalize_root(root: ET.Element, tier: int) -> None:
     root.set("width", str(tier))
     root.set("height", str(tier))
     root.set("viewBox", f"0 0 {tier} {tier}")
-    if abs(scale - 1.0) > 1e-6 and not (len(root) == 1 and root[0].get("data-ss-scale")):
+    if abs(scale - 1.0) > 1e-6 and not (
+        len(root) == 1 and root[0].get("data-ss-scale")
+    ):
         group = ET.Element(f"{{{SVG_NS}}}g")
         group.set("transform", f"scale({scale:.8f})")
         group.set("data-ss-scale", "1")
@@ -705,7 +788,9 @@ def cmd_compose(args: argparse.Namespace) -> int:
                     tier = max(tiers)
                     target = folder / category / str(tier) / f"{name}.svg"
                     target.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copyfile(ICONS / category / str(tier) / f"{name}.svg", target)
+                    shutil.copyfile(
+                        ICONS / category / str(tier) / f"{name}.svg", target
+                    )
                     files[icon].add(tier)
                     spread += 1
             continue
@@ -728,8 +813,15 @@ def cmd_compose(args: argparse.Namespace) -> int:
             category, name = icon.split("/", 1)
             if label_spec and label_spec[0] is None:
                 tier = 48
-                compose_one(None, tier, folder / category / str(tier) / f"{name}.svg", None,
-                            label_spec[1], mono, palette)
+                compose_one(
+                    None,
+                    tier,
+                    folder / category / str(tier) / f"{name}.svg",
+                    None,
+                    label_spec[1],
+                    mono,
+                    palette,
+                )
                 made += 1
                 continue
             art = base_artwork(folder, base, row, files)
@@ -741,11 +833,20 @@ def cmd_compose(args: argparse.Namespace) -> int:
             kind = label_spec[2] if label_spec else badge
             if kind == "arrow" and icon in ARROW_UP_IDS:
                 kind = "arrow-up"
-            compose_one(source, tier, folder / category / str(tier) / f"{name}.svg", kind, text,
-                        mono, palette)
+            compose_one(
+                source,
+                tier,
+                folder / category / str(tier) / f"{name}.svg",
+                kind,
+                text,
+                mono,
+                palette,
+            )
             made += 1
-    print(f"compose: {made} composite(s) written, {spread} plain id(s) spread from their base, "
-          f"{skipped} skipped (base not in pack)")
+    print(
+        f"compose: {made} composite(s) written, {spread} plain id(s) spread from their base, "
+        f"{skipped} skipped (base not in pack)"
+    )
     return 0
 
 
@@ -761,8 +862,11 @@ def cmd_qrc(args: argparse.Namespace) -> int:
         if folder.name in excluded:
             continue
         for path in sorted(folder.rglob("*")):
-            if (path.is_file() and path.relative_to(folder).parts[0] != BASES_DIR
-                    and path.name != ".DS_Store"):
+            if (
+                path.is_file()
+                and path.relative_to(folder).parts[0] != BASES_DIR
+                and path.name != ".DS_Store"
+            ):
                 entries.append(path.relative_to(PACKS).as_posix())
     lines = ["<RCC>", '    <qresource prefix="/iconpacks">']
     lines += [f"        <file>{entry}</file>" for entry in sorted(entries)]
@@ -779,8 +883,15 @@ def cmd_qrc(args: argparse.Namespace) -> int:
 
 def cmd_house_sync(_: argparse.Namespace) -> int:
     """Only files git does not track are normalized: the committed house set is never rewritten."""
-    tracked = set(subprocess.run(["git", "ls-files", "--", str(ICONS)], capture_output=True,
-                                 text=True, check=False, cwd=ROOT).stdout.split())
+    tracked = set(
+        subprocess.run(
+            ["git", "ls-files", "--", str(ICONS)],
+            capture_output=True,
+            text=True,
+            check=False,
+            cwd=ROOT,
+        ).stdout.split()
+    )
     normalized = 0
     for path in sorted(ICONS.rglob("*.svg")):
         parts = path.relative_to(ICONS).parts
@@ -798,14 +909,24 @@ def cmd_house_sync(_: argparse.Namespace) -> int:
         lines = text.split("\n")
         for entry in missing:
             new_line = f"        <file>{entry}</file>"
-            index = next((i for i, line in enumerate(lines)
-                          if line.strip().startswith("<file>icons/") and line.strip() > new_line.strip()),
-                         None)
+            index = next(
+                (
+                    i
+                    for i, line in enumerate(lines)
+                    if line.strip().startswith("<file>icons/")
+                    and line.strip() > new_line.strip()
+                ),
+                None,
+            )
             if index is None:
-                index = max(i for i, line in enumerate(lines) if "<file>icons/" in line) + 1
+                index = (
+                    max(i for i, line in enumerate(lines) if "<file>icons/" in line) + 1
+                )
             lines.insert(index, new_line)
         HOUSE_QRC.write_text("\n".join(lines), encoding="utf-8", newline="\n")
-    print(f"house-sync: {normalized} file(s) normalized, {len(missing)} qrc entr{'y' if len(missing) == 1 else 'ies'} added")
+    print(
+        f"house-sync: {normalized} file(s) normalized, {len(missing)} qrc entr{'y' if len(missing) == 1 else 'ies'} added"
+    )
     return 0
 
 
@@ -815,8 +936,9 @@ def cmd_house_sync(_: argparse.Namespace) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     sub = parser.add_subparsers(dest="command", required=True)
     check = sub.add_parser("check")
     check.add_argument("--gate", type=float, default=0.85)
@@ -836,8 +958,12 @@ def main() -> int:
     comp.add_argument("pack")
     comp.set_defaults(func=cmd_compose)
     qrc = sub.add_parser("qrc")
-    qrc.add_argument("--exclude", action="append", metavar="PACK",
-                     help="leave this pack out (a pack still being fetched)")
+    qrc.add_argument(
+        "--exclude",
+        action="append",
+        metavar="PACK",
+        help="leave this pack out (a pack still being fetched)",
+    )
     qrc.set_defaults(func=cmd_qrc)
     house = sub.add_parser("house-sync")
     house.set_defaults(func=cmd_house_sync)
