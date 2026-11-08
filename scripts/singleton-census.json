@@ -1,10 +1,10 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 801,
+  "total": 802,
   "files": 201,
   "buckets": {
-    "root": 212,
+    "root": 213,
     "accessor": 71,
     "ctor-capture": 62,
     "deferred": 7,
@@ -17,7 +17,7 @@
     "CommandRegistry": 57,
     "AppState": 51,
     "UI::Dashboard": 49,
-    "Misc::ThemeManager": 30,
+    "Misc::ThemeManager": 31,
     "DataModel::ProjectModel": 29,
     "Console::Handler": 25,
     "IO::PipelineHost": 23,
@@ -229,9 +229,9 @@
       }
     },
     "app/src/Misc/ModuleManager.cpp": {
-      "total": 206,
+      "total": 207,
       "buckets": {
-        "root": 206,
+        "root": 207,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,

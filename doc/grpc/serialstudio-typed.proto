@@ -1686,6 +1686,7 @@ message ProjectDatasetTransformDryRunRequest {
 }
 
 message ProjectDatasetUpdateRequest {
+  reserved 21;
   string id = 1;
   int64 datasetId = 2;
   int64 groupId = 3;
@@ -1706,7 +1707,6 @@ message ProjectDatasetUpdateRequest {
   bool graph = 18;
   bool hideOnDashboard = 19;
   int64 index = 20;
-  bool led = 21;
   double ledHigh = 22;
   bool log = 23;
   bool overviewDisplay = 24;
@@ -2927,7 +2927,7 @@ service SerialStudioTypedAPI {
   // Returns the latest RAW frame received from the device: sequence number, payload (text/base64) and the parser's channel tokens in values[] -- including channels NOT yet mapped to any dataset (dashboard.getData only shows mapped data). Poll it from a control script loop() to detect new channels and auto-build widgets via project mutations; the sequence field tells you when a new frame arrived. Capture runs only while a control script is running or the API server is enabled, so hasData:false means no data OR no active consumer. timestampMs is a monotonic clock in milliseconds (not Unix epoch time); use it only for deltas between frames. ageMs is the time elapsed since the frame was captured -- use it for staleness watchdogs instead of mixing clocks.
   rpc IoGetLatestFrame(IoGetLatestFrameRequest) returns (CommandResponse);
 
-  // Returns the current connection state: isConnected, paused, busType + busTypeLabel, configurationOk (true when the active bus has enough config to call io.connect), readOnly/readWrite capability flags and linkState (connected, connecting or idle; connecting means a dial is in flight). Call this first when the user reports a connection issue. Reconnection is each driver's own business, so no attempt counter is reported: poll isConnected to watch a link that keeps dropping.
+  // Returns the current connection state: isConnected, paused, busType + busTypeLabel, configurationOk (true when the active bus has enough config to call io.connect), readOnly/readWrite capability flags, linkState (connected, connecting or idle; connecting means a dial is in flight) and sources: one entry per source with sourceId, title, busType, state (connected, connecting, failed or idle) and, when failed, error. In a project with several sources isConnected is true while ANY of them is open, so read sources to see which ones are down. Call this first when the user reports a connection issue. Reconnection is each driver's own business, so no attempt counter is reported: poll isConnected to watch a link that keeps dropping.
   rpc IoGetStatus(IoGetStatusRequest) returns (CommandResponse);
 
   // Get complete HID driver configuration
@@ -3477,11 +3477,11 @@ service SerialStudioTypedAPI {
   //   4 = Bar
   //   8 = Gauge (radial dial; needs widgetMin/widgetMax)
   //   16 = Compass (heading 0-360)
-  //   32 = LED (binary indicator with ledHigh threshold)
   //   64 = Waterfall (Pro; spectrogram, FFT-driven)
+  //   Lights are not a dataset option: put the dataset in a group whose widgetType is 11 (LEDPanel).
   //   0 = no widget (raw column for export only)
   // Combine: 1|8 = 9 = plot AND gauge. After creation, set title, units, ranges, and transformCode via project.dataset.update.
-  // Only plain, Multi-Plot, Data Grid and Bar Panel groups accept datasets; a widget that fixes its layout (Plot3D, Gyroscope, GPS, ...) refuses.
+  // Only plain, Multi-Plot, Data Grid, Bar Panel and LED Panel groups accept datasets; a widget that fixes its layout (Plot3D, Gyroscope, GPS, ...) refuses.
   rpc ProjectDatasetAdd(ProjectDatasetAddRequest) returns (CommandResponse);
 
   // Bulk-create N datasets in one call -- the right tool whenever you would otherwise loop project.dataset.add. Avoids per-call overhead and the autosave-debounce churn that comes with rapid mutation bursts. After creation, individual datasets can still be patched with project.dataset.update or another project.batch round-trip.
@@ -3536,10 +3536,10 @@ service SerialStudioTypedAPI {
   // Atomically replaces the dataset's value labels. Each entry is {value, text} where value must be an integer (a non-integer value is refused with an error); rows with empty text or a repeated value are dropped and counted in result.droppedInvalid (the first row of a value wins). The dataset's value is rounded to the nearest integer before the lookup, and wherever it is shown as text the matching row's text replaces it; plots, alarms, exports and numeric API fields keep the number. labelsDefault (optional) sets the catch-all text for unlisted values. Labels are not Pro content. Pass an empty array to clear all labels.
   rpc ProjectDatasetSetLabels(ProjectDatasetSetLabelsRequest) returns (CommandResponse);
 
-  // DEPRECATED -- prefer project.dataset.setOptions, which takes the full bitfield in one call and removes the singular/plural ambiguity. Kept for backward compatibility with existing scripts. Toggles one DatasetOption flag on a dataset and updates the group's compatibleWidgetTypes immediately. option values (DatasetOption bitflag): 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 32=LED, 64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive. NOTE: this is a DatasetOption bitflag, NOT a DashboardWidget enum -- the numbers do not line up with project.workspace.addWidget's widgetType.
+  // DEPRECATED -- prefer project.dataset.setOptions, which takes the full bitfield in one call and removes the singular/plural ambiguity. Kept for backward compatibility with existing scripts. Toggles one DatasetOption flag on a dataset and updates the group's compatibleWidgetTypes immediately. option values (DatasetOption bitflag): 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive. NOTE: this is a DatasetOption bitflag, NOT a DashboardWidget enum -- the numbers do not line up with project.workspace.addWidget's widgetType.
   rpc ProjectDatasetSetOption(ProjectDatasetSetOptionRequest) returns (CommandResponse);
 
-  // Apply several DatasetOption flags at once (plural form of project.dataset.setOption). Pass `options` as the bitwise OR of the flags you want enabled; any flag NOT set in the value is disabled. Bits: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 32=LED, 64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive -- if more than one is set, the highest bit wins. Updates the group's compatibleWidgetTypes immediately. NOTE: these are DatasetOption bitflags, NOT DashboardWidget enum values -- the numbers do not line up with project.workspace.addWidget's widgetType.
+  // Apply several DatasetOption flags at once (plural form of project.dataset.setOption). Pass `options` as the bitwise OR of the flags you want enabled; any flag NOT set in the value is disabled. Bits: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive -- if more than one is set, the highest bit wins. Updates the group's compatibleWidgetTypes immediately. NOTE: these are DatasetOption bitflags, NOT DashboardWidget enum values -- the numbers do not line up with project.workspace.addWidget's widgetType.
   rpc ProjectDatasetSetOptions(ProjectDatasetSetOptionsRequest) returns (CommandResponse);
 
   // Set dataset transformCode. Empty clears. Pass `language` whenever you author code so the dataset's transformLanguage matches the syntax you wrote -- mismatches compile-fail silently. Lua (1) is the recommended default; it's measurably faster than JavaScript on hot transforms. If this dataset is compute-only (no slot in the parser output array), also set virtual=true via project.dataset.setVirtual or project.dataset.update. Validate with project.dataset.transform.dryRun before setting. **Call meta.fetchScriptingDocs{kind: 'transform_lua' | 'transform_js'} first** for the transform(value) signature, table API (tableGet/tableSet/datasetGetRaw/datasetGetFinal), and execution-order rules -- a transform may read RAW values from any dataset but only FINAL values of datasets earlier in project.dataset.getExecutionOrder. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.

@@ -21,7 +21,11 @@
 
 #include "ProjectEditor/Editors/TransformLibraryEditor.h"
 
+// clang-format off
+extern "C" {
 #include <lua.h>
+}
+// clang-format on
 
 #include <QDir>
 #include <QFileDialog>

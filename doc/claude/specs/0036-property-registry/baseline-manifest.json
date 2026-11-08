@@ -14,7 +14,7 @@
     },
     {
       "path": "examples/CAN Bus Example/ecu_simulator.ssproj",
-      "sha256": "9875716f4409df74ff4743ce20f7014643de7a7b37df5e0a477e86d9b70f74c3"
+      "sha256": "0cdf147d8d9005d270137ad3b8e4f681c26e0cf3e5777ed0f583ccd698e0b050"
     },
     {
       "path": "examples/Camera Telemetry/Camera Telemetry.ssproj",
@@ -30,7 +30,7 @@
     },
     {
       "path": "examples/EtherNet-IP Example/EtherNet-IP Tags.ssproj",
-      "sha256": "6eb0379cdea447f3601f3469c3ba7e4ef7f0d771d094f02d8603d769677571bb"
+      "sha256": "8762b5dd27a5b77101af2f9e10d85f8cf14de2625b77f88cee6047c4aeff6260"
     },
     {
       "path": "examples/Graphical Ping/graphical-ping.ssproj",
@@ -46,7 +46,7 @@
     },
     {
       "path": "examples/IEC 104 Example/IEC 104 Station.ssproj",
-      "sha256": "24e8365792beb384af4b5efabfd78f1a7a9e3bd9f9e39e76078353937acacbb6"
+      "sha256": "1b96771faeaba2fbff07f24c5f73708a047733c0b52d8973705fff07e610a7b1"
     },
     {
       "path": "examples/IMU Simulator/imu_batched.ssproj",
@@ -74,7 +74,7 @@
     },
     {
       "path": "examples/Modbus PLC Simulator/Modbus PLC Simulator.ssproj",
-      "sha256": "1a04d6c4f408b2baadbacf1d3969da2d72a2c2dde2289237546601c39b8ba2ab"
+      "sha256": "acfaa6218e634b91818bdf55e93008617b19348878efe44bb510b013388eb541"
     },
     {
       "path": "examples/OBD-II/OBD-II.ssproj",
@@ -82,7 +82,7 @@
     },
     {
       "path": "examples/OPC UA PLC Simulator/OPC UA PLC Simulator.ssproj",
-      "sha256": "f0cea0afeb8912ccdcc79a6ad8242e70b62512f97a19ab2fb49aaae463c65b5d"
+      "sha256": "feaf52a9c9fec82f7651dfe29f45ed637af84da19487ea613ce5723fa7a494d7"
     },
     {
       "path": "examples/Project Tutorial/tutorial.ssproj",
@@ -98,11 +98,11 @@
     },
     {
       "path": "examples/S7 PLC Example/S7 PLC Simulator.ssproj",
-      "sha256": "da328b74e8634d0114e671706da461ea2cdf7b911b64126640253373753a0191"
+      "sha256": "e63b5943158fdb2c253efebccc2411104871ef805474559567fa573a5e890fc9"
     },
     {
       "path": "examples/Sparkplug Example/Sparkplug Edge Node.ssproj",
-      "sha256": "090b49a1b59d9e45462226219425e085db7a58b8ed9124bfdb6b41cb51a9e7a6"
+      "sha256": "56e398bbae2bfe898677ec9c3eb6e24a953423121dd85bac15a4d16b2f753ea5"
     },
     {
       "path": "examples/System Monitor/system-monitor.ssproj",

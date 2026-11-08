@@ -2209,7 +2209,6 @@
         "hideOnDashboard": 19,
         "index": 20,
         "labelsDefault": 53,
-        "led": 21,
         "ledHigh": 22,
         "log": 23,
         "overviewDisplay": 24,
@@ -2231,7 +2230,9 @@
         "widget": 39,
         "xAxisId": 40
       },
-      "reserved": [],
+      "reserved": [
+        21
+      ],
       "next": 54
     },
     "project.declaration.adopt": {

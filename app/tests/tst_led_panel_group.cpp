@@ -58,7 +58,7 @@ static Group sourceGroup()
   AlarmBand band;
   band.min      = 0.5;
   band.max      = 1.5;
-  band.severity = 3;
+  band.severity = AlarmSeverity::Critical;
   g.datasets[1].alarmBands.push_back(band);
   g.outputWidgets.emplace_back();
   return g;
@@ -149,7 +149,7 @@ void TstLedPanelGroup::keepsIndexBandsAndThreshold()
   QCOMPARE(panel.datasets[0].ledHigh, 1.0);
   QCOMPARE(panel.datasets[0].wgtMax, 1.0);
   QCOMPARE(panel.datasets[0].alarmBands.size(), size_t(1));
-  QCOMPARE(panel.datasets[0].alarmBands[0].severity, 3);
+  QCOMPARE(panel.datasets[0].alarmBands[0].severity, AlarmSeverity::Critical);
 }
 
 void TstLedPanelGroup::leavesIdentityUnassigned()

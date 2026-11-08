@@ -1650,7 +1650,7 @@
         ]
     },
     {
-        "description": "Returns the current connection state: isConnected, paused, busType + busTypeLabel, configurationOk (true when the active bus has enough config to call io.connect), readOnly/readWrite capability flags and linkState (connected, connecting or idle; connecting means a dial is in flight). Call this first when the user reports a connection issue. Reconnection is each driver's own business, so no attempt counter is reported: poll isConnected to watch a link that keeps dropping.",
+        "description": "Returns the current connection state: isConnected, paused, busType + busTypeLabel, configurationOk (true when the active bus has enough config to call io.connect), readOnly/readWrite capability flags, linkState (connected, connecting or idle; connecting means a dial is in flight) and sources: one entry per source with sourceId, title, busType, state (connected, connecting, failed or idle) and, when failed, error. In a project with several sources isConnected is true while ANY of them is open, so read sources to see which ones are down. Call this first when the user reports a connection issue. Reconnection is each driver's own business, so no attempt counter is reported: poll isConnected to watch a link that keeps dropping.",
         "name": "io.getStatus",
         "properties": {
         },
@@ -3968,7 +3968,7 @@
         ]
     },
     {
-        "description": "Add a dataset to a group. A dataset is one channel of incoming data: it gets one column in CSV/MDF4 export, one entry in the frame parser's output array (its `index` field), and zero or more dashboard widgets driven by the `options` bitflags.\nPass `options` as the bitwise OR of the visualizations you want:\n  1 = Plot (time-series line)\n  2 = FFT (frequency-domain plot)\n  4 = Bar\n  8 = Gauge (radial dial; needs widgetMin/widgetMax)\n  16 = Compass (heading 0-360)\n  32 = LED (binary indicator with ledHigh threshold)\n  64 = Waterfall (Pro; spectrogram, FFT-driven)\n  0 = no widget (raw column for export only)\nCombine: 1|8 = 9 = plot AND gauge. After creation, set title, units, ranges, and transformCode via project.dataset.update.\nOnly plain, Multi-Plot, Data Grid and Bar Panel groups accept datasets; a widget that fixes its layout (Plot3D, Gyroscope, GPS, ...) refuses.",
+        "description": "Add a dataset to a group. A dataset is one channel of incoming data: it gets one column in CSV/MDF4 export, one entry in the frame parser's output array (its `index` field), and zero or more dashboard widgets driven by the `options` bitflags.\nPass `options` as the bitwise OR of the visualizations you want:\n  1 = Plot (time-series line)\n  2 = FFT (frequency-domain plot)\n  4 = Bar\n  8 = Gauge (radial dial; needs widgetMin/widgetMax)\n  16 = Compass (heading 0-360)\n  64 = Waterfall (Pro; spectrogram, FFT-driven)\n  Lights are not a dataset option: put the dataset in a group whose widgetType is 11 (LEDPanel).\n  0 = no widget (raw column for export only)\nCombine: 1|8 = 9 = plot AND gauge. After creation, set title, units, ranges, and transformCode via project.dataset.update.\nOnly plain, Multi-Plot, Data Grid, Bar Panel and LED Panel groups accept datasets; a widget that fixes its layout (Plot3D, Gyroscope, GPS, ...) refuses.",
         "name": "project.dataset.add",
         "properties": {
             "groupId": {
@@ -4366,7 +4366,7 @@
         ]
     },
     {
-        "description": "DEPRECATED -- prefer project.dataset.setOptions, which takes the full bitfield in one call and removes the singular/plural ambiguity. Kept for backward compatibility with existing scripts. Toggles one DatasetOption flag on a dataset and updates the group's compatibleWidgetTypes immediately. option values (DatasetOption bitflag): 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 32=LED, 64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive. NOTE: this is a DatasetOption bitflag, NOT a DashboardWidget enum -- the numbers do not line up with project.workspace.addWidget's widgetType.",
+        "description": "DEPRECATED -- prefer project.dataset.setOptions, which takes the full bitfield in one call and removes the singular/plural ambiguity. Kept for backward compatibility with existing scripts. Toggles one DatasetOption flag on a dataset and updates the group's compatibleWidgetTypes immediately. option values (DatasetOption bitflag): 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive. NOTE: this is a DatasetOption bitflag, NOT a DashboardWidget enum -- the numbers do not line up with project.workspace.addWidget's widgetType.",
         "name": "project.dataset.setOption",
         "properties": {
             "datasetId": {
@@ -4382,7 +4382,7 @@
                 "type": "integer"
             },
             "option": {
-                "description": "PREFERRED: a slug -- 'plot', 'fft', 'bar', 'gauge', 'compass', 'led', 'waterfall'. Integer DatasetOption bitflag still accepted (1, 2, 4, 8, 16, 32, 64).",
+                "description": "PREFERRED: a slug -- 'plot', 'fft', 'bar', 'gauge', 'compass', 'waterfall'. Integer DatasetOption bitflag still accepted (1, 2, 4, 8, 16, 64).",
                 "type": [
                     "string",
                     "integer"
@@ -4397,7 +4397,7 @@
         ]
     },
     {
-        "description": "Apply several DatasetOption flags at once (plural form of project.dataset.setOption). Pass `options` as the bitwise OR of the flags you want enabled; any flag NOT set in the value is disabled. Bits: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 32=LED, 64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive -- if more than one is set, the highest bit wins. Updates the group's compatibleWidgetTypes immediately. NOTE: these are DatasetOption bitflags, NOT DashboardWidget enum values -- the numbers do not line up with project.workspace.addWidget's widgetType.",
+        "description": "Apply several DatasetOption flags at once (plural form of project.dataset.setOption). Pass `options` as the bitwise OR of the flags you want enabled; any flag NOT set in the value is disabled. Bits: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive -- if more than one is set, the highest bit wins. Updates the group's compatibleWidgetTypes immediately. NOTE: these are DatasetOption bitflags, NOT DashboardWidget enum values -- the numbers do not line up with project.workspace.addWidget's widgetType.",
         "name": "project.dataset.setOptions",
         "properties": {
             "datasetId": {
@@ -4409,7 +4409,7 @@
                 "type": "integer"
             },
             "options": {
-                "description": "PREFERRED: an array of slugs (e.g. ['plot','fft','waterfall']). Integer bitflag still accepted (Plot=1, FFT=2, Bar=4, Gauge=8, Compass=16, LED=32, Waterfall=64).",
+                "description": "PREFERRED: an array of slugs (e.g. ['plot','fft','waterfall']). Integer bitflag still accepted (Plot=1, FFT=2, Bar=4, Gauge=8, Compass=16, Waterfall=64).",
                 "type": [
                     "array",
                     "integer"
@@ -4679,10 +4679,6 @@
             "labelsDefault": {
                 "description": "Text shown for a value no label row matches; empty shows the number",
                 "type": "string"
-            },
-            "led": {
-                "description": "Shows this dataset as a light in the LED panel.",
-                "type": "boolean"
             },
             "ledHigh": {
                 "description": "The LED turns on when the value reaches this level. Use alarm bands for more than two states.",
@@ -5141,7 +5137,7 @@
                 "type": "string"
             },
             "widgetType": {
-                "description": "GroupWidget enum -- see command description for decision guidance. 0=DataGrid, 1=Accelerometer, 2=Gyroscope, 3=GPS, 4=MultiPlot, 5=NoGroupWidget, 6=Plot3D, 7=ImageView, 8=Painter, 9=WebView, 10=BarPanel",
+                "description": "GroupWidget enum -- see command description for decision guidance. 0=DataGrid, 1=Accelerometer, 2=Gyroscope, 3=GPS, 4=MultiPlot, 5=NoGroupWidget, 6=Plot3D, 7=ImageView, 8=Painter, 9=WebView, 10=BarPanel, 11=LEDPanel",
                 "type": "integer"
             }
         },
