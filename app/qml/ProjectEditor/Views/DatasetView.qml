@@ -182,22 +182,33 @@ Widgets.Pane {
         Layout.fillWidth: true
         Layout.margins: -1
         border.width: 1
-        implicitHeight: computedLabel.implicitHeight + 16
+        implicitHeight: computedNote.implicitHeight + 16
         visible: Cpp_JSON_ProjectEditor.selectedDatasetComputed
-        color: Cpp_ThemeManager.colors["groupbox_background"]
-        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        color: Cpp_ThemeManager.colors["notebox_background"]
+        border.color: Cpp_ThemeManager.colors["notebox_border"]
 
-        Label {
-          id: computedLabel
+        RowLayout {
+          id: computedNote
 
-          wrapMode: Label.WordWrap
+          spacing: 12
           anchors.margins: 8
-          anchors.left: parent.left
-          anchors.right: parent.right
-          anchors.verticalCenter: parent.verticalCenter
-          text: qsTr("This is a computed dataset: its transform calculates the value, so it does "
-                     + "not read a position in the frame. A dataset becomes computed when its "
-                     + "transform does not use the incoming value.")
+          anchors.fill: parent
+
+          Image {
+            sourceSize.width: 32
+            Layout.alignment: Qt.AlignVCenter
+            source: Cpp_Misc_IconRegistry.icon("editor", "transform", 32)
+          }
+
+          Label {
+            Layout.fillWidth: true
+            wrapMode: Label.WordWrap
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["notebox_text"]
+            text: qsTr("This is a computed dataset: its transform calculates the value, so it does "
+                       + "not read a position in the frame. A dataset becomes computed when its "
+                       + "transform does not use the incoming value.")
+          }
         }
       }
 
