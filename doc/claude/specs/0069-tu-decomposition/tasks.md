@@ -410,7 +410,7 @@ updated: 2026-08-26
   reconstructed afterwards.
 - **Verify:** Both runs meet every tier; numbers recorded below the task.
 - **Deps:** T31
-- [ ] done
+- Not done: the spec was shelved on 2026-08-26.
 
 ### T33 — Split `UI/Dashboard.cpp`
 
@@ -455,7 +455,7 @@ updated: 2026-08-26
   one that proves the force-inline promotion worked; the optimized one proves the CI gate holds.
 - **Verify:** Every tier met on both builds; no regression beyond run-to-run noise.
 - **Deps:** T34
-- [ ] done
+- Not done: the spec was shelved on 2026-08-26.
 
 ## Phase 7 — Headers and QML
 
@@ -506,7 +506,7 @@ updated: 2026-08-26
 - **Verify:** `code-verify.py --check`; maintainer confirms a live plot renders with curves,
   axes, area fill, trigger line and crosshair.
 - **Deps:** T38
-- [ ] done
+- Not done: the spec was shelved on 2026-08-26.
 
 ### T40 — Split `FlowDiagram.qml`
 
@@ -518,7 +518,7 @@ updated: 2026-08-26
 - **Verify:** `code-verify.py --check`; maintainer opens the Project Editor flow view and
   confirms nodes, chips, transforms and arrows render and collapse/zoom still work.
 - **Deps:** T39
-- [ ] done
+- Not done: the spec was shelved on 2026-08-26.
 
 ## Phase 8 — Enforcement and documentation
 
@@ -535,7 +535,7 @@ updated: 2026-08-26
 - **Verify:** `code-verify.py --check` exits 0 on the tree; a scratch 1600-line file makes it
   exit non-zero; `grep -r tu-census` finds nothing outside this spec directory.
 - **Deps:** T35, T37, T40
-- [ ] done
+- Not done: the spec was shelved on 2026-08-26.
 
 ### T42 — Update documentation for the new layout
 

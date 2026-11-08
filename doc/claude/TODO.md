@@ -66,45 +66,76 @@ Left after the sweep (`scripts/icon-report.py`, tier holes):
     can decode once as wrong values;
   - a missed connect edge can leave the Quick Plot builder in binary mode;
   - the binary lane converts each value to text and back, and has no benchmark row.
-- [ ] Spec 0113 (material themes, panel hardware), open tasks in its `tasks.md`: the Selector
-  control type, the toggle and knob hardware looks, consumers for the theme `styles` section,
-  the `display` surface behind plots, the taskbar's open-tab indicator, the HDR boost on lit
-  hardware, and the unit tests for AC2, AC3 and AC12.
+- [ ] Spec 0113 (material themes, panel hardware), open tasks in its `tasks.md`: consumers for
+  the theme `styles` section (T8), the `display` surface behind plots (T9), the toolbar and
+  taskbar surfaces and the open-tab indicator (T10), what the colour table cannot reach (T11c),
+  `LedIndicator.qml` (T14), the HDR boost on lit hardware (T24), the toggle and knob hardware
+  looks (T25), the Selector leftovers (T26b), automation roles for the hardware looks (T27),
+  and the unit tests for AC2, AC3 and AC12 (T11, T23).
 - [ ] A project source's live driver writes the Setup pane's saved defaults: opening a project
   whose Modbus source uses port 5521 left `ModbusDriver/port` at 5521 for the next Quick Plot
   session (seen 2026-11-06). The driver setters persist whoever calls them, and
   `applyConnectionSettings` on a `DriverFactory` instance goes through those setters. Map which
   drivers do this before choosing a fix.
+- [ ] `test_declared_binary` fails on Windows in CI ("the declared dashboard never filled", while
+  the app log shows the declaration arriving) and passes on macOS.
+- [ ] Spec 0099 deferrals: span-lane writeback (T3, benchmark-gated) and ZMODEM backpressure and
+  ZEOF timing (T15, needs a cross-layer HAL drain API). Briefs in its `findings.md`.
+- [ ] Close-out that needs no build: spec 0103 T39 to T42 (hotpath re-read, C++ review, docs
+  sweep, sanitize and close), and the review and handoff of specs 0093 (T16) and 0105 (T18).
+- [ ] Spec 0104 consolidation quarter, T3 to T19 in its `tasks.md`. T10 reads on 2026-12-01 and
+  T14 on 2027-01-01.
 
 ## Maintainer steps
 
-- [ ] Build, then run `ctest -R tst_consent_gate` (three cases added 2026-11-06, syntax-checked
-  only), and check a second instance: with one app on 7777, `--headless --api-server --api-port
-  7801` should listen on 7801 and leave `API/Enabled` as it was.
-- [ ] With the app up: `pytest tests/integration/test_connection_verdicts.py -k source_list`, then
-  connect a project with several devices while one endpoint is down and check the notification
-  and the `sources` list of `io.getStatus` (added 2026-11-06, never run).
+CI answers every build, `ctest` and `--benchmark-hotpath` question, and runs the pytest suite
+without the GUI tests. Read `pytest-results-<os>` from the run, because the test job stays green
+on a failure. This section holds only what CI cannot do.
 
-- [ ] Spec 0113: first build of the uncompiled C++ (the syntax check could not run, the compile
-  database names a removed SDK), then `--dump-api-schema` and `scripts/generate-sdk.py` once
-  `style` is in the two output-widget command descriptions, then the AC1 screenshots.
-- [ ] Build, then run `ctest` for the specs 0102 to 0111 suites, and `--benchmark-hotpath`.
-- [ ] Integration tests with the app up: `tests/integration/test_device_declaration.py`,
-  `test_uart_sequence.py`, `test_fixed_length_frames.py`, `test_dataset_formats.py`,
-  `test_output_write_limits.py`, `test_acknowledged_commands.py`, `test_mcp.py`.
-- [ ] First CI run of the firmware job: C and Arduino goldens, the Uno RAM limit, and the two
-  declared example sketches (never compiled locally).
+Decisions:
+
+- [ ] Spec 0098 T30: accept the proposed replacement for the hostile publisher fixture
+  (`tst_publisher_logic_strip` plus a two-instance observation), or decide otherwise.
+- [ ] Spec 0107 R8: the macOS proof leg takes 367 s against a five-minute budget. Spec 0107 T3 and
+  T6, and spec 0104 T4, wait on this.
+
+With a current build:
+
+- [ ] Spec 0113 T22: `project.outputWidget.update` and `.get` handle `style`, but their C++
+  descriptions never name it, so a dump cannot carry it. Add it, build, then `--dump-api-schema`
+  and `scripts/generate-sdk.py`.
+- [ ] With the app up, recapture what spec 0114 moved:
+  `SS_CAPTURE_BASELINES=1 pytest tests/integration/test_property_registry.py`, then
+  `tests/fixtures/mirror/generate_fixtures.py`.
+- [ ] The tests marked `gui`, which CI deselects: specs 0109 (T19) and 0110 (T22).
+- [ ] `tests/integration/test_uart_sequence.py` with `socat` installed: CI has none, so four of
+  its five tests have never run.
+- [ ] Spec 0104 T5: run the released 4.2.1 macOS DMG under `arch -x86_64` with `--headless
+  --selftest-suite qml` and record the result. Due the first week of November.
+
+Observations by hand:
+
+- [ ] Second instance: with one app on 7777, `--headless --api-server --api-port 7801` should
+  listen on 7801 and leave `API/Enabled` as it was.
+- [ ] Connect a project with several devices while one endpoint is down, and check the
+  notification and the `sources` list of `io.getStatus`.
+- [ ] Screenshots: spec 0113 AC1 and the spec 0114 CAN Bus example before and after (AC4).
+- [ ] Walks and rigs: specs 0093 (T15) and 0105 (T17) in the editor, spec 0097 T22 (audio rig and
+  AC10 side by side), the observations in specs 0108 (T26), 0109 (AC4), 0110 (AC5, on a board)
+  and 0115 (T22).
+- [ ] Spec 0111 T60, steps 5 and 6: measure `MPU6050.ino` and the declared sketch on an Uno (AC6),
+  and send a declaration line to the first 0106 release (AC8). CI compiles only `Minimal`, so the
+  two declared example sketches have never been compiled.
+
+Outside this repository:
+
 - [ ] Spec 0111 publishing (T46): PyPI trusted publisher for `serialstudio`, the Arduino mirror
-  repository (`ARDUINO_MIRROR_REPO`, `ARDUINO_MIRROR_TOKEN`), then set `FIRMWARE_PUBLISH`.
-- [ ] Spec 0111 T60: build, schema, benchmark and observations.
-- [ ] Spec 0114 (LED Panel as a group widget, landed 2026-11-07 unbuilt): build, then
-  `ctest -R "tst_led_panel_group|tst_alarm_band_applicability|tst_group_widget_requirement|tst_enum_labels|tst_serialstudio_enums|tst_frame_serialization|tst_opcua_project_builder|tst_modbus_generation|tst_proto_importer|tst_tool_compact"`;
-  `--dump-api-schema` then `scripts/generate-sdk.py` (and drop `led: 32` / add `ledpanel: 11`
-  in `app/rcc/api/SerialStudio.js` and `prelude.js`); with the app up,
-  `pytest tests/integration/test_led_panel_migration.py` (AC2) and
-  `SS_CAPTURE_BASELINES=1 pytest tests/integration/test_property_registry.py` to recapture the
-  baselines; `tests/fixtures/mirror/generate_fixtures.py`; CAN Bus example before/after
-  screenshots (AC4); `--benchmark-hotpath` as a no-change check (AC9). The C and Arduino
-  golden halves (`ledpanel` sketch) run in the firmware CI job. Then the Arduino registry PR
-  (spec 0111 T46).
-- [ ] Translation update for the 2026-11-04 plain-language text pass.
+  repository (`ARDUINO_MIRROR_REPO`, `ARDUINO_MIRROR_TOKEN`), then set `FIRMWARE_PUBLISH`, and the
+  Arduino registry PR.
+- [ ] Spec 0102 T14: copy the MCP Client example's `claude_desktop_bridge.py` to
+  `Serial-Studio/claude-plugin` as `bridge.py`, byte-identical. The two differ today.
+- [ ] Spec 0112 T18: the macOS and Linux runs and the recorded portal result.
+- [ ] `updates.json`: move `windows-msix` to 4.2.1 once the Store certifies it (pending since
+  2026-10-28).
+- [ ] Translation update for spec 0115's "Icon Pack" and "Follow theme" (T22). Land the
+  dataset-dialog commands first.

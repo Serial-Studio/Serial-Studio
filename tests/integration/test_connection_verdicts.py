@@ -140,7 +140,7 @@ def test_network_dead_port_settles_with_one_verdict(api_client, clean_state):
 
 
 @pytest.mark.network
-def test_failed_dial_is_named_in_the_source_list(api_client, clean_state):
+def test_failed_dial_is_named_in_the_source_list(api_client, clean_state, feed_server):
     """A refused dial leaves its source 'failed' with the reason, until the next attempt."""
     if not refusal_is_observable():
         pytest.skip("this host swallows the RST for closed loopback ports")
@@ -151,17 +151,22 @@ def test_failed_dial_is_named_in_the_source_list(api_client, clean_state):
     )
     time.sleep(0.3)
 
-    before = _status(api_client).get("sources")
-    assert isinstance(before, list) and len(before) == 1
-    assert before[0].get("sourceId") == 0
-    assert before[0].get("state") == "idle"
-    assert "error" not in before[0]
-
     st = _connect_and_settle(api_client)
     sources = st.get("sources")
     assert isinstance(sources, list) and len(sources) == 1
+    assert sources[0].get("sourceId") == 0
     assert sources[0].get("state") == "failed"
     assert sources[0].get("error")
+
+    api_client.configure_network(
+        host="127.0.0.1", port=feed_server.port, socket_type="tcp"
+    )
+    time.sleep(0.3)
+
+    st = _connect_and_settle(api_client)
+    assert st.get("isConnected") is True
+    assert st["sources"][0].get("state") == "connected"
+    assert "error" not in st["sources"][0]
 
 
 @pytest.mark.network

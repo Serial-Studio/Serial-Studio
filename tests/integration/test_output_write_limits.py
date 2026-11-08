@@ -10,7 +10,7 @@ Output Control Write Limit Integration Tests (spec 0109)
     widget saved before the spec carries none of the new keys.
   * AC5 and R3, structurally (no app required) - no clamp in the manual's examples or the two
     bundled templates, and the transmit script is reached only through the admission in
-    Base::sendValue.
+    Base::submitValue.
 
 Copyright (C) 2020-2026 Alex Spataru
 SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
@@ -64,29 +64,39 @@ def test_static_manual_examples_do_not_clamp():
 
 def test_static_script_is_reached_only_through_admission():
     """
-    R3: deliverValue runs from sendValue and flushPendingValue only, and sendValue admits the
-    value before it paces. A control kind added later inherits the check by calling sendValue.
+    R3: deliverValue runs from submitValue and flushPendingValue only, and submitValue admits the
+    value before it paces. sendValue and sendValueNow are its only entries, so a control kind
+    added later inherits the check by calling either one.
     """
     text = (_OUTPUT_DIR / "Base.cpp").read_text(encoding="utf-8")
-    send = _function_body(text, "sendValue")
+    submit = _function_body(text, "submitValue")
     flush = _function_body(text, "flushPendingValue")
 
-    outside = text.replace(send, "").replace(flush, "")
+    for entry in ("sendValue", "sendValueNow"):
+        assert "submitValue(" in _function_body(
+            text, entry
+        ), f"{entry} no longer goes through submitValue"
+
+    outside = text.replace(submit, "").replace(flush, "")
     calls = [m for m in re.finditer(r"\bdeliverValue\(", outside)]
     definition = [
         m for m in calls if outside[max(0, m.start() - 2) : m.start()] == "::"
     ]
     assert len(calls) == len(
         definition
-    ), "deliverValue is called outside sendValue/flush"
+    ), "deliverValue is called outside submitValue/flush"
 
-    admit = send.find("admit")
+    admit = submit.find("admit(")
     pacing = min(
-        (i for i in (send.find("m_rateLimiter"), send.find("m_hasPending")) if i >= 0),
+        (
+            i
+            for i in (submit.find("m_rateLimiter"), submit.find("m_hasPending"))
+            if i >= 0
+        ),
         default=-1,
     )
-    assert admit >= 0, "sendValue no longer admits the value"
-    assert pacing < 0 or admit < pacing, "admission must precede pacing in sendValue"
+    assert admit >= 0, "submitValue no longer admits the value"
+    assert pacing < 0 or admit < pacing, "admission must precede pacing in submitValue"
 
 
 # ---------------------------------------------------------------------------

@@ -126,7 +126,7 @@ updated: 2026-09-11
 - **Verify:** `python scripts/code-verify.py --check` on the three files;
   `python scripts/layer-verify.py`; `--singleton-census --check` flat.
 - **Deps:** T5 (go)
-- [ ] shelved 2026-09-11 (T5 no-go)
+- Shelved 2026-09-11 (T5 no-go).
 
 ### T7 — `Widgets::SpectralStager`
 
@@ -147,7 +147,7 @@ updated: 2026-09-11
 - **Verify:** `python scripts/code-verify.py --check` on both files; `layer-verify.py` (owned
   sources, no upward include).
 - **Deps:** T6
-- [ ] shelved 2026-09-11 (T5 no-go)
+- Shelved 2026-09-11 (T5 no-go).
 
 ### T8 — Stager unit suite
 
@@ -164,7 +164,7 @@ updated: 2026-09-11
   maintainer: `ctest -R tst_spectral_stager` locally; CI runs it under the ASan and TSan legs
   (AC7, AC9).
 - **Deps:** T7
-- [ ] shelved 2026-09-11 (T5 no-go)
+- Shelved 2026-09-11 (T5 no-go).
 
 ### T9 — Waterfall adopt-then-submit
 
@@ -185,7 +185,7 @@ updated: 2026-09-11
 - **Verify:** `python scripts/code-verify.py --check` on both files; maintainer observation
   with a steady sensor (still scrolls), a hide/show cycle and an FFT-size change while live.
 - **Deps:** T8
-- [ ] shelved 2026-09-11 (T5 no-go)
+- Shelved 2026-09-11 (T5 no-go).
 
 ### T10 — FFT plot adopt-then-submit
 
@@ -197,7 +197,7 @@ updated: 2026-09-11
 - **Verify:** `python scripts/code-verify.py --check` on both files; maintainer: FFT peak
   markers agree between the worker path and the forced-inline path on the same input (AC5).
 - **Deps:** T9
-- [ ] shelved 2026-09-11 (T5 no-go)
+- Shelved 2026-09-11 (T5 no-go).
 
 ### T11 — Half B docs
 
@@ -209,7 +209,7 @@ updated: 2026-09-11
   through one atomic per stager.
 - **Verify:** `python scripts/claim-verify.py` clean; `python scripts/documentation-verify.py`.
 - **Deps:** T10
-- [ ] shelved 2026-09-11 (T5 no-go)
+- Shelved 2026-09-11 (T5 no-go).
 
 ### T12 — Half B gates, review and observations
 
@@ -224,7 +224,7 @@ updated: 2026-09-11
   script flat), AC9 (pool-absent switch), AC10 (benchmark gates unchanged).
 - **Verify:** every command exits 0; each observation recorded against its AC in `spec.md`.
 - **Deps:** T11
-- [ ] shelved 2026-09-11 (T5 no-go)
+- Shelved 2026-09-11 (T5 no-go).
 
 ## Definition of Done
 

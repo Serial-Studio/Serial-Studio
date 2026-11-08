@@ -350,6 +350,7 @@ def test_sequence_round_trips_through_a_project(api_client, clean_state, temp_di
     try:
         api_client.set_operation_mode("project")
         api_client.create_new_project(title="Sequence Round Trip")
+        api_client.add_dataset(api_client.add_group("G"))
         api_client.source_update(0, busType=0)
         api_client.command("io.uart.setSequence", {"sequence": PROBE_SEQUENCE})
 

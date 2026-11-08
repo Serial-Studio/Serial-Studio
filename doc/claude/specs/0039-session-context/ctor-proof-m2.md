@@ -881,23 +881,24 @@ project open through a queued call (Wave C2), which makes a double-clicked proje
 
 ### Maintainer launch gates — the whole checklist, in one place
 
-None of these can be run by the implementing pass; all of them are open.
+None of these could be run by the implementing pass, and the spec closed on 2026-08-20 without
+recording them one by one. They stay here as a record, not as open work.
 
-- [ ] Launch in **ProjectFile**, **QuickPlot**, and **ConsoleOnly** (every wave asked for this; the
+- Launch in **ProjectFile**, **QuickPlot**, and **ConsoleOnly** (every wave asked for this; the
       milestone needs it once on the final tree). ProjectFile specifically covers the only branch of
       `AppState::deriveFrameConfig()` that touches `ProjectModel` during construction.
-- [ ] Open, edit, autosave, and restore a project; confirm restore-last-project still runs.
-- [ ] Double-click a `.ssproj` on macOS — the path Wave C2's deferral changed.
-- [ ] Connect and disconnect a real device, then quit via **window close**, **Cmd-Q**, and
+- Open, edit, autosave, and restore a project; confirm restore-last-project still runs.
+- Double-click a `.ssproj` on macOS — the path Wave C2's deferral changed.
+- Connect and disconnect a real device, then quit via **window close**, **Cmd-Q**, and
       **Dock-quit** on macOS: the three paths behind the 2026-06 exit crash. Repeat with a USB or HID
       device still attached (thread join, `libusb_exit`, `hid_exit`).
-- [ ] Load a project with a **Lua** parser (Wave B2's ctor edge) and one with a live dashboard plus a
+- Load a project with a **Lua** parser (Wave B2's ctor edge) and one with a live dashboard plus a
       replay (Wave D3).
-- [ ] `--benchmark-hotpath`: **all nine tiers** against the Wave A baseline, not just the headline
+- `--benchmark-hotpath`: **all nine tiers** against the Wave A baseline, not just the headline
       number. Waves C and D are the reason the gate exists — the objects moved from `.bss` to the
       heap, and `FrameBuilder`, `ConnectionManager`, and `Dashboard` are the three the parse path
       touches.
-- [ ] Build and launch **both GPL and commercial** configurations (the `LemonSqueezy` ctor edges in
+- Build and launch **both GPL and commercial** configurations (the `LemonSqueezy` ctor edges in
       `FrameBuilder` and `Dashboard` exist only in the latter).
 
 ### What M2 does not fix, stated plainly

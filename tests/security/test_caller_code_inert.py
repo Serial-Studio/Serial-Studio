@@ -276,6 +276,19 @@ class Sandbox:
 
         return reply.get("value")
 
+    def _settled_register(self):
+        """The register once it can be read at all. A layout rebuild leaves the store briefly
+        without the table, and a failed read says nothing about what the code did. A variable
+        that stays unreadable, or reads anything but its baseline, still fails the check.
+        """
+        deadline = time.monotonic() + REGISTER_WAIT_SECONDS
+        value = self._read_register()
+        while value is None and time.monotonic() < deadline:
+            time.sleep(0.1)
+            value = self._read_register()
+
+        return value
+
     def _wait_for_register(self) -> bool:
         deadline = time.monotonic() + REGISTER_WAIT_SECONDS
         while time.monotonic() < deadline:
@@ -348,7 +361,7 @@ class Sandbox:
         ), f"{what}: caller code replaced the control script"
         if self.has_table:
             assert (
-                self._read_register() == self.table_before
+                self._settled_register() == self.table_before
             ), f"{what}: caller code changed the live data-table variable"
 
         assert (

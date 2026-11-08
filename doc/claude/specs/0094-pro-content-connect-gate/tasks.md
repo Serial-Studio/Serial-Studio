@@ -139,7 +139,7 @@ work at once, without waiting for spec 0093 to be committed or for a release tag
 - **Verify:** `code-verify.py --check`; AC7 on the maintainer's build. Cut and report if a
   full read of the workspace code shows the fallback cannot be made view-only.
 - **Deps:** none
-- [ ] done — CUT on 2026-10-06, as the plan allowed. A non-persisted session list exists and could back a fallback, but keeping it fresh touches several refresh paths whose signals cannot be tested without a build, and it is unconfirmed that dashboard layout autosave stays out of the project file. Custom workspaces keep the editor-only gate; spec R6 and AC7 stay open
+- Cut on 2026-10-06, as the plan allowed. A non-persisted session list exists and could back a fallback, but keeping it fresh touches several refresh paths whose signals cannot be tested without a build, and it is unconfirmed that dashboard layout autosave stays out of the project file. Custom workspaces keep the editor-only gate; spec R6 and AC7 stay open
 
 ### T11 — Integration test
 

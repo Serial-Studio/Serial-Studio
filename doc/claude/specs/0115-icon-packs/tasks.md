@@ -350,7 +350,7 @@ stay in the mapping for a later run and Default keeps the Office set.
 - **Verify:** `icon-packs.py check` ≥ 85 %; sheet; AC3 re-run for Default with the setting
   cleared.
 - **Deps:** T18
-- [ ] done
+- Superseded by T20b.
 
 ### Stage H — Deco, gated
 

@@ -35,6 +35,9 @@ PACKAGE_KEYS = {
 # Keys that notify and open a page instead of downloading an asset
 OPEN_URL_KEYS = {"windows-msix", "linux"}
 
+# Keys that wait on a store's certification, so a release can leave them a version behind
+STORE_GATED_KEYS = {"windows-msix"}
+
 # Expected download asset suffix per direct-download key
 ASSET_SUFFIX = {
     "windows": "-Windows.msi",
@@ -70,10 +73,24 @@ def test_every_entry_has_the_required_fields(updates):
             assert field in entry, f"{key} is missing {field}"
 
 
-def test_all_entries_advertise_the_same_version(updates):
-    versions = {entry["latest-version"] for entry in updates.values()}
+def test_direct_entries_advertise_the_same_version(updates):
+    versions = {
+        entry["latest-version"]
+        for key, entry in updates.items()
+        if key not in STORE_GATED_KEYS
+    }
     assert len(versions) == 1, f"version mismatch across entries: {versions}"
     assert all(versions), "latest-version must not be empty"
+
+
+def test_store_gated_entries_never_lead_the_release(updates):
+    def parsed(version):
+        return tuple(int(part) for part in version.split("."))
+
+    latest = parsed(updates["windows"]["latest-version"])
+    for key in STORE_GATED_KEYS:
+        version = updates[key]["latest-version"]
+        assert parsed(version) <= latest, f"{key} is ahead of the release: {version}"
 
 
 def test_download_urls_match_package_type_and_arch(updates):

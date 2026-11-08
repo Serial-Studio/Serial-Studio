@@ -550,13 +550,26 @@ class TcpServer:
         client.close()
 
     def close(self):
+        """Stop serving and release the port.
+
+        shutdown() comes first: on Linux, close() alone leaves a socket listening while another
+        thread is blocked in its accept(), which keeps the port taken for the life of the process.
+        macOS and Windows refuse shutdown() on a listening socket, so its error is ignored.
+        """
         self._running = False
         for sock in (self._client, self._socket):
-            if sock is not None:
-                try:
-                    sock.close()
-                except OSError:
-                    pass
+            if sock is None:
+                continue
+
+            try:
+                sock.shutdown(socket.SHUT_RDWR)
+            except OSError:
+                pass
+
+            try:
+                sock.close()
+            except OSError:
+                pass
 
 
 def tcp_server(device, host="127.0.0.1", port=0):

@@ -5,7 +5,9 @@
 #
 # SPDX-License-Identifier: MIT
 
+import socket
 import sys
+import time
 import unittest
 from pathlib import Path
 
@@ -211,6 +213,20 @@ class ReplyTests(unittest.TestCase):
         device.feed(b"#ss!Go=1\n")
         device.poll()
         self.assertEqual(self.frame(device, out).count(b","), 0)
+
+
+class TcpServerTests(unittest.TestCase):
+    def test_close_releases_the_port_while_waiting_for_a_client(self):
+        server = serialstudio.tcp_server(serialstudio.Device("T"))
+        port = server.port
+        time.sleep(0.1)
+        server.close()
+
+        probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.addCleanup(probe.close)
+        probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        probe.bind(("127.0.0.1", port))
+        probe.listen(1)
 
 
 if __name__ == "__main__":

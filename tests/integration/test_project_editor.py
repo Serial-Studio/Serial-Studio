@@ -258,8 +258,8 @@ def test_dataset_option_toggle(api_client, clean_state):
     g, d = _last_dataset(api_client)
     before = _status(api_client)["datasetCount"]
 
-    api_client.set_dataset_option(g, d, option=0, enabled=True)
-    api_client.set_dataset_option(g, d, option=0, enabled=False)
+    api_client.set_dataset_option(g, d, option=1, enabled=True)
+    api_client.set_dataset_option(g, d, option=1, enabled=False)
 
     assert _status(api_client)["datasetCount"] == before
 

@@ -675,7 +675,7 @@ unit is confirmed; waves are one build-and-launch cycle each and may not be batc
   `tst_proto_importer` (maintainer); AC3 checked off in `spec.md` with the mechanism named
   accurately (TU split, enabled by but not caused by ownership).
 - **Deps:** M2-T14
-- [ ] done
+- Not done.
 - **Status (2026-07-25): REFUTED as designed — do not execute without a design change.**
   Two ground-truth facts break the premise:
   1. The generation path is not `SerialStudio`-free: `projectFromMessages` / `buildGroups` /
@@ -720,7 +720,7 @@ unit is confirmed; waves are one build-and-launch cycle each and may not be batc
   M3 named as the carrier.
 - **Verify:** the "Definition of Done" below is fully checked or the exception is stated.
 - **Deps:** M2-T15, M2-T16, M2-T17
-- [ ] done
+- Not recorded as done when the spec closed on 2026-08-20.
 
 ## Definition of Done
 
