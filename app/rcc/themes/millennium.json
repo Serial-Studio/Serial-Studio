@@ -86,28 +86,28 @@
     "switch_highlight": "#35AE55",
 
     "console_text": "#1A1C1E",
-    "console_base": "#EAF0EA",
+    "console_base": "#EDEFF1",
     "console_border": "#B0B4B6",
     "console_highlight": "#BFE3C8",
 
     "widget_text": "#1A1C1E",
-    "widget_base": "#F0F1F0",
+    "widget_base": "#F1F2F3",
     "widget_button": "#E6E7E8",
     "widget_border": "#A9ADB1",
-    "widget_window": "#E9EBE9",
+    "widget_window": "#E9EAEC",
     "widget_highlight": "#1F7A33",
     "widget_button_text": "#1A1C1E",
     "widget_highlighted_text": "#FFFFFF",
     "widget_placeholder_text": "#5F6469",
 
     "window_border": "#B0B4B6",
-    "window_toolbar_background": "#E4E6E4",
+    "window_toolbar_background": "#E3E5E7",
     "window_caption_active_top": "#EFF0F0",
     "window_caption_active_text": "#1A1C1E",
-    "window_caption_inactive_top": "#E4E6E4",
+    "window_caption_inactive_top": "#E3E5E7",
     "window_caption_inactive_text": "#5A6066",
-    "window_caption_active_bottom": "#E4E6E4",
-    "window_caption_inactive_bottom": "#E4E6E4",
+    "window_caption_active_bottom": "#E3E5E7",
+    "window_caption_inactive_bottom": "#E3E5E7",
 
     "taskbar_top": "#59606A",
     "taskbar_text": "#E4E7EA",
@@ -145,7 +145,7 @@
     "table_separator_header": "#B0B4B6",
 
     "polar_indicator": "#CB2E1E",
-    "polar_background": "#F3F5F3",
+    "polar_background": "#F3F4F5",
     "polar_foreground": "#23272C",
 
     "plot3d_x_axis": "#CB2E1E",
@@ -154,8 +154,8 @@
     "plot3d_axis_text": "#FFFFFF",
     "plot3d_grid_major": "#9AA1A6",
     "plot3d_grid_minor": "#B9BEBE",
-    "plot3d_background_inner": "#E1E4E1",
-    "plot3d_background_outer": "#BFC4BF",
+    "plot3d_background_inner": "#E1E3E5",
+    "plot3d_background_outer": "#BFC3C7",
 
     "plot_cursor_a": "#23272C",
     "plot_cursor_b": "#B3261A",
@@ -199,7 +199,7 @@
   "materials": {
     "panel": {
       "recipe": "brushed-metal",
-      "color": "#E9EBE9",
+      "color": "#E9EAEC",
       "grain": 0.4,
       "bevel": false,
       "shade": 0
@@ -221,7 +221,7 @@
     },
     "header": {
       "recipe": "brushed-metal",
-      "color": "#DDE0DD",
+      "color": "#DDDFE1",
       "grain": 0.35,
       "bevel": false,
       "shade": 0.35
@@ -248,7 +248,7 @@
       "focus": "#1F7A33"
     },
     "instrument": {
-      "face": "#C8CDC8",
+      "face": "#C8CBCE",
       "band-opacity": 0.5,
       "marker": "level"
     },
