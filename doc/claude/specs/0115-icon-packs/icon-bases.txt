@@ -32,7 +32,10 @@ window-popout|window with an arrow leaving it|open in new window;external link;p
 folder-upload|folder with an up arrow|upload folder;file transfer;send file;upload|commands/file-transmission
 funnel|funnel|filter;funnel|commands/filter
 freeze|padlock in blue, meaning frozen view|snowflake;freeze;frozen;lock|commands/freeze
-cube|3D cube, one face highlighted|cube;3d cube;isometric cube;orthogonal view|commands/front-view;commands/left-view;commands/orthogonal-view;commands/top-view
+cube-front|3D cube with the front face highlighted|cube;3d cube|commands/front-view
+cube-left|3D cube with the left face highlighted|cube;3d cube|commands/left-view
+cube-iso|3D cube with every face highlighted: the orthogonal view|cube;3d cube;isometric cube;orthogonal view|commands/orthogonal-view
+cube-top|3D cube with the top face highlighted|cube;3d cube|commands/top-view
 expand-arrows|four arrows pointing outward|full screen;expand;fullscreen|commands/full-screen
 collapse-arrows|four arrows pointing inward|exit full screen;collapse;compress;normal screen|commands/normal-screen;editor/compress
 question|question mark in a circle|help;question mark;faq|commands/help;editor/help;code/help
