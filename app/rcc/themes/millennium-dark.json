@@ -29,7 +29,7 @@
   },
   "colors": {
     "groupbox_border": "#464C53",
-    "groupbox_background": "#2A2F34",
+    "groupbox_background": "#333940",
     "groupbox_hard_border": "#5A6168",
 
     "pane_background": "#22262A",
