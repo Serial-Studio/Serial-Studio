@@ -355,7 +355,7 @@ Millennium themes name it.
   Millennium themes name it. Otherwise the task closes as "not shipped" with the number.
 - **Verify:** `icon-packs.py check`.
 - **Deps:** T18
-- [ ] done
+- [x] done (135 downloads; 78.0 % by id against the 75 % pack gate; both Millennium themes name it)
 
 ### Stage I — maintainer steps
 

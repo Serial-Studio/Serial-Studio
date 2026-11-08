@@ -154,12 +154,14 @@ the holes, so the review and the pack mechanism are one piece of work.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1, R2, R5) — A data check without the application walks the icon tree and fails
+- [x] **AC1** (R1, R2, R5) — A data check without the application walks the icon tree and fails
       on: pack artwork in a fixed category, a pack below the coverage gate, a logical id in a pack
       that does not exist in the house pack, a tier outside the ladder. It emits the per-pack
       coverage report.
-- [ ] **AC2** (R4) — A unit test asks every pack for every house id at every tier and never
-      receives the placeholder; asking for a made-up id does.
+- [x] **AC2** (R4) — A unit test asks every pack for every house id at every tier and never
+      receives the placeholder; asking for a made-up id does. (`tst_icon_packs`, written against
+      a temporary tree; it runs in the maintainer's `ctest`, the unit tier being outside the
+      Release compile database.)
 - [ ] **AC3** (R6, R8) — With no preference stored and each of Default, Fluent Light, Fluent
       Dark, Millennium and three extension themes without the parameter selected, screenshots of
       the main window, the palette and the Project Editor match the build before this spec.
@@ -171,17 +173,17 @@ the holes, so the review and the pack mechanism are one piece of work.
       a load and save under each pack; the automation catalogue reports the same names.
 - [ ] **AC6** (R12) — The compressed resource payload grows by at most 1 MiB per added pack,
       measured on the built binary. (Maintainer run.)
-- [ ] **AC7** (R15 to R18) — The gap report and the command manifest check report zero
+- [x] **AC7** (R15 to R18) — The gap report and the command manifest check report zero
       commands without icons, zero borrowed icons and zero upscaled 32 px cells for the house
       pack.
-- [ ] **AC8** (R14) — `reuse lint` passes with the icon tree annotated under the Icons8 licence.
-- [ ] **AC9** (R19, R20) — For each shipped pack a contact sheet of every themed id, pack
+- [x] **AC8** (R14) — `reuse lint` passes with the icon tree annotated under the Icons8 licence.
+- [x] **AC9** (R19, R20) — For each shipped pack a contact sheet of every themed id, pack
       artwork beside house artwork, is reviewed by the maintainer; a mismatched metaphor is a
       defect.
 - [ ] **AC10** (R21) — Under the Outline pack and each bundled theme, every surface in R9 shows
       the icons in that theme's text colour with no untinted (black or grey) glyph, and switching
       to a colour pack restores full-colour artwork. (Maintainer observation.)
-- [ ] **AC11** (R22) — The data check of AC1 also fails when an id in the icon tree has no row in
+- [x] **AC11** (R22) — The data check of AC1 also fails when an id in the icon tree has no row in
       the mapping, or a row names an id the tree lacks.
 
 ## Constraints & Invariants

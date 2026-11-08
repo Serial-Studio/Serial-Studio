@@ -2,6 +2,7 @@
   "title": "Millennium Light",
   "parameters": {
     "code-editor-theme": "millennium",
+    "icon-pack": "deco",
     "start-icon": "qrc:/logo/start-dark.svg"
   },
   "translations": {

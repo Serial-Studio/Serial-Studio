@@ -173,7 +173,7 @@ monitor-check|monitor with a check mark|verified device;monitor check;fingerprin
 warning-red|red triangle with exclamation|high priority;error;critical|notifications/critical
 warning|yellow triangle with exclamation|warning;error triangle;caution|notifications/warning
 check-mark|green check mark acknowledging an alert|checkmark;approval;acknowledge|commands/alarm-acknowledge
-bell-off|bell crossed out, alerts silenced|do not disturb;mute notifications;no bell|commands/alarm-silence
+bell-off|a bell, crossed out by the no badge: alerts silenced|bell;notification bell|commands/alarm-silence+no
 speaker|speaker with sound waves|speaker;audio;sound|commands/sound-unmute
 speaker-off|speaker crossed out|mute;no audio;speaker off|commands/sound-mute
 window-x|application window with a close cross|close window;close program|commands/window-close

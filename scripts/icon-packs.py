@@ -20,7 +20,9 @@ Subcommands:
                         equal to the tier, artwork scaled in a group when the source differs.
   compose PACK          build the composite ids (base plus badge or label) from the pack's own
                         base artwork, and copy that artwork to every other plain id the base
-                        serves; an id whose base the pack lacks is skipped.
+                        serves; an id whose base the pack lacks is skipped. pack.json may carry
+                        a "badges" map (plus, x, arrow, arrow-up, pencil, warning, no, lock) of
+                        disc colours tuned to the style.
   qrc                   regenerate app/rcc/iconpacks/iconpacks.qrc from disk; --exclude PACK
                         leaves a pack that is still being fetched out of the list.
   house-sync            after new house icons land: normalize every house SVG git does not
@@ -427,7 +429,8 @@ def cmd_normalize(args: argparse.Namespace) -> int:
 # ------------------------------------------------------------------------------------------------
 
 
-def badge_group(kind: str, tier: int, mono: bool = False) -> ET.Element:
+def badge_group(kind: str, tier: int, mono: bool = False,
+                palette: dict[str, str] | None = None) -> ET.Element:
     """A bottom-right badge, 44 % of the tier: a filled disc with a white glyph for a colour
     pack; for a mono pack the glyph alone in black (the tint, once recoloured), drawn into a hole
     the caller cuts out of the base with knockout_mask(), the way outline icon sets badge."""
@@ -441,7 +444,7 @@ def badge_group(kind: str, tier: int, mono: bool = False) -> ET.Element:
         disc.set("cx", f"{cx:.3f}")
         disc.set("cy", f"{cy:.3f}")
         disc.set("r", f"{size / 2:.3f}")
-        disc.set("fill", BADGE_FILL[kind])
+        disc.set("fill", (palette or {}).get(kind, BADGE_FILL[kind]))
         disc.set("stroke", "#FFFFFF")
         disc.set("stroke-width", f"{tier * 0.03:.3f}")
     bar = size * 0.52
@@ -626,7 +629,8 @@ def base_artwork(folder: Path, base: str, row: dict, files: dict[str, set[int]])
 
 
 def compose_one(source: Path | None, tier: int, target: Path, badge: str | None,
-                label: str | None, mono: bool = False) -> None:
+                label: str | None, mono: bool = False,
+                palette: dict[str, str] | None = None) -> None:
     if source is not None:
         tree = ET.parse(source)
         root = tree.getroot()
@@ -653,7 +657,7 @@ def compose_one(source: Path | None, tier: int, target: Path, badge: str | None,
     if label:
         root.append(label_group(label, tier, band=banded, beside_badge=bool(badge), mono=mono))
     if badge:
-        root.append(badge_group(badge, tier, mono))
+        root.append(badge_group(badge, tier, mono, palette))
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root) + b"\n")
 
@@ -681,7 +685,9 @@ def normalize_root(root: ET.Element, tier: int) -> None:
 
 def cmd_compose(args: argparse.Namespace) -> int:
     folder = PACKS / args.pack
-    mono = bool(read_pack(folder).get("mono", False))
+    meta = read_pack(folder)
+    mono = bool(meta.get("mono", False))
+    palette = meta.get("badges") if isinstance(meta.get("badges"), dict) else None
     bases = read_bases()
     mapping = read_mapping()
     files = pack_files(folder)
@@ -709,7 +715,7 @@ def cmd_compose(args: argparse.Namespace) -> int:
             if label_spec and label_spec[0] is None:
                 tier = 48
                 compose_one(None, tier, folder / category / str(tier) / f"{name}.svg", None,
-                            label_spec[1], mono)
+                            label_spec[1], mono, palette)
                 made += 1
                 continue
             art = base_artwork(folder, base, row, files)
@@ -722,7 +728,7 @@ def cmd_compose(args: argparse.Namespace) -> int:
             if kind == "arrow" and icon in ARROW_UP_IDS:
                 kind = "arrow-up"
             compose_one(source, tier, folder / category / str(tier) / f"{name}.svg", kind, text,
-                        mono)
+                        mono, palette)
             made += 1
     print(f"compose: {made} composite(s) written, {spread} plain id(s) spread from their base, "
           f"{skipped} skipped (base not in pack)")
