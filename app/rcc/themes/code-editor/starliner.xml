@@ -9,18 +9,18 @@
   <style name="Occurrences" background="#2A3340"/>
   <style name="SearchResult" background="#4A3F1E" foreground="#F4F7FA"/>
 
-  <!-- Syntax Highlighting (Visual Studio dark palette) -->
-  <style name="Keyword" foreground="#569CD6"/>
-  <style name="Type" foreground="#4EC9B0"/>
-  <style name="Function" foreground="#DCDCAA"/>
-  <style name="Macro" foreground="#C586C0"/>
-  <style name="String" foreground="#CE9178"/>
-  <style name="Number" foreground="#B5CEA8"/>
-  <style name="Comment" foreground="#6A9955"/>
-  <style name="Label" foreground="#C586C0"/>
-  <style name="Operator" foreground="#D4D4D4"/>
-  <style name="Punctuation" foreground="#D4D4D4"/>
-  <style name="Preprocessor" foreground="#C586C0"/>
+  <!-- Syntax Highlighting (Starliner palette) -->
+  <style name="Keyword" foreground="#4FA3FF"/>
+  <style name="Type" foreground="#5BD1D7"/>
+  <style name="Function" foreground="#E3D7A2"/>
+  <style name="Macro" foreground="#B0A4E8"/>
+  <style name="String" foreground="#E8A07A"/>
+  <style name="Number" foreground="#9FD6B3"/>
+  <style name="Comment" foreground="#6E7F94" italic="true"/>
+  <style name="Label" foreground="#B0A4E8"/>
+  <style name="Operator" foreground="#C9D2DC"/>
+  <style name="Punctuation" foreground="#AAB4C0"/>
+  <style name="Preprocessor" foreground="#B0A4E8"/>
 
   <!-- Braces and Matching -->
   <style name="Parentheses" background="#244A7A" foreground="#F4F7FA"/>

@@ -33,7 +33,7 @@ namespace Console {
 [[nodiscard]] QString welcomeLogo();
 
 /**
- * @brief Returns the one-line start hint that closes the welcome guide.
+ * @brief Returns the start hint that closes the welcome guide, word-wrapped to its 80 columns.
  */
 [[nodiscard]] QString commandPaletteTip();
 

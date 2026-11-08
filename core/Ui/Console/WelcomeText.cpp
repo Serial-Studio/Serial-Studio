@@ -27,6 +27,7 @@
 
 #include "Core/LanguageTable.h"
 #include "Core/License.h"
+#include "Core/SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Welcome text
@@ -36,6 +37,11 @@
  * @brief The ordinal the root publishes for a trial entitlement; anything above it is a paid tier.
  */
 static constexpr quint8 kTrialTier = 2;
+
+/**
+ * @brief The column budget the welcome guide is written for; the terminal never wraps narrower.
+ */
+static constexpr int kGuideColumns = 80;
 
 /**
  * @brief Resolves the resource path of the welcome text variant this build and licence get:
@@ -112,8 +118,41 @@ QString Console::welcomeLogo()
 }
 
 /**
- * @brief Returns the one-line start hint that closes the welcome guide (spec 0100 R1), spelling
- *        the palette shortcut the way this platform shows it; one line keeps the guide in 80x24.
+ * @brief Breaks @p text at spaces so no line runs past @p columns; a single word longer than the
+ *        budget stands on its own line. The terminal wraps by character, so a translated tip that
+ *        overruns the budget would otherwise split mid-word.
+ */
+[[nodiscard]] static QString wrapWords(const QString& text, const int columns)
+{
+  SS_ASSERT(columns > 0, return text);
+
+  QString out;
+  out.reserve(text.size() + 8);
+
+  int line_length  = 0;
+  const auto words = text.split(u' ', Qt::SkipEmptyParts);
+  for (const auto& word : words) {
+    if (line_length > 0 && line_length + 1 + word.size() > columns) {
+      out         += u'\n';
+      line_length  = 0;
+    }
+
+    else if (line_length > 0) {
+      out += u' ';
+      ++line_length;
+    }
+
+    out         += word;
+    line_length += word.size();
+  }
+
+  return out;
+}
+
+/**
+ * @brief Returns the start hint that closes the welcome guide (spec 0100 R1), spelling the palette
+ *        shortcut the way this platform shows it and word-wrapped to the guide's 80 columns, since
+ *        most translations overrun one row and the terminal would split them mid-word.
  */
 QString Console::commandPaletteTip()
 {
@@ -124,10 +163,11 @@ QString Console::commandPaletteTip()
   // code-verify on
 #endif
 
-  return QStringLiteral("\n")
-       + QObject::tr("Tip: pick a device in Device Setup, then press Connect. %1 opens commands.")
-           .arg(key)
-       + QStringLiteral("\n");
+  const auto tip =
+    QObject::tr("Tip: pick a device in Device Setup, then press Connect. %1 opens commands.")
+      .arg(key);
+
+  return QStringLiteral("\n") + wrapWords(tip, kGuideColumns) + QStringLiteral("\n");
 }
 
 /**

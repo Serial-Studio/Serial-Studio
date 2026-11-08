@@ -246,6 +246,9 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
 
     if (msg.startsWith("QThread::start: Failed to set thread priority"))
       return;
+
+    if (msg.startsWith("Populating font family aliases took"))
+      return;
   }
 
   QString message;
