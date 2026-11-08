@@ -27,6 +27,7 @@ RECIPES = {"flat", "gradient", "brushed-metal", "glass"}
 LOOKS = {"led": {"lamp"}, "output": {"hardware", "plain"}}
 OLDER_THEMES = ("fluent-light", "fluent-dark")
 BUNDLED_THEMES = ("millennium", "millennium-dark", "starliner")
+TITLES = {"millennium": "Millennium Light", "millennium-dark": "Millennium Dark", "starliner": "Starliner"}
 MATERIAL_THEMES = ("default",) + BUNDLED_THEMES
 
 # Text colour over the surface it is drawn on (spec 0113 R13: at least 4.5 to 1)
@@ -85,7 +86,7 @@ def test_bundled_theme_is_in_the_resource_tree(name):
     qrc = QRC.read_text(encoding="utf-8")
     assert f"<file>themes/{name}.json</file>" in qrc
     assert f"<file>themes/code-editor/{name}.xml</file>" in qrc
-    assert load(name)["title"].lower().replace(" ", "-") == name
+    assert load(name)["title"] == TITLES[name]
     assert load(name)["parameters"]["code-editor-theme"] == name
 
 
