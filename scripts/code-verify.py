@@ -2456,6 +2456,47 @@ def find_js_interrupt_site_violations(
     return violations
 
 
+# LuaJIT's C headers carry no __cplusplus guard, and their include guards make the first
+# inclusion in a translation unit decide linkage for all later ones. In a unity batch that
+# TU spans several files, so one bare include breaks the link of a neighbouring file.
+_LUA_HEADER_RE = re.compile(
+    r'^\s*#\s*include\s*[<"](?:lua|lualib|lauxlib|luajit)\.h[>"]'
+)
+_EXTERN_C_OPEN_RE = re.compile(r'^\s*extern\s+"C"\s*\{')
+
+
+def find_lua_include_linkage_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag a LuaJIT C header included outside an extern "C" block (error)."""
+    if path.suffix not in (".cpp", ".h"):
+        return []
+
+    violations: list[Violation] = []
+    depth = 0
+    for i, line in enumerate(raw_lines):
+        if depth > 0:
+            depth = max(0, depth + line.count("{") - line.count("}"))
+            continue
+        if _EXTERN_C_OPEN_RE.match(line):
+            depth = max(0, line.count("{") - line.count("}"))
+            continue
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        if _LUA_HEADER_RE.match(line):
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "lua-include-linkage",
+                    'Wrap LuaJIT headers in extern "C" { }: they declare no linkage of '
+                    "their own, so a bare include gives every lua_* function C++ linkage "
+                    "for the whole unity batch and the link fails on mangled names.",
+                )
+            )
+    return violations
+
+
 # Trial parity: an active trial installs a valid CommercialToken, so every Pro
 # feature gate must count trial users as entitled -- SerialStudio::activated()
 # in C++, or the paid probe paired with Cpp_Licensing_Trial state in QML.
@@ -2649,6 +2690,7 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
             + find_pipeline_queued_hop_violations(raw_lines, path, fence_mask)
             + find_js_raw_call_violations(raw_lines, path, fence_mask)
             + find_js_interrupt_site_violations(raw_lines, path, fence_mask)
+            + find_lua_include_linkage_violations(raw_lines, path, fence_mask)
         )
         violations.extend(find_undo_scope_violations(raw_lines, path, fence_mask))
         violations.extend(
