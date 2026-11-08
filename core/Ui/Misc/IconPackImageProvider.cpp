@@ -144,7 +144,7 @@ QByteArray Misc::IconPackImageProvider::recolour(const QByteArray& svg, const QS
 
   auto text      = QString::fromUtf8(svg);
   const auto hex = QStringLiteral("#") + tint;
-  text.replace(kAttribute, QStringLiteral("\\1") + hex + QStringLiteral("\\3"));
+  text.replace(kAttribute, QStringLiteral("\\1") + hex + QStringLiteral("\\4"));
   text.replace(kStyle, QStringLiteral("\\1") + hex);
 
   const auto open = text.indexOf(QStringLiteral("<svg"));

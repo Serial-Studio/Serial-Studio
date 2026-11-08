@@ -92,8 +92,9 @@ Controls.GroupBox {
       anchors.verticalCenter: parent.verticalCenter
 
       Image {
-        source: root.icon
         sourceSize: Qt.size(16, 16)
+        source: Cpp_Misc_IconRegistry.retint(root.icon,
+                                             Cpp_ThemeManager.colors["pane_caption_foreground"])
         Layout.alignment: Qt.AlignVCenter
       }
 

@@ -195,6 +195,20 @@ QString Misc::IconPacks::resolveByIdOn(const QString& tone, const QString& id, c
   return m_registry.iconByIdOn(toneFrom(tone), id, px);
 }
 
+/**
+ * @brief Re-tints a mono pack URL to @p color for a surface whose foreground is neither the text
+ *        nor the strip tone (a pane caption, for one); a qrc URL comes back unchanged.
+ */
+QString Misc::IconPacks::retint(const QString& url, const QColor& color) const
+{
+  const auto marker = QStringLiteral("?tint=");
+  const auto at     = url.indexOf(marker);
+  if (!url.startsWith(QStringLiteral("image://iconpack")) || at < 0 || !color.isValid())
+    return url;
+
+  return url.left(at + marker.length()) + color.name().mid(1).toLower();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Selection
 //--------------------------------------------------------------------------------------------------

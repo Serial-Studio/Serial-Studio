@@ -7,7 +7,9 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pytest
@@ -144,3 +146,58 @@ def test_qrc_lists_every_pack_file_and_skips_scratch(tree):
     assert "<file>fluent/widgets/48/gauge.svg</file>" in text
     assert "<file>fluent/pack.json</file>" in text
     assert "_bases" not in text
+
+
+PROVIDER = SCRIPTS.parent / "core" / "Ui" / "Misc" / "IconPackImageProvider.cpp"
+
+COMPOSITE = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><mask id="ss-knockout">'
+    '<rect x="0" y="0" width="48" height="48" fill="white"/><circle cx="37" cy="37" r="12" '
+    'fill="black"/></mask></defs><g mask="url(#ss-knockout)"><path d="M4 4h20v20H4z"/>'
+    '<path fill="#1A1A1A" stroke="#000" style="fill:#222;stroke:none" d="M1 1h1"/></g>'
+    '<g data-ss-badge="plus"><rect fill="#000000" x="30" y="36" width="14" height="2"/></g></svg>'
+)
+
+
+def _cpp_recolour():
+    """The provider's two regexes and replacement templates, read from the C++ source so this
+    test fails when the group numbers in the source drift (2026-11-07: a \\3 for a \\4 broke
+    every tinted composite)."""
+    text = PROVIDER.read_text(encoding="utf-8")
+    patterns = re.findall(r'QStringLiteral\(\s*R"re\((.*?)\)re"\)', text, re.S)
+    assert len(patterns) == 2, patterns
+    attr_pat, style_pat = patterns
+    replacements = re.findall(r'text\.replace\(k(Attribute|Style),\s*(.*?)\);', text, re.S)
+    assert [name for name, _ in replacements] == ["Attribute", "Style"]
+
+    def template(expr: str) -> str:
+        groups = re.findall(r'QStringLiteral\("\\\\(\d)"\)', expr)
+        return groups
+
+    attr_groups = template(replacements[0][1])
+    style_groups = template(replacements[1][1])
+
+    def recolour(svg: str, tint: str) -> str:
+        hexc = "#" + tint
+
+        def attr_sub(m):
+            return m.group(int(attr_groups[0])) + hexc + m.group(int(attr_groups[1]))
+
+        def style_sub(m):
+            return m.group(int(style_groups[0])) + hexc
+
+        svg = re.sub(attr_pat, attr_sub, svg)
+        svg = re.sub(style_pat, style_sub, svg)
+        return svg
+
+    return recolour
+
+
+def test_provider_recolour_keeps_composites_well_formed():
+    recolour = _cpp_recolour()
+    out = recolour(COMPOSITE, "e6e8ea")
+    ET.fromstring(out)
+    assert 'fill="#e6e8ea"' in out and 'stroke="#e6e8ea"' in out
+    assert "fill:#e6e8ea" in out
+    assert 'fill="white"' in out and 'fill="black"' in out
+    assert "#e6e8ea#" not in out

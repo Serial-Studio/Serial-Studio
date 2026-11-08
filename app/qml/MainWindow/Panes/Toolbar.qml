@@ -257,7 +257,7 @@ Rectangle {
       visible: Cpp_API_Mirror.attached
       Layout.alignment: Qt.AlignVCenter
       ToolTip.text: qsTr("Manage the remote dashboard connection")
-      icon.source: Cpp_Misc_IconRegistry.iconById("commands/remote-attach", 32)
+      icon.source: Cpp_Misc_IconRegistry.iconByIdOn("strip", "commands/remote-attach", 32)
     }
 
     //
@@ -301,7 +301,8 @@ Rectangle {
         checked: entry !== null && entry.checked === true
         ToolTip.text: entry !== null && entry.tooltip !== undefined ? entry.tooltip : ""
         text: connecting ? qsTr("Connecting…") : (checked ? qsTr("Disconnect") : qsTr("Connect"))
-        icon.source: Cpp_Misc_IconRegistry.iconById(checked ? "commands/connect" : "commands/disconnect", 32)
+        icon.source: Cpp_Misc_IconRegistry.iconByIdOn("strip", checked ? "commands/connect"
+                                                                : "commands/disconnect", 32)
 
         enabled: entry !== null && entry.enabled !== false
 

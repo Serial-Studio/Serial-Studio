@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QColor>
 #include <QJSValue>
 #include <QObject>
 #include <QSettings>
@@ -105,6 +106,7 @@ public:
   [[nodiscard]] Q_INVOKABLE QString resolveByIdOn(const QString& tone,
                                                   const QString& id,
                                                   int px) const;
+  [[nodiscard]] Q_INVOKABLE QString retint(const QString& url, const QColor& color) const;
 
 public slots:
   void setPack(int index);
