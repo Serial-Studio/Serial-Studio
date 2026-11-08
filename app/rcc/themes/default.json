@@ -34,9 +34,9 @@
 
     "pane_background": "#f9f9f9",
     "pane_section_label": "#232629",
-    "pane_caption_bg_top": "#394046",
+    "pane_caption_bg_top": "#30363C",
     "pane_caption_border": "#595E63",
-    "pane_caption_bg_bottom": "#475057",
+    "pane_caption_bg_bottom": "#4A525A",
     "pane_caption_foreground": "#ffffff",
 
     "setup_border": "#9aa0a6",
