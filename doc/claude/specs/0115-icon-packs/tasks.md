@@ -368,6 +368,25 @@ Millennium themes name it.
 - **Deps:** T18
 - [ ] done
 
+### Stage J — monochrome-by-design surfaces (R23, 2026-11-08)
+
+### T23 — Widget toolbars draw mono glyphs; ribbon collapsed icons follow their label
+
+- **Files:** `core/Core/IconRegistry.h/.cpp` (`monoIconById`, `monoPackId`, `packPathIn`,
+  `locateHouse`), `core/Ui/Misc/IconPacks.h/.cpp` (`monoIconById` function property),
+  `app/qml/Widgets/Dashboard/DashboardToolButton.qml` (`glyph`), the nine widget QML files whose
+  tool buttons name a glyph, `app/qml/Widgets/RibbonSection.qml` (`retint` on the collapsed
+  icon), `scripts/registry-verify.py` (glyph check), `app/tests/tst_icon_packs.cpp`,
+  `doc/claude/architecture/commands-icons.md`, `CLAUDE.md`.
+- **Does:** one resolver reads the Outline pack in the text tint whatever pack is active and
+  serves the house file for a missing glyph; the tool button owns the request, so no widget
+  builds a URL. Invariants: resolution stays in the registry, bindings stay calls on notifying
+  function properties, fixed categories still ignore packs, never blank.
+- **Verify:** `python scripts/code-verify.py --check` on the files, `registry-verify.py`,
+  `tst_icon_packs` (maintainer `ctest`), AC12 observation.
+- **Deps:** T19
+- [x] done (2026-11-08; AC12 rendering pending the maintainer's build)
+
 ## Definition of Done
 
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.

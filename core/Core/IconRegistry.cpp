@@ -195,6 +195,15 @@ const QStringList& Misc::IconRegistry::fixedCategories()
 }
 
 /**
+ * @brief The bundled mono pack the monochrome-by-design surfaces draw from (the Outline set).
+ */
+const QString& Misc::IconRegistry::monoPackId()
+{
+  static const QString kMono = QStringLiteral("outline");
+  return kMono;
+}
+
+/**
  * @brief Selects the pack with @p id (empty for the house set); an unknown id falls back to the
  *        house set with a warning so a theme naming a pack this build lacks stays usable.
  */
@@ -290,6 +299,27 @@ QString Misc::IconRegistry::iconByIdOn(const Tone tone, const QString& id, const
 }
 
 /**
+ * @brief Resolves a combined id against the fixed mono pack in the text tint whatever pack is
+ *        active, for the surfaces that are monochrome by design (the dashboard widget toolbars,
+ *        spec 0115 R23); a glyph that pack lacks, or a build without it, serves the house file.
+ */
+QString Misc::IconRegistry::monoIconById(const QString& id, const int px) const
+{
+  const auto slash = id.indexOf(QChar('/'));
+  if (slash <= 0 || slash == id.length() - 1)
+    return QStringLiteral("qrc:") + missingIcon(QStringLiteral("(malformed)"), id);
+
+  const auto category = id.left(slash);
+  const auto name     = id.mid(slash + 1);
+  const auto path     = packPathIn(monoPackId(), category, name, px);
+  if (path.isEmpty())
+    return QStringLiteral("qrc:") + locateHouse(category, name, px).path;
+
+  return QStringLiteral("image://iconpack/%1/%2%3?tint=%4")
+    .arg(monoPackId(), category, path, m_textTint);
+}
+
+/**
  * @brief Returns the resource path (":/...", QPixmap/QIcon consumable) of @p category / @p name
  *        at the tier nearest at-or-above @p px; a mono pack's file is served untinted here.
  */
@@ -304,15 +334,30 @@ QString Misc::IconRegistry::iconPath(const QString& category, const QString& nam
  */
 QString Misc::IconRegistry::packPath(const QString& category, const QString& name, int px) const
 {
-  if (m_pack.isEmpty() || fixedCategories().contains(category))
+  if (m_pack.isEmpty())
     return {};
 
-  const auto pack = m_packCatalog.constFind(m_pack);
-  if (pack == m_packCatalog.constEnd())
+  return packPathIn(m_pack, category, name, px);
+}
+
+/**
+ * @brief Returns @p pack's "/<tier>/<name>.svg" for @p category / @p name, or an empty string
+ *        when the category is fixed or the pack lacks the icon.
+ */
+QString Misc::IconRegistry::packPathIn(const QString& pack,
+                                       const QString& category,
+                                       const QString& name,
+                                       int px) const
+{
+  if (fixedCategories().contains(category))
     return {};
 
-  const auto cat = pack->constFind(category);
-  if (cat == pack->constEnd())
+  const auto entry = m_packCatalog.constFind(pack);
+  if (entry == m_packCatalog.constEnd())
+    return {};
+
+  const auto cat = entry->constFind(category);
+  if (cat == entry->constEnd())
     return {};
 
   return tierPath(*cat, name, px);
@@ -334,6 +379,17 @@ Misc::IconRegistry::Located Misc::IconRegistry::locate(const QString& category,
   if (!fromPack.isEmpty())
     return {QStringLiteral("/iconpacks/%1/%2%3").arg(m_pack, category, fromPack), true};
 
+  return locateHouse(category, name, px);
+}
+
+/**
+ * @brief The house tree alone: the artwork for @p category / @p name at the tier nearest
+ *        at-or-above @p px, else the placeholder.
+ */
+Misc::IconRegistry::Located Misc::IconRegistry::locateHouse(const QString& category,
+                                                            const QString& name,
+                                                            const int px) const
+{
   const auto cat = m_catalog.constFind(category);
   if (cat == m_catalog.constEnd())
     return notFound(category, name);

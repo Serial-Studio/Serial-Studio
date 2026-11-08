@@ -40,6 +40,7 @@ private slots:
   void packArtworkWinsAndFallsBackPerIcon();
   void fixedCategoriesIgnoreThePack();
   void monoPackCarriesTheTintPerTone();
+  void monoSurfaceIgnoresTheActivePack();
   void unknownIdAndUnknownPackStayLoud();
 
 private:
@@ -97,6 +98,9 @@ void TstIconPacks::initTestCase()
   QVERIFY(writeSvg(QStringLiteral("iconpacks/colour/window/32/close.svg")));
   QVERIFY(writePack(QStringLiteral("mono"), true));
   QVERIFY(writeSvg(QStringLiteral("iconpacks/mono/commands/48/settings.svg")));
+  QVERIFY(writePack(Misc::IconRegistry::monoPackId(), true));
+  QVERIFY(writeSvg(
+    QStringLiteral("iconpacks/%1/commands/48/settings.svg").arg(Misc::IconRegistry::monoPackId())));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -108,7 +112,7 @@ void TstIconPacks::houseSetResolvesWithoutPack()
   Misc::IconRegistry registry(m_root.path() + QStringLiteral("/icons"),
                               m_root.path() + QStringLiteral("/iconpacks"));
   QVERIFY(registry.pack().isEmpty());
-  QCOMPARE(registry.packs().size(), 2);
+  QCOMPARE(registry.packs().size(), 3);
   QCOMPARE(registry.icon(QStringLiteral("widgets"), QStringLiteral("gauge"), 24),
            QStringLiteral("qrc:/icons/widgets/32/gauge.svg"));
   QCOMPARE(registry.iconById(QStringLiteral("commands/settings"), 16),
@@ -158,6 +162,29 @@ void TstIconPacks::monoPackCarriesTheTintPerTone()
            QStringLiteral("qrc:/icons/widgets/32/gauge.svg"));
   QCOMPARE(registry.iconPath(QStringLiteral("commands"), QStringLiteral("settings"), 24),
            QStringLiteral(":/iconpacks/mono/commands/48/settings.svg"));
+}
+
+/**
+ * @brief The widget-toolbar resolver draws from the fixed mono pack under the house set and
+ *        under a colour pack alike, in the text tint, and serves the house file for a glyph the
+ *        mono pack lacks.
+ */
+void TstIconPacks::monoSurfaceIgnoresTheActivePack()
+{
+  Misc::IconRegistry registry(m_root.path() + QStringLiteral("/icons"),
+                              m_root.path() + QStringLiteral("/iconpacks"));
+  registry.setTints(QStringLiteral("#232629"), QStringLiteral("#FFFFFF"));
+  const auto expected = QStringLiteral("image://iconpack/%1/commands/48/settings.svg?tint=232629")
+                          .arg(Misc::IconRegistry::monoPackId());
+  QCOMPARE(registry.monoIconById(QStringLiteral("commands/settings"), 18), expected);
+  registry.setPack(QStringLiteral("colour"));
+  QCOMPARE(registry.monoIconById(QStringLiteral("commands/settings"), 18), expected);
+  QCOMPARE(registry.icon(QStringLiteral("commands"), QStringLiteral("settings"), 18),
+           QStringLiteral("qrc:/icons/commands/24/settings.svg"));
+  QCOMPARE(registry.monoIconById(QStringLiteral("widgets/gauge"), 18),
+           QStringLiteral("qrc:/icons/widgets/32/gauge.svg"));
+  QCOMPARE(registry.monoIconById(QStringLiteral("malformed"), 18),
+           QStringLiteral("qrc:/icons/system/16/missing.svg"));
 }
 
 void TstIconPacks::unknownIdAndUnknownPackStayLoud()

@@ -169,7 +169,7 @@ Item {
         icon.width: 18
         icon.height: 18
         icon.color: "transparent"
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "color", 16)
+        icon.source: Cpp_Misc_IconRegistry.monoIconById("commands/color", 18)
       }
 
       Widgets.Combo {
@@ -190,8 +190,8 @@ Item {
 
       DashboardToolButton {
         checked: root.showCrosshair
+        glyph: "commands/crosshair"
         ToolTip.text: qsTr("Show Crosshair")
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "crosshair", 16)
         onClicked: {
           root.showCrosshair = !root.showCrosshair
           if (!root.showCrosshair) {
@@ -208,8 +208,8 @@ Item {
       }
 
       DashboardToolButton {
+        glyph: "commands/zoom-in"
         ToolTip.text: qsTr("Zoom In")
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-in", 16)
         onClicked: {
           const oldZoom = root.zoom
           const newZoom = Math.min(root.maxZoom, oldZoom * 1.5)
@@ -221,8 +221,8 @@ Item {
       }
 
       DashboardToolButton {
+        glyph: "commands/zoom-out"
         ToolTip.text: qsTr("Zoom Out")
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-out", 16)
         onClicked: {
           const oldZoom = root.zoom
           const newZoom = Math.max(root.minZoom, oldZoom / 1.5)
@@ -240,9 +240,9 @@ Item {
       }
 
       DashboardToolButton {
+        glyph: "commands/camcoder"
         ToolTip.text: qsTr("Export Images")
         checked: model && model.exportEnabled
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "camcoder", 16)
         onClicked: {
           if (model)
             model.exportEnabled = !model.exportEnabled
@@ -250,8 +250,8 @@ Item {
       }
 
       DashboardToolButton {
+        glyph: "commands/pictures-folder"
         ToolTip.text: qsTr("Open Export Folder")
-        icon.source: Cpp_Misc_IconRegistry.icon("commands", "pictures-folder", 16)
         onClicked: {
           if (model)
             Cpp_Misc_Utilities.revealFile(

@@ -41,7 +41,7 @@ static const QString kHouseId     = QStringLiteral("office");
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Binds the four resolver functions in @p engine, restores the persisted selection and
+ * @brief Binds the five resolver functions in @p engine, restores the persisted selection and
  *        follows @p theme for the effective pack and the mono tints. The dependencies arrive as
  *        references from the composition root: nothing here reaches a singleton.
  */
@@ -57,10 +57,11 @@ Misc::IconPacks::IconPacks(QJSEngine& engine,
     return fn;
   };
 
-  m_icon       = bind("(function(c, n, px) { return this.resolve(c, n, px) })");
-  m_iconById   = bind("(function(id, px) { return this.resolveById(id, px) })");
-  m_iconOn     = bind("(function(t, c, n, px) { return this.resolveOn(t, c, n, px) })");
-  m_iconByIdOn = bind("(function(t, id, px) { return this.resolveByIdOn(t, id, px) })");
+  m_icon         = bind("(function(c, n, px) { return this.resolve(c, n, px) })");
+  m_iconById     = bind("(function(id, px) { return this.resolveById(id, px) })");
+  m_iconOn       = bind("(function(t, c, n, px) { return this.resolveOn(t, c, n, px) })");
+  m_iconByIdOn   = bind("(function(t, id, px) { return this.resolveByIdOn(t, id, px) })");
+  m_monoIconById = bind("(function(id, px) { return this.resolveMonoById(id, px) })");
 
   m_selected = m_settings.value(kSettingsKey).toString();
   if (!m_selected.isEmpty() && m_selected != kHouseId && !m_registry.hasPack(m_selected))
@@ -156,6 +157,14 @@ QJSValue Misc::IconPacks::iconByIdOnFunction() const
   return m_iconByIdOn;
 }
 
+/**
+ * @brief The fixed-mono-pack ("category/name", px) resolver as a JS function.
+ */
+QJSValue Misc::IconPacks::monoIconByIdFunction() const
+{
+  return m_monoIconById;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Resolvers behind the JS functions
 //--------------------------------------------------------------------------------------------------
@@ -193,6 +202,14 @@ QString Misc::IconPacks::resolveOn(const QString& tone,
 QString Misc::IconPacks::resolveByIdOn(const QString& tone, const QString& id, const int px) const
 {
   return m_registry.iconByIdOn(toneFrom(tone), id, px);
+}
+
+/**
+ * @brief Fixed-mono-pack resolution by combined id, the target of the `monoIconById` function.
+ */
+QString Misc::IconPacks::resolveMonoById(const QString& id, const int px) const
+{
+  return m_registry.monoIconById(id, px);
 }
 
 /**

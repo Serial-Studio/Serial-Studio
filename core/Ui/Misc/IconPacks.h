@@ -38,7 +38,8 @@ class ThemeManager;
  * @brief The QML face of the icon registry under icon packs (spec 0115): the resolvers are
  *        function-valued notifying properties, so every icon binding re-evaluates on a pack or
  *        theme change; the selection persists, "Follow theme" defers to the theme's icon-pack
- *        parameter and "Office (default)" pins the house set.
+ *        parameter and "Office (default)" pins the house set. monoIconById serves the surfaces
+ *        that are monochrome by design from the fixed mono pack, whatever pack is active.
  */
 class IconPacks : public QObject {
   // clang-format off
@@ -54,6 +55,9 @@ class IconPacks : public QObject {
              NOTIFY revisionChanged)
   Q_PROPERTY(QJSValue iconByIdOn
              READ iconByIdOnFunction
+             NOTIFY revisionChanged)
+  Q_PROPERTY(QJSValue monoIconById
+             READ monoIconByIdFunction
              NOTIFY revisionChanged)
   Q_PROPERTY(int pack
              READ pack
@@ -94,6 +98,7 @@ public:
   [[nodiscard]] QJSValue iconByIdFunction() const;
   [[nodiscard]] QJSValue iconOnFunction() const;
   [[nodiscard]] QJSValue iconByIdOnFunction() const;
+  [[nodiscard]] QJSValue monoIconByIdFunction() const;
 
   [[nodiscard]] Q_INVOKABLE QString resolve(const QString& category,
                                             const QString& name,
@@ -106,6 +111,7 @@ public:
   [[nodiscard]] Q_INVOKABLE QString resolveByIdOn(const QString& tone,
                                                   const QString& id,
                                                   int px) const;
+  [[nodiscard]] Q_INVOKABLE QString resolveMonoById(const QString& id, int px) const;
   [[nodiscard]] Q_INVOKABLE QString retint(const QString& url, const QColor& color) const;
 
 public slots:
@@ -131,6 +137,7 @@ private:
   QJSValue m_iconById;
   QJSValue m_iconOn;
   QJSValue m_iconByIdOn;
+  QJSValue m_monoIconById;
 };
 
 }  // namespace Misc

@@ -127,8 +127,8 @@ Item {
           Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "plotTrajectory", root.model.plotTrajectory)
         }
       }
+      glyph: "commands/poliline"
       ToolTip.text: qsTr("Plot Trajectory")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "poliline", 16)
     }
 
     DashboardToolButton {
@@ -143,8 +143,8 @@ Item {
           Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showNasaWeather", root.model.showNasaWeather)
         }
       }
+      glyph: "commands/weather"
       ToolTip.text: qsTr("Show Weather")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "weather", 16)
     }
 
     DashboardToolButton {
@@ -159,8 +159,8 @@ Item {
           Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showNasaWeather", root.model.showNasaWeather)
         }
       }
+      glyph: "commands/nasa"
       ToolTip.text: qsTr("NASA Weather Overlay")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "nasa", 16)
     }
 
     Rectangle {
@@ -179,8 +179,8 @@ Item {
           Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "autoCenter", root.model.autoCenter)
         }
       }
+      glyph: "commands/crosshair"
       ToolTip.text: qsTr("Auto Center")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "crosshair", 16)
     }
 
     DashboardToolButton {
@@ -188,8 +188,8 @@ Item {
         if (root.model)
           root.model.zoomLevel = root.model.zoomLevel + 1
       }
+      glyph: "commands/zoom-in"
       ToolTip.text: qsTr("Zoom In")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-in", 16)
     }
 
     DashboardToolButton {
@@ -197,8 +197,8 @@ Item {
         if (root.model)
           root.model.zoomLevel = root.model.zoomLevel - 1
       }
+      glyph: "commands/zoom-out"
       ToolTip.text: qsTr("Zoom Out")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "zoom-out", 16)
     }
 
     Item {

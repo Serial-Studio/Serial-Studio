@@ -183,16 +183,16 @@ Item {
                                                 root.interpolationMode)
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showAreaUnderPlot", root.showAreaUnderPlot)
       }
-      icon.source: root.interpolationMode === SerialStudio.InterpolationNone
-                     ? Cpp_Misc_IconRegistry.icon("commands", "interpolate-off", 16)
-                     : Cpp_Misc_IconRegistry.icon("commands", "interpolate-on", 16)
+      glyph: root.interpolationMode === SerialStudio.InterpolationNone
+             ? "commands/interpolate-off"
+             : "commands/interpolate-on"
     }
 
     DashboardToolButton {
+      glyph: "commands/area"
       opacity: enabled ? 1 : 0.5
       checked: root.showAreaUnderPlot
       ToolTip.text: qsTr("Show Area Under Plot")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "area", 16)
 
       onClicked: {
         root.showAreaUnderPlot = !root.showAreaUnderPlot
@@ -208,9 +208,9 @@ Item {
     }
 
     DashboardToolButton {
+      glyph: "commands/x"
       checked: root.userShowXLabel
       ToolTip.text: qsTr("Show X Axis Label")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "x", 16)
 
       onClicked: {
         root.userShowXLabel = !root.userShowXLabel
@@ -220,9 +220,9 @@ Item {
     }
 
     DashboardToolButton {
+      glyph: "commands/y"
       checked: root.userShowYLabel
       ToolTip.text: qsTr("Show Y Axis Label")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "y", 16)
 
       onClicked: {
         root.userShowYLabel = !root.userShowYLabel
@@ -241,14 +241,14 @@ Item {
       checked: plot.showCrosshairs
       ToolTip.text: qsTr("Show Crosshair")
       onClicked: plot.showCrosshairs = !plot.showCrosshairs
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "crosshair", 16)
+      glyph: "commands/crosshair"
     }
 
     DashboardToolButton {
+      glyph: "commands/labels"
       checked: root.showFrequencyMarkers
       ToolTip.text: qsTr("Show Frequency Markers")
       visible: root.model && root.model.markers.length > 0
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "labels", 16)
       onClicked: {
         root.showFrequencyMarkers = !root.showFrequencyMarkers
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId,
@@ -274,15 +274,15 @@ Item {
         plot.yMin = Qt.binding(function() { return root.model.minY })
         plot.yMax = Qt.binding(function() { return root.model.maxY })
       }
+      glyph: "commands/return"
       opacity: enabled ? 1 : 0.5
       ToolTip.text: qsTr("Reset View")
       enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "return", 16)
     }
 
     DashboardToolButton {
+      glyph: "commands/settings"
       ToolTip.text: qsTr("Axis Range Settings")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "settings", 16)
       onClicked: axisRangeDialog.openDialog(plot, root.model)
     }
 
@@ -298,8 +298,8 @@ Item {
     //
     DashboardToolButton {
       visible: Cpp_CommercialBuild
+      glyph: "commands/audio-file"
       ToolTip.text: qsTr("Record Audio")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "audio-file", 16)
       checked: Cpp_CommercialBuild && root.model && root.model.audioRecordingEnabled
       onClicked: {
         if (root.model)
@@ -312,8 +312,8 @@ Item {
     //
     DashboardToolButton {
       visible: Cpp_CommercialBuild
+      glyph: "commands/sound-folder"
       ToolTip.text: qsTr("Open Recordings Folder")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "sound-folder", 16)
       onClicked: {
         if (root.model)
           Cpp_Misc_Utilities.revealFile(root.model.recordingsFolder())
@@ -328,10 +328,8 @@ Item {
 
     DashboardToolButton {
       checked: !model.running
+      glyph: model.running ? "commands/pause" : "commands/resume"
       ToolTip.text: model.running ? qsTr("Pause") : qsTr("Resume")
-      icon.source: model.running?
-                     Cpp_Misc_IconRegistry.icon("commands", "pause", 16) :
-                     Cpp_Misc_IconRegistry.icon("commands", "resume", 16)
       onClicked: model.running = !model.running
     }
 

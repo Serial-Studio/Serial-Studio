@@ -44,7 +44,9 @@ struct IconPackInfo {
  * @brief Resolves fixed UI icons by (category, name, pixel size) from the resource tree at
  *        :/icons/<category>/<tier>/<name>.svg (spec 0028), consulting the active icon pack at
  *        :/iconpacks/<pack>/<category>/<tier>/<name>.svg first for the themed categories
- *        (spec 0115). A mono pack resolves to an image-provider URL carrying the tint.
+ *        (spec 0115). A mono pack resolves to an image-provider URL carrying the tint, and
+ *        monoIconById() draws from the fixed mono pack whatever pack is active, for the surfaces
+ *        that are monochrome by design (the dashboard widget toolbars).
  */
 class IconRegistry : public QObject {
   Q_OBJECT
@@ -78,6 +80,7 @@ public:
                                const QString& name,
                                int px) const;
   [[nodiscard]] QString iconByIdOn(Tone tone, const QString& id, int px) const;
+  [[nodiscard]] QString monoIconById(const QString& id, int px) const;
   [[nodiscard]] QString iconPath(const QString& category, const QString& name, int px) const;
 
   [[nodiscard]] const QString& pack() const noexcept;
@@ -85,6 +88,7 @@ public:
   [[nodiscard]] bool isMono() const noexcept;
   [[nodiscard]] bool hasPack(const QString& id) const;
   [[nodiscard]] static const QStringList& fixedCategories();
+  [[nodiscard]] static const QString& monoPackId();
 
 public slots:
   void setPack(const QString& id);
@@ -99,8 +103,13 @@ private:
   void scanTree(const QString& root, const QString& pack);
   void scanPacks(const QString& packsRoot);
   [[nodiscard]] Located locate(const QString& category, const QString& name, int px) const;
+  [[nodiscard]] Located locateHouse(const QString& category, const QString& name, int px) const;
   [[nodiscard]] Located notFound(const QString& category, const QString& name) const;
   [[nodiscard]] QString packPath(const QString& category, const QString& name, int px) const;
+  [[nodiscard]] QString packPathIn(const QString& pack,
+                                   const QString& category,
+                                   const QString& name,
+                                   int px) const;
   [[nodiscard]] QString url(const Located& hit, Tone tone) const;
   [[nodiscard]] QString missingIcon(const QString& category, const QString& name) const;
   [[nodiscard]] static QString tierPath(const QHash<QString, QList<int>>& names,

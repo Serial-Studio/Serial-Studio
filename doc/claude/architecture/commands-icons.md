@@ -59,6 +59,17 @@ the `IconPack` setting (empty = *Follow theme*, which reads the theme's `icon-pa
 coverage, mapping and qrc consistency) and `registry-verify.py` runs it; the Icons8 mapping is
 `doc/claude/specs/0115-icon-packs/icons8-map.csv`.
 
+**Monochrome-by-design surfaces (spec 0115 R23):** the dashboard widget toolbars draw at 18 px
+inside every widget, where colour artwork collapses and competes with the plotted data, so they
+are mono whatever pack is active. `DashboardToolButton` takes `glyph: "<category>/<name>"` and
+resolves it through `Cpp_Misc_IconRegistry.monoIconById(id, px)`, which reads the Outline pack
+(`IconRegistry::monoPackId()`) in the theme's text tint and serves the house file for a glyph
+that pack lacks; `registry-verify.py` checks every `glyph` id resolves. A collapsed ribbon
+section tints its icon with the section's own text colour through `retint`, so it follows the
+other icons of its toolbar on the strip and on secondary toolbars alike. The dashboard taskbar,
+the Terminal ribbon and content marks (notification severities, empty-state illustrations) keep
+the pack's colour artwork.
+
 **Legacy paths:** old `qrc:/icons/…` URLs persisted in user project files are remapped by
 `Misc::legacyIconPath()` (generated table, consulted in `IconEngine::resolveActionIconSource`).
 Regenerate with `scripts/generate-legacy-icons.py` only if the migration manifest changes.

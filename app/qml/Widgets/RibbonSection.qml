@@ -147,9 +147,9 @@ RowLayout {
 
           Image {
             opacity: 1
-            source: root.collapsedIcon
             sourceSize: Qt.size(32, 32)
             Layout.alignment: Qt.AlignVCenter
+            source: Cpp_Misc_IconRegistry.retint(root.collapsedIcon, root.collapsedTextColor)
           }
 
           IconButton {
@@ -178,9 +178,9 @@ RowLayout {
 
         Image {
           opacity: 1
-          source: root.collapsedIcon
           sourceSize: Qt.size(18, 18)
           Layout.alignment: Qt.AlignVCenter
+          source: Cpp_Misc_IconRegistry.retint(root.collapsedIcon, root.collapsedTextColor)
         }
 
         Label {

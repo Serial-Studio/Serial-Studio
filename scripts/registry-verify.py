@@ -350,7 +350,8 @@ RENDER_RES = (
     re.compile(r"\bsourceSize\.width\s*:\s*(\d+)\b"),
     re.compile(r"\bsourceSize\.height\s*:\s*(\d+)\b"),
 )
-REQUEST_RE = re.compile(r"IconRegistry\.icon(?:ById)?(?:On)?\([^)]*\b(\d+)\s*\)")
+REQUEST_RE = re.compile(r"IconRegistry\.(?:icon|monoIcon)(?:ById)?(?:On)?\([^)]*\b(\d+)\s*\)")
+GLYPH_RE = re.compile(r"\bglyph\s*:[^\n]*?\"([a-z]+/[a-z0-9-]+)\"")
 ELEMENT_RE = re.compile(r"([A-Za-z_][A-Za-z0-9_.]*)\s*\{")
 SORTED_TIERS = (16, 24, 32, 48)
 
@@ -397,6 +398,17 @@ def strip_qml_noise(line: str, in_comment: bool) -> tuple[str, bool]:
         out.append(char)
         index += 1
     return "".join(out), in_comment
+
+
+def check_widget_glyphs(errors: list[str]) -> None:
+    """Every `glyph: "category/name"` a dashboard tool button names resolves in the house tree
+    (the mono surface falls back there when the Outline pack lacks the glyph)."""
+    for path in sorted((QML_ROOT / "Widgets" / "Dashboard").rglob("*.qml")):
+        rel = path.relative_to(ROOT).as_posix()
+        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            for match in GLYPH_RE.finditer(line):
+                if not icon_ref_resolves(match.group(1)):
+                    fail(errors, f"{rel}:{number}: glyph '{match.group(1)}' does not resolve")
 
 
 def check_icon_render_sizes(errors: list[str]) -> None:
@@ -1903,6 +1915,7 @@ def main() -> int:
     check_layouts(errors, ids)
     check_menus(errors, ids)
     check_binding_guards(errors)
+    check_widget_glyphs(errors)
     check_icon_render_sizes(errors)
     check_property_manifests(errors)
     check_widget_manifests(errors)

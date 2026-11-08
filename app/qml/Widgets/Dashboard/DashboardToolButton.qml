@@ -25,11 +25,18 @@ import QtQuick.Controls
 ToolButton {
   id: root
 
+  //
+  // Glyph as "category/name", drawn from the fixed mono pack in the text colour whatever icon
+  // pack is active: widget toolbars are monochrome by design (spec 0115 R23)
+  //
+  property string glyph: ""
+
   width: 24
   height: 24
   icon.width: 18
   icon.height: 18
   icon.color: "transparent"
+  icon.source: root.glyph !== "" ? Cpp_Misc_IconRegistry.monoIconById(root.glyph, 18) : ""
   onClicked: Cpp_UI_Alarms.playEvent("button")
 
   ToolTip {

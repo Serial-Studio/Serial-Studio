@@ -204,11 +204,9 @@ Item {
         model.interpolationEnabled = !model.interpolationEnabled
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolationEnabled", model.interpolationEnabled)
       }
-      checked: model.interpolationEnabled
       ToolTip.text: qsTr("Interpolate")
-      icon.source: model.interpolationEnabled ?
-                     Cpp_Misc_IconRegistry.icon("commands", "interpolate-on", 16) :
-                     Cpp_Misc_IconRegistry.icon("commands", "interpolate-off", 16)
+      checked: model.interpolationEnabled
+      glyph: model.interpolationEnabled ? "commands/interpolate-on" : "commands/interpolate-off"
     }
 
     Rectangle {
@@ -222,9 +220,9 @@ Item {
         model.orbitNavigation = true
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", true)
       }
+      glyph: "commands/orbit"
       checked: model.orbitNavigation
       ToolTip.text: qsTr("Orbit Navigation")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "orbit", 16)
     }
 
     DashboardToolButton {
@@ -232,9 +230,9 @@ Item {
         model.orbitNavigation = false
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", false)
       }
+      glyph: "commands/pan"
       checked: !model.orbitNavigation
       ToolTip.text: qsTr("Pan Navigation")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "pan", 16)
     }
 
     Rectangle {
@@ -246,25 +244,25 @@ Item {
     DashboardToolButton {
       ToolTip.text: qsTr("Orthogonal View")
       onClicked: animateToView(300, 0, 225, 0, 0)
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "orthogonal-view", 16)
+      glyph: "commands/orthogonal-view"
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Top View")
       onClicked: animateToView(360, 0, 360, 0, 0)
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "top-view", 16)
+      glyph: "commands/top-view"
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Left View")
       onClicked: animateToView(270, 0, 270, 0, 0)
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "left-view", 16)
+      glyph: "commands/left-view"
     }
 
     DashboardToolButton {
       ToolTip.text: qsTr("Front View")
       onClicked: animateToView(270, 0, 180, 0, 0)
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "front-view", 16)
+      glyph: "commands/front-view"
     }
 
     DashboardToolButton {
@@ -272,9 +270,9 @@ Item {
         model.autoCenter = !model.autoCenter
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "autoCenter", model.autoCenter)
       }
+      glyph: "commands/center"
       checked: model.autoCenter
       ToolTip.text: qsTr("Auto Center")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "center", 16)
     }
 
     Rectangle {
@@ -288,9 +286,9 @@ Item {
         model.anaglyphEnabled = !model.anaglyphEnabled
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "anaglyphEnabled", model.anaglyphEnabled)
       }
+      glyph: "commands/anaglyph"
       checked: model.anaglyphEnabled
       ToolTip.text: qsTr("Anaglyph 3D")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "anaglyph", 16)
     }
 
     DashboardToolButton {
@@ -300,11 +298,11 @@ Item {
         model.invertEyePositions = !model.invertEyePositions
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "invertEyePositions", model.invertEyePositions)
       }
+      glyph: "commands/invert"
       enabled: model.anaglyphEnabled
       checked: model.invertEyePositions
       opacity: model.anaglyphEnabled ? 1 : 0
       ToolTip.text: qsTr("Invert Eye Positions")
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "invert", 16)
     }
 
     Slider {

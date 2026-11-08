@@ -151,6 +151,15 @@ the holes, so the review and the pack mechanism are one piece of work.
 20. **R20 — Metaphor parity.** A pack's icon for a given id depicts the same object as the house
     icon (a gauge is a gauge, a compass a compass). Where the source style has no icon for the
     metaphor, the fallback (R4) applies rather than a different metaphor.
+23. **R23 — Monochrome-by-design surfaces** (maintainer, 2026-11-08). The dashboard widget
+    toolbars draw their icons monochrome in the theme's text colour under every pack, colour
+    packs and the house set included: at 18 px inside every widget, colour artwork collapses and
+    competes with the plotted data. The glyphs come from the mono pack (Outline), so a widget
+    toolbar never shows a colour icon beside a mono one; a glyph the mono pack lacks falls back
+    to the house file (R4). The dashboard taskbar, the Terminal ribbon and content marks
+    (notification severities, empty-state illustrations) keep the pack's artwork. A collapsed
+    ribbon section's icon takes the colour of the section's own label, so it matches the other
+    icons of its toolbar on the strip and on secondary toolbars alike.
 
 ## Acceptance Criteria
 
@@ -185,6 +194,11 @@ the holes, so the review and the pack mechanism are one piece of work.
       to a colour pack restores full-colour artwork. (Maintainer observation.)
 - [x] **AC11** (R22) — The data check of AC1 also fails when an id in the icon tree has no row in
       the mapping, or a row names an id the tree lacks.
+- [ ] **AC12** (R23) — Under Office, Fluent and Outline alike, every widget toolbar button shows
+      a mono glyph in the theme's text colour, and the unit test proves the resolver ignores the
+      active pack and falls back per glyph (`tst_icon_packs`, maintainer `ctest`); a collapsed
+      ribbon section's icon matches its label colour on the main toolbar and in the Console
+      ribbon. (Maintainer observation for the rendering.)
 
 ## Constraints & Invariants
 
