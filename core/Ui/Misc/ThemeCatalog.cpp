@@ -45,7 +45,8 @@ static QStringList builtInThemeFiles()
           QStringLiteral("fluent-light"),
           QStringLiteral("fluent-dark"),
           QStringLiteral("millennium"),
-          QStringLiteral("millennium-dark")};
+          QStringLiteral("millennium-dark"),
+          QStringLiteral("starliner")};
 }
 
 //--------------------------------------------------------------------------------------------------

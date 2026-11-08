@@ -1,0 +1,263 @@
+{
+  "title": "Starliner",
+  "parameters": {
+    "code-editor-theme": "starliner",
+    "start-icon": "qrc:/logo/start-dark.svg"
+  },
+  "translations": {
+    "en_US": "Starliner",
+    "es_MX": "Starliner",
+    "de_DE": "Starliner",
+    "fr_FR": "Starliner",
+    "it_IT": "Starliner",
+    "ja_JP": "スターライナー",
+    "ko_KR": "스타라이너",
+    "pl_PL": "Starliner",
+    "pt_BR": "Starliner",
+    "ru_RU": "Старлайнер",
+    "tr_TR": "Starliner",
+    "zh_CN": "星际客机",
+    "cs_CZ": "Starliner",
+    "uk_UA": "Старлайнер",
+    "hi_IN": "स्टारलाइनर",
+    "nl_NL": "Starliner",
+    "ro_RO": "Starliner",
+    "sv_SE": "Starliner",
+    "ar_SA": "ستارلاينر",
+    "he_IL": "סטארליינר",
+    "vi_VN": "Starliner"
+  },
+  "colors": {
+    "groupbox_border": "#48515D",
+    "groupbox_background": "#262B33",
+    "groupbox_hard_border": "#5C6673",
+
+    "pane_background": "#1E2329",
+    "pane_section_label": "#E8ECF1",
+    "pane_caption_bg_top": "#1D2229",
+    "pane_caption_border": "#3E4751",
+    "pane_caption_bg_bottom": "#262B33",
+    "pane_caption_foreground": "#E8ECF1",
+
+    "setup_border": "#48515D",
+    "toolbar_top": "#3C444F",
+    "titlebar_text": "#E8ECF1",
+    "toolbar_text": "#D6DCE4",
+    "toolbar_bottom": "#262B33",
+    "toolbar_border": "#4E5763",
+    "toolbar_separator": "#4E5763",
+    "toolbar_checked_button_opacity": 0.7,
+    "toolbar_checked_button_border": "#0A0D11",
+    "toolbar_checked_button_background": "#12151A",
+
+    "error": "#E8554E",
+    "alarm": "#E8554E",
+    "alarm_info": "#4FA3FF",
+    "alarm_ok": "#3CC46A",
+    "alarm_warning": "#F0A030",
+    "alarm_critical": "#E8554E",
+    "dashboard_background": "#14171C",
+
+    "notebox_text": "#E8ECF1",
+    "notebox_border": "#4A5566",
+    "notebox_background": "#243040",
+
+    "mid": "#454D58",
+    "dark": "#12151A",
+    "text": "#E8ECF1",
+    "base": "#1E2329",
+    "link": "#6FC3FF",
+    "light": "#3A424D",
+    "window": "#262B33",
+    "shadow": "#06080B",
+    "accent": "#1F62D6",
+    "button": "#343B45",
+    "midlight": "#2F353E",
+    "highlight": "#1F62D6",
+    "window_text": "#E8ECF1",
+    "bright_text": "#FFFFFF",
+    "button_text": "#E8ECF1",
+    "tooltip_base": "#38404A",
+    "tooltip_text": "#F4F7FA",
+    "link_visited": "#B0A4E8",
+    "alternate_base": "#232830",
+    "placeholder_text": "#98A3B1",
+    "highlighted_text": "#FFFFFF",
+    "switch_highlight": "#4FA3FF",
+
+    "console_text": "#8FD3FF",
+    "console_base": "#0C0F13",
+    "console_border": "#3E4751",
+    "console_highlight": "#244A7A",
+
+    "widget_text": "#E8ECF1",
+    "widget_base": "#1F242B",
+    "widget_button": "#343B45",
+    "widget_border": "#4A535F",
+    "widget_window": "#262B33",
+    "widget_highlight": "#1F62D6",
+    "widget_button_text": "#E8ECF1",
+    "widget_highlighted_text": "#FFFFFF",
+    "widget_placeholder_text": "#98A3B1",
+
+    "window_border": "#4A535F",
+    "window_toolbar_background": "#38404A",
+    "window_caption_active_top": "#46505C",
+    "window_caption_active_text": "#F4F7FA",
+    "window_caption_inactive_top": "#38404A",
+    "window_caption_inactive_text": "#AAB4C0",
+    "window_caption_active_bottom": "#38404A",
+    "window_caption_inactive_bottom": "#38404A",
+
+    "taskbar_top": "#3C444F",
+    "taskbar_text": "#D6DCE4",
+    "taskbar_bottom": "#262B33",
+    "taskbar_border": "#12151A",
+    "taskbar_separator": "#4E5763",
+    "taskbar_highlight": "#4FA3FF",
+    "taskbar_indicator_active": "#FFFFFF",
+    "taskbar_indicator_inactive": "#8A96A4",
+    "taskbar_checked_button_top": "#12151A",
+    "taskbar_checked_button_border": "#0A0D11",
+    "taskbar_checked_button_bottom": "#1A1E24",
+
+    "start_menu_text": "#E8ECF1",
+    "start_menu_border": "#4A535F",
+    "start_menu_highlight": "#1F62D6",
+    "start_menu_background": "#1E2329",
+    "start_menu_gradient_top": "#12151A",
+    "start_menu_version_text": "#FFFFFF",
+    "start_menu_gradient_bottom": "#1F62D6",
+    "start_menu_highlighted_text": "#FFFFFF",
+    "start_menu_button_gradient_enabled": false,
+
+    "snap_indicator_border": "#4FA3FF",
+    "snap_indicator_background": "#404FA3FF",
+    "canvas_grid": "#3DE8ECF1",
+
+    "table_text": "#E8ECF1",
+    "table_cell_bg": "#1E2329",
+    "table_fg_header": "#E8ECF1",
+    "table_separator": "#3C444F",
+    "table_border_header": "#4A535F",
+    "table_bg_header_top": "#3C444F",
+    "table_bg_header_bottom": "#262B33",
+    "table_separator_header": "#4A535F",
+
+    "polar_indicator": "#F0A030",
+    "polar_background": "#1A1E24",
+    "polar_foreground": "#D6DCE4",
+
+    "plot3d_x_axis": "#E8554E",
+    "plot3d_y_axis": "#3CC46A",
+    "plot3d_z_axis": "#4FA3FF",
+    "plot3d_axis_text": "#FFFFFF",
+    "plot3d_grid_major": "#5C6673",
+    "plot3d_grid_minor": "#3C444F",
+    "plot3d_background_inner": "#1E2329",
+    "plot3d_background_outer": "#0C0F13",
+
+    "plot_cursor_a": "#8FD3FF",
+    "plot_cursor_b": "#F0A030",
+
+    "widget_colors": [
+      "#4FA3FF",
+      "#F0A030",
+      "#8FD3FF",
+      "#3CC46A",
+      "#E8554E",
+      "#C9A96E",
+      "#A58BFF",
+      "#2BC4B8",
+      "#2F7BFF",
+      "#FF8C5A",
+      "#6C8EB5",
+      "#D6B04A",
+      "#9DB8FF",
+      "#5AD0A0",
+      "#E07A9A",
+      "#B86E5A",
+      "#58D5F0",
+      "#C8D2DC",
+      "#7A6EDF",
+      "#8CC63F"
+    ],
+
+    "device_colors": [
+      { "top": "#262D38", "bottom": "#1E242D" },
+      { "top": "#2A2D36", "bottom": "#21242C" },
+      { "top": "#2E2C30", "bottom": "#242227" },
+      { "top": "#262F38", "bottom": "#1E252D" },
+      { "top": "#2A2B38", "bottom": "#21222D" },
+      { "top": "#282E33", "bottom": "#1F2429" },
+      { "top": "#252B3A", "bottom": "#1D222E" },
+      { "top": "#302D34", "bottom": "#26232A" },
+      { "top": "#262E36", "bottom": "#1E242B" },
+      { "top": "#2B2A38", "bottom": "#22212D" }
+    ]
+  },
+  "materials": {
+    "panel": {
+      "recipe": "brushed-metal",
+      "color": "#2A3038",
+      "grain": 0.4,
+      "bevel": false,
+      "shade": 0.35
+    },
+    "frame": {
+      "recipe": "gradient",
+      "top": "#1A1E24",
+      "bottom": "#0A0D11"
+    },
+    "strip": {
+      "recipe": "gradient",
+      "top": "#3C444F",
+      "bottom": "#262B33"
+    },
+    "well": {
+      "recipe": "glass",
+      "top": "#030508",
+      "bottom": "#0E1218"
+    },
+    "header": {
+      "recipe": "brushed-metal",
+      "color": "#38404A",
+      "grain": 0.3,
+      "bevel": false,
+      "shade": 0.35
+    }
+  },
+  "surfaces": {
+    "dashboard": "frame",
+    "widget": "panel",
+    "toolbar": "strip",
+    "taskbar": "strip",
+    "display": "well",
+    "widget-header": "header"
+  },
+  "styles": {
+    "button": {
+      "radius": 2
+    },
+    "tab": {
+      "indicator": "#4FA3FF"
+    },
+    "input": {
+      "radius": 2,
+      "border": 1,
+      "focus": "#4FA3FF"
+    },
+    "instrument": {
+      "face": "#1A1E24",
+      "band-opacity": 0.5,
+      "marker": "level"
+    },
+    "caption": {
+      "active-lift": 1.12
+    }
+  },
+  "widgets": {
+    "led": "lamp",
+    "output": "hardware"
+  }
+}

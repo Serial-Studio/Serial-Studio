@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 Data checks for the material theme format (spec 0113), run without the application: the
-bundled Millennium themes carry the complete colour table and only names they define, their
+bundled material themes carry the complete colour table and only names they define, their
 lettering meets the contrast bar, the two Fluent themes carry none of the new sections, the
 Default names only what it defines (its 2026-11-07 shading amended spec 0113's "Default
 unchanged" non-goal at the maintainer's request), and the grain tile matches its generator.
@@ -26,8 +26,8 @@ NEW_SECTIONS = ("fonts", "materials", "surfaces", "styles", "widgets")
 RECIPES = {"flat", "gradient", "brushed-metal", "glass"}
 LOOKS = {"led": {"lamp"}, "output": {"hardware", "plain"}}
 OLDER_THEMES = ("fluent-light", "fluent-dark")
-MILLENNIUM_THEMES = ("millennium", "millennium-dark")
-MATERIAL_THEMES = ("default",) + MILLENNIUM_THEMES
+BUNDLED_THEMES = ("millennium", "millennium-dark", "starliner")
+MATERIAL_THEMES = ("default",) + BUNDLED_THEMES
 
 # Text colour over the surface it is drawn on (spec 0113 R13: at least 4.5 to 1)
 TEXT_PAIRS = (
@@ -80,17 +80,17 @@ def test_older_themes_carry_no_new_section(name):
     assert not [section for section in NEW_SECTIONS if section in theme]
 
 
-@pytest.mark.parametrize("name", MILLENNIUM_THEMES)
-def test_millennium_is_bundled(name):
+@pytest.mark.parametrize("name", BUNDLED_THEMES)
+def test_bundled_theme_is_in_the_resource_tree(name):
     qrc = QRC.read_text(encoding="utf-8")
     assert f"<file>themes/{name}.json</file>" in qrc
     assert f"<file>themes/code-editor/{name}.xml</file>" in qrc
-    assert load(name)["title"].startswith("Millennium")
+    assert load(name)["title"].lower().replace(" ", "-") == name
     assert load(name)["parameters"]["code-editor-theme"] == name
 
 
-@pytest.mark.parametrize("name", MILLENNIUM_THEMES)
-def test_millennium_carries_the_complete_colour_table(name):
+@pytest.mark.parametrize("name", BUNDLED_THEMES)
+def test_bundled_theme_carries_the_complete_colour_table(name):
     assert set(load(name)["colors"]) == set(load("default")["colors"])
 
 
@@ -111,9 +111,9 @@ def test_material_theme_names_only_what_it_defines(name):
             assert rule["material"] in materials
 
 
-@pytest.mark.parametrize("name", MILLENNIUM_THEMES)
+@pytest.mark.parametrize("name", BUNDLED_THEMES)
 @pytest.mark.parametrize("text,surface", TEXT_PAIRS)
-def test_millennium_lettering_contrast(name, text, surface):
+def test_bundled_theme_lettering_contrast(name, text, surface):
     colors = load(name)["colors"]
     assert contrast(colors[text], colors[surface]) >= 4.5
 
