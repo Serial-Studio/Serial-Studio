@@ -386,13 +386,11 @@
         <file>icons/commands/24/open-project.svg</file>
         <file>icons/commands/24/orbit.svg</file>
         <file>icons/commands/24/orthogonal-view.svg</file>
-        <file>icons/commands/24/pause.svg</file>
         <file>icons/commands/24/pictures-folder.svg</file>
         <file>icons/commands/24/poliline.svg</file>
         <file>icons/commands/24/quit.svg</file>
         <file>icons/commands/24/remote-attach.svg</file>
         <file>icons/commands/24/reset.svg</file>
-        <file>icons/commands/24/resume.svg</file>
         <file>icons/commands/24/sessions.svg</file>
         <file>icons/commands/24/settings.svg</file>
         <file>icons/commands/24/sound-folder.svg</file>
