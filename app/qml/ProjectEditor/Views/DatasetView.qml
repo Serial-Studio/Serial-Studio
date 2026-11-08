@@ -181,6 +181,7 @@ Widgets.Pane {
       Rectangle {
         Layout.fillWidth: true
         Layout.margins: -1
+        Layout.bottomMargin: 0
         border.width: 1
         implicitHeight: computedNote.implicitHeight + 16
         visible: Cpp_JSON_ProjectEditor.selectedDatasetComputed
