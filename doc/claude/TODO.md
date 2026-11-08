@@ -22,6 +22,8 @@ the tier size, with the artwork in a scale group.
   `editor/fft`.
 - [ ] `editor/dataset-values` at 16 px: still the old artwork; 24, 32 and 48 were redrawn on
   2026-11-04.
+- [ ] `editor/add-profile` (24): the Workspaces toolbar's Add Profile button borrows
+  `editor/add-group` since it moved beside Add Workspace on 2026-11-07.
 
 ### Missing 32 px tier (blurry in the palette)
 

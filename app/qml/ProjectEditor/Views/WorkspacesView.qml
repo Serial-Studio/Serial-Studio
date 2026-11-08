@@ -163,6 +163,17 @@ Widgets.Pane {
             icon.source: Cpp_Misc_IconRegistry.icon("editor", "group", 24)
           }
 
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Add Profile")
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Add a workspace profile")
+            enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
+            onClicked: Cpp_JSON_ProjectModel.promptAddWorkspaceProfile()
+            icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-group", 24)
+          }
+
           Item { Layout.fillWidth: true }
 
           //
@@ -211,13 +222,13 @@ Widgets.Pane {
         Layout.fillWidth: true
         visible: Cpp_JSON_ProjectModel.customizeWorkspaces
         height: visible ? profilesLayout.implicitHeight + 16 : 0
-        color: Cpp_ThemeManager.colors["groupbox_background"]
+        color: Cpp_ThemeManager.colors["notebox_background"]
 
         Rectangle {
           height: 1
           width: parent.width
           anchors.bottom: parent.bottom
-          color: Cpp_ThemeManager.colors["groupbox_border"]
+          color: Cpp_ThemeManager.colors["notebox_border"]
         }
 
         ColumnLayout {
@@ -238,29 +249,19 @@ Widgets.Pane {
             Label {
               text: qsTr("Profiles")
               font: Cpp_Misc_CommonFonts.boldUiFont
-              color: Cpp_ThemeManager.colors["text"]
               Layout.alignment: Qt.AlignVCenter
+              color: Cpp_ThemeManager.colors["notebox_text"]
             }
 
             Label {
-              opacity: 0.6
+              opacity: 0.8
               Layout.fillWidth: true
               elide: Text.ElideRight
               font: Cpp_Misc_CommonFonts.uiFont
-              color: Cpp_ThemeManager.colors["text"]
               Layout.alignment: Qt.AlignVCenter
+              color: Cpp_ThemeManager.colors["notebox_text"]
               text: qsTr("A profile lists the folders an operator sees; a project with two "
                          + "or more asks which one to show when it opens.")
-            }
-
-            Widgets.ToolbarButton {
-              iconSize: 24
-              toolbarButton: false
-              text: qsTr("Add Profile")
-              Layout.alignment: Qt.AlignVCenter
-              ToolTip.text: qsTr("Add a workspace profile")
-              onClicked: Cpp_JSON_ProjectModel.promptAddWorkspaceProfile()
-              icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-folder", 24)
             }
           }
 
@@ -279,7 +280,7 @@ Widgets.Pane {
                 text: profileRow.modelData.title
                 elide: Text.ElideRight
                 font: Cpp_Misc_CommonFonts.uiFont
-                color: Cpp_ThemeManager.colors["text"]
+                color: Cpp_ThemeManager.colors["notebox_text"]
                 Layout.preferredWidth: 180
                 Layout.alignment: Qt.AlignVCenter
               }
