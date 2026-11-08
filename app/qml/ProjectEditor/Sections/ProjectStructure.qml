@@ -863,13 +863,13 @@ Widgets.Pane {
       Layout.fillWidth: true
       visible: !Cpp_JSON_ProjectModel.canSave
       implicitHeight: bannerLayout.implicitHeight + 24
-      color: Cpp_ThemeManager.colors["groupbox_background"]
+      color: Cpp_ThemeManager.colors["notebox_background"]
 
       Rectangle {
         height: 1
         width: parent.width
         anchors.top: parent.top
-        color: Cpp_ThemeManager.colors["groupbox_border"]
+        color: Cpp_ThemeManager.colors["notebox_border"]
       }
 
       ColumnLayout {
@@ -893,7 +893,7 @@ Widgets.Pane {
             Layout.fillWidth: true
             wrapMode: Label.WordWrap
             Layout.alignment: Qt.AlignVCenter
-            color: Cpp_ThemeManager.colors["text"]
+            color: Cpp_ThemeManager.colors["notebox_text"]
             text: Cpp_JSON_ProjectModel.saveBlockerTitle
             font: Cpp_Misc_CommonFonts.customUiFont(1.2, true)
           }
@@ -903,7 +903,7 @@ Widgets.Pane {
           opacity: 0.85
           Layout.fillWidth: true
           wrapMode: Label.WordWrap
-          color: Cpp_ThemeManager.colors["text"]
+          color: Cpp_ThemeManager.colors["notebox_text"]
           text: Cpp_JSON_ProjectModel.saveBlockerDetail
         }
       }

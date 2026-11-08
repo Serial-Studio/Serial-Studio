@@ -116,30 +116,41 @@ Widgets.Pane {
       Rectangle {
         Layout.fillWidth: true
         Layout.margins: -1
+        Layout.bottomMargin: 0
         border.width: 1
-        implicitHeight: requirementLabel.implicitHeight + 16
+        implicitHeight: requirementNote.implicitHeight + 16
         visible: Cpp_JSON_ProjectEditor.selectedGroupRequirementText.length > 0
-        color: Cpp_ThemeManager.colors["groupbox_background"]
+        color: Cpp_ThemeManager.colors["notebox_background"]
         border.color: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
-                      ? Cpp_ThemeManager.colors["groupbox_border"]
+                      ? Cpp_ThemeManager.colors["notebox_border"]
                       : Cpp_ThemeManager.colors["alarm"]
 
-        Label {
-          id: requirementLabel
+        RowLayout {
+          id: requirementNote
 
-          wrapMode: Label.WordWrap
+          spacing: 12
           anchors.margins: 8
-          anchors.left: parent.left
-          anchors.right: parent.right
-          anchors.verticalCenter: parent.verticalCenter
-          font: Cpp_Misc_CommonFonts.customUiFont(1, !Cpp_JSON_ProjectEditor.selectedGroupRequirementMet)
-          color: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
-                 ? Cpp_ThemeManager.colors["text"]
-                 : Cpp_ThemeManager.colors["alarm"]
-          text: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
-                ? Cpp_JSON_ProjectEditor.selectedGroupRequirementText
-                : qsTr("This widget shows nothing yet. %1").arg(
-                    Cpp_JSON_ProjectEditor.selectedGroupRequirementText)
+          anchors.fill: parent
+
+          Image {
+            sourceSize.width: 32
+            Layout.alignment: Qt.AlignVCenter
+            source: Cpp_Misc_IconRegistry.icon("editor", "dashboard-widgets", 32)
+          }
+
+          Label {
+            Layout.fillWidth: true
+            wrapMode: Label.WordWrap
+            Layout.alignment: Qt.AlignVCenter
+            font: Cpp_Misc_CommonFonts.customUiFont(1, !Cpp_JSON_ProjectEditor.selectedGroupRequirementMet)
+            color: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
+                   ? Cpp_ThemeManager.colors["notebox_text"]
+                   : Cpp_ThemeManager.colors["alarm"]
+            text: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
+                  ? Cpp_JSON_ProjectEditor.selectedGroupRequirementText
+                  : qsTr("This widget shows nothing yet. %1").arg(
+                      Cpp_JSON_ProjectEditor.selectedGroupRequirementText)
+          }
         }
       }
 
