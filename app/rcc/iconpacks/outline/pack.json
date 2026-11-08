@@ -1,0 +1,29 @@
+{
+  "id": "outline",
+  "title": "Outline",
+  "style": "fluent-systems-regular",
+  "mono": true,
+  "translations": {
+    "en_US": "Outline",
+    "es_MX": "Contorno",
+    "de_DE": "Kontur",
+    "fr_FR": "Contour",
+    "it_IT": "Contorno",
+    "ja_JP": "アウトライン",
+    "ko_KR": "아웃라인",
+    "pl_PL": "Kontur",
+    "pt_BR": "Contorno",
+    "ru_RU": "Контур",
+    "tr_TR": "Dış Hat",
+    "zh_CN": "线条",
+    "cs_CZ": "Obrys",
+    "uk_UA": "Контур",
+    "hi_IN": "आउटलाइन",
+    "nl_NL": "Omtrek",
+    "ro_RO": "Contur",
+    "sv_SE": "Kontur",
+    "ar_SA": "مخطط",
+    "he_IL": "קווי מתאר",
+    "vi_VN": "Đường viền"
+  }
+}

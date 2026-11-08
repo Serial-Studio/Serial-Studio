@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/iconpacks">
-        <file>deco/pack.json</file>
         <file>fluent/code/48/copy.svg</file>
         <file>fluent/code/48/cut.svg</file>
         <file>fluent/code/48/help.svg</file>
@@ -232,10 +231,16 @@
         <file>fluent/editor/48/tx-data.svg</file>
         <file>fluent/editor/48/widget.svg</file>
         <file>fluent/editor/48/workspace.svg</file>
+        <file>fluent/illustrations/48/drag-and-drop.svg</file>
+        <file>fluent/illustrations/48/driver.svg</file>
+        <file>fluent/illustrations/48/hammer.svg</file>
         <file>fluent/illustrations/48/locked.svg</file>
         <file>fluent/illustrations/48/multi-device.svg</file>
         <file>fluent/illustrations/48/no-bluetooth.svg</file>
+        <file>fluent/illustrations/48/no-mic.svg</file>
+        <file>fluent/illustrations/48/no-results.svg</file>
         <file>fluent/illustrations/48/project-mode-required.svg</file>
+        <file>fluent/illustrations/48/tip.svg</file>
         <file>fluent/licensing/48/devices.svg</file>
         <file>fluent/licensing/48/email.svg</file>
         <file>fluent/licensing/48/key.svg</file>
@@ -279,10 +284,24 @@
         <file>fluent/widgets/48/terminal.svg</file>
         <file>fluent/widgets/48/webview.svg</file>
         <file>fluent/widgets/48/workspace.svg</file>
+        <file>outline/code/48/copy.svg</file>
+        <file>outline/code/48/cut.svg</file>
+        <file>outline/code/48/help.svg</file>
+        <file>outline/code/48/open.svg</file>
+        <file>outline/code/48/paste.svg</file>
+        <file>outline/code/48/redo.svg</file>
+        <file>outline/code/48/reload.svg</file>
+        <file>outline/code/48/save.svg</file>
+        <file>outline/code/48/template.svg</file>
+        <file>outline/code/48/test.svg</file>
+        <file>outline/code/48/undo.svg</file>
         <file>outline/commands/48/about.svg</file>
         <file>outline/commands/48/abscissa.svg</file>
         <file>outline/commands/48/actions.svg</file>
+        <file>outline/commands/48/activate.svg</file>
+        <file>outline/commands/48/add-workspace.svg</file>
         <file>outline/commands/48/ai.svg</file>
+        <file>outline/commands/48/alarm-reset.svg</file>
         <file>outline/commands/48/anaglyph.svg</file>
         <file>outline/commands/48/archive.svg</file>
         <file>outline/commands/48/area.svg</file>
@@ -294,8 +313,12 @@
         <file>outline/commands/48/color.svg</file>
         <file>outline/commands/48/command-palette.svg</file>
         <file>outline/commands/48/connect.svg</file>
+        <file>outline/commands/48/console-log.svg</file>
         <file>outline/commands/48/console.svg</file>
+        <file>outline/commands/48/crosshair.svg</file>
+        <file>outline/commands/48/csv-log.svg</file>
         <file>outline/commands/48/csv.svg</file>
+        <file>outline/commands/48/database-export.svg</file>
         <file>outline/commands/48/deepwiki.svg</file>
         <file>outline/commands/48/deploy.svg</file>
         <file>outline/commands/48/device-setup.svg</file>
@@ -314,16 +337,218 @@
         <file>outline/commands/48/interpolate-off.svg</file>
         <file>outline/commands/48/interpolate-on.svg</file>
         <file>outline/commands/48/invert.svg</file>
+        <file>outline/commands/48/left-view.svg</file>
         <file>outline/commands/48/macro.svg</file>
         <file>outline/commands/48/map.svg</file>
+        <file>outline/commands/48/mf4-log.svg</file>
+        <file>outline/commands/48/mf4.svg</file>
         <file>outline/commands/48/normal-screen.svg</file>
         <file>outline/commands/48/open-project.svg</file>
         <file>outline/commands/48/orbit.svg</file>
+        <file>outline/commands/48/orthogonal-view.svg</file>
+        <file>outline/commands/48/pan.svg</file>
+        <file>outline/commands/48/pause.svg</file>
+        <file>outline/commands/48/pictures-folder.svg</file>
+        <file>outline/commands/48/poliline.svg</file>
+        <file>outline/commands/48/project-setup.svg</file>
+        <file>outline/commands/48/quit.svg</file>
+        <file>outline/commands/48/remote-attach.svg</file>
+        <file>outline/commands/48/reset.svg</file>
+        <file>outline/commands/48/resume.svg</file>
+        <file>outline/commands/48/return.svg</file>
+        <file>outline/commands/48/save-as.svg</file>
+        <file>outline/commands/48/sessions.svg</file>
+        <file>outline/commands/48/settings.svg</file>
+        <file>outline/commands/48/sound-folder.svg</file>
+        <file>outline/commands/48/tools.svg</file>
+        <file>outline/commands/48/top-view.svg</file>
+        <file>outline/commands/48/trigger.svg</file>
+        <file>outline/commands/48/weather.svg</file>
+        <file>outline/commands/48/workspace-next.svg</file>
+        <file>outline/commands/48/workspace-previous.svg</file>
+        <file>outline/commands/48/workspaces.svg</file>
+        <file>outline/commands/48/x.svg</file>
+        <file>outline/commands/48/y.svg</file>
+        <file>outline/commands/48/zoom-in.svg</file>
+        <file>outline/commands/48/zoom-out.svg</file>
+        <file>outline/console/48/annotations.svg</file>
+        <file>outline/console/48/clear.svg</file>
+        <file>outline/console/48/collapse-duplicates.svg</file>
+        <file>outline/console/48/hexadecimal.svg</file>
+        <file>outline/console/48/plain-text.svg</file>
+        <file>outline/console/48/search.svg</file>
+        <file>outline/console/48/settings.svg</file>
+        <file>outline/console/48/utilities.svg</file>
+        <file>outline/database/48/close.svg</file>
+        <file>outline/database/48/delete.svg</file>
+        <file>outline/database/48/export-pdf.svg</file>
+        <file>outline/database/48/lock.svg</file>
+        <file>outline/database/48/open.svg</file>
+        <file>outline/database/48/replay.svg</file>
+        <file>outline/database/48/restore.svg</file>
+        <file>outline/database/48/unlock.svg</file>
+        <file>outline/devices/48/audio.svg</file>
+        <file>outline/devices/48/bluetooth.svg</file>
+        <file>outline/devices/48/canbus.svg</file>
+        <file>outline/devices/48/ethernetip.svg</file>
+        <file>outline/devices/48/hid.svg</file>
+        <file>outline/devices/48/iec104.svg</file>
+        <file>outline/devices/48/modbus.svg</file>
+        <file>outline/devices/48/mqtt.svg</file>
+        <file>outline/devices/48/network.svg</file>
+        <file>outline/devices/48/opcua.svg</file>
+        <file>outline/devices/48/process.svg</file>
+        <file>outline/devices/48/uart.svg</file>
+        <file>outline/devices/48/usb.svg</file>
+        <file>outline/editor/48/action.svg</file>
+        <file>outline/editor/48/add-accelerometer.svg</file>
+        <file>outline/editor/48/add-action.svg</file>
+        <file>outline/editor/48/add-bar.svg</file>
+        <file>outline/editor/48/add-compass.svg</file>
+        <file>outline/editor/48/add-datagrid.svg</file>
+        <file>outline/editor/48/add-dataset.svg</file>
+        <file>outline/editor/48/add-device.svg</file>
+        <file>outline/editor/48/add-fft.svg</file>
+        <file>outline/editor/48/add-folder.svg</file>
+        <file>outline/editor/48/add-gauge.svg</file>
+        <file>outline/editor/48/add-gps.svg</file>
+        <file>outline/editor/48/add-group.svg</file>
+        <file>outline/editor/48/add-image.svg</file>
+        <file>outline/editor/48/add-meter.svg</file>
+        <file>outline/editor/48/add-multiplot.svg</file>
+        <file>outline/editor/48/add-output-button.svg</file>
+        <file>outline/editor/48/add-output-panel.svg</file>
+        <file>outline/editor/48/add-output-slider.svg</file>
+        <file>outline/editor/48/add-output-textfield.svg</file>
+        <file>outline/editor/48/add-output-toggle.svg</file>
+        <file>outline/editor/48/add-painter.svg</file>
+        <file>outline/editor/48/add-plot.svg</file>
+        <file>outline/editor/48/add-plot3d.svg</file>
+        <file>outline/editor/48/add-register.svg</file>
+        <file>outline/editor/48/add-table.svg</file>
+        <file>outline/editor/48/add-webview.svg</file>
+        <file>outline/editor/48/ai.svg</file>
+        <file>outline/editor/48/alarm-bands.svg</file>
+        <file>outline/editor/48/alarm.svg</file>
+        <file>outline/editor/48/bar.svg</file>
+        <file>outline/editor/48/change-group.svg</file>
+        <file>outline/editor/48/clear.svg</file>
         <file>outline/editor/48/code.svg</file>
+        <file>outline/editor/48/compass.svg</file>
+        <file>outline/editor/48/compress.svg</file>
+        <file>outline/editor/48/control-script.svg</file>
+        <file>outline/editor/48/customize.svg</file>
+        <file>outline/editor/48/dashboard-widgets.svg</file>
+        <file>outline/editor/48/data-conversion.svg</file>
+        <file>outline/editor/48/dataset-values.svg</file>
+        <file>outline/editor/48/dataset.svg</file>
+        <file>outline/editor/48/delete-register.svg</file>
+        <file>outline/editor/48/delete-table.svg</file>
+        <file>outline/editor/48/delete.svg</file>
+        <file>outline/editor/48/device.svg</file>
+        <file>outline/editor/48/duplicate.svg</file>
+        <file>outline/editor/48/edit-code.svg</file>
+        <file>outline/editor/48/encoding.svg</file>
+        <file>outline/editor/48/expand.svg</file>
+        <file>outline/editor/48/export-table.svg</file>
+        <file>outline/editor/48/fft.svg</file>
+        <file>outline/editor/48/frame-detection.svg</file>
+        <file>outline/editor/48/frame-end.svg</file>
+        <file>outline/editor/48/frame-start.svg</file>
+        <file>outline/editor/48/group.svg</file>
+        <file>outline/editor/48/help.svg</file>
+        <file>outline/editor/48/hide.svg</file>
+        <file>outline/editor/48/import-table.svg</file>
+        <file>outline/editor/48/indicator.svg</file>
         <file>outline/editor/48/influx.svg</file>
+        <file>outline/editor/48/insert-constant.svg</file>
+        <file>outline/editor/48/left.svg</file>
+        <file>outline/editor/48/load-ca-certs.svg</file>
+        <file>outline/editor/48/lock.svg</file>
+        <file>outline/editor/48/meter.svg</file>
+        <file>outline/editor/48/move-down.svg</file>
+        <file>outline/editor/48/move-up.svg</file>
+        <file>outline/editor/48/mqtt-broker.svg</file>
+        <file>outline/editor/48/mqtt-publisher.svg</file>
+        <file>outline/editor/48/mqtt-ssl.svg</file>
+        <file>outline/editor/48/new.svg</file>
+        <file>outline/editor/48/open.svg</file>
+        <file>outline/editor/48/output-button.svg</file>
+        <file>outline/editor/48/output-range.svg</file>
+        <file>outline/editor/48/output-slider.svg</file>
+        <file>outline/editor/48/output-textfield.svg</file>
+        <file>outline/editor/48/output-toggle.svg</file>
         <file>outline/editor/48/plot.svg</file>
+        <file>outline/editor/48/project-setup.svg</file>
+        <file>outline/editor/48/project-structure.svg</file>
+        <file>outline/editor/48/project-title.svg</file>
+        <file>outline/editor/48/project.svg</file>
         <file>outline/editor/48/protobuf.svg</file>
+        <file>outline/editor/48/read-only.svg</file>
+        <file>outline/editor/48/read-write.svg</file>
+        <file>outline/editor/48/recover-backup.svg</file>
+        <file>outline/editor/48/rename-table.svg</file>
+        <file>outline/editor/48/rename.svg</file>
+        <file>outline/editor/48/right.svg</file>
+        <file>outline/editor/48/save-as.svg</file>
+        <file>outline/editor/48/save-warning.svg</file>
+        <file>outline/editor/48/save.svg</file>
+        <file>outline/editor/48/separator.svg</file>
+        <file>outline/editor/48/shared-memory.svg</file>
+        <file>outline/editor/48/shared-table-alt.svg</file>
+        <file>outline/editor/48/shared-table.svg</file>
+        <file>outline/editor/48/show.svg</file>
+        <file>outline/editor/48/test-connection.svg</file>
+        <file>outline/editor/48/text-encoding.svg</file>
+        <file>outline/editor/48/timer.svg</file>
+        <file>outline/editor/48/transform.svg</file>
+        <file>outline/editor/48/tx-data.svg</file>
+        <file>outline/editor/48/widget.svg</file>
+        <file>outline/editor/48/workspace.svg</file>
+        <file>outline/illustrations/48/locked.svg</file>
+        <file>outline/illustrations/48/multi-device.svg</file>
+        <file>outline/illustrations/48/no-bluetooth.svg</file>
+        <file>outline/illustrations/48/project-mode-required.svg</file>
+        <file>outline/licensing/48/devices.svg</file>
+        <file>outline/licensing/48/email.svg</file>
         <file>outline/licensing/48/key.svg</file>
+        <file>outline/licensing/48/license.svg</file>
+        <file>outline/licensing/48/plan.svg</file>
+        <file>outline/licensing/48/user.svg</file>
+        <file>outline/licensing/48/uuid.svg</file>
+        <file>outline/notifications/48/critical.svg</file>
+        <file>outline/notifications/48/info.svg</file>
+        <file>outline/notifications/48/warning.svg</file>
         <file>outline/pack.json</file>
+        <file>outline/panes/48/dashboard.svg</file>
+        <file>outline/panes/48/details.svg</file>
+        <file>outline/panes/48/important.svg</file>
+        <file>outline/panes/48/info.svg</file>
+        <file>outline/panes/48/overview.svg</file>
+        <file>outline/panes/48/sessions.svg</file>
+        <file>outline/panes/48/setup.svg</file>
+        <file>outline/widgets/48/accelerometer.svg</file>
+        <file>outline/widgets/48/bar.svg</file>
+        <file>outline/widgets/48/clock.svg</file>
+        <file>outline/widgets/48/compass.svg</file>
+        <file>outline/widgets/48/datagrid.svg</file>
+        <file>outline/widgets/48/fft.svg</file>
+        <file>outline/widgets/48/folder.svg</file>
+        <file>outline/widgets/48/gauge.svg</file>
+        <file>outline/widgets/48/gps.svg</file>
+        <file>outline/widgets/48/group.svg</file>
+        <file>outline/widgets/48/image.svg</file>
+        <file>outline/widgets/48/meter.svg</file>
+        <file>outline/widgets/48/multiplot.svg</file>
+        <file>outline/widgets/48/notification-log.svg</file>
+        <file>outline/widgets/48/output-panel.svg</file>
+        <file>outline/widgets/48/output.svg</file>
+        <file>outline/widgets/48/painter.svg</file>
+        <file>outline/widgets/48/plot.svg</file>
+        <file>outline/widgets/48/plot3d.svg</file>
+        <file>outline/widgets/48/stopwatch.svg</file>
+        <file>outline/widgets/48/terminal.svg</file>
+        <file>outline/widgets/48/webview.svg</file>
+        <file>outline/widgets/48/workspace.svg</file>
     </qresource>
 </RCC>

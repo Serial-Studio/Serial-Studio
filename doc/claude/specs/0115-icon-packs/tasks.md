@@ -317,7 +317,9 @@ updated: 2026-11-07
   2026-11-07: the recolour mirrored in Python over the first 47 Outline files (plain black paths,
   no fill attribute) renders pale on the dark strip and ink on the light pane, every file valid.
 - **Deps:** T18
-- [ ] done (45 of 161 downloaded; the allowance reopens hourly)
+- [x] done (161 downloads over three windows; 89.5 % by id, the gaps being the six house-review
+  bases not yet searched in this style and the six Outline lacks: gyroscope, LED, knob, PLC,
+  move-folder, colour swatch)
 
 ### Stage G — the Glass pack
 

@@ -21,7 +21,8 @@ Subcommands:
   compose PACK          build the composite ids (base plus badge or label) from the pack's own
                         base artwork, and copy that artwork to every other plain id the base
                         serves; an id whose base the pack lacks is skipped.
-  qrc                   regenerate app/rcc/iconpacks/iconpacks.qrc from disk.
+  qrc                   regenerate app/rcc/iconpacks/iconpacks.qrc from disk; --exclude PACK
+                        leaves a pack that is still being fetched out of the list.
   house-sync            after new house icons land: normalize every house SVG git does not
                         track yet (a fresh Icons8 download; committed files are never rewritten)
                         and add every house file missing from app/rcc/rcc.qrc to its icon block.
@@ -733,9 +734,12 @@ def cmd_compose(args: argparse.Namespace) -> int:
 # ------------------------------------------------------------------------------------------------
 
 
-def cmd_qrc(_: argparse.Namespace) -> int:
+def cmd_qrc(args: argparse.Namespace) -> int:
+    excluded = set(getattr(args, "exclude", None) or [])
     entries = []
     for folder in pack_dirs():
+        if folder.name in excluded:
+            continue
         for path in sorted(folder.rglob("*")):
             if (path.is_file() and path.relative_to(folder).parts[0] != BASES_DIR
                     and path.name != ".DS_Store"):
@@ -812,6 +816,8 @@ def main() -> int:
     comp.add_argument("pack")
     comp.set_defaults(func=cmd_compose)
     qrc = sub.add_parser("qrc")
+    qrc.add_argument("--exclude", action="append", metavar="PACK",
+                     help="leave this pack out (a pack still being fetched)")
     qrc.set_defaults(func=cmd_qrc)
     house = sub.add_parser("house-sync")
     house.set_defaults(func=cmd_house_sync)
