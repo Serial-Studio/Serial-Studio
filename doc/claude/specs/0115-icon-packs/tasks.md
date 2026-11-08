@@ -132,7 +132,8 @@ updated: 2026-11-07
   Maintainer's run, 2026-11-07: the Project Editor tree still showed Office under Fluent. Two
   causes, both fixed: the facade was created after `restoreLastProject()` (now `bindIconPacks()`
   right after `composeSession`), and the tree and form models bake URLs, so `EditorWiring` now
-  rebuilds them on the registry's new `revisionChanged` (pack or tint).
+  rebuilds them on the registry's new `revisionChanged` (pack or tint). Confirmed in the
+  maintainer's rebuild the same evening, together with the illustrations under Fluent.
 - **Verify:** `syntax-check.py` on `Taskbar.cpp`; `code-verify.py --check`.
 - **Deps:** T2
 - [x] done
