@@ -323,7 +323,20 @@ updated: 2026-11-07
 
 ### Stage G — the Glass pack
 
-### T20 — Glass: on hold (maintainer, 2026-11-07)
+### T20b — Glass ships as Liquid Glass Color (maintainer, 2026-11-08)
+
+- **Files:** `app/rcc/iconpacks/glass/**`, `pack.json` (`style: liquid-glass-color`), `icons8-map.csv`
+  (`glasscolor_id` filled for 25 more bases by a search pass), `iconpacks.qrc`.
+- **Does:** Color Glass was fetched to 100 % and rejected by eye ("switch to transparent glass");
+  plain Liquid Glass is a white ghost on light panes, so the pack is the Liquid Glass Color style:
+  141 Icons8 downloads, 43 metaphors the style lacks drawn by the designer/judge loop in the
+  pack's own glass treatment (one hue gradient per slab, white inset rim), the last seven
+  accepted by eye. No theme names it; it is a Preferences choice.
+- **Verify:** `icon-packs.py check` (100 %), every SVG parses and renders, contact sheet reviewed.
+- **Deps:** T19
+- [x] done (2026-11-08)
+
+### T20 — Glass: on hold (maintainer, 2026-11-07; superseded by T20b)
 
 No glass style clears the gate (Color Glass 75.9 %, Liquid Glass Color 68.2 %); the probe columns
 stay in the mapping for a later run and Default keeps the Office set.

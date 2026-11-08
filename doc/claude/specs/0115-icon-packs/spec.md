@@ -289,6 +289,10 @@ session's question dialog.
   stays open. Deco Color (78.0 %) replaces Deco Duotone for the industrial pack and ships for the
   two Millennium themes with a per-pack gate of 75 %, the Office fallbacks accepted on their plates.
 
+- **Glass is Liquid Glass Color (2026-11-08).** The Color Glass fetch reached 100 % and was
+  rejected by eye; plain Liquid Glass is near-white on light panes; Liquid Glass Color keeps the
+  translucent look and stays readable on both. No theme names the pack by default.
+
 ## Open Questions
 
 - **Default under *Follow theme*.** Recommendation: Default → Glass, Fluent Light/Dark →

@@ -1,0 +1,40 @@
+{
+  "id": "glass",
+  "title": "Glass",
+  "style": "liquid-glass-color",
+  "mono": false,
+  "gate": 0.75,
+  "translations": {
+    "en_US": "Glass",
+    "es_MX": "Cristal",
+    "de_DE": "Glas",
+    "fr_FR": "Verre",
+    "it_IT": "Vetro",
+    "ja_JP": "グラス",
+    "ko_KR": "글래스",
+    "pl_PL": "Szkło",
+    "pt_BR": "Vidro",
+    "ru_RU": "Стекло",
+    "tr_TR": "Cam",
+    "zh_CN": "玻璃",
+    "cs_CZ": "Sklo",
+    "uk_UA": "Скло",
+    "hi_IN": "ग्लास",
+    "nl_NL": "Glas",
+    "ro_RO": "Sticlă",
+    "sv_SE": "Glas",
+    "ar_SA": "زجاج",
+    "he_IL": "זכוכית",
+    "vi_VN": "Kính"
+  },
+  "badges": {
+    "plus": "#2BB5B8",
+    "x": "#E0574B",
+    "arrow": "#3BA7D6",
+    "arrow-up": "#3BA7D6",
+    "pencil": "#7E57C2",
+    "warning": "#E0A52E",
+    "no": "#E0574B",
+    "lock": "#5C7A8A"
+  }
+}
