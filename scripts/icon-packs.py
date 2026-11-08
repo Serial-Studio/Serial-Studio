@@ -77,6 +77,7 @@ STYLE_COLUMN = {
     "liquid-glass": "glass_id",
     "deco": "deco_id",
     "fluent-systems-regular": "outline_id",
+    "ios7": "ios7_id",
     "liquid-glass-color": "glasscolor_id",
     "deco-color": "decocolor_id",
     "clr-gls": "clrgls_id",
@@ -659,7 +660,7 @@ def label_group(
     label.set("y", f"{tier * 0.79 if band else tier * 0.68:.3f}")
     label.set("text-anchor", "middle")
     label.set("font-family", "Helvetica, Arial, sans-serif")
-    label.set("font-weight", "bold")
+    label.set("font-weight", "normal" if mono and not band else "bold")
     label.set("font-size", f"{tier * (0.24 if band else 0.6):.3f}")
     label.set("fill", "#000000" if mono else ("#FFFFFF" if band else "#37474F"))
     label.text = text
@@ -675,7 +676,7 @@ def letter_tile(tier: int, mono: bool = False) -> ET.Element:
     tile.set("rx", f"{tier * 0.16:.3f}")
     tile.set("fill", "none" if mono else "#A5D6A7")
     tile.set("stroke", "#000000" if mono else "#2E7D32")
-    tile.set("stroke-width", f"{tier * 0.06 if mono else tier * 0.04:.3f}")
+    tile.set("stroke-width", f"{tier * 0.04:.3f}")
     return tile
 
 
