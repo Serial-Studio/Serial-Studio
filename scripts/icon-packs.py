@@ -637,7 +637,9 @@ def compose_one(source: Path | None, tier: int, target: Path, badge: str | None,
         root.set("viewBox", f"0 0 {tier} {tier}")
         root.append(letter_tile(tier, mono))
     for child in list(root):
-        if child.get("data-ss-badge") or child.get("data-ss-label") or child.tag.endswith("defs"):
+        own_defs = child.tag.endswith("defs") and any(
+            grand.get("id") == "ss-knockout" for grand in child)
+        if child.get("data-ss-badge") or child.get("data-ss-label") or own_defs:
             root.remove(child)
         elif child.get("data-ss-masked"):
             root.remove(child)
