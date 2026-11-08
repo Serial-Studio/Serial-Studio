@@ -426,23 +426,26 @@ def cmd_normalize(args: argparse.Namespace) -> int:
 # ------------------------------------------------------------------------------------------------
 
 
-def badge_group(kind: str, tier: int) -> ET.Element:
-    """A bottom-right badge: a filled disc with a white glyph, 44 % of the tier."""
+def badge_group(kind: str, tier: int, mono: bool = False) -> ET.Element:
+    """A bottom-right badge, 44 % of the tier: a filled disc with a white glyph for a colour
+    pack; for a mono pack the glyph alone in black (the tint, once recoloured), drawn into a hole
+    the caller cuts out of the base with knockout_mask(), the way outline icon sets badge."""
     size = tier * 0.44
     cx = tier - size / 2
     cy = tier - size / 2
     group = ET.Element(f"{{{SVG_NS}}}g")
     group.set("data-ss-badge", kind)
-    disc = ET.SubElement(group, f"{{{SVG_NS}}}circle")
-    disc.set("cx", f"{cx:.3f}")
-    disc.set("cy", f"{cy:.3f}")
-    disc.set("r", f"{size / 2:.3f}")
-    disc.set("fill", BADGE_FILL[kind])
-    disc.set("stroke", "#FFFFFF")
-    disc.set("stroke-width", f"{tier * 0.03:.3f}")
+    if not mono:
+        disc = ET.SubElement(group, f"{{{SVG_NS}}}circle")
+        disc.set("cx", f"{cx:.3f}")
+        disc.set("cy", f"{cy:.3f}")
+        disc.set("r", f"{size / 2:.3f}")
+        disc.set("fill", BADGE_FILL[kind])
+        disc.set("stroke", "#FFFFFF")
+        disc.set("stroke-width", f"{tier * 0.03:.3f}")
     bar = size * 0.52
     thick = size * 0.14
-    glyph = "#FFFFFF"
+    glyph = "#000000" if mono else "#FFFFFF"
     if kind in ("plus", "x"):
         for angle in ((0, 90) if kind == "plus" else (45, -45)):
             rect = ET.SubElement(group, f"{{{SVG_NS}}}rect")
@@ -524,14 +527,58 @@ def badge_group(kind: str, tier: int) -> ET.Element:
     return group
 
 
-def label_group(text: str, tier: int, band: bool, beside_badge: bool = False) -> ET.Element:
+def knockout_mask(root: ET.Element, tier: int, badge: bool, label_box: tuple | None) -> None:
+    """Wraps the base artwork of a mono composite in a mask that cuts out the badge disc and the
+    label box, so the tinted glyph or text sits in a clean hole instead of over the base lines."""
+    mask_id = "ss-knockout"
+    defs = ET.Element(f"{{{SVG_NS}}}defs")
+    mask = ET.SubElement(defs, f"{{{SVG_NS}}}mask")
+    mask.set("id", mask_id)
+    paper = ET.SubElement(mask, f"{{{SVG_NS}}}rect")
+    paper.set("x", "0")
+    paper.set("y", "0")
+    paper.set("width", str(tier))
+    paper.set("height", str(tier))
+    paper.set("fill", "white")
+    if badge:
+        size = tier * 0.44
+        hole = ET.SubElement(mask, f"{{{SVG_NS}}}circle")
+        hole.set("cx", f"{tier - size / 2:.3f}")
+        hole.set("cy", f"{tier - size / 2:.3f}")
+        hole.set("r", f"{size / 2 + tier * 0.03:.3f}")
+        hole.set("fill", "black")
+    if label_box:
+        x, y, w, h = label_box
+        box = ET.SubElement(mask, f"{{{SVG_NS}}}rect")
+        box.set("x", f"{x - tier * 0.03:.3f}")
+        box.set("y", f"{y - tier * 0.03:.3f}")
+        box.set("width", f"{w + tier * 0.06:.3f}")
+        box.set("height", f"{h + tier * 0.06:.3f}")
+        box.set("fill", "black")
+    wrapper = ET.Element(f"{{{SVG_NS}}}g")
+    wrapper.set("mask", f"url(#{mask_id})")
+    wrapper.set("data-ss-masked", "1")
+    for child in list(root):
+        root.remove(child)
+        wrapper.append(child)
+    root.append(defs)
+    root.append(wrapper)
+
+
+def label_box(tier: int, beside_badge: bool) -> tuple:
+    width = tier * (0.56 if beside_badge else 0.84)
+    return (tier * 0.08, tier * 0.56, width, tier * 0.3)
+
+
+def label_group(text: str, tier: int, band: bool, beside_badge: bool = False,
+                mono: bool = False) -> ET.Element:
     """A text label: on a dark band across the lower third when @p band (narrowed to leave the
     bottom-right corner free when a badge sits there), else centred large."""
     group = ET.Element(f"{{{SVG_NS}}}g")
     group.set("data-ss-label", text)
     width = tier * (0.56 if beside_badge else 0.84)
     centre = tier * 0.08 + width / 2
-    if band:
+    if band and not mono:
         rect = ET.SubElement(group, f"{{{SVG_NS}}}rect")
         rect.set("x", f"{tier * 0.08:.3f}")
         rect.set("y", f"{tier * 0.56:.3f}")
@@ -546,21 +593,21 @@ def label_group(text: str, tier: int, band: bool, beside_badge: bool = False) ->
     label.set("font-family", "Helvetica, Arial, sans-serif")
     label.set("font-weight", "bold")
     label.set("font-size", f"{tier * (0.24 if band else 0.6):.3f}")
-    label.set("fill", "#FFFFFF" if band else "#37474F")
+    label.set("fill", "#000000" if mono else ("#FFFFFF" if band else "#37474F"))
     label.text = text
     return group
 
 
-def letter_tile(tier: int) -> ET.Element:
+def letter_tile(tier: int, mono: bool = False) -> ET.Element:
     tile = ET.Element(f"{{{SVG_NS}}}rect")
     tile.set("x", f"{tier * 0.1:.3f}")
     tile.set("y", f"{tier * 0.1:.3f}")
     tile.set("width", f"{tier * 0.8:.3f}")
     tile.set("height", f"{tier * 0.8:.3f}")
     tile.set("rx", f"{tier * 0.16:.3f}")
-    tile.set("fill", "#A5D6A7")
-    tile.set("stroke", "#2E7D32")
-    tile.set("stroke-width", f"{tier * 0.04:.3f}")
+    tile.set("fill", "none" if mono else "#A5D6A7")
+    tile.set("stroke", "#000000" if mono else "#2E7D32")
+    tile.set("stroke-width", f"{tier * 0.06 if mono else tier * 0.04:.3f}")
     return tile
 
 
@@ -578,7 +625,7 @@ def base_artwork(folder: Path, base: str, row: dict, files: dict[str, set[int]])
 
 
 def compose_one(source: Path | None, tier: int, target: Path, badge: str | None,
-                label: str | None) -> None:
+                label: str | None, mono: bool = False) -> None:
     if source is not None:
         tree = ET.parse(source)
         root = tree.getroot()
@@ -588,14 +635,22 @@ def compose_one(source: Path | None, tier: int, target: Path, badge: str | None,
         root.set("width", str(tier))
         root.set("height", str(tier))
         root.set("viewBox", f"0 0 {tier} {tier}")
-        root.append(letter_tile(tier))
+        root.append(letter_tile(tier, mono))
     for child in list(root):
-        if child.get("data-ss-badge") or child.get("data-ss-label"):
+        if child.get("data-ss-badge") or child.get("data-ss-label") or child.tag.endswith("defs"):
             root.remove(child)
+        elif child.get("data-ss-masked"):
+            root.remove(child)
+            for grand in list(child):
+                root.append(grand)
+    banded = source is not None
+    if mono and (badge or (label and banded)):
+        knockout_mask(root, tier, bool(badge), label_box(tier, bool(badge)) if label and banded
+                      else None)
     if label:
-        root.append(label_group(label, tier, band=source is not None, beside_badge=bool(badge)))
+        root.append(label_group(label, tier, band=banded, beside_badge=bool(badge), mono=mono))
     if badge:
-        root.append(badge_group(badge, tier))
+        root.append(badge_group(badge, tier, mono))
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(b'<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(root) + b"\n")
 
@@ -623,6 +678,7 @@ def normalize_root(root: ET.Element, tier: int) -> None:
 
 def cmd_compose(args: argparse.Namespace) -> int:
     folder = PACKS / args.pack
+    mono = bool(read_pack(folder).get("mono", False))
     bases = read_bases()
     mapping = read_mapping()
     files = pack_files(folder)
@@ -650,7 +706,7 @@ def cmd_compose(args: argparse.Namespace) -> int:
             if label_spec and label_spec[0] is None:
                 tier = 48
                 compose_one(None, tier, folder / category / str(tier) / f"{name}.svg", None,
-                            label_spec[1])
+                            label_spec[1], mono)
                 made += 1
                 continue
             art = base_artwork(folder, base, row, files)
@@ -662,7 +718,8 @@ def cmd_compose(args: argparse.Namespace) -> int:
             kind = label_spec[2] if label_spec else badge
             if kind == "arrow" and icon in ARROW_UP_IDS:
                 kind = "arrow-up"
-            compose_one(source, tier, folder / category / str(tier) / f"{name}.svg", kind, text)
+            compose_one(source, tier, folder / category / str(tier) / f"{name}.svg", kind, text,
+                        mono)
             made += 1
     print(f"compose: {made} composite(s) written, {spread} plain id(s) spread from their base, "
           f"{skipped} skipped (base not in pack)")

@@ -130,17 +130,17 @@ QByteArray Misc::IconPackImageProvider::tinted(const QString& path, const QStrin
 }
 
 /**
- * @brief Replaces every fill and stroke value other than none with @p tint and, when the root
- *        element declares no fill of its own, gives it one so paths relying on the default black
- *        inherit the tint too. A root that already says fill="none" keeps it: those are stroke
- *        icons, and their strokes were recoloured above.
+ * @brief Replaces every hex, rgb() and url() fill and stroke value with @p tint and gives a root
+ *        without a fill one, so paths relying on the default black inherit it. Keyword colours
+ *        stay: "none" marks stroke icons, and the pack build's knockout masks are drawn in white
+ *        and black so a badge hole survives the recolouring.
  */
 QByteArray Misc::IconPackImageProvider::recolour(const QByteArray& svg, const QString& tint)
 {
-  static const QRegularExpression kAttribute(
-    QStringLiteral(R"re(((fill|stroke|stop-color)=")(?!none")[^"]*("))re"));
-  static const QRegularExpression kStyle(
-    QStringLiteral(R"re(((fill|stroke|stop-color)\s*:\s*)(?!none)[^;"]+)re"));
+  static const QRegularExpression kAttribute(QStringLiteral(
+    R"re(((fill|stroke|stop-color)=")(#[0-9A-Fa-f]{3,8}|url\([^"]*\)|rgba?\([^"]*\))("))re"));
+  static const QRegularExpression kStyle(QStringLiteral(
+    R"re(((fill|stroke|stop-color)\s*:\s*)(#[0-9A-Fa-f]{3,8}|url\([^;"]*\)|rgba?\([^;"]*\)))re"));
 
   auto text      = QString::fromUtf8(svg);
   const auto hex = QStringLiteral("#") + tint;

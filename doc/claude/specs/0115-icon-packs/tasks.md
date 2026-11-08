@@ -307,7 +307,10 @@ updated: 2026-11-07
 
 - **Files:** `app/rcc/iconpacks/outline/**`, `iconpacks.qrc`, `icons8-map.csv`
 - **Does:** Same names as Fluent (`fluent-systems-regular`), `"mono": true`; composites with a
-  mono badge set; `check` and sheet. The maintainer's first look is the retina check (AC10): if
+  mono badge set; `check` and sheet. Mono badges and labels cannot use a coloured disc (the tint
+  flattens disc and glyph alike), so the composer cuts a hole in the base with an SVG `<mask>`
+  drawn in keyword colours and draws the glyph in it; the provider recolours only hex, rgb() and
+  url() values, leaving `none`, `white` and `black` alone, so the mask survives. The maintainer's first look is the retina check (AC10): if
   soft, T3's provider renders at `requestedSize × dpr` and sets the image's DPR.
 - **Verify:** `icon-packs.py check`; AC10 observation under each bundled theme. Dry run
   2026-11-07: the recolour mirrored in Python over the first 47 Outline files (plain black paths,
