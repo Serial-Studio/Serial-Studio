@@ -141,8 +141,8 @@ void TstToolCompact::optionSlug_data()
   QTest::newRow("bar") << QStringLiteral("bar") << QStringLiteral("bar");
   QTest::newRow("gauge") << QStringLiteral("gauge") << QStringLiteral("gauge");
   QTest::newRow("compass") << QStringLiteral("compass") << QStringLiteral("compass");
-  QTest::newRow("led") << QStringLiteral("led") << QStringLiteral("led");
   QTest::newRow("waterfall") << QStringLiteral("waterfall") << QStringLiteral("waterfall");
+  QTest::newRow("led panel needs no option") << QStringLiteral("led") << QString();
   QTest::newRow("group widget needs no option") << QStringLiteral("multiplot") << QString();
   QTest::newRow("3d plot needs no option") << QStringLiteral("plot3d") << QString();
   QTest::newRow("datagrid needs no option") << QStringLiteral("datagrid") << QString();
@@ -152,7 +152,7 @@ void TstToolCompact::optionSlug_data()
 }
 
 /**
- * @brief Only the seven per-dataset widgets need a dataset option enabled before a tile is
+ * @brief Only the six per-dataset widgets need a dataset option enabled before a tile is
  *        pinned; everything else must map to an empty slug so addTile skips the setOptions step.
  */
 void TstToolCompact::optionSlug()

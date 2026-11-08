@@ -587,7 +587,7 @@ void TstEnumLabels::groupWidgetOutOfRange_data()
   QTest::addColumn<int>("value");
 
   QTest::newRow("negative") << -1;
-  QTest::newRow("just-past-last") << 11;
+  QTest::newRow("just-past-last") << 12;
   QTest::newRow("far-out-of-range") << 100;
 }
 

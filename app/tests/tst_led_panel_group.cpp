@@ -68,6 +68,7 @@ class TstLedPanelGroup : public QObject {
   Q_OBJECT
 
 private slots:
+  void initTestCase();
   void copiesNamedDatasetsInOrder();
   void keepsIndexBandsAndThreshold();
   void leavesIdentityUnassigned();
@@ -125,6 +126,15 @@ static std::vector<Group> loadedGroups()
   second.datasets.push_back(first.datasets[1]);
   second.datasets[0].datasetId = 0;
   return {first, second};
+}
+
+/**
+ * @brief Takes the SS_ASSERT recovery branch instead of aborting, so the out-of-range skip is
+ *        observable from a debug build.
+ */
+void TstLedPanelGroup::initTestCase()
+{
+  qputenv("SS_ASSERT_NONFATAL", "1");
 }
 
 void TstLedPanelGroup::copiesNamedDatasetsInOrder()
