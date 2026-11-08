@@ -71,7 +71,7 @@ The Data Grid Group Widget lists both values in a table; the gauge, the bar and 
 
 ## Step 6: add the motion group
 
-Click **Add Accelerometer** in the editor toolbar and name the group `Motion`. The Accelerometer template creates three datasets tagged X, Y and Z, which the Accelerometer widget needs. The group page states this requirement and warns while it is not met.
+Click **Add Accelerometer** in the editor toolbar and name the group `Motion`. The Accelerometer template creates three datasets tagged X, Y and Z, which the Accelerometer widget needs. The group page warns, stating this requirement, while it is not met.
 
 Set the three datasets' **Frame Index** to `3`, `4` and `5`, units to `m/s²`, and turn on **Plot** for each. The Accelerometer widget reads its datasets by tag, not by position in the group, so keep the X, Y and Z tags on the right datasets.
 

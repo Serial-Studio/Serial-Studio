@@ -111,7 +111,7 @@ Widgets.Pane {
       }
 
       //
-      // Group widget requirement (spec 0100 R15): stated up front, warned while unmet
+      // Group widget requirement (spec 0100 R15): warned, with the rule, while unmet
       //
       Rectangle {
         Layout.fillWidth: true
@@ -120,10 +120,9 @@ Widgets.Pane {
         border.width: 1
         implicitHeight: requirementNote.implicitHeight + 16
         visible: Cpp_JSON_ProjectEditor.selectedGroupRequirementText.length > 0
+                 && !Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
         color: Cpp_ThemeManager.colors["notebox_background"]
-        border.color: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
-                      ? Cpp_ThemeManager.colors["notebox_border"]
-                      : Cpp_ThemeManager.colors["alarm"]
+        border.color: Cpp_ThemeManager.colors["alarm"]
 
         RowLayout {
           id: requirementNote
@@ -142,14 +141,10 @@ Widgets.Pane {
             Layout.fillWidth: true
             wrapMode: Label.WordWrap
             Layout.alignment: Qt.AlignVCenter
-            font: Cpp_Misc_CommonFonts.customUiFont(1, !Cpp_JSON_ProjectEditor.selectedGroupRequirementMet)
-            color: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
-                   ? Cpp_ThemeManager.colors["notebox_text"]
-                   : Cpp_ThemeManager.colors["alarm"]
-            text: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
-                  ? Cpp_JSON_ProjectEditor.selectedGroupRequirementText
-                  : qsTr("This widget shows nothing yet. %1").arg(
-                      Cpp_JSON_ProjectEditor.selectedGroupRequirementText)
+            font: Cpp_Misc_CommonFonts.customUiFont(1, true)
+            color: Cpp_ThemeManager.colors["alarm"]
+            text: qsTr("This widget shows nothing yet. %1").arg(
+                    Cpp_JSON_ProjectEditor.selectedGroupRequirementText)
           }
         }
       }

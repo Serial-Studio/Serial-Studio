@@ -36,7 +36,7 @@ flowchart LR
 ## Rules that follow from the chain
 
 - **A value the parser does not return never arrives.** If the parser returns three values and a dataset reads frame index 4, that dataset keeps its last value and looks frozen. The Problem Center reports this as a `short-frames` finding. See [Troubleshooting](Troubleshooting.md).
-- **Group Widgets bind datasets by tag.** An Accelerometer or Gyroscope needs exactly three datasets tagged X, Y and Z; a GPS Map needs datasets tagged lat and lon. The group editor states the requirement and warns while it is unmet.
+- **Group Widgets bind datasets by tag.** An Accelerometer or Gyroscope needs exactly three datasets tagged X, Y and Z; a GPS Map needs datasets tagged lat and lon. The group editor warns, stating the requirement, while it is unmet.
 - **A computed dataset has no frame index.** A dataset whose value transform never reads `value` takes its value from the transform alone, so it reads no position in the frame. See [Deriving values](Derived-Values.md).
 
 ## Optional layers
