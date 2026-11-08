@@ -71,6 +71,7 @@ public:
   [[nodiscard]] QVariantList workspaceFolderContents(int parentFolderId) const;
 
   void selectInfluxSink();
+  void selectSystemDatasets();
   void selectMqttPublisher();
   void selectControlScript();
   void selectTransformLibrary();

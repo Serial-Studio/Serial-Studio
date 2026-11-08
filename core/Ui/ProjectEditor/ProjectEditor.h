@@ -470,6 +470,7 @@ public slots:
   void selectWorkspaceFolder(int folderId);
   void selectGroupFolder(int folderId);
   void selectTableFolder(int folderId);
+  void selectSystemDatasets();
   void selectMqttPublisher();
   void selectInfluxSink();
   void selectControlScript();

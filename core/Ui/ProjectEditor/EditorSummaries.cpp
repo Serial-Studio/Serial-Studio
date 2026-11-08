@@ -451,6 +451,18 @@ void EditorSummaries::selectTableFolder(int folderId)
 }
 
 /**
+ * @brief Selects the Dataset Values tree item when available.
+ */
+void EditorSummaries::selectSystemDatasets()
+{
+  if (!m_editor.m_selectionModel || !m_editor.m_systemDatasetsItem)
+    return;
+
+  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_systemDatasetsItem->index(),
+                                             QItemSelectionModel::ClearAndSelect);
+}
+
+/**
  * @brief Selects the MQTT Publisher tree item when available.
  */
 void EditorSummaries::selectMqttPublisher()

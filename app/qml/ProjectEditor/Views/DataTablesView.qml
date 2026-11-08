@@ -244,12 +244,11 @@ Widgets.Pane {
 
           MouseArea {
             anchors.fill: parent
-            cursorShape: modelData.isSystem ? Qt.ArrowCursor : Qt.PointingHandCursor
+            cursorShape: Qt.PointingHandCursor
             onClicked: {
               if (modelData.isSystem)
-                return
-
-              if (modelData.isFolder)
+                Cpp_JSON_ProjectEditor.selectSystemDatasets()
+              else if (modelData.isFolder)
                 Cpp_JSON_ProjectEditor.selectTableFolder(modelData.id)
               else
                 Cpp_JSON_ProjectEditor.selectUserTable(modelData.path)

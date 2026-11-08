@@ -1252,6 +1252,14 @@ void DataModel::ProjectEditor::selectTableFolder(int folderId)
 /**
  * @brief Forwards to EditorSummaries.
  */
+void DataModel::ProjectEditor::selectSystemDatasets()
+{
+  m_summaries.selectSystemDatasets();
+}
+
+/**
+ * @brief Forwards to EditorSummaries.
+ */
 void DataModel::ProjectEditor::selectMqttPublisher()
 {
   m_summaries.selectMqttPublisher();
