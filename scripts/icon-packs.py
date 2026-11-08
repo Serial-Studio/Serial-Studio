@@ -345,7 +345,7 @@ def cmd_fetch_list(args: argparse.Namespace) -> int:
     pending = 0
     for base, row in bases.items():
         entry = mapping.get(base)
-        if not entry or entry["status"] in ("house", "composed", "none"):
+        if not entry or entry["status"] in ("house", "house-copy", "composed", "design", "none"):
             continue
         icon8 = entry[column].strip()
         if not icon8 or icon8.upper() == "NONE" or icon8 == "?":
@@ -691,9 +691,23 @@ def cmd_compose(args: argparse.Namespace) -> int:
     bases = read_bases()
     mapping = read_mapping()
     files = pack_files(folder)
+    house = house_ids()
     made = skipped = spread = 0
     for base, row in bases.items():
-        if mapping.get(base, {}).get("status") == "house":
+        status = mapping.get(base, {}).get("status")
+        if status == "house-copy":
+            for icon, badge in row["ids"]:
+                if badge is None and icon not in files:
+                    category, name = icon.split("/", 1)
+                    tiers = house.get(icon) or set()
+                    if not tiers:
+                        continue
+                    tier = max(tiers)
+                    target = folder / category / str(tier) / f"{name}.svg"
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(ICONS / category / str(tier) / f"{name}.svg", target)
+                    files[icon].add(tier)
+                    spread += 1
             continue
         for icon, badge in row["ids"]:
             label_spec = LABELS.get(icon)

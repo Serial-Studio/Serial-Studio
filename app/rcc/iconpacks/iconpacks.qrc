@@ -9,11 +9,14 @@
         <file>deco/code/48/reload.svg</file>
         <file>deco/code/48/save.svg</file>
         <file>deco/code/48/template.svg</file>
+        <file>deco/code/48/test.svg</file>
         <file>deco/code/48/undo.svg</file>
+        <file>deco/commands/24/nasa.svg</file>
         <file>deco/commands/48/about.svg</file>
         <file>deco/commands/48/abscissa.svg</file>
         <file>deco/commands/48/actions.svg</file>
         <file>deco/commands/48/activate.svg</file>
+        <file>deco/commands/48/add-workspace.svg</file>
         <file>deco/commands/48/ai.svg</file>
         <file>deco/commands/48/alarm-acknowledge.svg</file>
         <file>deco/commands/48/alarm-reset.svg</file>
@@ -22,9 +25,11 @@
         <file>deco/commands/48/archive.svg</file>
         <file>deco/commands/48/area.svg</file>
         <file>deco/commands/48/audio-file.svg</file>
+        <file>deco/commands/48/auto-layout.svg</file>
         <file>deco/commands/48/camcoder.svg</file>
         <file>deco/commands/48/center.svg</file>
         <file>deco/commands/48/clear.svg</file>
+        <file>deco/commands/48/color.svg</file>
         <file>deco/commands/48/command-palette.svg</file>
         <file>deco/commands/48/connect.svg</file>
         <file>deco/commands/48/console-log.svg</file>
@@ -33,31 +38,39 @@
         <file>deco/commands/48/csv-log.svg</file>
         <file>deco/commands/48/csv.svg</file>
         <file>deco/commands/48/database-export.svg</file>
+        <file>deco/commands/48/deepwiki.svg</file>
         <file>deco/commands/48/deploy.svg</file>
         <file>deco/commands/48/device-setup.svg</file>
         <file>deco/commands/48/diagnostics.svg</file>
         <file>deco/commands/48/disconnect.svg</file>
         <file>deco/commands/48/examples.svg</file>
         <file>deco/commands/48/export.svg</file>
+        <file>deco/commands/48/extensions.svg</file>
         <file>deco/commands/48/external-window.svg</file>
         <file>deco/commands/48/file-transmission.svg</file>
         <file>deco/commands/48/filter.svg</file>
         <file>deco/commands/48/freeze.svg</file>
+        <file>deco/commands/48/front-view.svg</file>
         <file>deco/commands/48/full-screen.svg</file>
         <file>deco/commands/48/help.svg</file>
+        <file>deco/commands/48/interpolate-off.svg</file>
         <file>deco/commands/48/interpolate-on.svg</file>
         <file>deco/commands/48/invert.svg</file>
         <file>deco/commands/48/labels.svg</file>
+        <file>deco/commands/48/left-view.svg</file>
         <file>deco/commands/48/macro.svg</file>
         <file>deco/commands/48/map.svg</file>
         <file>deco/commands/48/mf4-log.svg</file>
         <file>deco/commands/48/mf4.svg</file>
         <file>deco/commands/48/normal-screen.svg</file>
         <file>deco/commands/48/open-project.svg</file>
+        <file>deco/commands/48/orbit.svg</file>
+        <file>deco/commands/48/orthogonal-view.svg</file>
         <file>deco/commands/48/pan.svg</file>
         <file>deco/commands/48/pause.svg</file>
         <file>deco/commands/48/pictures-folder.svg</file>
         <file>deco/commands/48/poliline.svg</file>
+        <file>deco/commands/48/project-setup.svg</file>
         <file>deco/commands/48/quit.svg</file>
         <file>deco/commands/48/remote-attach.svg</file>
         <file>deco/commands/48/reset.svg</file>
@@ -69,18 +82,24 @@
         <file>deco/commands/48/sound-folder.svg</file>
         <file>deco/commands/48/sound-mute.svg</file>
         <file>deco/commands/48/sound-unmute.svg</file>
+        <file>deco/commands/48/sweep.svg</file>
         <file>deco/commands/48/tools.svg</file>
+        <file>deco/commands/48/top-view.svg</file>
+        <file>deco/commands/48/trigger.svg</file>
         <file>deco/commands/48/weather.svg</file>
         <file>deco/commands/48/window-close.svg</file>
         <file>deco/commands/48/window-minimize.svg</file>
         <file>deco/commands/48/workspace-next.svg</file>
         <file>deco/commands/48/workspace-previous.svg</file>
+        <file>deco/commands/48/workspaces.svg</file>
         <file>deco/commands/48/x.svg</file>
         <file>deco/commands/48/y.svg</file>
         <file>deco/commands/48/zoom-in.svg</file>
         <file>deco/commands/48/zoom-out.svg</file>
+        <file>deco/console/48/annotations.svg</file>
         <file>deco/console/48/clear.svg</file>
         <file>deco/console/48/collapse-duplicates.svg</file>
+        <file>deco/console/48/hexadecimal.svg</file>
         <file>deco/console/48/plain-text.svg</file>
         <file>deco/console/48/search.svg</file>
         <file>deco/console/48/settings.svg</file>
@@ -94,6 +113,7 @@
         <file>deco/database/48/restore.svg</file>
         <file>deco/database/48/unlock.svg</file>
         <file>deco/devices/48/audio.svg</file>
+        <file>deco/devices/48/bluetooth.svg</file>
         <file>deco/devices/48/canbus.svg</file>
         <file>deco/devices/48/ethernetip.svg</file>
         <file>deco/devices/48/hid.svg</file>
@@ -103,12 +123,14 @@
         <file>deco/devices/48/network.svg</file>
         <file>deco/devices/48/opcua.svg</file>
         <file>deco/devices/48/process.svg</file>
+        <file>deco/devices/48/s7.svg</file>
         <file>deco/devices/48/uart.svg</file>
         <file>deco/devices/48/usb.svg</file>
         <file>deco/editor/48/action.svg</file>
         <file>deco/editor/48/add-accelerometer.svg</file>
         <file>deco/editor/48/add-action.svg</file>
         <file>deco/editor/48/add-bar.svg</file>
+        <file>deco/editor/48/add-barpanel.svg</file>
         <file>deco/editor/48/add-compass.svg</file>
         <file>deco/editor/48/add-datagrid.svg</file>
         <file>deco/editor/48/add-dataset.svg</file>
@@ -117,18 +139,27 @@
         <file>deco/editor/48/add-folder.svg</file>
         <file>deco/editor/48/add-gauge.svg</file>
         <file>deco/editor/48/add-gps.svg</file>
+        <file>deco/editor/48/add-group.svg</file>
+        <file>deco/editor/48/add-gyroscope.svg</file>
         <file>deco/editor/48/add-image.svg</file>
+        <file>deco/editor/48/add-led.svg</file>
         <file>deco/editor/48/add-meter.svg</file>
         <file>deco/editor/48/add-multiplot.svg</file>
         <file>deco/editor/48/add-output-button.svg</file>
+        <file>deco/editor/48/add-output-knob.svg</file>
         <file>deco/editor/48/add-output-panel.svg</file>
         <file>deco/editor/48/add-output-slider.svg</file>
+        <file>deco/editor/48/add-output-textfield.svg</file>
         <file>deco/editor/48/add-output-toggle.svg</file>
         <file>deco/editor/48/add-painter.svg</file>
         <file>deco/editor/48/add-plot.svg</file>
+        <file>deco/editor/48/add-plot3d.svg</file>
+        <file>deco/editor/48/add-register.svg</file>
         <file>deco/editor/48/add-table.svg</file>
+        <file>deco/editor/48/add-waterfall.svg</file>
         <file>deco/editor/48/add-webview.svg</file>
         <file>deco/editor/48/ai.svg</file>
+        <file>deco/editor/48/alarm-bands.svg</file>
         <file>deco/editor/48/alarm.svg</file>
         <file>deco/editor/48/bar.svg</file>
         <file>deco/editor/48/change-group.svg</file>
@@ -137,9 +168,12 @@
         <file>deco/editor/48/compass.svg</file>
         <file>deco/editor/48/compress.svg</file>
         <file>deco/editor/48/control-script.svg</file>
+        <file>deco/editor/48/customize.svg</file>
         <file>deco/editor/48/dashboard-widgets.svg</file>
+        <file>deco/editor/48/data-conversion.svg</file>
         <file>deco/editor/48/dataset-values.svg</file>
         <file>deco/editor/48/dataset.svg</file>
+        <file>deco/editor/48/delete-register.svg</file>
         <file>deco/editor/48/delete-table.svg</file>
         <file>deco/editor/48/delete.svg</file>
         <file>deco/editor/48/device.svg</file>
@@ -152,17 +186,21 @@
         <file>deco/editor/48/frame-detection.svg</file>
         <file>deco/editor/48/frame-end.svg</file>
         <file>deco/editor/48/frame-start.svg</file>
+        <file>deco/editor/48/group.svg</file>
         <file>deco/editor/48/help.svg</file>
         <file>deco/editor/48/hide.svg</file>
         <file>deco/editor/48/import-table.svg</file>
         <file>deco/editor/48/indicator.svg</file>
         <file>deco/editor/48/influx.svg</file>
         <file>deco/editor/48/insert-constant.svg</file>
+        <file>deco/editor/48/led.svg</file>
         <file>deco/editor/48/left.svg</file>
         <file>deco/editor/48/load-ca-certs.svg</file>
         <file>deco/editor/48/lock.svg</file>
         <file>deco/editor/48/meter.svg</file>
         <file>deco/editor/48/move-down.svg</file>
+        <file>deco/editor/48/move-folder.svg</file>
+        <file>deco/editor/48/move-here.svg</file>
         <file>deco/editor/48/move-up.svg</file>
         <file>deco/editor/48/mqtt-broker.svg</file>
         <file>deco/editor/48/mqtt-publisher.svg</file>
@@ -170,13 +208,16 @@
         <file>deco/editor/48/new.svg</file>
         <file>deco/editor/48/open.svg</file>
         <file>deco/editor/48/output-button.svg</file>
+        <file>deco/editor/48/output-knob.svg</file>
         <file>deco/editor/48/output-range.svg</file>
         <file>deco/editor/48/output-slider.svg</file>
+        <file>deco/editor/48/output-textfield.svg</file>
         <file>deco/editor/48/output-toggle.svg</file>
         <file>deco/editor/48/plot.svg</file>
         <file>deco/editor/48/project-setup.svg</file>
         <file>deco/editor/48/project-structure.svg</file>
         <file>deco/editor/48/project-title.svg</file>
+        <file>deco/editor/48/project.svg</file>
         <file>deco/editor/48/protobuf.svg</file>
         <file>deco/editor/48/read-only.svg</file>
         <file>deco/editor/48/read-write.svg</file>
@@ -193,16 +234,32 @@
         <file>deco/editor/48/shared-table.svg</file>
         <file>deco/editor/48/show.svg</file>
         <file>deco/editor/48/test-connection.svg</file>
+        <file>deco/editor/48/text-encoding.svg</file>
         <file>deco/editor/48/timer.svg</file>
+        <file>deco/editor/48/top-level-folder.svg</file>
+        <file>deco/editor/48/transform.svg</file>
         <file>deco/editor/48/tx-data.svg</file>
+        <file>deco/editor/48/waterfall.svg</file>
+        <file>deco/editor/48/widget.svg</file>
+        <file>deco/editor/48/workspace.svg</file>
+        <file>deco/illustrations/48/drag-and-drop.svg</file>
+        <file>deco/illustrations/48/driver.svg</file>
+        <file>deco/illustrations/48/hammer.svg</file>
         <file>deco/illustrations/48/locked.svg</file>
         <file>deco/illustrations/48/multi-device.svg</file>
+        <file>deco/illustrations/48/no-bluetooth.svg</file>
+        <file>deco/illustrations/48/no-mic.svg</file>
+        <file>deco/illustrations/48/no-results.svg</file>
+        <file>deco/illustrations/48/project-mode-required.svg</file>
+        <file>deco/illustrations/48/tip.svg</file>
         <file>deco/licensing/48/devices.svg</file>
         <file>deco/licensing/48/email.svg</file>
         <file>deco/licensing/48/key.svg</file>
         <file>deco/licensing/48/license.svg</file>
         <file>deco/licensing/48/plan.svg</file>
+        <file>deco/licensing/48/user.svg</file>
         <file>deco/licensing/48/uuid.svg</file>
+        <file>deco/notifications/48/critical.svg</file>
         <file>deco/notifications/48/info.svg</file>
         <file>deco/notifications/48/warning.svg</file>
         <file>deco/pack.json</file>
@@ -215,6 +272,7 @@
         <file>deco/panes/48/setup.svg</file>
         <file>deco/widgets/48/accelerometer.svg</file>
         <file>deco/widgets/48/bar.svg</file>
+        <file>deco/widgets/48/barpanel.svg</file>
         <file>deco/widgets/48/clock.svg</file>
         <file>deco/widgets/48/compass.svg</file>
         <file>deco/widgets/48/datagrid.svg</file>
@@ -222,16 +280,23 @@
         <file>deco/widgets/48/folder.svg</file>
         <file>deco/widgets/48/gauge.svg</file>
         <file>deco/widgets/48/gps.svg</file>
+        <file>deco/widgets/48/group.svg</file>
+        <file>deco/widgets/48/gyroscope.svg</file>
         <file>deco/widgets/48/image.svg</file>
+        <file>deco/widgets/48/led.svg</file>
         <file>deco/widgets/48/meter.svg</file>
         <file>deco/widgets/48/multiplot.svg</file>
+        <file>deco/widgets/48/notification-log.svg</file>
         <file>deco/widgets/48/output-panel.svg</file>
         <file>deco/widgets/48/output.svg</file>
         <file>deco/widgets/48/painter.svg</file>
         <file>deco/widgets/48/plot.svg</file>
+        <file>deco/widgets/48/plot3d.svg</file>
         <file>deco/widgets/48/stopwatch.svg</file>
         <file>deco/widgets/48/terminal.svg</file>
+        <file>deco/widgets/48/waterfall.svg</file>
         <file>deco/widgets/48/webview.svg</file>
+        <file>deco/widgets/48/workspace.svg</file>
         <file>fluent/code/48/copy.svg</file>
         <file>fluent/code/48/cut.svg</file>
         <file>fluent/code/48/help.svg</file>
@@ -243,6 +308,7 @@
         <file>fluent/code/48/template.svg</file>
         <file>fluent/code/48/test.svg</file>
         <file>fluent/code/48/undo.svg</file>
+        <file>fluent/commands/24/nasa.svg</file>
         <file>fluent/commands/48/about.svg</file>
         <file>fluent/commands/48/abscissa.svg</file>
         <file>fluent/commands/48/actions.svg</file>
@@ -313,6 +379,7 @@
         <file>fluent/commands/48/sound-folder.svg</file>
         <file>fluent/commands/48/sound-mute.svg</file>
         <file>fluent/commands/48/sound-unmute.svg</file>
+        <file>fluent/commands/48/sweep.svg</file>
         <file>fluent/commands/48/tools.svg</file>
         <file>fluent/commands/48/top-view.svg</file>
         <file>fluent/commands/48/trigger.svg</file>
@@ -360,6 +427,7 @@
         <file>fluent/editor/48/add-accelerometer.svg</file>
         <file>fluent/editor/48/add-action.svg</file>
         <file>fluent/editor/48/add-bar.svg</file>
+        <file>fluent/editor/48/add-barpanel.svg</file>
         <file>fluent/editor/48/add-compass.svg</file>
         <file>fluent/editor/48/add-datagrid.svg</file>
         <file>fluent/editor/48/add-dataset.svg</file>
@@ -385,6 +453,7 @@
         <file>fluent/editor/48/add-plot3d.svg</file>
         <file>fluent/editor/48/add-register.svg</file>
         <file>fluent/editor/48/add-table.svg</file>
+        <file>fluent/editor/48/add-waterfall.svg</file>
         <file>fluent/editor/48/add-webview.svg</file>
         <file>fluent/editor/48/ai.svg</file>
         <file>fluent/editor/48/alarm-bands.svg</file>
@@ -467,6 +536,7 @@
         <file>fluent/editor/48/top-level-folder.svg</file>
         <file>fluent/editor/48/transform.svg</file>
         <file>fluent/editor/48/tx-data.svg</file>
+        <file>fluent/editor/48/waterfall.svg</file>
         <file>fluent/editor/48/widget.svg</file>
         <file>fluent/editor/48/workspace.svg</file>
         <file>fluent/illustrations/48/drag-and-drop.svg</file>
@@ -499,6 +569,7 @@
         <file>fluent/panes/48/setup.svg</file>
         <file>fluent/widgets/48/accelerometer.svg</file>
         <file>fluent/widgets/48/bar.svg</file>
+        <file>fluent/widgets/48/barpanel.svg</file>
         <file>fluent/widgets/48/clock.svg</file>
         <file>fluent/widgets/48/compass.svg</file>
         <file>fluent/widgets/48/datagrid.svg</file>
@@ -520,6 +591,7 @@
         <file>fluent/widgets/48/plot3d.svg</file>
         <file>fluent/widgets/48/stopwatch.svg</file>
         <file>fluent/widgets/48/terminal.svg</file>
+        <file>fluent/widgets/48/waterfall.svg</file>
         <file>fluent/widgets/48/webview.svg</file>
         <file>fluent/widgets/48/workspace.svg</file>
         <file>outline/code/48/copy.svg</file>
@@ -533,6 +605,7 @@
         <file>outline/code/48/template.svg</file>
         <file>outline/code/48/test.svg</file>
         <file>outline/code/48/undo.svg</file>
+        <file>outline/commands/24/nasa.svg</file>
         <file>outline/commands/48/about.svg</file>
         <file>outline/commands/48/abscissa.svg</file>
         <file>outline/commands/48/actions.svg</file>
@@ -577,6 +650,7 @@
         <file>outline/commands/48/interpolate-off.svg</file>
         <file>outline/commands/48/interpolate-on.svg</file>
         <file>outline/commands/48/invert.svg</file>
+        <file>outline/commands/48/labels.svg</file>
         <file>outline/commands/48/left-view.svg</file>
         <file>outline/commands/48/macro.svg</file>
         <file>outline/commands/48/map.svg</file>
@@ -602,6 +676,7 @@
         <file>outline/commands/48/sound-folder.svg</file>
         <file>outline/commands/48/sound-mute.svg</file>
         <file>outline/commands/48/sound-unmute.svg</file>
+        <file>outline/commands/48/sweep.svg</file>
         <file>outline/commands/48/tools.svg</file>
         <file>outline/commands/48/top-view.svg</file>
         <file>outline/commands/48/trigger.svg</file>
@@ -642,12 +717,14 @@
         <file>outline/devices/48/network.svg</file>
         <file>outline/devices/48/opcua.svg</file>
         <file>outline/devices/48/process.svg</file>
+        <file>outline/devices/48/s7.svg</file>
         <file>outline/devices/48/uart.svg</file>
         <file>outline/devices/48/usb.svg</file>
         <file>outline/editor/48/action.svg</file>
         <file>outline/editor/48/add-accelerometer.svg</file>
         <file>outline/editor/48/add-action.svg</file>
         <file>outline/editor/48/add-bar.svg</file>
+        <file>outline/editor/48/add-barpanel.svg</file>
         <file>outline/editor/48/add-compass.svg</file>
         <file>outline/editor/48/add-datagrid.svg</file>
         <file>outline/editor/48/add-dataset.svg</file>
@@ -657,10 +734,13 @@
         <file>outline/editor/48/add-gauge.svg</file>
         <file>outline/editor/48/add-gps.svg</file>
         <file>outline/editor/48/add-group.svg</file>
+        <file>outline/editor/48/add-gyroscope.svg</file>
         <file>outline/editor/48/add-image.svg</file>
+        <file>outline/editor/48/add-led.svg</file>
         <file>outline/editor/48/add-meter.svg</file>
         <file>outline/editor/48/add-multiplot.svg</file>
         <file>outline/editor/48/add-output-button.svg</file>
+        <file>outline/editor/48/add-output-knob.svg</file>
         <file>outline/editor/48/add-output-panel.svg</file>
         <file>outline/editor/48/add-output-slider.svg</file>
         <file>outline/editor/48/add-output-textfield.svg</file>
@@ -670,6 +750,7 @@
         <file>outline/editor/48/add-plot3d.svg</file>
         <file>outline/editor/48/add-register.svg</file>
         <file>outline/editor/48/add-table.svg</file>
+        <file>outline/editor/48/add-waterfall.svg</file>
         <file>outline/editor/48/add-webview.svg</file>
         <file>outline/editor/48/ai.svg</file>
         <file>outline/editor/48/alarm-bands.svg</file>
@@ -706,11 +787,14 @@
         <file>outline/editor/48/indicator.svg</file>
         <file>outline/editor/48/influx.svg</file>
         <file>outline/editor/48/insert-constant.svg</file>
+        <file>outline/editor/48/led.svg</file>
         <file>outline/editor/48/left.svg</file>
         <file>outline/editor/48/load-ca-certs.svg</file>
         <file>outline/editor/48/lock.svg</file>
         <file>outline/editor/48/meter.svg</file>
         <file>outline/editor/48/move-down.svg</file>
+        <file>outline/editor/48/move-folder.svg</file>
+        <file>outline/editor/48/move-here.svg</file>
         <file>outline/editor/48/move-up.svg</file>
         <file>outline/editor/48/mqtt-broker.svg</file>
         <file>outline/editor/48/mqtt-publisher.svg</file>
@@ -718,6 +802,7 @@
         <file>outline/editor/48/new.svg</file>
         <file>outline/editor/48/open.svg</file>
         <file>outline/editor/48/output-button.svg</file>
+        <file>outline/editor/48/output-knob.svg</file>
         <file>outline/editor/48/output-range.svg</file>
         <file>outline/editor/48/output-slider.svg</file>
         <file>outline/editor/48/output-textfield.svg</file>
@@ -745,14 +830,22 @@
         <file>outline/editor/48/test-connection.svg</file>
         <file>outline/editor/48/text-encoding.svg</file>
         <file>outline/editor/48/timer.svg</file>
+        <file>outline/editor/48/top-level-folder.svg</file>
         <file>outline/editor/48/transform.svg</file>
         <file>outline/editor/48/tx-data.svg</file>
+        <file>outline/editor/48/waterfall.svg</file>
         <file>outline/editor/48/widget.svg</file>
         <file>outline/editor/48/workspace.svg</file>
+        <file>outline/illustrations/48/drag-and-drop.svg</file>
+        <file>outline/illustrations/48/driver.svg</file>
+        <file>outline/illustrations/48/hammer.svg</file>
         <file>outline/illustrations/48/locked.svg</file>
         <file>outline/illustrations/48/multi-device.svg</file>
         <file>outline/illustrations/48/no-bluetooth.svg</file>
+        <file>outline/illustrations/48/no-mic.svg</file>
+        <file>outline/illustrations/48/no-results.svg</file>
         <file>outline/illustrations/48/project-mode-required.svg</file>
+        <file>outline/illustrations/48/tip.svg</file>
         <file>outline/licensing/48/devices.svg</file>
         <file>outline/licensing/48/email.svg</file>
         <file>outline/licensing/48/key.svg</file>
@@ -773,6 +866,7 @@
         <file>outline/panes/48/setup.svg</file>
         <file>outline/widgets/48/accelerometer.svg</file>
         <file>outline/widgets/48/bar.svg</file>
+        <file>outline/widgets/48/barpanel.svg</file>
         <file>outline/widgets/48/clock.svg</file>
         <file>outline/widgets/48/compass.svg</file>
         <file>outline/widgets/48/datagrid.svg</file>
@@ -781,7 +875,9 @@
         <file>outline/widgets/48/gauge.svg</file>
         <file>outline/widgets/48/gps.svg</file>
         <file>outline/widgets/48/group.svg</file>
+        <file>outline/widgets/48/gyroscope.svg</file>
         <file>outline/widgets/48/image.svg</file>
+        <file>outline/widgets/48/led.svg</file>
         <file>outline/widgets/48/meter.svg</file>
         <file>outline/widgets/48/multiplot.svg</file>
         <file>outline/widgets/48/notification-log.svg</file>
@@ -792,6 +888,7 @@
         <file>outline/widgets/48/plot3d.svg</file>
         <file>outline/widgets/48/stopwatch.svg</file>
         <file>outline/widgets/48/terminal.svg</file>
+        <file>outline/widgets/48/waterfall.svg</file>
         <file>outline/widgets/48/webview.svg</file>
         <file>outline/widgets/48/workspace.svg</file>
     </qresource>

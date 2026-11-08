@@ -70,12 +70,6 @@ Left after the sweep (`scripts/icon-report.py`, tier holes):
   control type, the toggle and knob hardware looks, consumers for the theme `styles` section,
   the `display` surface behind plots, the taskbar's open-tab indicator, the HDR boost on lit
   hardware, and the unit tests for AC2, AC3 and AC12.
-- [ ] Icon packs (maintainer idea, 2026-11-07): button icons are Windows 11 flat, colour icons
-  are Office style. Every lookup already goes through `Misc::IconRegistry`, so a pack is a second
-  root under `app/rcc/icons/<pack>/` (or an extension folder) selected per theme or in Preferences,
-  and the registry falls back to the house set for a name the pack lacks. Candidates: Windows
-  Fluent, Deco. The Icons8 MCP server and skill (`claude plugin install icons8@icons8`) can supply
-  the sweep.
 - [ ] A project source's live driver writes the Setup pane's saved defaults: opening a project
   whose Modbus source uses port 5521 left `ModbusDriver/port` at 5521 for the next Quick Plot
   session (seen 2026-11-06). The driver setters persist whoever calls them, and
