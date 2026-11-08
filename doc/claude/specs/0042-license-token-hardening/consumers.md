@@ -173,3 +173,12 @@ its workspaces still shows them unlicensed (editor-only gate, as ruled on 2026-1
 Playback is not gated: CSV, MDF4 and Historian replay never run a transform (`m_playerOpen`
 keeps the engines down), so there is nothing for a playback gate to protect. Mirror viewers
 show publisher-computed values and never call `connectDevice()`.
+
+## Expiry notice (2026-11-08)
+
+`Trial::maybePostExpiryNotice` no longer runs from the constructor or shows anything itself: it
+marks the notice due after a server reply or a real rollover, and `TrialGate::onExpiryNoticeDue`
+shows it with Activate and Get Pro buttons, claiming the `trial/notified-<version>` latch at display
+time. The constructor call judged the previous version's stored dates, so an upgrade with an expired
+trial was told "expired" just before the per-version renewal, and the real expiry 14 days later
+found the latch already burnt. No entitlement decision changed.

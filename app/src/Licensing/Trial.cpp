@@ -71,6 +71,7 @@ Licensing::Trial::Trial()
   , m_silentFetch(false)
   , m_trialEnabled(false)
   , m_deviceRegistered(false)
+  , m_expiryNoticePending(false)
   , m_lastEffectiveEnabled(false)
   , m_daysRemaining(0)
   , m_trialExpiry(QDateTime::currentDateTimeUtc())
@@ -101,7 +102,6 @@ Licensing::Trial::Trial()
 
   readSettings();
   m_lastEffectiveEnabled = trialEnabled();
-  maybePostExpiryNotice();
 
   m_rolloverTimer.setInterval(kRolloverCheckMs);
   connect(&m_rolloverTimer, &QTimer::timeout, this, &Licensing::Trial::onRolloverTick);
@@ -224,14 +224,29 @@ void Licensing::Trial::onRolloverTick()
 }
 
 /**
- * @brief Posts the trial-expiry notice exactly once per machine (spec 0092 R5): a plain latch
- *        beside the encrypted trial keys, checked on every path that can settle into the expired
- *        state. Posted, never shown: this runs from the constructor and a timer tick (K13).
+ * @brief Marks the expiry notice due once the server has answered for this app version. Never run
+ *        from the stored dates alone: each version earns a fresh trial on its first server reply
+ *        (appVerMachineId), so judging the previous version's expiry at startup announces an
+ *        ending that reply is about to undo and burns the latch the real expiry needs.
  */
 void Licensing::Trial::maybePostExpiryNotice()
 {
-  if (!trialExpired())
-    return;
+  m_expiryNoticePending = trialExpired();
+  if (m_expiryNoticePending)
+    Q_EMIT expiryNoticeDue();
+}
+
+/**
+ * @brief Claims the due expiry notice for the prompt owner, at most once per app version (spec
+ *        0092 R5): a plain latch beside the encrypted trial keys. Claimed only at display time, so
+ *        a signal emitted before TrialGate exists delays the notice instead of losing it.
+ */
+bool Licensing::Trial::claimExpiryNotice()
+{
+  if (!m_expiryNoticePending || !trialExpired())
+    return false;
+
+  m_expiryNoticePending = false;
 
   const QString key = QStringLiteral("notified-") + QCoreApplication::applicationVersion();
   m_settings.beginGroup("trial");
@@ -240,16 +255,7 @@ void Licensing::Trial::maybePostExpiryNotice()
     m_settings.setValue(key, true);
 
   m_settings.endGroup();
-
-  if (notified)
-    return;
-
-  Misc::Utilities::postMessageBox(
-    QObject::tr("Your Serial Studio Pro trial has expired"),
-    QObject::tr("Pro features are locked until a license is activated. All free features "
-                "remain fully functional, with no time limit."),
-    QMessageBox::Information,
-    QObject::tr("Trial Expired"));
+  return !notified;
 }
 
 //--------------------------------------------------------------------------------------------------

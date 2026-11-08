@@ -37,8 +37,9 @@
 
 /**
  * @brief Installs this object as the process-wide Pro-intent handler and watches the entitlement
- *        funnel. Constructed by the composition root right after the licensing block, GUI builds
- *        only: a headless root never constructs one, so gate refusals stay silent there.
+ *        funnel. Constructed by the composition root after the boot restore, GUI builds only: a
+ *        headless root never constructs one, so gate refusals stay silent there. The server may
+ *        have answered by then, so the first pass also picks up an expiry notice already due.
  */
 Licensing::TrialGate::TrialGate(Trial& trial, LemonSqueezy& lemonSqueezy, QObject* parent)
   : QObject(parent)
@@ -55,11 +56,18 @@ Licensing::TrialGate::TrialGate(Trial& trial, LemonSqueezy& lemonSqueezy, QObjec
           &Licensing::Trial::registrationSettled,
           this,
           &Licensing::TrialGate::onRegistrationSettled);
+  connect(&m_trial,
+          &Licensing::Trial::expiryNoticeDue,
+          this,
+          &Licensing::TrialGate::onExpiryNoticeDue,
+          Qt::QueuedConnection);
 
   Core::License::setProFeatureHandler(
     [this](const QString& featureId, Core::License::ProFeatureRetry retry) {
       handleIntent(featureId, std::move(retry));
     });
+
+  QTimer::singleShot(0, this, &Licensing::TrialGate::onExpiryNoticeDue);
 }
 
 /**
@@ -162,35 +170,69 @@ void Licensing::TrialGate::offerTrial(const QString& featureId,
  */
 void Licensing::TrialGate::offerActivation(const QString& featureId)
 {
-  ButtonTextMap labels;
-  labels[QMessageBox::Yes] = tr("Activate License");
-  labels[QMessageBox::No]  = tr("Get Serial Studio Pro");
-
-  m_prompting      = true;
-  const int answer = Misc::Utilities::showMessageBox(
+  askActivationChoice(
     tr("This feature requires Serial Studio Pro"),
     tr("Your trial has ended. All free features remain fully functional; activate a "
        "license or purchase one to use Pro features again.")
       + Misc::ProFeatureNotice::contentDetail(featureId),
-    QMessageBox::Information,
     tr("Serial Studio Pro"),
-    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-    QMessageBox::Yes,
-    labels);
+    QMessageBox::Yes);
+
+  if (!m_registrationPending)
+    m_pendingRetry = {};
+}
+
+/**
+ * @brief The activate, purchase or dismiss box shared by a refused gesture and the expiry notice.
+ *        Blocking box sanctioned: every caller sits on a gesture stack or a queued slot.
+ */
+void Licensing::TrialGate::askActivationChoice(const QString& text,
+                                               const QString& detail,
+                                               const QString& windowTitle,
+                                               QMessageBox::StandardButton defaultButton)
+{
+  ButtonTextMap labels;
+  labels[QMessageBox::Yes] = tr("Activate License");
+  labels[QMessageBox::No]  = tr("Get Serial Studio Pro");
+
+  m_prompting = true;
+  const int answer =
+    Misc::Utilities::showMessageBox(text,
+                                    detail,
+                                    QMessageBox::Information,
+                                    windowTitle,
+                                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                                    defaultButton,
+                                    labels);
   m_prompting = false;
 
   if (answer == QMessageBox::Yes)
     Q_EMIT activationRequested();
   else if (answer == QMessageBox::No)
     m_lemonSqueezy.buy();
-
-  if (!m_registrationPending)
-    m_pendingRetry = {};
 }
 
 //--------------------------------------------------------------------------------------------------
 // Entitlement transitions
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Tells the user the trial ended, with the way to buy on the same box, once per app
+ *        version. Queued so the modal loop never runs under a reply handler or the rollover timer
+ *        (K13). While another prompt is up the notice stays unclaimed for a later pass. QObject::tr
+ *        keeps these strings in the context their translations already live in.
+ */
+void Licensing::TrialGate::onExpiryNoticeDue()
+{
+  if (m_prompting || !m_trial.claimExpiryNotice())
+    return;
+
+  askActivationChoice(QObject::tr("Your Serial Studio Pro trial has expired"),
+                      QObject::tr("Pro features are locked until a license is activated. All free "
+                                  "features remain fully functional, with no time limit."),
+                      QObject::tr("Trial Expired"),
+                      QMessageBox::No);
+}
 
 /**
  * @brief Resumes the refused gesture once the token lands. Queued single-shot on purpose: every

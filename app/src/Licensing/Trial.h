@@ -60,6 +60,7 @@ class Trial : public QObject {
 signals:
   void busyChanged();
   void enabledChanged();
+  void expiryNoticeDue();
   void availableChanged();
   void registrationSettled();
 
@@ -80,6 +81,7 @@ public:
   [[nodiscard]] bool trialEnabled() const;
   [[nodiscard]] bool trialExpired() const;
   [[nodiscard]] bool trialAvailable() const;
+  [[nodiscard]] bool claimExpiryNotice();
 
   [[nodiscard]] int daysRemaining() const;
 
@@ -102,6 +104,7 @@ private:
   bool m_silentFetch;
   bool m_trialEnabled;
   bool m_deviceRegistered;
+  bool m_expiryNoticePending;
   bool m_lastEffectiveEnabled;
 
   // Day-keyed cache of daysRemaining(), a QML-bound property that floors the monotonic clock

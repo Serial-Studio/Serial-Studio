@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <QMessageBox>
 #include <QObject>
 
 #include "Core/License.h"
@@ -54,6 +55,7 @@ public slots:
   void requestProFeature(const QString& featureId);
 
 private slots:
+  void onExpiryNoticeDue();
   void onEntitlementChanged();
   void onRegistrationSettled();
 
@@ -61,6 +63,10 @@ private:
   void handleIntent(const QString& featureId, Core::License::ProFeatureRetry retry);
   void offerTrial(const QString& featureId, Core::License::ProFeatureRetry retry);
   void offerActivation(const QString& featureId);
+  void askActivationChoice(const QString& text,
+                           const QString& detail,
+                           const QString& windowTitle,
+                           QMessageBox::StandardButton defaultButton);
 
 private:
   bool m_prompting;
