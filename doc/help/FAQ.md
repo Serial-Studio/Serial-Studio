@@ -383,7 +383,7 @@ Yes. Click **Preferences → Theme** and pick one. [Preferences](Preferences.md)
 ### Can I change the icon style?
 
 Yes. **Preferences → Icon Pack** lists the bundled packs. *Follow theme* (the default) uses the
-pack the theme names, or the standard set when it names none; *Office (default)* pins that
+pack the theme names, or the standard set when it names none; *Office* pins that
 standard set under every theme. The button glyphs
 and the window controls stay the same under every pack; the colour icons of the toolbar, the
 Project Editor, the dashboard and the dialogs change. A mono pack is drawn in the theme's text

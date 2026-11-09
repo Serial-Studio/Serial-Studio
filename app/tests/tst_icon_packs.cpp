@@ -220,9 +220,13 @@ void TstIconPacks::widgetToolbarsFollowTheirOwnChoice()
   QCOMPARE(registry.monoIconById(settings, 18),
            QStringLiteral("qrc:/icons/commands/24/settings.svg"));
 
-  registry.setWidgetPack(QStringLiteral("absent"));
-  QVERIFY(registry.widgetPack().isEmpty());
+  registry.setWidgetPack(QString());
   QCOMPARE(registry.monoIconById(settings, 18), fixed);
+
+  registry.setWidgetPack(QStringLiteral("absent"));
+  QCOMPARE(registry.widgetPack(), Misc::IconRegistry::houseId());
+  QCOMPARE(registry.monoIconById(settings, 18),
+           QStringLiteral("qrc:/icons/commands/24/settings.svg"));
 }
 
 void TstIconPacks::unknownIdAndUnknownPackStayLoud()

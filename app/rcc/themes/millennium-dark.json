@@ -3,6 +3,7 @@
   "parameters": {
     "code-editor-theme": "millennium-dark",
     "icon-pack": "deco",
+    "widget-icon-pack": "deco",
     "start-icon": "qrc:/logo/start-dark.svg"
   },
   "translations": {

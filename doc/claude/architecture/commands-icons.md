@@ -75,9 +75,10 @@ the idea it stands for, never from another theme's icon.
 
 **Widget toolbar icons (spec 0115 R23, spec 0116):** the dashboard widget toolbars draw at 18 px
 inside every widget and take their art from their own setting (`WidgetIconPack`, Preferences >
-General > Widget Toolbar Icons), independent of the active pack. `DashboardToolButton` takes
+General > Widget Toolbar Icons), independent of the active pack. Empty follows the theme's
+`widget-icon-pack` parameter, and a theme that names none uses the house set. `DashboardToolButton` takes
 `glyph: "<category>/<name>"` and resolves it through `Cpp_Misc_IconRegistry.monoIconById(id, px)`:
-the chosen pack, then the Fine Line pack (`IconRegistry::monoPackId()`, the default), then the
+the chosen pack, then the Fine Line pack (`IconRegistry::monoPackId()`), then the
 house file. Only a mono pack is tinted; `registry-verify.py` checks every `glyph` id resolves. A collapsed ribbon
 section tints its icon with the section's own text colour through `retint`, so it follows the
 other icons of its toolbar on the strip and on secondary toolbars alike. The dashboard taskbar,

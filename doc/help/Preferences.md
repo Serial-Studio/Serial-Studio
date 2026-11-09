@@ -19,8 +19,8 @@ A change takes effect as you make it, and **Apply** and **Close** both dismiss t
 |---------|--------------|---------|
 | **Language** | Interface language. Disabled while a device is connected. | |
 | **Theme** | Colors and surfaces of the whole interface. **Get Themes…** opens the [extension catalog](Extensions.md) filtered to themes. | Default |
-| **Icon Pack** | Artwork of the color icons on the toolbar, the Project Editor, the dashboard, and the dialogs. **Follow theme** uses the pack the theme names, or the standard set when it names none. The entry marked **(default)** pins the standard set. | Follow theme |
-| **Widget Toolbar Icons** | Artwork of the small buttons on dashboard widgets, chosen separately from **Icon Pack**. The entry marked **(default)** draws single-color line art in the theme's text color. Every other entry draws that set's own artwork. | The entry marked (default) |
+| **Icon Pack** | Artwork of the color icons on the toolbar, the Project Editor, the dashboard, and the dialogs. **Follow theme** uses the pack the theme names, or the standard set when it names none. **Office** pins the standard set; a build without it shows **Basic** there instead. | Follow theme |
+| **Widget Toolbar Icons** | Artwork of the small buttons on dashboard widgets, chosen separately from **Icon Pack**. **Follow theme** uses the set the theme names, or the standard set when it names none. Every other entry draws that set's own artwork. | Follow theme |
 | **Custom Window Decorations** | Draws Serial Studio's own window title bars. Not offered on macOS or Windows 11. | On |
 | **Workspace Folder** | Where Serial Studio keeps its files. Disabled while a device is connected. | `Documents/Serial Studio` |
 | **Enable API Server** | Accepts commands from local programs over TCP. See the [API Reference](API-Reference.md). | Off |

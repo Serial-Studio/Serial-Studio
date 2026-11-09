@@ -3,6 +3,7 @@
   "parameters":{
     "code-editor-theme":"fluent-light",
     "icon-pack": "fluent",
+    "widget-icon-pack": "outline",
     "start-icon":"qrc:/logo/start.svg"
   },
   "translations":{

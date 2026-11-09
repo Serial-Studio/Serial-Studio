@@ -35,6 +35,7 @@
 static const QString kSettingsKey = QStringLiteral("IconPack");
 static const QString kThemeParam  = QStringLiteral("icon-pack");
 static const QString kWidgetKey   = QStringLiteral("WidgetIconPack");
+static const QString kWidgetParam = QStringLiteral("widget-icon-pack");
 static const QString& kHouseId    = Misc::IconRegistry::houseId();
 
 //--------------------------------------------------------------------------------------------------
@@ -69,10 +70,9 @@ Misc::IconPacks::IconPacks(QJSEngine& engine,
     m_selected.clear();
 
   m_widgetSelected = m_settings.value(kWidgetKey).toString();
-  if (m_widgetSelected != kHouseId && m_registry.selectablePack(m_widgetSelected).isEmpty())
+  if (widgetPack() == 0)
     m_widgetSelected.clear();
 
-  m_registry.setWidgetPack(m_widgetSelected);
   applyEffectivePack();
   updateLocalizedNames();
 
@@ -108,8 +108,8 @@ int Misc::IconPacks::pack() const
 }
 
 /**
- * @brief The widget-toolbar selector index: 0 is the fixed mono pack, 1 the house set, then the
- *        other bundled packs in catalog order.
+ * @brief The widget-toolbar selector index: 0 is "Follow theme", 1 the house set, then the
+ *        bundled packs in catalog order.
  */
 int Misc::IconPacks::widgetPack() const
 {
@@ -288,8 +288,8 @@ void Misc::IconPacks::setPack(const int index)
 }
 
 /**
- * @brief Selects a widget-toolbar selector entry (0 the fixed mono pack, 1 the house set) and
- *        persists it; the toolbars re-resolve through the registry's revision signal.
+ * @brief Selects a widget-toolbar selector entry (0 follows the theme, 1 pins the house set) and
+ *        persists it.
  */
 void Misc::IconPacks::setWidgetPack(const int index)
 {
@@ -307,8 +307,7 @@ void Misc::IconPacks::setWidgetPack(const int index)
   if (m_persistSettings)
     m_settings.setValue(kWidgetKey, m_widgetSelected);
 
-  m_registry.setWidgetPack(m_widgetSelected);
-  Q_EMIT revisionChanged();
+  applyEffectivePack();
   Q_EMIT widgetPackChanged();
 }
 
@@ -333,14 +332,19 @@ void Misc::IconPacks::applyEffectivePack()
 
   effective = effective == kHouseId ? QString() : m_registry.selectablePack(effective);
 
+  auto widget = m_widgetSelected;
+  if (widget.isEmpty())
+    widget = m_theme.parameters().value(kWidgetParam, kHouseId).toString();
+
   const auto text  = m_theme.getColor(QStringLiteral("text")).name();
   const auto strip = m_theme.getColor(QStringLiteral("toolbar_text")).name();
-  const auto state = effective + QChar('|') + text + QChar('|') + strip;
+  const auto state = effective + QChar('|') + widget + QChar('|') + text + QChar('|') + strip;
   if (state == m_applied)
     return;
 
   m_applied = state;
   m_registry.setPack(effective);
+  m_registry.setWidgetPack(widget);
   m_registry.setTints(text, strip);
   Q_EMIT revisionChanged();
 }
@@ -358,25 +362,19 @@ void Misc::IconPacks::updateLocalizedNames()
     return text.isEmpty() ? info.title : text;
   };
 
+  const auto house = m_registry.houseTitle();
+  const auto standard =
+    house.isEmpty() ? QCoreApplication::translate("Misc::IconPacks", "Office") : house;
+
   QStringList names;
   names.append(QCoreApplication::translate("Misc::IconPacks", "Follow theme"));
-  const auto house = m_registry.houseTitle();
-  names.append(house.isEmpty()
-                 ? QCoreApplication::translate("Misc::IconPacks", "Office (default)")
-                 : QCoreApplication::translate("Misc::IconPacks", "%1 (default)").arg(house));
+  names.append(standard);
+  auto widgets = names;
+
   const auto packs = m_registry.visiblePacks();
   for (const auto& info : packs)
     names.append(title(info));
 
-  auto fixed = IconRegistry::monoPackId();
-  for (const auto& info : m_registry.packs())
-    if (info.id == IconRegistry::monoPackId())
-      fixed = title(info);
-
-  QStringList widgets;
-  widgets.append(QCoreApplication::translate("Misc::IconPacks", "%1 (default)").arg(fixed));
-  widgets.append(house.isEmpty() ? QCoreApplication::translate("Misc::IconPacks", "Office")
-                                 : house);
   const auto choices = widgetPackChoices();
   for (const auto& info : choices)
     widgets.append(title(info));
@@ -391,14 +389,13 @@ void Misc::IconPacks::updateLocalizedNames()
 
 /**
  * @brief The packs offered for the widget toolbars after the two fixed entries: every pack a user
- *        may choose except the fixed mono pack, which is already the first entry.
+ *        may choose, plus the fixed mono pack even where it is hidden from the icon pack list.
  */
 QList<Misc::IconPackInfo> Misc::IconPacks::widgetPackChoices() const
 {
   QList<IconPackInfo> choices;
-  const auto packs = m_registry.visiblePacks();
-  for (const auto& info : packs)
-    if (info.id != IconRegistry::monoPackId())
+  for (const auto& info : m_registry.packs())
+    if (info.id == IconRegistry::monoPackId() || !m_registry.selectablePack(info.id).isEmpty())
       choices.append(info);
 
   return choices;

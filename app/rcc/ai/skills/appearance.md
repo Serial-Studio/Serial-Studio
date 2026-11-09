@@ -27,7 +27,7 @@ controls stay the same under every pack.
 
 | Choice            | Look                               | Theme that names it               |
 |-------------------|------------------------------------|-----------------------------------|
-| Office (default)  | Flat colour icons, the standard set | Default                          |
+| Office            | Flat colour icons, the standard set | Default                          |
 | Basic             | Colourful icons drawn for Serial Studio | none                         |
 | Flat Color        | Flat multicolour icons             | none                              |
 | Fluent            | Microsoft Fluent colour icons      | Fluent Light, Fluent Dark         |
@@ -53,9 +53,10 @@ How to recommend one:
 
 **Preferences > General > Widget Toolbar Icons** sets the artwork of the
 small buttons on dashboard widgets on its own, whatever the Icon Pack is.
-The entry marked (default) is single-color line art in the theme's text
-colour; any other entry uses that set's artwork. Builds without the licensed
-art use Basic as the standard set.
+**Follow theme** is the default: Default uses Office, Fluent Light and Fluent
+Dark use Outline, Millennium Light and Millennium Dark use Deco, and Starliner
+uses Fine Line. Any other entry uses that set's artwork. Builds without the
+licensed art use Basic as the standard set, and in place of a set they lack.
 
 ## Where settings live
 

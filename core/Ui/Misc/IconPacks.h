@@ -38,8 +38,8 @@ class ThemeManager;
  * @brief The QML face of the icon registry under icon packs (spec 0115): the resolvers are
  *        function-valued notifying properties, so every icon binding re-evaluates on a pack or
  *        theme change; the selection persists, "Follow theme" defers to the theme's icon-pack
- *        parameter and "Office (default)" pins the house set. monoIconById serves the dashboard
- *        widget toolbars from their own persisted choice, whatever pack is active.
+ *        parameter and "Office" pins the house set. monoIconById serves the dashboard widget
+ *        toolbars from their own choice, which follows the theme's widget-icon-pack by default.
  */
 class IconPacks : public QObject {
   // clang-format off

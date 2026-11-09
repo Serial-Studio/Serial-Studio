@@ -1,6 +1,7 @@
 {
   "title":"Default",
   "parameters":{
+    "widget-icon-pack": "office",
     "code-editor-theme":"default",
     "start-icon":"qrc:/logo/start-dark.svg"
   },

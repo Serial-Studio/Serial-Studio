@@ -300,11 +300,12 @@ const QString& Misc::IconRegistry::widgetPack() const noexcept
 
 /**
  * @brief Chooses the art of the dashboard widget toolbars: a pack id, houseId() for the house set,
- *        or empty for the fixed mono pack. An id this build lacks means the fixed mono pack.
+ *        or empty for the fixed mono pack. An id this build lacks means the house set, as it
+ *        does for the icon pack.
  */
 void Misc::IconRegistry::setWidgetPack(const QString& id)
 {
-  const auto next = id == houseId() || hasPack(id) ? id : QString();
+  const auto next = id.isEmpty() || hasPack(id) ? id : houseId();
   if (next == m_widgetPack)
     return;
 
