@@ -232,7 +232,7 @@ pytest tests/unit/ -v
 | `test_updates_manifest.py` | The repo-root `updates.json` appcast: one endpoint per shipped package type plus the legacy per-OS keys, URLs agreeing with each key |
 | `test_mirror_protocol.py` | The spec-0040 mirror wire contract against the recorded fixtures in `tests/fixtures/mirror/` |
 | `test_alarm_sounds.py` | The bundled sound theme under `app/rcc/sounds`: WAV format, duration caps, IEC 60601-1-8 pulse counts |
-| `test_mcp_bridge.py` | The Claude bridge from the MCP Client example against a closed port (through `SERIAL_STUDIO_API_PORT`): exit 1 within ten seconds, the Preferences fix on the last stderr line (spec 0112 AC7); the stdout line filter that forwards only JSON-RPC |
+| `test_mcp_bridge.py` | The Claude bridge from the MCP Client example against a closed port (through `SERIAL_STUDIO_API_PORT`): the handshake answered at once, a tool call failing with the Preferences fix, a clean exit when the client leaves (spec 0112 AC7, R9 as amended); the stdout line filter that forwards only JSON-RPC |
 
 ## C++ unit tests (`app/tests/`)
 
@@ -548,7 +548,7 @@ tests/
 │   ├── test_updates_manifest.py        # updates.json appcast shape (spec 0001)
 │   ├── test_mirror_protocol.py         # Spec-0040 mirror wire contract vs fixtures
 │   ├── test_alarm_sounds.py            # Spec-0087 sound theme: WAV format, pulse counts
-│   └── test_mcp_bridge.py              # Spec-0112 bridge failure path: exit 1, fix last; JSON-RPC-only line filter
+│   └── test_mcp_bridge.py              # Spec-0112 bridge failure path: the fix in every answer; JSON-RPC-only line filter
 │
 ├── fixtures/                           # Checked-in inputs the suites read
 │   ├── projects/legacy/*.ssproj        # One hand-written document per loader migration

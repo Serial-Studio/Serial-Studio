@@ -2,16 +2,18 @@
 MCP Bridge Failure Tests
 
 Spawns examples/MCP Client/claude_desktop_bridge.py against a port nothing
-listens on and pins spec 0112 R9: the bridge gives up within ten seconds,
-exits 1, and its last stderr line names the fix (enable the API server in
-Preferences), so an MCP client's status shows the cause instead of a hung
-server. No running app needed; with the app up, the port override keeps the
-bridge away from it.
+listens on and pins spec 0112 R9 as amended: the bridge answers the MCP
+handshake itself, fails a tool call with the fix (enable the API server in
+Preferences) and exits cleanly when the client leaves, so an MCP client shows
+the cause instead of a hung server. No running app needed; with the app up, the
+port override keeps the bridge away from it. The reconnect, stalled-link and
+shutdown cases live with the plugin's copy, Serial-Studio/claude-plugin.
 
 Copyright (C) 2020-2026 Alex Spataru
 SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
+import json
 import os
 import socket
 import subprocess
@@ -22,7 +24,7 @@ from pathlib import Path
 BRIDGE = (
     Path(__file__).parents[2] / "examples" / "MCP Client" / "claude_desktop_bridge.py"
 )
-GIVE_UP_SECONDS = 10.0
+ANSWER_SECONDS = 10.0
 
 
 def closed_port() -> int:
@@ -32,28 +34,36 @@ def closed_port() -> int:
         return probe.getsockname()[1]
 
 
-def test_bridge_exits_with_the_fix_when_nothing_listens():
+def test_bridge_answers_with_the_fix_when_nothing_listens():
     env = dict(os.environ, SERIAL_STUDIO_API_PORT=str(closed_port()))
+    requests = [
+        {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}},
+        {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "tools/call",
+            "params": {"name": "io.getStatus", "arguments": {}},
+        },
+    ]
     started = time.monotonic()
     proc = subprocess.run(
         [sys.executable, "-I", str(BRIDGE)],
-        input=b"",
+        input=b"".join(json.dumps(r).encode() + b"\n" for r in requests),
         capture_output=True,
         env=env,
-        timeout=GIVE_UP_SECONDS + 5.0,
+        timeout=ANSWER_SECONDS + 5.0,
     )
     elapsed = time.monotonic() - started
 
-    assert proc.returncode == 1, proc.stderr.decode("utf-8", "replace")
-    assert elapsed < GIVE_UP_SECONDS, f"bridge took {elapsed:.1f} s to give up"
+    log = proc.stderr.decode("utf-8", "replace")
+    assert proc.returncode == 0, log
+    assert elapsed < ANSWER_SECONDS, f"bridge took {elapsed:.1f} s to answer"
+    assert "Enable API Server" in log, log
 
-    lines = [
-        line
-        for line in proc.stderr.decode("utf-8", "replace").splitlines()
-        if line.strip()
-    ]
-    assert lines, "bridge wrote nothing to stderr"
-    assert "Enable API Server" in lines[-1], lines[-1]
+    replies = {r["id"]: r for r in map(json.loads, proc.stdout.splitlines())}
+    assert replies[1]["result"]["capabilities"]["tools"]["listChanged"]
+    assert replies[2]["result"]["isError"]
+    assert "Enable API Server" in replies[2]["result"]["content"][0]["text"]
 
 
 def test_bridge_forwards_only_jsonrpc_lines():
@@ -72,12 +82,12 @@ def test_bridge_forwards_only_jsonrpc_lines():
         env=env,
     )
     try:
-        server.settimeout(GIVE_UP_SECONDS)
+        server.settimeout(ANSWER_SECONDS)
         conn, _ = server.accept()
         conn.sendall(b'{"frames":[]}\n{"data":"AA=="}\n' + reply)
         time.sleep(1.0)
         conn.close()
-        out, err = proc.communicate(input=b"", timeout=GIVE_UP_SECONDS)
+        out, err = proc.communicate(input=b"", timeout=ANSWER_SECONDS)
     finally:
         server.close()
         proc.kill()

@@ -102,6 +102,10 @@ and never reaches an external client.
 9. **R9** — When Serial Studio is not running or the API server is off, the bridge exits with
    a failure within a bounded time and its last message names the fix (enable the API server
    in Preferences), so Claude's MCP status shows the cause instead of a hung server.
+   **Amended 2026-11-08:** the bridge stays up instead of exiting, answers the MCP handshake
+   itself, and names the fix in its status tool, in every failed call and on its last log
+   line, so the cause still shows and a Serial Studio started later needs no reconnect. AC7's
+   test pins the amended behavior.
 10. **R10** — The bundled skill states the prerequisite, the read-first workflow (status,
     then frames, then project edits), and the consent prompts the user will see for device
     control and script changes, so Claude explains a refusal instead of retrying it.

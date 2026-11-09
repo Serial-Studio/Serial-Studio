@@ -132,8 +132,6 @@ Outside this repository:
 - [ ] Spec 0111 publishing (T46): PyPI trusted publisher for `serialstudio`, the Arduino mirror
   repository (`ARDUINO_MIRROR_REPO`, `ARDUINO_MIRROR_TOKEN`), then set `FIRMWARE_PUBLISH`, and the
   Arduino registry PR.
-- [ ] Spec 0102 T14: copy the MCP Client example's `claude_desktop_bridge.py` to
-  `Serial-Studio/claude-plugin` as `bridge.py`, byte-identical. The two differ today.
 - [ ] Spec 0112 T18: the macOS and Linux runs and the recorded portal result.
 - [ ] `updates.json`: move `windows-msix` to 4.2.1 once the Store certifies it (pending since
   2026-10-28).

@@ -263,9 +263,9 @@ examples/MCP Client/claude_desktop_bridge.py
 This script connects Claude Desktop (stdio) to Serial Studio's TCP API (port 7777).
 
 **Features:**
-- Retries the initial connection to Serial Studio for six seconds at startup, then
-  exits with the fix on its last log line (does not reconnect mid-session; a dropped
-  connection ends the bridge process)
+- Stays up while Serial Studio is away and reconnects by itself, at startup and
+  mid-session; until then it lists one status tool, fails every other call with the
+  fix, and names the fix on its last log line
 - Proper error handling and logging
 - Graceful shutdown
 - Detailed status messages in Claude Desktop logs
@@ -422,7 +422,7 @@ You can now ask Claude to:
 #### Bridge starts but Claude can't connect
 
 **Fix:**
-1. Ensure Serial Studio is running **before** starting Claude Desktop
+1. Ensure Serial Studio is running (the tools appear once it answers, in either start order)
 2. Enable API server in Serial Studio Preferences
 3. Check port 7777 is not blocked: `lsof -i :7777` (macOS/Linux) or `netstat -ano | findstr :7777` (Windows)
 4. Try connecting manually: `nc localhost 7777` (should connect immediately)
