@@ -271,9 +271,13 @@ jobs:
 
 
     #
-    # Stage 1 of the two-stage PGO flow: an instrumented Release build whose only job is to emit
-    # profiles for the training runs below
+    # Official builds compile the licensed art; everything else builds from the free tree (spec 0116)
     #
+    - name: '🎨 Fetch licensed icon art'
+      uses: ./.github/actions/fetch-icon-art
+      with:
+        ssh-key: ${{secrets.ICON_ART_DEPLOY_KEY}}
+
     - name: '🚧 Configure with CMake (PGO generate)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -285,6 +289,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
+          -DSS_ICON_ART_DIR=${{github.workspace}}/icon-art \
+          -DSS_REQUIRE_ICON_ART=${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && 'ON' || 'OFF' }} \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
           -DSS_ALLOC_STATS=ON \
@@ -380,6 +386,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
+          -DSS_ICON_ART_DIR=${{github.workspace}}/icon-art \
+          -DSS_REQUIRE_ICON_ART=${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && 'ON' || 'OFF' }} \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
           -DSS_ALLOC_STATS=ON \
@@ -659,9 +667,13 @@ jobs:
       run: ctest --test-dir build/unit-ci --output-on-failure
 
     #
-    # Stage 1 of the two-stage PGO flow: an instrumented Release build whose only job is to emit
-    # profiles for the training runs below
+    # Official builds compile the licensed art; everything else builds from the free tree (spec 0116)
     #
+    - name: '🎨 Fetch licensed icon art'
+      uses: ./.github/actions/fetch-icon-art
+      with:
+        ssh-key: ${{secrets.ICON_ART_DEPLOY_KEY}}
+
     - name: '🚧 Configure with CMake (PGO generate)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -673,6 +685,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
+          -DSS_ICON_ART_DIR=${{github.workspace}}/icon-art \
+          -DSS_REQUIRE_ICON_ART=${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && 'ON' || 'OFF' }} \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
           -DSS_ALLOC_STATS=ON \
@@ -722,6 +736,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
+          -DSS_ICON_ART_DIR=${{github.workspace}}/icon-art \
+          -DSS_REQUIRE_ICON_ART=${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && 'ON' || 'OFF' }} \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
           -DSS_ALLOC_STATS=ON \
@@ -923,8 +939,13 @@ jobs:
         useLocalCache: true
 
     #
-    # Stage 1 of the two-stage PGO flow, pinned to arm64: this job builds only the native slice
+    # Official builds compile the licensed art; everything else builds from the free tree (spec 0116)
     #
+    - name: '🎨 Fetch licensed icon art'
+      uses: ./.github/actions/fetch-icon-art
+      with:
+        ssh-key: ${{secrets.ICON_ART_DEPLOY_KEY}}
+
     - name: '🚧 Configure with CMake (PGO generate, arm64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -936,6 +957,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
+          -DSS_ICON_ART_DIR=${{github.workspace}}/icon-art \
+          -DSS_REQUIRE_ICON_ART=${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && 'ON' || 'OFF' }} \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
           -DSS_ALLOC_STATS=ON \
@@ -1005,6 +1028,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
+          -DSS_ICON_ART_DIR=${{github.workspace}}/icon-art \
+          -DSS_REQUIRE_ICON_ART=${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && 'ON' || 'OFF' }} \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
           -DSS_ALLOC_STATS=ON \
@@ -1200,9 +1225,13 @@ jobs:
         useLocalCache: true
 
     #
-    # No PGO here: this job only supplies the x86_64 half of the universal binary, and the arm64
-    # runner can only train a profile through emulation, which would describe the emulator
+    # Official builds compile the licensed art; everything else builds from the free tree (spec 0116)
     #
+    - name: '🎨 Fetch licensed icon art'
+      uses: ./.github/actions/fetch-icon-art
+      with:
+        ssh-key: ${{secrets.ICON_ART_DEPLOY_KEY}}
+
     - name: '🚧 Configure with CMake (production, x86_64)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1214,6 +1243,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
+          -DSS_ICON_ART_DIR=${{github.workspace}}/icon-art \
+          -DSS_REQUIRE_ICON_ART=${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && 'ON' || 'OFF' }} \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DCMAKE_BUILD_TYPE=Release \
@@ -1601,9 +1632,13 @@ jobs:
         GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     #
-    # Stage 1 of the two-stage PGO flow: an instrumented Release build whose only job is to emit
-    # profiles for the training runs below
+    # Official builds compile the licensed art; everything else builds from the free tree (spec 0116)
     #
+    - name: '🎨 Fetch licensed icon art'
+      uses: ./.github/actions/fetch-icon-art
+      with:
+        ssh-key: ${{secrets.ICON_ART_DEPLOY_KEY}}
+
     - name: '🚧 Configure with CMake (PGO generate)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -1618,6 +1653,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON `
           -DENABLE_HARDENING=ON `
           -DENABLE_GRPC=ON `
+          -DSS_ICON_ART_DIR=${{github.workspace}}/icon-art `
+          -DSS_REQUIRE_ICON_ART=${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && 'ON' || 'OFF' }} `
           -DENABLE_PGO=ON `
           -DPGO_STAGE=GENERATE `
           -DSS_ALLOC_STATS=ON `
@@ -1687,6 +1724,8 @@ jobs:
           -DPRODUCTION_OPTIMIZATION=ON `
           -DENABLE_HARDENING=ON `
           -DENABLE_GRPC=ON `
+          -DSS_ICON_ART_DIR=${{github.workspace}}/icon-art `
+          -DSS_REQUIRE_ICON_ART=${{ (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && 'ON' || 'OFF' }} `
           -DENABLE_PGO=ON `
           -DPGO_STAGE=USE `
           -DSS_ALLOC_STATS=ON `
@@ -2267,6 +2306,7 @@ jobs:
     - name: '🧬 Verify generated API surfaces'
       run: |
         python3 scripts/registry-verify.py
+        python3 scripts/art-verify.py
         python3 scripts/generate-command-strings.py --check
         python3 scripts/generate-command-safety.py --check
         python3 scripts/generate-property-registry.py --check
