@@ -1,6 +1,6 @@
 # Serial Studio End User License Agreement
 
-Effective date: 2026-08-29
+Effective date: 2026-11-08
 Product: Serial Studio, official precompiled binaries ("Software")
 Licensor: Alex Spataru — alex@serial-studio.com
 
@@ -18,9 +18,8 @@ activated devices stated for the purchased Seat Tier at the time of purchase, on
 infrastructure under the Licensee's control.
 
 - Monthly and yearly plans: the grant runs while the subscription is paid and active.
-- Lifetime plans: the grant is perpetual and irrevocable, except upon termination
-  for the Licensee's uncured material breach of this Agreement.
-  [COUNSEL: perpetual-grant and termination interaction.]
+- Lifetime plans: the grant is perpetual and irrevocable, and ends only under
+  Section 5.
 
 With a valid activation, the Software may be used in commercial, institutional,
 enterprise, and academic environments, in production systems, and in funded research.
@@ -44,9 +43,13 @@ The Licensee may not:
 
 - Redistribute, resell, mirror, or publicly host the Software, directly or embedded
   in a container image, firmware, or product, without a written distribution license.
-- Reverse engineer, decompile, or disassemble the Software, except to the extent a
-  mandatory law permits notwithstanding this clause. [COUNSEL: EU/other mandatory
-  interoperability exceptions wording.]
+- Reverse engineer, decompile, or disassemble the Software, except: (a) to the extent
+  a mandatory law permits notwithstanding this clause, including interoperability
+  rights that cannot be waived; and (b) as section 6 of the GNU Lesser General Public
+  License, Version 2.1 requires for the bundled libusb library: modifying the Software
+  for the Licensee's own use so that it works with a modified version of libusb, and
+  reverse engineering it to debug those modifications. Exception (b) covers no other
+  purpose and does not extend to the Qt libraries included with the Software.
 - Circumvent, disable, or tamper with activation, trial, or license-enforcement
   mechanisms.
 - Remove or alter license notices, branding, or attribution.
@@ -67,8 +70,11 @@ naming and labeling of such builds is governed by TRADEMARKS.md.
 ## 5. Term and termination
 
 This Agreement terminates if the Licensee materially breaches it and fails to cure
-within thirty (30) days of written notice. [COUNSEL: cure mechanics; incurable
-breaches.] Upon termination the Licensee ceases use and deletes installed copies.
+within thirty (30) days of written notice. Circumventing activation, trial, or
+license-enforcement mechanisms, and redistributing the Software without a written
+distribution license, cannot be cured: for those breaches this Agreement terminates on
+written notice. Notice goes to the email address of the purchasing account and takes
+effect when sent. Upon termination the Licensee ceases use and deletes installed copies.
 No refunds are due on termination for breach; the standard refund policy applies
 otherwise. Termination does not affect any rights held under the GPL for
 self-compiled GPL builds.
@@ -78,7 +84,8 @@ self-compiled GPL builds.
 The Software is licensed, not sold. All rights not expressly granted are reserved,
 including in the proprietary source code, activation systems, and the trademarks
 identified in TRADEMARKS.md. Bundled third-party components remain under their own
-licenses (see REUSE.toml and LICENSES/ in the source repository).
+licenses (see the Acknowledgements dialog in the Software, and REUSE.toml and LICENSES/
+in the source repository).
 
 ## 7. Updates and support
 
@@ -97,15 +104,14 @@ TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR IS NOT LIABLE FOR INDIRECT,
 INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF REVENUE,
 PROFITS, OR DATA. Total liability is capped at the fees paid in the twelve (12)
 months preceding the claim. Where law does not permit these limits, liability is
-limited to the minimum extent permitted. [COUNSEL: consumer-jurisdiction limits.]
+limited to the minimum extent permitted.
 
 ## 10. Governing law and disputes
 
 This Agreement is governed by the laws of Mexico; disputes are resolved in the
-courts of Mexico City, or by binding arbitration through the Mexican Arbitration
-Center (CAM) at the Licensor's election. [COUNSEL: add consumer-law carve-outs
-preserving mandatory home-jurisdiction rights and forums for consumers; review
-unilateral arbitration election.]
+courts of Mexico City. Nothing in this Agreement limits any right or forum that the
+mandatory consumer-protection law of a consumer's home jurisdiction does not allow to
+be waived.
 
 ## 11. Entire agreement
 

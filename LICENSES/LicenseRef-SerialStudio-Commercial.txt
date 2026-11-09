@@ -1,7 +1,7 @@
 Serial Studio Commercial Source License
 =======================================
 
-Effective Date: 2026-08-29
+Effective Date: 2026-11-08
 Licensor: Alex Spataru (https://github.com/alex-spataru)
 Contact: alex@serial-studio.com
 
@@ -27,8 +27,10 @@ Agreement (EULA.md).
   Small Business (20), or Enterprise (100), or as stated at purchase.
 
   "Licensee" means the purchasing individual or legal entity registered under the
-  purchasing account. [COUNSEL: define entity scope — affiliates, contractors
-  working on Licensee systems, and successor entities.]
+  purchasing account. Contractors working for the Licensee on systems it controls
+  act under the Licensee's license and count toward its Seat Tier. Affiliates need
+  their own license. A successor to all or substantially all of the Licensee's
+  business takes over this License on written notice to the Licensor.
 
 2. Grant
 --------
@@ -41,15 +43,13 @@ non-transferable, worldwide license to:
   b. Use the resulting Pro Builds for any internal purpose, commercial use
      included, on up to the number of devices in the Licensee's Seat Tier.
   c. Modify the Pro Modules for the Licensee's internal use, and use Pro Builds
-     containing such modifications within the same Seat Tier limits.
-     [COUNSEL: confirm internal-modification grant scope and whether modified
-     Pro Builds affect support obligations.]
+     containing such modifications within the same Seat Tier limits. The Licensor
+     provides no support for modified Pro Builds.
   d. Run Pro Builds on physical, virtual, cloud, or containerized infrastructure
      under the Licensee's control.
 
-Lifetime licenses: the rights in this Section 2 are perpetual and irrevocable
-except upon termination for the Licensee's uncured material breach.
-[COUNSEL: perpetual-grant wording and its interaction with Section 6.]
+Lifetime licenses: the rights in this Section 2 are perpetual and irrevocable,
+and end only under Section 6.
 
 3. What this License does not grant
 -----------------------------------
@@ -81,15 +81,18 @@ IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
 NON-INFRINGEMENT. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR IS NOT
 LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES.
 The Licensor's total liability under this License is capped at the license fees
-paid by the Licensee in the twelve (12) months preceding the claim.
-[COUNSEL: liability cap and disclaimer enforceability per jurisdiction.]
+paid by the Licensee in the twelve (12) months preceding the claim. Where law does
+not permit these limits, liability is limited to the minimum extent permitted.
 
 6. Term and termination
 -----------------------
 
 This License runs for the License Term. It terminates if the Licensee materially
 breaches it and fails to cure within thirty (30) days of written notice.
-[COUNSEL: cure-period mechanics; whether specific breaches are incurable.]
+Circumventing license validation in Pro Builds, and conveying the Pro Modules or a
+Pro Build to a third party, cannot be cured: for those breaches this License
+terminates on written notice. Notice goes to the email address of the purchasing
+account and takes effect when sent.
 Upon termination, the Licensee ceases use of the Pro Modules and Pro Builds and
 deletes compiled Pro Builds. Termination of this License does not affect any
 rights the Licensee holds under the GPL for GPL builds.
@@ -98,9 +101,9 @@ rights the Licensee holds under the GPL for GPL builds.
 ----------------
 
 This License is governed by the laws of Mexico; disputes are resolved in the
-courts of Mexico City. [COUNSEL: add mandatory consumer-law carve-outs for
-consumer purchasers in their home jurisdictions; confirm forum clause
-enforceability against foreign licensees.]
+courts of Mexico City. Nothing in this License limits any right or forum that the
+mandatory consumer-protection law of a consumer's home jurisdiction does not allow
+to be waived.
 
 8. Entire agreement
 -------------------
