@@ -1257,6 +1257,18 @@ jobs:
         path: ${{env.EXECUTABLE}}-x86_64
         retention-days: 1
 
+    #
+    # libusb ships as a shared library built once per architecture; the merge job lipos this slice
+    # into the arm64 copy inside the deployed bundle
+    #
+    - name: '📤 Upload artifact: x86_64 libusb'
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: macos-intel-frameworks
+        path: ${{github.workspace}}/x86_64-stage/${{env.EXECUTABLE}}.app/Contents/Frameworks/libusb-1.0.dylib
+        if-no-files-found: error
+        retention-days: 1
+
     - name: '📤 Upload artifact: symbols (macOS x86_64)'
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
@@ -1309,6 +1321,15 @@ jobs:
         path: ./intel-slice
 
     #
+    # The x86_64 libusb the dynamic-library merge below lipos into the arm64 copy
+    #
+    - name: '📥 Download x86_64 libusb'
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      with:
+        name: macos-intel-frameworks
+        path: ./intel-frameworks
+
+    #
     # Unpacks the bundle the lipo step edits in place
     #
     - name: '🗜 Unpack deployed .app'
@@ -1334,8 +1355,8 @@ jobs:
     # library failed to load on Intel. dlopen failing at runtime is the only symptom: the build,
     # the signature and the notarisation all pass. Qt's own bundled dylibs (the FFmpeg set behind
     # Qt Multimedia) ship fat from the online installer, so a library already carrying both
-    # slices only needs the assertion; the merge branch exists for a future arm64-only dependency
-    # and expects the intel job to publish a matching slice under intel-frameworks/.
+    # slices only needs the assertion. libusb is built per architecture and takes the merge branch,
+    # with the matching slice build-macos-intel publishes under intel-frameworks/.
     #
     - name: '🔗 Lipo bundled dynamic libraries'
       run: |
@@ -2044,6 +2065,16 @@ jobs:
           merge-multiple: true
 
       #
+      # libusb is LGPL-2.1 and the Pro binaries carry it as a shared library, so its source is
+      # offered from the same release page as those binaries. The hash pins upstream's own archive
+      #
+      - name: '📥 Download libusb source'
+        run: |
+          curl -fsSL --retry 5 --retry-all-errors -o artifacts/libusb-1.0.30.tar.bz2 \
+            https://github.com/libusb/libusb/releases/download/v1.0.30/libusb-1.0.30.tar.bz2
+          echo "fea36f34f9156400209595e300840767ab1a385ede1dc7ee893015aea9c6dbaf  artifacts/libusb-1.0.30.tar.bz2" | sha256sum -c -
+
+      #
       # The continuous release is recreated from scratch on every run; deleting the tag with it
       # keeps the release page from accumulating stale assets
       #
@@ -2078,6 +2109,7 @@ jobs:
             artifacts/*.dmg
             artifacts/*.msi
             artifacts/*.zip
+            artifacts/libusb-*.tar.bz2
 
 #---------------------------------------------------------------------------------------------------
 # Static analysis (fail-fast, no build)
