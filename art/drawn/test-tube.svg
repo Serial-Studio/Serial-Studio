@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".36"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".35" stop-color="#64baff" stop-opacity=".22"/><stop offset=".7" stop-color="#64baff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity=".42"/></linearGradient>
+<linearGradient id="l" gradientUnits="userSpaceOnUse" x1="0" y1="18" x2="0" y2="41"><stop offset="0" stop-color="#9bdb4d"/><stop offset=".55" stop-color="#68b723"/><stop offset="1" stop-color="#3a9104"/></linearGradient>
+<radialGradient id="c" cx=".5" cy=".6" r=".55"><stop offset="0" stop-color="#ffe16b" stop-opacity=".55"/><stop offset="1" stop-color="#ffe16b" stop-opacity="0"/></radialGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="e" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffe16b"/><stop offset=".5" stop-color="#9bdb4d"/><stop offset="1" stop-color="#68b723"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.6" rx="13" ry="2.7" fill="url(#s)"/>
+<path d="M14.5,7 V33 A9.5,9.5 0 0 0 33.5,33 V7 Z" fill="url(#g)" stroke="#485a6c" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M16,18 V33 A8,8 0 0 0 32,33 V18 Z" fill="url(#l)"/>
+<ellipse cx="24" cy="30" rx="8" ry="11" fill="url(#c)"/>
+<ellipse cx="24" cy="18" rx="8" ry="2.2" fill="url(#e)" stroke="#3a9104" stroke-opacity=".5"/>
+<g fill="#fff" fill-opacity=".6">
+<circle cx="21" cy="30" r="1.5"/>
+<circle cx="27" cy="34" r="2"/>
+<circle cx="26.5" cy="25.5" r="1.1"/>
+</g>
+<path d="M17.6,9 V33 C17.6,36.5 19.8,39.2 22.6,40" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>
+<path d="M31.5,9 V33" fill="none" stroke="#fff" stroke-opacity=".4"/>
+<rect x="12.5" y="3.5" width="23" height="4.5" rx="2.25" fill="url(#r)" stroke="#485a6c" stroke-opacity=".65"/>
+<path d="M14,4.5 H34" fill="none" stroke="#fff" stroke-opacity=".8"/>
+</svg>

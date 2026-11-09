@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <radialGradient id="sh"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="pol" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8b8d8f"/><stop offset=".35" stop-color="#fafafa"/><stop offset="1" stop-color="#7e8082"/></linearGradient>
+    <linearGradient id="org" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="5" y2="27"><stop offset="0" stop-color="#ffa154"/><stop offset=".55" stop-color="#f37329"/><stop offset="1" stop-color="#cc3b02"/></linearGradient>
+    <linearGradient id="wht" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="5" y2="27"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#ececec"/><stop offset="1" stop-color="#b8b9bb"/></linearGradient>
+    <linearGradient id="bas" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#95a3ab"/><stop offset="1" stop-color="#485a6c"/></linearGradient>
+    <linearGradient id="fin" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffe16b"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+    <linearGradient id="inn" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6b2a08"/><stop offset="1" stop-color="#b85a20"/></linearGradient>
+    <linearGradient id="hi" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="5" y2="27"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+  </defs>
+  <ellipse cx="15" cy="44.5" rx="13" ry="2.4" fill="url(#sh)"/>
+  <rect x="6.5" y="4" width="4" height="38" fill="url(#pol)" stroke="#6e7072" stroke-opacity=".7"/>
+  <path d="M4.5 44.5l1-3.5h6l1 3.5z" fill="url(#bas)" stroke="#2c3b47" stroke-opacity=".65" stroke-linejoin="round"/>
+  <circle cx="8.5" cy="3.8" r="2.3" fill="url(#fin)" stroke="#a06a08" stroke-opacity=".7"/>
+  <path d="M10.5 7h4M10.5 25h4" fill="none" stroke="#6e7072" stroke-width="1.4"/>
+  <ellipse cx="14.5" cy="15.5" rx="3" ry="10" fill="url(#inn)" stroke="#6b2a08" stroke-opacity=".65"/>
+  <path d="M14.5 5.5L21 7.3V24.3L14.5 25.5C16.8 22 16.8 9 14.5 5.5z" fill="url(#org)"/>
+  <path d="M21 7.3L27.5 9.1V23.8L21 24.3C23 21 23 11 21 7.3z" fill="url(#wht)"/>
+  <path d="M27.5 9.1L34 10.9V23.4L27.5 23.8C29.3 21 29.3 12 27.5 9.1z" fill="url(#org)"/>
+  <path d="M34 10.9L40 12.7V23.1L34 23.4C35.6 21 35.6 13.2 34 10.9z" fill="url(#wht)"/>
+  <path d="M40 12.7L45 14.4 44.4 22.7 40 23.1C41.3 21 41.3 15 40 12.7z" fill="url(#org)"/>
+  <path d="M14.5 5.5L45 14.4 44.4 22.7 14.5 25.5" fill="none" stroke="#a03510" stroke-opacity=".65" stroke-linejoin="round"/>
+  <path d="M16.5 7.1L43.5 15.2" fill="none" stroke="url(#hi)"/>
+  <ellipse cx="14.5" cy="15.5" rx="3" ry="10" fill="none" stroke="#d4d4d4" stroke-width="1.5"/>
+</svg>

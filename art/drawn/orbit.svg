@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".36"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<radialGradient id="p" cx=".38" cy=".28" r=".85"><stop offset="0" stop-color="#cd9ef7"/><stop offset=".55" stop-color="#a56de2"/><stop offset="1" stop-color="#7239b3"/></radialGradient>
+<linearGradient id="r" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="33"><stop offset="0" stop-color="#ffe16b"/><stop offset=".55" stop-color="#f9c440"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".7" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<radialGradient id="m" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#43d6b5"/><stop offset=".6" stop-color="#28bca3"/><stop offset="1" stop-color="#0e9a83"/></radialGradient>
+</defs>
+<ellipse cx="24" cy="43.5" rx="15" ry="2.8" fill="url(#s)"/>
+<g transform="rotate(-18 24 23)">
+<g fill="none">
+<path d="M4,23 A20,6.5 0 0 1 44,23" stroke="#d48e15" stroke-opacity=".65" stroke-width="4.4" stroke-linecap="round"/>
+<path d="M4,23 A20,6.5 0 0 1 44,23" stroke="url(#r)" stroke-width="3"/>
+<path d="M5,22 A19.5,5.5 0 0 1 43,22" stroke="#fff" stroke-opacity=".4" stroke-width=".9"/>
+</g>
+<circle cx="24" cy="23" r="14" fill="url(#p)" stroke="#7239b3" stroke-opacity=".65"/>
+<path d="M13.13,15 Q24,18.5 34.87,15 L36.54,18 Q24,21.5 11.46,18 Z" fill="#fff" fill-opacity=".16"/>
+<path d="M10.65,21 Q24,24.5 37.35,21 L37.49,23.5 Q24,27 10.51,23.5 Z" fill="#7239b3" fill-opacity=".35"/>
+<path d="M11.5,28 H36.5 L33.6,32.5 Q24,35.5 14.4,32.5 Z" fill="#000" fill-opacity=".22"/>
+<circle cx="24" cy="23" r="13" fill="none" stroke="url(#h)"/>
+<ellipse cx="18.5" cy="14.2" rx="4.6" ry="2.4" fill="#fff" fill-opacity=".3"/>
+<g fill="none">
+<path d="M4,23 A20,6.5 0 0 0 44,23" stroke="#d48e15" stroke-opacity=".65" stroke-width="4.4" stroke-linecap="round"/>
+<path d="M4,23 A20,6.5 0 0 0 44,23" stroke="url(#r)" stroke-width="3" stroke-linecap="round"/>
+<path d="M5,24 A19.5,5.5 0 0 0 43,24" stroke="#fff" stroke-opacity=".45" stroke-width=".9"/>
+</g>
+<circle cx="40" cy="27" r="3.5" fill="url(#m)" stroke="#0e9a83" stroke-opacity=".65"/>
+<circle cx="39" cy="25.9" r="1.1" fill="#fff" fill-opacity=".8"/>
+</g>
+</svg>

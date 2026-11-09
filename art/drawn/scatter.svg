@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000000" stop-opacity=".42"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
+<linearGradient id="r" gradientUnits="userSpaceOnUse" x1="0" y1="4" x2="0" y2="44"><stop offset="0" stop-color="#fafafa"/><stop offset=".6" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa154"/><stop offset=".55" stop-color="#f37329"/><stop offset="1" stop-color="#cc3b02"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".85"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44" rx="22" ry="2.6" fill="url(#s)"/>
+<path d="M6.5,4.5 H7.5 A2,2 0 0 1 9.5,6.5 V38.5 H42.5 A2,2 0 0 1 44.5,40.5 V41.5 A2,2 0 0 1 42.5,43.5 H6.5 A2,2 0 0 1 4.5,41.5 V6.5 A2,2 0 0 1 6.5,4.5 Z" fill="url(#r)" stroke="#485a6c" stroke-opacity=".65"/>
+<path d="M5.5,41 V6.5 A1,1 0 0 1 6.5,5.5 H7.5 A1,1 0 0 1 8.5,6.5 V39.5 H42.5 A1,1 0 0 1 43.5,40.5" fill="none" stroke="#ffffff" stroke-opacity=".7"/>
+<g fill="url(#b)" stroke="#0d52bf" stroke-opacity=".75">
+<circle cx="16" cy="31.5" r="4.5"/><circle cx="29" cy="31" r="4.5"/><circle cx="38.5" cy="21.5" r="4.5"/>
+</g>
+<g fill="url(#o)" stroke="#cc3b02" stroke-opacity=".75">
+<circle cx="20.5" cy="19.5" r="4.5"/><circle cx="31" cy="12" r="4.5"/><circle cx="41" cy="7.5" r="3.8"/>
+</g>
+<g fill="url(#h)">
+<ellipse cx="16" cy="29.4" rx="2.9" ry="1.8"/><ellipse cx="29" cy="28.9" rx="2.9" ry="1.8"/><ellipse cx="38.5" cy="19.4" rx="2.9" ry="1.8"/>
+<ellipse cx="20.5" cy="17.4" rx="2.9" ry="1.8"/><ellipse cx="31" cy="9.9" rx="2.9" ry="1.8"/><ellipse cx="41" cy="5.7" rx="2.4" ry="1.5"/>
+</g>
+</svg>

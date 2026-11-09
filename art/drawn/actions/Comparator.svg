@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0a6"/><stop offset=".45" stop-color="#f9c440"/><stop offset=".55" stop-color="#ebb030"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#d48e15"/><stop offset=".4" stop-color="#ffe16b"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+<radialGradient id="k" cx=".4" cy=".3" r=".8"><stop stop-color="#fff0a6"/><stop offset=".5" stop-color="#f9c440"/><stop offset="1" stop-color="#d48e15"/></radialGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44.5" rx="18" ry="2.6" fill="url(#s)"/>
+<path d="M13.5,43.5C13.5,40.5 18,38.5 24,38.5C30,38.5 34.5,40.5 34.5,43.5Z" fill="url(#m)" stroke="#ad5f00" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M14.7,42.5C15,40.8 19,39.5 24,39.5C29,39.5 33,40.8 33.3,42.5" fill="none" stroke="#fff" stroke-opacity=".4"/>
+<rect x="21.5" y="9.5" width="5" height="30" fill="url(#p)" stroke="#ad5f00" stroke-opacity=".65"/>
+<path d="M11,13 4.5,29M11,13 17.5,29M37,13 30.5,29M37,13 43.5,29" fill="none" stroke="#d48e15" stroke-width="1.3"/>
+<path d="M3.5,29.5H18.5C18.5,34 15,36.5 11,36.5C7,36.5 3.5,34 3.5,29.5Z" fill="url(#m)" stroke="#ad5f00" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M5,31.5C5.9,34 8.2,35.5 11,35.5C13.8,35.5 16.1,34 17,31.5" fill="none" stroke="#fff" stroke-opacity=".38"/>
+<ellipse cx="11" cy="29.5" rx="7.5" ry="1.6" fill="#d48e15" stroke="#ad5f00" stroke-opacity=".65"/>
+<path d="M29.5,29.5H44.5C44.5,34 41,36.5 37,36.5C33,36.5 29.5,34 29.5,29.5Z" fill="url(#m)" stroke="#ad5f00" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M31,31.5C31.9,34 34.2,35.5 37,35.5C39.8,35.5 42.1,34 43,31.5" fill="none" stroke="#fff" stroke-opacity=".38"/>
+<ellipse cx="37" cy="29.5" rx="7.5" ry="1.6" fill="#d48e15" stroke="#ad5f00" stroke-opacity=".65"/>
+<rect x="4.5" y="9.5" width="39" height="5" rx="2.5" fill="url(#m)" stroke="#ad5f00" stroke-opacity=".65"/>
+<rect x="5.5" y="10.5" width="37" height="3" rx="1.5" fill="none" stroke="url(#h)"/>
+<circle cx="24" cy="8" r="4" fill="url(#k)" stroke="#ad5f00" stroke-opacity=".65"/>
+</svg>

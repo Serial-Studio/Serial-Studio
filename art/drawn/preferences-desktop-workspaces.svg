@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f4f4f4"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9bdb4d"/><stop offset="1" stop-color="#3a9104"/></linearGradient>
+<linearGradient id="o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa154"/><stop offset="1" stop-color="#cc3b02"/></linearGradient>
+<linearGradient id="v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cd9ef7"/><stop offset="1" stop-color="#7239b3"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.6" rx="21.5" ry="3" fill="url(#s)"/>
+<rect x="3.5" y="7.5" width="18" height="16" rx="2" fill="url(#p)" stroke="#485a6c" stroke-opacity=".65"/>
+<path d="M5.5,7.5 H19.5 Q21.5,7.5 21.5,9.5 V14 H3.5 V9.5 Q3.5,7.5 5.5,7.5 Z" fill="url(#b)" stroke="#0d52bf" stroke-opacity=".7"/>
+<path d="M5.5,8.5 H19.5" stroke="#fff" stroke-opacity=".5"/>
+<rect x="6.5" y="17" width="12" height="1.7" rx=".8" fill="#abacae"/>
+<rect x="6.5" y="20.3" width="7.5" height="1.7" rx=".8" fill="#abacae"/>
+<rect x="25.5" y="4.5" width="18" height="16" rx="2" fill="url(#p)" stroke="#485a6c" stroke-opacity=".65"/>
+<path d="M27.5,4.5 H41.5 Q43.5,4.5 43.5,6.5 V11 H25.5 V6.5 Q25.5,4.5 27.5,4.5 Z" fill="url(#g)" stroke="#3a9104" stroke-opacity=".7"/>
+<path d="M27.5,5.5 H41.5" stroke="#fff" stroke-opacity=".5"/>
+<rect x="28.5" y="14" width="12" height="1.7" rx=".8" fill="#abacae"/>
+<rect x="28.5" y="17.3" width="7.5" height="1.7" rx=".8" fill="#abacae"/>
+<rect x="5.5" y="26.5" width="18" height="16" rx="2" fill="url(#p)" stroke="#485a6c" stroke-opacity=".65"/>
+<path d="M7.5,26.5 H21.5 Q23.5,26.5 23.5,28.5 V33 H5.5 V28.5 Q5.5,26.5 7.5,26.5 Z" fill="url(#o)" stroke="#a83200" stroke-opacity=".7"/>
+<path d="M7.5,27.5 H21.5" stroke="#fff" stroke-opacity=".5"/>
+<rect x="8.5" y="36" width="12" height="1.7" rx=".8" fill="#abacae"/>
+<rect x="8.5" y="39.3" width="7.5" height="1.7" rx=".8" fill="#abacae"/>
+<rect x="27.5" y="23.5" width="18" height="16" rx="2" fill="url(#p)" stroke="#485a6c" stroke-opacity=".65"/>
+<path d="M29.5,23.5 H43.5 Q45.5,23.5 45.5,25.5 V30 H27.5 V25.5 Q27.5,23.5 29.5,23.5 Z" fill="url(#v)" stroke="#5a2a94" stroke-opacity=".7"/>
+<path d="M29.5,24.5 H43.5" stroke="#fff" stroke-opacity=".5"/>
+<rect x="30.5" y="33" width="12" height="1.7" rx=".8" fill="#abacae"/>
+<rect x="30.5" y="36.3" width="7.5" height="1.7" rx=".8" fill="#abacae"/>
+</svg>

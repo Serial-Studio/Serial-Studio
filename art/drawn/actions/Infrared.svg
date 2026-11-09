@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <radialGradient id="sh"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="dom" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#cd9ef7"/><stop offset=".55" stop-color="#7239b3"/><stop offset="1" stop-color="#4a2a8a"/></linearGradient>
+    <linearGradient id="shn" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".3" stop-color="#fff" stop-opacity=".28"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".28"/></linearGradient>
+    <radialGradient id="die"><stop offset="0" stop-color="#fff0e0"/><stop offset=".35" stop-color="#ff8a70"/><stop offset=".7" stop-color="#ed5353" stop-opacity=".6"/><stop offset="1" stop-color="#ed5353" stop-opacity="0"/></radialGradient>
+    <linearGradient id="flg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#a56de2"/><stop offset="1" stop-color="#4a2a8a"/></linearGradient>
+    <linearGradient id="ld" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#9a9c9e"/><stop offset=".35" stop-color="#fafafa"/><stop offset="1" stop-color="#8b8d8f"/></linearGradient>
+    <linearGradient id="wav" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="3" y2="15"><stop offset="0" stop-color="#ed5353"/><stop offset="1" stop-color="#c6262e"/></linearGradient>
+    <linearGradient id="hi" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="15" y2="34"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+  </defs>
+  <ellipse cx="24" cy="44.5" rx="11" ry="2.4" fill="url(#sh)"/>
+  <rect x="19" y="36" width="3" height="8.5" rx=".5" fill="url(#ld)" stroke="#6e7072" stroke-opacity=".7"/>
+  <rect x="26" y="36" width="3" height="6.5" rx=".5" fill="url(#ld)" stroke="#6e7072" stroke-opacity=".7"/>
+  <rect x="15.5" y="33.5" width="17" height="3" rx=".8" fill="url(#flg)" stroke="#3b2070" stroke-opacity=".65"/>
+  <path d="M16.5 34.5V21.5a7.5 7.5 0 0 1 15 0v13z" fill="url(#dom)" stroke="#3b2070" stroke-opacity=".65" stroke-linejoin="round"/>
+  <path d="M16.5 34.5V21.5a7.5 7.5 0 0 1 15 0v13z" fill="url(#shn)"/>
+  <path d="M20.2 34v-5.5h2.2V34zM25.6 34v-5.5c0-1.2 1-2 2.2-2v7.5z" fill="#2c1a55" fill-opacity=".55"/>
+  <circle cx="24" cy="23" r="6.5" fill="url(#die)"/>
+  <path d="M17.5 33.5V21.5a6.5 6.5 0 0 1 13 0v12" fill="none" stroke="url(#hi)"/>
+  <path d="M19.6 28V21.5a4.4 4.4 0 0 1 2.7-4" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M16.34 13.57A10 10 0 0 1 31.66 13.57" fill="none" stroke="#a10705" stroke-opacity=".62" stroke-width="4.4" stroke-linecap="round"/>
+  <path d="M16.34 13.57A10 10 0 0 1 31.66 13.57" fill="none" stroke="url(#wav)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M12.51 10.36A15 15 0 0 1 35.49 10.36" fill="none" stroke="#a10705" stroke-opacity=".62" stroke-width="4.4" stroke-linecap="round"/>
+  <path d="M12.51 10.36A15 15 0 0 1 35.49 10.36" fill="none" stroke="url(#wav)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M15.8 13.12A10.7 10.7 0 0 1 32.2 13.12M11.97 9.91A15.7 15.7 0 0 1 36.03 9.91" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".9" stroke-linecap="round"/>
+</svg>

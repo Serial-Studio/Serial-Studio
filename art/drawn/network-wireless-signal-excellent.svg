@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="a" gradientUnits="userSpaceOnUse" x1="0" y1="7" x2="0" y2="20"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="b" gradientUnits="userSpaceOnUse" x1="0" y1="16" x2="0" y2="27"><stop offset="0" stop-color="#43d6b5"/><stop offset=".55" stop-color="#28bca3"/><stop offset="1" stop-color="#0e9a83"/></linearGradient>
+<linearGradient id="c" gradientUnits="userSpaceOnUse" x1="0" y1="25" x2="0" y2="34"><stop offset="0" stop-color="#9bdb4d"/><stop offset=".55" stop-color="#68b723"/><stop offset="1" stop-color="#3a9104"/></linearGradient>
+<radialGradient id="o" cx=".4" cy=".32" r=".72"><stop offset="0" stop-color="#ffd2a3"/><stop offset=".45" stop-color="#ff8a3c"/><stop offset="1" stop-color="#cc3b02"/></radialGradient>
+</defs>
+<ellipse cx="24" cy="44.2" rx="13" ry="2.4" fill="url(#s)"/>
+<g fill="none" stroke-linecap="round">
+<path d="M6.15,16.15 A29,29 0 0 1 41.85,16.15" stroke="#0d52bf" stroke-opacity=".65" stroke-width="6.2"/>
+<path d="M6.15,16.15 A29,29 0 0 1 41.85,16.15" stroke="url(#a)" stroke-width="5"/>
+<path d="M6.89,13.63 A30.6,30.6 0 0 1 41.11,13.63" stroke="#fff" stroke-opacity=".4"/>
+<path d="M11.7,23.24 A20,20 0 0 1 36.3,23.24" stroke="#0e9a83" stroke-opacity=".65" stroke-width="6.2"/>
+<path d="M11.7,23.24 A20,20 0 0 1 36.3,23.24" stroke="url(#b)" stroke-width="5"/>
+<path d="M11.92,21.09 A21.6,21.6 0 0 1 36.08,21.09" stroke="#fff" stroke-opacity=".4"/>
+<path d="M17.23,30.33 A11,11 0 0 1 30.77,30.33" stroke="#3a9104" stroke-opacity=".65" stroke-width="6.2"/>
+<path d="M17.23,30.33 A11,11 0 0 1 30.77,30.33" stroke="url(#c)" stroke-width="5"/>
+<path d="M16.95,28.55 A12.6,12.6 0 0 1 31.05,28.55" stroke="#fff" stroke-opacity=".4"/>
+</g>
+<circle cx="24" cy="39" r="4.5" fill="url(#o)" stroke="#a83200" stroke-opacity=".65"/>
+<ellipse cx="22.6" cy="37.3" rx="1.4" ry="1" fill="#fff" fill-opacity=".85"/>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="w" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e3e6e8"/><stop offset=".32" stop-color="#fafafa"/><stop offset=".52" stop-color="#d4d4d4"/><stop offset=".72" stop-color="#95a3ab"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="k" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#fafafa"/><stop offset=".5" stop-color="#d4d4d4"/><stop offset="1" stop-color="#7f8c95"/></linearGradient>
+<linearGradient id="r" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#ed5353"/><stop offset=".5" stop-color="#c6262e"/><stop offset="1" stop-color="#a10705"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.6" rx="20" ry="3" fill="url(#s)"/>
+<g transform="rotate(45 24 23)">
+<path d="M20.6,-0.3 V5.1 L22.4,8.3 H25.6 L27.4,5.1 V-0.3 A8.5,8.5 0 0 1 27.5,15.3 L27.8,44 A3.8,3.8 0 0 1 20.2,44 L20.5,15.3 A8.5,8.5 0 0 1 20.6,-0.3 Z M24,43 A1.5,1.5 0 1 0 24,46 A1.5,1.5 0 1 0 24,43 Z" fill="url(#w)" fill-rule="evenodd" stroke="#485a6c" stroke-opacity=".7" stroke-linejoin="round"/>
+<rect x="22.1" y="18.5" width="3.8" height="21" rx="1.9" fill="#485a6c" fill-opacity=".32"/>
+<path d="M21.6,0.8 V4.8 M21.5,16.2 L21.2,43" fill="none" stroke="#fff" stroke-opacity=".6"/>
+</g>
+<g transform="rotate(-45 24 23)">
+<rect x="20" y="19.8" width="2" height="6.4" fill="#000" fill-opacity=".22"/>
+<path d="M22,7 L20.7,2.5 L22.2,-1.5 H25.8 L27.3,2.5 L26,7 V27 H22 Z" fill="url(#k)" stroke="#485a6c" stroke-opacity=".7" stroke-linejoin="round"/>
+<path d="M25.2,1 V26" fill="none" stroke="#fff" stroke-opacity=".55"/>
+<rect x="20.5" y="24.5" width="7" height="4" rx=".8" fill="url(#k)" stroke="#485a6c" stroke-opacity=".7"/>
+<path d="M20,28.5 H28 C29.2,28.5 30,29.5 30,31 C30,35 29.2,37.5 29.2,40.5 C29.2,43 30,43.8 30,45 C30,46.8 28.5,47.5 26.5,47.5 H21.5 C19.5,47.5 18,46.8 18,45 C18,43.8 18.8,43 18.8,40.5 C18.8,37.5 18,35 18,31 C18,29.5 18.8,28.5 20,28.5 Z" fill="url(#r)" stroke="#a10705" stroke-opacity=".7" stroke-linejoin="round"/>
+<path d="M21,31.5 V44.5 M24,31.5 V45 M27,31.5 V44.5" fill="none" stroke="#7a0503" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M22.1,31.5 V44.5 M25.1,31.5 V45 M28.1,31.5 V44" fill="none" stroke="#fff" stroke-opacity=".35" stroke-linecap="round"/>
+</g>
+</svg>

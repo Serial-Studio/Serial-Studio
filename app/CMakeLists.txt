@@ -768,7 +768,8 @@ endif()
 #
 # Exactly one art tree is compiled (spec 0116): the private licensed checkout when there is one,
 # the free tree otherwise. A sibling Icons folder is picked up for local work, and
-# SS_REQUIRE_ICON_ART stops a release from silently shipping the free tree.
+# SS_REQUIRE_ICON_ART stops a release from silently shipping the free tree. The Basic icon theme,
+# drawn for this project, is compiled into every build.
 #
 if(NOT SS_ICON_ART_DIR AND EXISTS "${PROJECT_ROOT_DIR}/../Icons/art.qrc")
   get_filename_component(SS_ICON_ART_DIR "${PROJECT_ROOT_DIR}/../Icons" ABSOLUTE)
@@ -789,6 +790,7 @@ endif()
 
 qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
 qt_add_resources(ART_RCC "${SS_ART_QRC}")
+qt_add_resources(BASIC_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/basic.qrc)
 qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #---------------------------------------------------------------------------------------------------
@@ -894,6 +896,7 @@ qt_add_executable(
   ${QML_RCC}
   ${RES_RCC}
   ${ART_RCC}
+  ${BASIC_RCC}
   ${SRC_RCC}
   ${QTR_RCC}
   ${QT_RCC_TRANSLATIONS}
@@ -1222,7 +1225,7 @@ if(SS_UNITY_BUILD)
     target_compile_options(${PROJECT_EXECUTABLE} PRIVATE /bigobj)
   endif()
 
-  set_source_files_properties(${RES_RCC} ${ART_RCC} ${SRC_RCC} ${QTR_RCC}
+  set_source_files_properties(${RES_RCC} ${ART_RCC} ${BASIC_RCC} ${SRC_RCC} ${QTR_RCC}
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
   )
 

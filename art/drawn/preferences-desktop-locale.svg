@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa154"/><stop offset=".55" stop-color="#f37329"/><stop offset="1" stop-color="#cc3b02"/></linearGradient>
+<linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e0e8f2"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
+</defs>
+<ellipse cx="25" cy="43.6" rx="20" ry="3" fill="url(#s)"/>
+<path d="M8.5,5.5 H25.5 C28.3,5.5 30.5,7.7 30.5,10.5 V21.5 C30.5,24.3 28.3,26.5 25.5,26.5 H15.5 L8.5,33 C8,33.5 7.5,33.2 7.5,32.6 V26.4 C5.2,26 3.5,24 3.5,21.5 V10.5 C3.5,7.7 5.7,5.5 8.5,5.5 Z" fill="url(#b)" stroke="#0d52bf" stroke-opacity=".7" stroke-linejoin="round"/>
+<path d="M8.5,6.5 H25.5 C27.7,6.5 29.5,8.3 29.5,10.5 V21.5 C29.5,23.7 27.7,25.5 25.5,25.5 H15.1 L8.5,31.7 V25.5 C6.2,25.3 4.5,23.7 4.5,21.5 V10.5 C4.5,8.3 6.3,6.5 8.5,6.5 Z" fill="none" stroke="url(#h)"/>
+<path d="M11.7,8.5 H15.3 L20,21 H16.6 L15.7,18.2 H11.3 L10.4,21 H7 Z M13.5,12.3 L12.2,15.6 H14.8 Z" fill="url(#l)" fill-rule="evenodd"/>
+<path d="M19.5,26.5 V26 C19.5,22.9 22,20.5 25,20.5 H30.5 V21.5 C30.5,24.3 28.3,26.5 25.5,26.5 Z" fill="#062d6e" fill-opacity=".3"/>
+<path d="M25.5,21.5 H39.5 C42.3,21.5 44.5,23.7 44.5,26.5 V33.5 C44.5,36.1 42.6,38.2 40.5,38.5 V42.6 C40.5,43.2 40,43.5 39.5,43 L33.9,38.5 H25.5 C22.7,38.5 20.5,36.3 20.5,33.5 V26.5 C20.5,23.7 22.7,21.5 25.5,21.5 Z" fill="url(#o)" stroke="#a83200" stroke-opacity=".7" stroke-linejoin="round"/>
+<path d="M25.5,22.5 H39.5 C41.7,22.5 43.5,24.3 43.5,26.5 V33.5 C43.5,35.6 41.8,37.5 39.5,37.5 V41.8 L34.2,37.5 H25.5 C23.3,37.5 21.5,35.7 21.5,33.5 V26.5 C21.5,24.3 23.3,22.5 25.5,22.5 Z" fill="none" stroke="url(#h)"/>
+<path d="M37.8,24.5 V35.5 H34.6 V32.2 H32.8 L30.4,35.5 H26.8 L29.7,31.8 C28.2,31.1 27.4,29.8 27.4,28.3 C27.4,25.9 29.3,24.5 31.9,24.5 Z M34.6,27 H32.3 C31.1,27 30.5,27.5 30.5,28.4 C30.5,29.3 31.1,29.8 32.3,29.8 H34.6 Z" fill="url(#l)" fill-rule="evenodd"/>
+</svg>

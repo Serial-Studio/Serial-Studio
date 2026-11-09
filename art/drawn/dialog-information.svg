@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<radialGradient id="g" cx=".5" cy=".95" r=".55"><stop offset="0" stop-color="#7fd0ff" stop-opacity=".8"/><stop offset="1" stop-color="#7fd0ff" stop-opacity="0"/></radialGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
+<linearGradient id="m" gradientUnits="userSpaceOnUse" x1="0" y1="9" x2="0" y2="38"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#dcebfb"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.8" rx="16" ry="2.8" fill="url(#s)"/>
+<circle cx="24" cy="23" r="19.5" fill="url(#b)" stroke="#083a8c" stroke-opacity=".65"/>
+<circle cx="24" cy="23" r="19" fill="url(#g)"/>
+<circle cx="24" cy="23" r="18.5" fill="none" stroke="url(#h)"/>
+<path d="M9.6,20 C8.8,11.2 15.6,5.4 24,5.4 C32.4,5.4 39.2,11.2 38.4,20 C31.4,13.4 16.6,13.4 9.6,20 Z" fill="url(#t)"/>
+<g fill="#083a8c" fill-opacity=".5" transform="translate(0 1)">
+<circle cx="24" cy="12.6" r="3.6"/>
+<path d="M19.8,19.2 H26.6 C27.2,19.2 27.7,19.7 27.7,20.3 V32.4 H29.4 C30,32.4 30.5,32.9 30.5,33.5 V35.4 C30.5,36 30,36.5 29.4,36.5 H18.6 C18,36.5 17.5,36 17.5,35.4 V33.5 C17.5,32.9 18,32.4 18.6,32.4 H20.4 V23.3 H19.8 C19.2,23.3 18.7,22.8 18.7,22.2 V20.3 C18.7,19.7 19.2,19.2 19.8,19.2 Z"/>
+</g>
+<g fill="url(#m)">
+<circle cx="24" cy="12.6" r="3.6"/>
+<path d="M19.8,19.2 H26.6 C27.2,19.2 27.7,19.7 27.7,20.3 V32.4 H29.4 C30,32.4 30.5,32.9 30.5,33.5 V35.4 C30.5,36 30,36.5 29.4,36.5 H18.6 C18,36.5 17.5,36 17.5,35.4 V33.5 C17.5,32.9 18,32.4 18.6,32.4 H20.4 V23.3 H19.8 C19.2,23.3 18.7,22.8 18.7,22.2 V20.3 C18.7,19.7 19.2,19.2 19.8,19.2 Z"/>
+</g>
+</svg>

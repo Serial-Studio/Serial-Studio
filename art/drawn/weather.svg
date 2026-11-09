@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".36"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<radialGradient id="o" cx=".4" cy=".36" r=".75"><stop offset="0" stop-color="#ffe16b"/><stop offset=".6" stop-color="#f9c440"/><stop offset="1" stop-color="#f37329"/></radialGradient>
+<linearGradient id="y" gradientUnits="userSpaceOnUse" x1="0" y1="3" x2="0" y2="26"><stop offset="0" stop-color="#ffe16b"/><stop offset="1" stop-color="#f9c440"/></linearGradient>
+<linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#ececec"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="h" gradientUnits="userSpaceOnUse" x1="0" y1="18" x2="0" y2="35"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.8" rx="19" ry="2.8" fill="url(#s)"/>
+<g fill="none" stroke-linecap="round">
+<path d="M32,5.6 V3.4 M39.2,8.8 L40.8,7.2 M42.4,16 H44.6 M24.8,8.8 L23.2,7.2 M39.2,23.2 L40.8,24.8" stroke="#cc3b02" stroke-opacity=".65" stroke-width="4"/>
+<path d="M32,5.6 V3.4 M39.2,8.8 L40.8,7.2 M42.4,16 H44.6 M24.8,8.8 L23.2,7.2 M39.2,23.2 L40.8,24.8" stroke="url(#y)" stroke-width="2.6"/>
+</g>
+<circle cx="32" cy="16" r="7.5" fill="url(#o)" stroke="#cc3b02" stroke-opacity=".65"/>
+<path d="M12.5,41.5 C8,41.5 4.5,37.9 4.5,33.5 C4.5,29.3 7.7,25.8 11.9,25.5 C13.3,20.7 17.8,17.5 22.7,17.5 C28.4,17.5 33.2,21.5 34.4,27 C34.9,26.9 35.4,26.9 35.9,26.9 C40.1,26.9 43.5,30.1 43.5,34.2 C43.5,38.3 40.1,41.5 36,41.5 Z" fill="url(#c)" stroke="#667885" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M5.5,33.5 C5.5,29.8 8.3,26.8 12,26.5 L12.7,26.4 C14.1,21.8 18.1,18.5 22.7,18.5 C27.9,18.5 32.3,22.2 33.4,27.2 L33.6,28.2 C34.4,28 35.1,27.9 35.9,27.9 C39.5,27.9 42.5,30.7 42.5,34.2" fill="none" stroke="url(#h)"/>
+</svg>

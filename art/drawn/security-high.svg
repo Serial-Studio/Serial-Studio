@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#d4d4d4"/><stop offset=".62" stop-color="#abacae"/><stop offset=".85" stop-color="#e0e0e2"/><stop offset="1" stop-color="#95a3ab"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".42"/><stop offset="1" stop-color="#fff" stop-opacity=".04"/></linearGradient>
+<linearGradient id="m" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="33"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#dcebfb"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.6" rx="14" ry="2.6" fill="url(#s)"/>
+<path d="M24,3.5 C28.5,6.8 34.5,8.6 41.5,9 V22.5 C41.5,32 34.5,38.5 24,42.5 C13.5,38.5 6.5,32 6.5,22.5 V9 C13.5,8.6 19.5,6.8 24,3.5 Z" fill="url(#k)" stroke="#485a6c" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M24,4.7 C28.3,7.7 34,9.5 40.5,9.95 V22.5 C40.5,31.4 33.9,37.5 24,41.4 C14.1,37.5 7.5,31.4 7.5,22.5 V9.95 C14,9.5 19.7,7.7 24,4.7 Z" fill="none" stroke="url(#h)"/>
+<path d="M24,8.2 C28,10.8 32.8,12.3 37.7,12.7 V22.5 C37.7,29.8 32.4,35 24,38.3 C15.6,35 10.3,29.8 10.3,22.5 V12.7 C15.2,12.3 20,10.8 24,8.2 Z" fill="url(#b)" stroke="#083a8c" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M24,8.8 V37.8 C32.2,34.6 37.2,29.6 37.2,22.5 V13.2 C32.6,12.8 28,11.2 24,8.8 Z" fill="#083a8c" fill-opacity=".22"/>
+<path d="M24,9.4 C28,11.8 32.4,13.3 36.8,13.7 V21 C29,16.6 19,16.6 11.2,21 V13.7 C15.6,13.3 20,11.8 24,9.4 Z" fill="url(#t)"/>
+<path d="M15.6,23.4 L22,29.8 L32.6,16.6" fill="none" stroke="#083a8c" stroke-opacity=".5" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 1)"/>
+<path d="M15.6,23.4 L22,29.8 L32.6,16.6" fill="none" stroke="url(#m)" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

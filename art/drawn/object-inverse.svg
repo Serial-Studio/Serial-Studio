@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<radialGradient id="a" gradientUnits="userSpaceOnUse" cx="16" cy="12" r="29"><stop offset="0" stop-color="#fff"/><stop offset=".42" stop-color="#f4f4f4"/><stop offset=".8" stop-color="#c8cacc"/><stop offset="1" stop-color="#abacae"/></radialGradient>
+<radialGradient id="b" gradientUnits="userSpaceOnUse" cx="32" cy="14" r="26"><stop offset="0" stop-color="#95a3ab"/><stop offset=".45" stop-color="#667885"/><stop offset="1" stop-color="#34424f"/></radialGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.4" rx="17" ry="2.9" fill="url(#s)"/>
+<path d="M33.25,6.98 A18.5,18.5 0 0 0 14.75,39.02 Q28.33,25.5 33.25,6.98 Z" fill="url(#a)"/>
+<path d="M33.25,6.98 A18.5,18.5 0 0 1 14.75,39.02 Q28.33,25.5 33.25,6.98 Z" fill="url(#b)"/>
+<path d="M33.25,6.98 Q28.33,25.5 14.75,39.02" fill="none" stroke="#485a6c" stroke-opacity=".5"/>
+<ellipse cx="34" cy="15" rx="3.8" ry="2.2" transform="rotate(50 34 15)" fill="#fff" fill-opacity=".38"/>
+<circle cx="24" cy="23" r="17.5" fill="none" stroke="url(#h)"/>
+<circle cx="24" cy="23" r="18.5" fill="none" stroke="#2f3d4b" stroke-opacity=".65"/>
+</svg>

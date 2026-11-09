@@ -1,192 +1,192 @@
 kind,key,source,ref,status,tabler,tint
-base,3d-glasses,tabler,stereo-glasses,stand-in,stereo-glasses,#75507b
-base,alpha,tabler,alpha,stand-in,alpha,#3465a4
-base,archive,tango,package-x-generic,final,archive,
-base,area-chart,tabler,chart-area,stand-in,chart-area,#3465a4
-base,at-sign,tabler,at,stand-in,at,#3465a4
-base,audio-file,tango,audio-x-generic,final,file-music,
-base,axis,tabler,axis-x,stand-in,axis-x,#555753
-base,barcode-scanner,tabler,barcode,stand-in,barcode,#555753
-base,bell-off,tabler,bell-off,stand-in,bell-off,#c4a000
-base,binary,tabler,binary,stand-in,binary,#555753
-base,blueprint,tabler,ruler,stand-in,ruler,#3465a4
-base,bluetooth,tabler,bluetooth,stand-in,bluetooth,#3465a4
-base,books,tabler,books,stand-in,books,#ce5c00
-base,braces,tabler,braces,stand-in,braces,#75507b
-base,broom,tango,edit-clear,final,eraser,
-base,brush,tabler,brush,stand-in,brush,#ce5c00
-base,cable,tango,network-wired,stand-in,plug,
-base,camcorder,tango,camera-video,final,video,
-base,card-shield,tabler,shield-check,stand-in,shield-check,#4e9a06
-base,certificate,tango,application-certificate,final,certificate,
-base,check-mark,tabler,check,stand-in,check,#4e9a06
-base,checklist,tabler,checklist,stand-in,checklist,#4e9a06
-base,chevron-down,tango,go-down,final,chevron-down,
-base,chevron-left,tango,go-previous,final,chevron-left,
-base,chevron-right,tango,go-next,final,chevron-right,
-base,chip,tabler,cpu,stand-in,cpu,#4e9a06
-base,circle-down,tango,go-bottom,final,arrow-down-circle,
-base,circle-up,tango,go-top,final,arrow-up-circle,
-base,clipboard,tango,edit-paste,final,clipboard,
-base,clock,tabler,clock,stand-in,clock,#3465a4
-base,clock-arrow,tabler,history,stand-in,history,#3465a4
-base,close-circle,tango,process-stop,final,circle-x,
-base,code-file,tango,text-x-script,final,file-code,
-base,collapse-arrows,tabler,arrows-minimize,stand-in,arrows-minimize,#555753
-base,color-wheel,tango,preferences-desktop-theme,final,palette,
-base,command-window,tango,utilities-terminal,final,terminal-2,
-base,compass,tabler,compass,stand-in,compass,#cc0000
-base,control-panel,tango,preferences-system,stand-in,adjustments,
-base,conveyor,tabler,forklift,stand-in,forklift,#ce5c00
-base,csv-file,tango,x-office-spreadsheet,final,file-type-csv,
-base,cube-front,tabler,cube,stand-in,cube,#3465a4
-base,cube-left,tabler,cube,stand-in,cube,#3465a4
-base,cube-iso,tabler,cube,stand-in,cube,#3465a4
-base,cube-top,tabler,cube,stand-in,cube,#3465a4
-base,curve,tabler,vector-spline,stand-in,vector-spline,#3465a4
-base,dashboard-charts,tabler,layout-dashboard,stand-in,layout-dashboard,#3465a4
-base,data-arrow,tabler,database-import,stand-in,database-import,#3465a4
-base,database,tango,drive-harddisk,stand-in,database,
-base,devices,tango,computer,final,devices,
-base,document-eye,tango,document-print-preview,final,file-search,
-base,document-gear,tango,document-properties,final,file-settings,
-base,document-key,tango,x-office-document+lock,final,file-lock,
-base,document-pencil,tango,x-office-document+pencil,final,file-pencil,
-base,document-pencil2,tango,x-office-document+pencil,final,file-pencil,
-base,document-x,tango,x-office-document+x,final,file-x,
-base,documents,tango,edit-copy,final,files,
-base,engine,tabler,engine,stand-in,engine,#555753
-base,equalizer,tabler,adjustments-horizontal,stand-in,adjustments-horizontal,#3465a4
-base,ethernet,tango,network-wired,final,network,
-base,exclamation,tango,emblem-important,final,exclamation-circle,
-base,expand-arrows,tango,view-fullscreen,final,arrows-maximize,
-base,eye,tabler,eye,stand-in,eye,#3465a4
-base,eye-off,tabler,eye-off,stand-in,eye-off,#555753
-base,field,tabler,forms,stand-in,forms,#3465a4
-base,floppy,tango,media-floppy,final,device-floppy,
-base,floppy-pencil,tango,document-save-as,final,device-floppy,
-base,floppy-warning,tango,document-save+warning,final,device-floppy,
-base,flow-chart,tabler,sitemap,stand-in,sitemap,#3465a4
-base,folder,tango,folder,final,folder,
-base,folder-arrow,tango,folder+arrow,final,folder-share,
-base,folder-upload,tango,folder+arrow-up,final,folder-up,
-base,font,tango,preferences-desktop-font,final,typography,
-base,freeze,tabler,snowflake,stand-in,snowflake,#3465a4
-base,function,tabler,math-function,stand-in,math-function,#75507b
-base,funnel,tabler,filter,stand-in,filter,#ce5c00
-base,gauge,tango,utilities-system-monitor,stand-in,gauge,
-base,gear,tango,emblem-system,final,settings,
-base,globe,tango,internet-web-browser,final,world,
-base,grid-dots,tabler,grid-dots,stand-in,grid-dots,#555753
-base,grid-layout,tabler,layout-grid,stand-in,layout-grid,#3465a4
-base,group-frame,tabler,frame,stand-in,frame,#555753
-base,gyroscope,tabler,rotate-3d,stand-in,rotate-3d,#75507b
-base,hammer,tabler,hammer,stand-in,hammer,#ce5c00
-base,hand,tabler,hand-stop,stand-in,hand-stop,#ce5c00
-base,hex,tabler,hexagon,stand-in,hexagon,#75507b
-base,horizontal-bars,tabler,chart-bar,stand-in,chart-bar,#3465a4
-base,house,tango,go-home,final,home,
-base,id-card,tabler,id,stand-in,id,#3465a4
-base,image,tango,image-x-generic,final,photo,
-base,import-file,tango,document-open,final,file-import,
-base,info-bubble,tango,dialog-information,final,info-circle,
-base,invert,tabler,contrast,stand-in,contrast,#555753
-base,key,tabler,key,stand-in,key,#c4a000
-base,knob,tabler,gauge,stand-in,gauge,#555753
-base,led,tabler,bulb,stand-in,bulb,#c4a000
-base,letter-x,tabler,letter-x,stand-in,letter-x,#3465a4
-base,letter-y,tabler,letter-y,stand-in,letter-y,#3465a4
-base,light-bulb,tabler,bulb,stand-in,bulb,#c4a000
-base,lightning,tabler,bolt,stand-in,bolt,#c4a000
-base,magnifier,tango,system-search,final,search,
-base,map,tabler,map,stand-in,map,#4e9a06
-base,map-pin,tabler,map-pin,stand-in,map-pin,#cc0000
-base,merge-lines,tabler,arrow-merge,stand-in,arrow-merge,#3465a4
-base,meter,tango,utilities-system-monitor,stand-in,gauge,
-base,mf4-file,tango,text-x-generic,stand-in,file,
-base,microphone,tango,audio-input-microphone,final,microphone,
-base,molecule,tabler,atom,stand-in,atom,#75507b
-base,monitor-chart,tango,utilities-system-monitor,final,device-desktop-analytics,
-base,monitor-check,tango,video-display+plus,stand-in,device-desktop-check,
-base,music-folder,tango,folder+arrow,stand-in,music,
-base,nasa,tabler,rocket,stand-in,rocket,#cc0000
-base,network-port,tango,network-wired,final,network,
-base,notes-list,tango,accessories-text-editor,final,notes,
-base,nothing-found,tango,dialog-information,stand-in,mood-empty,
-base,number-doc,tabler,numbers,stand-in,numbers,#3465a4
-base,open-box,tango,package-x-generic,final,package,
-base,orbit,tabler,orbit,stand-in,orbit,#75507b
-base,oscilloscope,tabler,wave-sine,stand-in,wave-sine,#4e9a06
-base,padlock,tango,system-lock-screen,final,lock,
-base,padlock-open,tabler,lock-open,stand-in,lock-open,#c4a000
-base,pause,tango,media-playback-pause,final,player-pause,
-base,pdf,tabler,file-type-pdf,stand-in,file-type-pdf,#cc0000
-base,pi,tabler,math-pi,stand-in,math-pi,#75507b
-base,pictures-folder,tango,image-x-generic,stand-in,photo,
-base,play,tango,media-playback-start,final,player-play,
-base,plc,tabler,cpu-2,stand-in,cpu-2,#555753
-base,plug-connected,tango,network-transmit-receive,final,plug-connected,
-base,plug-disconnected,tango,network-offline,final,plug-connected-x,
-base,polyhedron,tabler,irregular-polyhedron,stand-in,irregular-polyhedron,#75507b
-base,polyline,tabler,chart-line,stand-in,chart-line,#3465a4
-base,pulse-monitor,tabler,heart-rate-monitor,stand-in,heart-rate-monitor,#cc0000
-base,puzzle,tabler,puzzle,stand-in,puzzle,#4e9a06
-base,pylon,tabler,cone,stand-in,cone,#ce5c00
-base,question,tango,help-browser,final,help,
-base,ram,tango,media-flash,stand-in,device-sd-card,
-base,redo-arrow,tango,edit-redo,final,arrow-forward-up,
-base,rename,tabler,pencil,stand-in,pencil,#ce5c00
-base,reset,tango,view-refresh,final,refresh,
-base,return-arrow,tango,edit-undo,final,corner-down-left,
-base,robot,tabler,robot,stand-in,robot,#555753
-base,robot-arm,tabler,robot,stand-in,robot,#555753
-base,router,tango,network-wireless,stand-in,router,
-base,run-dialog,tabler,app-window,stand-in,app-window,#3465a4
-base,scatter,tabler,chart-dots,stand-in,chart-dots,#3465a4
-base,schedule,tango,office-calendar,final,calendar,
-base,scissors,tango,edit-cut,final,scissors,
-base,script-window,tango,text-x-script,final,script,
-base,scroll-gear,tabler,script,stand-in,script,#555753
-base,server,tango,network-server,final,server,
-base,signal,tabler,antenna-bars-5,stand-in,antenna-bars-5,#4e9a06
-base,siren,tabler,urgent,stand-in,urgent,#cc0000
-base,skip-end,tango,media-skip-forward,final,player-skip-forward,
-base,skip-start,tango,media-skip-backward,final,player-skip-back,
-base,slider,tabler,adjustments,stand-in,adjustments,#555753
-base,software-box,tango,package-x-generic,final,package,
-base,speaker,tango,audio-volume-high,final,volume,
-base,speaker-off,tango,audio-volume-muted,final,volume-off,
-base,spectrogram,tabler,chart-histogram,stand-in,chart-histogram,#75507b
-base,split-arrows,tabler,arrows-split,stand-in,arrows-split,#3465a4
-base,square-wave,tabler,wave-square,stand-in,wave-square,#4e9a06
-base,swatches,tango,preferences-desktop-theme,stand-in,palette,
-base,table,tango,x-office-spreadsheet,final,table,
-base,tags,tabler,tag,stand-in,tag,#c4a000
-base,target,tabler,target,stand-in,target,#cc0000
-base,test-tube,tabler,test-pipe,stand-in,test-pipe,#4e9a06
-base,text-cursor,tabler,cursor-text,stand-in,cursor-text,#555753
-base,timer,tabler,stopwatch,stand-in,stopwatch,#3465a4
-base,toggle,tabler,toggle-left,stand-in,toggle-left,#4e9a06
-base,toolbox,tabler,tool,stand-in,tool,#ce5c00
-base,tools,tango,preferences-system,stand-in,tools,
-base,translate,tango,preferences-desktop-locale,final,language,
-base,txt-file,tango,text-x-generic,final,file-type-txt,
-base,usb,tango,drive-removable-media,stand-in,usb,
-base,warning,tango,dialog-warning,final,alert-triangle,
-base,warning-red,tango,dialog-error,final,alert-triangle,
-base,weather,tango,weather-few-clouds,final,cloud,
-base,window-flash,tango,window-new,stand-in,app-window,
-base,window-gear,tango,window-new,stand-in,app-window,
-base,window-minimize,tango,window-new,stand-in,window-minimize,
-base,window-play,tango,window-new,stand-in,app-window,
-base,window-popout,tango,window-new,stand-in,external-link,
-base,window-trash,tango,window-new+x,stand-in,app-window,
-base,window-x,tango,window-new+x,stand-in,browser-x,
-base,windows,tango,preferences-system-windows,final,window,
-base,workspace-grid,tabler,layout-grid,stand-in,layout-grid,#3465a4
-base,wrench,tabler,tool,stand-in,tool,#555753
-base,zoom-in,tabler,zoom-in,stand-in,zoom-in,#3465a4
-base,zoom-out,tabler,zoom-out,stand-in,zoom-out,#3465a4
+base,3d-glasses,drawn,3d-glasses,final,stereo-glasses,
+base,alpha,drawn,alpha,final,alpha,
+base,archive,drawn,package-x-generic,final,archive,
+base,area-chart,drawn,area-chart,final,chart-area,
+base,at-sign,drawn,at-sign,final,at,
+base,audio-file,drawn,audio-x-generic,final,file-music,
+base,axis,drawn,axis,final,axis-x,
+base,barcode-scanner,drawn,barcode-scanner,final,barcode,
+base,bell-off,drawn,notification-disabled,final,bell-off,
+base,binary,drawn,binary,final,binary,
+base,blueprint,drawn,tool-measure,final,ruler,
+base,bluetooth,drawn,bluetooth,final,bluetooth,
+base,books,drawn,books,final,books,
+base,braces,drawn,braces,final,braces,
+base,broom,drawn,edit-clear,final,eraser,
+base,brush,drawn,draw-calligraphic,final,brush,
+base,cable,drawn,ethernet,final,plug,
+base,camcorder,drawn,camera-video,final,video,
+base,card-shield,drawn,security-high,final,shield-check,
+base,certificate,drawn,application-certificate,final,certificate,
+base,check-mark,drawn,process-completed,final,check,
+base,checklist,drawn,checklist,final,checklist,
+base,chevron-down,drawn,go-down,final,chevron-down,
+base,chevron-left,drawn,go-previous,final,chevron-left,
+base,chevron-right,drawn,go-next,final,chevron-right,
+base,chip,drawn,chip,final,cpu,
+base,circle-down,drawn,go-bottom,final,arrow-down-circle,
+base,circle-up,drawn,go-top,final,arrow-up-circle,
+base,clipboard,drawn,edit-paste,final,clipboard,
+base,clock,drawn,preferences-system-time,final,clock,
+base,clock-arrow,drawn,document-open-recent,final,history,
+base,close-circle,drawn,process-stop,final,circle-x,
+base,code-file,drawn,text-x-script,final,file-code,
+base,collapse-arrows,drawn,collapse-arrows,final,arrows-minimize,
+base,color-wheel,drawn,preferences-desktop-theme,final,palette,
+base,command-window,drawn,utilities-terminal,final,terminal-2,
+base,compass,drawn,compass,final,compass,
+base,control-panel,drawn,preferences-system,final,adjustments,
+base,conveyor,drawn,conveyor,final,forklift,
+base,csv-file,drawn,x-office-spreadsheet,final,file-type-csv,
+base,cube-front,drawn,draw-cuboid,final,cube,
+base,cube-left,drawn,draw-cuboid,final,cube,
+base,cube-iso,drawn,draw-cuboid,final,cube,
+base,cube-top,drawn,draw-cuboid,final,cube,
+base,curve,drawn,segment-curve,final,vector-spline,
+base,dashboard-charts,drawn,utilities-system-monitor,final,layout-dashboard,
+base,data-arrow,drawn,document-import,final,database-import,
+base,database,drawn,office-database,final,database,
+base,devices,drawn,computer,final,devices,
+base,document-eye,drawn,document-print-preview,final,file-search,
+base,document-gear,drawn,document-properties,final,file-settings,
+base,document-key,drawn,x-office-document+lock,final,file-lock,
+base,document-pencil,drawn,document-edit,final,file-pencil,
+base,document-pencil2,drawn,document-edit,final,file-pencil,
+base,document-x,drawn,x-office-document+x,final,file-x,
+base,documents,drawn,edit-copy,final,files,
+base,engine,drawn,engine,final,engine,
+base,equalizer,drawn,equalizer,final,adjustments-horizontal,
+base,ethernet,drawn,ethernet,final,network,
+base,exclamation,drawn,dialog-warning,final,exclamation-circle,
+base,expand-arrows,drawn,zoom-fit-best,final,arrows-maximize,
+base,eye,drawn,object-visible,final,eye,
+base,eye-off,drawn,object-hidden,final,eye-off,
+base,field,drawn,field,final,forms,
+base,floppy,drawn,document-save,final,device-floppy,
+base,floppy-pencil,drawn,document-save-as,final,device-floppy,
+base,floppy-warning,drawn,document-save+warning,final,device-floppy,
+base,flow-chart,drawn,flow-chart,final,sitemap,
+base,folder,drawn,folder,final,folder,
+base,folder-arrow,drawn,folder-open,final,folder-share,
+base,folder-upload,drawn,folder+arrow-up,final,folder-up,
+base,font,drawn,font,final,typography,
+base,freeze,drawn,changes-prevent,final,lock,
+base,function,drawn,function,final,math-function,
+base,funnel,drawn,funnel,final,filter,
+base,gauge,drawn,gauge,final,gauge,
+base,gear,drawn,system-run,final,settings,
+base,globe,drawn,applications-internet,final,world,
+base,grid-dots,drawn,grid-dots,final,grid-dots,
+base,grid-layout,drawn,preferences-desktop-workspaces,final,layout-grid,
+base,group-frame,drawn,object-group,final,frame,
+base,gyroscope,drawn,gyroscope,final,rotate-3d,
+base,hammer,drawn,hammer,final,hammer,
+base,hand,drawn,hand,final,hand-stop,
+base,hex,drawn,hex,final,hexagon,
+base,horizontal-bars,drawn,horizontal-bars,final,chart-bar,
+base,house,drawn,go-home,final,home,
+base,id-card,drawn,id-card,final,id,
+base,image,drawn,image-x-generic,final,photo,
+base,import-file,drawn,document-import,final,file-import,
+base,info-bubble,drawn,dialog-information,final,info-circle,
+base,invert,drawn,object-inverse,final,contrast,
+base,key,drawn,dialog-password,final,key,
+base,knob,drawn,knob,final,gauge,
+base,led,drawn,led,final,bulb,
+base,letter-x,drawn,letter-x,final,letter-x,
+base,letter-y,drawn,letter-y,final,letter-y,
+base,light-bulb,drawn,light-bulb,final,bulb,
+base,lightning,drawn,thunderbolt,final,bolt,
+base,magnifier,drawn,system-search,final,search,
+base,map,drawn,map,final,map,
+base,map-pin,drawn,find-location,final,map-pin,
+base,merge-lines,drawn,object-merge,final,arrow-merge,
+base,meter,drawn,gauge,final,gauge,
+base,mf4-file,drawn,mf4-file,final,file,
+base,microphone,drawn,audio-input-microphone,final,microphone,
+base,molecule,drawn,molecule,final,atom,
+base,monitor-chart,drawn,utilities-system-monitor,final,device-desktop-analytics,
+base,monitor-check,drawn,video-display+plus,final,device-desktop-check,
+base,music-folder,drawn,folder-music,final,music,
+base,nasa,drawn,nasa,final,rocket,
+base,network-port,drawn,ethernet,final,network,
+base,notes-list,drawn,accessories-text-editor,final,notes,
+base,nothing-found,drawn,dialog-information,final,mood-empty,
+base,number-doc,drawn,number-doc,final,numbers,
+base,open-box,drawn,package-x-generic,final,package,
+base,orbit,drawn,orbit,final,orbit,
+base,oscilloscope,drawn,oscilloscope,final,wave-sine,
+base,padlock,drawn,changes-prevent,final,lock,
+base,padlock-open,drawn,changes-allow,final,lock-open,
+base,pause,drawn,media-playback-pause,final,player-pause,
+base,pdf,drawn,application-pdf,final,file-type-pdf,
+base,pi,drawn,pi,final,math-pi,
+base,pictures-folder,drawn,folder-pictures,final,photo,
+base,play,drawn,media-playback-start,final,player-play,
+base,plc,drawn,plc,final,cpu-2,
+base,plug-connected,drawn,plug-connected,final,plug-connected,
+base,plug-disconnected,drawn,plug-disconnected,final,plug-connected-x,
+base,polyhedron,drawn,draw-cuboid,final,irregular-polyhedron,
+base,polyline,drawn,draw-path,final,chart-line,
+base,pulse-monitor,drawn,pulse-monitor,final,heart-rate-monitor,
+base,puzzle,drawn,dialog-extensions,final,puzzle,
+base,pylon,drawn,pylon,final,cone,
+base,question,drawn,dialog-question,final,help,
+base,ram,drawn,dialog-memory,final,device-sd-card,
+base,redo-arrow,drawn,edit-redo,final,arrow-forward-up,
+base,rename,drawn,edit,final,pencil,
+base,reset,drawn,view-refresh,final,refresh,
+base,return-arrow,drawn,edit-undo,final,corner-down-left,
+base,robot,drawn,robot,final,robot,
+base,robot-arm,drawn,robot-arm,final,robot,
+base,router,drawn,network-wireless,final,router,
+base,run-dialog,drawn,system-run,final,app-window,
+base,scatter,drawn,scatter,final,chart-dots,
+base,schedule,drawn,x-office-calendar,final,calendar,
+base,scissors,drawn,edit-cut,final,scissors,
+base,script-window,drawn,dialog-scripts,final,script,
+base,scroll-gear,drawn,dialog-scripts,final,script,
+base,server,drawn,server,final,server,
+base,signal,drawn,network-wireless-signal-excellent,final,antenna-bars-5,
+base,siren,drawn,siren,final,urgent,
+base,skip-end,drawn,media-skip-forward,final,player-skip-forward,
+base,skip-start,drawn,media-skip-backward,final,player-skip-back,
+base,slider,drawn,slider,final,adjustments,
+base,software-box,drawn,system-software-install,final,package,
+base,speaker,drawn,audio-speakers,final,volume,
+base,speaker-off,drawn,audio-speakers+x,final,volume-off,
+base,spectrogram,drawn,spectrogram,final,chart-histogram,
+base,split-arrows,drawn,split-arrows,final,arrows-split,
+base,square-wave,drawn,square-wave,final,wave-square,
+base,swatches,drawn,preferences-desktop-theme,final,palette,
+base,table,drawn,x-office-spreadsheet,final,table,
+base,tags,drawn,tag-new,final,tag,
+base,target,drawn,target,final,target,
+base,test-tube,drawn,test-tube,final,test-pipe,
+base,text-cursor,drawn,draw-text,final,cursor-text,
+base,timer,drawn,timer,final,stopwatch,
+base,toggle,drawn,toggle,final,toggle-left,
+base,toolbox,drawn,applications-accessories,final,tool,
+base,tools,drawn,preferences-system,final,tools,
+base,translate,drawn,preferences-desktop-locale,final,language,
+base,txt-file,drawn,text-x-generic,final,file-type-txt,
+base,usb,drawn,drive-removable-media-usb,final,usb,
+base,warning,drawn,dialog-warning,final,alert-triangle,
+base,warning-red,drawn,dialog-error,final,alert-triangle,
+base,weather,drawn,weather,final,cloud,
+base,window-flash,drawn,window-new,final,app-window,
+base,window-gear,drawn,window-new,final,app-window,
+base,window-minimize,drawn,window-new,final,window-minimize,
+base,window-play,drawn,window-new,final,app-window,
+base,window-popout,drawn,window-new,final,external-link,
+base,window-trash,drawn,window-new+x,final,app-window,
+base,window-x,drawn,window-new+x,final,browser-x,
+base,windows,drawn,window-new,final,window,
+base,workspace-grid,drawn,preferences-desktop-workspaces,final,layout-grid,
+base,wrench,drawn,preferences-system,final,tool,
+base,zoom-in,drawn,zoom-in,final,zoom-in,
+base,zoom-out,drawn,zoom-out,final,zoom-out,
 button,activate,tabler,key,final,key,
 button,add-workspace,tabler,layout-grid-add,final,layout-grid-add,
 button,alarm-acknowledge,tabler,checks,final,checks,
@@ -274,106 +274,106 @@ image,no-usb,tabler,plug-off,final,plug-off,#555753
 image,spinner,tabler,loader-2,final,loader-2,#555753
 image,usb,tabler,usb,final,usb,#555753
 image,shortcut,tabler,external-link,final,external-link,#555753
-action,Abscissa,tabler,axis-x,final,axis-x,#3465a4
-action,Accuracy,tabler,target,final,target,#3465a4
-action,Add properties,tabler,adjustments-plus,final,adjustments-plus,#3465a4
-action,Alpha,tabler,alpha,final,alpha,#3465a4
-action,Alphabetical Sorting,tabler,sort-ascending-letters,final,sort-ascending-letters,#3465a4
-action,America,tabler,world,final,world,#3465a4
-action,Atmospheric Pressure,tabler,gauge,final,gauge,#3465a4
-action,Audio Cable,tabler,plug,final,plug,#3465a4
-action,Azimuth,tabler,compass,final,compass,#3465a4
-action,Battery Level,tango,battery,final,,
-action,Beta,tabler,letter-b,final,letter-b,#3465a4
-action,Binary File,tabler,binary,final,binary,#3465a4
-action,Bluetooth,tabler,bluetooth,final,bluetooth,#3465a4
-action,Capacitor,tabler,circuit-capacitor,final,circuit-capacitor,#3465a4
-action,Cellular Network,tabler,antenna-bars-5,final,antenna-bars-5,#3465a4
-action,Close,tango,process-stop,final,,
-action,Cloud Lightning,tango,weather-storm,final,,
-action,Clouds,tango,weather-overcast,final,,
-action,Code,tabler,code,final,code,#3465a4
-action,Code Fork,tabler,git-fork,final,git-fork,#3465a4
-action,Comparator,tabler,math-greater,final,math-greater,#3465a4
-action,Connected,tango,network-transmit-receive,final,,
-action,Counter,tabler,numbers,final,numbers,#3465a4
-action,Cursor,tabler,pointer,final,pointer,#3465a4
-action,Data Transfer,tabler,arrows-exchange,final,arrows-exchange,#3465a4
-action,Delete Document,tango,edit-delete,final,,
-action,Dew Point,tabler,droplet,final,droplet,#3465a4
-action,Disconnected,tango,network-offline,final,,
-action,Display,tango,video-display,final,,
-action,Done,tabler,check,final,check,#3465a4
-action,Edit,tango,accessories-text-editor,final,,
-action,Edit Property,tabler,edit,final,edit,#3465a4
-action,Electricity,tabler,bolt,final,bolt,#3465a4
-action,Erase,tango,edit-clear,final,,
-action,GPS Antenna,tabler,antenna,final,antenna,#3465a4
-action,GPS Disconnected,tabler,map-pin-off,final,map-pin-off,#3465a4
-action,GPS Signal,tabler,map-pin,final,map-pin,#3465a4
-action,Gamma,tabler,letter-g,final,letter-g,#3465a4
-action,Gears,tango,emblem-system,final,,
-action,Geometry,tabler,triangle-square-circle,final,triangle-square-circle,#3465a4
-action,Ground Symbol,tabler,circuit-ground,final,circuit-ground,#3465a4
-action,Gyroscope,tabler,rotate-3d,final,rotate-3d,#3465a4
-action,Hammer,tabler,hammer,final,hammer,#3465a4
-action,Home,tango,go-home,final,,
-action,Idea,tabler,bulb,final,bulb,#3465a4
-action,Important Property,tango,emblem-important,final,,
-action,Infrared,tabler,access-point,final,access-point,#3465a4
-action,Infrared Sensor,tabler,access-point,final,access-point,#3465a4
-action,Jewel,tabler,diamond,final,diamond,#3465a4
-action,LED Diode,tabler,circuit-diode,final,circuit-diode,#3465a4
-action,Ladder,tabler,ladder,final,ladder,#3465a4
-action,Lambda,tabler,lambda,final,lambda,#3465a4
-action,Length,tabler,ruler,final,ruler,#3465a4
-action,Lock,tango,system-lock-screen,final,,
-action,Motion Sensor,tabler,walk,final,walk,#3465a4
-action,Mu,tabler,letter-m,final,letter-m,#3465a4
-action,Omega,tabler,omega,final,omega,#3465a4
-action,Orthogonal View,tabler,perspective,final,perspective,#3465a4
-action,Oscillator,tabler,wave-sine,final,wave-sine,#3465a4
-action,Padlock,tango,system-lock-screen,final,,
-action,Pause,tango,media-playback-pause,final,,
-action,Pi,tabler,math-pi,final,math-pi,#3465a4
-action,Play,tango,media-playback-start,final,,
-action,Play Graph Report,tabler,chart-line,final,chart-line,#3465a4
-action,Play Property,tango,media-playback-start,final,,
-action,Plot,tabler,chart-line,final,chart-line,#3465a4
-action,Potentiometer,tabler,gauge,final,gauge,#3465a4
-action,Processor,tabler,cpu,final,cpu,#3465a4
-action,Project Setup,tango,preferences-system,final,,
-action,Properties Script,tango,text-x-script,final,,
-action,Proximity Sensor,tabler,radar-2,final,radar-2,#3465a4
-action,Radar,tabler,radar,final,radar,#3465a4
-action,Relay,tabler,circuit-switch-open,final,circuit-switch-open,#3465a4
-action,Resistor,tabler,circuit-resistor,final,circuit-resistor,#3465a4
-action,Restart,tango,view-refresh,final,,
-action,Robotic Arm,tabler,robot,final,robot,#3465a4
-action,Satellite Signal,tabler,satellite,final,satellite,#3465a4
-action,Search Property,tango,system-search,final,,
-action,Sensor,tabler,access-point,final,access-point,#3465a4
-action,Services,tango,emblem-system,final,,
-action,Show Property,tabler,eye,final,eye,#3465a4
-action,Shuffle,tabler,arrows-shuffle,final,arrows-shuffle,#3465a4
-action,Shutdown,tango,system-shutdown,final,,
-action,Sigma,tabler,sum,final,sum,#3465a4
-action,Signal,tabler,antenna-bars-5,final,antenna-bars-5,#3465a4
-action,Sleep Mode,tango,weather-clear-night,final,,
-action,Slider,tabler,adjustments,final,adjustments,#3465a4
-action,Stop,tango,media-playback-stop,final,,
-action,Stop Property,tango,process-stop,final,,
-action,System Task,tango,utilities-system-monitor,final,,
-action,Toolbox,tabler,tool,final,tool,#3465a4
-action,Transistor,tabler,cpu-2,final,cpu-2,#3465a4
-action,Upload to the Cloud,tabler,cloud-upload,final,cloud-upload,#3465a4
-action,Urgent Property,tango,software-update-urgent,final,,
-action,Wind Gauge,tabler,wind,final,wind,#3465a4
-action,Windsock,tabler,windsock,final,windsock,#3465a4
-action,Workflow,tabler,sitemap,final,sitemap,#3465a4
-action,Xbox A,tabler,letter-a,final,letter-a,#3465a4
-action,Xbox B,tabler,letter-b,final,letter-b,#3465a4
-action,Xbox X,tabler,letter-x,final,letter-x,#3465a4
-action,Xbox Y,tabler,letter-y,final,letter-y,#3465a4
-action,Zoom In,tabler,zoom-in,final,zoom-in,#3465a4
-action,Zoom Out,tabler,zoom-out,final,zoom-out,#3465a4
+action,Abscissa,drawn,axis,final,axis-x,
+action,Accuracy,drawn,target,final,target,
+action,Add properties,drawn,document-properties+plus,final,adjustments-plus,
+action,Alpha,drawn,alpha,final,alpha,
+action,Alphabetical Sorting,drawn,actions/Alphabetical Sorting,final,sort-ascending-letters,
+action,America,drawn,actions/America,final,world,
+action,Atmospheric Pressure,drawn,gauge,final,gauge,
+action,Audio Cable,drawn,actions/Audio Cable,final,plug,
+action,Azimuth,drawn,compass,final,compass,
+action,Battery Level,drawn,battery,final,,
+action,Beta,drawn,actions/Beta,final,letter-b,
+action,Binary File,drawn,binary,final,binary,
+action,Bluetooth,drawn,bluetooth,final,bluetooth,
+action,Capacitor,drawn,actions/Capacitor,final,circuit-capacitor,
+action,Cellular Network,drawn,actions/Cellular Network,final,antenna-bars-5,
+action,Close,drawn,process-stop,final,,
+action,Cloud Lightning,drawn,actions/Cloud Lightning,final,,
+action,Clouds,drawn,weather,final,,
+action,Code,drawn,text-x-script,final,code,
+action,Code Fork,drawn,actions/Code Fork,final,git-fork,
+action,Comparator,drawn,actions/Comparator,final,math-greater,
+action,Connected,drawn,network-idle,final,,
+action,Counter,drawn,number-doc,final,numbers,
+action,Cursor,drawn,tool-pointer,final,pointer,
+action,Data Transfer,drawn,mail-send-receive,final,arrows-exchange,
+action,Delete Document,drawn,edit-delete,final,,
+action,Dew Point,drawn,actions/Dew Point,final,droplet,
+action,Disconnected,drawn,network-error,final,,
+action,Display,drawn,video-display,final,,
+action,Done,drawn,process-completed,final,check,
+action,Edit,drawn,accessories-text-editor,final,,
+action,Edit Property,drawn,edit,final,edit,
+action,Electricity,drawn,thunderbolt,final,bolt,
+action,Erase,drawn,edit-clear,final,,
+action,GPS Antenna,drawn,actions/GPS Antenna,final,antenna,
+action,GPS Disconnected,drawn,actions/GPS Disconnected,final,map-pin-off,
+action,GPS Signal,drawn,find-location,final,map-pin,
+action,Gamma,drawn,actions/Gamma,final,letter-g,
+action,Gears,drawn,system-run,final,,
+action,Geometry,drawn,draw-cuboid,final,triangle-square-circle,
+action,Ground Symbol,drawn,actions/Ground Symbol,final,circuit-ground,
+action,Gyroscope,drawn,gyroscope,final,rotate-3d,
+action,Hammer,drawn,hammer,final,hammer,
+action,Home,drawn,go-home,final,,
+action,Idea,drawn,light-bulb,final,bulb,
+action,Important Property,drawn,dialog-warning,final,,
+action,Infrared,drawn,actions/Infrared,final,access-point,
+action,Infrared Sensor,drawn,actions/Infrared,final,access-point,
+action,Jewel,drawn,actions/Jewel,final,diamond,
+action,LED Diode,drawn,led,final,circuit-diode,
+action,Ladder,drawn,actions/Ladder,final,ladder,
+action,Lambda,drawn,actions/Lambda,final,lambda,
+action,Length,drawn,tool-measure,final,ruler,
+action,Lock,drawn,system-lock-screen,final,,
+action,Motion Sensor,drawn,actions/Motion Sensor,final,walk,
+action,Mu,drawn,actions/Mu,final,letter-m,
+action,Omega,drawn,actions/Omega,final,omega,
+action,Orthogonal View,drawn,actions/Orthogonal View,final,perspective,
+action,Oscillator,drawn,oscilloscope,final,wave-sine,
+action,Padlock,drawn,system-lock-screen,final,,
+action,Pause,drawn,media-playback-pause,final,,
+action,Pi,drawn,pi,final,math-pi,
+action,Play,drawn,media-playback-start,final,,
+action,Play Graph Report,drawn,area-chart,final,chart-line,
+action,Play Property,drawn,media-playback-start,final,,
+action,Plot,drawn,area-chart,final,chart-line,
+action,Potentiometer,drawn,knob,final,gauge,
+action,Processor,drawn,chip,final,cpu,
+action,Project Setup,drawn,preferences-system,final,,
+action,Properties Script,drawn,text-x-script,final,,
+action,Proximity Sensor,drawn,actions/Proximity Sensor,final,radar-2,
+action,Radar,drawn,actions/Radar,final,radar,
+action,Relay,drawn,actions/Relay,final,circuit-switch-open,
+action,Resistor,drawn,actions/Resistor,final,circuit-resistor,
+action,Restart,drawn,view-refresh,final,,
+action,Robotic Arm,drawn,robot-arm,final,robot,
+action,Satellite Signal,drawn,actions/Satellite Signal,final,satellite,
+action,Search Property,drawn,system-search,final,,
+action,Sensor,drawn,actions/Sensor,final,access-point,
+action,Services,drawn,system-run,final,,
+action,Show Property,drawn,object-visible,final,eye,
+action,Shuffle,drawn,actions/Shuffle,final,arrows-shuffle,
+action,Shutdown,drawn,system-shutdown,final,,
+action,Sigma,drawn,actions/Sigma,final,sum,
+action,Signal,drawn,network-wireless-signal-excellent,final,antenna-bars-5,
+action,Sleep Mode,drawn,actions/Sleep Mode,final,,
+action,Slider,drawn,slider,final,adjustments,
+action,Stop,drawn,media-playback-stop,final,,
+action,Stop Property,drawn,process-stop,final,,
+action,System Task,drawn,utilities-system-monitor,final,,
+action,Toolbox,drawn,applications-accessories,final,tool,
+action,Transistor,drawn,actions/Transistor,final,cpu-2,
+action,Upload to the Cloud,drawn,actions/Upload to the Cloud,final,cloud-upload,
+action,Urgent Property,drawn,software-update-urgent,final,,
+action,Wind Gauge,drawn,actions/Wind Gauge,final,wind,
+action,Windsock,drawn,actions/Windsock,final,windsock,
+action,Workflow,drawn,flow-chart,final,sitemap,
+action,Xbox A,drawn,actions/Xbox A,final,letter-a,
+action,Xbox B,drawn,actions/Xbox B,final,letter-b,
+action,Xbox X,drawn,actions/Xbox X,final,letter-x,
+action,Xbox Y,drawn,actions/Xbox Y,final,letter-y,
+action,Zoom In,drawn,zoom-in,final,zoom-in,
+action,Zoom Out,drawn,zoom-out,final,zoom-out,

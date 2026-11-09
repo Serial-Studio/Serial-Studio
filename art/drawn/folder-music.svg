@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9c440"/><stop offset=".5" stop-color="#e2a11f"/><stop offset="1" stop-color="#b9780e"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe16b"/><stop offset=".55" stop-color="#f9c440"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+<linearGradient id="h" gradientUnits="userSpaceOnUse" x1="0" y1="19" x2="0" y2="42"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+<linearGradient id="t" gradientUnits="userSpaceOnUse" x1="0" y1="8" x2="0" y2="20"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+<linearGradient id="n" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b27fe8"/><stop offset=".5" stop-color="#7c3fc4"/><stop offset="1" stop-color="#5a2596"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.5" rx="22" ry="3.2" fill="url(#s)"/>
+<path d="M4.5,12 C4.5,9.7 5.7,8.5 8,8.5 H17.5 C19,8.5 19.9,9 20.7,10.1 L22.4,12.5 H40 C42.3,12.5 43.5,13.7 43.5,16 V36 H4.5 Z" fill="url(#b)" stroke="#9a5f06" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M5.5,20 V12 C5.5,10.3 6.3,9.5 8,9.5 H17.5 C18.6,9.5 19.2,9.9 19.9,10.7 L21.9,13.5 H40 C41.7,13.5 42.5,14.3 42.5,16 V20" fill="none" stroke="url(#t)"/>
+<rect x="9.5" y="14.5" width="29" height="9" fill="url(#p)" stroke="#abacae"/>
+<path d="M4.5,23 C4.5,20.7 5.7,19.5 8,19.5 H19 C20.6,19.5 20.8,22.5 24,22.5 C27.2,22.5 27.4,19.5 29,19.5 H40 C42.3,19.5 43.5,20.7 43.5,23 V38 C43.5,40.3 42.3,41.5 40,41.5 H8 C5.7,41.5 4.5,40.3 4.5,38 Z" fill="url(#f)" stroke="#9a5f06" stroke-opacity=".65"/>
+<path d="M8,20.5 H18.6 C20.2,20.5 20.4,23.5 24,23.5 C27.6,23.5 27.8,20.5 29.4,20.5 H40 C41.7,20.5 42.5,21.3 42.5,23 V38 C42.5,39.7 41.7,40.5 40,40.5 H8 C6.3,40.5 5.5,39.7 5.5,38 V23 C5.5,21.3 6.3,20.5 8,20.5 Z" fill="none" stroke="url(#h)"/>
+<path d="M22.7,16 H25.2 C25.9,20.7 33.9,22.2 33,31.2 C32.7,34.2 31.7,35.4 30.7,36.2 C31.9,30.8 28.6,27 25.2,26 V34.5 C25.2,37.6 22,39.6 18.6,39.6 C15.6,39.6 13.6,38.2 13.6,35.8 C13.6,32.6 17,30.2 20.2,30.2 C21.2,30.2 22,30.4 22.7,30.7 Z" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M22.7,16 H25.2 C25.9,20.7 33.9,22.2 33,31.2 C32.7,34.2 31.7,35.4 30.7,36.2 C31.9,30.8 28.6,27 25.2,26 V34.5 C25.2,37.6 22,39.6 18.6,39.6 C15.6,39.6 13.6,38.2 13.6,35.8 C13.6,32.6 17,30.2 20.2,30.2 C21.2,30.2 22,30.4 22.7,30.7 Z" fill="url(#n)" stroke="#4a1f87" stroke-opacity=".7" stroke-linejoin="round"/>
+<ellipse cx="18" cy="33.8" rx="2.2" ry="1.1" transform="rotate(-22 18 33.8)" fill="#fff" fill-opacity=".55"/>
+</svg>

@@ -24,13 +24,15 @@ updated: 2026-11-08
 
 ## Status (2026-11-09)
 
-- **Done:** T0-T16, T18-T20, T22-T24 and T26. The swap is committed on `master` and not pushed.
-- **Next:** T17, the maintainer's build and review of the free set in the running application, then
-  T21 with a `../Icons` checkout, and the push.
+The free art changed after in-app testing: see the amendment at the top of `spec.md`. Basic is
+committed on `master`; the Tango tree remains in the history of the commit before it.
+
+- **Done:** T0-T20, T22-T24, T26 and T28 (206 original drawings, no stand-ins). T17 was the
+  maintainer's review of Basic in the running application.
+- **Superseded:** T27, the Tango-style pilot approval.
+- **Next:** T21 and T25, the maintainer's checks of an official build, then the push.
 - **The art packs added in T0 never entered a commit:** the private repo took them first, and the
   swap replaced them in the working tree.
-- **Review material:** `review/pilot.png` for T27; `review/full-light.png`, `full-dark.png`,
-  `themes.png` and `mono.png` for T17. On the full sheets an orange dot marks a stand-in.
 - **Do not commit `patches/` or `review/`;** they are working material for this spec.
 
 Changes from `plan.md`, all smaller than planned or additive:
@@ -219,7 +221,7 @@ Changes from `plan.md`, all smaller than planned or additive:
 - **Does:** You review the sheets, including 18 px legibility. Changes go back into T14 or T15 (AC6).
 - **Verify:** Your approval, recorded here.
 - **Deps:** T16
-- [ ] done
+- [x] done
 
 ### Phase E — the private art
 
@@ -330,7 +332,7 @@ Changes from `plan.md`, all smaller than planned or additive:
   list reaches zero (R12).
 - **Verify:** `art-verify.py` reports zero stand-ins.
 - **Deps:** T27
-- [ ] done
+- [x] done
 
 ### Phase H — handoff
 

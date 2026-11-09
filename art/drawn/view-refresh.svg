@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".38"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" gradientUnits="userSpaceOnUse" x1="0" y1="4" x2="0" y2="42"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="h" gradientUnits="userSpaceOnUse" x1="0" y1="4" x2="0" y2="30"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44" rx="16" ry="2.8" fill="url(#s)"/>
+<path d="M40.52,32.75 A18.5,18.5 0 1 1 33.75,7.48 L36,3.58 L41.04,21.2 L28,17.44 L30.25,13.54 A11.5,11.5 0 1 0 34.46,29.25 Z" fill="url(#b)" stroke="#0d52bf" stroke-opacity=".75" stroke-linejoin="round"/>
+<path d="M32.4,8.2 A17.5,17.5 0 0 0 7.2,28 M35.7,6.2 L39.3,18.9" fill="none" stroke="url(#h)"/>
+<path d="M9.53,19.49 A15.5,15.5 0 0 1 28.51,8.53" fill="none" stroke="url(#h)" stroke-width="2.2" stroke-linecap="round" opacity=".7"/>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="c" gradientUnits="userSpaceOnUse" x1="0" y1="5" x2="0" y2="31"><stop stop-color="#c3ced5"/><stop offset=".5" stop-color="#95a3ab"/><stop offset="1" stop-color="#667885"/></linearGradient>
+<linearGradient id="h" gradientUnits="userSpaceOnUse" x1="0" y1="5" x2="0" y2="29"><stop stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
+<linearGradient id="b" gradientUnits="userSpaceOnUse" x1="0" y1="19" x2="0" y2="44"><stop stop-color="#fff0a0"/><stop offset=".45" stop-color="#f9c440"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+<linearGradient id="g" gradientUnits="userSpaceOnUse" x1="0" y1="19" x2="0" y2="40"><stop stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+<radialGradient id="w"><stop stop-color="#ffe16b" stop-opacity=".6"/><stop offset="1" stop-color="#ffe16b" stop-opacity="0"/></radialGradient>
+</defs>
+<ellipse cx="24" cy="44.5" rx="16" ry="2.6" fill="url(#s)"/>
+<g fill="none" stroke-linejoin="round">
+<path d="M12,29A5,5 0 1 1 14.03,19.43A8,8 0 1 1 28.2,12.01A5.5,5.5 0 0 1 35.91,16.01A6.5,6.5 0 0 1 35.5,29z" stroke="#273445" stroke-opacity=".6" stroke-width="4"/>
+<path d="M12,29A5,5 0 1 1 14.03,19.43A8,8 0 1 1 28.2,12.01A5.5,5.5 0 0 1 35.91,16.01A6.5,6.5 0 0 1 35.5,29z" stroke="url(#c)" stroke-width="2"/>
+<path d="M12,29A5,5 0 1 1 14.03,19.43A8,8 0 1 1 28.2,12.01A5.5,5.5 0 0 1 35.91,16.01A6.5,6.5 0 0 1 35.5,29z" stroke="url(#h)" stroke-width="2"/>
+</g>
+<path d="M12,29A5,5 0 1 1 14.03,19.43A8,8 0 1 1 28.2,12.01A5.5,5.5 0 0 1 35.91,16.01A6.5,6.5 0 0 1 35.5,29z" fill="url(#c)"/>
+<ellipse cx="25" cy="24" rx="12" ry="7" fill="url(#w)"/>
+<g fill="none" stroke-linejoin="round">
+<path d="M23.5,21h7l-3,7h5l-11,14 2.5-9h-6z" stroke="#ad5f00" stroke-opacity=".7" stroke-width="4"/>
+<path d="M23.5,21h7l-3,7h5l-11,14 2.5-9h-6z" stroke="url(#b)" stroke-width="2"/>
+<path d="M23.5,21h7l-3,7h5l-11,14 2.5-9h-6z" stroke="url(#g)" stroke-width="2"/>
+</g>
+<path d="M23.5,21h7l-3,7h5l-11,14 2.5-9h-6z" fill="url(#b)"/>
+</svg>

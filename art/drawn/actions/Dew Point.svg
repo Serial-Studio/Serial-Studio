@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <radialGradient id="sh"><stop offset="0" stop-color="#000" stop-opacity=".38"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="drp" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+    <radialGradient id="ref" cx=".55" cy=".78" r=".55"><stop offset="0" stop-color="#b0e0ff" stop-opacity=".85"/><stop offset="1" stop-color="#b0e0ff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="hi" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="4" y2="42"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+    <linearGradient id="gls" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#c9d1d6"/><stop offset=".4" stop-color="#ffffff"/><stop offset="1" stop-color="#b8b9bb"/></linearGradient>
+    <radialGradient id="blb" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#ffa59a"/><stop offset=".45" stop-color="#ed5353"/><stop offset="1" stop-color="#a10705"/></radialGradient>
+    <linearGradient id="col" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ed5353"/><stop offset="1" stop-color="#a10705"/></linearGradient>
+  </defs>
+  <ellipse cx="22" cy="44.5" rx="18" ry="2.4" fill="url(#sh)"/>
+  <path d="M19 3.5C19 3.5 5.5 17 5.5 29 5.5 37 11.5 43 19 43S32.5 37 32.5 29C32.5 17 19 3.5 19 3.5z" fill="url(#drp)" stroke="#0a3c8f" stroke-opacity=".65" stroke-linejoin="round"/>
+  <path d="M19 3.5C19 3.5 5.5 17 5.5 29 5.5 37 11.5 43 19 43S32.5 37 32.5 29C32.5 17 19 3.5 19 3.5z" fill="url(#ref)"/>
+  <path d="M19 5C16 8.2 6.5 18.9 6.5 29 6.5 36.5 12 42 19 42S31.5 36.5 31.5 29C31.5 18.9 22 8.2 19 5z" fill="none" stroke="url(#hi)"/>
+  <path d="M11 29C11 24 14 19 17 15.5" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M37.5 5c1.8 0 3.7 1.3 3.7 3.2v21.4a7.4 7.4 0 1 1-7.4 0V8.2c0-1.9 1.9-3.2 3.7-3.2z" fill="#000" fill-opacity=".25" transform="translate(-1 .6)"/>
+  <path d="M37.5 5c1.8 0 3.7 1.3 3.7 3.2v21.4a7.4 7.4 0 1 1-7.4 0V8.2c0-1.9 1.9-3.2 3.7-3.2z" fill="url(#gls)" stroke="#6e7072" stroke-opacity=".68" stroke-linejoin="round"/>
+  <rect x="36" y="16" width="3" height="16" fill="url(#col)"/>
+  <circle cx="37.5" cy="36" r="5.2" fill="url(#blb)" stroke="#a10705" stroke-opacity=".55"/>
+  <path d="M41 13h-1.8M41 17h-1.8M41 21h-1.8M41 25h-1.8" fill="none" stroke="#6e7072" stroke-opacity=".85"/>
+</svg>

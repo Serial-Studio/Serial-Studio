@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset=".3" stop-color="#ffe16b"/><stop offset=".7" stop-color="#f9c440"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity=".15"/></linearGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+<linearGradient id="m" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="38"><stop offset="0" stop-color="#57392d"/><stop offset="1" stop-color="#2e1c12"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43" rx="19" ry="2.8" fill="url(#s)"/>
+<path d="M24,4.5 C25.6,4.5 26.8,5.3 27.6,6.7 L44,35.8 C45.5,38.5 43.8,41.5 40.7,41.5 L7.3,41.5 C4.2,41.5 2.5,38.5 4,35.8 L20.4,6.7 C21.2,5.3 22.4,4.5 24,4.5 Z" fill="url(#b)" stroke="#9a5f06" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M24,5.5 C25.2,5.5 26.1,6.1 26.7,7.2 L43.1,36.3 C44.2,38.3 43,40.5 40.7,40.5 L7.3,40.5 C5,40.5 3.8,38.3 4.9,36.3 L21.3,7.2 C21.9,6.1 22.8,5.5 24,5.5 Z" fill="none" stroke="url(#h)"/>
+<path d="M24,7 C25,7 25.6,7.6 26.1,8.4 L34.4,23 C28,19.6 20,19.6 13.6,23 L21.9,8.4 C22.4,7.6 23,7 24,7 Z" fill="url(#t)"/>
+<g fill="#fff" fill-opacity=".5" transform="translate(0 1)">
+<path d="M20.9,16.4 C20.9,14.8 22.2,13.7 24,13.7 C25.8,13.7 27.1,14.8 27.1,16.4 L26.3,28.3 C26.2,29.7 25.3,30.5 24,30.5 C22.7,30.5 21.8,29.7 21.7,28.3 Z"/>
+<circle cx="24" cy="35.2" r="3.1"/>
+</g>
+<g fill="url(#m)">
+<path d="M20.9,16.4 C20.9,14.8 22.2,13.7 24,13.7 C25.8,13.7 27.1,14.8 27.1,16.4 L26.3,28.3 C26.2,29.7 25.3,30.5 24,30.5 C22.7,30.5 21.8,29.7 21.7,28.3 Z"/>
+<circle cx="24" cy="35.2" r="3.1"/>
+</g>
+</svg>

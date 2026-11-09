@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="t" gradientUnits="userSpaceOnUse" x1="0" y1="11" x2="0" y2="37"><stop stop-color="#f0f0f0"/><stop offset=".55" stop-color="#b4b6ba"/><stop offset="1" stop-color="#7e8791"/></linearGradient>
+<radialGradient id="n" cx=".42" cy=".28" r=".8"><stop stop-color="#ffd2a8"/><stop offset=".45" stop-color="#f37329"/><stop offset="1" stop-color="#b03000"/></radialGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity=".15"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44.2" rx="13" ry="2.5" fill="url(#s)"/>
+<g fill="none">
+<path d="M24,36V31C24,23.5 12,24.5 12,17V11M24,31C24,23.5 36,24.5 36,17V11" stroke="#485a6c" stroke-opacity=".7" stroke-width="9"/>
+<path d="M24,36V31C24,23.5 12,24.5 12,17V11M24,31C24,23.5 36,24.5 36,17V11" stroke="url(#t)" stroke-width="7"/>
+<path d="M24,36V31C24,23.5 12,24.5 12,17V11M24,31C24,23.5 36,24.5 36,17V11" stroke="#fff" stroke-opacity=".5" stroke-width="2"/>
+</g>
+<circle cx="12" cy="11" r="7" fill="url(#n)" stroke="#a62100" stroke-opacity=".65"/>
+<circle cx="12" cy="11" r="6" fill="none" stroke="url(#h)"/>
+<ellipse cx="12" cy="8" rx="4.2" ry="2.8" fill="url(#g)"/>
+<circle cx="36" cy="11" r="7" fill="url(#n)" stroke="#a62100" stroke-opacity=".65"/>
+<circle cx="36" cy="11" r="6" fill="none" stroke="url(#h)"/>
+<ellipse cx="36" cy="8" rx="4.2" ry="2.8" fill="url(#g)"/>
+<circle cx="24" cy="36.5" r="7" fill="url(#n)" stroke="#a62100" stroke-opacity=".65"/>
+<circle cx="24" cy="36.5" r="6" fill="none" stroke="url(#h)"/>
+<ellipse cx="24" cy="33.5" rx="4.2" ry="2.8" fill="url(#g)"/>
+</svg>

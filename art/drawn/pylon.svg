@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".36"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="m" gradientUnits="userSpaceOnUse" x1="0" y1="3" x2="0" y2="43"><stop offset="0" stop-color="#e8e8e8"/><stop offset=".5" stop-color="#abacae"/><stop offset="1" stop-color="#7a8a96"/></linearGradient>
+<linearGradient id="y" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe16b"/><stop offset=".5" stop-color="#ffa154"/><stop offset="1" stop-color="#f37329"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44" rx="19" ry="2.8" fill="url(#s)"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<g stroke="#36424c" stroke-opacity=".65">
+<path stroke-width="3" d="M19.5,22 L32.45,31 M28.5,22 L15.55,31 M15.55,31 H32.45 M15.55,31 L37.5,42.5 M32.45,31 L10.5,42.5 M21.57,13.5 L26.43,8.5 M26.43,13.5 L21.57,8.5"/>
+<path stroke-width="4.2" d="M10.5,42.5 L19.5,22 L24,3.5 L28.5,22 L37.5,42.5 M10,13.5 H38 M10,13.5 L22.78,8.5 M38,13.5 L25.22,8.5 M5,22 H43 M5,22 L20.84,16.5 M43,22 L27.16,16.5"/>
+</g>
+<g stroke="url(#m)">
+<path stroke-width="1.7" d="M19.5,22 L32.45,31 M28.5,22 L15.55,31 M15.55,31 H32.45 M15.55,31 L37.5,42.5 M32.45,31 L10.5,42.5 M21.57,13.5 L26.43,8.5 M26.43,13.5 L21.57,8.5"/>
+<path stroke-width="2.8" d="M10.5,42.5 L19.5,22 L24,3.5 L28.5,22 L37.5,42.5 M10,13.5 H38 M10,13.5 L22.78,8.5 M38,13.5 L25.22,8.5 M5,22 H43 M5,22 L20.84,16.5 M43,22 L27.16,16.5"/>
+</g>
+</g>
+<g fill="url(#y)" stroke="#cc3b02" stroke-opacity=".65">
+<ellipse cx="10" cy="16" rx="2.5" ry="1.2"/>
+<ellipse cx="10" cy="18.2" rx="2.5" ry="1.2"/>
+<ellipse cx="38" cy="16" rx="2.5" ry="1.2"/>
+<ellipse cx="38" cy="18.2" rx="2.5" ry="1.2"/>
+<ellipse cx="5" cy="24.5" rx="2.5" ry="1.2"/>
+<ellipse cx="5" cy="26.7" rx="2.5" ry="1.2"/>
+<ellipse cx="43" cy="24.5" rx="2.5" ry="1.2"/>
+<ellipse cx="43" cy="26.7" rx="2.5" ry="1.2"/>
+</g>
+</svg>

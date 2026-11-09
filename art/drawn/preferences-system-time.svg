@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffcf9a"/><stop offset=".5" stop-color="#e58c3a"/><stop offset="1" stop-color="#a14e14"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4e6e8"/><stop offset=".22" stop-color="#fff"/><stop offset="1" stop-color="#f0f0f0"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd2ff" stop-opacity=".55"/><stop offset="1" stop-color="#9fd2ff" stop-opacity=".05"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ed5353"/><stop offset="1" stop-color="#a10705"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.8" rx="16" ry="2.8" fill="url(#s)"/>
+<circle cx="24" cy="23" r="19.5" fill="url(#c)" stroke="#6a3208" stroke-opacity=".7"/>
+<circle cx="24" cy="23" r="18.5" fill="none" stroke="url(#h)"/>
+<circle cx="24" cy="23" r="15.5" fill="url(#f)" stroke="#6a3208" stroke-opacity=".7"/>
+<g stroke="#485a6c" stroke-linecap="round" fill="none">
+<path d="M24,10 V13.2 M24,36 V32.8 M37,23 H33.8 M11,23 H14.2" stroke-width="2.2"/>
+<path d="M30.5,11.7 L29.8,13 M35.3,16.5 L34,17.2 M35.3,29.5 L34,28.8 M30.5,34.3 L29.8,33 M17.5,34.3 L18.2,33 M12.7,29.5 L14,28.8 M12.7,16.5 L14,17.2 M17.5,11.7 L18.2,13" stroke-width="1.3"/>
+</g>
+<g stroke-linecap="round" fill="none">
+<path d="M24,23 L17.3,18.4" stroke="#2f3e4c" stroke-width="3"/>
+<path d="M24,23 L34.4,17" stroke="#2f3e4c" stroke-width="2.3"/>
+<path d="M24.9,20.6 L20,33.6" stroke="#c6262e" stroke-width="1.3"/>
+</g>
+<circle cx="24" cy="23" r="2.4" fill="url(#r)" stroke="#a10705" stroke-opacity=".7"/>
+<path d="M10,19.2 A14.5,14.5 0 0 1 38,19.2 C30,14.6 18,14.6 10,19.2 Z" fill="url(#g)"/>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#f2f3f4"/><stop offset="1" stop-color="#cdd2d6"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset="1" stop-color="#abb1b7"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f8e9a"/><stop offset="1" stop-color="#4e5f6d"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ed5353"/><stop offset=".55" stop-color="#c6262e"/><stop offset="1" stop-color="#a10705"/></linearGradient>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffdcd8"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44" rx="19" ry="3" fill="url(#s)"/>
+<path d="M9,4.5 H31.5 L40.5,13.5 V42 Q40.5,43.5 39,43.5 H9 Q7.5,43.5 7.5,42 V6 Q7.5,4.5 9,4.5 Z" fill="url(#p)" stroke="#485a6c" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M9,5.5 H31 L39.5,14 V42 Q39.5,42.5 39,42.5 H9 Q8.5,42.5 8.5,42 V6 Q8.5,5.5 9,5.5 Z" fill="none" stroke="url(#h)"/>
+<rect x="12" y="9" width="15" height="3" rx="1" fill="url(#t)"/>
+<path d="M32,14 H40 V16.5 H34.5 Z" fill="#000" fill-opacity=".12"/>
+<path d="M31.5,4.5 V13.5 H40.5 Z" fill="url(#f)" stroke="#485a6c" stroke-opacity=".65" stroke-linejoin="round"/>
+<rect x="3.5" y="18.5" width="41" height="20" rx="1.5" fill="url(#r)" stroke="#a10705" stroke-opacity=".7"/>
+<rect x="4.5" y="19.5" width="39" height="18" rx=".7" fill="none" stroke="url(#h)"/>
+<path d="M6,21 H13 Q15,21 15,23 V28 Q15,30 13,30 H9 V36 H6 Z M9,24 V27 H12 V24 Z M18,21 H25 Q30,21 30,26 V31 Q30,36 25,36 H18 Z M21,24 V33 H25 Q27,33 27,30.5 V26.5 Q27,24 25,24 Z M33,21 H42 V24 H36 V27 H40 V30 H36 V36 H33 Z" fill="url(#w)" fill-rule="evenodd"/>
+</svg>

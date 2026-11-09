@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="r" gradientUnits="userSpaceOnUse" x1="0" y1="2" x2="0" y2="44"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#d9efff"/><stop offset="1" stop-color="#a6d8ff"/></linearGradient>
+<linearGradient id="c" gradientUnits="userSpaceOnUse" x1="0" y1="2" x2="0" y2="44"><stop offset="0" stop-color="#7cc4ff"/><stop offset=".5" stop-color="#3f97ee"/><stop offset="1" stop-color="#1a68d0"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44.3" rx="15" ry="2.6" fill="url(#s)"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M24,22.5L24.00,4.00M17.50,8.55L24.00,12.30L30.50,8.55M24,22.5L40.02,13.25M32.83,9.90L32.83,17.40L39.33,21.15M24,22.5L40.02,31.75M39.33,23.85L32.83,27.60L32.83,35.10M24,22.5L24.00,41.00M30.50,36.45L24.00,32.70L17.50,36.45M24,22.5L7.98,31.75M15.17,35.10L15.17,27.60L8.67,23.85M24,22.5L7.98,13.25M8.67,21.15L15.17,17.40L15.17,9.90" stroke="#0d52bf" stroke-opacity=".8" stroke-width="6"/>
+<path d="M24,22.5L24.00,4.00M17.50,8.55L24.00,12.30L30.50,8.55M24,22.5L40.02,13.25M32.83,9.90L32.83,17.40L39.33,21.15M24,22.5L40.02,31.75M39.33,23.85L32.83,27.60L32.83,35.10M24,22.5L24.00,41.00M30.50,36.45L24.00,32.70L17.50,36.45M24,22.5L7.98,31.75M15.17,35.10L15.17,27.60L8.67,23.85M24,22.5L7.98,13.25M8.67,21.15L15.17,17.40L15.17,9.90" stroke="url(#c)" stroke-width="4"/>
+<path d="M24,22.5L24.00,4.00M17.50,8.55L24.00,12.30L30.50,8.55M24,22.5L40.02,13.25M32.83,9.90L32.83,17.40L39.33,21.15M24,22.5L40.02,31.75M39.33,23.85L32.83,27.60L32.83,35.10M24,22.5L24.00,41.00M30.50,36.45L24.00,32.70L17.50,36.45M24,22.5L7.98,31.75M15.17,35.10L15.17,27.60L8.67,23.85M24,22.5L7.98,13.25M8.67,21.15L15.17,17.40L15.17,9.90" stroke="url(#r)" stroke-width="1.5"/>
+</g>
+<path d="M24.00,17.30L28.50,19.90L28.50,25.10L24.00,27.70L19.50,25.10L19.50,19.90Z" fill="url(#r)" stroke="#0d52bf" stroke-opacity=".7" stroke-linejoin="round"/>
+</svg>

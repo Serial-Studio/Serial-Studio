@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#95a3ab"/><stop offset=".5" stop-color="#667885"/><stop offset="1" stop-color="#485a6c"/></linearGradient>
+<linearGradient id="k" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7d8a94"/><stop offset=".45" stop-color="#e4e6e8"/><stop offset="1" stop-color="#667885"/></linearGradient>
+<linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<radialGradient id="d" cx=".5" cy=".44" r=".68"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#e8f5ff"/><stop offset=".72" stop-color="#8ccbff"/><stop offset="1" stop-color="#3689e6"/></radialGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.5" rx="16" ry="2.8" fill="url(#s)"/>
+<path d="M11.5,42.5 C13,39.8 18,39.5 20.5,39.5 H27.5 C30,39.5 35,39.8 36.5,42.5 Z" fill="url(#c)" stroke="#5b6670" stroke-opacity=".65" stroke-linejoin="round"/>
+<rect x="20.5" y="35.5" width="7" height="4.5" fill="url(#k)" stroke="#485a6c" stroke-opacity=".65"/>
+<rect x="2.5" y="5.5" width="43" height="31" rx="2.5" fill="url(#b)" stroke="#263340" stroke-opacity=".7"/>
+<rect x="3.5" y="6.5" width="41" height="29" rx="1.5" fill="none" stroke="url(#h)"/>
+<rect x="5.5" y="8.5" width="37" height="24" rx="1" fill="url(#d)" stroke="#0d52bf" stroke-opacity=".55"/>
+<path d="M6,9 H31 L18,32 H6 Z" fill="url(#f)"/>
+<circle cx="24" cy="34.5" r="1" fill="#9bdb4d" stroke="#3a9104" stroke-opacity=".6" stroke-width=".5"/>
+</svg>

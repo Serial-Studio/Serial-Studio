@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000000" stop-opacity=".42"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" gradientUnits="userSpaceOnUse" x1="0" y1="9" x2="0" y2="38"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="m" gradientUnits="userSpaceOnUse" x1="0" y1="22" x2="0" y2="38"><stop offset="0" stop-color="#5fe0c3"/><stop offset=".5" stop-color="#34c9ae"/><stop offset="1" stop-color="#0e9a83"/></linearGradient>
+<linearGradient id="r" gradientUnits="userSpaceOnUse" x1="0" y1="4" x2="0" y2="43"><stop offset="0" stop-color="#fafafa"/><stop offset=".6" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".6"/><stop offset="1" stop-color="#ffffff" stop-opacity=".12"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43" rx="22" ry="3" fill="url(#s)"/>
+<path d="M9,39 V27 C12,22 14,16 18,16 C23,16 24,25 27.5,25 C31.5,25 32,10 36.5,10 C40,10 41.5,15 43.5,16 V39 Z" fill="url(#b)" stroke="#0d52bf" stroke-opacity=".65"/>
+<path d="M9.8,27.4 C12.5,23 14.4,17 18,17 C22.4,17 23.6,26 27.5,26 C31.8,26 32.3,11 36.5,11 C39.8,11 41.2,15.8 42.8,16.8" fill="none" stroke="url(#h)"/>
+<path d="M9,39 V33 C12,30 14,27 18,27 C22,27 23.5,32.5 27.5,32.5 C31.5,32.5 33,23 37,23 C40,23 42,26 43.5,27.5 V39 Z" fill="url(#m)" stroke="#0e9a83" stroke-opacity=".7"/>
+<path d="M9.8,33.6 C12.5,31 14.4,28 18,28 C21.7,28 23.4,33.5 27.5,33.5 C31.8,33.5 33.2,24 37,24 C39.7,24 41.5,26.8 42.8,28" fill="none" stroke="url(#h)"/>
+<path d="M6.5,4.5 H7.5 A2,2 0 0 1 9.5,6.5 V37.5 H41.5 A2,2 0 0 1 43.5,39.5 V40.5 A2,2 0 0 1 41.5,42.5 H6.5 A2,2 0 0 1 4.5,40.5 V6.5 A2,2 0 0 1 6.5,4.5 Z" fill="url(#r)" stroke="#485a6c" stroke-opacity=".65"/>
+<path d="M5.5,40 V6.5 A1,1 0 0 1 6.5,5.5 H7.5 A1,1 0 0 1 8.5,6.5 V38.5 H41.5 A1,1 0 0 1 42.5,39.5" fill="none" stroke="#ffffff" stroke-opacity=".7"/>
+</svg>

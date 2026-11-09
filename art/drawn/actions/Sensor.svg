@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <radialGradient id="sh"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="pcb" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#1f6cd0"/></linearGradient>
+    <linearGradient id="edg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2a70c8"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+    <linearGradient id="pin" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#d48e15"/><stop offset=".4" stop-color="#ffe16b"/><stop offset="1" stop-color="#c88510"/></linearGradient>
+    <linearGradient id="hdr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#667885"/><stop offset="1" stop-color="#34424f"/></linearGradient>
+    <linearGradient id="lid" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+    <linearGradient id="sid" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#b8b9bb"/><stop offset="1" stop-color="#85878a"/></linearGradient>
+    <linearGradient id="hi" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="10" y2="32"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
+  </defs>
+  <ellipse cx="24" cy="44.5" rx="20" ry="2.4" fill="url(#sh)"/>
+  <path d="M10.8 38h2.4v6.5h-2.4zM15.8 38h2.4v6.5h-2.4zM20.8 38h2.4v6.5h-2.4zM25.8 38h2.4v6.5h-2.4zM30.8 38h2.4v6.5h-2.4zM35.8 38h2.4v6.5h-2.4z" fill="url(#pin)" stroke="#a06a08" stroke-opacity=".7" stroke-width=".7"/>
+  <rect x="8.5" y="35.5" width="31" height="3.5" rx=".6" fill="url(#hdr)" stroke="#2c3b47" stroke-opacity=".65"/>
+  <path d="M4.5 32.5h39v3h-39z" fill="url(#edg)" stroke="#0a3c8f" stroke-opacity=".65" stroke-linejoin="round"/>
+  <path d="M12.5 9.5h23l8 23h-39zM15.7 12.1a1.8 1.4 0 1 0 .01 0zM32.3 12.1a1.8 1.4 0 1 0 .01 0z" fill="url(#pcb)" fill-rule="evenodd" stroke="#0a3c8f" stroke-opacity=".65" stroke-linejoin="round"/>
+  <path d="M13.2 10.5h21.6l7.3 21" fill="none" stroke="url(#hi)"/>
+  <ellipse cx="15.7" cy="13.5" rx="2.5" ry="2" fill="none" stroke="#f9c440" stroke-opacity=".9"/>
+  <ellipse cx="32.3" cy="13.5" rx="2.5" ry="2" fill="none" stroke="#f9c440" stroke-opacity=".9"/>
+  <path d="M18.5 28.5l-3.5 4M24 28.5v4M29.5 28.5l3.5 4M15.5 22l-7 10.5M32.5 22l7 10.5" fill="none" stroke="#b5dcff" stroke-opacity=".55" stroke-width=".9"/>
+  <rect x="9.5" y="25" width="4" height="3" rx=".4" fill="#a3907c" stroke="#57392d" stroke-opacity=".7" stroke-width=".6"/>
+  <rect x="34.5" y="25" width="4" height="3" rx=".4" fill="#a3907c" stroke="#57392d" stroke-opacity=".7" stroke-width=".6"/>
+  <path d="M15 25h18v3.5H15z" fill="url(#sid)" stroke="#6e7072" stroke-opacity=".65"/>
+  <path d="M17.5 14.5h13l2.5 10.5h-18z" fill="url(#lid)" stroke="#6e7072" stroke-opacity=".65" stroke-linejoin="round"/>
+  <ellipse cx="24" cy="19.5" rx="1.7" ry="1.3" fill="#485a6c"/>
+</svg>

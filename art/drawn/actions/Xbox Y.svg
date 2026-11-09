@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs>
+<radialGradient id="xbys"><stop offset="0" stop-color="#000" stop-opacity="0.42"/><stop offset="0.55" stop-color="#000" stop-opacity="0.2"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="xbyc" x1="0" y1="3.5" x2="0" y2="40.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fafafa"/><stop offset="0.5" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="xbye" x1="0" y1="24.0" x2="0" y2="42.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#abacae"/><stop offset="1" stop-color="#667885"/></linearGradient>
+<linearGradient id="xbyo" x1="0" y1="5.5" x2="0" y2="38.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5f4a18"/><stop offset="0.5" stop-color="#332205"/><stop offset="1" stop-color="#150b00"/></linearGradient>
+<radialGradient id="xbyg" cx=".5" cy=".95" r=".62"><stop offset="0" stop-color="#ffe16b" stop-opacity="0.6"/><stop offset="0.55" stop-color="#f9c440" stop-opacity="0.2"/><stop offset="1" stop-color="#f9c440" stop-opacity="0"/></radialGradient>
+<linearGradient id="xbyr" x1="0" y1="3.5" x2="0" y2="40.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0.15"/></linearGradient>
+<linearGradient id="xbyi" x1="0" y1="5.5" x2="0" y2="38.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.3"/><stop offset="1" stop-color="#fff" stop-opacity="0.02"/></linearGradient>
+<linearGradient id="xbyt" x1="0" y1="6.5" x2="0" y2="20.0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.5"/><stop offset="1" stop-color="#fff" stop-opacity="0.02"/></linearGradient>
+<linearGradient id="xbyf" x1="0" y1="11.3" x2="0" y2="32.7" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffec9f"/><stop offset="0.55" stop-color="#ffe16b"/><stop offset="1" stop-color="#f9c440"/></linearGradient>
+<linearGradient id="xbyh" x1="0" y1="11.3" x2="0" y2="32.7" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.55"/><stop offset="1" stop-color="#fff" stop-opacity="0.05"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="41.5" rx="19" ry="3.5" fill="url(#xbys)"/>
+<circle cx="24" cy="24" r="18.5" fill="url(#xbye)" stroke="#485a6c" stroke-opacity=".62"/>
+<circle cx="24" cy="22" r="18.5" fill="url(#xbyc)" stroke="#485a6c" stroke-opacity=".62"/>
+<circle cx="24" cy="22" r="17.5" fill="none" stroke="url(#xbyr)"/>
+<circle cx="24" cy="22" r="16.5" fill="url(#xbyo)" stroke="#000" stroke-opacity=".6"/>
+<circle cx="24" cy="22" r="16" fill="url(#xbyg)"/>
+<circle cx="24" cy="22" r="15.5" fill="none" stroke="url(#xbyi)"/>
+<path fill="#5f3400" fill-rule="evenodd" d="M12.46 11.54l-.08 .25 0 1 .06 .24 7.96 12.75 .03 .18 0 7.24 .08 .26 .2 .16 .17 .04 6.24 0 .25 -.08 .17 -.2 .03 -.18 0 -7.24 .03 -.18 7.96 -12.75 .06 -.24 0 -1 -.07 -.25 -.21 -.16 -.17 -.04 -7.27 0 -.18 .04 -.21 .19 -3.11 5.42 -.19 .19 -.25 .05 -.24 -.09 -.12 -.15 -3.11 -5.42 -.21 -.19 -.18 -.04 -7.27 0 -.17 .04z"/>
+<path fill="url(#xbyf)" fill-rule="evenodd" stroke="#ad5f00" stroke-opacity=".55" stroke-linejoin="round" d="M12.83 11.34l-.25 .08 -.17 .2 -.03 .25 .06 .16 7.96 12.75 .03 .18 0 7.25 .08 .25 .2 .16 .17 .04 6.24 0 .25 -.08 .17 -.2 .03 -.18 0 -7.24 .03 -.18 7.96 -12.75 .06 -.24 -.07 -.25 -.13 -.12 -.25 -.08 -7.27 0 -.18 .04 -.21 .19 -3.11 5.42 -.19 .19 -.25 .05 -.24 -.09 -.12 -.15 -3.11 -5.42 -.21 -.19 -.18 -.04z"/>
+<path fill="none" stroke="url(#xbyh)" stroke-width=".8" stroke-linejoin="round" d="M13.46 12.14l7.69 12.34 .06 .23 .02 .21 0 6.94 5.54 0 0 -6.94 .02 -.21 .06 -.23 7.69 -12.34 -6.44 0 -3.02 5.28 -.13 .18 -.17 .17 -.21 .13 -.22 .09 -.23 .04 -.24 0 -.23 -.04 -.22 -.09 -.21 -.13 -.17 -.17 -.13 -.18 -3.02 -5.28z"/>
+<ellipse cx="24" cy="13" rx="12" ry="6.5" fill="url(#xbyt)"/>
+</svg>

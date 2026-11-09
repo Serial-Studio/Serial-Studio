@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="k" gradientUnits="userSpaceOnUse" x1="0" y1="3" x2="0" y2="22"><stop offset="0" stop-color="#e6e9ec"/><stop offset=".3" stop-color="#aab2b9"/><stop offset=".6" stop-color="#7a8791"/><stop offset=".85" stop-color="#aab2b9"/><stop offset="1" stop-color="#667885"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9dee2"/><stop offset=".16" stop-color="#b3bcc3"/><stop offset=".5" stop-color="#95a3ab"/><stop offset=".78" stop-color="#667885"/><stop offset=".9" stop-color="#8596a1"/><stop offset="1" stop-color="#485a6c"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d3a46"/><stop offset="1" stop-color="#5b6c7a"/></linearGradient>
+<radialGradient id="g"><stop offset="0" stop-color="#9bdb4d" stop-opacity=".8"/><stop offset="1" stop-color="#9bdb4d" stop-opacity="0"/></radialGradient>
+<radialGradient id="l" cx=".5" cy=".42" r=".6"><stop offset="0" stop-color="#e9ffb0"/><stop offset=".5" stop-color="#8ee03a"/><stop offset="1" stop-color="#3a9104"/></radialGradient>
+</defs>
+<ellipse cx="24" cy="43.8" rx="17" ry="2.8" fill="url(#s)"/>
+<g fill="none">
+<path d="M15.5,23 V15 A8.5,8.5 0 0 1 32.5,15 V23" stroke="#2f3c48" stroke-opacity=".65" stroke-width="7"/>
+<path d="M15.5,23 V15 A8.5,8.5 0 0 1 32.5,15 V23" stroke="url(#k)" stroke-width="5"/>
+<path d="M14.5,22 V15 A9.5,9.5 0 0 1 33.5,15 V22" stroke="#fff" stroke-opacity=".55"/>
+</g>
+<rect x="8.5" y="21.5" width="31" height="20" rx="4" fill="url(#b)" stroke="#3a4a58" stroke-opacity=".65"/>
+<rect x="9.5" y="22.5" width="29" height="18" rx="3" fill="none" stroke="url(#h)"/>
+<circle cx="24" cy="32" r="9.5" fill="url(#g)"/>
+<circle cx="24" cy="32" r="6.5" fill="url(#r)" stroke="#2d3a46" stroke-opacity=".65"/>
+<circle cx="24" cy="32" r="5" fill="url(#l)"/>
+<ellipse cx="22.6" cy="30.4" rx="1.6" ry="1.2" fill="#fff" fill-opacity=".85"/>
+</svg>

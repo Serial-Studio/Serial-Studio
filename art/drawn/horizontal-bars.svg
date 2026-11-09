@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000000" stop-opacity=".42"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
+<linearGradient id="o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa154"/><stop offset=".55" stop-color="#f37329"/><stop offset="1" stop-color="#cc3b02"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9bdb4d"/><stop offset=".55" stop-color="#68b723"/><stop offset="1" stop-color="#3a9104"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#95a3ab"/><stop offset=".35" stop-color="#d7dee2"/><stop offset=".6" stop-color="#95a3ab"/><stop offset="1" stop-color="#667885"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#95a3ab"/><stop offset="1" stop-color="#485a6c"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity=".1"/></linearGradient>
+</defs>
+<ellipse cx="22" cy="44.5" rx="21" ry="2.5" fill="url(#s)"/>
+<rect x="9" y="6.5" width="28.5" height="9" rx="2" fill="url(#o)" stroke="#cc3b02" stroke-opacity=".75"/>
+<rect x="12.5" y="7.5" width="24" height="7" rx="1" fill="none" stroke="url(#h)"/>
+<rect x="9" y="18.5" width="35.5" height="9" rx="2" fill="url(#g)" stroke="#3a9104" stroke-opacity=".75"/>
+<rect x="12.5" y="19.5" width="31" height="7" rx="1" fill="none" stroke="url(#h)"/>
+<rect x="9" y="30.5" width="19.5" height="9" rx="2" fill="url(#b)" stroke="#0d52bf" stroke-opacity=".75"/>
+<rect x="12.5" y="31.5" width="15" height="7" rx="1" fill="none" stroke="url(#h)"/>
+<rect x="5.5" y="3.5" width="6" height="39" rx="1.5" fill="url(#p)" stroke="#485a6c" stroke-opacity=".8"/>
+<rect x="2.5" y="41.5" width="12" height="3" rx="1.5" fill="url(#f)" stroke="#485a6c" stroke-opacity=".8"/>
+</svg>

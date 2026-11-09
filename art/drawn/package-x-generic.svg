@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2d3a4"/><stop offset="1" stop-color="#d9ae73"/></linearGradient>
+<linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d5a56a"/><stop offset=".55" stop-color="#b98249"/><stop offset="1" stop-color="#8f5e2c"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c0894d"/><stop offset=".55" stop-color="#9a6836"/><stop offset="1" stop-color="#744a21"/></linearGradient>
+<linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4d6"/><stop offset="1" stop-color="#ecd29c"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.6" rx="21" ry="3.2" fill="url(#s)"/>
+<path d="M24,22.5 L42.5,14 V33.5 L24,42.5 Z" fill="url(#r)" stroke="#57392d" stroke-opacity=".75" stroke-linejoin="round"/>
+<path d="M5.5,14 L24,22.5 V42.5 L5.5,33.5 Z" fill="url(#l)" stroke="#57392d" stroke-opacity=".75" stroke-linejoin="round"/>
+<path d="M24,5.5 L42.5,14 L24,22.5 L5.5,14 Z" fill="url(#t)" stroke="#57392d" stroke-opacity=".75" stroke-linejoin="round"/>
+<path d="M6.5,14.9 L24,23 M24,23 L41.5,14.9" fill="none" stroke="#fff" stroke-opacity=".5"/>
+<path d="M24.5,23.8 V41.6" stroke="#fff" stroke-opacity=".3"/>
+<path d="M29.55,24.95 L39.7,20.3 V27.3 L29.55,31.95 Z" fill="url(#p)" stroke="#57392d" stroke-opacity=".55" stroke-linejoin="round"/>
+<path d="M31.5,26.3 L37.5,23.5 M31.5,29 L35.5,27.1" fill="none" stroke="#667885" stroke-width="1.4"/>
+<path d="M11.79,16.89 L17.71,19.61 V29.61 L11.79,26.89 Z M11.79,16.89 L17.71,19.61 L36.21,11.11 L30.29,8.39 Z" fill="url(#a)" stroke="#8f5e2c" stroke-opacity=".6" stroke-linejoin="round"/>
+<path d="M14.75,18.25 L33.25,9.75" fill="none" stroke="#8f5e2c" stroke-opacity=".5"/>
+</svg>

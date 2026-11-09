@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="k" gradientUnits="userSpaceOnUse" x1="0" y1="3" x2="0" y2="22"><stop offset="0" stop-color="#e6e9ec"/><stop offset=".3" stop-color="#aab2b9"/><stop offset=".6" stop-color="#7a8791"/><stop offset=".85" stop-color="#aab2b9"/><stop offset="1" stop-color="#667885"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b0"/><stop offset=".16" stop-color="#ffe16b"/><stop offset=".48" stop-color="#f9c440"/><stop offset=".78" stop-color="#d48e15"/><stop offset=".9" stop-color="#ecb83a"/><stop offset="1" stop-color="#a86a08"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+<linearGradient id="n" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e1c12"/><stop offset="1" stop-color="#57392d"/></linearGradient>
+</defs>
+<ellipse cx="20" cy="43.8" rx="17" ry="2.8" fill="url(#s)"/>
+<g fill="none" stroke-linecap="round">
+<path d="M26.5,23 V13 A7.5,7.5 0 0 1 41.5,13 V18.5" stroke="#2f3c48" stroke-opacity=".65" stroke-width="7"/>
+<path d="M26.5,23 V13 A7.5,7.5 0 0 1 41.5,13 V18.5" stroke="url(#k)" stroke-width="5"/>
+<path d="M25.5,21 V13 A8.5,8.5 0 0 1 42.5,13 V18" stroke="#fff" stroke-opacity=".55"/>
+</g>
+<rect x="3.5" y="21.5" width="31" height="20" rx="4" fill="url(#b)" stroke="#8a5a10" stroke-opacity=".65"/>
+<rect x="4.5" y="22.5" width="29" height="18" rx="3" fill="none" stroke="url(#h)"/>
+<path d="M4.5,26.5 H33.5" fill="none" stroke="#8a5a10" stroke-opacity=".3"/>
+<path d="M4.5,27.5 H33.5" fill="none" stroke="#fff" stroke-opacity=".3"/>
+<circle cx="19" cy="31" r="3.4" fill="url(#n)"/>
+<path d="M17.5,32.5 L16.4,38 H21.6 L20.5,32.5 Z" fill="url(#n)"/>
+<path d="M16.4,38.6 H21.6" fill="none" stroke="#fff" stroke-opacity=".4"/>
+</svg>

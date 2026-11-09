@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs>
+<radialGradient id="xbxs"><stop offset="0" stop-color="#000" stop-opacity="0.42"/><stop offset="0.55" stop-color="#000" stop-opacity="0.2"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="xbxc" x1="0" y1="3.5" x2="0" y2="40.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fafafa"/><stop offset="0.5" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="xbxe" x1="0" y1="24.0" x2="0" y2="42.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#abacae"/><stop offset="1" stop-color="#667885"/></linearGradient>
+<linearGradient id="xbxo" x1="0" y1="5.5" x2="0" y2="38.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#153457"/><stop offset="0.5" stop-color="#03142e"/><stop offset="1" stop-color="#000612"/></linearGradient>
+<radialGradient id="xbxg" cx=".5" cy=".95" r=".62"><stop offset="0" stop-color="#64baff" stop-opacity="0.6"/><stop offset="0.55" stop-color="#3689e6" stop-opacity="0.2"/><stop offset="1" stop-color="#3689e6" stop-opacity="0"/></radialGradient>
+<linearGradient id="xbxr" x1="0" y1="3.5" x2="0" y2="40.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0.15"/></linearGradient>
+<linearGradient id="xbxi" x1="0" y1="5.5" x2="0" y2="38.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.3"/><stop offset="1" stop-color="#fff" stop-opacity="0.02"/></linearGradient>
+<linearGradient id="xbxt" x1="0" y1="6.5" x2="0" y2="20.0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.5"/><stop offset="1" stop-color="#fff" stop-opacity="0.02"/></linearGradient>
+<linearGradient id="xbxf" x1="0" y1="11.3" x2="0" y2="32.7" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9ad2ff"/><stop offset="0.55" stop-color="#64baff"/><stop offset="1" stop-color="#3689e6"/></linearGradient>
+<linearGradient id="xbxh" x1="0" y1="11.3" x2="0" y2="32.7" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.55"/><stop offset="1" stop-color="#fff" stop-opacity="0.05"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="41.5" rx="19" ry="3.5" fill="url(#xbxs)"/>
+<circle cx="24" cy="24" r="18.5" fill="url(#xbxe)" stroke="#485a6c" stroke-opacity=".62"/>
+<circle cx="24" cy="22" r="18.5" fill="url(#xbxc)" stroke="#485a6c" stroke-opacity=".62"/>
+<circle cx="24" cy="22" r="17.5" fill="none" stroke="url(#xbxr)"/>
+<circle cx="24" cy="22" r="16.5" fill="url(#xbxo)" stroke="#000" stroke-opacity=".6"/>
+<circle cx="24" cy="22" r="16" fill="url(#xbxg)"/>
+<circle cx="24" cy="22" r="15.5" fill="none" stroke="url(#xbxi)"/>
+<path fill="#001954" fill-rule="evenodd" d="M13.01 11.55l-.07 .25 0 1 .08 .25 6.34 9.12 -6.78 9.78 -.08 .25 0 1 .03 .17 .1 .15 .15 .1 .17 .04 7.15 0 .18 -.04 .2 -.17 3.13 -4.74 .14 -.14 .25 -.08 .25 .08 .14 .14 3.13 4.74 .2 .17 .18 .04 7.15 0 .17 -.04 .15 -.1 .1 -.15 .03 -.17 0 -1 -.08 -.25 -6.78 -9.78 6.34 -9.12 .08 -.25 0 -1 -.03 -.17 -.1 -.15 -.14 -.1 -.18 -.04 -7.04 0 -.17 .04 -.21 .17 -2.8 4.29 -.14 .15 -.25 .07 -.25 -.07 -.14 -.15 -2.8 -4.29 -.21 -.17 -.17 -.04 -7.04 0 -.18 .04z"/>
+<path fill="url(#xbxf)" fill-rule="evenodd" stroke="#002e99" stroke-opacity=".55" stroke-linejoin="round" d="M12.58 31.95l-.08 .25 .07 .25 .21 .17 .17 .04 7.15 0 .18 -.04 .2 -.17 3.13 -4.74 .14 -.14 .25 -.08 .25 .08 .14 .14 3.13 4.74 .2 .17 .18 .04 7.15 0 .17 -.04 .15 -.1 .12 -.23 0 -.18 -.07 -.16 -6.94 -10 -.05 -.1 -.04 -.18 .04 -.17 .05 -.1 6.5 -9.35 .07 -.16 .01 -.18 -.13 -.23 -.14 -.1 -.18 -.04 -7.04 0 -.17 .04 -.21 .17 -2.8 4.29 -.14 .15 -.25 .07 -.25 -.07 -.14 -.15 -2.8 -4.29 -.21 -.17 -.17 -.04 -7.04 0 -.18 .04 -.14 .1 -.13 .23 .01 .18 .07 .16 6.5 9.35 .05 .1 .04 .17 -.04 .18 -.05 .1z"/>
+<path fill="none" stroke="url(#xbxh)" stroke-width=".8" stroke-linejoin="round" d="M13.62 31.86l6.3 0 3.05 -4.62 .14 -.18 .19 -.16 .22 -.12 .23 -.07 .25 -.02 .25 .02 .23 .07 .22 .12 .19 .16 .14 .18 3.05 4.62 6.3 0 -6.58 -9.49 -.11 -.2 -.08 -.25 -.02 -.25 .02 -.25 .08 -.24 .11 -.21 6.14 -8.83 -6.18 0 -2.72 4.17 -.15 .18 -.19 .16 -.22 .12 -.23 .07 -.25 .03 -.25 -.03 -.23 -.07 -.22 -.12 -.19 -.16 -.15 -.18 -2.72 -4.17 -6.18 0 6.14 8.83 .11 .21 .08 .24 .02 .25 -.02 .25 -.08 .25 -.11 .2z"/>
+<ellipse cx="24" cy="13" rx="12" ry="6.5" fill="url(#xbxt)"/>
+</svg>

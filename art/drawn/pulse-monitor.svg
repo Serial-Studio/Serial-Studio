@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".36"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset=".55" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#95a3ab"/><stop offset=".6" stop-color="#667885"/><stop offset="1" stop-color="#485a6c"/></linearGradient>
+<radialGradient id="v" cx=".5" cy=".5" r=".7"><stop offset="0" stop-color="#2e6a4a"/><stop offset=".6" stop-color="#1f3f36"/><stop offset="1" stop-color="#17272c"/></radialGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ed5353"/><stop offset="1" stop-color="#c6262e"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.5" rx="17" ry="2.8" fill="url(#s)"/>
+<rect x="20.5" y="34.5" width="7" height="5.5" fill="url(#d)" stroke="#485a6c" stroke-opacity=".65"/>
+<path d="M13.5,42.5 C13.5,40.5 15,39.5 17,39.5 H31 C33,39.5 34.5,40.5 34.5,42.5 Z" fill="url(#c)" stroke="#667885" stroke-opacity=".65" stroke-linejoin="round"/>
+<rect x="3.5" y="6.5" width="41" height="29" rx="3.5" fill="url(#c)" stroke="#667885" stroke-opacity=".65"/>
+<rect x="4.5" y="7.5" width="39" height="27" rx="2.5" fill="none" stroke="url(#h)"/>
+<rect x="7.5" y="10.5" width="33" height="21" rx="1.5" fill="url(#v)" stroke="#485a6c" stroke-opacity=".65"/>
+<path d="M8.5,16.5 H39.5 M8.5,26.5 H39.5 M14.5,11 V31 M24.5,11 V31 M34.5,11 V31" fill="none" stroke="#9bdb4d" stroke-opacity=".16"/>
+<path d="M9,22.5 H14 L16,19.8 L18,22.5 H19.5 L22,13.5 L25,29.5 L27,22.5 H29 Q31,19.5 33,22.5 H39" fill="none" stroke="#68b723" stroke-opacity=".4" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M9,22.5 H14 L16,19.8 L18,22.5 H19.5 L22,13.5 L25,29.5 L27,22.5 H29 Q31,19.5 33,22.5 H39" fill="none" stroke="#9bdb4d" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M36.5,15.6 C35.7,14.2 33.7,14.5 33.7,16.1 C33.7,17.4 35.3,18.4 36.5,19.4 C37.7,18.4 39.3,17.4 39.3,16.1 C39.3,14.5 37.3,14.2 36.5,15.6 Z" fill="url(#r)"/>
+<path d="M8,11 H31 L21,31 H8 Z" fill="#fff" fill-opacity=".06"/>
+</svg>

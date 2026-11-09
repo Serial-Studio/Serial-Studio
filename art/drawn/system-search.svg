@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset=".35" stop-color="#d4d4d4"/><stop offset=".65" stop-color="#abacae"/><stop offset=".85" stop-color="#d4d4d4"/><stop offset="1" stop-color="#95a3ab"/></linearGradient>
+<linearGradient id="n" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#7f8c95"/><stop offset=".5" stop-color="#d4d4d4"/><stop offset="1" stop-color="#fafafa"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfeaff"/><stop offset=".42" stop-color="#7cc6ff"/><stop offset=".46" stop-color="#4aa3f2"/><stop offset=".78" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="o" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#cc3b02"/><stop offset=".5" stop-color="#f37329"/><stop offset="1" stop-color="#ffa154"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+</defs>
+<ellipse cx="26" cy="43.6" rx="18" ry="3" fill="url(#s)"/>
+<g transform="rotate(45 19.5 19.5)">
+<rect x="33.5" y="16.5" width="6.5" height="6" fill="url(#n)" stroke="#485a6c" stroke-opacity=".7"/>
+<rect x="38.5" y="15" width="14" height="9" rx="4.5" fill="url(#o)" stroke="#a83200" stroke-opacity=".7"/>
+<path d="M41.5,16.2 H49.5" fill="none" stroke="#fff" stroke-opacity=".5"/>
+</g>
+<circle cx="19.5" cy="19.5" r="15" fill="url(#m)" stroke="#485a6c" stroke-opacity=".7"/>
+<circle cx="19.5" cy="19.5" r="14" fill="none" stroke="url(#h)"/>
+<circle cx="19.5" cy="19.5" r="11.5" fill="url(#g)" stroke="#0d52bf" stroke-opacity=".75"/>
+<path d="M10.3,19.5 A9.2,9.2 0 0 1 19.5,10.3 C15,11.6 11.6,15 10.3,19.5 Z" fill="#fff" fill-opacity=".8"/>
+<path d="M28,21 A8.8,8.8 0 0 1 21.5,28 C24.6,26.7 26.7,24.4 28,21 Z" fill="#fff" fill-opacity=".35"/>
+</svg>

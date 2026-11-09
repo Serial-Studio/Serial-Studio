@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000000" stop-opacity=".42"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa154"/><stop offset=".55" stop-color="#f37329"/><stop offset="1" stop-color="#cc3b02"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity=".08"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="42.5" rx="22" ry="3" fill="url(#s)"/>
+<path transform="translate(0,2.5)" d="M14,7.5 C19.2,7.5 23.5,11 23.5,17 V29 C23.5,35 19.2,38.5 14,38.5 C8.8,38.5 4.5,35 4.5,29 V17 C4.5,11 8.8,7.5 14,7.5 Z" fill="#0d52bf" stroke="#0d52bf" stroke-opacity=".6"/>
+<path fill-rule="evenodd" d="M14,7.5 C19.2,7.5 23.5,11 23.5,17 V29 C23.5,35 19.2,38.5 14,38.5 C8.8,38.5 4.5,35 4.5,29 V17 C4.5,11 8.8,7.5 14,7.5 Z M14,14.5 C12.3,14.5 11.5,15.7 11.5,17.5 V28.5 C11.5,30.3 12.3,31.5 14,31.5 C15.7,31.5 16.5,30.3 16.5,28.5 V17.5 C16.5,15.7 15.7,14.5 14,14.5 Z" fill="url(#b)" stroke="#0d52bf" stroke-opacity=".7"/>
+<path d="M14,8.5 C18.6,8.5 22.5,11.8 22.5,17 V29 C22.5,34.2 18.6,37.5 14,37.5 C9.4,37.5 5.5,34.2 5.5,29 V17 C5.5,11.8 9.4,8.5 14,8.5 Z M14,13.5 C11.7,13.5 10.5,15.2 10.5,17.5 V28.5 C10.5,30.8 11.7,32.5 14,32.5 C16.3,32.5 17.5,30.8 17.5,28.5 V17.5 C17.5,15.2 16.3,13.5 14,13.5 Z" fill="none" stroke="url(#h)"/>
+<path transform="translate(0,2.5)" d="M33,7.5 H39.5 V31.5 H43.5 V38.5 H27.5 V31.5 H32.5 V16.8 L27.5,19.5 V12.5 Z" fill="#cc3b02" stroke="#cc3b02" stroke-opacity=".6"/>
+<path d="M33,7.5 H39.5 V31.5 H43.5 V38.5 H27.5 V31.5 H32.5 V16.8 L27.5,19.5 V12.5 Z" fill="url(#o)" stroke="#cc3b02" stroke-opacity=".7"/>
+<path d="M33.4,8.5 H38.5 V32.5 H42.5 V37.5 H28.5 V32.5 H33.5 V15.1 L28.5,17.8 V12.9 Z" fill="none" stroke="url(#h)"/>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4d6a2"/><stop offset=".5" stop-color="#d6a266"/><stop offset="1" stop-color="#96622f"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ed5353"/><stop offset=".55" stop-color="#c6262e"/><stop offset="1" stop-color="#a10705"/></linearGradient>
+<linearGradient id="o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa154"/><stop offset=".55" stop-color="#f37329"/><stop offset="1" stop-color="#cc3b02"/></linearGradient>
+<linearGradient id="y" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe16b"/><stop offset=".55" stop-color="#f9c440"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9bdb4d"/><stop offset=".55" stop-color="#68b723"/><stop offset="1" stop-color="#3a9104"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cd9ef7"/><stop offset=".55" stop-color="#a56de2"/><stop offset="1" stop-color="#7239b3"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.4" rx="20" ry="3" fill="url(#s)"/>
+<path transform="translate(0 1.6)" d="M24,7.5 C36.5,7.5 44.5,13.5 44.5,22 C44.5,27.5 40.5,30 36,29.2 C32.5,28.6 29.5,29.5 29.5,32.5 C29.5,35 31,36 30.2,38 C29.2,40.6 25,41.5 21,41 C11,39.8 3.5,33 3.5,24 C3.5,14 12.5,7.5 24,7.5 Z M27,21.3 A3.8,3.4 0 1 0 27,28.1 A3.8,3.4 0 1 0 27,21.3 Z" fill="#7a4a1e" fill-rule="evenodd" stroke="#4d2a0e" stroke-opacity=".7" stroke-linejoin="round"/>
+<path d="M24,7.5 C36.5,7.5 44.5,13.5 44.5,22 C44.5,27.5 40.5,30 36,29.2 C32.5,28.6 29.5,29.5 29.5,32.5 C29.5,35 31,36 30.2,38 C29.2,40.6 25,41.5 21,41 C11,39.8 3.5,33 3.5,24 C3.5,14 12.5,7.5 24,7.5 Z M27,21.3 A3.8,3.4 0 1 0 27,28.1 A3.8,3.4 0 1 0 27,21.3 Z" fill="url(#w)" fill-rule="evenodd" stroke="#6a3e14" stroke-opacity=".7" stroke-linejoin="round"/>
+<path d="M24,8.5 C36,8.5 43.5,14 43.5,22 M24,8.5 C13,8.5 4.5,14.5 4.5,24" fill="none" stroke="url(#h)"/>
+<g stroke-opacity=".7" stroke-linejoin="round">
+<path d="M16.3,29.8 C18.8,29.6 20.5,31.5 20.2,33.8 C20,36.2 18,37.6 15.8,37.4 C13.3,37.1 12,35.3 12.4,33 C12.7,31 14.4,29.9 16.3,29.8 Z" fill="url(#r)" stroke="#a10705"/>
+<path d="M10.8,20.6 C13.4,20.4 15.1,22.4 14.8,24.9 C14.6,27.4 12.6,28.9 10.2,28.6 C7.6,28.3 6.3,26.3 6.6,23.9 C6.9,21.8 8.6,20.7 10.8,20.6 Z" fill="url(#o)" stroke="#a83200"/>
+<path d="M13.4,12.2 C15.9,12 17.5,14 17.3,16.3 C17.1,18.7 15.2,20.1 12.9,19.8 C10.4,19.5 9.2,17.7 9.6,15.3 C9.9,13.4 11.5,12.3 13.4,12.2 Z" fill="url(#y)" stroke="#ad5f00"/>
+<path d="M21.6,8.9 C24.1,8.7 25.6,10.5 25.5,12.8 C25.3,15.2 23.5,16.7 21.2,16.5 C18.7,16.2 17.5,14.5 17.8,12.1 C18.1,10.1 19.7,9 21.6,8.9 Z" fill="url(#g)" stroke="#2f7a03"/>
+<path d="M30.4,9.6 C32.9,9.4 34.6,11.4 34.3,13.7 C34,16.1 32.1,17.4 29.9,17.2 C27.4,16.9 26.2,15.1 26.6,12.8 C26.9,10.8 28.5,9.7 30.4,9.6 Z" fill="url(#b)" stroke="#0d52bf"/>
+<path d="M38.2,15.4 C40.6,15.2 42.2,17 42,19.3 C41.7,21.6 40,23 37.8,22.8 C35.4,22.5 34.2,20.8 34.5,18.6 C34.8,16.7 36.4,15.5 38.2,15.4 Z" fill="url(#p)" stroke="#5a2a94"/>
+</g>
+<g fill="#fff" fill-opacity=".75">
+<ellipse cx="15.2" cy="31.9" rx="1.5" ry="1"/>
+<ellipse cx="9.6" cy="22.7" rx="1.5" ry="1"/>
+<ellipse cx="12.3" cy="14.3" rx="1.5" ry="1"/>
+<ellipse cx="20.5" cy="10.9" rx="1.5" ry="1"/>
+<ellipse cx="29.3" cy="11.7" rx="1.5" ry="1"/>
+<ellipse cx="37.1" cy="17.4" rx="1.5" ry="1"/>
+</g>
+</svg>

@@ -37,7 +37,6 @@ MANIFEST_NAME = "art-provenance.json"
 ART_FOLDERS = ("icons", "actions", "images", "iconpacks")
 ART_SUFFIXES = {".svg", ".png", ".ico", ".icns"}
 ALLOWED_LICENSES = {
-    "LicenseRef-PublicDomain",
     "MIT",
     "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial",
 }
@@ -79,6 +78,8 @@ def expected_px(rel: str) -> int | None:
         return ACTION_ICON_PX
     if parts[0] == "icons" and len(parts) == 4 and parts[2].isdigit():
         return int(parts[2])
+    if parts[:2] == ["iconpacks", "basic"] and len(parts) == 5 and parts[3].isdigit():
+        return int(parts[3])
     return None
 
 

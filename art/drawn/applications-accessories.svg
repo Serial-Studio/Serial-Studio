@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f77a7a"/><stop offset=".45" stop-color="#d93a40"/><stop offset="1" stop-color="#a10705"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ed5353"/><stop offset=".55" stop-color="#c6262e"/><stop offset=".92" stop-color="#a10705"/><stop offset="1" stop-color="#c6262e"/></linearGradient>
+<linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset=".5" stop-color="#d4d4d4"/><stop offset="1" stop-color="#95a3ab"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.6" rx="22" ry="3" fill="url(#s)"/>
+<path d="M15.5,15 V10.5 C15.5,8 17,6.5 19.5,6.5 H28.5 C31,6.5 32.5,8 32.5,10.5 V15" fill="none" stroke="#485a6c" stroke-opacity=".85" stroke-width="4.8"/>
+<path d="M15.5,15 V10.5 C15.5,8 17,6.5 19.5,6.5 H28.5 C31,6.5 32.5,8 32.5,10.5 V15" fill="none" stroke="url(#m)" stroke-width="2.8"/>
+<path d="M4.5,24.5 H43.5 V39.5 C43.5,41 42.5,41.5 41,41.5 H7 C5.5,41.5 4.5,41 4.5,39.5 Z" fill="url(#b)" stroke="#a10705" stroke-opacity=".7" stroke-linejoin="round"/>
+<rect x="5" y="24.5" width="38" height="2.2" fill="#6e0402" fill-opacity=".5"/>
+<path d="M5.5,27 V39.5 M42.5,27 V39.5" fill="none" stroke="url(#h)"/>
+<path d="M5,35 H43" fill="none" stroke="#7a0503" stroke-opacity=".55" stroke-width="1.2"/>
+<path d="M5,36.2 H43" fill="none" stroke="#fff" stroke-opacity=".28"/>
+<path d="M10.5,14.5 H37.5 C39.2,14.5 40.1,15.5 40.6,16.9 L42.5,23.5 H5.5 L7.4,16.9 C7.9,15.5 8.8,14.5 10.5,14.5 Z" fill="url(#r)" stroke="#a10705" stroke-opacity=".7" stroke-linejoin="round"/>
+<path d="M10.5,15.5 H37.5 C38.6,15.5 39.3,16.2 39.7,17.2 L41.2,22.5 H6.8 L8.3,17.2 C8.7,16.2 9.4,15.5 10.5,15.5 Z" fill="none" stroke="url(#h)"/>
+<rect x="10.5" y="20.5" width="6" height="9" rx="1.2" fill="url(#m)" stroke="#485a6c" stroke-opacity=".75"/>
+<rect x="31.5" y="20.5" width="6" height="9" rx="1.2" fill="url(#m)" stroke="#485a6c" stroke-opacity=".75"/>
+<path d="M11.5,21.5 H15.5 M32.5,21.5 H36.5" fill="none" stroke="#fff" stroke-opacity=".8"/>
+<rect x="12.2" y="24.2" width="2.6" height="2.4" rx=".6" fill="#485a6c" fill-opacity=".85"/>
+<rect x="33.2" y="24.2" width="2.6" height="2.4" rx=".6" fill="#485a6c" fill-opacity=".85"/>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000000" stop-opacity=".42"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".6" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset=".55" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4e6e8"/><stop offset=".3" stop-color="#ffffff"/><stop offset="1" stop-color="#f4f4f4"/></linearGradient>
+<linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#667885"/><stop offset="1" stop-color="#485a6c"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".6"/><stop offset="1" stop-color="#ffffff" stop-opacity=".1"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43" rx="22.5" ry="2.8" fill="url(#s)"/>
+<path d="M6.5,20 V9.5 A2,2 0 0 1 8.5,7.5 H25.5 A2,2 0 0 1 27.5,9.5 V20 Z" fill="url(#t)" stroke="#0d52bf" stroke-opacity=".75"/>
+<path d="M7.5,18 V9.5 A1,1 0 0 1 8.5,8.5 H25.5 A1,1 0 0 1 26.5,9.5 V18" fill="none" stroke="url(#h)"/>
+<path d="M11,13 H23" fill="none" stroke="#ffffff" stroke-opacity=".9" stroke-width="2.6" stroke-linecap="round"/>
+<rect x="3.5" y="17.5" width="41" height="24" rx="3" fill="url(#f)" stroke="#485a6c" stroke-opacity=".7"/>
+<rect x="4.5" y="18.5" width="39" height="22" rx="2" fill="none" stroke="url(#h)"/>
+<rect x="7.5" y="21.5" width="33" height="16" rx="1" fill="url(#w)" stroke="#485a6c" stroke-opacity=".6"/>
+<rect x="11" y="27" width="11" height="5" rx="1.5" fill="url(#v)"/>
+<rect x="26" y="24" width="2.5" height="11" rx=".6" fill="url(#c)"/>
+</svg>

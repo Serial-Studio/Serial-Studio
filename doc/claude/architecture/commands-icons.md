@@ -44,7 +44,8 @@ the placeholder. On GitHub the unknown scheme degrades to the `alt` text.
 
 **Icon packs (spec 0115):** a pack is a second artwork root, `app/rcc/iconpacks/<pack>/
 <category>/<tier>/<name>.svg` plus `pack.json` (`id`, `title`, `translations`, `style`, `mono`),
-compiled in through the generated `app/rcc/iconpacks/iconpacks.qrc`. The Core registry consults
+compiled in through a generated resource list (`basic.qrc`, `art-free.qrc`, or the private tree's
+`art.qrc`). The Core registry consults
 the active pack before the house tree for the themed categories and never for `window`,
 `system` or the exempt `buttons`; a pack is partial by design and falls back per icon. In QML
 the `Cpp_Misc_IconRegistry` name is the Ui façade `Misc::IconPacks`, whose `icon`, `iconById`,
@@ -59,22 +60,25 @@ the `IconPack` setting (empty = *Follow theme*, which reads the theme's `icon-pa
 coverage, mapping and qrc consistency) and `registry-verify.py` runs it on a tree that carries the
 packs; the Icons8 mapping is `doc/claude/specs/0115-icon-packs/icons8-map.csv`.
 
-**Two art trees (spec 0116):** this repository holds only free art: Tango `@1x`/`@2x` PNG pairs for
-the themed categories and action icons, and Tabler SVGs for buttons, window controls and the hidden
-`fine-line` mono pack. `scripts/tango-art.py` generates it, with `app/rcc/art-free.qrc` and
-`app/rcc/art-provenance.json`. Official builds compile the licensed tree from the private
+**Two art trees and the Basic pack (spec 0116):** Basic is the colorful icon theme drawn for this
+project: `art/drawn/` holds its SVG sources and `scripts/basic-art.py` renders `@1x`/`@2x` PNG pairs
+to `app/rcc/iconpacks/basic/`, listed in `app/rcc/basic.qrc`, which every build compiles. Beside it,
+exactly one art tree is compiled. Official builds take the licensed Office set from the private
 `Serial-Studio/Icons` repository through `SS_ICON_ART_DIR` (a sibling `../Icons` checkout is picked
-up automatically), and `SS_REQUIRE_ICON_ART` makes a missing checkout a configure error. Both trees
-resolve the same ids at the same paths and exactly one is compiled, so `app/rcc/rcc.qrc` lists no
+up automatically), and `SS_REQUIRE_ICON_ART` makes a missing checkout a configure error. Without it,
+`app/rcc/art-free.qrc` supplies the Tabler window controls, hidden `fine-line` pack, images and the
+action icons. `IconRegistry::locateHouse` serves the house tree, then `fallbackPackId()`, so Basic is
+the default where Office is absent and fills any gap where it is present. `app/rcc/rcc.qrc` lists no
 art except the shared Tabler buttons. Licensed art never enters this repository: `art-verify.py`
-fails on any art file the manifest does not list. Change licensed art in the private repository.
+fails on any art file the manifest does not list. Basic must stay original: a drawing is made from
+the idea it stands for, never from another theme's icon.
 
-**Monochrome-by-design surfaces (spec 0115 R23):** the dashboard widget toolbars draw at 18 px
-inside every widget, where colour artwork collapses and competes with the plotted data, so they
-are mono whatever pack is active. `DashboardToolButton` takes `glyph: "<category>/<name>"` and
-resolves it through `Cpp_Misc_IconRegistry.monoIconById(id, px)`, which reads the Fine Line pack
-(`IconRegistry::monoPackId()`) in the theme's text tint and serves the house file for a glyph
-that pack lacks; `registry-verify.py` checks every `glyph` id resolves. A collapsed ribbon
+**Widget toolbar icons (spec 0115 R23, spec 0116):** the dashboard widget toolbars draw at 18 px
+inside every widget and take their art from their own setting (`WidgetIconPack`, Preferences >
+General > Widget Toolbar Icons), independent of the active pack. `DashboardToolButton` takes
+`glyph: "<category>/<name>"` and resolves it through `Cpp_Misc_IconRegistry.monoIconById(id, px)`:
+the chosen pack, then the Fine Line pack (`IconRegistry::monoPackId()`, the default), then the
+house file. Only a mono pack is tinted; `registry-verify.py` checks every `glyph` id resolves. A collapsed ribbon
 section tints its icon with the section's own text colour through `retint`, so it follows the
 other icons of its toolbar on the strip and on secondary toolbars alike. The dashboard taskbar,
 the Terminal ribbon and content marks (notification severities, empty-state illustrations) keep

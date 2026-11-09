@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".36"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f4f4"/><stop offset=".35" stop-color="#c4c8cc"/><stop offset=".65" stop-color="#949aa0"/><stop offset="1" stop-color="#7d8b96"/></linearGradient>
+<linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa154"/><stop offset=".55" stop-color="#f37329"/><stop offset="1" stop-color="#cc3b02"/></linearGradient>
+<radialGradient id="g" cx=".42" cy=".36" r=".72"><stop offset="0" stop-color="#f4fbff"/><stop offset=".55" stop-color="#c0e4fb"/><stop offset="1" stop-color="#7dbcf0"/></radialGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44.6" rx="20" ry="2.2" fill="url(#s)"/>
+<g fill="url(#a)" stroke="#0d52bf" stroke-opacity=".65" stroke-linejoin="round">
+<path d="M5.5,4.5 H17.5 L13.27,8.73 L18.22,13.68 L14.68,17.22 L9.73,12.27 L5.5,16.5 Z"/>
+<path d="M42.5,4.5 H30.5 L34.73,8.73 L29.78,13.68 L33.32,17.22 L38.27,12.27 L42.5,16.5 Z"/>
+<path d="M5.5,42.5 H17.5 L13.27,38.27 L18.22,33.32 L14.68,29.78 L9.73,34.73 L5.5,30.5 Z"/>
+<path d="M42.5,42.5 H30.5 L34.73,38.27 L29.78,33.32 L33.32,29.78 L38.27,34.73 L42.5,30.5 Z"/>
+</g>
+<g fill="none" stroke="url(#h)" stroke-linejoin="round">
+<path d="M6.5,5.5 H15.09 L11.86,8.73 L16.81,13.68 L14.68,15.81 L9.73,10.86 L6.5,14.09 Z"/>
+<path d="M41.5,5.5 H32.91 L36.14,8.73 L31.19,13.68 L33.32,15.81 L38.27,10.86 L41.5,14.09 Z"/>
+<path d="M6.5,41.5 H15.09 L11.86,38.27 L16.81,33.32 L14.68,31.19 L9.73,36.14 L6.5,32.91 Z"/>
+<path d="M41.5,41.5 H32.91 L36.14,38.27 L31.19,33.32 L33.32,31.19 L38.27,36.14 L41.5,32.91 Z"/>
+</g>
+<g transform="translate(22 21.5) rotate(45)">
+<rect x="5" y="-1.6" width="5.8" height="3.2" rx="1.4" fill="url(#k)" stroke="#a83200" stroke-opacity=".65" stroke-width=".7"/>
+</g>
+<circle cx="22" cy="21.5" r="5.8" fill="url(#r)" stroke="#667885" stroke-opacity=".65"/>
+<circle cx="22" cy="21.5" r="3.6" fill="url(#g)" stroke="#485a6c" stroke-opacity=".55" stroke-width=".8"/>
+</svg>

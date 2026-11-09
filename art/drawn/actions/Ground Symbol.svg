@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <radialGradient id="sh"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="bar" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffd0a0"/><stop offset=".3" stop-color="#f29a56"/><stop offset=".65" stop-color="#d96a26"/><stop offset="1" stop-color="#a84a14"/></linearGradient>
+    <linearGradient id="tee" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="3" y2="22"><stop offset="0" stop-color="#ffc48e"/><stop offset=".6" stop-color="#e37f3a"/><stop offset=".66" stop-color="#ffd0a0"/><stop offset=".82" stop-color="#e37b35"/><stop offset="1" stop-color="#a84a14"/></linearGradient>
+    <linearGradient id="hi" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="4" y2="42"><stop offset="0" stop-color="#fff" stop-opacity=".42"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient>
+  </defs>
+  <ellipse cx="24" cy="44.5" rx="18" ry="2.8" fill="url(#sh)"/>
+  <rect x="4.5" y="17" width="39" height="7" rx="1.5" fill="#8f3f12" stroke="#7c3108" stroke-opacity=".65"/>
+  <path d="M21.5 3.5h5a1 1 0 0 1 1 1V15.5H42a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5v-3a1.5 1.5 0 0 1 1.5-1.5H20.5V4.5a1 1 0 0 1 1-1z" fill="url(#tee)" stroke="#7c3108" stroke-opacity=".65"/>
+  <path d="M21.5 16.5v-12h5v12H42c.3 0 .5.2.5.5v2.5M21.5 16.5H6c-.3 0-.5.2-.5.5v2.5" fill="none" stroke="url(#hi)"/>
+  <rect x="10.5" y="28" width="27" height="6" rx="1.5" fill="#8f3f12" stroke="#7c3108" stroke-opacity=".65"/>
+  <rect x="10.5" y="26.5" width="27" height="5" rx="1.5" fill="url(#bar)" stroke="#7c3108" stroke-opacity=".65"/>
+  <path d="M11.5 30.5V28c0-.3.2-.5.5-.5h24c.3 0 .5.2.5.5v2.5" fill="none" stroke="url(#hi)"/>
+  <rect x="17.5" y="38" width="13" height="4.5" rx="1.5" fill="#8f3f12" stroke="#7c3108" stroke-opacity=".65"/>
+  <rect x="17.5" y="36.5" width="13" height="4" rx="1.5" fill="url(#bar)" stroke="#7c3108" stroke-opacity=".65"/>
+  <path d="M18.5 39.5V38c0-.3.2-.5.5-.5h10c.3 0 .5.2.5.5v1.5" fill="none" stroke="url(#hi)"/>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b8dcff"/><stop offset=".55" stop-color="#64baff"/><stop offset="1" stop-color="#3689e6"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f4f4f4"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset="1" stop-color="#b6b8bc"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+</defs>
+<ellipse cx="26" cy="43.5" rx="18" ry="3" fill="url(#s)"/>
+<rect x="6.5" y="4.5" width="25" height="30" rx="1.5" fill="url(#b)" stroke="#0d52bf" stroke-opacity=".65"/>
+<rect x="7.5" y="5.5" width="23" height="28" rx=".8" fill="none" stroke="url(#h)"/>
+<rect x="10.5" y="8.6" width="17" height="2.2" rx=".9" fill="#fff" fill-opacity=".75"/>
+<path d="M14.5,12 H31.5 V34 H15.5 Q14.5,34 14.5,33 Z" fill="#000" fill-opacity=".14"/>
+<path d="M18,13.5 H34 L41.5,21 V41 Q41.5,42.5 40,42.5 H18 Q16.5,42.5 16.5,41 V15 Q16.5,13.5 18,13.5 Z" fill="url(#p)" stroke="#5b6670" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M18,14.5 H33.6 L40.5,21.4 V41 Q40.5,41.5 40,41.5 H18 Q17.5,41.5 17.5,41 V15 Q17.5,14.5 18,14.5 Z" fill="none" stroke="url(#h)"/>
+<path d="M34,21 L41,21 L41,23.2 L36,23.2 Z" fill="#000" fill-opacity=".1"/>
+<path d="M34,13.5 L34,21 L41.5,21 Z" fill="url(#f)" stroke="#5b6670" stroke-opacity=".65" stroke-linejoin="round"/>
+<g fill="#3689e6">
+<rect x="20.5" y="19" width="10" height="2.4" rx="1"/>
+<rect x="20.5" y="25" width="17" height="2.4" rx="1"/>
+<rect x="20.5" y="30.5" width="17" height="2.4" rx="1"/>
+<rect x="20.5" y="36" width="11" height="2.4" rx="1"/>
+</g>
+</svg>

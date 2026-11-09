@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".38"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" gradientUnits="userSpaceOnUse" x1="0" y1="5" x2="0" y2="41"><stop offset="0" stop-color="#fafafa"/><stop offset=".6" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ed5353"/><stop offset=".55" stop-color="#c6262e"/><stop offset="1" stop-color="#a10705"/></linearGradient>
+<linearGradient id="u" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="y" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe16b"/><stop offset=".55" stop-color="#f9c440"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.6" rx="21" ry="2.8" fill="url(#s)"/>
+<g fill="none" stroke="#485a6c" stroke-opacity=".65" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M11,5.5 H5.5 V40.5 H11"/>
+<path d="M37,5.5 H42.5 V40.5 H37"/>
+</g>
+<g fill="none" stroke="url(#b)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M11,5.5 H5.5 V40.5 H11"/>
+<path d="M37,5.5 H42.5 V40.5 H37"/>
+</g>
+<circle cx="16.5" cy="15" r="6.5" fill="url(#r)" stroke="#a10705" stroke-opacity=".65"/>
+<circle cx="16.5" cy="15" r="5.5" fill="none" stroke="url(#h)"/>
+<ellipse cx="14.3" cy="12.4" rx="2.2" ry="1.4" fill="#fff" fill-opacity=".8"/>
+<rect x="24.5" y="8.5" width="13" height="13" rx="1.5" fill="url(#u)" stroke="#0d52bf" stroke-opacity=".65"/>
+<rect x="25.5" y="9.5" width="11" height="11" rx="1" fill="none" stroke="url(#h)"/>
+<path d="M26.5,10.5 H35.5 V13.6 Q31,15.8 26.5,13.2 Z" fill="#fff" fill-opacity=".26"/>
+<path d="M24,23.5 L33,37.5 H15 Z" fill="url(#y)" stroke="#a86a0a" stroke-opacity=".75" stroke-linejoin="round"/>
+<path d="M24,25.5 L31.1,36.5 H16.9 Z" fill="none" stroke="url(#h)" stroke-linejoin="round"/>
+</svg>

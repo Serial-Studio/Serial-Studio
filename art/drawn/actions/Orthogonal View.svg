@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#a6dcff"/><stop offset="1" stop-color="#64baff"/></linearGradient>
+<linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#64baff"/><stop offset="1" stop-color="#3689e6"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fafafa"/><stop offset=".6" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="e" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#95a3ab"/><stop offset="1" stop-color="#667885"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44.8" rx="20" ry="2.4" fill="url(#s)"/>
+<path d="M4,32.5 24,43.5 44,32.5V34.5L24,45.5 4,34.5z" fill="url(#e)" stroke="#273445" stroke-opacity=".6" stroke-linejoin="round"/>
+<path d="M24,21.5 44,32.5 24,43.5 4,32.5z" fill="url(#p)" stroke="#273445" stroke-opacity=".6" stroke-linejoin="round"/>
+<path d="M6.3,32.5 24,22.7 41.7,32.5" fill="none" stroke="#fff" stroke-opacity=".55" stroke-linejoin="round"/>
+<path d="M13,32.5 24,38.5 35,32.5 24,26.5z" fill="#0d52bf" fill-opacity=".42" stroke="#002e99" stroke-opacity=".55" stroke-linejoin="round"/>
+<path d="M13,21.5V32.5M24,27.5V38.5M35,21.5V32.5" fill="none" stroke="#f37329" stroke-width="1.75" stroke-dasharray="3 1.75"/>
+<circle cx="13" cy="32.5" r="1.7" fill="#f37329"/>
+<circle cx="24" cy="38.5" r="1.7" fill="#f37329"/>
+<circle cx="35" cy="32.5" r="1.7" fill="#f37329"/>
+<path d="M24,3.5 35,9.5 24,15.5 13,9.5z" fill="url(#t)"/>
+<path d="M13,9.5 24,15.5V27.5L13,21.5z" fill="url(#l)"/>
+<path d="M35,9.5 24,15.5V27.5L35,21.5z" fill="url(#r)"/>
+<path d="M13,9.5 24,15.5 35,9.5M24,15.5V27.5" fill="none" stroke="#fff" stroke-opacity=".4" stroke-linejoin="round"/>
+<path d="M14.7,9.5 24,4.6 33.3,9.5" fill="none" stroke="#fff" stroke-opacity=".6" stroke-linejoin="round"/>
+<path d="M24,3.5 35,9.5V21.5L24,27.5 13,21.5V9.5z" fill="none" stroke="#002e99" stroke-opacity=".65" stroke-linejoin="round"/>
+</svg>

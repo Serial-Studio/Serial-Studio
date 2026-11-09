@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f4f4f4"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset="1" stop-color="#b6b8bc"/></linearGradient>
+<linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43" rx="18.5" ry="3.2" fill="url(#s)"/>
+<path d="M9.8,4.5 L31,4.5 L39.5,13 L39.5,41.3 Q39.5,42.5 38.3,42.5 L9.7,42.5 Q8.5,42.5 8.5,41.3 L8.5,5.7 Q8.5,4.5 9.8,4.5 Z" fill="url(#p)" stroke="#5b6670" stroke-opacity=".65"/>
+<path d="M10,5.5 L30.5,5.5 L38.5,13.5 L38.5,41 L9.5,41 L9.5,6 Q9.5,5.5 10,5.5 Z" fill="none" stroke="url(#h)"/>
+<path d="M31,13 L39,13 L39,15.4 L33,15.4 Z" fill="#000" fill-opacity=".1"/>
+<path d="M31,4.5 L31,13 L39.5,13 Z" fill="url(#f)" stroke="#5b6670" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M20.8,9 L27.2,9 L35.3,30 L29.2,30 L27.58,25.8 L20.42,25.8 L18.8,30 L12.7,30 Z M24,16.52 L22,21.7 L26,21.7 Z" fill="url(#a)" fill-rule="evenodd" stroke="#0d52bf" stroke-opacity=".65" stroke-width=".6"/>
+<rect x="12.7" y="33.3" width="22.6" height="2.2" rx=".9" fill="#667885" fill-opacity=".9"/>
+<rect x="12.7" y="37.4" width="14.5" height="2.2" rx=".9" fill="#667885" fill-opacity=".9"/>
+</svg>

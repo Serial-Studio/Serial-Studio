@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c79b6d"/><stop offset=".55" stop-color="#a0713f"/><stop offset="1" stop-color="#7a4d24"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f4f4f4"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+<linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset=".4" stop-color="#d4d4d4"/><stop offset=".41" stop-color="#abacae"/><stop offset=".75" stop-color="#d4d4d4"/><stop offset="1" stop-color="#95a3ab"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43.6" rx="19" ry="3" fill="url(#s)"/>
+<rect x="8.5" y="7.5" width="31" height="35" rx="2.5" fill="url(#b)" stroke="#57392d" stroke-opacity=".75"/>
+<rect x="9.5" y="8.5" width="29" height="33" rx="1.6" fill="none" stroke="url(#h)"/>
+<path d="M14.5,14.5 H35.5 V33.5 L29.5,38.5 H14.5 Z" fill="#000" fill-opacity=".22"/>
+<path d="M13.5,13.5 H34.5 V32.5 L28.5,37.5 H13.5 Z" fill="url(#p)" stroke="#5b6670" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M34.5,32.5 L28.5,32.5 L28.5,37.5 Z" fill="#c9cbcf" stroke="#5b6670" stroke-opacity=".65" stroke-linejoin="round"/>
+<g fill="#3689e6">
+<rect x="17" y="19" width="14" height="2.4" rx="1"/>
+<rect x="17" y="24" width="14" height="2.4" rx="1"/>
+<rect x="17" y="29" width="8.5" height="2.4" rx="1"/>
+</g>
+<path d="M21,3.5 H27 Q28.5,3.5 28.5,5 V7.5 H31 Q32.5,7.5 32.5,9 V13 Q32.5,14.5 31,14.5 H17 Q15.5,14.5 15.5,13 V9 Q15.5,7.5 17,7.5 H19.5 V5 Q19.5,3.5 21,3.5 Z" fill="url(#m)" stroke="#485a6c" stroke-opacity=".7" stroke-linejoin="round"/>
+<rect x="22" y="5.2" width="4" height="2" rx=".9" fill="#485a6c"/>
+<path d="M17,8.5 H31" stroke="#fff" stroke-opacity=".7"/>
+</svg>

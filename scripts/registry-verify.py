@@ -205,8 +205,10 @@ def icon_ref_resolves(ref: str) -> bool:
     category, _, name = ref.partition("/")
     if not category or not name:
         return False
+    roots = (ICONS / category, RCC / "iconpacks" / "basic" / category)
     return any(
-        (ICONS / category / str(t) / f"{name}{suffix}").exists()
+        (root / str(t) / f"{name}{suffix}").exists()
+        for root in roots
         for t in (16, 24, 32, 48)
         for suffix in (".svg", ".png")
     )

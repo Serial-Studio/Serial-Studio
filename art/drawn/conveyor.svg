@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa154"/><stop offset=".6" stop-color="#d48e15"/><stop offset="1" stop-color="#a3682a"/></linearGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe16b"/><stop offset="1" stop-color="#ffa154"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#95a3ab"/><stop offset=".5" stop-color="#667885"/><stop offset="1" stop-color="#485a6c"/></linearGradient>
+<radialGradient id="m" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#fafafa"/><stop offset=".55" stop-color="#d4d4d4"/><stop offset="1" stop-color="#95a3ab"/></radialGradient>
+</defs>
+<ellipse cx="24" cy="44.2" rx="20" ry="3" fill="url(#s)"/>
+<path d="M9.5,38 h4 v6.2 h-4 z M34.5,38 h4 v6.2 h-4 z" fill="url(#g)" stroke="#2c3b49" stroke-opacity=".65"/>
+<path d="M12.5,12.5 L16.5,7.5 H31.5 L35.5,12.5 Z" fill="url(#t)" stroke="#a15a00" stroke-opacity=".65" stroke-linejoin="round"/>
+<rect x="12.5" y="12.5" width="23" height="17.5" fill="url(#f)" stroke="#8a4a00" stroke-opacity=".65"/>
+<path d="M13.5,29.5 V13.5 H34.5 V29.5" fill="none" stroke="#fff" stroke-opacity=".35"/>
+<path d="M17,8.5 H31" stroke="#fff" stroke-opacity=".5"/>
+<path d="M21.5,7.5 H26.5 L27,12.5 V30 H21 V12.5 Z" fill="#ffe16b" fill-opacity=".55"/>
+<path d="M21,12.5 V30 M27,12.5 V30" stroke="#a15a00" stroke-opacity=".35"/>
+<rect x="29.5" y="23.5" width="4" height="4" fill="#fafafa" fill-opacity=".9"/>
+<rect x="2.5" y="30.5" width="43" height="9" rx="4.5" fill="url(#g)" stroke="#2c3b49" stroke-opacity=".65"/>
+<path d="M7,31.5 H41" stroke="#fff" stroke-opacity=".4"/>
+<circle cx="8" cy="35" r="2.8" fill="url(#m)" stroke="#2c3b49" stroke-opacity=".6"/>
+<circle cx="18.7" cy="35" r="2.8" fill="url(#m)" stroke="#2c3b49" stroke-opacity=".6"/>
+<circle cx="29.3" cy="35" r="2.8" fill="url(#m)" stroke="#2c3b49" stroke-opacity=".6"/>
+<circle cx="40" cy="35" r="2.8" fill="url(#m)" stroke="#2c3b49" stroke-opacity=".6"/>
+</svg>

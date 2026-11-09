@@ -92,7 +92,8 @@ def test_changed_file_fails(tree: Tree) -> None:
 
 
 @pytest.mark.parametrize(
-    "license_id", ["LicenseRef-Icons8", "LGPL-3.0-or-later", "CC-BY-SA-3.0"]
+    "license_id",
+    ["LicenseRef-Icons8", "LGPL-3.0-or-later", "CC-BY-SA-3.0", "GPL-3.0-only"],
 )
 def test_unsafe_license_fails(tree: Tree, license_id: str) -> None:
     tree.add("icons/buttons/close.svg", CLEAN_SVG, license_id=license_id)
@@ -120,6 +121,14 @@ def test_wrong_pixel_size_fails(tree: Tree) -> None:
     tree.add("icons/commands/16/save.png", png(24))
     tree.add("icons/commands/16/save@2x.png", png(32))
     assert any("expected 16x16" in error for error in tree.errors())
+
+
+def test_basic_pack_is_held_to_its_tier(tree: Tree) -> None:
+    tree.pair("iconpacks/basic/commands/16/save", 16)
+    assert tree.errors() == []
+    tree.add("iconpacks/basic/commands/24/open.png", png(16))
+    tree.add("iconpacks/basic/commands/24/open@2x.png", png(48))
+    assert any("expected 24x24" in error for error in tree.errors())
 
 
 def test_unresolved_target_fails(tree: Tree) -> None:

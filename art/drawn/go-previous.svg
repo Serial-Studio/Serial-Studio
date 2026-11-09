@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".14"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b2bdc5"/><stop offset=".5" stop-color="#909eaa"/><stop offset="1" stop-color="#778793"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="37.4" rx="7" ry="1.4" fill="url(#s)"/>
+<path d="M31.3,31.7 L28.7,34.3 Q28,35 27.3,34.3 L17.7,24.7 Q17,24 17.7,23.3 L27.3,13.7 Q28,13 28.7,13.7 L31.3,16.3 Q32,17 31.3,17.7 L25,24 L31.3,30.3 Q32,31 31.3,31.7 Z" fill="url(#c)" stroke="#33414e" stroke-opacity=".7" stroke-linejoin="round"/>
+<path d="M30.73,31 L28,33.73 L18.27,24 L28,14.27 L30.73,17 L23.73,24 Z" fill="none" stroke="url(#h)" stroke-linejoin="round"/>
+</svg>

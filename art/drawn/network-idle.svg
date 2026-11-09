@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+<linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f4f4"/><stop offset=".55" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#20252c"/><stop offset="1" stop-color="#3b444e"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#485a6c"/><stop offset="1" stop-color="#20252c"/></linearGradient>
+<radialGradient id="l" cx=".42" cy=".38" r=".66"><stop offset="0" stop-color="#f1ffd6"/><stop offset=".5" stop-color="#9bdb4d"/><stop offset="1" stop-color="#3a9104"/></radialGradient>
+<radialGradient id="g"><stop offset="0" stop-color="#9bdb4d" stop-opacity=".6"/><stop offset="1" stop-color="#9bdb4d" stop-opacity="0"/></radialGradient>
+</defs>
+<ellipse cx="24" cy="42.4" rx="22" ry="3" fill="url(#s)"/>
+<path d="M9.5,14.5 H38.5 L44.5,24 H3.5 Z" fill="url(#t)" stroke="#5b6670" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M13,18.5 H35 M11.5,21 H36.5" stroke="#667885" stroke-opacity=".4"/>
+<rect x="3.5" y="23.5" width="41" height="16" rx="2" fill="url(#c)" stroke="#5b6670" stroke-opacity=".65"/>
+<path d="M4.5,24.5 H43.5" stroke="#fff" stroke-opacity=".75"/>
+<circle cx="11.5" cy="31.5" r="9" fill="url(#g)"/>
+<circle cx="11.5" cy="31.5" r="6" fill="url(#r)" stroke="#2c3b49" stroke-opacity=".65"/>
+<circle cx="11.5" cy="31.5" r="4.6" fill="url(#l)"/>
+<ellipse cx="10" cy="29.7" rx="1.6" ry="1.1" fill="#fff" fill-opacity=".85"/>
+<g fill="url(#p)" stroke="#20252c" stroke-opacity=".55">
+<path d="M20.5,27.5 h6 v5.5 h-1.2 v1.5 h-3.6 v-1.5 h-1.2 z"/>
+<path d="M28.5,27.5 h6 v5.5 h-1.2 v1.5 h-3.6 v-1.5 h-1.2 z"/>
+<path d="M36.5,27.5 h6 v5.5 h-1.2 v1.5 h-3.6 v-1.5 h-1.2 z"/>
+</g>
+<g fill="#f9c440">
+<rect x="21.5" y="28.5" width="4" height="1.2"/>
+<rect x="29.5" y="28.5" width="4" height="1.2"/>
+<rect x="37.5" y="28.5" width="4" height="1.2"/>
+</g>
+</svg>

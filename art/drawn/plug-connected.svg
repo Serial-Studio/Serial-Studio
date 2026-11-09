@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9cbcf"/><stop offset=".2" stop-color="#fff"/><stop offset=".5" stop-color="#d4d4d4"/><stop offset=".76" stop-color="#9a9da2"/><stop offset=".9" stop-color="#d0d2d6"/><stop offset="1" stop-color="#7f848b"/></linearGradient>
+<linearGradient id="c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".5" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3689e6"/><stop offset=".55" stop-color="#1a68d1"/><stop offset="1" stop-color="#083a8c"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#d4d4d4"/><stop offset="1" stop-color="#8e9298"/></linearGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#20252c"/><stop offset=".7" stop-color="#3b444e"/><stop offset="1" stop-color="#667885"/></linearGradient>
+<linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#68b723"/><stop offset=".35" stop-color="#dcf9a9"/><stop offset=".55" stop-color="#9bdb4d"/><stop offset="1" stop-color="#3a9104"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44" rx="17" ry="2.8" fill="url(#s)"/>
+<g transform="translate(24 23.5) rotate(-45)">
+<g transform="translate(1 0)">
+<rect x="10" y="-3.2" width="16" height="6.4" rx="3" fill="url(#c)" stroke="#0d52bf" stroke-opacity=".65"/>
+<path d="M13,-1.9 L24.3,-1.9" fill="none" stroke="#fff" stroke-opacity=".42"/>
+<rect x="9.2" y="-4.8" width="3.4" height="9.6" rx="1" fill="url(#b)" stroke="#083a8c" stroke-opacity=".65"/>
+<ellipse rx="3.4" ry="9.5" fill="url(#r)" stroke="#5b6670" stroke-opacity=".65"/>
+<ellipse cx="-.2" rx="2.3" ry="8" fill="url(#t)"/>
+</g>
+<g transform="translate(-1 0)">
+<rect x="-26" y="-3.2" width="16" height="6.4" rx="3" fill="url(#c)" stroke="#0d52bf" stroke-opacity=".65"/>
+<path d="M-24.3,-1.9 L-13,-1.9" fill="none" stroke="#fff" stroke-opacity=".42"/>
+<rect x="-12.6" y="-4.8" width="3.4" height="9.6" rx="1" fill="url(#b)" stroke="#083a8c" stroke-opacity=".65"/>
+<path d="M0,-8 A2.8,8 0 0 1 0,8 L-5.6,8 Q-7.6,8 -8.3,6.5 L-9.8,4.4 L-9.8,-4.4 L-8.3,-6.5 Q-7.6,-8 -5.6,-8 Z" fill="url(#m)" stroke="#5b6670" stroke-opacity=".65"/>
+<path d="M-5.4,-7 L0,-7" fill="none" stroke="#fff" stroke-opacity=".42"/>
+</g>
+<g transform="translate(1 0)">
+<path d="M0,-9.5 L6,-9.5 Q8,-9.5 8.7,-7.9 L10.2,-4.6 L10.2,4.6 L8.7,7.9 Q8,9.5 6,9.5 L0,9.5 A3.4,9.5 0 0 0 0,-9.5 Z" fill="url(#m)" stroke="#5b6670" stroke-opacity=".65"/>
+<path d="M1.6,-9.5 L5,-9.5 A3.4,9.5 0 0 1 5,9.5 L1.6,9.5 A3.4,9.5 0 0 0 1.6,-9.5 Z" fill="url(#l)" stroke="#3a9104" stroke-opacity=".65" stroke-width=".7"/>
+</g>
+</g>
+</svg>

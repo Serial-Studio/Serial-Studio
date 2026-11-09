@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9bdb4d"/><stop offset=".5" stop-color="#68b723"/><stop offset="1" stop-color="#3a9104"/></linearGradient>
+<linearGradient id="k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#48525d"/><stop offset=".5" stop-color="#262d35"/><stop offset="1" stop-color="#151a20"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0a8"/><stop offset=".45" stop-color="#f9c440"/><stop offset="1" stop-color="#d48e15"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="41.5" rx="22" ry="3" fill="url(#s)"/>
+<path d="M5,11.5 H43 Q44.5,11.5 44.5,13 V21 Q43,22 43,23.5 Q43,25 44.5,26 V37.5 H27.5 V34.5 H23.5 V37.5 H3.5 V26 Q5,25 5,23.5 Q5,22 3.5,21 V13 Q3.5,11.5 5,11.5 Z" fill="url(#b)" stroke="#2c6e02" stroke-opacity=".7" stroke-linejoin="round"/>
+<path d="M5,12.5 H43" stroke="#fff" stroke-opacity=".5"/>
+<g fill="url(#k)" stroke="#0e1319" stroke-opacity=".75">
+<rect x="7.5" y="15.5" width="6" height="12" rx=".8"/>
+<rect x="16.5" y="15.5" width="6" height="12" rx=".8"/>
+<rect x="25.5" y="15.5" width="6" height="12" rx=".8"/>
+<rect x="34.5" y="15.5" width="6" height="12" rx=".8"/>
+</g>
+<path d="M8.5,16.5 H12.5 M17.5,16.5 H21.5 M26.5,16.5 H30.5 M35.5,16.5 H39.5" stroke="#fff" stroke-opacity=".32"/>
+<path d="M6.5,29.5 H41.5" stroke="#2c6e02" stroke-opacity=".5"/>
+<g fill="#fff" fill-opacity=".4">
+<circle cx="9.3" cy="19" r=".8"/>
+<circle cx="18.3" cy="19" r=".8"/>
+<circle cx="27.3" cy="19" r=".8"/>
+<circle cx="36.3" cy="19" r=".8"/>
+</g>
+<g fill="url(#g)" stroke="#ad5f00" stroke-opacity=".5" stroke-width=".6">
+<rect x="6" y="31" width="2" height="6.5"/>
+<rect x="9" y="31" width="2" height="6.5"/>
+<rect x="12" y="31" width="2" height="6.5"/>
+<rect x="15" y="31" width="2" height="6.5"/>
+<rect x="18" y="31" width="2" height="6.5"/>
+<rect x="21" y="31" width="2" height="6.5"/>
+<rect x="28" y="31" width="2" height="6.5"/>
+<rect x="31" y="31" width="2" height="6.5"/>
+<rect x="34" y="31" width="2" height="6.5"/>
+<rect x="37" y="31" width="2" height="6.5"/>
+<rect x="40" y="31" width="2" height="6.5"/>
+</g>
+</svg>

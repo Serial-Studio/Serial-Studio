@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#0d52bf"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".42"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".62"/><stop offset="1" stop-color="#fff" stop-opacity=".14"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="43" rx="18" ry="2.8" fill="url(#s)"/>
+<path d="M40.5,11.5 Q40.5,8.5 38,10.1 L19,22.4 Q16.5,24 19,25.6 L38,37.9 Q40.5,39.5 40.5,36.5 Z" fill="url(#f)" stroke="#0d52bf" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M38.5,13 Q38.5,11.4 37.1,12.3 L21.6,22.3 C27.6,23.7 33.4,25.6 38.5,29 Z" fill="url(#g)"/>
+<path d="M39.5,11.6 Q39.5,10 38.1,10.9 L19.6,22.9 Q18.2,24 19.6,25.1 L38.1,37.1 Q39.5,38 39.5,36.4 Z" fill="none" stroke="url(#h)" stroke-linejoin="round"/>
+<rect x="6.5" y="8.5" width="8" height="31" rx="2.5" fill="url(#f)" stroke="#0d52bf" stroke-opacity=".65"/>
+<path d="M8.5,12 Q8.5,10.5 10,10.5 H11 Q12.5,10.5 12.5,12 V22 Q10.5,23 8.5,24.5 Z" fill="url(#g)"/>
+<rect x="7.5" y="9.5" width="6" height="29" rx="1.5" fill="none" stroke="url(#h)"/>
+</svg>

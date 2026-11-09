@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <radialGradient id="sh"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="pin" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#9a9c9e"/><stop offset=".35" stop-color="#fafafa"/><stop offset="1" stop-color="#8b8d8f"/></linearGradient>
+    <linearGradient id="bas" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#667885"/><stop offset="1" stop-color="#34424f"/></linearGradient>
+    <linearGradient id="wir" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8f3f12"/><stop offset=".28" stop-color="#ffc08a"/><stop offset=".6" stop-color="#e9843f"/><stop offset="1" stop-color="#a84a14"/></linearGradient>
+    <linearGradient id="flg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#95a3ab"/><stop offset="1" stop-color="#485a6c"/></linearGradient>
+    <linearGradient id="cas" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e6f5fd"/><stop offset=".5" stop-color="#c3e1f2"/><stop offset="1" stop-color="#a7cde3"/></linearGradient>
+    <linearGradient id="top" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d4edf9"/></linearGradient>
+    <linearGradient id="hi" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="10" y2="34"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+  </defs>
+  <ellipse cx="24" cy="44.5" rx="20" ry="2.6" fill="url(#sh)"/>
+  <rect x="11.5" y="37" width="3" height="7.5" rx=".5" fill="url(#pin)" stroke="#6e7072" stroke-opacity=".7"/>
+  <rect x="19.5" y="37" width="3" height="7.5" rx=".5" fill="url(#pin)" stroke="#6e7072" stroke-opacity=".7"/>
+  <rect x="25.5" y="37" width="3" height="7.5" rx=".5" fill="url(#pin)" stroke="#6e7072" stroke-opacity=".7"/>
+  <rect x="33.5" y="37" width="3" height="7.5" rx=".5" fill="url(#pin)" stroke="#6e7072" stroke-opacity=".7"/>
+  <rect x="5.5" y="34.5" width="37" height="4" rx="1" fill="url(#bas)" stroke="#2c3b47" stroke-opacity=".65"/>
+  <path d="M11.5 3.5h25l5 6h-35z" fill="url(#top)" stroke="#5f7f94" stroke-opacity=".65" stroke-linejoin="round"/>
+  <rect x="6.5" y="9.5" width="35" height="25" rx="1" fill="url(#cas)" stroke="#5f7f94" stroke-opacity=".65"/>
+  <rect x="31" y="12.5" width="1.8" height="21" fill="#a7a9ab"/>
+  <rect x="38" y="12.5" width="1.8" height="21" fill="#a7a9ab"/>
+  <rect x="34.2" y="13.5" width="2.4" height="20" fill="url(#pin)" stroke="#6e7072" stroke-opacity=".6" stroke-width=".6"/>
+  <circle cx="33.4" cy="20" r="1.5" fill="#f9c440" stroke="#d48e15"/>
+  <circle cx="37.4" cy="20" r="1.5" fill="#f9c440" stroke="#d48e15"/>
+  <rect x="11.5" y="15.5" width="16" height="15" fill="url(#wir)" stroke="#7c3108" stroke-opacity=".65"/>
+  <path d="M12 17.5h15M12 19.5h15M12 21.5h15M12 23.5h15M12 25.5h15M12 27.5h15" fill="none" stroke="#7c3108" stroke-opacity=".5"/>
+  <rect x="9.5" y="12.5" width="20" height="3" rx=".7" fill="url(#flg)" stroke="#2c3b47" stroke-opacity=".65"/>
+  <rect x="9.5" y="30" width="20" height="3" rx=".7" fill="url(#flg)" stroke="#2c3b47" stroke-opacity=".65"/>
+  <path d="M7.5 10.5H21L7.5 29z" fill="#fff" fill-opacity=".32"/>
+  <rect x="7.5" y="10.5" width="33" height="23" fill="none" stroke="url(#hi)"/>
+</svg>

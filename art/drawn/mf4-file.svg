@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#f2f3f4"/><stop offset="1" stop-color="#cdd2d6"/></linearGradient>
+<linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset="1" stop-color="#abb1b7"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#43d6b5"/><stop offset=".55" stop-color="#28bca3"/><stop offset="1" stop-color="#0e7f6e"/></linearGradient>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d4fff3"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44" rx="19" ry="3" fill="url(#s)"/>
+<path d="M9,4.5 H31.5 L40.5,13.5 V42 Q40.5,43.5 39,43.5 H9 Q7.5,43.5 7.5,42 V6 Q7.5,4.5 9,4.5 Z" fill="url(#p)" stroke="#485a6c" stroke-opacity=".65" stroke-linejoin="round"/>
+<path d="M9,5.5 H31 L39.5,14 V42 Q39.5,42.5 39,42.5 H9 Q8.5,42.5 8.5,42 V6 Q8.5,5.5 9,5.5 Z" fill="none" stroke="url(#h)"/>
+<path d="M11.5,13 L14,8.5 L17,14.5 L20,9 L23,14 L25.5,10.5 L28,12.5" fill="none" stroke="#0e9a83" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M32,14 H40 V16.5 H34.5 Z" fill="#000" fill-opacity=".12"/>
+<path d="M31.5,4.5 V13.5 H40.5 Z" fill="url(#f)" stroke="#485a6c" stroke-opacity=".65" stroke-linejoin="round"/>
+<rect x="3.5" y="18.5" width="41" height="20" rx="1.5" fill="url(#r)" stroke="#0e7f6e" stroke-opacity=".75"/>
+<rect x="4.5" y="19.5" width="39" height="18" rx=".7" fill="none" stroke="url(#h)"/>
+<path d="M6,36 V21 H9.6 L12,28.2 L14.4,21 H18 V36 H15 V27.4 L13,33.2 H11 L9,27.4 V36 Z M21,21 H29.5 V24 H24 V27 H28.5 V30 H24 V36 H21 Z M38,21 H41.5 V30 H43.5 V33 H41.5 V36 H38 V33 H31 V30 Z M38,25.6 L34.7,30 H38 Z" fill="url(#w)" fill-rule="evenodd"/>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <radialGradient id="sh"><stop offset="0" stop-color="#000" stop-opacity=".38"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="met" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#9a9c9e"/><stop offset=".28" stop-color="#fafafa"/><stop offset=".62" stop-color="#d4d4d4"/><stop offset="1" stop-color="#85878a"/></linearGradient>
+    <linearGradient id="grp" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ed5353"/><stop offset=".55" stop-color="#c6262e"/><stop offset="1" stop-color="#a10705"/></linearGradient>
+    <linearGradient id="shn" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset=".3" stop-color="#fff" stop-opacity=".38"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".34"/></linearGradient>
+    <linearGradient id="cab" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="13" y2="45"><stop offset="0" stop-color="#95a3ab"/><stop offset=".55" stop-color="#667885"/><stop offset="1" stop-color="#485a6c"/></linearGradient>
+    <linearGradient id="hi" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="26" y2="37"><stop offset="0" stop-color="#fff" stop-opacity=".42"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+  </defs>
+  <ellipse cx="24" cy="44.5" rx="20" ry="2.8" fill="url(#sh)"/>
+  <path d="M15.5 34C15.5 44 33 44 35 34 36 27 41.5 27 41.5 14" fill="none" stroke="#2c3b47" stroke-opacity=".62" stroke-width="6.4"/>
+  <path d="M15.5 34C15.5 44 33 44 35 34 36 27 41.5 27 41.5 14" fill="none" stroke="url(#cab)" stroke-width="4.8"/>
+  <path d="M14.6 35C14.8 43.5 32.2 43.5 34.1 33.6 35.2 26.6 40.6 26.8 40.6 15" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1.3"/>
+  <path d="M40 14l-.8-4.8M41.5 14V8.4M43 14l.8-4.4" fill="none" stroke="#a84a14" stroke-width="1.7" stroke-linecap="round"/>
+  <path d="M40 14l-.8-4.8M41.5 14V8.4M43 14l.8-4.4" fill="none" stroke="#ffa154" stroke-width=".8" stroke-linecap="round"/>
+  <path d="M11 36h9l-1.2 3.6h-6.6z" fill="#3c4c5a" stroke="#2c3b47" stroke-opacity=".65"/>
+  <path d="M11.8 37.5h7.4" fill="none" stroke="#95a3ab" stroke-opacity=".55"/>
+  <rect x="8.5" y="26.5" width="14" height="10" rx="1.5" fill="url(#grp)" stroke="#a10705" stroke-opacity=".65"/>
+  <rect x="8.5" y="26.5" width="14" height="10" rx="1.5" fill="url(#shn)"/>
+  <rect x="9.5" y="27.5" width="12" height="8" rx=".8" fill="none" stroke="url(#hi)"/>
+  <path d="M9.5 30.5h12M9.5 32.5h12" fill="none" stroke="#7a0a0a" stroke-opacity=".5"/>
+  <rect x="13.5" y="9.5" width="4" height="9" fill="#3c4c5a" stroke="#2c3b47" stroke-opacity=".6"/>
+  <rect x="12.5" y="18" width="6" height="6.5" fill="url(#met)" stroke="#6e7072" stroke-opacity=".7"/>
+  <rect x="12.5" y="11.5" width="6" height="5" fill="url(#met)" stroke="#6e7072" stroke-opacity=".7"/>
+  <path d="M15.5 3.5c2 0 3.2 2 3.2 3.7 0 1-.5 1.7-1 2.6h-4.4c-.5-.9-1-1.6-1-2.6 0-1.7 1.2-3.7 3.2-3.7z" fill="url(#met)" stroke="#6e7072" stroke-opacity=".7"/>
+  <rect x="10.5" y="24" width="10" height="2.5" rx=".7" fill="url(#met)" stroke="#6e7072" stroke-opacity=".7"/>
+</svg>

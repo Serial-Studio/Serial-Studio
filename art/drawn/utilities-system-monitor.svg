@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset=".55" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+<linearGradient id="k" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7d8a94"/><stop offset=".45" stop-color="#e4e6e8"/><stop offset="1" stop-color="#667885"/></linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f2a35"/><stop offset="1" stop-color="#101419"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+<linearGradient id="l" gradientUnits="userSpaceOnUse" x1="7" y1="0" x2="41" y2="0"><stop offset="0" stop-color="#43d6b5"/><stop offset=".4" stop-color="#9bdb4d"/><stop offset=".7" stop-color="#ffe16b"/><stop offset="1" stop-color="#ffa154"/></linearGradient>
+<linearGradient id="a" gradientUnits="userSpaceOnUse" x1="0" y1="10" x2="0" y2="32"><stop offset="0" stop-color="#68b723" stop-opacity=".55"/><stop offset="1" stop-color="#68b723" stop-opacity=".02"/></linearGradient>
+<radialGradient id="p" cx=".42" cy=".38" r=".66"><stop offset="0" stop-color="#fff2c8"/><stop offset=".55" stop-color="#ffa154"/><stop offset="1" stop-color="#cc3b02"/></radialGradient>
+<radialGradient id="g"><stop offset="0" stop-color="#ffa154" stop-opacity=".7"/><stop offset="1" stop-color="#ffa154" stop-opacity="0"/></radialGradient>
+</defs>
+<ellipse cx="24" cy="43.6" rx="16" ry="2.8" fill="url(#s)"/>
+<path d="M12.5,42.5 C14,39.8 18,39.5 20.5,39.5 H27.5 C30,39.5 34,39.8 35.5,42.5 Z" fill="url(#b)" stroke="#5b6670" stroke-opacity=".65" stroke-linejoin="round"/>
+<rect x="20.5" y="33" width="7" height="7" fill="url(#k)" stroke="#485a6c" stroke-opacity=".65"/>
+<rect x="2.5" y="4.5" width="43" height="30" rx="2.5" fill="url(#b)" stroke="#5b6670" stroke-opacity=".65"/>
+<rect x="3.5" y="5.5" width="41" height="28" rx="1.5" fill="none" stroke="url(#h)"/>
+<rect x="5.5" y="7.5" width="37" height="24" rx="1" fill="url(#d)" stroke="#20252c" stroke-opacity=".75"/>
+<path d="M6,13.5 H42 M6,19.5 H42 M6,25.5 H42 M12.5,8 V31 M23.5,8 V31 M34.5,8 V31" stroke="#95a3ab" stroke-opacity=".18"/>
+<path d="M6.5,26 L11,21.5 L16,24.5 L21,11.5 L26.5,29 L31.5,17 L35.5,21 L39.5,14 V31 H6.5 Z" fill="url(#a)"/>
+<path d="M6.5,26 L11,21.5 L16,24.5 L21,11.5 L26.5,29 L31.5,17 L35.5,21 L39.5,14" fill="none" stroke="url(#l)" stroke-opacity=".3" stroke-width="5.4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M6.5,26 L11,21.5 L16,24.5 L21,11.5 L26.5,29 L31.5,17 L35.5,21 L39.5,14" fill="none" stroke="url(#l)" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="39.5" cy="14" r="5" fill="url(#g)"/>
+<circle cx="39.5" cy="14" r="2.5" fill="url(#p)" stroke="#a83200" stroke-opacity=".65" stroke-width=".6"/>
+</svg>

@@ -7,6 +7,15 @@ updated: 2026-11-08
 
 # Plan 0116 — Public icon set free of licensed art (Tango)
 
+> **Amended 2026-11-09.** The free art is Basic, rendered by `scripts/basic-art.py` from `art/drawn/`
+> into `app/rcc/iconpacks/basic/` and listed in `app/rcc/basic.qrc`, which every build compiles. The
+> house tree `:/icons/<themed>` exists only with the private art. `IconRegistry::locateHouse` falls
+> back to `fallbackPackId()`, the legacy path lookup falls back to the same pack, and
+> `Preferences > Widget Toolbar Icons` (`WidgetIconPack`, `IconRegistry::setWidgetPack`) selects the
+> art of the widget toolbars. `art-free.qrc` keeps the window controls, the hidden `fine-line`
+> glyphs, images and action icons. Where this plan describes Tango, its download or a stand-in, the
+> Basic drawings replace it.
+
 > **Phase 2 of 4 — the HOW.** The technical design that satisfies every requirement in
 > [`spec.md`](./spec.md). Gate: do not start `/ss-tasks` until a human marks this `approved`.
 

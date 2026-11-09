@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <radialGradient id="sh"><stop offset="0" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="thr" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8b8d8f"/><stop offset=".3" stop-color="#fafafa"/><stop offset=".62" stop-color="#d4d4d4"/><stop offset="1" stop-color="#7e8082"/></linearGradient>
+    <linearGradient id="cap" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffa154"/><stop offset=".6" stop-color="#f37329"/><stop offset="1" stop-color="#cc3b02"/></linearGradient>
+    <linearGradient id="ctp" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffc48e"/><stop offset="1" stop-color="#ffa154"/></linearGradient>
+    <linearGradient id="shn" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".25"/><stop offset=".3" stop-color="#fff" stop-opacity=".4"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient>
+    <linearGradient id="nut" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset=".6" stop-color="#d4d4d4"/><stop offset="1" stop-color="#abacae"/></linearGradient>
+    <linearGradient id="nus" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d4d4d4"/><stop offset=".6" stop-color="#abacae"/><stop offset="1" stop-color="#8b8d8f"/></linearGradient>
+    <linearGradient id="col" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#667885"/><stop offset="1" stop-color="#34424f"/></linearGradient>
+    <radialGradient id="led" cx=".42" cy=".36" r=".7"><stop offset="0" stop-color="#eaffb0"/><stop offset=".55" stop-color="#9bdb4d"/><stop offset="1" stop-color="#3a9104"/></radialGradient>
+    <radialGradient id="glo"><stop offset="0" stop-color="#9bdb4d" stop-opacity=".7"/><stop offset="1" stop-color="#9bdb4d" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="24" cy="44.5" rx="14" ry="2.4" fill="url(#sh)"/>
+  <rect x="21" y="41" width="6" height="3.5" fill="#3c4c5a" stroke="#2c3b47" stroke-opacity=".6"/>
+  <rect x="16.5" y="10.5" width="15" height="25.5" fill="#85878a" stroke="#6e7072" stroke-opacity=".6"/>
+  <path d="M15.5 12.5h17v1.3h-17zM15.5 14.7h17v1.3h-17zM15.5 16.9h17v1.3h-17zM15.5 19.1h17v1.3h-17zM15.5 21.3h17v1.3h-17zM15.5 23.2h17v1.1h-17zM15.5 31.8h17v1.3h-17zM15.5 34h17v1.3h-17z" fill="url(#thr)"/>
+  <path d="M16.5 6v5.5h15V6a7.5 2.5 0 0 1-15 0z" fill="url(#cap)" stroke="#a10705" stroke-opacity=".6" stroke-linejoin="round"/>
+  <path d="M16.5 6v5.5h15V6a7.5 2.5 0 0 1-15 0z" fill="url(#shn)"/>
+  <ellipse cx="24" cy="6" rx="7.5" ry="2.5" fill="url(#ctp)" stroke="#a10705" stroke-opacity=".6"/>
+  <path d="M17.5 10.5V7.8" fill="none" stroke="#fff" stroke-opacity=".35"/>
+  <rect x="10.5" y="24.5" width="27" height="6.5" rx=".8" fill="url(#nus)" stroke="#6e7072" stroke-opacity=".7"/>
+  <rect x="17" y="25" width="14" height="5.5" fill="url(#nut)"/>
+  <path d="M17 25v5.5M31 25v5.5" fill="none" stroke="#6e7072" stroke-opacity=".55"/>
+  <path d="M11.5 25.5h25" fill="none" stroke="#fff" stroke-opacity=".6"/>
+  <rect x="17.5" y="35.5" width="13" height="6" rx="1" fill="url(#col)" stroke="#2c3b47" stroke-opacity=".65"/>
+  <circle cx="24" cy="38.5" r="6" fill="url(#glo)"/>
+  <circle cx="24" cy="38.5" r="2.4" fill="url(#led)" stroke="#2c6b02" stroke-opacity=".7" stroke-width=".7"/>
+</svg>

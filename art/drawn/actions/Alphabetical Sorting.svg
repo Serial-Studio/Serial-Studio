@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="a" gradientUnits="userSpaceOnUse" x1="0" y1="3" x2="0" y2="22"><stop stop-color="#64baff"/><stop offset=".55" stop-color="#3689e6"/><stop offset="1" stop-color="#1a63cf"/></linearGradient>
+<linearGradient id="z" gradientUnits="userSpaceOnUse" x1="0" y1="25" x2="0" y2="43"><stop stop-color="#ed5353"/><stop offset=".55" stop-color="#c6262e"/><stop offset="1" stop-color="#a10705"/></linearGradient>
+<linearGradient id="r" gradientUnits="userSpaceOnUse" x1="0" y1="4" x2="0" y2="44"><stop stop-color="#9bdb4d"/><stop offset=".6" stop-color="#68b723"/><stop offset="1" stop-color="#3a9104"/></linearGradient>
+<linearGradient id="h" gradientUnits="userSpaceOnUse" x1="0" y1="3" x2="0" y2="22"><stop stop-color="#fff" stop-opacity=".36"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+<linearGradient id="i" gradientUnits="userSpaceOnUse" x1="0" y1="25" x2="0" y2="43"><stop stop-color="#fff" stop-opacity=".32"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient>
+<linearGradient id="j" gradientUnits="userSpaceOnUse" x1="0" y1="4" x2="0" y2="44"><stop stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity=".06"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="45" rx="20.5" ry="2.4" fill="url(#s)"/>
+<g fill="none" stroke-linejoin="round">
+<path transform="translate(0,2)" d="M6,20 14.5,5h2L25,20h-2l-2.55-4.5h-9.9L8,20zM15.5,6 9.98,15h11.04z" stroke="#0d52bf" stroke-width="4"/>
+<path d="M6,20 14.5,5h2L25,20h-2l-2.55-4.5h-9.9L8,20zM15.5,6 9.98,15h11.04z" stroke="#002e99" stroke-opacity=".6" stroke-width="4"/>
+<path d="M6,20 14.5,5h2L25,20h-2l-2.55-4.5h-9.9L8,20zM15.5,6 9.98,15h11.04z" stroke="url(#a)" stroke-width="2"/>
+<path d="M6,20 14.5,5h2L25,20h-2l-2.55-4.5h-9.9L8,20zM15.5,6 9.98,15h11.04z" stroke="url(#h)" stroke-width="2"/>
+<path transform="translate(0,2)" d="M7,27H24.5v1.5L10,39.5H25V41H6.5v-1.5L21,28.5H7z" stroke="#a10705" stroke-width="4"/>
+<path d="M7,27H24.5v1.5L10,39.5H25V41H6.5v-1.5L21,28.5H7z" stroke="#7a0000" stroke-opacity=".6" stroke-width="4"/>
+<path d="M7,27H24.5v1.5L10,39.5H25V41H6.5v-1.5L21,28.5H7z" stroke="url(#z)" stroke-width="2"/>
+<path d="M7,27H24.5v1.5L10,39.5H25V41H6.5v-1.5L21,28.5H7z" stroke="url(#i)" stroke-width="2"/>
+<path transform="translate(0,2)" d="M35.5,6h4V29h4L37.5,41.5 31.5,29h4z" stroke="#3a9104" stroke-width="4"/>
+<path d="M35.5,6h4V29h4L37.5,41.5 31.5,29h4z" stroke="#206b00" stroke-opacity=".6" stroke-width="4"/>
+<path d="M35.5,6h4V29h4L37.5,41.5 31.5,29h4z" stroke="url(#r)" stroke-width="2"/>
+<path d="M35.5,6h4V29h4L37.5,41.5 31.5,29h4z" stroke="url(#j)" stroke-width="2"/>
+</g>
+<path d="M6,20 14.5,5h2L25,20h-2l-2.55-4.5h-9.9L8,20zM15.5,6 9.98,15h11.04z" fill="url(#a)" fill-rule="evenodd"/>
+<path d="M7,27H24.5v1.5L10,39.5H25V41H6.5v-1.5L21,28.5H7z" fill="url(#z)"/>
+<path d="M35.5,6h4V29h4L37.5,41.5 31.5,29h4z" fill="url(#r)"/>
+</svg>

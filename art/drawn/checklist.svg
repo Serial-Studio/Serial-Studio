@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs>
+<radialGradient id="s"><stop offset="0" stop-color="#000000" stop-opacity=".42"/><stop offset="1" stop-color="#000000" stop-opacity="0"/></radialGradient>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a3907c"/><stop offset=".55" stop-color="#8a715e"/><stop offset="1" stop-color="#57392d"/></linearGradient>
+<linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".65" stop-color="#f5f5f5"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+<linearGradient id="m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fafafa"/><stop offset=".5" stop-color="#abacae"/><stop offset="1" stop-color="#d4d4d4"/></linearGradient>
+<linearGradient id="t" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="42"><stop offset="0" stop-color="#9bdb4d"/><stop offset="1" stop-color="#68b723"/></linearGradient>
+<linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".45"/><stop offset="1" stop-color="#ffffff" stop-opacity=".08"/></linearGradient>
+</defs>
+<ellipse cx="24" cy="44.8" rx="19" ry="2.4" fill="url(#s)"/>
+<rect x="7.5" y="6.5" width="33" height="38" rx="2.5" fill="url(#w)" stroke="#57392d" stroke-opacity=".8"/>
+<rect x="8.5" y="7.5" width="31" height="36" rx="1.5" fill="none" stroke="url(#h)"/>
+<rect x="11.5" y="10.5" width="25" height="30.5" rx="1" fill="url(#p)" stroke="#57392d" stroke-opacity=".5"/>
+<rect x="16.5" y="3.5" width="15" height="8" rx="1.5" fill="url(#m)" stroke="#485a6c" stroke-opacity=".75"/>
+<rect x="17.5" y="4.5" width="13" height="2.5" rx="1" fill="#ffffff" fill-opacity=".55"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M14.5,18.5 L17,21 L21.5,15.5 M14.5,27.5 L17,30 L21.5,24.5 M14.5,36.5 L17,39 L21.5,33.5" stroke="#3a9104" stroke-opacity=".8" stroke-width="4.4"/>
+<path d="M14.5,18.5 L17,21 L21.5,15.5 M14.5,27.5 L17,30 L21.5,24.5 M14.5,36.5 L17,39 L21.5,33.5" stroke="url(#t)" stroke-width="2.8"/>
+<path d="M25.5,18.5 H33.5 M25.5,27.5 H33.5 M25.5,36.5 H33.5" stroke="#667885" stroke-opacity=".75" stroke-width="2.4"/>
+</g>
+</svg>
