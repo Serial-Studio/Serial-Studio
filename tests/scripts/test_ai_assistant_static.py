@@ -148,7 +148,7 @@ def test_widget_display_commands_are_tiered_and_documented():
 UI_AUTOMATION_TIERS = {
     "ui.automation.listWindows": "safe",
     "ui.automation.listElements": "safe",
-    "ui.automation.setReduceMotion": "safe",
+    "ui.automation.setReduceMotion": "confirm",
     "ui.automation.screenshot": "confirm",
     "ui.automation.click": "deviceGated",
     "ui.automation.key": "deviceGated",

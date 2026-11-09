@@ -484,7 +484,7 @@ static constexpr std::array<Entry, 470> kEntries = {{
   {QLatin1StringView("ui.automation.listElements"), Tier::Safe, false},
   {QLatin1StringView("ui.automation.listWindows"), Tier::Safe, false},
   {QLatin1StringView("ui.automation.screenshot"), Tier::Confirm, false},
-  {QLatin1StringView("ui.automation.setReduceMotion"), Tier::Safe, false},
+  {QLatin1StringView("ui.automation.setReduceMotion"), Tier::Confirm, false},
   {QLatin1StringView("ui.window.getLayout"), Tier::Safe, false},
   {QLatin1StringView("ui.window.getStatus"), Tier::Safe, false},
   {QLatin1StringView("ui.window.getWidgetSettings"), Tier::Safe, false},

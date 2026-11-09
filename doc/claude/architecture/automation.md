@@ -113,8 +113,9 @@ offscreen platform, and granted in memory by `SERIAL_STUDIO_API_AUTO_CONSENT=1` 
 two. Consents do not compose: a device-write "yes" never unlocks a click, which
 `tst_server_auth` pins without a prompt. `API::SealedPolicy` denies all six names, because a
 sealed deployment's windows show the package content. The assistant tiers
-(`app/rcc/ai/command_safety.json`) put `listWindows`, `listElements` and `setReduceMotion` in
-`safe`, `screenshot` in `confirm`, `click` and `key` in `deviceGated`;
+(`app/rcc/ai/command_safety.json`) put `listWindows` and `listElements` in `safe`, `screenshot`
+and `setReduceMotion` (it persists a preference, so it is no read) in `confirm`, `click` and
+`key` in `deviceGated`;
 `tests/scripts/test_ai_assistant_static.py` pins each to exactly one tier.
 
 ## Headless and the reduce-motion switch
