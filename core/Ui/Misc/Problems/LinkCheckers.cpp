@@ -27,6 +27,7 @@
 #include <QString>
 
 #include "API/HandlerContext.h"
+#include "AppState.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/PipelineModules.h"
@@ -293,12 +294,34 @@ static void reportNoFrames(QList<Finding>& out)
 }
 
 /**
+ * @brief Reports whether every dataset of the loaded project is computed: such a parser feeds the
+ *        data tables and returns no rows by design, so frames without values are its normal state.
+ */
+[[nodiscard]] static bool everyDatasetIsComputed()
+{
+  const auto& modules = DataModel::pipelineModules();
+  if (modules.appState.operationMode() != SerialStudio::ProjectFile)
+    return false;
+
+  bool has_datasets = false;
+  for (const auto& group : modules.projectModel.groups())
+    for (const auto& dataset : group.datasets) {
+      if (!dataset.virtual_)
+        return false;
+
+      has_datasets = true;
+    }
+
+  return has_datasets;
+}
+
+/**
  * @brief Reports frames that are extracted but yield no dataset values, the signature of a parser
- *        that returns an empty result.
+ *        that returns an empty result, except in a project whose datasets are all computed.
  */
 static void reportNoParsedFrames(QList<Finding>& out)
 {
-  if (s_noParseTicks < kSustainTicks)
+  if (s_noParseTicks < kSustainTicks || everyDatasetIsComputed())
     return;
 
   out.append(

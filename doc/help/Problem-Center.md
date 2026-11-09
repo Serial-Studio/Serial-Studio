@@ -52,7 +52,7 @@ Checkers run on three triggers. Project checkers run whenever the project is loa
 | Finding | Severity | Condition |
 |---------|----------|-----------|
 | `bytes-without-frames` | Error | Bytes arrive but no frame is detected, sustained for 3 consecutive samples. The delimiters or the frame detection mode do not match the stream. |
-| `frames-without-values` | Error | Frames are detected but the parser produces no values, sustained for 3 consecutive samples. |
+| `frames-without-values` | Error | Frames are detected but the parser produces no values, sustained for 3 consecutive samples. Not raised when every dataset is computed, because that parser feeds data tables and returns no values by design. |
 | `short-frames` | Warning | Frames carry fewer values than the highest frame index the project maps for that source, sustained for 3 consecutive samples. The datasets above the received count keep their last value and look frozen. One finding per affected source; **Go To** opens the first starved dataset. |
 | `checksum-failures` | Warning | At least 20 checksummed frames have been seen and 5% or more failed. |
 | `dropped-frames` | Warning | The frame queue overflowed and frames were discarded. |
