@@ -8,10 +8,11 @@
   stroke-width="2"
   stroke-linecap="round"
   stroke-linejoin="round"
-  class="icon icon-tabler icons-tabler-outline icon-tabler-bell-off"
+  class="icon icon-tabler icons-tabler-outline icon-tabler-volume-off"
 >
   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-  <path d="M9.346 5.353c.21 -.129 .428 -.246 .654 -.353a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3m-1 3h-13a4 4 0 0 0 2 -3v-3a6.996 6.996 0 0 1 1.273 -3.707" />
-  <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+  <path d="M15 8a5 5 0 0 1 1.912 4.934m-1.377 2.602a5 5 0 0 1 -.535 .464" />
+  <path d="M17.7 5a9 9 0 0 1 2.362 11.086m-1.676 2.299a9 9 0 0 1 -.686 .615" />
+  <path d="M9.069 5.054l.431 -.554a.8 .8 0 0 1 1.5 .5v2m0 4v8a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l1.294 -1.664" />
   <path d="M3 3l18 18" />
 </svg>

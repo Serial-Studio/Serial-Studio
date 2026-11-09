@@ -63,9 +63,15 @@ precedence = "override"
 SPDX-FileCopyrightText = "2020-2026 Paweł Kuna"
 SPDX-License-Identifier = "MIT"
 
-# The two MQTT button glyphs have no Tabler counterpart and stay first-party.
+# The button glyphs with no Tabler counterpart are first-party.
 [[annotations]]
-path = ["app/rcc/icons/buttons/mqtt-off.svg", "app/rcc/icons/buttons/mqtt-on.svg"]
+path = [
+  "app/rcc/icons/buttons/falling-edge.svg",
+  "app/rcc/icons/buttons/mqtt-off.svg",
+  "app/rcc/icons/buttons/mqtt-on.svg",
+  "app/rcc/icons/buttons/rising-edge.svg",
+  "app/rcc/icons/buttons/workspace-settings.svg",
+]
 precedence = "override"
 SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
 SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"

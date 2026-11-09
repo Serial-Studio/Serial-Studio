@@ -8,12 +8,8 @@
   stroke-width="2"
   stroke-linecap="round"
   stroke-linejoin="round"
-  class="icon icon-tabler icons-tabler-outline icon-tabler-lemon"
+  class="icon icon-tabler icons-tabler-outline icon-tabler-receipt"
 >
   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-  <path d="M17.536 3.393c3.905 3.906 3.905 10.237 0 14.143c-3.906 3.905 -10.237 3.905 -14.143 0l14.143 -14.143" />
-  <path d="M5.868 15.06a6.5 6.5 0 0 0 9.193 -9.192" />
-  <path d="M10.464 10.464l4.597 4.597" />
-  <path d="M10.464 10.464v6.364" />
-  <path d="M10.464 10.464h6.364" />
+  <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2m4 -14h6m-6 4h6m-2 4h2" />
 </svg>

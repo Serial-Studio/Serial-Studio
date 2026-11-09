@@ -9676,17 +9676,17 @@
    "license": "MIT"
   },
   "icons/buttons/alarm-annunciator.svg": {
-   "sha256": "df628cbfd3e4fdf9aefc2645b516998a04cd72bdf8417ee84ca8482c22a0de0d",
+   "sha256": "4fbe42288f65debad7f9ba8858fe1ad695b41734e1a50c9902079b671df02139",
    "source": "tabler",
    "license": "MIT"
   },
   "icons/buttons/alarm-mute.svg": {
-   "sha256": "bdfba55920a24705b6f3b384744a1ccec53b9fa3433e639d97cec3f829e18cfe",
+   "sha256": "8d62fccfb0ad9c1fa58a15415c294edf8c18da9c26487f180507a6b90efda597",
    "source": "tabler",
    "license": "MIT"
   },
   "icons/buttons/alarm-silence.svg": {
-   "sha256": "8d62fccfb0ad9c1fa58a15415c294edf8c18da9c26487f180507a6b90efda597",
+   "sha256": "bdfba55920a24705b6f3b384744a1ccec53b9fa3433e639d97cec3f829e18cfe",
    "source": "tabler",
    "license": "MIT"
   },
@@ -9751,7 +9751,7 @@
    "license": "MIT"
   },
   "icons/buttons/collapse-duplicates.svg": {
-   "sha256": "8f8b3b916acf81aa8c954923cdb7c367a9757df94b7fbb457a466ac3a765f192",
+   "sha256": "ed0d532584b78da5f97685da73549bfe19bae8e59904b55a151194073508897e",
    "source": "tabler",
    "license": "MIT"
   },
@@ -9801,9 +9801,9 @@
    "license": "MIT"
   },
   "icons/buttons/falling-edge.svg": {
-   "sha256": "82f8623d4627ef5b029ace7d7c3733c66258a83cdc55d36c98cebe19a123a2a1",
-   "source": "tabler",
-   "license": "MIT"
+   "sha256": "22f249fa1763fcf22676337a72f01b067c880c8d1de58c8e50fa5afee5fdc462",
+   "source": "drawn",
+   "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
   },
   "icons/buttons/forward.svg": {
    "sha256": "66fba3efdb3fb4aac588c235419b47c3b768fab1de4c8bc59793c32a00a6bbae",
@@ -9836,7 +9836,7 @@
    "license": "MIT"
   },
   "icons/buttons/lemonsqueezy.svg": {
-   "sha256": "c134f34c0320644653bd29fe1d8e549cd8d1568824911708aaba92b9e99419d1",
+   "sha256": "f17c1f1c39b390e62239af0c305bbbbcd14b85fda99fc17d66c87fa1d73ccc70",
    "source": "tabler",
    "license": "MIT"
   },
@@ -9941,9 +9941,9 @@
    "license": "MIT"
   },
   "icons/buttons/rising-edge.svg": {
-   "sha256": "806224e183771f5b7013a2b31464ddec5a44a92c4cf2d762e83d5ac3aa595d74",
-   "source": "tabler",
-   "license": "MIT"
+   "sha256": "c78c9720b0dd0dbabbeb64062d4e676de2f04fadc8d6062bca2f583a825fadc0",
+   "source": "drawn",
+   "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
   },
   "icons/buttons/save.svg": {
    "sha256": "386c871d2459faa509fbe7f03084b267aa712bbd9691b4db354fea4b5bd105dc",
@@ -9986,7 +9986,7 @@
    "license": "MIT"
   },
   "icons/buttons/stopwatch-stop.svg": {
-   "sha256": "033e0d70c194a0d1572383330c885b45547c31c43ed857dccf72bfdbef212ac4",
+   "sha256": "b5834fe6f2aca1bb220b05497037fbb236c377c0f5c00c6d8b7907ca8c9d1aff",
    "source": "tabler",
    "license": "MIT"
   },
@@ -10011,7 +10011,7 @@
    "license": "MIT"
   },
   "icons/buttons/utilities.svg": {
-   "sha256": "57b49ebc957f41b24b3ef5b09fc90171946666c04252ce44087bcc3174c929e0",
+   "sha256": "45ba701a0b0c9599e5ab22ae9655449aa35149509543037f01b552cf9c73a430",
    "source": "tabler",
    "license": "MIT"
   },
@@ -10026,9 +10026,9 @@
    "license": "MIT"
   },
   "icons/buttons/workspace-settings.svg": {
-   "sha256": "d27d824ab0f03bdd517f0e54b03269f92b6556edd79d99e03db0006a08e576bd",
-   "source": "tabler",
-   "license": "MIT"
+   "sha256": "3b5aca1a43d1ee40355f798b894d9c659599d3f7454c378a8eba62b28488eac9",
+   "source": "drawn",
+   "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
   },
   "icons/buttons/workspaces.svg": {
    "sha256": "6026d42b135c3fdc3d043224888619f5ba50614e6b7af1226ff201fe79049dcb",
