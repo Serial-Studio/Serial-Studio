@@ -311,7 +311,7 @@ Changes from `plan.md`, all smaller than planned or additive:
 
 ### T26 — Pilot the hardest icons
 
-- **Files:** `art/drawn/` (new), about 10 SVGs
+- **Files:** `doc/art/drawn/` (new), about 10 SVGs
 - **Does:** Drafts oscilloscope, gyroscope, knob, LED, PLC and similar in Tango's palette and style,
   rendered beside real Tango icons.
 - **Verify:** The comparison sheet is ready for you.
@@ -327,7 +327,7 @@ Changes from `plan.md`, all smaller than planned or additive:
 
 ### T28 — Draw the remaining icons
 
-- **Files:** `art/drawn/`, `art-map.csv`, regenerated art, qrc and manifest
+- **Files:** `doc/art/drawn/`, `art-map.csv`, regenerated art, qrc and manifest
 - **Does:** Works through the stand-in list in batches, each reviewed on a contact sheet, until the
   list reaches zero (R12).
 - **Verify:** `art-verify.py` reports zero stand-ins.

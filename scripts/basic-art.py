@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """Generates Basic, the icon theme drawn for Serial Studio, and the free art tree (spec 0116).
 
-The SVG sources live in art/drawn. doc/claude/specs/0116-tango-public-icons/art-map.csv names the
-drawing behind every icon, so re-running this script reproduces the output, which is committed:
+The SVG sources live in doc/art/drawn. doc/claude/specs/0116-tango-public-icons/art-map.csv names
+the drawing behind every icon, so re-running this script reproduces the output, which is committed:
 nobody needs PySide6 to build. Tabler (MIT) supplies the single-color glyphs and the corner badges.
 
 Each colored icon becomes <name>.png and <name>@2x.png at every size the application offers. The
@@ -50,7 +50,7 @@ SPEC = ROOT / "doc" / "claude" / "specs" / "0116-tango-public-icons"
 ART_MAP = SPEC / "art-map.csv"
 TARGETS = SPEC / "art-targets.txt"
 ICON_IDS = ROOT / "doc" / "claude" / "specs" / "0115-icon-packs" / "icons8-map.csv"
-DRAWN = ROOT / "art" / "drawn"
+DRAWN = ROOT / "doc" / "art" / "drawn"
 
 TABLER_URL = "https://registry.npmjs.org/@tabler/icons/-/icons-3.51.0.tgz"
 TABLER_SHA256 = "b30108713d3fa60aee862c2a133225da8e0f309be0708fe2925763ff810c766c"

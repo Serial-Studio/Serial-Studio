@@ -9,7 +9,7 @@ SPDX-PackageDownloadLocation = "https://github.com/Serial-Studio/Serial-Studio"
 # ------------------------------------------------------------------------------------------------
 
 # Basic, the icon theme drawn for this project (spec 0116), and the action icons of public builds.
-# art/drawn holds the sources; app/rcc/art-provenance.json records every file and art-verify.py
+# doc/art/drawn holds the sources; app/rcc/art-provenance.json records every file and art-verify.py
 # holds the tree to it. Some icons carry a corner badge built from a Tabler glyph (MIT).
 [[annotations]]
 path = [
@@ -90,7 +90,6 @@ path = [
   "doc/**",
   "examples/**",
   "scripts/**",
-  "art/drawn/**",
   "app/tests/support/hidpi/**",
   "app/tests/fuzz/corpus/**",
   "tests/**",

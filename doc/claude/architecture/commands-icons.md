@@ -61,7 +61,7 @@ coverage, mapping and qrc consistency) and `registry-verify.py` runs it on a tre
 packs; the Icons8 mapping is `doc/claude/specs/0115-icon-packs/icons8-map.csv`.
 
 **Two art trees and the Basic pack (spec 0116):** Basic is the colorful icon theme drawn for this
-project: `art/drawn/` holds its SVG sources and `scripts/basic-art.py` renders `@1x`/`@2x` PNG pairs
+project: `doc/art/drawn/` holds its SVG sources and `scripts/basic-art.py` renders `@1x`/`@2x` PNG pairs
 to `app/rcc/iconpacks/basic/`, listed in `app/rcc/basic.qrc`, which every build compiles. Beside it,
 exactly one art tree is compiled. Official builds take the licensed Office set from the private
 `Serial-Studio/Icons` repository through `SS_ICON_ART_DIR` (a sibling `../Icons` checkout is picked

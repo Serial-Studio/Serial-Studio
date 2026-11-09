@@ -7,7 +7,7 @@ updated: 2026-11-08
 
 # Plan 0116 — Public icon set free of licensed art (Tango)
 
-> **Amended 2026-11-09.** The free art is Basic, rendered by `scripts/basic-art.py` from `art/drawn/`
+> **Amended 2026-11-09.** The free art is Basic, rendered by `scripts/basic-art.py` from `doc/art/drawn/`
 > into `app/rcc/iconpacks/basic/` and listed in `app/rcc/basic.qrc`, which every build compiles. The
 > house tree `:/icons/<themed>` exists only with the private art. `IconRegistry::locateHouse` falls
 > back to `fallbackPackId()`, the legacy path lookup falls back to the same pack, and
@@ -69,7 +69,7 @@ and the remaining drawings land afterwards.
 | `app/rcc/icons/{buttons,window,system}/`, `app/rcc/images/` | Tabler SVGs at the same paths. |
 | `app/rcc/actions/` | Free art at the same names; the five removed names deleted. |
 | `app/rcc/iconpacks/` | Only a hidden Tabler `fine-line` pack for the mono toolbars. |
-| `art/drawn/` (new) | SVG sources of the icons drawn for this spec. |
+| `doc/art/drawn/` (new) | SVG sources of the icons drawn for this spec. |
 | `scripts/assets/` | Icons8 badge files move to the private repo. |
 | `doc/claude/specs/0116-tango-public-icons/art-map.csv` (new) | Each base's source: tango, composed, tabler, drawn or stand-in. |
 | `app/rcc/messages/Acknowledgements.txt` | Tabler notice in; Icons8 section and the first-party claim out. |

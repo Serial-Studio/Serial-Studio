@@ -10,7 +10,7 @@ author: Alex Spataru
 
 > **Amended 2026-11-09, after testing in the running application.** Tango, then elementary, were
 > rejected or could not ship in the proprietary build, so the free set is now **Basic**: a colorful
-> icon theme drawn for this project from the idea of each icon (`art/drawn/`, 205 drawings). Basic is
+> icon theme drawn for this project from the idea of each icon (`doc/art/drawn/`, 205 drawings). Basic is
 > compiled into every build as a normal icon pack. Where the licensed Office set is present it stays
 > the default and Basic is a choice beside it; where Office is absent Basic is the default. The
 > dashboard widget toolbars gained their own setting. Where this spec says Tango, read Basic; the
