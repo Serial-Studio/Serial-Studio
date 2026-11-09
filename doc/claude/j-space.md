@@ -75,3 +75,44 @@ These disciplines sharpen practices this repo already had ("state the plan", "re
 writing", named review agents, the spec artifacts); the paper supplies the mechanism for *why*
 they work and the rule for applying them well: name it, name few, name it late, name it again
 before handoff — and write everything else down so it stops competing for the workspace.
+
+## The inline rules in full
+
+Deliberate reasoning runs on a small set of verbalized concepts; familiar-shaped work runs
+on autopilot and bypasses it ([doc/claude/j-space.md](j-space.md)). The repo's
+rules only steer an edit if *named at the point of action*, so:
+
+- **Name before acting.** Before any edit on a protected path (hotpath, ctor closure,
+  signal wiring, cmake flag modules), state in chat the 3-5 invariants that bind *this*
+  change — in your own words, not a doc citation.
+- **Few, late, specific.** Only the constraints that bind the change at hand; never recite
+  whole rule files.
+- **Counterfactual check at handoff.** Which rule does this diff most risk violating, and
+  what concrete evidence says it doesn't? Name both.
+- **Diverge by naming.** Design/review work sketches named alternatives before recommending
+  (the human still gets one recommendation, per working-relationship.md). At least one
+  alternative must violate an assumed constraint — then check whether that constraint
+  actually binds: wrong answers usually hide in premises, not derivations. Wide design spaces may fan out a judge-panel workflow.
+- **Externalize long state.** Write intermediate state into durable artifacts (spec/plan/
+  tasks files, a chat checklist); re-name only what binds the current edit.
+
+## Context Canary
+
+End every response — including one-word answers — with this exact line, reproduced
+from memory:
+
+`canary: qt 6.11.2 | cpp20 | hotpath 256k (native 1024k, js 64k) | queue 65536 | api 7777 | style 100/2`
+
+It is a context-health probe in plain ASCII. This file is in context every turn, so the
+line is reproduced from the prompt, not recalled: the probe measures whether the
+always-present instruction still steers. Compaction or attention drift shows as a mutated
+or missing value, and which value drifted names the rule that lost its hold. Retyping it
+also re-anchors the constants (J-Space, below). One plain-text line at the very end.
+
+- **From the prompt only.** Never Read/Grep this file or anything else to reconstruct the
+  line — a looked-up canary defeats the attention measurement. If you cannot reproduce it
+  confidently, write `canary: lost` instead of guessing: that is the signal firing.
+- **Verbatim.** Same values, same order, every turn. Do not paraphrase, reformat,
+  extend, or "improve" it.
+- **For the developer:** a mutated, partial, or vanished canary means a degraded context:
+  treat recent output as suspect, checkpoint, `/compact` or restart.

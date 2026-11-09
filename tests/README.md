@@ -732,3 +732,33 @@ frame = b"1.0,2.0,3.0\n"
 the plain requirements file, or the `lint` and `test` jobs install a different set than you did.
 
 **Script tests fail with `node: command not found`.** Install Node.js and make sure `node` is on your `PATH`. Script tests are the only ones that require it.
+
+## Rules for AI agents
+
+Python/pytest suite under `tests/`. The full catalog (per-file coverage, fixtures, markers, the
+C++ ctest tier, the `--selftest` in-app tier) lives in [tests/README.md](README.md); read it
+before writing a test. What binds you:
+
+- **You don't build or launch the app, but you may drive a running one.** Integration,
+  security, and performance tests drive a running Serial Studio over TCP — they need the app
+  up with **Preferences → API & Plugins → Enable API Server** (`localhost:7777`). The user
+  launches it; once up, you may run those tests and poke the API directly
+  (`tests/utils/api_client.py`) to test hypotheses. Probe first: `nc -z 127.0.0.1 7777`.
+- **`tests/scripts/` is the exception you *can* run** — pure JS frame-parser unit tests, fresh
+  Node.js subprocess per case, no Qt, no app. `pip install -r tests/requirements.txt` once;
+  `pytest.ini` registers all markers and a 30 s per-test timeout.
+- **`scripts/tests/` is the tooling tier**, also yours: linter fixtures, census gates, the CI
+  shape, the hooks on fixture transcripts.
+- **C++ units under `app/tests/`** (spec 0032) run via `ctest` (no CMake presets — the repo
+  uses hand-written `cmake -B ... -D...` configures; CI inlines the unit-tier flags) — the
+  maintainer builds; you may run `ctest` against an existing build dir (never configure or
+  compile). **`--selftest`** suites run inside
+  `CLI::process()` **before** the composition root: never touch an application singleton there.
+- The C++ hotpath has no pytest path — throughput is the user-run `--benchmark-hotpath` gate
+  (see Threading & Hotpath), piece correctness the ctest tier; `ci.yml` runs both.
+
+```bash
+pytest tests/scripts/ -v                  # JS-parser units (Node.js only) — safe for you
+pytest tests/integration/ -v              # all integration (needs running app)
+pytest tests/ -m "not destructive" -v     # skip server-crashing tests
+```

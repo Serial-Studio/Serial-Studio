@@ -210,3 +210,42 @@ Mission-critical telemetry. Hotpath violations are blockers.
    to a tag or invariant-checked `static_cast`.
 10. **Zero warnings.** `-Wall -Wextra -Wpedantic`, `ENABLE_HARDENING` for production. Fix
     root cause; never suppress without justification.
+
+## The essentials in full
+
+`scripts/code-verify.py` is the contract — read its `--check` output, don't re-derive the
+rules. Full spec and the NASA Power of Ten live in
+[doc/claude/code-style.md](code-style.md). The handful you need *before* typing:
+
+- **Format**: 100-col, 2-space indent, LF, pointer/ref binds to type (`int* p`). No braces on
+  single-statement bodies; blank line after a brace-free body. Max 3 nesting levels (guard
+  clauses); functions 40-80 lines, hard limit 100; translation units under 1500 lines
+  (`cxx-tu-too-long` — the function cap alone let god TUs accrete a method per feature).
+  Run `clang-format`.
+- **Headers (.h)**: `Q_OBJECT` → `Q_PROPERTY` → `signals:` → ctor/deleted copy → `public:`
+  (`instance()` first) → `public slots:` → `private slots:` → `private:`, Christmas-tree in
+  each block. `[[nodiscard]]` on every non-void return. **Never `Q_INVOKABLE void`** (use
+  `public slots:`). **No in-header member init** — ctor init list only.
+- **Signals**: `Q_EMIT` not `emit`; lowercase `signals:`/`public slots:`; never
+  `SIGNAL()`/`SLOT()`. Never `disconnect(nullptr)` as the slot — capture the `Connection`.
+- **Comments**: code is the spec; label, don't narrate. **No comments inside a function body**
+  (`cxx-inbody-comment`, advisory) — functions are short, so the one-line `/** @brief ... */`
+  above the function plus self-explanatory code carry it; fold a load-bearing *why* into the
+  `@brief`, or fence a genuinely-needed note with `// code-verify off`. `//---` concern-group
+  banners live *between* functions, never inside one. No inline EOL comments, no AI narration.
+  Don't fake the em-dash with ` -- ` — rewrite the sentence.
+- **Naming**: `CamelCase` types, `camelCase` functions, `lower_case` locals + public members,
+  `s_`/`m_`/`k`/`UPPER_CASE` for static/private/constexpr/macro (full table in the sub-doc).
+- **Safety-critical (NASA Power of Ten)** — hotpath violations are blockers. The ones that
+  bite: no alloc/Frame-copy on the dashboard path; fixed loop bounds + capped recursion;
+  assertion density ≥2/function; `[[nodiscard]]` + return checks at every system boundary;
+  zero warnings; no `reinterpret_cast`/`dynamic_cast` on the hotpath; SPDX header per file —
+  first-party is `GPL-3.0-or-later` (relicensed from `-only`, 2026-07). The repo is
+  REUSE-compliant: `REUSE.toml` + `LICENSES/`, `reuse lint` gates in CI.
+- **Assertions are `SS_ASSERT(cond, action)`** (`core/Core/SSAssert.h`), not `Q_ASSERT`: the
+  condition evaluates in **every** build; debug aborts, release reports once per site and
+  runs the recovery `action` instead of the guarded code. Condition side-effect-free and
+  cheap; action side-effect-complete, single statement, no top-level comma, never
+  `continue`/`break` (use `SS_ASSERT_LOG(cond); if (!(cond)) continue;`). On the
+  per-frame/per-cell kernels use `SS_ASSERT_HOTPATH(cond)` instead — see
+  [doc/claude/architecture/kernels.md](architecture/kernels.md).

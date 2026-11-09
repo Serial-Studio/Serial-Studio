@@ -48,19 +48,13 @@ from memory:
 
 `canary: qt 6.11.2 | cpp20 | hotpath 256k (native 1024k, js 64k) | queue 65536 | api 7777 | style 100/2`
 
-It is a context-health probe in plain ASCII. This file is in context every turn, so the
-line is reproduced from the prompt, not recalled: the probe measures whether the
-always-present instruction still steers. Compaction or attention drift shows as a mutated
-or missing value, and which value drifted names the rule that lost its hold. Retyping it
-also re-anchors the constants (J-Space, below). One plain-text line at the very end.
+One plain-text line at the very end.
 
 - **From the prompt only.** Never Read/Grep this file or anything else to reconstruct the
-  line — a looked-up canary defeats the attention measurement. If you cannot reproduce it
-  confidently, write `canary: lost` instead of guessing: that is the signal firing.
-- **Verbatim.** Same values, same order, every turn. Do not paraphrase, reformat,
-  extend, or "improve" it.
-- **For the developer:** a mutated, partial, or vanished canary means a degraded context:
-  treat recent output as suspect, checkpoint, `/compact` or restart.
+  line. If you cannot reproduce it confidently, write `canary: lost` instead of guessing.
+- **Verbatim.** Same values, same order, every turn.
+
+What it measures and what a mutated canary means: [j-space.md](doc/claude/j-space.md).
 
 ## Trust Contract
 
@@ -93,33 +87,17 @@ text and the incidents behind each rule:
 
 ## Delegation & Cost — Advisor Economics
 
-Quality concentrates in planning and review; bulk token generation doesn't need the strong
-model. Anthropic's advisor-tool measurements and the spec-0069 post-mortem agree: the main session
-advises, cheaper executors type.
+Quality concentrates in planning and review: the main session advises, cheaper executors type.
+The full rules and their measurements: [doc/claude/delegation.md](doc/claude/delegation.md).
 
-- **The main session plans, reviews, and integrates; mechanical execution is delegated.**
-  Applying an approved brief, repetitive multi-file sweeps, test-writing against a fixed
-  pattern: run them in subagents with a cheaper model override (Sonnet by default, Haiku
-  for purely mechanical work). Design decisions, hotpath edits, and anything on a
-  protected surface stay in the main session. An executor brief names a donor file whose
-  pattern the output matches; a brief without one produces code that fits nothing.
-- **Two high-tier touchpoints per task, not continuous involvement.** One after
-  orientation but before committing to an approach (the `/ss-plan` gate), one before
-  declaring done (the self-review gate). Between them the strong model directs; it
-  doesn't type.
-- **Briefs and reports are budgeted.** A per-component brief fits half a page: files,
-  the invariants that bind, one acceptance check. Subagents return conclusions, never
-  file dumps. Measured: hard output caps cut advice volume ~7x with no detectable quality loss, so cap first
-  and raise only on evidence.
-- **Searches fan out, conclusions come back.** Multi-file exploration runs in read-only
-  search subagents; the main context receives the answer, not the excerpts, which also keeps the cached
-  prompt prefix stable. A line number a subagent reports is a hint: re-read the slice
-  before editing it. A whole-file read over 800 lines is refused and redirected there,
-  the read-in-full hotpath files excepted (`SS_READ_GATE_LINES` retunes it). Enforced:
-  hook:large-read-gate.py.
-- **No process tax on trivial work.** A mandated consult/plan step on tasks whose first action needs no
-  planning measured net-zero quality gain at pure cost. Keep the "skip for trivial" escape
-  hatches; never write a rule that both mandates and restrains one mechanism.
+- **The main session plans, reviews, and integrates; mechanical execution is delegated** to
+  subagents on a cheaper model (Sonnet by default, Haiku for purely mechanical work). Design
+  decisions, hotpath edits, and anything on a protected surface stay in the main session. An
+  executor brief names a donor file whose pattern the output matches.
+- **Searches fan out, conclusions come back.** A line number a subagent reports is a hint:
+  re-read the slice before editing it. A whole-file read over 800 lines is refused and redirected,
+  the read-in-full hotpath files excepted. Enforced: hook:large-read-gate.py.
+- **No process tax on trivial work.** Keep the "skip for trivial" escape hatches.
 
 ## Scripts
 
@@ -140,27 +118,16 @@ mechanics live in [doc/claude/scripts.md](doc/claude/scripts.md).
 
 ## Tests
 
-Python/pytest suite under `tests/`. The full catalog (per-file coverage, fixtures, markers, the
-C++ ctest tier, the `--selftest` in-app tier) lives in [tests/README.md](tests/README.md); read it
-before writing a test. What binds you:
+Python/pytest suite under `tests/`. The full catalog and these rules in full live in
+[tests/README.md](tests/README.md); read it before writing a test. What binds you:
 
-- **You don't build or launch the app, but you may drive a running one.** Integration,
-  security, and performance tests drive a running Serial Studio over TCP — they need the app
-  up with **Preferences → API & Plugins → Enable API Server** (`localhost:7777`). The user
-  launches it; once up, you may run those tests and poke the API directly
-  (`tests/utils/api_client.py`) to test hypotheses. Probe first: `nc -z 127.0.0.1 7777`.
-- **`tests/scripts/` is the exception you *can* run** — pure JS frame-parser unit tests, fresh
-  Node.js subprocess per case, no Qt, no app. `pip install -r tests/requirements.txt` once;
-  `pytest.ini` registers all markers and a 30 s per-test timeout.
-- **`scripts/tests/` is the tooling tier**, also yours: linter fixtures, census gates, the CI
-  shape, the hooks on fixture transcripts.
-- **C++ units under `app/tests/`** (spec 0032) run via `ctest` (no CMake presets — the repo
-  uses hand-written `cmake -B ... -D...` configures; CI inlines the unit-tier flags) — the
-  maintainer builds; you may run `ctest` against an existing build dir (never configure or
-  compile). **`--selftest`** suites run inside
-  `CLI::process()` **before** the composition root: never touch an application singleton there.
-- The C++ hotpath has no pytest path — throughput is the user-run `--benchmark-hotpath` gate
-  (see Threading & Hotpath), piece correctness the ctest tier; `ci.yml` runs both.
+- **You don't build or launch the app, but you may drive a running one**, once the user has it
+  up with the API Server enabled (`localhost:7777`). Probe first: `nc -z 127.0.0.1 7777`.
+- **`tests/scripts/` and `scripts/tests/` are yours to run**: JS frame-parser units with no app,
+  and the tooling tier.
+- **C++ units under `app/tests/`** run via `ctest` against an existing build dir (never configure
+  or compile). **`--selftest`** suites run **before** the composition root: never touch an
+  application singleton there.
 
 ```bash
 pytest tests/scripts/ -v                  # JS-parser units (Node.js only) — safe for you
@@ -171,29 +138,17 @@ pytest tests/ -m "not destructive" -v     # skip server-crashing tests
 ## Project Overview
 
 Serial Studio: cross-platform telemetry dashboard, Qt 6.11.2 + C++20, 15+ visualization
-widgets, 5 output (control) widgets, 256 kHz+ data rate (CI-gated; see below). Data sources,
-per-dataset transforms, the Pro feature list and the aural alerts live in
-[directory-map.md](doc/claude/directory-map.md) "Product Overview".
-Frame parsers in JavaScript (`QJSEngine`), Lua (embedded LuaJIT 2.1, 5.1 + shims; per-project
-Safe/Fast execution mode — spec 0051), or Built-In ("Native"
-in all internal identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeTemplate`; only
-user-facing strings/docs say Built-In. Parametrized C++ templates configured via a JSON
-descriptor, no user code).
-User-facing renames of 2026-08-19, internal identifiers unchanged: Historian (was Session
-Database; `Sessions::`, `sessions.*`, the "Session Databases" folder stay), Variables (was Shared
-Memory; `RegisterDef`/`registers` stay), Computed Dataset (was Virtual Dataset; `virtual_` and
-`"Virtual"` stay), Canvas Widget (was Painter; `"painter"`, `project.painter.*`, Painter* stay).
-In doc/help the hotpath is called the "acquisition pipeline" — code, benchmarks, and internal
-docs keep "hotpath". The code base is seven static libraries under `core/`, every one a
-STRICT layer since spec 0077 (`SerialStudioCore` and `SerialStudioProtocols` with prefixed
-includes; `SerialStudioPipeline`, `SerialStudioDevices`, `SerialStudioStorage`, `SerialStudioApi`
-and `SerialStudioUi` keeping their relative include roots) plus the composition root in
+widgets, 5 output (control) widgets, 256 kHz+ data rate (CI-gated; see below). Frame parsers in
+JavaScript, Lua, or Built-In ("Native" in all internal identifiers; only user-facing strings and
+docs say Built-In). Other user-facing names differ from identifiers that stay as they are:
+Historian (`Sessions::`), Variables (`registers`), Computed Dataset (`virtual_`), Canvas Widget
+(`painter`), and "acquisition pipeline" in doc/help for the hotpath.
+
+The code base is seven STRICT static libraries under `core/` plus the composition root in
 `app/src`; a library includes and links only the layers below it. Cross-library talk goes over
-`Core::Bus::MessageBus` (typed topics, shared-pointer messages, retained state), through the
-interfaces the root binds, or through the three root-bound module sets (`Core::services()`,
-`DataModel::pipelineModules()`, `API::handlerContext()`) — never an `instance()` reach into
-another library; `scripts/layer-verify.py` fails on any include, include root or link outside
-the graph, and `code-verify.py --singleton-census` fails on any cross-library reach.
+`Core::Bus::MessageBus`, the interfaces the root binds, or the three root-bound module sets, never
+an `instance()` reach into another library. Product detail and the full text:
+[directory-map.md](doc/claude/directory-map.md) "Product Overview".
 
 ## Sub-Documentation
 
@@ -202,121 +157,75 @@ section a pointer names before working there. The inline blocks are pointers, no
 
 | Document | When to read it |
 |----------|-----------------|
-| [architecture.md](doc/claude/architecture.md) | Before touching any subsystem: the index into `doc/claude/architecture/` — dataflow (hotpath), startup, io, project, scripting, dashboard, kernels, export, mirror, ai, commands-icons. |
-| [architecture/ai.md](doc/claude/architecture/ai.md) | Before touching `core/Ui/AI/`, `app/rcc/ai/` or `app/qml/AI/`: the command safety tiers, checkpoint-not-save semantics, the meta-tool discovery seam, the provider/reply contract, and the `FileSandbox` / `KeyVault` trust boundaries. |
-| [common-mistakes.md](doc/claude/common-mistakes.md) | The silent-breakage lookup: gotchas the linter can't catch (timestamp capture, queued-vs-direct hotpath, `operator[]` inserts, macOS file-dialog reentrancy, the GUI-stall sampling recipe). |
-| [code-style.md](doc/claude/code-style.md) | Full style spec + NASA Power of Ten. The Code Style block below is the inline essentials. |
-| [trust-contract.md](doc/claude/trust-contract.md) | Full text of the Trust Contract above, with the incidents behind each rule. |
-| [directory-map.md](doc/claude/directory-map.md) | The `core/` / `app/src` / `app/qml` / `lib` tree, one line of role per subsystem. |
+| [architecture.md](doc/claude/architecture.md) | Before touching any subsystem: the index into `doc/claude/architecture/`. |
+| [architecture/ai.md](doc/claude/architecture/ai.md) | Before touching `core/Ui/AI/`, `app/rcc/ai/` or `app/qml/AI/`. |
+| [common-mistakes.md](doc/claude/common-mistakes.md) | The silent-breakage lookup: gotchas the linter can't catch. |
+| [code-style.md](doc/claude/code-style.md) | Full style spec + NASA Power of Ten. |
+| [trust-contract.md](doc/claude/trust-contract.md) | Full text of the Trust Contract, with the incidents behind each rule. |
+| [directory-map.md](doc/claude/directory-map.md) | The source tree, one line of role per subsystem. |
 | [scripts.md](doc/claude/scripts.md) | The per-script table for `scripts/`. |
-| [working-relationship.md](doc/claude/working-relationship.md) | How to collaborate here: recommend don't enumerate, push back when a choice will cost, ground truth outranks on-paper reasoning. Read once per session. |
-| [j-space.md](doc/claude/j-space.md) | The verbalization discipline and its grounding. Read when tuning any AI-facing doc or skill. |
-| [repo-skills.md](doc/claude/repo-skills.md) | The project `/`-skills catalog and when each fires. Most auto-activate; this is the deliberate-pick lookup. |
-| [spec-driven.md](doc/claude/spec-driven.md) | Before any non-trivial or multi-file feature: the four gated phases, where artifacts live, when to skip. |
-| [TODO.md](doc/claude/TODO.md) | Open work across sessions: icons to draw, commands to wire, follow-ups, maintainer steps. Read it at the start of a task; add what you defer, delete what you finish in the same commit. |
+| [working-relationship.md](doc/claude/working-relationship.md) | How to collaborate here. Read once per session. |
+| [j-space.md](doc/claude/j-space.md) | The verbalization discipline. Read when tuning any AI-facing doc or skill. |
+| [repo-skills.md](doc/claude/repo-skills.md) | The project `/`-skills catalog and when each fires. |
+| [spec-driven.md](doc/claude/spec-driven.md) | Before any non-trivial or multi-file feature. |
+| [TODO.md](doc/claude/TODO.md) | Open work across sessions. Read it at the start of a task; add what you defer, delete what you finish in the same commit. |
 
 ## J-Space Discipline — Verbalize the Binding Constraints
 
-Deliberate reasoning runs on a small set of verbalized concepts; familiar-shaped work runs
-on autopilot and bypasses it ([doc/claude/j-space.md](doc/claude/j-space.md)). The repo's
-rules only steer an edit if *named at the point of action*, so:
+The repo's rules only steer an edit if *named at the point of action*
+([doc/claude/j-space.md](doc/claude/j-space.md)), so:
 
 - **Name before acting.** Before any edit on a protected path (hotpath, ctor closure,
   signal wiring, cmake flag modules), state in chat the 3-5 invariants that bind *this*
   change — in your own words, not a doc citation.
-- **Few, late, specific.** Only the constraints that bind the change at hand; never recite
-  whole rule files.
 - **Counterfactual check at handoff.** Which rule does this diff most risk violating, and
   what concrete evidence says it doesn't? Name both.
-- **Diverge by naming.** Design/review work sketches named alternatives before recommending
-  (the human still gets one recommendation, per working-relationship.md). At least one
-  alternative must violate an assumed constraint — then check whether that constraint
-  actually binds: wrong answers usually hide in premises, not derivations. Wide design spaces may fan out a judge-panel workflow.
-- **Externalize long state.** Write intermediate state into durable artifacts (spec/plan/
-  tasks files, a chat checklist); re-name only what binds the current edit.
+- **Diverge by naming.** Design/review work sketches named alternatives before one
+  recommendation; at least one must violate an assumed constraint.
 
 ## Threading & Hotpath — Non-Negotiable
 
-The rules most likely to cause silent breakage. Full detail (data flow, threading table,
-cached flags, benchmark mechanics) in
-[doc/claude/architecture/dataflow.md](doc/claude/architecture/dataflow.md); invoke the
-`ss-hotpath` skill before editing these paths (nothing loads it for you) and it re-states them,
-including the spec-0055 block caps, the time-ring/plot-clock rules, and the kernel macros.
+The rules most likely to cause silent breakage. Every rule in full:
+[doc/claude/hotpath-rules.md](doc/claude/hotpath-rules.md); data flow, threading table and
+benchmark mechanics: [doc/claude/architecture/dataflow.md](doc/claude/architecture/dataflow.md).
+Invoke the `ss-hotpath` skill before editing these paths (nothing loads it for you).
 
 - **The frame pipeline runs on `IO::PipelineHost`'s processing thread (spec 0051 M3), not the
-  GUI thread.** FrameReaders, `FrameParser` and `FrameBuilder` all live there; the GUI drains
-  finished pooled frames from an SPSC ring in `Dashboard::onDisplayTick`. Public
-  FrameBuilder/FrameParser mutators SELF-MARSHAL — GUI→pipeline waits go through
-  `IO::PipelineHost::runOnObjectThread` (event-loop-backed), pipeline→GUI reads through
-  `runOnGuiThreadBlocking`. Never add a plain `BlockingQueuedConnection` from the GUI into the
-  pipeline.
-- **`runOnObjectThread` is for command-rate waits, never for a GUI-thread script API.** The wait
-  spins a nested `QEventLoop` that fires the display tick and re-enters the calling script.
-  `DataModel::readTableView` / `writeTableStore` (`DataTable.h`) hold the ONE routing rule, and
-  both the JS bridge and the Lua closures go through them. **No `lua_*` call may run inside a
-  routed lambda.** Any new GUI-callable script API follows the same rule:
-  [doc/claude/architecture/scripting.md](doc/claude/architecture/scripting.md) "Data Tables".
-- **`FrameReader` and `CircularBuffer` are pipeline-thread / SPSC. Never add mutexes.** Recreate
-  via `resetFrameReader()` / `reconfigure()`. Enforced: code-verify:spsc-lock.
-- **In-pipeline signal hops must be `Qt::DirectConnection`.** Queued between two
-  pipeline-thread objects fills the 65536-slot queue at 10+ kHz and drops frames. GUI↔pipeline
-  traffic is chunk/command/tick rate only — never a per-frame queued emission. Enforced:
-  code-verify:pipeline-queued-hop.
-- **No allocation on the publish path.** Blocks come from a pool (`use_count()==1` probe,
-  aliasing shared_ptr) with columns sized once at bind — `DataModel::BlockStager` owns it on the
-  frame lane, `StreamProcessor::claimBlockSlot()` on the stream lane. The one copy is
-  `clone_block_trimmed`, made by `DataModel::BlockPublisher` for the async sinks — deliberate and
-  gated on a sink being on.
-- **One publication payload, one ingestion path (spec 0055).** Nothing publishes a
-  `TimestampedFrame` any more: `FrameBuilder`'s `BlockStager` stages parsed rows into a pooled
-  `DataModel::DataBlock` and flushes on the display tick or a sample cap (`kFrameBlockSampleCap`
-  64, `kStreamBlockSampleCap` 4096); `BlockPublisher` fans the finished block out. Dense sources do per-sample work on their own
-  `IO::StreamWorker` thread but emit `blockReady` **queued to the pipeline thread**, the SINGLE
-  producer for every sink. Structure travels separately as a `StructureSnapshot`. Never add a
-  rate cap or a per-view reduction; an overrun drops whole blocks and counts them.
-- **The two republish lanes never share one "already republished" mark (spec 0064)**, or the
-  dashboard stays live while every recording comes out empty. Enforced:
-  compile:DataModel::RepublishLane, ctest:tst_republish_lanes. Detail: dataflow.md "The Two
-  Republish Lanes".
-- **The session boundary is the sink contract (spec 0075).** Recording sinks close on
-  `FrameBuilder::sessionBoundary(connected, paused)` — pause included — and the builder flushes
-  every open block BEFORE emitting, so the tail lands in the file that was open. The export-time
-  tie-break is per source (`monotonicSourceNs`) and a uniform-grid block never takes it.
+  GUI thread.** Never add a plain `BlockingQueuedConnection` from the GUI into the pipeline.
+- **`runOnObjectThread` is for command-rate waits, never for a GUI-thread script API.** **No
+  `lua_*` call may run inside a routed lambda.**
+- **`FrameReader` and `CircularBuffer` are pipeline-thread / SPSC. Never add mutexes.** Enforced:
+  code-verify:spsc-lock.
+- **In-pipeline signal hops must be `Qt::DirectConnection`.** GUI↔pipeline traffic is
+  chunk/command/tick rate only. Enforced: code-verify:pipeline-queued-hop.
+- **No allocation on the publish path.** Blocks come from a pool.
+- **One publication payload, one ingestion path (spec 0055).** Blocks flush on the display tick or
+  a sample cap (`kFrameBlockSampleCap` 64, `kStreamBlockSampleCap` 4096). Never add a rate cap or a
+  per-view reduction.
+- **The two republish lanes never share one "already republished" mark (spec 0064).** Enforced:
+  compile:DataModel::RepublishLane, ctest:tst_republish_lanes.
+- **The session boundary is the sink contract (spec 0075).** The builder flushes every open block
+  BEFORE emitting.
 - **Time rings are sized from a rate, never a sample count, and a ring's clock never rewinds.**
-  Since spec 0097 they start rate-true and grow per block on coverage (`EnvelopeRing::growFor`, the
-  one named allocation on the ingest path, never inside a per-sample loop), keep every sample up
-  to the per-curve ceiling or the 512 MB rail, and display storage is never pinned. Enforced:
-  compile:DSP::RingCapacity, compile:UI::PlotClockState, ctest:tst_time_ring_sizing,
-  ctest:tst_ring_exactness, code-verify:lock-memory-scope. Rules + the 2026-08 incidents:
-  [dashboard.md](doc/claude/architecture/dashboard.md) "Time-Ring Sizing & the Plot Clocks".
-- **Native + PlainText parses through the span fast lane** (`trySpanLane` → `parseUtf8Spans` →
-  `applyDatasetValuesSpans`), zero steady-state allocation. Hotpath flags are `DataModel::Cached<T>`
-  re-derived at 1 Hz (spec 0095); a new input wires its change signal to the cache refresh, a new
-  cache is never a plain `bool`. Enforced: ctest:tst_cached_flags, anchor:cached-hotpath-flags.
-  Read dataflow.md "Cached Hotpath Flags" before touching any.
-- **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
-  workers (use `monotonicFrameNs(...)` as the safety net only). Enforced: code-verify:--clock-census.
+  Enforced: compile:DSP::RingCapacity, compile:UI::PlotClockState, ctest:tst_time_ring_sizing,
+  ctest:tst_ring_exactness, code-verify:lock-memory-scope.
+- **Native + PlainText parses through the span fast lane**, zero steady-state allocation. Hotpath
+  flags are `DataModel::Cached<T>`; a new cache is never a plain `bool`. Enforced:
+  ctest:tst_cached_flags, anchor:cached-hotpath-flags.
+- **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report workers.
+  Enforced: code-verify:--clock-census.
 - **Driver opens are synchronous calls; most drivers dial asynchronously behind them.** An async
   dial's verdict has ONE owner, `HAL_Driver::openFinished(ok, reason)`, emitted exactly once per
-  attempt; a driver that reports only success wedges the connect button. Doctrine:
-  [doc/claude/architecture/io.md](doc/claude/architecture/io.md) "Opening a Link".
-- **Diagnostics are pulled, never pushed (specs 0033/0035).** Pipeline counters are plain
-  `quint64` increments polled on the 1 Hz tick, never a per-frame signal, allocation or lock; a
-  recreated `FrameReader` zeroes them, so consumers work on deltas. Detail: dataflow.md
-  "Diagnostic Counters" (the polled-PLC atomic deviation: io.md).
+  attempt.
+- **Diagnostics are pulled, never pushed (specs 0033/0035).**
 - **JS scripts**: always `JsScriptEngine::guardedCall()`, never `parseFunction.call()`.
   `setInterrupted(true)` only in `JsWatchdogThread.cpp`. Enforced: code-verify:js-raw-call,
   code-verify:js-interrupt-site.
-- **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` runs nine gates tiered off
-  `--min-fps` (default 256000) as a hard gate in `ci.yml`; don't regress it. Enforced:
-  anchor:hotpath-min-fps. Tier table and the ~70-80% `datasets+publish` share: `ss-hotpath` skill.
-- **The message bus is not a hotpath primitive** (spec 0076): frames and blocks keep the pooled
-  SPSC path. Enforced: code-verify:bus-on-hotpath. Detail: directory-map.md "Message bus".
-- **Reuse the kernels; never inline intrinsics or invent a macro** — `core/Core/DSPSimd.h`
-  (bit-exact per lane, runtime-dispatched) and `core/Core/HotpathOptimization.h`; never fast-math,
-  no-unwind or GCC `optimize("...")`, and no TU is compiled wide. Rules:
-  [doc/claude/architecture/kernels.md](doc/claude/architecture/kernels.md). Debt: no
-  intrinsic-header lint yet.
+- **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` is a hard gate in `ci.yml`; don't
+  regress it. Enforced: anchor:hotpath-min-fps.
+- **The message bus is not a hotpath primitive** (spec 0076). Enforced: code-verify:bus-on-hotpath.
+- **Reuse the kernels; never inline intrinsics or invent a macro** (`core/Core/DSPSimd.h`,
+  `core/Core/HotpathOptimization.h`); never fast-math, no-unwind or GCC `optimize("...")`.
 
 ## Startup & Composition Root — Non-Negotiable
 
@@ -345,32 +254,31 @@ Full contract, including the ctor-edge proof and the licensing consumer inventor
 
 ## Subsystem Contracts — Read Before Touching
 
-Each row is a trigger, not a summary: read the named section before editing that area.
-The hazard column names what breaks silently; the doc holds the rule.
+Each row is a trigger, not a summary: read the named section before editing that area. What
+breaks silently in each one: [doc/claude/subsystem-contracts.md](doc/claude/subsystem-contracts.md).
 
-| Touching | Read | Hazard |
-|----------|------|--------|
-| Any `ProjectModel` mutator, undo/redo (spec 0031) | [project.md](doc/claude/architecture/project.md) "Undo History" | Mementos are two-phase: `ProjectUndoScope` stages, the first `setModified(true)` commits — omit it and nothing is recorded. Enforced: code-verify:undo-scope-missing. |
-| A dataset property or any API-surface generator (specs 0036, 0037) | [project.md](doc/claude/architecture/project.md) "Dataset Property Registry", `project.md` "Generated API Surfaces" | `app/rcc/properties/dataset.json` generates six checked-in artifacts — **never hand-edit a generated file**. gRPC field numbers are append-only; a moved one fails CI. |
-| A toolbar button, palette entry, context menu, shortcut, or fixed icon (specs 0028/0063) | [commands-icons.md](doc/claude/architecture/commands-icons.md) "Icons", `commands-icons.md` "Commands" | Icons resolve ONLY via `Misc::IconRegistry` — never hardcode `qrc:/icons/...`. New command = one manifest entry + one bindings entry; Enforced: script:scripts/registry-verify.py. Project Editor context menus are registry-driven too (`editor-menus.json` + `ProjectEditorMenuBindings.qml` + `CommandMenu.qml`) — never hand-write a `Menu` there. |
-| Any icon art: `app/rcc/icons/`, `actions/`, `images/`, `iconpacks/`, `art/drawn/`, `basic.qrc`, `art-free.qrc`, or the private `Serial-Studio/Icons` repo (spec 0116) | [commands-icons.md](doc/claude/architecture/commands-icons.md) "Two art trees and the Basic pack" | Licensed art never enters this repository, a build compiles exactly one art tree beside Basic, and listing the same art in `rcc.qrc` too duplicates it. Basic ships in the proprietary build, so a drawing must be original, never derived from another theme's icon. A file without a manifest entry fails the gate. Enforced: script:scripts/art-verify.py. |
-| Installable widgets, `UI::WidgetExtensions` (spec 0038) | [dashboard.md](doc/claude/architecture/dashboard.md) "Widget Extensions" | Packages resolve to `DashboardExtension = 100`, persist as `"ext:<id>"`; `readsStringValues` is what registers one in `string_targets`. Trust model is consent, not containment — never call an extension sandboxed. |
-| Alarm bands: `UI::AlarmMonitor` trackers, the annunciator's band points, the Project Editor's Alarm Bands buttons, the `suppressAlarms` or `alarmsWhileVisible` option (specs 0093/0105) | [dashboard.md](doc/claude/architecture/dashboard.md) "Alarm Bands" | Whether a dataset's bands are drawn has ONE home, `SerialStudio::datasetRendersAlarmBands`, and whether they alarm one more beside it (`datasetRaisesBandAlarms`, `datasetAlarmsNow`). A second copy of one lets a band drawn nowhere sound while the editor refuses to open it. |
-| `core/Ui/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" | `annotate()` stages, `commitPending()` publishes per tick — reading `count()` right after needs a commit. `reset()` clears the model *before* re-reading the offset. |
-| `core/Api/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) "Wire protocol" | Dataset ordering or `wireUniqueId` changes are wire breaks: bump `kWireVersion`, regenerate `tests/fixtures/mirror/`. Viewer frames never reach the export fan-out. |
-| Chrome motion: a popup, menu, dialog or button animation in `app/qml` | [PopupEnter.qml](app/qml/Widgets/PopupEnter.qml), [PopupExit.qml](app/qml/Widgets/PopupExit.qml) | Popups take the two shared transitions plus a `transformOrigin`, never an ad-hoc `Transition`. Anything that scales, slides or bounces gates on `Cpp_Misc_GraphicsBackend.reduceMotion` (fades stay). Animate `opacity`/`scale`/`Translate` only — never `width`/`height` of a laid-out item, never inside `Widgets/Dashboard/` or a recycled `TreeView`/`ListView` delegate. |
-| HDR output: `HdrSurface`/`HdrBoost`, `Misc::HdrOutput`, an emissive material, a shader under `app/shaders/`, or any `MultiEffect`/`layer` near an emissive element (spec 0089) | [dashboard.md](doc/claude/architecture/dashboard.md) "HDR Output" | The whole UI composites SDR inside a per-window FP16 layer; only the output transform converts. An emissive element behind a `MultiEffect` or default-format layer silently clamps to SDR. `_qt_sg_hdr_format` is private Qt API — re-verify per Qt bump. |
-| An embedded code editor's render cadence | [scripting.md](doc/claude/architecture/scripting.md) "Embedded Code Editors" | Never give a main-window-embedded editor an unconditional per-tick `grab()` — cost 13% of the GUI thread (2026-08-17). |
-| The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface, the sandbox roots | [ai.md](doc/claude/architecture/ai.md) "The Tier Model", `ai.md` "Checkpoint Semantics" | A mutating tool call takes a **checkpoint**, never a save. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. Enforced: ctest:tst_command_safety_table. The bundled source behind the `source/` prefix (spec 0078) is read-only and joins a search ONLY through the `path` scope — never add it to the default walk. |
-| Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs: decompose into member sub-objects instead. |
-| The connect gate, a dataset transform or user-table mutator, or any new way to author either (spec 0094) | [io.md](doc/claude/architecture/io.md) "Opening a Link" | A project with transforms or user tables refuses to CONNECT unlicensed (`IO::EntitlementGate`, rule in `SerialStudio::proContentSummary`), and a live unlicensed session ends when its content grows past what its connect admitted. A new authoring path (API command, importer, generator) needs the license refusal too. |
-| Anything that switches the operation mode: a project load, save or generation, a file drop, an example download, the Project Editor opening (spec 0100) | [AppState.h](core/Pipeline/AppState.h) | An *implicit* switch goes through `AppState::requestOperationMode()`, which defers while a link is live and applies on disconnect; only explicit mode choices (radios, `mode.*`, CLI, the API mode command) call `setOperationMode()`. A direct `setOperationMode` from a load path rebuilds devices under a live connection. |
-| A new API command, one that runs or installs code, loads a project or launches a process, or one that re-dispatches other commands (spec 0098) | [CommandCapabilities.h](core/Api/API/CommandCapabilities.h), [CommandRegistry.h](core/Api/API/CommandRegistry.h), [LaunchAuthorizer.h](core/Core/IO/LaunchAuthorizer.h) | Every command carries a capability classification, and the remote gate refuses one without. Enforced: ctest:tst_command_capability_registry. Dry runs and compile checks build their engines with `ScriptSurface::Inert`, never the live bridges. Every program start, a script's `system.exec` or a Process source, asks `IO::authorizeLaunch` (the per-project launch consent). Remote origin is a dispatch scope (`RemoteDispatchScope`), never a per-site check, and the assistant's tiers ride a separate `DispatchPolicyScope`, because licensing reads `RemoteDispatchScope::active()`. `SERIAL_STUDIO_API_AUTO_CONSENT=1` grants every gate for headless runs. |
-| A new API command, or anything that serializes the project or a live frame outward (spec 0096) | [io.md](doc/claude/architecture/io.md) "Sealed Sessions" | A process opened from a `.ssdeploy` package is sealed one-way (`Core::Runtime::sealed()`). A new command needs a classification in `API::SealedPolicy`, and an unclassified name is refused (Enforced: ctest:tst_sealed_policy_registry). A new exit for the project or a live frame consults the seal and strips through `DataModel::stripSealedContent`, or it hands the package's script source to any API client (Enforced: ctest:tst_sealed_strip). |
-| Anything under `core/` or a source that could move there (spec 0076) | [directory-map.md](doc/claude/directory-map.md) "core/" | A library never includes `app/src`; a moved `Q_OBJECT` header listed in both a library and the executable mocs twice; every `.h`/`.cpp` pair lives in one target; a relative include must resolve in exactly one root; an upward include beyond `scripts/layer-baseline.json` fails CI; the bus is never on the per-frame path. |
-| The driving surface (spec 0101): `core/Ui/UI/Automation/`, `AutomationHandler`, an `objectName` under `app/qml`, or the `DrivesUi` consent | [automation.md](doc/claude/architecture/automation.md) | A control is addressed by its `objectName` and nothing else: a translated or theme-derived name breaks every client, an unnamed control is invisible, and click/key sit behind a consent no other consent unlocks. Roles lean on Qt internal class names pinned by `tst_ui_automation`; re-verify per Qt bump. |
-| Quick Plot parsing: `LineFormat`, `QuickPlotFormatState`, `QuickPlotBuilder`, `line_values`, Save as Project (spec 0106) | [dataflow.md](doc/claude/architecture/dataflow.md) "The Quick Plot Lane" | ONE tokenizer serves the live lane and the saved project; a second splitter diverges them. Detection runs once per connect, never during replay or audio; missing or text fields are NaN, skipped by every ring. |
-| A `#ss` declaration, `declaration.json`, a `wire` flag or `firmware/` (spec 0111) | [dataflow.md](doc/claude/architecture/dataflow.md) "Device Declarations" | Keys are generated into the app and three libraries; a hand-typed key list drifts silently. The prefix test runs before 0106 detection, or a declaration establishes a format. |
+| Touching | Read |
+|----------|------|
+| Any `ProjectModel` mutator, undo/redo (spec 0031) | [project.md](doc/claude/architecture/project.md) "Undo History" |
+| A dataset property or any API-surface generator (specs 0036, 0037) | [project.md](doc/claude/architecture/project.md) "Dataset Property Registry", `project.md` "Generated API Surfaces" |
+| A toolbar button, palette entry, context menu, shortcut, or fixed icon (specs 0028/0063) | [commands-icons.md](doc/claude/architecture/commands-icons.md) "Icons", `commands-icons.md` "Commands" |
+| Installable widgets, `UI::WidgetExtensions` (spec 0038) | [dashboard.md](doc/claude/architecture/dashboard.md) "Widget Extensions" |
+| Alarm bands: `UI::AlarmMonitor` trackers, the annunciator's band points, the Project Editor's Alarm Bands buttons, the `suppressAlarms` or `alarmsWhileVisible` option (specs 0093/0105) | [dashboard.md](doc/claude/architecture/dashboard.md) "Alarm Bands" |
+| `core/Ui/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" |
+| `core/Api/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) "Wire protocol" |
+| Chrome motion: a popup, menu, dialog or button animation in `app/qml` | [PopupEnter.qml](app/qml/Widgets/PopupEnter.qml), [PopupExit.qml](app/qml/Widgets/PopupExit.qml) |
+| HDR output: `HdrSurface`/`HdrBoost`, `Misc::HdrOutput`, an emissive material, a shader under `app/shaders/`, or any `MultiEffect`/`layer` near an emissive element (spec 0089) | [dashboard.md](doc/claude/architecture/dashboard.md) "HDR Output" |
+| An embedded code editor's render cadence | [scripting.md](doc/claude/architecture/scripting.md) "Embedded Code Editors" |
+| The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface, the sandbox roots | [ai.md](doc/claude/architecture/ai.md) "The Tier Model", `ai.md` "Checkpoint Semantics" |
+| Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) |
+| The connect gate, a dataset transform or user-table mutator, or any new way to author either (spec 0094) | [io.md](doc/claude/architecture/io.md) "Opening a Link" |
+| Anything that switches the operation mode: a project load, save or generation, a file drop, an example download, the Project Editor opening (spec 0100) | [AppState.h](core/Pipeline/AppState.h) |
+| A new API command, one that runs or installs code, loads a project or launches a process, or one that re-dispatches other commands (spec 0098) | [CommandCapabilities.h](core/Api/API/CommandCapabilities.h), [CommandRegistry.h](core/Api/API/CommandRegistry.h), [LaunchAuthorizer.h](core/Core/IO/LaunchAuthorizer.h) |
+| A new API command, or anything that serializes the project or a live frame outward (spec 0096) | [io.md](doc/claude/architecture/io.md) "Sealed Sessions" |
+| Anything under `core/` or a source that could move there (spec 0076) | [directory-map.md](doc/claude/directory-map.md) "core/" |
+| The driving surface (spec 0101): `core/Ui/UI/Automation/`, `AutomationHandler`, an `objectName` under `app/qml`, or the `DrivesUi` consent | [automation.md](doc/claude/architecture/automation.md) |
+| Quick Plot parsing: `LineFormat`, `QuickPlotFormatState`, `QuickPlotBuilder`, `line_values`, Save as Project (spec 0106) | [dataflow.md](doc/claude/architecture/dataflow.md) "The Quick Plot Lane" |
+| A `#ss` declaration, `declaration.json`, a `wire` flag or `firmware/` (spec 0111) | [dataflow.md](doc/claude/architecture/dataflow.md) "Device Declarations" |
 
 ## Code Style — Essentials
 
@@ -389,24 +297,15 @@ rules. Full spec and the NASA Power of Ten live in
   `public slots:`). **No in-header member init** — ctor init list only.
 - **Signals**: `Q_EMIT` not `emit`; lowercase `signals:`/`public slots:`; never
   `SIGNAL()`/`SLOT()`. Never `disconnect(nullptr)` as the slot — capture the `Connection`.
-- **Comments**: code is the spec; label, don't narrate. **No comments inside a function body**
-  (`cxx-inbody-comment`, advisory) — functions are short, so the one-line `/** @brief ... */`
-  above the function plus self-explanatory code carry it; fold a load-bearing *why* into the
-  `@brief`, or fence a genuinely-needed note with `// code-verify off`. `//---` concern-group
-  banners live *between* functions, never inside one. No inline EOL comments, no AI narration.
-  Don't fake the em-dash with ` -- ` — rewrite the sentence.
+- **Comments**: label, don't narrate. **No comments inside a function body** (`cxx-inbody-comment`):
+  fold a load-bearing *why* into the one-line `/** @brief ... */`. `//---` banners live *between*
+  functions. No inline EOL comments, no AI narration.
 - **Naming**: `CamelCase` types, `camelCase` functions, `lower_case` locals + public members,
   `s_`/`m_`/`k`/`UPPER_CASE` for static/private/constexpr/macro (full table in the sub-doc).
-- **Safety-critical (NASA Power of Ten)** — hotpath violations are blockers. The ones that
-  bite: no alloc/Frame-copy on the dashboard path; fixed loop bounds + capped recursion;
-  assertion density ≥2/function; `[[nodiscard]]` + return checks at every system boundary;
-  zero warnings; no `reinterpret_cast`/`dynamic_cast` on the hotpath; SPDX header per file —
-  first-party is `GPL-3.0-or-later` (relicensed from `-only`, 2026-07). The repo is
-  REUSE-compliant: `REUSE.toml` + `LICENSES/`, `reuse lint` gates in CI.
+- **Safety-critical (NASA Power of Ten)** — hotpath violations are blockers: no alloc/Frame-copy
+  on the dashboard path; fixed loop bounds; assertion density ≥2/function; `[[nodiscard]]` + return
+  checks at every system boundary; zero warnings; no `reinterpret_cast`/`dynamic_cast` on the
+  hotpath; SPDX header per file (first-party is `GPL-3.0-or-later`; `reuse lint` gates CI).
 - **Assertions are `SS_ASSERT(cond, action)`** (`core/Core/SSAssert.h`), not `Q_ASSERT`: the
-  condition evaluates in **every** build; debug aborts, release reports once per site and
-  runs the recovery `action` instead of the guarded code. Condition side-effect-free and
-  cheap; action side-effect-complete, single statement, no top-level comma, never
-  `continue`/`break` (use `SS_ASSERT_LOG(cond); if (!(cond)) continue;`). On the
-  per-frame/per-cell kernels use `SS_ASSERT_HOTPATH(cond)` instead — see
-  [doc/claude/architecture/kernels.md](doc/claude/architecture/kernels.md).
+  condition evaluates in **every** build; the action is one side-effect-complete statement, never
+  `continue`/`break`. On per-frame/per-cell kernels use `SS_ASSERT_HOTPATH(cond)`.

@@ -24,3 +24,23 @@ summarized inline in CLAUDE.md — the sub-files hold the full detail.
 Cross-cutting reads: a Dashboard ingest change is also a hotpath change (dataflow.md); a
 ProjectModel ctor-adjacent change is also a startup change (startup.md). When a change spans
 subsystems, read every file it touches.
+
+## Every sub-document
+
+Deep subsystem detail and the silent-breakage lookup live in `doc/claude/`; read the
+section a pointer names before working there. The inline blocks are pointers, not substitutes.
+
+| Document | When to read it |
+|----------|-----------------|
+| [architecture.md](architecture.md) | Before touching any subsystem: the index into `doc/claude/architecture/` — dataflow (hotpath), startup, io, project, scripting, dashboard, kernels, export, mirror, ai, commands-icons. |
+| [architecture/ai.md](architecture/ai.md) | Before touching `core/Ui/AI/`, `app/rcc/ai/` or `app/qml/AI/`: the command safety tiers, checkpoint-not-save semantics, the meta-tool discovery seam, the provider/reply contract, and the `FileSandbox` / `KeyVault` trust boundaries. |
+| [common-mistakes.md](common-mistakes.md) | The silent-breakage lookup: gotchas the linter can't catch (timestamp capture, queued-vs-direct hotpath, `operator[]` inserts, macOS file-dialog reentrancy, the GUI-stall sampling recipe). |
+| [code-style.md](code-style.md) | Full style spec + NASA Power of Ten. The Code Style block below is the inline essentials. |
+| [trust-contract.md](trust-contract.md) | Full text of the Trust Contract above, with the incidents behind each rule. |
+| [directory-map.md](directory-map.md) | The `core/` / `app/src` / `app/qml` / `lib` tree, one line of role per subsystem. |
+| [scripts.md](scripts.md) | The per-script table for `scripts/`. |
+| [working-relationship.md](working-relationship.md) | How to collaborate here: recommend don't enumerate, push back when a choice will cost, ground truth outranks on-paper reasoning. Read once per session. |
+| [j-space.md](j-space.md) | The verbalization discipline and its grounding. Read when tuning any AI-facing doc or skill. |
+| [repo-skills.md](repo-skills.md) | The project `/`-skills catalog and when each fires. Most auto-activate; this is the deliberate-pick lookup. |
+| [spec-driven.md](spec-driven.md) | Before any non-trivial or multi-file feature: the four gated phases, where artifacts live, when to skip. |
+| [TODO.md](TODO.md) | Open work across sessions: icons to draw, commands to wire, follow-ups, maintainer steps. Read it at the start of a task; add what you defer, delete what you finish in the same commit. |

@@ -23,6 +23,33 @@ Aural alerts (spec 0087, every build): an ISA-18.1 annunciator (`UI::Alarms::Ala
 root-owned, `Cpp_UI_Alarms`, `alarms.*` API) with IEC 60601-1-8 WAV signatures played by
 `IO::Audio::SoundPlayer` on a raw miniaudio device.
 
+### Names, parsers and layers
+
+Serial Studio: cross-platform telemetry dashboard, Qt 6.11.2 + C++20, 15+ visualization
+widgets, 5 output (control) widgets, 256 kHz+ data rate (CI-gated; see below). Data sources,
+per-dataset transforms, the Pro feature list and the aural alerts live in
+[directory-map.md](directory-map.md) "Product Overview".
+Frame parsers in JavaScript (`QJSEngine`), Lua (embedded LuaJIT 2.1, 5.1 + shims; per-project
+Safe/Fast execution mode — spec 0051), or Built-In ("Native"
+in all internal identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeTemplate`; only
+user-facing strings/docs say Built-In. Parametrized C++ templates configured via a JSON
+descriptor, no user code).
+User-facing renames of 2026-08-19, internal identifiers unchanged: Historian (was Session
+Database; `Sessions::`, `sessions.*`, the "Session Databases" folder stay), Variables (was Shared
+Memory; `RegisterDef`/`registers` stay), Computed Dataset (was Virtual Dataset; `virtual_` and
+`"Virtual"` stay), Canvas Widget (was Painter; `"painter"`, `project.painter.*`, Painter* stay).
+In doc/help the hotpath is called the "acquisition pipeline" — code, benchmarks, and internal
+docs keep "hotpath". The code base is seven static libraries under `core/`, every one a
+STRICT layer since spec 0077 (`SerialStudioCore` and `SerialStudioProtocols` with prefixed
+includes; `SerialStudioPipeline`, `SerialStudioDevices`, `SerialStudioStorage`, `SerialStudioApi`
+and `SerialStudioUi` keeping their relative include roots) plus the composition root in
+`app/src`; a library includes and links only the layers below it. Cross-library talk goes over
+`Core::Bus::MessageBus` (typed topics, shared-pointer messages, retained state), through the
+interfaces the root binds, or through the three root-bound module sets (`Core::services()`,
+`DataModel::pipelineModules()`, `API::handlerContext()`) — never an `instance()` reach into
+another library; `scripts/layer-verify.py` fails on any include, include root or link outside
+the graph, and `code-verify.py --singleton-census` fails on any cross-library reach.
+
 ## `core/`
 
 Seven statically linked CamelCase libraries live under `core/`; `app/src` holds only the
