@@ -319,6 +319,7 @@ Formats and labels (below) are not Pro content: a project that uses them without
 - **FFT Window Function.** Window applied before the transform to reduce spectral leakage; affects both the FFT plot and the waterfall. Default is **Blackman-Harris**. Options: Rectangular (None), Bartlett (Triangular), Hann, Hamming, Blackman, Blackman-Harris, Nuttall, Blackman-Nuttall, Flat Top, Welch, Bartlett-Hann, Bohman, Cosine (Sine), Lanczos, Parzen.
 - **FFT Sampling Rate (Hz, required).** Has to match the actual data rate for correct frequency axis labeling.
 - **Minimum Value (optional) / Maximum Value (optional).** Y-axis range for the FFT plot; falls back to the General section's Minimum Value / Maximum Value when left unset.
+- **Freq. Markers** (dataset toolbar). Names frequencies or ranges on the FFT plot and the waterfall, with optional level colors. See [Frequency markers](Widget-Reference.md#frequency-markers).
 
 **Waterfall (Pro)**
 
@@ -335,7 +336,7 @@ Formats and labels (below) are not Pro content: a project that uses them without
 
 **Labels**
 
-- **Labels** (dataset toolbar, next to **Transform**). Opens a two-column table of integer values and the text shown for each, plus an **Any other** row whose text stands in for every unlisted value (left empty, an unlisted value shows its number). The value is rounded to the nearest integer before the lookup. On **Apply**, a row with empty text or a value already listed is dropped. Wherever the value appears as text, the label replaces it: the Data Grid, the Bar, Gauge, Meter, and Compass caption, the Bar Panel caption, the LED Panel status text, the plot tooltip, alarm notifications, and widget extensions. Everything that reads the number keeps it: plot curves, needles and fills, alarm bands, FFT, exports, and the Historian.
+- **Labels** (dataset toolbar, next to **Transform**). Opens a two-column table of integer values and the text shown for each, plus an **Any other** row whose text stands in for every unlisted value (left empty, an unlisted value shows its number). The value is rounded to the nearest integer before the lookup. On **Apply**, a row with empty text or a value already listed is dropped. Wherever the value appears as text, the label replaces it: the Data Grid, the Bar, Gauge, Meter, and Compass caption, the Bar Panel caption, the LED Panel status text, the plot tooltip, alarm notifications, and widget extensions. Everything that reads the number keeps it: plot curves, needles and fills, alarm bands, FFT, exports, and the Historian. For a status byte labeled 0 Idle, 1 Running, and 2 Fault, with **Any other** set to Unknown, the Data Grid reads Running while the value is 1 and the plot keeps drawing 1.
 
 **Widget Settings**
 

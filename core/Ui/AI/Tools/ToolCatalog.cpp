@@ -109,7 +109,7 @@ static const QVector<AssistantToolDef>& metaToolRoster()
      QStringLiteral("Load a focused skill reference for one area of Serial Studio."),
      {}},
     {        QStringLiteral("meta.searchDocs"),
-     QStringLiteral("Semantic search over bundled docs, skills, templates, and example scripts."),
+     QStringLiteral("Semantic search over the help manual, skills, templates and examples."),
      {}},
     {            QStringLiteral("meta.search"),
      QStringLiteral(

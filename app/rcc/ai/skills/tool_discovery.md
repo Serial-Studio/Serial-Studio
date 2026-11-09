@@ -54,7 +54,7 @@ How to pick `path`:
   `Troubleshooting`, `API-Reference`, `Pro-vs-Free`, `License-Agreement`,
   `Operation-Modes`, `Data-Flow`, `Devices`, `Widget-Reference`,
   `Project-Editor`, `Use-Cases`, `Comparison`, `Notifications`,
-  `Extensions`. If you can name the page in plain English with high
+  `Extensions`, `Preferences`. If you can name the page in plain English with high
   confidence, just try it; the 404 redirect catches you if you're wrong.
 - **Exploratory or unsure → fetch `"help.json"` first.** Returns a JSON
   array of `{id, title, section, file}`. Pick the right `file`, then

@@ -125,7 +125,9 @@
         <file>ai/docs/painter_js.md</file>
         <file>ai/docs/transform_js.md</file>
         <file>ai/docs/transform_lua.md</file>
+        <file>ai/skills/alarms.md</file>
         <file>ai/skills/api_semantics.md</file>
+        <file>ai/skills/appearance.md</file>
         <file>ai/skills/behavioral.md</file>
         <file>ai/skills/can_modbus.md</file>
         <file>ai/skills/control_script.md</file>

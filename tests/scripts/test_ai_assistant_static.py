@@ -97,6 +97,23 @@ def test_search_index_contains_current_assistant_terms():
     assert "assistant.project.bulkApply" in body
 
 
+def test_search_index_covers_the_help_manual():
+    index = json.loads(read_text("app/rcc/ai/search_index.json"))
+
+    assert any(doc["source"] == "help" for doc in index["docs"])
+
+
+def test_appearance_skill_names_every_bundled_pack_and_theme():
+    skill = read_text("app/rcc/ai/skills/appearance.md")
+    packs = sorted((ROOT / "app/rcc/iconpacks").glob("*/pack.json"))
+    themes = sorted((ROOT / "app/rcc/themes").glob("*.json"))
+
+    assert packs and themes
+    for path in packs + themes:
+        title = json.loads(path.read_text(encoding="utf-8"))["title"]
+        assert title in skill, f"appearance.md does not name {title}"
+
+
 def test_discovery_commands_are_safe_tier():
     safety = json.loads(read_text("app/rcc/ai/command_safety.json"))
     safe = set(safety["safe"])

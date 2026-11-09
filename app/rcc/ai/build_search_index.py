@@ -12,9 +12,10 @@ Corpus:
   - Every reference script under scripts/{painter,parser,transforms,output}/
     (the leading // header comment is the most useful chunk)
   - Every example .ssproj title + frameParser body in examples/
+  - Every published page of doc/help, minus legal, install and marketing pages
 
 The index is keyword-y enough that BM25 works well; the corpus is small
-enough (~few hundred chunks) that we don't need a vector DB.
+enough (a few thousand chunks) that we don't need a vector DB.
 """
 
 import json
@@ -37,6 +38,19 @@ DOCS_DIR = SCRIPT.parent / "docs"
 TEMPLATES = SCRIPT.parent / "templates"
 SCRIPTS = RCC / "scripts"
 EXAMPLES = ROOT / "examples"
+HELP = ROOT / "doc" / "help"
+
+# Manual pages no telemetry or how-to question needs.
+HELP_SKIP = {
+    "Become-an-Affiliate",
+    "Comparison",
+    "Earn-Pro-License",
+    "License-Agreement",
+    "Linux-Installation",
+    "Privacy-Policy",
+    "Support-Serial-Studio",
+    "Windows-Installation",
+}
 
 # ---- Tokenization -------------------------------------------------------
 
@@ -269,6 +283,23 @@ def harvest_example_readmes():
             )
 
 
+def harvest_help():
+    """The manual's published pages: help.json lists them, so a retired stub never answers."""
+    entries = json.loads((HELP / "help.json").read_text(encoding="utf-8"))
+    published = {Path(entry["file"]).stem for entry in entries} - HELP_SKIP
+    for md in sorted(HELP.glob("*.md"), key=path_key):
+        if md.stem not in published:
+            continue
+        text = md.read_text(encoding="utf-8", errors="replace")
+        for i, chunk in enumerate(chunk_markdown(text)):
+            add(
+                source="help",
+                title=f"{md.stem}#{i}",
+                body=chunk,
+                doc_id=f"help/{md.name}#{i}",
+            )
+
+
 def harvest_examples():
     if not EXAMPLES.exists():
         return
@@ -324,6 +355,7 @@ harvest_scripts(SCRIPTS / "control", "script:control")
 harvest_markdown(SCRIPTS / "native", "doc:native_template")
 harvest_examples()
 harvest_example_readmes()
+harvest_help()
 
 print(f"[index] corpus has {len(corpus)} chunks", file=sys.stderr)
 

@@ -116,6 +116,11 @@ static QString buildRoleBlock(bool device_control, bool memory_on, bool probe_on
                        "\n")
           .arg(QStringLiteral(APP_NAME), QStringLiteral(APP_VERSION), commit.left(7), commit);
   const QString source_ladder = QStringLiteral(
+    "Look it up before you say you don't know\n"
+    "Before calling a feature undocumented, unfamiliar or out of scope, search for it "
+    "yourself: meta.searchDocs covers the help manual, and meta.fetchHelp reads the page it "
+    "names. Meta tools are yours to call, so never tell the user to run one.\n"
+    "\n"
     "When to read the application source\n"
     "Answer from a skill or help page first, meta.searchDocs second. Read the source "
     "(fs.search with path:'source/...', then fs.read one file) only when one of these "
@@ -130,7 +135,8 @@ static QString buildRoleBlock(bool device_control, bool memory_on, bool probe_on
   return QStringLiteral("You are the in-app AI assistant for Serial Studio, a cross-platform "
                         "telemetry dashboard. You help the user build and edit telemetry projects: "
                         "data sources, groups, datasets, frame parsers, transforms, tables, output "
-                        "widgets, painters, workspaces.\n"
+                        "widgets, painters, workspaces. You also answer questions about the "
+                        "application itself: its Preferences, appearance, alarms and recordings.\n"
                         "\n")
        + build_identity + source_ladder
        + QStringLiteral(
@@ -169,6 +175,11 @@ static QString buildRoleBlock(bool device_control, bool memory_on, bool probe_on
            "SerialStudio.js/.lua SDK (io.ble.writeCharacteristic(uuid, hex, "
            "SerialStudio.Hex), delay(ms)), controlScript.* management. Load for "
            "device automation, wake-up handshakes, polling, keep-alives.\n"
+           "  appearance        -> themes, icon packs, and where a setting lives in the "
+           "Preferences dialog. No command changes these; load it for any question about "
+           "how the application looks.\n"
+           "  alarms            -> alarms.*, annunciator sequences, aural alerts, why an "
+           "alarm stays silent. Load it before acknowledging or silencing anything.\n"
            "  tool_discovery    -> meta.* (always relevant when you're hunting for a "
            "command you don't recognise)\n"
            "  behavioral        -> conversational tone AND the undo/recovery flow "
@@ -321,7 +332,7 @@ static QString buildRoleBlock(bool device_control, bool memory_on, bool probe_on
            "  meta.snapshot            composite status across all subsystems\n"
            "  project.snapshot         composite read of the active project (sources, "
            "groups+datasets, workspaces, tables); pass verbose=true for parser code\n"
-           "  meta.searchDocs          semantic search over docs+skills+examples\n"
+           "  meta.searchDocs          semantic search over the help manual, skills and examples\n"
            "  meta.loadSkill           load one of the skills above\n"
            "  assistant.*              high-level rails for snapshots, resolvers, and "
            "workspace tile orchestration\n"
@@ -820,6 +831,8 @@ QStringList AI::ContextBuilder::skillIds()
     QStringLiteral("debugging"),
     QStringLiteral("api_semantics"),
     QStringLiteral("control_script"),
+    QStringLiteral("appearance"),
+    QStringLiteral("alarms"),
   };
 }
 

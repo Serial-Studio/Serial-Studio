@@ -100,7 +100,7 @@ That declares: message ID 256 (`0x100`), 8 bytes long, sent by `ECU`, received b
 - **ThrottlePosition** at bit 16, 8 bits wide, factor 0.392, offset 0, units %.
 - **EngineTemp** at bit 24, 8 bits wide, factor 1, offset -40, units °C.
 
-Most automotive and industrial CAN networks come with a DBC describing every message and signal. Serial Studio's importer reads the file and generates a project automatically (see [Auto-Generating Projects](Auto-Generating-Projects.md)).
+Most automotive and industrial CAN networks come with a DBC describing every message and signal. Serial Studio's importer reads the file and generates a project automatically (see [Auto-Generating Projects](Auto-Generating-Projects.md)). A signal with a `VAL_` value table and plain scaling (factor 1, offset 0) imports with those descriptions as its [Labels](Project-Editor.md), so a gear signal reads as a name while its plot keeps the number.
 
 ## How Serial Studio uses it
 

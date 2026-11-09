@@ -44,7 +44,7 @@ The toolbar runs along the top of the window, left to right, grouped into sectio
 
 | Button | Icon | What it does | Notes |
 |--------|------|--------------|-------|
-| **Preferences** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Opens application settings and preferences. | Authoring mode only. |
+| **Preferences** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Opens the [Preferences](Preferences.md) dialog. | Authoring mode only. |
 | **UART** | <img src="cmd:driver.uart" alt="UART" width="16" height="16"> | Selects the Serial port (UART) [driver](Drivers-UART.md). | |
 | **Audio** **(Pro)** | <img src="cmd:driver.audio" alt="Audio" width="16" height="16"> | Selects the [audio input](Drivers-Audio.md) driver. | |
 | **USB** **(Pro)** | <img src="cmd:driver.usb" alt="USB" width="16" height="16"> | Selects the [raw USB](Drivers-USB.md) driver. | |

@@ -60,6 +60,12 @@
   "file": "Command-Palette.md"
  },
  {
+  "id": "preferences",
+  "title": "Preferences",
+  "section": "Basics",
+  "file": "Preferences.md"
+ },
+ {
   "id": "project-editor",
   "title": "Project Editor",
   "section": "Configuration",

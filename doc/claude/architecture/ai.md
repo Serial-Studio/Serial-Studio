@@ -146,6 +146,11 @@ meta tools: `meta.listCategories`, `meta.listCommands`, `meta.search`, `meta.des
   flush timer.
 - A discovery-heavy turn is cheap by design; the alternative (300 tool definitions in every
   request) costs the context window the conversation needs.
+- **`meta.searchDocs` reads `app/rcc/ai/search_index.json`**, a BM25 index over the skills, the
+  scripting references, the bundled scripts and examples, and the manual's published pages. A
+  feature documented in `doc/help` is findable with no skill of its own, so write a skill only
+  for judgment or a recipe the manual lacks. A new skill is one file plus its `app/rcc/rcc.qrc`
+  entry, `ContextBuilder::skillIds`, the prompt's skill map and `skill_triggers.json`.
 
 ## Provider Abstraction
 

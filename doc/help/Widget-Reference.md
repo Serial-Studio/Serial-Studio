@@ -176,6 +176,7 @@ flowchart TD
 - Selectable window function applied before the transform to reduce spectral leakage (15 options, from Rectangular to Flat Top). Default Blackman-Harris. The same window is used by the Waterfall widget.
 - Configurable sampling rate determines the frequency axis (default 100 Hz).
 - Configurable frequency range via `fftMin` and `fftMax`.
+- [Frequency markers](#frequency-markers) name frequencies or ranges on the plot and show their live level.
 - Best for: vibration frequency analysis, audio spectrum, signal quality.
 - Configuration fields: `fftSamples` (window size), `fftWindow` (window function), `fftSamplingRate` (Hz), `fftMin`, `fftMax`.
 
@@ -188,6 +189,7 @@ flowchart TD
 - Built-in color maps, sequential: Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Cividis, Cubehelix, SDR Classic, Grayscale, Grayscale (Inverted). Diverging (mid-scale neutral, so an idle spectrogram reads as the low-end color rather than black): Spectral, Red/Blue, Coolwarm.
 - Mouse wheel to zoom, drag to pan, hover for a frequency/time readout. Reset view from the toolbar.
 - Configurable history depth (number of stored rows).
+- Draws the same [frequency markers](#frequency-markers) as the FFT Plot.
 - **Y-axis source.** Defaults to elapsed time. Set `waterfallYAxis` to another dataset's `uniqueId` to drive the Y axis from that dataset's value instead. This is typically used for order-tracking plots (for example RPM vs. frequency).
 - Best for: vibration order tracking, audio spectrograms, RF band monitoring, transient frequency events.
 - Configuration fields: `waterfall: true`, `waterfallYAxis` (0 = time; otherwise the `uniqueId` of the dataset to use as the Y axis), plus the FFT fields above.
@@ -258,6 +260,37 @@ Bands may have gaps, may overlap, and need not cover the full range. Overlaps re
 **Notifications and aural alerts.** Entering a Warning or Critical band also raises an alarm point on the master annunciator (see [Aural Alerts](Aural-Alerts.md)); leaving it returns the point to normal. When the value enters a band with severity ≥ Warning, Serial Studio posts a notification on the "Alarms" channel: band severity 2 posts `Warning`, severity 3 posts `Critical` (with the band's `label` in the subtitle). Alarm tracking runs per dataset at the dashboard level, so notifications fire even when the widget displaying the dataset is hidden or not instantiated. The cooldown is per severity tier, not per dataset: a Warning is suppressed for 3 seconds by a recent Warning or Critical, but a Critical is only suppressed by a recent Critical, so escalating from Warning to Critical always posts immediately.
 
 **Legacy compatibility.** Project files written by older Serial Studio releases carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[wgtMin..alarmLow]` and `[alarmHigh..wgtMax]`). The legacy keys are not written back; re-saved projects carry only `alarmBands`. For canvas scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
+
+## Frequency markers
+
+A frequency marker names a frequency or a range on a dataset's FFT Plot and Waterfall and shows the live level there, which keeps a known line in view: mains hum, a resonance, the band where a bearing defect appears. Markers are free on the FFT Plot. The Waterfall is a Pro feature (license or free trial).
+
+In the [Project Editor](Project-Editor.md), select a dataset with FFT or Waterfall enabled and click **Freq. Markers** on the dataset toolbar. The **Frequency Markers** dialog holds one row per marker, and a strip at the bottom previews them from 0 Hz to the top of the range.
+
+| Column | Meaning |
+|--------|---------|
+| **Start (Hz)** | Frequency of a point marker, or the low edge of a band. A row left at 0 is dropped on **Apply**. |
+| **End (Hz)** | High edge of a band. Left empty, or not above **Start (Hz)**, the row is a point marker. |
+| **Warn (dB)**, **Alarm (dB)** | Levels from -200 to 100 at which the marker changes color. Left empty, the level is off. |
+| **Color** | Click to choose a color; right-click to return to the automatic color. |
+| **Label** | Name shown on the marker. Without one, the marker shows its frequency. |
+
+Frequencies stop at half the FFT sampling rate, shown as **Frequency range** at the top of the dialog. **Preset** replaces the table with a watchlist and skips any entry above that range: **Mains Hum (50 Hz + harmonics)**, **Mains Hum (60 Hz + harmonics)**, or **Octave Bands (31.5 Hz - 16 kHz)**.
+
+On the dashboard a point marker is a vertical line and a band is a shaded region. Each marker carries a chip with its name and its peak level in dB, measured on the spectrum as displayed: inside the band, or within two FFT bins either side of a point marker. On the FFT Plot, clicking a chip highlights that marker and dims the others. **Show Frequency Markers** on the widget toolbar hides or shows them all; the FFT Plot offers this button only when the dataset has markers.
+
+**The levels only change the color.** A peak at or above **Warn (dB)** draws the marker in the theme's Warning color, and at or above **Alarm (dB)** in its Critical color. A marker raises no alarm point, notification, or sound. For an alert you can hear, use [alarm bands](#alarm-bands) on a Bar, Gauge, or Meter.
+
+In the project file, markers are the dataset's `fftMarkers` array. This dataset is sampled at 2000 Hz, so its range ends at 1000 Hz:
+
+```json
+"fftMarkers": [
+  { "freq": 50, "label": "Mains", "color": "#ffb300" },
+  { "freq": 120, "endFreq": 180, "label": "Bearing", "warningDb": -40, "alarmDb": -20 }
+]
+```
+
+On load, an entry whose `freq` is not above 0 is dropped, an `endFreq` not above `freq` makes a point marker, and a `warningDb` above `alarmDb` swaps the two. The API commands are `project.dataset.getFFTMarkers` and `project.dataset.setFFTMarkers` in the [API Reference](API-Reference.md).
 
 ## Utility widgets
 
@@ -337,6 +370,9 @@ Every dataset in a project file supports these visualization-related fields:
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |
 | `fftMin`           | double | 0       | FFT frequency axis minimum. |
 | `fftMax`           | double | 0       | FFT frequency axis maximum. |
+| `fftMarkers`       | array  | none    | [Frequency markers](#frequency-markers) drawn on the FFT Plot and Waterfall. Written only when not empty. |
+| `labels`           | array  | none    | Value-to-text table, entries `{"value": <integer>, "text": <string>}`. Editor button "Labels"; see the [Project Editor](Project-Editor.md). |
+| `labelsDefault`    | string | ""      | Text shown for a value no `labels` entry lists; empty shows the number. Editor row "Any other". |
 | `xAxis`            | int    | -2      | X-axis source: `-2` = time (default), `-1` = sample count (the **Samples** choice in the X-Axis Source combo), or the `uniqueId` of another dataset for an XY plot. C++ field `xAxisId`. |
 
 ## Dashboard layout

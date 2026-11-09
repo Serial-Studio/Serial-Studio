@@ -378,7 +378,7 @@ The first column is elapsed seconds with 9-decimal resolution. With multiple sou
 
 ### Can I change the application theme?
 
-Yes. Click **Preferences → Theme** and pick one.
+Yes. Click **Preferences → Theme** and pick one. [Preferences](Preferences.md) lists every setting in the dialog.
 
 ### Can I change the icon style?
 
@@ -394,6 +394,10 @@ colour. The change applies immediately, without a restart.
 Yes. Enable **Preferences → Startup → System → Reduce Motion**. Menus, dialogs, and buttons stop scaling, sliding, and bouncing; short fades remain. The change applies immediately, without a restart.
 
 Reduce Motion is on by default when the rendering backend is **Software (Fallback)**, where every animated frame is drawn by the CPU. Dashboard widgets are not affected: gauge needles, bars, and compasses keep following the data.
+
+### Does Serial Studio support HDR displays?
+
+Yes, on macOS and Windows. Enable **Preferences → Startup → Graphics → HDR Output** and restart. Needles, lit lamps, and plot lines then glow brighter than the rest of the interface. See [HDR Output](Preferences.md#hdr-output).
 
 ### How do I calibrate or filter a dataset value?
 

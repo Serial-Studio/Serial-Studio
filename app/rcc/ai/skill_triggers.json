@@ -170,6 +170,33 @@
       "summary view",
       "design the dashboard",
       "organize the workspaces"
+    ],
+    "appearance": [
+      "icon pack",
+      "icon set",
+      "icon style",
+      "change the icons",
+      "which icons",
+      "change the theme",
+      "switch the theme",
+      "which theme",
+      "dark theme",
+      "light theme",
+      "dark mode",
+      "light mode",
+      "millennium",
+      "starliner",
+      "preferences",
+      "hdr output",
+      "reduce motion",
+      "display scaling"
+    ],
+    "alarms": [
+      "alarm",
+      "annunciator",
+      "aural",
+      "audible",
+      "isa-18"
     ]
   }
 }
