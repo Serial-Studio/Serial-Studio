@@ -328,7 +328,7 @@ API::CommandResponse API::Handlers::ProjectListCommands::groupsList(const QStrin
     result[QStringLiteral("_hint")] =
       QStringLiteral("%1 groups / %2 datasets present. For bulk edits across many "
                      "groups/datasets use project.batch instead of looping per-item updates "
-                     "(see meta.describeCommand{name:\"project.batch\"}). For creating arrays "
+                     "(its input schema gives the ops shape). For creating arrays "
                      "of similar datasets, use project.dataset.addMany.")
         .arg(groups.size())
         .arg(totalDatasets);
@@ -394,8 +394,8 @@ API::CommandResponse API::Handlers::ProjectListCommands::datasetsList(const QStr
       QStringLiteral("Bulk edits across %1 datasets: use project.batch (rename/retitle/reindex/"
                      "update many at once) or project.dataset.addMany (create N similar). "
                      "Looping single project.dataset.update calls costs N round-trips and N "
-                     "autosave-debounce restarts. See meta.describeCommand{name:"
-                     "\"project.batch\"} for the {ops:[{command,params},...]} shape.")
+                     "autosave-debounce restarts. The project.batch input schema gives the "
+                     "{ops:[{command,params},...]} shape.")
         .arg(total_datasets);
 
   return CommandResponse::makeSuccess(id, result);
