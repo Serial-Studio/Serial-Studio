@@ -765,8 +765,34 @@ endif()
 #
 #---------------------------------------------------------------------------------------------------
 
+#
+# Exactly one art tree is compiled (spec 0116): the private licensed checkout when there is one,
+# the free tree otherwise. A sibling Icons folder is picked up for local work once the free tree
+# exists (before that the application's own resource list still carries the same art, and it
+# would compile twice), and SS_REQUIRE_ICON_ART stops a release from silently shipping the free
+# tree.
+#
+if(NOT SS_ICON_ART_DIR
+   AND EXISTS "${PROJECT_ROOT_DIR}/../Icons/art.qrc"
+   AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/rcc/art-free.qrc")
+  get_filename_component(SS_ICON_ART_DIR "${PROJECT_ROOT_DIR}/../Icons" ABSOLUTE)
+endif()
+
+if(SS_ICON_ART_DIR)
+  if(NOT EXISTS "${SS_ICON_ART_DIR}/art.qrc")
+    message(FATAL_ERROR "SS_ICON_ART_DIR has no art.qrc: ${SS_ICON_ART_DIR}")
+  endif()
+  set(SS_ART_QRC "${SS_ICON_ART_DIR}/art.qrc")
+  message(STATUS "Icon art: licensed tree at ${SS_ICON_ART_DIR}")
+elseif(SS_REQUIRE_ICON_ART)
+  message(FATAL_ERROR "SS_REQUIRE_ICON_ART is ON but SS_ICON_ART_DIR names no licensed art tree")
+else()
+  set(SS_ART_QRC "${CMAKE_CURRENT_SOURCE_DIR}/rcc/iconpacks/iconpacks.qrc")
+  message(STATUS "Icon art: public tree")
+endif()
+
 qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
-qt_add_resources(PACKS_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/iconpacks/iconpacks.qrc)
+qt_add_resources(ART_RCC "${SS_ART_QRC}")
 qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #---------------------------------------------------------------------------------------------------
@@ -854,8 +880,10 @@ endif()
 #   Vendored (static):
 #     - kissfft: Fast Fourier Transform (FFT plot calculations)
 #     - OpenSSL: Cryptography/SSL/TLS, prebuilt (skipped when ENABLE_GRPC=ON -- gRPC's BoringSSL)
-#     - libusb, hidapi: USB/HID device drivers (Pro only)
+#     - hidapi: HID device driver (Pro only)
 #     - gRPC, protobuf: gRPC server (when ENABLE_GRPC=ON)
+#   Vendored (shared, deployed with the executable):
+#     - libusb: Raw USB driver (Pro only), kept replaceable for LGPL-2.1
 #   Bundled:
 #     - QCodeEditor: Syntax highlighting for DataModel/JavaScript editor
 #     - QSimpleUpdater: Auto-update framework (checks for new versions)
@@ -869,7 +897,7 @@ qt_add_executable(
   ${HEADERS}
   ${QML_RCC}
   ${RES_RCC}
-  ${PACKS_RCC}
+  ${ART_RCC}
   ${SRC_RCC}
   ${QTR_RCC}
   ${QT_RCC_TRANSLATIONS}
@@ -953,6 +981,7 @@ target_link_openssl(${PROJECT_EXECUTABLE})
 target_link_open62541(${PROJECT_EXECUTABLE})
 target_link_libplctag(${PROJECT_EXECUTABLE})
 target_link_mimalloc(${PROJECT_EXECUTABLE})
+target_link_libusb(${PROJECT_EXECUTABLE})
 
 if(WIN32 AND MSVC)
   add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
@@ -964,7 +993,6 @@ if(WIN32 AND MSVC)
 endif()
 
 if(BUILD_COMMERCIAL)
-  target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)
 endif()
 
@@ -1198,7 +1226,7 @@ if(SS_UNITY_BUILD)
     target_compile_options(${PROJECT_EXECUTABLE} PRIVATE /bigobj)
   endif()
 
-  set_source_files_properties(${RES_RCC} ${PACKS_RCC} ${SRC_RCC} ${QTR_RCC}
+  set_source_files_properties(${RES_RCC} ${ART_RCC} ${SRC_RCC} ${QTR_RCC}
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
   )
 
@@ -1360,7 +1388,7 @@ endif()
 #     MACOS_BUNDLE_POST_BUILD - Run deployment automatically after build
 #
 #   Windows (windeployqt):
-#     -force-openssl        - Force inclusion of OpenSSL DLLs
+#     -force-openssl        - Deploy Qt's OpenSSL TLS plugin, ignoring its library dependency
 #     --release             - Deploy release Qt DLLs (not debug)
 #     --no-translations     - Exclude Qt translations (we embed our own)
 #     --no-compiler-runtime - Skip windeployqt's CRT handling; the MSVC runtime

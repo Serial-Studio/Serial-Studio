@@ -81,6 +81,8 @@ path = [
   "doc/**",
   "examples/**",
   "scripts/**",
+  "art/drawn/**",
+  "app/tests/support/hidpi/**",
   "app/tests/fuzz/corpus/**",
   "tests/**",
   "lib/VERSIONS.json",
@@ -127,9 +129,15 @@ SPDX-FileCopyrightText = "2006 Ivan Sagalaev and other contributors"
 SPDX-License-Identifier = "BSD-3-Clause"
 
 [[annotations]]
-path = ["app/rcc/vendor/katex*", "app/rcc/vendor/katex-fonts/**"]
+path = ["app/rcc/vendor/katex*"]
 SPDX-FileCopyrightText = "2013-2020 Khan Academy and other contributors"
 SPDX-License-Identifier = "MIT"
+
+# The KaTeX fonts state their own terms in each font's name table: SIL OFL 1.1, not KaTeX's MIT.
+[[annotations]]
+path = ["app/rcc/vendor/katex-fonts/**"]
+SPDX-FileCopyrightText = ["2009-2010 Design Science, Inc.", "2014-2018 Khan Academy"]
+SPDX-License-Identifier = "OFL-1.1"
 
 [[annotations]]
 path = ["app/rcc/vendor/mermaid*"]
@@ -243,10 +251,11 @@ SPDX-License-Identifier = "Apache-2.0"
 # upstream sources land in the build tree and are declared by their own project; nothing here is
 # theirs to cover. MPL-2.0 is file-level copyleft, so static linkage carries no relink duty.
 #
-# No dependency of this project is LGPL. The S7comm client is first-party Qt-Core code under
-# core/Protocols/S7, so nothing here obliges a release to ship a replaceable shared library or
-# to keep a relink path open. Any future dependency must be checked against PROPRIETARY
-# distribution, not only against the GPL, before it is added.
+# libusb is the one LGPL dependency (LGPL-2.1-or-later), fetched at configure time and carried only
+# by Pro builds, which is why lib/CMakeLists.txt keeps it a separate shared library users can
+# replace. The S7comm client is first-party Qt-Core code under core/Protocols/S7. Any future
+# dependency must be checked against PROPRIETARY distribution, not only against the GPL, before it
+# is added.
 [[annotations]]
 path = [
   "lib/CMakeLists.txt",

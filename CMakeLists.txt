@@ -89,6 +89,8 @@ option(SS_ENABLE_OPCUA         "Build the OPC UA driver against the bundled open
 option(SS_ENABLE_EIP           "Build the EtherNet/IP driver against the libplctag stack"      ON)
 option(SS_BUILD_TESTS          "Build the C++ unit-test tier"          OFF)
 option(SS_INAPP_TESTS          "Expose the in-app --selftest suites"   OFF)
+option(SS_REQUIRE_ICON_ART     "Fail the configure when the licensed icon art is missing" OFF)
+set(SS_ICON_ART_DIR "" CACHE PATH "Checkout of the private licensed icon art (spec 0116)")
 option(SS_UNITY_BUILD          "Monolithic jumbo build of app sources (CI compile-time)" OFF)
 set(SS_UNITY_BATCH_SIZE 8 CACHE STRING
     "Sources per unity TU when SS_UNITY_BUILD=ON (0 = one monolithic TU)")
@@ -517,7 +519,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/Signing.cmake)
 #    - QCodeEditor: Syntax-highlighted code editor for JSON/JS
 #    - QSimpleUpdater: Auto-update framework
 #    - mdflib: MDF4/MF4 file format parser
-#    - OpenSSL: Cryptography and SSL/TLS (static linking)
+#    - OpenSSL: Prebuilt, linked only when ENABLE_GRPC=OFF (the distro's copy on Linux)
 #    - ZLIB: Compression library (FetchContent or system)
 #    - EXPAT: XML parser (FetchContent or system)
 #

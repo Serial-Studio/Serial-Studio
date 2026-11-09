@@ -334,9 +334,10 @@ endif()
 #   - target_link_openssl() is a no-op when ENABLE_GRPC=ON: gRPC bundles BoringSSL, which already
 #     exports the OpenSSL-compatible crypto/SSL symbols (linking both duplicates them, a hard error
 #     under clang-cl's lld-link).
-#   - Otherwise Windows MSVC/MinGW and macOS download prebuilt static OpenSSL 4.0.0 from the
-#     alex-spataru/OpenSSL-Builder release; Linux links the distro OpenSSL via pkg-config.
-#   - Used for: HTTPS, SSL/TLS, license validation, MQTT encryption
+#   - Otherwise Windows MSVC/MinGW and macOS download the prebuilt static OpenSSL pinned in
+#     lib/OpenSSL/CMakeLists.txt; Linux links the distro OpenSSL via pkg-config.
+#   - No first-party code calls it: license tokens are verified by TweetNaCl, OPC UA uses Mbed
+#     TLS, and HTTPS and MQTT go through Qt's TLS backends.
 #
 # KissFFT (lib/KissFFT/):
 #   - Fast Fourier Transform library for FFT plot widget
@@ -468,19 +469,29 @@ endif()
 # It is only included in BUILD_COMMERCIAL builds — the GPL binary contains no USB code.
 #
 # Acquisition: FetchContent downloads libusb 1.0.30 from GitHub at configure time.
-# libusb ships no CMakeLists.txt, so the libusb-cmake wrapper assembles the target.
+# libusb ships no CMakeLists.txt, so the libusb-cmake wrapper assembles the target. A version bump
+# also updates the source archive and hash in ci.yml's release job and Acknowledgements.txt.
 #
 # Platform source sets:
 #   Windows : windows_winusb.c + WinUSB / SetupAPI system libraries
 #   macOS   : darwin_usb.c + IOKit / CoreFoundation frameworks
-#   Linux   : linux_usbfs.c + linux_netlink.c (udev-less netlink hotplug)
+#   Linux   : linux_usbfs.c + linux_udev.c (libudev hotplug)
+#
+# It stays a SHARED library on every platform: libusb is LGPL-2.1 and the only binary that carries
+# it is the proprietary Pro build, so users must be able to replace it. Keep the soname unversioned
+# too: "libusb-1.0.so.0" is on the AppImage excludelist linuxdeploy honors, and a package built
+# without the library fails to start on any host that has no system libusb.
+#
+# ss_exclude_from_pgo: the training runs open no USB device, so a profile would mark the whole
+# library cold. -fno-sanitize=cfi: libusb calls back into the executable through function pointers,
+# and CFI without cross-DSO support traps on a call target outside its own DSO.
 #
 #---------------------------------------------------------------------------------------------------
 
 if(BUILD_COMMERCIAL)
   message(STATUS "Fetching libusb-cmake (libusb 1.0.30) from GitHub...")
 
-  set(LIBUSB_BUILD_SHARED_LIBS        OFF CACHE BOOL "" FORCE)
+  set(LIBUSB_BUILD_SHARED_LIBS        ON  CACHE BOOL "" FORCE)
   set(LIBUSB_BUILD_TESTING            OFF CACHE BOOL "" FORCE)
   set(LIBUSB_BUILD_EXAMPLES           OFF CACHE BOOL "" FORCE)
   set(LIBUSB_INSTALL_TARGETS          OFF CACHE BOOL "" FORCE)
@@ -496,8 +507,47 @@ if(BUILD_COMMERCIAL)
 
   FetchContent_MakeAvailable(libusb_cmake)
 
+  ss_exclude_from_pgo(usb-1.0)
+  if(CMAKE_C_COMPILER_ID STREQUAL "Clang" AND UNIX AND NOT APPLE)
+    target_compile_options(usb-1.0 PRIVATE -fno-sanitize=cfi)
+    target_link_options(usb-1.0 PRIVATE -fno-sanitize=cfi)
+  endif()
+
   message(STATUS "libusb-cmake configured")
 endif()
+
+#
+# Defined unconditionally, exactly like target_link_open62541(): app/CMakeLists.txt calls it in
+# every configuration. Links <TARGET> and carries the library along with it. Windows has no RPATH,
+# so the DLL sits beside the executable. macdeployqt only searches Qt's own directory, so the dylib
+# has to be inside the bundle before it runs. linuxdeploy finds the .so through ldd, which leaves
+# the install rule for a plain cmake --install.
+#
+function(target_link_libusb TARGET)
+  if(NOT BUILD_COMMERCIAL)
+    return()
+  endif()
+
+  target_link_libraries(${TARGET} PUBLIC usb-1.0)
+
+  if(WIN32)
+    add_custom_command(TARGET ${TARGET} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+              $<TARGET_FILE:usb-1.0> $<TARGET_FILE_DIR:${TARGET}>
+      VERBATIM)
+
+    install(FILES $<TARGET_FILE:usb-1.0> DESTINATION ${CMAKE_INSTALL_BINDIR})
+  elseif(APPLE)
+    add_custom_command(TARGET ${TARGET} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E make_directory
+              $<TARGET_BUNDLE_CONTENT_DIR:${TARGET}>/Frameworks
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+              $<TARGET_FILE:usb-1.0> $<TARGET_BUNDLE_CONTENT_DIR:${TARGET}>/Frameworks
+      VERBATIM)
+  else()
+    install(FILES $<TARGET_FILE:usb-1.0> DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  endif()
+endfunction()
 
 #---------------------------------------------------------------------------------------------------
 # hidapi (Pro edition only)
@@ -565,7 +615,7 @@ endif()
 #   QCodeEditor    - Syntax highlighting editor (static, Qt-based)
 #   QSimpleUpdater - Auto-update framework (static, Qt-based)
 #   mdf            - MDF4 file parser (static, requires ZLIB, EXPAT)
-#   usb-1.0        - Raw USB driver (static, commercial builds only)
+#   usb-1.0        - Raw USB driver (shared, commercial builds only)
 #   hidapi         - HID device driver (static, commercial builds only)
 #
 # Not applied to:
