@@ -2,7 +2,7 @@
   "title": "Starliner",
   "parameters": {
     "code-editor-theme": "starliner",
-    "icon-pack": "outline",
+    "icon-pack": "fine-line",
     "start-icon": "qrc:/logo/start-dark.svg"
   },
   "translations": {

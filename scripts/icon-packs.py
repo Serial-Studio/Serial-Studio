@@ -78,6 +78,7 @@ STYLE_COLUMN = {
     "deco": "deco_id",
     "fluent-systems-regular": "outline_id",
     "ios7": "ios7_id",
+    "color": "color_id",
     "liquid-glass-color": "glasscolor_id",
     "deco-color": "decocolor_id",
     "clr-gls": "clrgls_id",
@@ -936,9 +937,24 @@ def cmd_house_sync(_: argparse.Namespace) -> int:
 # ------------------------------------------------------------------------------------------------
 
 
+def use_art_root(root: Path) -> None:
+    """Points every tree at the private art checkout (spec 0116)."""
+    global ICONS, PACKS, QRC, HOUSE_QRC
+    ICONS = root / "icons"
+    PACKS = root / "iconpacks"
+    QRC = PACKS / "iconpacks.qrc"
+    HOUSE_QRC = root / "art.qrc"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--art-root",
+        type=Path,
+        default=None,
+        help="private art checkout holding icons/ and iconpacks/ (spec 0116)",
     )
     sub = parser.add_subparsers(dest="command", required=True)
     check = sub.add_parser("check")
@@ -969,6 +985,8 @@ def main() -> int:
     house = sub.add_parser("house-sync")
     house.set_defaults(func=cmd_house_sync)
     args = parser.parse_args()
+    if args.art_root:
+        use_art_root(args.art_root)
     return args.func(args)
 
 

@@ -21,6 +21,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QRegularExpression>
 #include <QTemporaryDir>
 #include <QTest>
 
@@ -42,6 +43,9 @@ private slots:
   void monoPackCarriesTheTintPerTone();
   void monoSurfaceIgnoresTheActivePack();
   void unknownIdAndUnknownPackStayLoud();
+  void rasterTiersResolveBesideVectorOnes();
+  void hiddenPackStaysOutOfTheSelector();
+  void unavailablePackIsNotSelectableAndStaysQuiet();
 
 private:
   [[nodiscard]] bool writeSvg(const QString& relative) const;
@@ -198,6 +202,93 @@ void TstIconPacks::unknownIdAndUnknownPackStayLoud()
            QStringLiteral("qrc:/icons/system/16/missing.svg"));
   QCOMPARE(registry.iconById(QStringLiteral("malformed"), 16),
            QStringLiteral("qrc:/icons/system/16/missing.svg"));
+}
+
+/**
+ * @brief Writes @p text at @p relative under @p root, creating its folders.
+ */
+[[nodiscard]] static bool writeText(const QString& root,
+                                    const QString& relative,
+                                    const QString& text)
+{
+  const auto path = root + QChar('/') + relative;
+  if (!QDir().mkpath(QFileInfo(path).absolutePath()))
+    return false;
+
+  QFile file(path);
+  return file.open(QFile::WriteOnly) && file.write(text.toUtf8()) > 0;
+}
+
+/**
+ * @brief A public build mixes PNG and SVG tiers (spec 0116): each tier keeps its own suffix, and an
+ *        @2x file never counts as an icon, even with no @1x file beside it.
+ */
+void TstIconPacks::rasterTiersResolveBesideVectorOnes()
+{
+  QTemporaryDir root;
+  QVERIFY(root.isValid());
+  QVERIFY(writeText(root.path(), QStringLiteral("icons/system/16/missing.svg"), kSvg));
+  QVERIFY(writeText(root.path(), QStringLiteral("icons/widgets/16/gauge.png"), kSvg));
+  QVERIFY(writeText(root.path(), QStringLiteral("icons/widgets/16/gauge@2x.png"), kSvg));
+  QVERIFY(writeText(root.path(), QStringLiteral("icons/widgets/32/gauge.svg"), kSvg));
+  QVERIFY(writeText(root.path(), QStringLiteral("icons/commands/48/orphan@2x.png"), kSvg));
+
+  Misc::IconRegistry registry(root.path() + QStringLiteral("/icons"),
+                              root.path() + QStringLiteral("/iconpacks"));
+  QCOMPARE(registry.icon(QStringLiteral("widgets"), QStringLiteral("gauge"), 16),
+           QStringLiteral("qrc:/icons/widgets/16/gauge.png"));
+  QCOMPARE(registry.icon(QStringLiteral("widgets"), QStringLiteral("gauge"), 24),
+           QStringLiteral("qrc:/icons/widgets/32/gauge.svg"));
+  QCOMPARE(registry.icon(QStringLiteral("commands"), QStringLiteral("orphan@2x"), 48),
+           QStringLiteral("qrc:/icons/system/16/missing.svg"));
+}
+
+/**
+ * @brief A hidden pack is bundled and serves glyphs, but a user can never pick it (spec 0116 R11).
+ */
+void TstIconPacks::hiddenPackStaysOutOfTheSelector()
+{
+  QTemporaryDir root;
+  QVERIFY(root.isValid());
+  QVERIFY(writeText(root.path(), QStringLiteral("icons/system/16/missing.svg"), kSvg));
+  QVERIFY(writeText(root.path(),
+                    QStringLiteral("iconpacks/glyphs/pack.json"),
+                    QStringLiteral("{\"id\":\"glyphs\",\"mono\":true,\"hidden\":true}")));
+  QVERIFY(writeText(root.path(),
+                    QStringLiteral("iconpacks/open/pack.json"),
+                    QStringLiteral("{\"id\":\"open\",\"mono\":false}")));
+
+  Misc::IconRegistry registry(root.path() + QStringLiteral("/icons"),
+                              root.path() + QStringLiteral("/iconpacks"));
+  QCOMPARE(registry.packs().size(), 2);
+  QCOMPARE(registry.visiblePacks().size(), 1);
+  QCOMPARE(registry.visiblePacks().first().id, QStringLiteral("open"));
+}
+
+/**
+ * @brief A theme or saved setting naming a hidden or absent pack resolves to the house set with
+ *        nothing logged (spec 0116 AC9).
+ */
+void TstIconPacks::unavailablePackIsNotSelectableAndStaysQuiet()
+{
+  QTest::failOnWarning(QRegularExpression(QStringLiteral(".*")));
+
+  QTemporaryDir root;
+  QVERIFY(root.isValid());
+  QVERIFY(writeText(root.path(), QStringLiteral("icons/system/16/missing.svg"), kSvg));
+  QVERIFY(writeText(root.path(),
+                    QStringLiteral("iconpacks/glyphs/pack.json"),
+                    QStringLiteral("{\"id\":\"glyphs\",\"mono\":true,\"hidden\":true}")));
+  QVERIFY(writeText(root.path(),
+                    QStringLiteral("iconpacks/open/pack.json"),
+                    QStringLiteral("{\"id\":\"open\",\"mono\":false}")));
+
+  Misc::IconRegistry registry(root.path() + QStringLiteral("/icons"),
+                              root.path() + QStringLiteral("/iconpacks"));
+  QCOMPARE(registry.selectablePack(QStringLiteral("open")), QStringLiteral("open"));
+  QVERIFY(registry.selectablePack(QStringLiteral("glyphs")).isEmpty());
+  QVERIFY(registry.selectablePack(QStringLiteral("absent")).isEmpty());
+  QVERIFY(registry.selectablePack(QString()).isEmpty());
 }
 
 QTEST_GUILESS_MAIN(TstIconPacks)

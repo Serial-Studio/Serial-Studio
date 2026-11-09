@@ -224,3 +224,13 @@ def test_provider_recolour_keeps_composites_well_formed():
     assert "fill:#e6e8ea" in out
     assert 'fill="white"' in out and 'fill="black"' in out
     assert "#e6e8ea#" not in out
+
+
+def test_art_root_repoints_every_tree(tmp_path, monkeypatch):
+    for name in ("ICONS", "PACKS", "QRC", "HOUSE_QRC"):
+        monkeypatch.setattr(IP, name, getattr(IP, name))
+    IP.use_art_root(tmp_path)
+    assert IP.ICONS == tmp_path / "icons"
+    assert IP.PACKS == tmp_path / "iconpacks"
+    assert IP.QRC == tmp_path / "iconpacks" / "iconpacks.qrc"
+    assert IP.HOUSE_QRC == tmp_path / "art.qrc"

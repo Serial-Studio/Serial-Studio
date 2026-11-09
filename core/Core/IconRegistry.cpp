@@ -73,9 +73,10 @@ Misc::IconRegistry& Misc::IconRegistry::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Registers every <category>/<tier>/<name>.svg under @p root, into the house catalog when
- *        @p pack is empty and into that pack's catalog otherwise. A pack file in a fixed
- *        category is skipped with one warning: the chrome glyphs never follow a pack.
+ * @brief Registers every <category>/<tier>/<name>.svg or .png under @p root, into the house
+ *        catalog when @p pack is empty and into that pack's catalog otherwise. An @2x file is not
+ *        an icon of its own: Qt finds it beside the @1x file. A pack file in a fixed category is
+ *        skipped with one warning: the chrome glyphs never follow a pack.
  */
 void Misc::IconRegistry::scanTree(const QString& root, const QString& pack)
 {
@@ -84,13 +85,17 @@ void Misc::IconRegistry::scanTree(const QString& root, const QString& pack)
   while (it.hasNext()) {
     const auto path  = it.next();
     const auto parts = path.mid(prefix).split(QChar('/'), Qt::SkipEmptyParts);
-    if (parts.size() != 3 || !parts[2].endsWith(QStringLiteral(".svg")))
+    if (parts.size() != 3)
+      continue;
+
+    const bool raster = parts[2].endsWith(QStringLiteral(".png"));
+    if (!raster && !parts[2].endsWith(QStringLiteral(".svg")))
       continue;
 
     bool numeric  = false;
     const int px  = parts[1].toInt(&numeric);
     const auto id = parts[2].chopped(4);
-    if (!numeric || px <= 0 || id.isEmpty())
+    if (!numeric || px <= 0 || id.isEmpty() || id.endsWith(QStringLiteral("@2x")))
       continue;
 
     if (!pack.isEmpty() && fixedCategories().contains(parts[0])) {
@@ -100,8 +105,9 @@ void Misc::IconRegistry::scanTree(const QString& root, const QString& pack)
     }
 
     auto& tiers = pack.isEmpty() ? m_catalog[parts[0]][id] : m_packCatalog[pack][parts[0]][id];
-    tiers.append(px);
-    std::sort(tiers.begin(), tiers.end());
+    tiers.append({px, raster});
+    std::sort(
+      tiers.begin(), tiers.end(), [](const IconTier& a, const IconTier& b) { return a.px < b.px; });
   }
 }
 
@@ -127,9 +133,10 @@ void Misc::IconRegistry::scanPacks(const QString& packsRoot)
     }
 
     IconPackInfo info;
-    info.id    = id;
-    info.title = obj.value(QStringLiteral("title")).toString(id);
-    info.mono  = obj.value(QStringLiteral("mono")).toBool(false);
+    info.id     = id;
+    info.title  = obj.value(QStringLiteral("title")).toString(id);
+    info.mono   = obj.value(QStringLiteral("mono")).toBool(false);
+    info.hidden = obj.value(QStringLiteral("hidden")).toBool(false);
 
     const auto translations = obj.value(QStringLiteral("translations")).toObject();
     for (auto it = translations.constBegin(); it != translations.constEnd(); ++it)
@@ -165,6 +172,33 @@ const QList<Misc::IconPackInfo>& Misc::IconRegistry::packs() const noexcept
 }
 
 /**
+ * @brief Returns the packs a user may choose, sorted by id; a hidden pack exists only to serve
+ *        monoIconById() (spec 0116 R9).
+ */
+QList<Misc::IconPackInfo> Misc::IconRegistry::visiblePacks() const
+{
+  QList<IconPackInfo> visible;
+  for (const auto& info : m_packs)
+    if (!info.hidden)
+      visible.append(info);
+
+  return visible;
+}
+
+/**
+ * @brief Returns @p id when it names a pack a user may choose and an empty string otherwise, with
+ *        no warning: a theme or saved setting may name a pack this build lacks (spec 0116 R11).
+ */
+QString Misc::IconRegistry::selectablePack(const QString& id) const
+{
+  for (const auto& info : m_packs)
+    if (info.id == id && !info.hidden)
+      return id;
+
+  return {};
+}
+
+/**
  * @brief Returns whether the active pack is monochrome and therefore tinted.
  */
 bool Misc::IconRegistry::isMono() const noexcept
@@ -195,11 +229,11 @@ const QStringList& Misc::IconRegistry::fixedCategories()
 }
 
 /**
- * @brief The bundled mono pack the monochrome-by-design surfaces draw from (the Outline set).
+ * @brief The bundled mono pack the monochrome-by-design surfaces draw from (the Fine Line set).
  */
 const QString& Misc::IconRegistry::monoPackId()
 {
-  static const QString kMono = QStringLiteral("outline");
+  static const QString kMono = QStringLiteral("fine-line");
   return kMono;
 }
 
@@ -425,10 +459,10 @@ QString Misc::IconRegistry::url(const Located& hit, const Tone tone) const
 }
 
 /**
- * @brief Returns "/<tier>/<name>.svg" for the tier of @p name nearest at-or-above @p px, the
- *        largest tier when none reaches it, or an empty string when @p name is unknown.
+ * @brief Returns "/<tier>/<name>.<svg or png>" for the tier of @p name nearest at-or-above @p px,
+ *        the largest tier when none reaches it, or an empty string when @p name is unknown.
  */
-QString Misc::IconRegistry::tierPath(const QHash<QString, QList<int>>& names,
+QString Misc::IconRegistry::tierPath(const QHash<QString, QList<IconTier>>& names,
                                      const QString& name,
                                      const int px)
 {
@@ -436,12 +470,16 @@ QString Misc::IconRegistry::tierPath(const QHash<QString, QList<int>>& names,
   if (entry == names.constEnd() || entry->isEmpty())
     return {};
 
-  const auto form = QStringLiteral("/%1/%2.svg");
-  for (const int tier : *entry)
-    if (tier >= px)
-      return form.arg(QString::number(tier), name);
+  const auto form = [&name](const IconTier& tier) {
+    const auto suffix = tier.raster ? QStringLiteral("png") : QStringLiteral("svg");
+    return QStringLiteral("/%1/%2.%3").arg(QString::number(tier.px), name, suffix);
+  };
 
-  return form.arg(QString::number(entry->constLast()), name);
+  for (const auto& tier : *entry)
+    if (tier.px >= px)
+      return form(tier);
+
+  return form(entry->constLast());
 }
 
 /**

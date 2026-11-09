@@ -38,6 +38,16 @@ struct IconPackInfo {
   QString title;
   QHash<QString, QString> translations;
   bool mono;
+  bool hidden;
+};
+
+/**
+ * @brief One artwork size of an icon; a raster tier ships as a <name>.png and <name>@2x.png pair,
+ *        and Qt picks the @2x file by itself (spec 0116).
+ */
+struct IconTier {
+  int px;
+  bool raster;
 };
 
 /**
@@ -85,6 +95,8 @@ public:
 
   [[nodiscard]] const QString& pack() const noexcept;
   [[nodiscard]] const QList<IconPackInfo>& packs() const noexcept;
+  [[nodiscard]] QList<IconPackInfo> visiblePacks() const;
+  [[nodiscard]] QString selectablePack(const QString& id) const;
   [[nodiscard]] bool isMono() const noexcept;
   [[nodiscard]] bool hasPack(const QString& id) const;
   [[nodiscard]] static const QStringList& fixedCategories();
@@ -112,7 +124,7 @@ private:
                                    int px) const;
   [[nodiscard]] QString url(const Located& hit, Tone tone) const;
   [[nodiscard]] QString missingIcon(const QString& category, const QString& name) const;
-  [[nodiscard]] static QString tierPath(const QHash<QString, QList<int>>& names,
+  [[nodiscard]] static QString tierPath(const QHash<QString, QList<IconTier>>& names,
                                         const QString& name,
                                         int px);
 
@@ -123,8 +135,8 @@ private:
   QString m_stripTint;
   QList<IconPackInfo> m_packs;
   mutable QSet<QString> m_warned;
-  QHash<QString, QHash<QString, QList<int>>> m_catalog;
-  QHash<QString, QHash<QString, QHash<QString, QList<int>>>> m_packCatalog;
+  QHash<QString, QHash<QString, QList<IconTier>>> m_catalog;
+  QHash<QString, QHash<QString, QHash<QString, QList<IconTier>>>> m_packCatalog;
 };
 
 }  // namespace Misc

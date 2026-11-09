@@ -64,7 +64,7 @@ Misc::IconPacks::IconPacks(QJSEngine& engine,
   m_monoIconById = bind("(function(id, px) { return this.resolveMonoById(id, px) })");
 
   m_selected = m_settings.value(kSettingsKey).toString();
-  if (!m_selected.isEmpty() && m_selected != kHouseId && !m_registry.hasPack(m_selected))
+  if (m_selected != kHouseId && m_registry.selectablePack(m_selected).isEmpty())
     m_selected.clear();
 
   applyEffectivePack();
@@ -93,7 +93,7 @@ int Misc::IconPacks::pack() const
   if (m_selected == kHouseId)
     return 1;
 
-  const auto& packs = m_registry.packs();
+  const auto packs = m_registry.visiblePacks();
   for (int i = 0; i < packs.size(); ++i)
     if (packs[i].id == m_selected)
       return i + 2;
@@ -235,7 +235,7 @@ QString Misc::IconPacks::retint(const QString& url, const QColor& color) const
  */
 void Misc::IconPacks::setPack(const int index)
 {
-  const auto& packs = m_registry.packs();
+  const auto packs = m_registry.visiblePacks();
   QString next;
   if (index == 1)
     next = kHouseId;
@@ -272,8 +272,7 @@ void Misc::IconPacks::applyEffectivePack()
   if (effective.isEmpty())
     effective = m_theme.parameters().value(kThemeParam).toString();
 
-  if (effective == kHouseId)
-    effective.clear();
+  effective = effective == kHouseId ? QString() : m_registry.selectablePack(effective);
 
   const auto text  = m_theme.getColor(QStringLiteral("text")).name();
   const auto strip = m_theme.getColor(QStringLiteral("toolbar_text")).name();
@@ -298,7 +297,8 @@ void Misc::IconPacks::updateLocalizedNames()
   QStringList names;
   names.append(QCoreApplication::translate("Misc::IconPacks", "Follow theme"));
   names.append(QCoreApplication::translate("Misc::IconPacks", "Office (default)"));
-  for (const auto& info : m_registry.packs()) {
+  const auto packs = m_registry.visiblePacks();
+  for (const auto& info : packs) {
     QString localized;
     if (language != Translator::English)
       localized = info.translations.value(key);
