@@ -58,6 +58,7 @@ for _stream in (sys.stdout, sys.stderr):
 
 import json
 import os
+import select
 import socket
 import threading
 import time
@@ -67,6 +68,7 @@ SERIAL_STUDIO_HOST = "localhost"
 SERIAL_STUDIO_PORT = int(os.environ.get("SERIAL_STUDIO_API_PORT", "7777"))
 RECONNECT_DELAY = 2  # seconds between attempts while Serial Studio is away
 LINK_TIMEOUT = 30  # seconds a send or a reconnect handshake may stall
+POLL_INTERVAL = 1  # seconds before the link thread notices an abandoned link
 LATEST_PROTOCOL_VERSION = "2025-06-18"
 
 FIX = "Enable the API server: Preferences → General → API & Plugins → Enable API Server"
@@ -192,14 +194,6 @@ def try_connect():
     return sock
 
 
-def abandon(sock):
-    """Wake the link thread, which alone closes the socket and reports the loss"""
-    try:
-        sock.shutdown(socket.SHUT_RDWR)
-    except OSError:
-        pass
-
-
 class Bridge:
     """Owns the link to Serial Studio and what the MCP client sees of it"""
 
@@ -212,7 +206,20 @@ class Bridge:
         self.replay_id = None  # the bridge's own initialize during a reconnect
         self.replays = 0
         self.pending = {}  # encoded id of each forwarded request → its method
+        self.abandoned = None  # a link given up on, for the link thread to close
         self.dropped = 0
+
+    def abandon(self, sock):
+        """Give up on a link; the link thread alone closes it and reports the loss
+
+        The flag is what ends the link: on Windows a local shutdown does not make
+        the socket readable, so the shutdown alone would never wake that thread.
+        """
+        self.abandoned = sock
+        try:
+            sock.shutdown(socket.SHUT_RDWR)
+        except OSError:
+            pass
 
     def write_to_client(self, data):
         """Write one message to the MCP client; a closed pipe ends the bridge"""
@@ -277,7 +284,7 @@ class Bridge:
         except OSError as e:
             # Part of the line may have gone out, so this stream cannot be reused
             log(f"stdin→TCP send error: {e}")
-            abandon(sock)
+            self.abandon(sock)
 
     # --- Serial Studio → MCP client (link thread) ---------------------------------
 
@@ -320,21 +327,27 @@ class Bridge:
             sock.sendall(encode(request) + b"\n")
         except OSError as e:
             log(f"Reconnect handshake failed: {e}")
-            abandon(sock)
+            self.abandon(sock)
 
     def pump(self, sock):
         """Forward Serial Studio's newline-delimited messages until the link ends"""
         buffer = b""
+        opened = time.monotonic()
         try:
             while True:
-                try:
-                    chunk = sock.recv(65536)
-                except socket.timeout:
-                    if self.replay_id is None:
+                readable = select.select([sock], [], [], POLL_INTERVAL)[0]
+                if self.abandoned is sock:
+                    log("Gave up on the link to Serial Studio")
+                    break
+
+                if not readable:
+                    waited = time.monotonic() - opened
+                    if self.replay_id is None or waited < LINK_TIMEOUT:
                         continue
                     log("Serial Studio did not answer the reconnect handshake")
                     break
 
+                chunk = sock.recv(65536)
                 if not chunk:
                     log("Serial Studio closed connection")
                     break
@@ -377,7 +390,7 @@ class Bridge:
         """Open a reconnected link for requests and have the client re-read its lists"""
         if "error" in message:
             log(f"Serial Studio refused the reconnect handshake: {message['error']}")
-            abandon(sock)
+            self.abandon(sock)
             return
 
         initialized = {"jsonrpc": "2.0", "method": "notifications/initialized"}
@@ -401,6 +414,7 @@ class Bridge:
                 self.sock = None
             self.replay_id = None
             self.init_key = None
+            self.abandoned = None
             pending, self.pending = self.pending, {}
 
         sock.close()
