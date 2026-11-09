@@ -8,10 +8,9 @@ SPDX-PackageDownloadLocation = "https://github.com/Serial-Studio/Serial-Studio"
 # trees (fonts/, vendor/) can never be swallowed by a wildcard: app/rcc/** would cover them too.
 # ------------------------------------------------------------------------------------------------
 
-# Icons8 artwork (the house icon set and every bundled icon pack) is used under the Icons8
-# Universal Multimedia License on the maintainer's paid plan; it is not relicensable under the
-# GPL. The exempt button glyphs and the window controls are first-party drawings and keep the
-# project licence below. Spec 0115 R14.
+# The free icon art public builds compile (spec 0116): Tango (public domain), Tabler (MIT), and
+# drawings made for the project in Tango's style. app/rcc/art-provenance.json records each file's
+# own origin and art-verify.py holds the tree to it.
 [[annotations]]
 path = [
   "app/rcc/icons/commands/**",
@@ -25,26 +24,16 @@ path = [
   "app/rcc/icons/licensing/**",
   "app/rcc/icons/notifications/**",
   "app/rcc/icons/illustrations/**",
-  "app/rcc/iconpacks/*/**/*.svg",
+  "app/rcc/actions/**",
 ]
 precedence = "override"
-SPDX-FileCopyrightText = "Icons8 LLC <https://icons8.com>"
-SPDX-License-Identifier = "LicenseRef-Icons8"
+SPDX-FileCopyrightText = ["The Tango Desktop Project", "2020-2026 Paweł Kuna"]
+SPDX-License-Identifier = "LicenseRef-PublicDomain AND MIT"
 
 [[annotations]]
 path = [
-  "app/rcc/iconpacks/iconpacks.qrc",
+  "app/rcc/art-provenance.json",
   "app/rcc/iconpacks/*/pack.json",
-  "app/rcc/icons/buttons/**",
-  "app/rcc/icons/window/**",
-  "app/rcc/icons/system/**",
-]
-SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
-SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
-
-[[annotations]]
-path = [
-  "app/rcc/actions/**",
   "app/rcc/ai/**",
   "app/rcc/api/**",
   "app/rcc/chartjs/**",
@@ -64,6 +53,30 @@ path = [
   "app/rcc/markdown-viewer.html",
   "app/rcc/rcc.qrc",
 ]
+SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
+SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+
+# Tabler glyphs, after the block above so they win over its app/rcc/images glob.
+[[annotations]]
+path = [
+  "app/rcc/iconpacks/*/**/*.svg",
+  "app/rcc/icons/buttons/**",
+  "app/rcc/icons/window/**",
+  "app/rcc/icons/system/**",
+  "app/rcc/images/code.svg",
+  "app/rcc/images/no-usb.svg",
+  "app/rcc/images/shortcut.*",
+  "app/rcc/images/spinner.svg",
+  "app/rcc/images/usb.svg",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2020-2026 Paweł Kuna"
+SPDX-License-Identifier = "MIT"
+
+# The two MQTT button glyphs have no Tabler counterpart and stay first-party.
+[[annotations]]
+path = ["app/rcc/icons/buttons/mqtt-off.svg", "app/rcc/icons/buttons/mqtt-on.svg"]
+precedence = "override"
 SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
 SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
 

@@ -107,15 +107,20 @@ def check_tree(errors: list[str]) -> None:
             fail(errors, f"tier not in {sorted(TIERS)}: icons/{rel}")
         if not NAME_RE.match(name):
             fail(errors, f"name not kebab-case: icons/{rel}")
+    # A vector glyph is the same file at every tier, so only two different icons count as a copy
     for digest, paths in sorted(hashes.items()):
-        if len(paths) > 1:
+        if len({(p.split("/")[0], p.split("/")[-1]) for p in paths}) > 1:
             fail(errors, f"byte-identical duplicates: {', '.join(paths)}")
 
 
 def check_icon_packs(errors: list[str]) -> None:
     """Spec 0115: the pack tree under app/rcc/iconpacks is judged by icon-packs.py (layout,
     fixed categories, coverage gate, mapping and qrc consistency); its error lines join ours.
+    The free tree carries only the hidden Tabler pack, which art-verify.py judges instead.
     """
+    if FREE_QRC.exists():
+        return
+
     run = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "icon-packs.py"), "check"],
         capture_output=True,

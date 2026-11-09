@@ -105,10 +105,14 @@ def test_search_index_covers_the_help_manual():
 
 def test_appearance_skill_names_every_bundled_pack_and_theme():
     skill = read_text("app/rcc/ai/skills/appearance.md")
-    packs = sorted((ROOT / "app/rcc/iconpacks").glob("*/pack.json"))
+    packs = [
+        path
+        for path in sorted((ROOT / "app/rcc/iconpacks").glob("*/pack.json"))
+        if not json.loads(path.read_text(encoding="utf-8")).get("hidden")
+    ]
     themes = sorted((ROOT / "app/rcc/themes").glob("*.json"))
 
-    assert packs and themes
+    assert themes
     for path in packs + themes:
         title = json.loads(path.read_text(encoding="utf-8"))["title"]
         assert title in skill, f"appearance.md does not name {title}"

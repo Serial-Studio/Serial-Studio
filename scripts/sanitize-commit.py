@@ -27,6 +27,7 @@
 #                                     fails in CI, where only a build can refresh the snapshot)
 #  - registry-verify.py       -> spec-0028 icon/command registry + icon render-size lint,
 #                                spec-0037 assistant-corpus field/enum reference lint
+#  - art-verify.py            -> spec-0116 allowlist of the art the public tree may carry
 #  - build_search_index.py    -> refresh AI assistant BM25 index
 #  - baseline-manifest refresh -> re-hash the shipped .ssproj corpus into the spec-0036
 #                                baseline manifest so a resaved example never drifts from it
@@ -461,6 +462,11 @@ def main(argv: list[str] | None = None) -> int:
     run_python_step(
         "Verifying icon & command registry",
         root / "scripts" / "registry-verify.py",
+    )
+
+    run_python_step(
+        "Verifying the public art tree",
+        root / "scripts" / "art-verify.py",
     )
 
     run_python_step(

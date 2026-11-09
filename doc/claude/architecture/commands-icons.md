@@ -56,13 +56,23 @@ recolours the bytes; the tints are the theme's `text` and `toolbar_text`. The se
 the `IconPack` setting (empty = *Follow theme*, which reads the theme's `icon-pack` parameter;
 `office` pins the house set).
 `scripts/icon-packs.py check` is the gate (fixed categories refused, ids inside the house set,
-coverage, mapping and qrc consistency) and `registry-verify.py` runs it; the Icons8 mapping is
-`doc/claude/specs/0115-icon-packs/icons8-map.csv`.
+coverage, mapping and qrc consistency) and `registry-verify.py` runs it on a tree that carries the
+packs; the Icons8 mapping is `doc/claude/specs/0115-icon-packs/icons8-map.csv`.
+
+**Two art trees (spec 0116):** this repository holds only free art: Tango `@1x`/`@2x` PNG pairs for
+the themed categories and action icons, and Tabler SVGs for buttons, window controls and the hidden
+`fine-line` mono pack. `scripts/tango-art.py` generates it, with `app/rcc/art-free.qrc` and
+`app/rcc/art-provenance.json`. Official builds compile the licensed tree from the private
+`Serial-Studio/Icons` repository through `SS_ICON_ART_DIR` (a sibling `../Icons` checkout is picked
+up automatically), and `SS_REQUIRE_ICON_ART` makes a missing checkout a configure error. Both trees
+resolve the same ids at the same paths and exactly one is compiled, so `app/rcc/rcc.qrc` lists no
+art except the shared Tabler buttons. Licensed art never enters this repository: `art-verify.py`
+fails on any art file the manifest does not list. Change licensed art in the private repository.
 
 **Monochrome-by-design surfaces (spec 0115 R23):** the dashboard widget toolbars draw at 18 px
 inside every widget, where colour artwork collapses and competes with the plotted data, so they
 are mono whatever pack is active. `DashboardToolButton` takes `glyph: "<category>/<name>"` and
-resolves it through `Cpp_Misc_IconRegistry.monoIconById(id, px)`, which reads the Outline pack
+resolves it through `Cpp_Misc_IconRegistry.monoIconById(id, px)`, which reads the Fine Line pack
 (`IconRegistry::monoPackId()`) in the theme's text tint and serves the house file for a glyph
 that pack lacks; `registry-verify.py` checks every `glyph` id resolves. A collapsed ribbon
 section tints its icon with the section's own text colour through `retint`, so it follows the

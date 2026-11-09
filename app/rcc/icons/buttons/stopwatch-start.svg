@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 64 64" width="50px" height="50px"><path d="M18 8H9v48h9V8zM27.8 8.07L25 10 25 54 27.8 55.93 59 33.51 59 30.49z"/></svg>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#000000"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="icon icon-tabler icons-tabler-outline icon-tabler-player-play"
+>
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path d="M7 4v16l13 -8l-13 -8" />
+</svg>

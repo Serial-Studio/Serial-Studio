@@ -767,14 +767,10 @@ endif()
 
 #
 # Exactly one art tree is compiled (spec 0116): the private licensed checkout when there is one,
-# the free tree otherwise. A sibling Icons folder is picked up for local work once the free tree
-# exists (before that the application's own resource list still carries the same art, and it
-# would compile twice), and SS_REQUIRE_ICON_ART stops a release from silently shipping the free
-# tree.
+# the free tree otherwise. A sibling Icons folder is picked up for local work, and
+# SS_REQUIRE_ICON_ART stops a release from silently shipping the free tree.
 #
-if(NOT SS_ICON_ART_DIR
-   AND EXISTS "${PROJECT_ROOT_DIR}/../Icons/art.qrc"
-   AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/rcc/art-free.qrc")
+if(NOT SS_ICON_ART_DIR AND EXISTS "${PROJECT_ROOT_DIR}/../Icons/art.qrc")
   get_filename_component(SS_ICON_ART_DIR "${PROJECT_ROOT_DIR}/../Icons" ABSOLUTE)
 endif()
 
@@ -787,8 +783,8 @@ if(SS_ICON_ART_DIR)
 elseif(SS_REQUIRE_ICON_ART)
   message(FATAL_ERROR "SS_REQUIRE_ICON_ART is ON but SS_ICON_ART_DIR names no licensed art tree")
 else()
-  set(SS_ART_QRC "${CMAKE_CURRENT_SOURCE_DIR}/rcc/iconpacks/iconpacks.qrc")
-  message(STATUS "Icon art: public tree")
+  set(SS_ART_QRC "${CMAKE_CURRENT_SOURCE_DIR}/rcc/art-free.qrc")
+  message(STATUS "Icon art: free tree")
 endif()
 
 qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)

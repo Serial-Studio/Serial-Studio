@@ -1,0 +1,6 @@
+## Tango Icons
+
+The colored interface icons in this build come from the Tango Icon Library, whose authors released
+it into the public domain, or were drawn for Serial Studio in the same style.
+
+Source: [https://tango.freedesktop.org](https://tango.freedesktop.org)

@@ -1,1 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="48px" height="48px"><path d="M 23.970703 4.9726562 A 2.0002 2.0002 0 0 0 22 7 L 22 22 L 7 22 A 2.0002 2.0002 0 1 0 7 26 L 22 26 L 22 41 A 2.0002 2.0002 0 1 0 26 41 L 26 26 L 41 26 A 2.0002 2.0002 0 1 0 41 22 L 26 22 L 26 7 A 2.0002 2.0002 0 0 0 23.970703 4.9726562 z"/></svg>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#000000"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="icon icon-tabler icons-tabler-outline icon-tabler-plus"
+>
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path d="M12 5l0 14" />
+  <path d="M5 12l14 0" />
+</svg>

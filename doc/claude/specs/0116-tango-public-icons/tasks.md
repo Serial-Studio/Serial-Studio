@@ -22,16 +22,13 @@ updated: 2026-11-08
 - Commits happen only when the maintainer asks, by pathspec, never beside unrelated work.
 - Pushing anywhere, and creating the private repo or its key, is the maintainer's call.
 
-## Status (2026-11-08)
+## Status (2026-11-09)
 
-Worked unattended. Nothing is committed and no build was run.
-
-- **Done:** T4-T10, T12-T16, and T26 (run ahead of T25 so the pilot is ready for review).
-- **Prepared as patches, because they touch uncommitted icon-pack files or need the private repo:**
-  T1-T3, T11 and T20, in `patches/`. Each was dry-run with `git apply --check`, and the C++ was
-  syntax-checked from a scratch overlay.
-- **Next:** T0, then `git apply doc/claude/specs/0116-tango-public-icons/patches/0116-apply-after-T0.patch`,
-  then build and run `ctest -R "tst_icon_packs|tst_icon_hidpi|tst_legacy_icons"`.
+- **Done:** T0-T16, T18-T20, T22-T24 and T26. The swap is committed on `master` and not pushed.
+- **Next:** T17, the maintainer's build and review of the free set in the running application, then
+  T21 with a `../Icons` checkout, and the push.
+- **The art packs added in T0 never entered a commit:** the private repo took them first, and the
+  swap replaced them in the working tree.
 - **Review material:** `review/pilot.png` for T27; `review/full-light.png`, `full-dark.png`,
   `themes.png` and `mono.png` for T17. On the full sheets an orange dot marks a stand-in.
 - **Do not commit `patches/` or `review/`;** they are working material for this spec.
@@ -57,7 +54,7 @@ Changes from `plan.md`, all smaller than planned or additive:
 - **Does:** Clears the files this spec edits. Nothing below touches them before this.
 - **Verify:** `git status` shows those paths clean.
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### Phase B — application support, with no visible change
 
@@ -69,8 +66,7 @@ Changes from `plan.md`, all smaller than planned or additive:
   resolution and the loud placeholder for unknown ids are unchanged.
 - **Verify:** `syntax-check.py` and `code-verify.py --check` on both files; covered by T3.
 - **Deps:** T0
-- **Status:** Prepared in `patches/0116-apply-after-T0.patch`; applies after T0.
-- [ ] done
+- [x] done
 
 ### T2 — Hidden packs and a quiet fallback
 
@@ -82,8 +78,7 @@ Changes from `plan.md`, all smaller than planned or additive:
   visible order, or the combo box selects the wrong pack.
 - **Verify:** `syntax-check.py`, `code-verify.py --check`; covered by T3.
 - **Deps:** T1
-- **Status:** Prepared in the same patch.
-- [ ] done
+- [x] done
 
 ### T3 — Registry and pack tests
 
@@ -92,8 +87,7 @@ Changes from `plan.md`, all smaller than planned or additive:
   that logs no warning (AC9).
 - **Verify:** `syntax-check.py`; the maintainer builds and runs `ctest -R tst_icon_packs`.
 - **Deps:** T2
-- **Status:** Prepared in the same patch.
-- [ ] done
+- [x] done
 
 ### T4 — High-DPI selection test
 
@@ -170,8 +164,7 @@ Changes from `plan.md`, all smaller than planned or additive:
   private tree.
 - **Verify:** `pytest scripts/tests/test_icon_packs.py`; `icon-packs.py check` is unchanged.
 - **Deps:** T0
-- **Status:** `overlay-add-icon.py` is done; `icon-packs.py` and its test are in the same patch.
-- [ ] done
+- [x] done
 
 ### T12 — The public-tree gate
 
@@ -257,11 +250,9 @@ Changes from `plan.md`, all smaller than planned or additive:
   it on `master` and tags (R2). The GPL and sanitizer tiers stay without it (R3).
 - **Verify:** `pytest scripts/tests/test_ci_workflow.py`; a CI run shows the art was fetched.
 - **Deps:** T9, T19
-- **Status:** Prepared in `patches/0116-T20-ci-after-private-repo.patch`. Apply it with T22, not
-  before: until T22 takes the art out of `rcc.qrc`, an explicit `SS_ICON_ART_DIR` compiles the art
-  twice and duplicates the action icons in the picker. T21 then compares a local build of the T22
-  tree against `../Icons` before that tree is pushed.
-- [ ] done
+- **Status:** Committed with T22, because an explicit `SS_ICON_ART_DIR` compiled the art twice
+  until T22 took it out of `rcc.qrc`. T21 compares a local build against `../Icons` before the push.
+- [x] done
 
 ### T21 — Confirm official builds are unchanged (Maintainer)
 
@@ -284,7 +275,7 @@ Changes from `plan.md`, all smaller than planned or additive:
 - **Verify:** `art-verify.py`, `registry-verify.py` and `pytest scripts/tests/` pass; no tracked file
   carries the Icons8 signature.
 - **Deps:** T3–T8, T12, T17, T21
-- [ ] done
+- [x] done
 
 ### T23 — Licensing and notices
 
@@ -294,7 +285,7 @@ Changes from `plan.md`, all smaller than planned or additive:
   and the public Icons8 section, and moves the Icons8 license to the private repo (R14).
 - **Verify:** `reuse lint` (AC11).
 - **Deps:** T22
-- [ ] done
+- [x] done
 
 ### T24 — Document the art contract
 
@@ -303,7 +294,7 @@ Changes from `plan.md`, all smaller than planned or additive:
   enters the public repository.
 - **Verify:** Read-back against the code; `claim-verify.py`.
 - **Deps:** T22
-- [ ] done
+- [x] done
 
 ### T25 — Verify the cutover (Maintainer)
 
