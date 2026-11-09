@@ -23,7 +23,9 @@
 
 #include "Misc/IconRegistryLegacy.h"
 
+#include <QFile>
 #include <QHash>
+#include <QSet>
 
 // clang-format off
 static const QHash<QString, QString> kLegacyIcons = {
@@ -412,11 +414,37 @@ static const QHash<QString, QString> kLegacyIcons = {
 // clang-format on
 
 /**
- * @brief Maps a pre-migration "qrc:/icons/..." URL persisted in user project
- *        files to its post-migration location; unknown inputs return @p icon
- *        unchanged.
+ * @brief Maps a pre-migration "qrc:/icons/..." URL persisted in user project files to its current
+ *        location; unknown inputs return @p icon unchanged. A build from public source ships
+ *        raster artwork (spec 0116), so an absent ".svg" target resolves to its ".png" twin.
  */
 QString Misc::legacyIconPath(const QString& icon)
 {
-  return kLegacyIcons.value(icon, icon);
+  const auto mapped = kLegacyIcons.value(icon, icon);
+  if (!mapped.startsWith(QStringLiteral("qrc:/")) || !mapped.endsWith(QStringLiteral(".svg")))
+    return mapped;
+
+  const auto resource = mapped.mid(3);
+  if (QFile::exists(resource))
+    return mapped;
+
+  const auto raster = resource.chopped(4) + QStringLiteral(".png");
+  return QFile::exists(raster) ? QStringLiteral("qrc") + raster : mapped;
+}
+
+/**
+ * @brief Returns the action icon to draw for the stored name @p name; the retired pop-culture
+ *        icons (spec 0116 R18) draw a generic one, so a project that uses them still shows an icon.
+ */
+QString Misc::legacyActionIconName(const QString& name)
+{
+  static const QSet<QString> kRetired = {
+    QStringLiteral("Homer Simpson"),
+    QStringLiteral("Futurama Bender"),
+    QStringLiteral("Matrix Desktop"),
+    QStringLiteral("Angry Face Meme"),
+    QStringLiteral("Scared Face Meme"),
+  };
+
+  return kRetired.contains(name) ? QStringLiteral("Services") : name;
 }

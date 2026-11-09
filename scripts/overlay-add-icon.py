@@ -60,12 +60,22 @@ def overlay(path: Path, tier: int) -> bool:
 
 
 def main() -> int:
+    global ICONS, ASSETS
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("name", help='target icon name, e.g. "add-plot"')
     parser.add_argument(
         "--from", dest="base", help='base glyph "category/name" to copy first'
     )
+    parser.add_argument(
+        "--art-root",
+        type=Path,
+        default=None,
+        help="private art checkout holding icons/ and assets/ (spec 0116)",
+    )
     args = parser.parse_args()
+    if args.art_root:
+        ICONS = args.art_root / "icons"
+        ASSETS = args.art_root / "assets"
 
     if args.base:
         base_cat, _, base_name = args.base.partition("/")

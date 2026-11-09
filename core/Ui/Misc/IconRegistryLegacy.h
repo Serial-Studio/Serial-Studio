@@ -26,5 +26,6 @@
 namespace Misc {
 
 [[nodiscard]] QString legacyIconPath(const QString& icon);
+[[nodiscard]] QString legacyActionIconName(const QString& name);
 
 }  // namespace Misc

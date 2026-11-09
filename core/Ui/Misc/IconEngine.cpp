@@ -22,6 +22,7 @@
 #include "Misc/IconEngine.h"
 
 #include <QBuffer>
+#include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -112,7 +113,12 @@ QString Misc::IconEngine::resolveActionIconSource(const QString& icon)
       || icon.contains(QStringLiteral("://")))
     return Misc::legacyIconPath(icon);
 
-  return QStringLiteral("qrc:/actions/%1.svg").arg(icon);
+  const auto name = Misc::legacyActionIconName(icon);
+  const auto png  = QStringLiteral(":/actions/%1.png").arg(name);
+  if (QFile::exists(png))
+    return QStringLiteral("qrc") + png;
+
+  return QStringLiteral("qrc:/actions/%1.svg").arg(name);
 }
 
 /**

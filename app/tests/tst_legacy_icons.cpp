@@ -56,6 +56,9 @@ private slots:
 
   void sampledTargetsMatchQrcShape_data();
   void sampledTargetsMatchQrcShape();
+
+  void absentSvgFallsBackToPng();
+  void retiredActionNamesDrawAGenericIcon();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -185,6 +188,38 @@ void TstLegacyIcons::sampledTargetsMatchQrcShape()
   QVERIFY(tier == QStringLiteral("buttons") || tier == QStringLiteral("16")
           || tier == QStringLiteral("24") || tier == QStringLiteral("32")
           || tier == QStringLiteral("48"));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Public-build artwork (spec 0116)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief A stored ".svg" reference serves the ".png" twin when only that exists, and stays put
+ *        when neither does, so a stale reference still reaches the placeholder path.
+ */
+void TstLegacyIcons::absentSvgFallsBackToPng()
+{
+  QCOMPARE(Misc::legacyIconPath(QStringLiteral("qrc:/fixture/x.svg")),
+           QStringLiteral("qrc:/fixture/x.png"));
+  QCOMPARE(Misc::legacyIconPath(QStringLiteral("qrc:/fixture/absent.svg")),
+           QStringLiteral("qrc:/fixture/absent.svg"));
+}
+
+/**
+ * @brief The five retired action icons draw the generic icon (spec 0116 AC15); any other stored
+ *        name is left alone.
+ */
+void TstLegacyIcons::retiredActionNamesDrawAGenericIcon()
+{
+  for (const auto* name : {"Homer Simpson",
+                           "Futurama Bender",
+                           "Matrix Desktop",
+                           "Angry Face Meme",
+                           "Scared Face Meme"})
+    QCOMPARE(Misc::legacyActionIconName(QString::fromLatin1(name)), QStringLiteral("Services"));
+
+  QCOMPARE(Misc::legacyActionIconName(QStringLiteral("Resistor")), QStringLiteral("Resistor"));
 }
 
 QTEST_APPLESS_MAIN(TstLegacyIcons)

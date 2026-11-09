@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs>
+<radialGradient id="shadow" cx="24" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0,42.5) scale(20.5,4.2) translate(-24,0) translate(24,0) translate(-24,0)"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbfbfa"/><stop offset=".55" stop-color="#d3d7cf"/><stop offset="1" stop-color="#a9ada5"/></linearGradient>
+<linearGradient id="dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#555753"/><stop offset="1" stop-color="#2e3436"/></linearGradient>
+<linearGradient id="screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2a16"/><stop offset="1" stop-color="#2e3436"/></linearGradient>
+<linearGradient id="blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#729fcf"/><stop offset="1" stop-color="#204a87"/></linearGradient>
+<linearGradient id="orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fcaf3e"/><stop offset="1" stop-color="#ce5c00"/></linearGradient>
+<linearGradient id="butter" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fce94f"/><stop offset="1" stop-color="#c4a000"/></linearGradient>
+<radialGradient id="knob" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#d3d7cf"/><stop offset="1" stop-color="#888a85"/></radialGradient>
+<radialGradient id="red" cx=".38" cy=".28" r=".9"><stop offset="0" stop-color="#ffb0b0"/><stop offset=".4" stop-color="#ef2929"/><stop offset="1" stop-color="#a40000"/></radialGradient>
+</defs><ellipse cx="24" cy="42.5" rx="20.5" ry="4.2" fill="url(#shadow)"/><circle cx="24" cy="23" r="19.5" fill="url(#dark)" stroke="#2e3436"/>
+<circle cx="24" cy="23" r="18.5" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="1"/>
+<line x1="13.25" y1="33.75" x2="11.27" y2="35.73" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="9.54" y1="27.70" x2="6.88" y2="28.56" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="8.99" y1="20.62" x2="6.22" y2="20.18" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="11.70" y1="14.07" x2="9.44" y2="12.42" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="17.10" y1="9.46" x2="15.83" y2="6.96" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="24.00" y1="7.80" x2="24.00" y2="5.00" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="30.90" y1="9.46" x2="32.17" y2="6.96" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="36.30" y1="14.07" x2="38.56" y2="12.42" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="39.01" y1="20.62" x2="41.78" y2="20.18" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="38.46" y1="27.70" x2="41.12" y2="28.56" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/><line x1="34.75" y1="33.75" x2="36.73" y2="35.73" stroke="#eeeeec" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="24" cy="23" r="12.5" fill="url(#knob)" stroke="#555753" stroke-width="1" stroke-linejoin="round"/>
+<circle cx="24" cy="23" r="11.5" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1"/>
+<circle cx="24" cy="23" r="7.5" fill="none" stroke="#888a85" stroke-opacity=".5"/>
+<line x1="24" y1="23" x2="30.4" y2="14" stroke="#cc0000" stroke-width="2.6" stroke-linecap="round"/></svg>

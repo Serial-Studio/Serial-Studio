@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs>
+<radialGradient id="shadow" cx="24" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0,42.5) scale(20.5,4.2) translate(-24,0) translate(24,0) translate(-24,0)"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbfbfa"/><stop offset=".55" stop-color="#d3d7cf"/><stop offset="1" stop-color="#a9ada5"/></linearGradient>
+<linearGradient id="dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#555753"/><stop offset="1" stop-color="#2e3436"/></linearGradient>
+<linearGradient id="screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2a16"/><stop offset="1" stop-color="#2e3436"/></linearGradient>
+<linearGradient id="blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#729fcf"/><stop offset="1" stop-color="#204a87"/></linearGradient>
+<linearGradient id="orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fcaf3e"/><stop offset="1" stop-color="#ce5c00"/></linearGradient>
+<linearGradient id="butter" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fce94f"/><stop offset="1" stop-color="#c4a000"/></linearGradient>
+<radialGradient id="knob" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#d3d7cf"/><stop offset="1" stop-color="#888a85"/></radialGradient>
+<radialGradient id="red" cx=".38" cy=".28" r=".9"><stop offset="0" stop-color="#ffb0b0"/><stop offset=".4" stop-color="#ef2929"/><stop offset="1" stop-color="#a40000"/></radialGradient>
+</defs><ellipse cx="24" cy="42.5" rx="20.5" ry="4.2" fill="url(#shadow)"/><rect x="9.5" y="36.5" width="20" height="5" rx="1.2" fill="url(#dark)" stroke="#2e3436"/>
+<path d="M15,37 l2.8,-11 l6,1.5 l-2.8,10.5 z" fill="url(#orange)" stroke="#8f5902" stroke-linejoin="round"/>
+<path d="M18,26 L32,13.8 l4,4.5 L22.4,30.5 z" fill="url(#orange)" stroke="#8f5902" stroke-linejoin="round"/>
+<path d="M21,27 L31.8,17.4" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.2"/>
+<circle cx="20.4" cy="27.6" r="4.5" fill="url(#knob)" stroke="#555753" stroke-width="1" stroke-linejoin="round"/>
+<circle cx="20.4" cy="27.6" r="1.5" fill="url(#dark)"/>
+<circle cx="34" cy="15.8" r="3.8" fill="url(#knob)" stroke="#555753" stroke-width="1" stroke-linejoin="round"/>
+<circle cx="34" cy="15.8" r="1.2" fill="url(#dark)"/>
+<path d="M36.6,18.6 l5.8,5.8 l-2.6,5 m-2.4,-11 l-1.6,7.5 l-3.5,3.5" fill="none" stroke="#555753" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M36.6,18.6 l5.8,5.8 l-2.6,5 m-2.4,-11 l-1.6,7.5 l-3.5,3.5" fill="none" stroke="#babdb6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>

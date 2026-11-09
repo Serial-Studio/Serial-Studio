@@ -60,6 +60,13 @@ function resolve(markdown, px) {
     return markdown
 
   return markdown.replace(kPlaceholderPattern, function(match, scheme, body) {
-    return 'src="' + resolveOne(scheme, body, px || 16) + '"'
+    var size = px || 16
+    var url = resolveOne(scheme, body, size)
+
+    // HTML views never pick an @2x file, so raster art asks for twice the size it draws at
+    if (url.endsWith(".png"))
+      url = resolveOne(scheme, body, size * 2)
+
+    return 'src="' + url + '"'
   })
 }

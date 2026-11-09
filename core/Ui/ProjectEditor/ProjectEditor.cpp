@@ -242,10 +242,11 @@ const QStringList& DataModel::ProjectEditor::availableActionIcons() const
 
   if (icons.isEmpty()) {
     const auto path = QStringLiteral(":/actions/");
-    QDirIterator it(path, QStringList() << "*.svg", QDir::Files);
+    QDirIterator it(path, QStringList() << "*.svg" << "*.png", QDir::Files);
     while (it.hasNext()) {
-      const auto filePath = it.next();
-      icons.append(QFileInfo(filePath).baseName());
+      const auto name = QFileInfo(it.next()).baseName();
+      if (!name.endsWith(QStringLiteral("@2x")))
+        icons.append(name);
     }
   }
 

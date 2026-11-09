@@ -40,6 +40,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RCC = ROOT / "app" / "rcc"
 ICONS = RCC / "icons"
 QRC = RCC / "rcc.qrc"
+FREE_QRC = RCC / "art-free.qrc"
 
 EXEMPT_FOLDERS = {"buttons"}
 CATEGORIES = {
@@ -62,11 +63,21 @@ TIERS = {"16", "24", "32", "48"}
 SOURCE_ROOTS = (ROOT / "app" / "qml", ROOT / "app" / "src", ROOT / "core")
 SOURCE_EXTS = {".qml", ".cpp", ".h"}
 
-NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*\.svg$")
+NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*(\.svg|(@2x)?\.png)$")
 
 
 def fail(errors: list[str], message: str) -> None:
     errors.append(message)
+
+
+def check_raster_partner(errors: list[str], path: Path, rel: str) -> None:
+    """Spec 0116: a raster icon ships as a pair, so Qt always has a sharp file for 2x displays."""
+    if path.stem.endswith("@2x"):
+        partner = path.with_name(path.stem[: -len("@2x")] + ".png")
+    else:
+        partner = path.with_name(path.stem + "@2x.png")
+    if not partner.exists():
+        fail(errors, f"PNG without its @1x/@2x partner: icons/{rel}")
 
 
 def check_tree(errors: list[str]) -> None:
@@ -79,12 +90,15 @@ def check_tree(errors: list[str]) -> None:
         if top in EXEMPT_FOLDERS or path.name == ".DS_Store":
             continue
         parts = rel.split("/")
-        if path.suffix != ".svg":
-            fail(errors, f"non-SVG file in icon tree: icons/{rel}")
+        if path.suffix not in (".svg", ".png"):
+            fail(errors, f"neither SVG nor PNG in icon tree: icons/{rel}")
             continue
-        hashes[hashlib.md5(path.read_bytes()).hexdigest()].append(rel)
+        if path.suffix == ".svg":
+            hashes[hashlib.md5(path.read_bytes()).hexdigest()].append(rel)
+        else:
+            check_raster_partner(errors, path, rel)
         if len(parts) != 3:
-            fail(errors, f"not <category>/<tier>/<name>.svg: icons/{rel}")
+            fail(errors, f"not <category>/<tier>/<name>: icons/{rel}")
             continue
         category, tier, name = parts
         if category not in CATEGORIES:
@@ -117,6 +131,8 @@ def check_icon_packs(errors: list[str]) -> None:
 
 def qrc_entries() -> tuple[set[str], dict[str, str]]:
     text = QRC.read_text(encoding="utf-8")
+    if FREE_QRC.exists():
+        text += FREE_QRC.read_text(encoding="utf-8")
     real = set(re.findall(r"<file>(icons/[^<]+)</file>", text))
     aliases = dict(
         re.findall(r'<file alias="(icons/[^"]+)">(icons/[^<]+)</file>', text)
@@ -126,7 +142,11 @@ def qrc_entries() -> tuple[set[str], dict[str, str]]:
 
 def check_qrc(errors: list[str]) -> dict[str, str]:
     real, aliases = qrc_entries()
-    disk = {f"icons/{p.relative_to(ICONS).as_posix()}" for p in ICONS.rglob("*.svg")}
+    disk = {
+        f"icons/{p.relative_to(ICONS).as_posix()}"
+        for p in ICONS.rglob("*")
+        if p.suffix in (".svg", ".png")
+    }
     for entry in sorted(real - disk):
         fail(errors, f"qrc entry has no file on disk: {entry}")
     for entry in sorted(disk - real):
@@ -181,7 +201,9 @@ def icon_ref_resolves(ref: str) -> bool:
     if not category or not name:
         return False
     return any(
-        (ICONS / category / str(t) / f"{name}.svg").exists() for t in (16, 24, 32, 48)
+        (ICONS / category / str(t) / f"{name}{suffix}").exists()
+        for t in (16, 24, 32, 48)
+        for suffix in (".svg", ".png")
     )
 
 

@@ -90,7 +90,7 @@ Widgets.SmartDialog {
           Image {
             anchors.centerIn: parent
             sourceSize: Qt.size(32, 32)
-            source: "qrc:/actions/" + modelData + ".svg"
+            source: Cpp_Misc_IconEngine.resolveActionIconSource(modelData)
 
             MouseArea {
               anchors.fill: parent

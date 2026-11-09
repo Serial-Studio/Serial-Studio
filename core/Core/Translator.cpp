@@ -92,7 +92,8 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the bundled acknowledgements text.
+ * @brief Returns the bundled acknowledgements text. The notice of the art tree this build compiled
+ *        goes before the closing LGPL text, which the document says comes last (spec 0116 R14).
  */
 QString Misc::Translator::acknowledgementsText() const
 {
@@ -103,7 +104,13 @@ QString Misc::Translator::acknowledgementsText() const
     file.close();
   }
 
-  return text;
+  QFile art(QStringLiteral(":/messages/Acknowledgements-Art.txt"));
+  if (!art.open(QFile::ReadOnly))
+    return text;
+
+  const auto notice = QString::fromUtf8(art.readAll()) + QChar('\n');
+  const auto lgpl   = text.indexOf(QStringLiteral("## GNU Lesser General Public License"));
+  return lgpl < 0 ? text + notice : text.insert(lgpl, notice);
 }
 
 //--------------------------------------------------------------------------------------------------

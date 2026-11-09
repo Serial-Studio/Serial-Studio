@@ -910,12 +910,39 @@ ss_add_unit_test(tst_password_hash
 # project's legacy qrc:/icons/... URL resolving. IconRegistryLegacy.cpp carries both, so the
 # spec-0028 registry and the theme manager stay out of the link set.
 #
+qt_add_resources(SS_TEST_HIDPI_RCC ${CMAKE_CURRENT_SOURCE_DIR}/support/hidpi.qrc)
+
 ss_add_unit_test(tst_legacy_icons
   SOURCES tst_legacy_icons.cpp
           ${SS_CORE_SRC}/Ui/Misc/IconRegistryLegacy.cpp
   LIBS    Qt6::Core
           SerialStudio::Core
 )
+if(TARGET tst_legacy_icons)
+  target_sources(tst_legacy_icons PRIVATE ${SS_TEST_HIDPI_RCC})
+endif()
+
+#
+# Spec 0116: which file Qt displays on each way the application loads an icon, once per scale.
+#
+ss_add_unit_test(tst_icon_hidpi
+  SOURCES tst_icon_hidpi.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Qml
+          Qt6::Quick
+)
+if(TARGET tst_icon_hidpi)
+  target_sources(tst_icon_hidpi PRIVATE ${SS_TEST_HIDPI_RCC})
+  set_tests_properties(tst_icon_hidpi PROPERTIES
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_QUICK_BACKEND=software;QT_SCALE_FACTOR=1")
+  add_test(NAME tst_icon_hidpi_1_5x COMMAND tst_icon_hidpi)
+  set_tests_properties(tst_icon_hidpi_1_5x PROPERTIES
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_QUICK_BACKEND=software;QT_SCALE_FACTOR=1.5")
+  add_test(NAME tst_icon_hidpi_2x COMMAND tst_icon_hidpi)
+  set_tests_properties(tst_icon_hidpi_2x PROPERTIES
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_QUICK_BACKEND=software;QT_SCALE_FACTOR=2")
+endif()
 
 #
 # Boundary sweep of the four ProjectModel-free validators in Core's PropertyValidators.cpp. The hooks

@@ -125,6 +125,7 @@ Item {
     Label {
       text: qsTr("Icon Pack")
       color: Cpp_ThemeManager.colors["text"]
+      visible: Cpp_Misc_IconRegistry.availablePacks.length > 2
     } Widgets.Combo {
       id: _iconPackCombo
 
@@ -133,6 +134,7 @@ Item {
       Layout.fillWidth: true
       currentIndex: Cpp_Misc_IconRegistry.pack
       model: Cpp_Misc_IconRegistry.availablePacks
+      visible: Cpp_Misc_IconRegistry.availablePacks.length > 2
       onActivated: {
         Cpp_Misc_IconRegistry.pack = currentIndex
       }

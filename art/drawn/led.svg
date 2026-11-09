@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><defs>
+<radialGradient id="shadow" cx="24" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0,42.5) scale(20.5,4.2) translate(-24,0) translate(24,0) translate(-24,0)"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbfbfa"/><stop offset=".55" stop-color="#d3d7cf"/><stop offset="1" stop-color="#a9ada5"/></linearGradient>
+<linearGradient id="dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#555753"/><stop offset="1" stop-color="#2e3436"/></linearGradient>
+<linearGradient id="screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2a16"/><stop offset="1" stop-color="#2e3436"/></linearGradient>
+<linearGradient id="blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#729fcf"/><stop offset="1" stop-color="#204a87"/></linearGradient>
+<linearGradient id="orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fcaf3e"/><stop offset="1" stop-color="#ce5c00"/></linearGradient>
+<linearGradient id="butter" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fce94f"/><stop offset="1" stop-color="#c4a000"/></linearGradient>
+<radialGradient id="knob" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#d3d7cf"/><stop offset="1" stop-color="#888a85"/></radialGradient>
+<radialGradient id="red" cx=".38" cy=".28" r=".9"><stop offset="0" stop-color="#ffb0b0"/><stop offset=".4" stop-color="#ef2929"/><stop offset="1" stop-color="#a40000"/></radialGradient>
+</defs><ellipse cx="24" cy="42.5" rx="20.5" ry="4.2" fill="url(#shadow)"/><circle cx="24" cy="15" r="14" fill="#ef2929" fill-opacity=".16"/>
+<rect x="19.5" y="29" width="2" height="12" fill="url(#metal)" stroke="#888a85" stroke-width=".7"/>
+<rect x="26.5" y="29" width="2" height="9" fill="url(#metal)" stroke="#888a85" stroke-width=".7"/>
+<path d="M15.5,30.5 v-13 a8.5,8.5 0 0 1 17,0 v13 z" fill="url(#red)" stroke="#a40000" stroke-linejoin="round"/>
+<rect x="13.5" y="28.5" width="21" height="4" rx="1" fill="url(#red)" stroke="#a40000"/>
+<path d="M18.2,26 v-8.5 a5.8,5.8 0 0 1 4.3,-5.6" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2.1" stroke-linecap="round"/></svg>
