@@ -204,6 +204,8 @@ void TstLegacyIcons::absentSvgFallsBackToPng()
            QStringLiteral("qrc:/fixture/x.png"));
   QCOMPARE(Misc::legacyIconPath(QStringLiteral("qrc:/fixture/absent.svg")),
            QStringLiteral("qrc:/fixture/absent.svg"));
+  QCOMPARE(Misc::legacyIconPath(QStringLiteral("qrc:/icons/fixture/16/y.svg")),
+           QStringLiteral("qrc:/iconpacks/basic/fixture/16/y.png"));
 }
 
 /**

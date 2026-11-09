@@ -125,7 +125,6 @@ Item {
     Label {
       text: qsTr("Icon Pack")
       color: Cpp_ThemeManager.colors["text"]
-      visible: Cpp_Misc_IconRegistry.availablePacks.length > 2
     } Widgets.Combo {
       id: _iconPackCombo
 
@@ -134,7 +133,6 @@ Item {
       Layout.fillWidth: true
       currentIndex: Cpp_Misc_IconRegistry.pack
       model: Cpp_Misc_IconRegistry.availablePacks
-      visible: Cpp_Misc_IconRegistry.availablePacks.length > 2
       onActivated: {
         Cpp_Misc_IconRegistry.pack = currentIndex
       }
@@ -143,6 +141,29 @@ Item {
         target: Cpp_Misc_IconRegistry
         function onPackChanged() {
           _iconPackCombo.currentIndex = Cpp_Misc_IconRegistry.pack
+        }
+      }
+    }
+
+    Label {
+      text: qsTr("Widget Toolbar Icons")
+      color: Cpp_ThemeManager.colors["text"]
+    } Widgets.Combo {
+      id: _widgetIconPackCombo
+
+      objectName: "settings.general.widgetIconPack"
+
+      Layout.fillWidth: true
+      currentIndex: Cpp_Misc_IconRegistry.widgetPack
+      model: Cpp_Misc_IconRegistry.availableWidgetPacks
+      onActivated: {
+        Cpp_Misc_IconRegistry.widgetPack = currentIndex
+      }
+
+      Connections {
+        target: Cpp_Misc_IconRegistry
+        function onWidgetPackChanged() {
+          _widgetIconPackCombo.currentIndex = Cpp_Misc_IconRegistry.widgetPack
         }
       }
     }

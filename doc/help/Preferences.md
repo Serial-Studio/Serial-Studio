@@ -11,7 +11,7 @@ A change takes effect as you make it, and **Apply** and **Close** both dismiss t
 | Rendering Backend, Display Scaling, Custom Scale (%), HDR Output | After a restart, which Serial Studio prompts for when you change one. |
 | Custom Window Decorations, Apply Performance Hints, Keep Display Awake | The next time Serial Studio starts. |
 
-**Reset**, at the bottom left, restores the defaults listed on this page. It leaves **Language**, **Icon Pack**, **HDR Output**, **SIMD Instruction Set**, **Workspace Folder**, **API Server Port**, **Row Interval (ms)**, and the two extension update switches as they are.
+**Reset**, at the bottom left, restores the defaults listed on this page. It leaves **Language**, **Icon Pack**, **Widget Toolbar Icons**, **HDR Output**, **SIMD Instruction Set**, **Workspace Folder**, **API Server Port**, **Row Interval (ms)**, and the two extension update switches as they are.
 
 ## General
 
@@ -19,7 +19,8 @@ A change takes effect as you make it, and **Apply** and **Close** both dismiss t
 |---------|--------------|---------|
 | **Language** | Interface language. Disabled while a device is connected. | |
 | **Theme** | Colors and surfaces of the whole interface. **Get Themes…** opens the [extension catalog](Extensions.md) filtered to themes. | Default |
-| **Icon Pack** | Artwork of the color icons on the toolbar, the Project Editor, the dashboard, and the dialogs. **Follow theme** uses the pack the theme names, or the standard set when it names none. **Office (default)** pins the standard set. | Follow theme |
+| **Icon Pack** | Artwork of the color icons on the toolbar, the Project Editor, the dashboard, and the dialogs. **Follow theme** uses the pack the theme names, or the standard set when it names none. The entry marked **(default)** pins the standard set. | Follow theme |
+| **Widget Toolbar Icons** | Artwork of the small buttons on dashboard widgets, chosen separately from **Icon Pack**. The entry marked **(default)** draws single-color line art in the theme's text color. Every other entry draws that set's own artwork. | The entry marked (default) |
 | **Custom Window Decorations** | Draws Serial Studio's own window title bars. Not offered on macOS or Windows 11. | On |
 | **Workspace Folder** | Where Serial Studio keeps its files. Disabled while a device is connected. | `Documents/Serial Studio` |
 | **Enable API Server** | Accepts commands from local programs over TCP. See the [API Reference](API-Reference.md). | Off |

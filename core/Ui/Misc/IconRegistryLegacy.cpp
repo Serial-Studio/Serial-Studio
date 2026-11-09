@@ -416,7 +416,8 @@ static const QHash<QString, QString> kLegacyIcons = {
 /**
  * @brief Maps a pre-migration "qrc:/icons/..." URL persisted in user project files to its current
  *        location; unknown inputs return @p icon unchanged. A build from public source ships
- *        raster artwork (spec 0116), so an absent ".svg" target resolves to its ".png" twin.
+ *        raster artwork (spec 0116), so an absent ".svg" target resolves to its ".png" twin, then
+ *        to the Basic pack's icon at the same place.
  */
 QString Misc::legacyIconPath(const QString& icon)
 {
@@ -429,7 +430,15 @@ QString Misc::legacyIconPath(const QString& icon)
     return mapped;
 
   const auto raster = resource.chopped(4) + QStringLiteral(".png");
-  return QFile::exists(raster) ? QStringLiteral("qrc") + raster : mapped;
+  if (QFile::exists(raster))
+    return QStringLiteral("qrc") + raster;
+
+  const auto house = QStringLiteral(":/icons/");
+  if (!raster.startsWith(house))
+    return mapped;
+
+  const auto basic = QStringLiteral(":/iconpacks/basic/") + raster.mid(house.length());
+  return QFile::exists(basic) ? QStringLiteral("qrc") + basic : mapped;
 }
 
 /**

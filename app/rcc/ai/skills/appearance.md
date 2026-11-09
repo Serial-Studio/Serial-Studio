@@ -28,6 +28,7 @@ controls stay the same under every pack.
 | Choice            | Look                               | Theme that names it               |
 |-------------------|------------------------------------|-----------------------------------|
 | Office (default)  | Flat colour icons, the standard set | Default                          |
+| Basic             | Colourful icons drawn for Serial Studio | none                         |
 | Flat Color        | Flat multicolour icons             | none                              |
 | Fluent            | Microsoft Fluent colour icons      | Fluent Light, Fluent Dark         |
 | Deco              | Decorative colour icons            | Millennium Light, Millennium Dark |
@@ -50,11 +51,17 @@ How to recommend one:
 - Deco, Glass and Glass Translucent are the most decorative. Recommend them
   when the user wants the look and the dashboard is not crowded.
 
+**Preferences > General > Widget Toolbar Icons** sets the artwork of the
+small buttons on dashboard widgets on its own, whatever the Icon Pack is.
+The entry marked (default) is single-color line art in the theme's text
+colour; any other entry uses that set's artwork. Builds without the licensed
+art use Basic as the standard set.
+
 ## Where settings live
 
 | Tab           | Rows |
 |---------------|------|
-| General       | Language, Theme, Icon Pack, Custom Window Decorations, Workspace Folder, the API Server (enable, port, external connections, access token), Export Protobuf File |
+| General       | Language, Theme, Icon Pack, Widget Toolbar Icons, Custom Window Decorations, Workspace Folder, the API Server (enable, port, external connections, access token), Export Protobuf File |
 | Startup       | Rendering Backend, Display Scaling, HDR Output, SIMD Instruction Set, Reduce Motion, Apply Performance Hints, Keep Display Awake, update checks |
 | Plotting      | Time Range, Point Count, UI Refresh Rate, Ask Devices for Their Dashboard (Quick Plot) |
 | Layout        | Dashboard font, Layout Margin, Layout Spacing, Show Actions Panel, Auto-Hide Toolbar, Show Alignment Guides |

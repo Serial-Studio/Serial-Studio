@@ -55,8 +55,8 @@ struct IconTier {
  *        :/icons/<category>/<tier>/<name>.svg (spec 0028), consulting the active icon pack at
  *        :/iconpacks/<pack>/<category>/<tier>/<name>.svg first for the themed categories
  *        (spec 0115). A mono pack resolves to an image-provider URL carrying the tint, and
- *        monoIconById() draws from the fixed mono pack whatever pack is active, for the surfaces
- *        that are monochrome by design (the dashboard widget toolbars).
+ *        monoIconById() serves the dashboard widget toolbars from their own pack, the fixed mono
+ *        pack unless the user chose another, whatever pack is active elsewhere.
  */
 class IconRegistry : public QObject {
   Q_OBJECT
@@ -97,13 +97,19 @@ public:
   [[nodiscard]] const QList<IconPackInfo>& packs() const noexcept;
   [[nodiscard]] QList<IconPackInfo> visiblePacks() const;
   [[nodiscard]] QString selectablePack(const QString& id) const;
+  [[nodiscard]] QString houseTitle() const;
+  [[nodiscard]] const QString& widgetPack() const noexcept;
   [[nodiscard]] bool isMono() const noexcept;
   [[nodiscard]] bool hasPack(const QString& id) const;
+  [[nodiscard]] bool hasHouseSet() const;
   [[nodiscard]] static const QStringList& fixedCategories();
   [[nodiscard]] static const QString& monoPackId();
+  [[nodiscard]] static const QString& fallbackPackId();
+  [[nodiscard]] static const QString& houseId();
 
 public slots:
   void setPack(const QString& id);
+  void setWidgetPack(const QString& id);
   void setTints(const QString& text, const QString& strip);
 
 private:
@@ -123,6 +129,11 @@ private:
                                    const QString& name,
                                    int px) const;
   [[nodiscard]] QString url(const Located& hit, Tone tone) const;
+  [[nodiscard]] bool isSelectable(const IconPackInfo& info) const;
+  [[nodiscard]] QString widgetGlyph(const QString& pack,
+                                    const QString& category,
+                                    const QString& name,
+                                    int px) const;
   [[nodiscard]] QString missingIcon(const QString& category, const QString& name) const;
   [[nodiscard]] static QString tierPath(const QHash<QString, QList<IconTier>>& names,
                                         const QString& name,
@@ -133,6 +144,7 @@ private:
   QString m_pack;
   QString m_textTint;
   QString m_stripTint;
+  QString m_widgetPack;
   QList<IconPackInfo> m_packs;
   mutable QSet<QString> m_warned;
   QHash<QString, QHash<QString, QList<IconTier>>> m_catalog;

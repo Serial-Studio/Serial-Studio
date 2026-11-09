@@ -179,10 +179,19 @@ QList<Misc::IconPackInfo> Misc::IconRegistry::visiblePacks() const
 {
   QList<IconPackInfo> visible;
   for (const auto& info : m_packs)
-    if (!info.hidden)
+    if (isSelectable(info))
       visible.append(info);
 
   return visible;
+}
+
+/**
+ * @brief Whether a user may choose @p info: not a hidden pack, and not the fallback pack while it
+ *        stands in for an absent house set, where the fixed default entry already names it.
+ */
+bool Misc::IconRegistry::isSelectable(const IconPackInfo& info) const
+{
+  return !info.hidden && (hasHouseSet() || info.id != fallbackPackId());
 }
 
 /**
@@ -192,10 +201,35 @@ QList<Misc::IconPackInfo> Misc::IconRegistry::visiblePacks() const
 QString Misc::IconRegistry::selectablePack(const QString& id) const
 {
   for (const auto& info : m_packs)
-    if (info.id == id && !info.hidden)
+    if (info.id == id && isSelectable(info))
       return id;
 
   return {};
+}
+
+/**
+ * @brief Returns the name of the pack standing in for an absent house set; empty when the licensed
+ *        Office set is compiled.
+ */
+QString Misc::IconRegistry::houseTitle() const
+{
+  if (hasHouseSet())
+    return {};
+
+  for (const auto& info : m_packs)
+    if (info.id == fallbackPackId())
+      return info.title;
+
+  return {};
+}
+
+/**
+ * @brief Whether this build compiled the licensed Office set; the public tree carries only the
+ *        fixed categories under the house root.
+ */
+bool Misc::IconRegistry::hasHouseSet() const
+{
+  return m_catalog.contains(QStringLiteral("commands"));
 }
 
 /**
@@ -235,6 +269,47 @@ const QString& Misc::IconRegistry::monoPackId()
 {
   static const QString kMono = QStringLiteral("fine-line");
   return kMono;
+}
+
+/**
+ * @brief The pack drawn for Serial Studio that serves any icon the house set does not provide,
+ *        which is every themed icon in a build without the licensed Office set (spec 0116).
+ */
+const QString& Misc::IconRegistry::fallbackPackId()
+{
+  static const QString kFallback = QStringLiteral("basic");
+  return kFallback;
+}
+
+/**
+ * @brief The id that names the house set in settings and theme parameters.
+ */
+const QString& Misc::IconRegistry::houseId()
+{
+  static const QString kHouse = QStringLiteral("office");
+  return kHouse;
+}
+
+/**
+ * @brief Returns the art chosen for the dashboard widget toolbars; empty means the fixed mono pack.
+ */
+const QString& Misc::IconRegistry::widgetPack() const noexcept
+{
+  return m_widgetPack;
+}
+
+/**
+ * @brief Chooses the art of the dashboard widget toolbars: a pack id, houseId() for the house set,
+ *        or empty for the fixed mono pack. An id this build lacks means the fixed mono pack.
+ */
+void Misc::IconRegistry::setWidgetPack(const QString& id)
+{
+  const auto next = id == houseId() || hasPack(id) ? id : QString();
+  if (next == m_widgetPack)
+    return;
+
+  m_widgetPack = next;
+  Q_EMIT revisionChanged();
 }
 
 /**
@@ -333,9 +408,9 @@ QString Misc::IconRegistry::iconByIdOn(const Tone tone, const QString& id, const
 }
 
 /**
- * @brief Resolves a combined id against the fixed mono pack in the text tint whatever pack is
- *        active, for the surfaces that are monochrome by design (the dashboard widget toolbars,
- *        spec 0115 R23); a glyph that pack lacks, or a build without it, serves the house file.
+ * @brief Resolves a combined id for the dashboard widget toolbars, whatever pack is active
+ *        elsewhere (spec 0115 R23): the pack chosen for them, then the fixed mono pack, then the
+ *        house file. Choosing the house set draws the house file directly.
  */
 QString Misc::IconRegistry::monoIconById(const QString& id, const int px) const
 {
@@ -345,12 +420,35 @@ QString Misc::IconRegistry::monoIconById(const QString& id, const int px) const
 
   const auto category = id.left(slash);
   const auto name     = id.mid(slash + 1);
-  const auto path     = packPathIn(monoPackId(), category, name, px);
-  if (path.isEmpty())
-    return QStringLiteral("qrc:") + locateHouse(category, name, px).path;
+  if (m_widgetPack != houseId()) {
+    for (const auto& pack : {m_widgetPack, monoPackId()}) {
+      const auto glyph = widgetGlyph(pack, category, name, px);
+      if (!glyph.isEmpty())
+        return glyph;
+    }
+  }
 
-  return QStringLiteral("image://iconpack/%1/%2%3?tint=%4")
-    .arg(monoPackId(), category, path, m_textTint);
+  return QStringLiteral("qrc:") + locateHouse(category, name, px).path;
+}
+
+/**
+ * @brief The URL of @p category / @p name in @p pack, tinted to the text color when the pack is
+ *        monochrome and plain otherwise; empty when @p pack is empty or lacks the icon.
+ */
+QString Misc::IconRegistry::widgetGlyph(const QString& pack,
+                                        const QString& category,
+                                        const QString& name,
+                                        const int px) const
+{
+  const auto path = pack.isEmpty() ? QString() : packPathIn(pack, category, name, px);
+  if (path.isEmpty())
+    return {};
+
+  for (const auto& info : m_packs)
+    if (info.id == pack && !info.mono)
+      return QStringLiteral("qrc:/iconpacks/%1/%2%3").arg(pack, category, path);
+
+  return QStringLiteral("image://iconpack/%1/%2%3?tint=%4").arg(pack, category, path, m_textTint);
 }
 
 /**
@@ -417,22 +515,23 @@ Misc::IconRegistry::Located Misc::IconRegistry::locate(const QString& category,
 }
 
 /**
- * @brief The house tree alone: the artwork for @p category / @p name at the tier nearest
- *        at-or-above @p px, else the placeholder.
+ * @brief The default art: the house tree at the tier nearest at-or-above @p px, then the fallback
+ *        pack for what the house tree lacks, else the placeholder.
  */
 Misc::IconRegistry::Located Misc::IconRegistry::locateHouse(const QString& category,
                                                             const QString& name,
                                                             const int px) const
 {
-  const auto cat = m_catalog.constFind(category);
-  if (cat == m_catalog.constEnd())
-    return notFound(category, name);
+  const auto cat  = m_catalog.constFind(category);
+  const auto path = cat == m_catalog.constEnd() ? QString() : tierPath(*cat, name, px);
+  if (!path.isEmpty())
+    return {QStringLiteral("/icons/%1%2").arg(category, path), false};
 
-  const auto path = tierPath(*cat, name, px);
-  if (path.isEmpty())
-    return notFound(category, name);
+  const auto fallback = packPathIn(fallbackPackId(), category, name, px);
+  if (!fallback.isEmpty())
+    return {QStringLiteral("/iconpacks/%1/%2%3").arg(fallbackPackId(), category, fallback), false};
 
-  return {QStringLiteral("/icons/%1%2").arg(category, path), false};
+  return notFound(category, name);
 }
 
 /**

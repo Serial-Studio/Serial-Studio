@@ -38,8 +38,8 @@ class ThemeManager;
  * @brief The QML face of the icon registry under icon packs (spec 0115): the resolvers are
  *        function-valued notifying properties, so every icon binding re-evaluates on a pack or
  *        theme change; the selection persists, "Follow theme" defers to the theme's icon-pack
- *        parameter and "Office (default)" pins the house set. monoIconById serves the surfaces
- *        that are monochrome by design from the fixed mono pack, whatever pack is active.
+ *        parameter and "Office (default)" pins the house set. monoIconById serves the dashboard
+ *        widget toolbars from their own persisted choice, whatever pack is active.
  */
 class IconPacks : public QObject {
   // clang-format off
@@ -69,14 +69,22 @@ class IconPacks : public QObject {
   Q_PROPERTY(bool mono
              READ mono
              NOTIFY revisionChanged)
+  Q_PROPERTY(int widgetPack
+             READ widgetPack
+             WRITE setWidgetPack
+             NOTIFY widgetPackChanged)
   Q_PROPERTY(QStringList availablePacks
              READ availablePacks
+             NOTIFY availablePacksChanged)
+  Q_PROPERTY(QStringList availableWidgetPacks
+             READ availableWidgetPacks
              NOTIFY availablePacksChanged)
   // clang-format on
 
 signals:
   void packChanged();
   void revisionChanged();
+  void widgetPackChanged();
   void availablePacksChanged();
 
 public:
@@ -90,9 +98,11 @@ public:
   IconPacks& operator=(const IconPacks&) = delete;
 
   [[nodiscard]] int pack() const;
+  [[nodiscard]] int widgetPack() const;
   [[nodiscard]] bool mono() const;
   [[nodiscard]] QString activePackId() const;
   [[nodiscard]] const QStringList& availablePacks() const noexcept;
+  [[nodiscard]] const QStringList& availableWidgetPacks() const noexcept;
 
   [[nodiscard]] QJSValue iconFunction() const;
   [[nodiscard]] QJSValue iconByIdFunction() const;
@@ -116,6 +126,7 @@ public:
 
 public slots:
   void setPack(int index);
+  void setWidgetPack(int index);
   void setSettingsPersistent(bool persistent);
 
 private slots:
@@ -123,6 +134,7 @@ private slots:
   void updateLocalizedNames();
 
 private:
+  [[nodiscard]] QList<IconPackInfo> widgetPackChoices() const;
   [[nodiscard]] static IconRegistry::Tone toneFrom(const QString& tone);
 
 private:
@@ -132,7 +144,9 @@ private:
   bool m_persistSettings;
   QString m_selected;
   QString m_applied;
+  QString m_widgetSelected;
   QStringList m_names;
+  QStringList m_widgetNames;
   QJSValue m_icon;
   QJSValue m_iconById;
   QJSValue m_iconOn;

@@ -3,11 +3,15 @@
   SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 
   Solid red 1x and blue 2x images: tst_icon_hidpi reads which one Qt displayed, and
-  tst_legacy_icons uses the plain one as a raster twin that has no SVG beside it.
+  tst_legacy_icons uses the plain one as a raster twin that has no SVG beside it, and as an
+  icon of the Basic pack.
 -->
 <RCC>
     <qresource prefix="/fixture">
         <file alias="x.png">hidpi/x.png</file>
         <file alias="x@2x.png">hidpi/x@2x.png</file>
+    </qresource>
+    <qresource prefix="/iconpacks/basic/fixture/16">
+        <file alias="y.png">hidpi/x.png</file>
     </qresource>
 </RCC>

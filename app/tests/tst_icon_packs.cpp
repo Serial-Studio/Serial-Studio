@@ -46,6 +46,8 @@ private slots:
   void rasterTiersResolveBesideVectorOnes();
   void hiddenPackStaysOutOfTheSelector();
   void unavailablePackIsNotSelectableAndStaysQuiet();
+  void basicPackStandsInForAnAbsentHouseSet();
+  void widgetToolbarsFollowTheirOwnChoice();
 
 private:
   [[nodiscard]] bool writeSvg(const QString& relative) const;
@@ -191,6 +193,38 @@ void TstIconPacks::monoSurfaceIgnoresTheActivePack()
            QStringLiteral("qrc:/icons/system/16/missing.svg"));
 }
 
+/**
+ * @brief The widget toolbars take the pack chosen for them, tinted only when it is monochrome, and
+ *        a glyph that pack lacks falls back to the fixed mono pack before the house file.
+ */
+void TstIconPacks::widgetToolbarsFollowTheirOwnChoice()
+{
+  Misc::IconRegistry registry(m_root.path() + QStringLiteral("/icons"),
+                              m_root.path() + QStringLiteral("/iconpacks"));
+  registry.setTints(QStringLiteral("#232629"), QStringLiteral("#FFFFFF"));
+  const auto settings = QStringLiteral("commands/settings");
+  const auto gauge    = QStringLiteral("widgets/gauge");
+  const auto fixed    = QStringLiteral("image://iconpack/%1/commands/48/settings.svg?tint=232629")
+                          .arg(Misc::IconRegistry::monoPackId());
+
+  registry.setWidgetPack(QStringLiteral("mono"));
+  QCOMPARE(registry.monoIconById(settings, 18),
+           QStringLiteral("image://iconpack/mono/commands/48/settings.svg?tint=232629"));
+
+  registry.setWidgetPack(QStringLiteral("colour"));
+  QCOMPARE(registry.monoIconById(gauge, 18),
+           QStringLiteral("qrc:/iconpacks/colour/widgets/48/gauge.svg"));
+  QCOMPARE(registry.monoIconById(settings, 18), fixed);
+
+  registry.setWidgetPack(Misc::IconRegistry::houseId());
+  QCOMPARE(registry.monoIconById(settings, 18),
+           QStringLiteral("qrc:/icons/commands/24/settings.svg"));
+
+  registry.setWidgetPack(QStringLiteral("absent"));
+  QVERIFY(registry.widgetPack().isEmpty());
+  QCOMPARE(registry.monoIconById(settings, 18), fixed);
+}
+
 void TstIconPacks::unknownIdAndUnknownPackStayLoud()
 {
   Misc::IconRegistry registry(m_root.path() + QStringLiteral("/icons"),
@@ -289,6 +323,43 @@ void TstIconPacks::unavailablePackIsNotSelectableAndStaysQuiet()
   QVERIFY(registry.selectablePack(QStringLiteral("glyphs")).isEmpty());
   QVERIFY(registry.selectablePack(QStringLiteral("absent")).isEmpty());
   QVERIFY(registry.selectablePack(QString()).isEmpty());
+}
+
+/**
+ * @brief Without the licensed set the Basic pack is the default and is not offered twice; with it,
+ *        Basic is an ordinary choice that still fills in for any icon the set lacks (spec 0116).
+ */
+void TstIconPacks::basicPackStandsInForAnAbsentHouseSet()
+{
+  QTemporaryDir root;
+  QVERIFY(root.isValid());
+  QVERIFY(writeText(root.path(), QStringLiteral("icons/system/16/missing.svg"), kSvg));
+  QVERIFY(writeText(root.path(),
+                    QStringLiteral("iconpacks/basic/pack.json"),
+                    QStringLiteral("{\"id\":\"basic\",\"title\":\"Basic\"}")));
+  QVERIFY(writeText(root.path(), QStringLiteral("iconpacks/basic/commands/48/settings.svg"), kSvg));
+  QVERIFY(writeText(root.path(), QStringLiteral("iconpacks/basic/commands/48/other.svg"), kSvg));
+
+  const auto house    = root.path() + QStringLiteral("/icons");
+  const auto packs    = root.path() + QStringLiteral("/iconpacks");
+  const auto commands = QStringLiteral("commands");
+  const auto basic    = QStringLiteral("basic");
+
+  Misc::IconRegistry unlicensed(house, packs);
+  QCOMPARE(unlicensed.houseTitle(), QStringLiteral("Basic"));
+  QVERIFY(unlicensed.visiblePacks().isEmpty());
+  QVERIFY(unlicensed.selectablePack(basic).isEmpty());
+  QCOMPARE(unlicensed.icon(commands, QStringLiteral("settings"), 18),
+           QStringLiteral("qrc:/iconpacks/basic/commands/48/settings.svg"));
+
+  QVERIFY(writeText(root.path(), QStringLiteral("icons/commands/24/settings.svg"), kSvg));
+  Misc::IconRegistry licensed(house, packs);
+  QVERIFY(licensed.houseTitle().isEmpty());
+  QCOMPARE(licensed.selectablePack(basic), basic);
+  QCOMPARE(licensed.icon(commands, QStringLiteral("settings"), 18),
+           QStringLiteral("qrc:/icons/commands/24/settings.svg"));
+  QCOMPARE(licensed.icon(commands, QStringLiteral("other"), 18),
+           QStringLiteral("qrc:/iconpacks/basic/commands/48/other.svg"));
 }
 
 QTEST_GUILESS_MAIN(TstIconPacks)

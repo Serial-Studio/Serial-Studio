@@ -26,8 +26,8 @@ ToolButton {
   id: root
 
   //
-  // Glyph as "category/name", drawn from the fixed mono pack in the text colour whatever icon
-  // pack is active: widget toolbars are monochrome by design (spec 0115 R23)
+  // Glyph as "category/name", drawn from the pack chosen under Widget Toolbar Icons whatever icon
+  // pack is active elsewhere; the default is a mono pack in the text colour (spec 0115 R23)
   //
   property string glyph: ""
 
