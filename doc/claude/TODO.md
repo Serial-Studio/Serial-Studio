@@ -59,8 +59,6 @@ Left after the sweep (`scripts/icon-report.py`, tier holes):
 
 - [ ] Output widget outcomes are string slugs (`"acknowledged"`, `"refused"` in
   `core/Ui/UI/Widgets/Output/Base.cpp`). Expose them as a QML enum.
-- [ ] `doxygen()` in `scripts/generate-property-registry.py` wraps continuation lines without
-  counting their 8-column indent, so a long brief can exceed 100 columns and fail generation.
 - [ ] Spec 0111 runtime checks (need a running app):
   - while the reader switches to binary framing, a line fragment of exactly the packed length
     can decode once as wrong values;

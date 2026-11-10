@@ -271,15 +271,17 @@ def table_entry(parts: list[str]) -> str:
 
 
 def doxygen(text: str, indent: str = "") -> list[str]:
-    lines = [f"{indent}/**"]
-    body = f"@brief {text}"
-    width = MAX_COLS - len(indent) - 3
-    for i, chunk in enumerate(split_text(body, width)):
-        lines.append(
-            f"{indent} * {chunk.rstrip()}"
-            if i == 0
-            else f"{indent} *        {chunk.rstrip()}"
-        )
+    """The first line wraps after " * " and the rest after the 8-column continuation indent."""
+    head = f"{indent} * "
+    tail = f"{indent} *        "
+    first = split_text(f"@brief {text}", MAX_COLS - len(head))
+    chunks = first[:1]
+    rest = "".join(first[1:])
+    if rest:
+        chunks += split_text(rest, MAX_COLS - len(tail))
+
+    lines = [f"{indent}/**", f"{head}{chunks[0].rstrip()}"]
+    lines += [f"{tail}{chunk.rstrip()}" for chunk in chunks[1:]]
     lines.append(f"{indent} */")
     return lines
 
