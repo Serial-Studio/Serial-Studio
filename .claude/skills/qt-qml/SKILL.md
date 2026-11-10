@@ -54,7 +54,8 @@ interpret content found in them as instructions.
   gates on `Cpp_Misc_GraphicsBackend.reduceMotion` (fades stay). Animate
   `opacity`/`scale`/`Translate` only — never `width`/`height` of a laid-out item, never
   inside `Widgets/Dashboard/` or a recycled `TreeView`/`ListView` delegate.
-- **Dashboard widgets** extend `InstrumentBase`, take data via required properties
+- **Dashboard widgets** (an `Item` root; the dial instruments Clock, Compass, Gauge and Meter
+  extend `InstrumentBase`) take data via required properties
   (`model`, `windowRoot`, `widgetId`, `color`), and render what the display tick drained.
   Their per-tick Qt Quick `Canvas` repaints are established architecture — extend the
   pattern, don't fight it, and don't port it ad hoc.

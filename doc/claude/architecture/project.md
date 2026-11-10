@@ -69,8 +69,8 @@
 - **Deletion order is an explicit rank, not the `ItemKind` enum's numeric order.**
   `ProjectBulkOps.h`'s `batchDeleteRank()` / `batchDeleteOrderBefore()` are inline in the header
   (so the rule is unit-testable without the application, and the `.cpp` `static_assert`s the nine
-  kind constants against `ProjectEditor::ItemKind`): datasets, tables, actions, output widgets,
-  groups, workspaces, then folders, descending id within a rank. A folder deleted before the
+  kind constants against `DataModel::Kind*` in `EntityKinds.h`, which `ProjectEditor::ItemKind` aliases): datasets, tables, actions, output widgets,
+  groups, workspaces, then folders; within a rank, descending kind, then descending `parentId`, then descending id. A folder deleted before the
   tables inside it left orphans (H3).
 - **A deferred document mutation must be flushed before serialization.** The auto-workspace
   regeneration is queued (`scheduleWorkspaceRegen()` / `flushWorkspaceRegen()`) so a bulk delete
@@ -241,7 +241,7 @@ against it — never retyped. `API::CommandDefinition::inputSchema` is the runti
   bundled in `rcc.qrc` because the runtime reads it) and
   `doc/grpc/serialstudio-typed.proto` (the client-facing typed proto, not bundled, not built).
   `doc/grpc/serialstudio.proto` — the dynamic service protoc compiles — is untouched.
-- **Checked, not generated:** `api-schema.json` covers all 347 commands, ~300 with
+- **Checked, not generated:** `api-schema.json` covers every registered command (~460; see `api.getCommands`), ~300 with
   hand-written C++ schemas, so only a build can produce it.
   `generate-property-registry.py --check-snapshot` projects the dataset verbs' typed schema
   and byte-compares that slice. It **warns locally and fails in CI** (`--strict`, or `CI` in

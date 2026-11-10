@@ -8,8 +8,11 @@ QML surface rewrite.
 
 ## Icons
 
-**Tree:** `app/rcc/icons/<category>/<tier>/<name>.svg`. Tiers are `16 24 32 48` (design
-px). Categories: `widgets window editor devices panes console database code licensing
+**Tree:** `<category>/<tier>/<name>`. Tiers are `16 24 32 48` (design px). The public repo's
+`app/rcc/icons/` holds only `buttons`, `system` and `window` (listed in `rcc.qrc`); every other
+category lives in `app/rcc/iconpacks/{basic,fine-line}/` (Basic = `@1x`/`@2x` PNG pairs in
+`basic.qrc`; `fine-line` = 48 px SVG in `art-free.qrc`) and in the private art checkout (see spec
+0116 below). Categories: `widgets window editor devices panes console database code licensing
 notifications commands illustrations system` (`illustrations` holds the empty-state pictures,
 drawn at 48 and rendered large; they follow the icon pack like every themed category). The `buttons/` folder is exempt (kept as-is, direct
 paths). The `system` category holds `missing.svg` (the placeholder).
@@ -25,9 +28,12 @@ paths). The `system` category holds `missing.svg` (the placeholder).
   unknown id logs one warning and serves `system/16/missing.svg` (never a crash, never a
   silent blank).
 
-**Adding an icon:** drop `name.svg` into the right `<category>/<tier>/` folder(s), add the
-`<file>` line to `app/rcc/rcc.qrc`, done — no C++/enum/QML table. Run
-`scripts/registry-verify.py` (checks layout, duplicates, qrc↔disk sync).
+**Adding an icon:** draw the SVG in `doc/art/drawn/`, name it in
+`doc/claude/specs/0116-tango-public-icons/art-map.csv`, and run `scripts/basic-art.py` (it
+writes the PNG pairs and regenerates `basic.qrc` / `art-free.qrc`); a fine-line glyph is a 48 px
+SVG under `iconpacks/fine-line/<category>/48/` listed in `art-free.qrc`. Only a `buttons`/
+`system`/`window` icon is a plain `<file>` line in `rcc.qrc`. No C++/enum/QML table. Run
+`scripts/registry-verify.py` (checks layout, duplicates, qrc↔disk sync) and `art-verify.py`.
 
 **Widget icons:** `SerialStudio::dashboardWidgetIcon(w, large)` maps the widget enum to a
 `widgets/<name>` id and resolves it (16/32). The taskbar model publishes a logical `iconId`
@@ -43,7 +49,7 @@ a command, `<img src="icon:<category>/<name>" …>` for non-command buttons (wid
 the placeholder. On GitHub the unknown scheme degrades to the `alt` text.
 
 **Icon packs (spec 0115):** a pack is a second artwork root, `app/rcc/iconpacks/<pack>/
-<category>/<tier>/<name>.svg` plus `pack.json` (`id`, `title`, `translations`, `style`, `mono`),
+<category>/<tier>/<name>.svg` plus `pack.json` (`id`, `title`, `translations`, `style`, `mono`, optional `hidden`),
 compiled in through a generated resource list (`basic.qrc`, `art-free.qrc`, or the private tree's
 `art.qrc`). The Core registry consults
 the active pack before the house tree for the themed categories and never for `window`,
@@ -98,13 +104,14 @@ about a command lives inside a toolbar/menu QML file anymore.
 
 - **Command manifests** `app.json`, `dashboard.json`, `projecteditor.json`, `database.json`.
   Each command: `id` (`scope.verb`), `title`, `tooltip?`, `icon` (`"category/name"`),
-  `titleChecked?`/`iconChecked?` (toggles), `shortcut?`, `shortcutWindows?`,
+  `titleChecked?`/`iconChecked?` (toggles), `shortcut?`, `shortcutWindows?`, `shortcutContext?` (e.g. `"application"`),
   `kind` (`action`|`toggle`), `pro?` (dropped from the catalog on GPL builds),
   `contexts` (which palettes list it — see below), `order?` (palette sort),
   `category` (palette grouping key, one of file/mode/connection/view/export/console/
   project/license/tools/help — validated by `registry-verify`; display names + section
   order live in `PaletteModel.categoryLabel`/`categoryOrder`).
-- **Layout manifests** `layouts/{main-toolbar,project-toolbar,start-menu,database-toolbar}.json`.
+- **Layout manifests** `layouts/{main-toolbar,project-toolbar,start-menu,database-toolbar,database-detail-toolbar}.json`
+  (`editor-menus.json` is the menu manifest, loaded by `loadMenus`).
   Node types: `section` (with `collapsible`/`collapsiblePro`/`collapsePriority`/
   `showSeparator`/`collapsedCommands`), `command` (`id` + optional `title`/`icon`/`tooltip`
   overrides + `role`), `grid` (`rows`, `itemHints`, `role: "drivers"` for the build-variant

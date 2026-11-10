@@ -9,9 +9,9 @@
 
 Since spec 0051 M3 the frame pipeline runs on a dedicated **processing thread**
 ("FramePipeline", owned by `IO::PipelineHost`, a SessionContext module adopted between
-FrameBuilder and ConnectionManager). FrameReaders, the FrameParser engines and the
-FrameBuilder all live there; the GUI thread only drains finished pooled frames from an
-SPSC ring on the display tick (`Dashboard::onDisplayTick`).
+FrameBuilder and FrameParser, before ConnectionManager). FrameReaders, the FrameParser engines
+and the FrameBuilder all live there; the GUI thread only drains pooled `DataBlock`s and
+structure snapshots from two SPSC rings on the display tick (`Dashboard::onDisplayTick`).
 
 ```
 Driver  (driver thread OR main, depending on driver)
@@ -34,7 +34,7 @@ BlockStager::stage  (spec 0055; FrameBuilder's m_stager)
   │ when the display tick moved PipelineHost's flush epoch
   ▼
 BlockPublisher::publish  (FrameBuilder's m_publisher)
-  ├─ PipelineHost block ring (SPSC, 256) ──> Dashboard::onDisplayTick drain
+  ├─ PipelineHost block ring (SPSC, 32) ──> Dashboard::onDisplayTick drain
   └─ if m_anyAsyncSink: ONE clone_block_trimmed copy shared by every sink
        CSV / MDF4 / Sessions / API / gRPC / MQTT / AudioExport / InfluxDB
 
@@ -45,7 +45,7 @@ Dense sources (audio, or streamLane=on) — spec 0055 D8
   the SAME BlockPublisher::publish tail as above
 
 Structure travels separately
-  FrameBuilder::publishStructureSnapshot on pool-generation bump only
+  FrameBuilder::ensureStructurePublished on pool-generation bump only (structure ring, SPSC, 32)
   ──> its own small ring, drained BEFORE the block ring each tick
   ──> Q_EMIT structurePublished(sourceId, frame) for the frame-shaped wires
       (API server, gRPC, MQTT) to rebuild what they serialize
@@ -103,8 +103,8 @@ usually belongs in one of them rather than in the facade:
 - **`DataModel::BlockPublisher` (`m_publisher`)** owns the fan-out: the dashboard hop through
   `PipelineHost::publishBlockToDashboard`, the cached `m_anyAsyncSink` flag
   (`refreshSinkFlag()`), and the ONE `clone_block_trimmed` copy every async sink shares. The sinks
-  arrive as an injected `BlockPublisher::Sinks` struct resolved once in
-  `FrameBuilder::setupExternalConnections()`, so the publisher reaches no singleton of its own; it
+  arrive as an injected `BlockPublisher::Sinks` struct the composition root resolves and binds
+  through `FrameBuilder::bindBlockSinks()` (`ModuleManager.cpp`), so the publisher reaches no singleton of its own; it
   binds `FrameBuilder::m_maskSinks` by `const bool&`, the same bool `BlockStager` binds, so the
   two can never disagree about whether the sinks are masked.
 - **`DataModel::ReplayIngest`** owns the replay column map and both replay cell writers with
@@ -340,7 +340,7 @@ export or report workers.
   into one file no longer shared a clock (spec 0075 B1). A **uniform-grid** block never takes the
   tie-break at all: its offsets are exactly derived (`t0 + i * dt`), and bumping them would
   falsify the grid. Only an irregular block's `t0 + times[i]` passes through
-  `monotonicSourceNs`. `tst_csv_export_times` pins all four cases.
+  `monotonicSourceNs`. `tst_csv_export_times` pins these cases.
 - Debug order when timing looks wrong: driver stamp → `CapturedData` propagation → FrameReader
   split → FrameBuilder fan-out → export/report. Never patch PDF/Chart.js first.
 
@@ -348,17 +348,17 @@ export or report workers.
 
 | Component | Rule |
 |-----------|------|
-| `PipelineHost` | GUI-affine module owning the processing `QThread`, the dashboard SPSC ring and the atomic mode/paused/connected/dashboardAccepting mirrors. Joined FIRST in `ModuleManager::stopFrameConsumerWorkers()` (bounded 5 s wait, warn-and-abandon on a hung Fast-mode script, R21) with FrameBuilder/FrameParser `prepareShutdown()` queued ahead of quit() so script engines die on their own thread. |
+| `PipelineHost` | GUI-affine module owning the processing `QThread`, the dashboard SPSC ring and the atomic mode/paused/connected/dashboardAccepting mirrors. Joined in `ModuleManager::stopFrameConsumerWorkers()` right after the annunciator audio and the stream workers stop (bounded 5 s wait, warn-and-abandon on a hung Fast-mode script, R21) with FrameBuilder/FrameParser `prepareShutdown()` queued ahead of quit() so script engines die on their own thread. |
 | `FrameReader` | **Pipeline thread** (configured on GUI before `moveToThread`, then registered via `PipelineHost::registerFrameReader`). Recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()` — the old reader's deleteLater executes on the pipeline loop. **Never add mutexes.** Single-delimiter uses KMP; multi uses `CircularBuffer::findFirstOfPatterns()` (single-pass, stack array ≤8). The fifth extractor, `readFixedLengthFrames()` (Fixed Length, spec 0103), cuts `N` bytes per frame and finds the header byte with the wrap-aware `CircularBuffer::findMaskedByte()`. Preserves driver timing via `PendingChunk` spans. |
 | `CircularBuffer` | **SPSC only.** Producer/consumer are both the pipeline thread (processData appends and scans). Never MPMC. |
 | `FrameBuilder` / `FrameParser` | **Pipeline thread** after the composition root's final `relocateProcessingObjects()` step. All external mutators self-marshal; the parse path is plain same-thread calls. Ownership moves only through `PipelineHost::moveProcessingObjectsTo()`, which releases every script engine on the outgoing thread and rebuilds them via `readCode()` on the new one — a `lua_State` / `QJSEngine` used off its creating thread corrupts the QV4 heap (crashed the in-app benchmark's JS phase, 2026-08-12). |
-| `Dashboard` | **GUI thread only.** Ingests pooled `TimestampedFramePtr`s from the PipelineHost ring on the display tick (`onDisplayTick`). |
-| Export workers | Lock-free enqueue from the pipeline thread (single producer); batch on worker thread. Consume a detached `make_shared` copy of the frame (NOT the pooled slot), so a slow worker's backlog can't pin the pool. The threshold trigger is coalesced: `markFlushPosted()` / `clearFlushPost()` (an `std::atomic<bool>` on `FrameConsumerWorkerBase`, cleared at `processData` entry) means ONE pending `processData` event per drain cycle instead of one `QMetaCallEvent` allocation per enqueue past the threshold, and a consumer with a second SPSC lane shares that trigger through `noteSecondaryEnqueued(pending)`. |
+| `Dashboard` | **GUI thread only.** Ingests pooled `DataBlockPtr`s (and `StructureSnapshotPtr`s from the separate structure ring) from PipelineHost on the display tick (`onDisplayTick`). |
+| Export workers | Lock-free enqueue from the pipeline thread (single producer); batch on worker thread. Consume the single detached `clone_block_trimmed` block copy (NOT the pooled slot), so a slow worker's backlog can't pin the pool. The threshold trigger is coalesced: `markFlushPosted()` / `clearFlushPost()` (an `std::atomic<bool>` on `FrameConsumerWorkerBase`, cleared at `processData` entry) means ONE pending `processData` event per drain cycle instead of one `QMetaCallEvent` allocation per enqueue past the threshold, and a consumer with a second SPSC lane shares that trigger through `noteSecondaryEnqueued(pending)`. |
 
 **In-pipeline signal hops must be `Qt::DirectConnection`.** A queued connection between two
 pipeline-thread objects costs a `QMetaCallEvent` alloc + event-queue insertion per emit; at
 10+ kHz that fills FrameReader's 65536-slot queue faster than the consumer drains and
-trips `Frame queue full — frame dropped`. GUI↔pipeline traffic is chunk/command/tick rate,
+trips `Frame queue full -- frame dropped`. GUI↔pipeline traffic is chunk/command/tick rate,
 never per-frame signals. Known frame-path sites:
 
 - `FrameReader::readyRead → PipelineHost::routeFrames` (explicit Direct, same thread)
@@ -438,7 +438,7 @@ increments; nothing on it emits, allocates, locks, or calls into `Misc::ProblemC
   existing `if (overflow > 0)` guard immediately before `resetOverflowCount()` — which
   previously destroyed the number. `resetDiagnosticCounters()` clears all four. The per-failure
   checksum hex dump is throttled to the same 5 s pattern `noteDroppedFrame` uses.
-- **`FrameBuilder`**: `m_transformErrors` increments in the existing transform-error branches;
+- **`DataModel::TransformCompiler`** (FrameBuilder's sub-object): `m_transformErrors` increments in the existing transform-error branches;
   `m_lastTransformError` / `m_lastTransformDatasetUniqueId` are assigned **only on a dataset's
   FIRST failure since the last engine rebuild** (`m_errorNotedDatasets`), so several datasets
   failing on every frame allocate one message each in total — a last-writer rule re-materialized
@@ -448,14 +448,14 @@ increments; nothing on it emits, allocates, locks, or calls into `Misc::ProblemC
   max configured frame index vs the delivered-token watermark, written with one compare+store at
   the three parse call sites (span, cell, list lanes). Single pipeline-thread writer over fixed
   storage with the count published last; `FrameBuilder::shortFrameStats()` reads it torn-benign
-  for the 1 Hz `link.short-frames` check. Watermarks are session-monotonic, reset on connect,
+  for the 1 Hz `link.statistics` checker (`reportShortFrames`, finding key `short-frames`). Watermarks are session-monotonic, reset on connect,
   mode change and project sync.
 - **Reading them.** `IO::PipelineHost` owns the readers (spec 0077); `ConnectionManager::
   linkStats()` forwards to `IO::IIngestBinder::linkStats()`, which the host answers by summing the
   per-device counters into an `IO::LinkStats` POD — the struct lives in
   `core/Core/IO/LinkStats.h`. It is called from the 1 Hz tick only — no caching, no signal, no call site on the frame path. Script health
   comes from `FrameParser::scriptStats()` (per-source engine counters) and `FrameBuilder::
-  parsedFrameCount()`. The stream lane's own timeout counter (`StreamWorker::
+  parsedFrameCount()`. The stream lane's own timeout counter (`StreamProcessor::
   transformTimeoutCount()`) is pulled the same way: a JS transform that overruns its budget
   restores the raw samples and increments, it never signals.
 
@@ -503,7 +503,7 @@ per-dataset transforms → Dashboard — against a project loaded programmatical
 `ProjectModel::loadFromJsonDocument`. **Nine runs are gated**, all tiered off `--min-fps` (default
 256000) so a `--min-fps 1` PGO training run stays effectively ungated: **data-pipeline** at 4x
 (1.024 MHz; `runDataPipeline` — `FrameReader` extraction only, no parse; `HOTPATH_DATA_FPS`),
-**Native numeric** at 4x (1.024 MHz; `CFrameParser` delimited template,
+**Native numeric** at 4x (1.024 MHz; Built-In `delimited` template,
 `HOTPATH_NATIVE_FPS`), **Native mixed** at 2x (512 kHz),
 **Lua numeric** at `min-fps` (256 kHz), **JS numeric** at half (128 kHz), **Lua mixed**
 (numeric + string columns) at half (128 kHz), **JS mixed** at a quarter (64 kHz), and two
@@ -525,7 +525,7 @@ engine x {numeric,mixed} x {exporters,dashboard} coverage matrix, and the stream
 accepted with no live device). Each run lasts until both
 the `--benchmark-frames` floor (default 1M) and the `--benchmark-seconds` window (default 10) are
 met. Throughput = `FrameBuilder::parsedFrameCount()` / elapsed; `--benchmark-output FILE` mirrors
-the report to a file (default: stdout only). `ci.yml` (the only workflow) runs it per push/PR
+the report to a file (default: stdout only). `ci.yml` (the only workflow that benchmarks) runs it per push/PR
 as a hard gate on the PGO-optimized binary. Don't regress the parse hotpath. (The `ss-hotpath` skill, invoked before
 a hotpath edit, re-states this check.)
 
@@ -572,8 +572,8 @@ shell to wait + capture stdout fails: a `/SUBSYSTEM:WINDOWS` binary **detaches f
 launching console** — `cmd`/PowerShell don't wait for it, its stdout is unwired, and the
 `AttachConsole`+`CONOUT$` fallback writes to the console *screen buffer* that GitHub's
 pipe-based log capture never reads → CI hangs with no output and no exit code
-(`Start-Process -Wait` and plain `bash` both fail differently). For CI, benchmark a throwaway
-`editbin /SUBSYSTEM:CONSOLE` **copy** of the exe — a console-subsystem image stays attached, so
-the shell waits, stdout pipes through, and the exit code propagates. Leave the shipped exe
-`/SUBSYSTEM:WINDOWS` so it never flashes a console for end users. Background:
+(`Start-Process -Wait` and plain `bash` both fail differently). CI instead launches it with
+`Start-Process -PassThru -NoNewWindow`, waits on the process handle (`WaitForExit(300000)`),
+and greps `HOTPATH_PASS=1` from the `--benchmark-output` file rather than stdout. Leave the
+shipped exe `/SUBSYSTEM:WINDOWS` so it never flashes a console for end users. Background:
 <https://www.devever.net/~hl/win32con>

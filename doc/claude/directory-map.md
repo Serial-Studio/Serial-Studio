@@ -93,10 +93,11 @@ is `STATIC`, named `SerialStudio<Layer>` with alias `SerialStudio::<Layer>`, one
 core/
 ├── Core/            (target SerialStudioCore, alias SerialStudio::Core; links only Qt6::Core)
 │   │                SSAssert, Concepts, DSPSimd, HotpathOptimization.h, ParseBudget.h,
-│   │                CircularBuffer, Checksum
+│   │                CircularBuffer, Checksum, JsonValidator.h, SerialStudio.h/.cpp (central
+│   │                enums), AppInfo.h
 │   ├── DataModel/   Frame, FrameKeys.h (namespace Keys), DataBlock, ExportSchema, FrameConsumer,
 │   │                FrameSupport, IBlockSink (the sink seam), PropertyValidators (the colour
-│   │                hook), Generated/DatasetSerialization.cpp (never hand-edit)
+│   │                validators), Generated/DatasetSerialization.cpp (never hand-edit)
 │   ├── IO/          FrameConfig, HAL_Driver, StreamConfig, LinkStats and the seam interfaces the
 │   │                root binds: IIngestBinder, IRawByteTap, IRawFrameTap, IMqttPublisher,
 │   │                IDeviceWriter, IPayloadInjector; FrameConfigBuilder derives a reader's
@@ -105,6 +106,11 @@ core/
 │   │                the seam the scripting layer drives commands through (spec 0077 T60)
 │   ├── Licensing/   CommercialToken (Pro) — the HMAC-sealed capability token every guard site
 │   │                in the libraries above reads; QtCore and the generated guards header only
+│   ├── Crypto/      CredentialVault, MachineKey (the root-published vault key), SimpleCrypt
+│   ├── Deploy/      PackageCodec, PackageFormat, ResourceTree — the deployable package format
+│   │                and its in-memory resource tree (spec 0096)
+│   ├── Prompt/      IUserPrompter + UserPrompt — the user-prompt seam libraries below Ui speak
+│   │                through (spec 0077)
 │   ├── Services.h   the root-bound Core service set: bus, Translator, TimerEvents,
 │   │                WorkspaceManager, IconRegistry (spec 0077 T71)
 │   ├── Async/       TaskTree, RetryPolicy, AsyncClock — used by MQTT::Publisher and the
@@ -117,6 +123,7 @@ core/
 │   │                codecs — no sockets, dialogs, settings or singletons
 │   ├── CAN/         CanReassembly, GsUsbProtocol (Pro; gated BUILD_COMMERCIAL OR
 │   │                SS_BUILD_TESTS)
+│   ├── OpcUa/       OpcUaWire.h — the OPC UA delta-frame wire vocabulary (spec 0066)
 │   ├── S7/          IsoTsap, S7Pdu, S7Address (Pro)
 │   ├── Iec104/      Apci, Asdu (Pro)
 │   ├── Sparkplug/   SparkplugPayload (Pro)
@@ -125,7 +132,7 @@ core/
 │   └── FileTransfer/  CRC, Protocol base, XMODEM, YMODEM, ZMODEM (GPL base)
 ├── Pipeline/        (target SerialStudioPipeline, alias SerialStudio::Pipeline; links Core and
 │   │                Protocols only) the frame/parse/project engine
-│   ├── DataModel/   FrameBuilder, DataTable(Store), ExportStructure, ReplayPlaybackEngine,
+│   ├── DataModel/   FrameBuilder, DataTable, ExportStructure, ReplayPlaybackEngine,
 │   │   │            ProjectModel, NotificationCenter, ActionBytes, TextCodec (the frame value
 │   │   │            types themselves live in core/Core/DataModel/); PipelineModules (the
 │   │   │            root-bound Pipeline module set) and the dashboard seams IReplayPlotSink,
@@ -139,7 +146,7 @@ core/
 │   │   │            ProjectBulkOps (+ ProjectNaming.h, WorkspaceKeys — the widget-ref
 │   │   │            key + lookup the editor and the workspaces API share). Plus
 │   │   │            ProjectHistory (undo/redo mementos, spec 0031) and
-│   │   │            PropertyHooks/PropertyValidators (registry hooks, spec 0036)
+│   │   │            PropertyHooks (registry hooks, spec 0036)
 │   │   ├── Generated/  DatasetRegistry.h, DatasetSerialization — emitted by
 │   │   │            generate-property-registry.py from app/rcc/properties/dataset.json;
 │   │   │            never hand-edit
@@ -152,6 +159,7 @@ core/
 │   ├── IO/          FrameReader, PipelineHost (frame-processing thread; owns the readers and
 │   │                implements IIngestBinder), StreamWorker (typed stream lane),
 │   │                StreamWorkerPool (the per-source worker lifecycle)
+│   ├── Misc/        PasswordHash (PBKDF2-SHA256)
 │   ├── DSP.h DSPDownsample.h, DSP/FixedQueue.h (the ring container, spec 0097)
 │   └── Platform/    AppPlatform.*
 ├── Devices/         (target SerialStudioDevices, alias SerialStudio::Devices) drivers +
@@ -171,7 +179,10 @@ core/
 │   │                vocabulary), S7, EthernetIp, Iec104 + PolledPlcWorkerBase (the shared
 │   │                polled-PLC worker); CANBus/SerialCanBackendBase for the two serial CAN
 │   │                adapters; GeneratedProjectRequest (the drivers' project-generation ask)
+│   └── ThirdParty/  the vendored miniaudio TU (the Audio device's backend)
 ├── Storage/         (target SerialStudioStorage, alias SerialStudio::Storage)
+│   ├── Replay/      LinkGate, PlayerState — the "is a replay player open / release the live link
+│   │                first" predicates the players share
 │   ├── CSV/         File playback & export
 │   ├── MDF4/        File playback & export
 │   ├── MQTT/        (Pro) Publisher (FrameConsumer-based, threaded, rate-limited 1-30 Hz) +
@@ -188,10 +199,12 @@ core/
 │       ├── HandlerContext.h  the root-bound Devices/Storage/Api module set the handlers and
 │       │            the Ui read (ConnectionManager, dashboard frames, registry, server,
 │       │            players, exports, historian) — spec 0077 T71
-│       ├── Handlers/  per-command handlers; ProjectHandler is a facade owning 13 real
+│       ├── Handlers/  per-command handlers; ProjectHandler is a facade owning 14 real
 │       │            Project*Commands classes + the ProjectApiSupport namespace (spec 0070);
 │       │            Mirror handler. ICheckpointStore is the pre-mutation snapshot seam; the
 │       │            handlers that reach the UI live in Ui/ApiHandlers/ (spec 0077 T62)
+│       ├── Server/  the API server's parts: ServerWorker (socket I/O thread), ServerAuth +
+│       │            AuthPrimitives (token and one-time consents), ConsentGate, ClientReception
 │       ├── Mirror/  MirrorProtocol/Session/Publisher/Client — remote dashboard mirroring
 │       │            (spec 0040)
 │       └── Generated/  DatasetApiFields.cpp — property-registry emitter output; never
@@ -201,6 +214,10 @@ core/
     ├── UI/          Dashboard, Taskbar (workspaces), visualization + output widget types,
     │   │            WidgetExtensions (installable widgets, spec 0038), CommandStrings.cpp
     │   │            (generated, never hand-edit), SnapGuides
+    │   ├── Automation/  the driving surface (spec 0101): ElementCatalog, InputSynthesizer,
+    │   │            WindowCapture, WindowInventory
+    │   ├── WindowManager/  WindowLayoutStore (manual-layout persistence), SnapOverlay (gesture
+    │   │            guides), WindowGeometry
     │   ├── Dashboard/  DashboardIngest (the block-ingest sub-object + every push table),
     │   │            DashboardTools, PlotMemoryLedger (plot-history budget + report, spec 0097)
     │   ├── Alarms/    AlarmAnnunciator (root-owned facade, Cpp_UI_Alarms, alarms.* API) +
@@ -220,12 +237,11 @@ core/
     │   │            keeps); ProjectNavHistory, ProjectEditorIcons.h, ProjectEditorItemIds.h
     │   ├── EditorForms/  row builders split out of EditorForms.cpp: OutputStateRows,
     │   │            OutputValueRows, SourceFramingRows (frame detection, Connection Sequence)
-    │   ├── Editors/  EmbeddedCodeEditorItem (the base all five hosts derive from) +
+    │   ├── Editors/  EmbeddedCodeEditorItem (the base six hosts derive from:
     │   │            ControlScriptEditor, JsCodeEditor, MacroEditor, OutputCodeEditor,
-    │   │            PainterCodeEditor, PublisherScriptEditor (Pro), DatasetTransformEditor,
-    │   │            FrameParserModel
-    │   ├── Generated/  DatasetForm.cpp — property-registry emitter output; never hand-edit
-    │   └── Dialogs/  TransmitTestDialog
+    │   │            PainterCodeEditor, TransformLibraryEditor) + PublisherScriptEditor (Pro) and
+    │   │            DatasetTransformEditor (both QDialogs), FrameParserModel
+    │   └── Generated/  DatasetForm.cpp — property-registry emitter output; never hand-edit
     ├── Console/     Terminal + export, Annotations.* (frame annotation layer, spec 0059)
     ├── Platform/    CSD, NativeWindow (true-size CSD windows: no painted shadow; Win10 gets
     │                a DWM-drawn shadow via WM_NCCALCSIZE filter, Linux the 1px border);
@@ -243,7 +259,7 @@ core/
     ├── ApiHandlers/  Assistant/Console/Dashboard/Diagnostics/Extension/Problems/Window/
     │            Workspaces/Notifications API handlers + UiHandlers::registerAll(), the set
     │            the composition root registers after the core handlers (spec 0077 T62)
-    └── Misc/        JsonValidator, ThemeManager, ContextRegistry (the one QML-globals
+    └── Misc/        ThemeManager, ContextRegistry (the one QML-globals
         │            table), ProblemCenter (pull-only problem aggregation, spec 0033),
         │            ConnectionDiagnostics (spec 0035) — NOT ModuleManager or CLI/, which
         │            stay in app/src/Misc/ (composition-root code)
@@ -275,13 +291,11 @@ path (spec 0055); the bus is command/state/notification rate, and `code-verify.p
 ## `app/`
 
 ```
-app/src/           Composition root only (spec 0076): everything else moved to core/.
+app/src/           Composition root only (spec 0076): everything else moved to core/ (SerialStudio.h
+│                  and AppInfo.h are in core/Core/, AppState.h in core/Pipeline/).
 ├── main.cpp
-├── SerialStudio.h/.cpp  Central enums (BusType, OperationMode, FrameDetection) +
-│                    SerialStudioFrameSupport.cpp
-├── AppState.h       Singleton: OperationMode, projectFilePath, FrameConfig
-├── AppInfo.h
-├── SessionContext.h  Session-scoped service context (spec 0039), owns the nine core modules
+├── SessionContext.h/.cpp  Session-scoped service context (spec 0039), owns the nine core modules
+│                    plus the message bus
 ├── Misc/            ModuleManager (composition root) + CLI/ (CLI entry point, argument
 │                    parsing) — the rest of Misc/ lives in core/Ui/Misc/
 ├── Licensing/       LemonSqueezy, Trial, MachineID (CommercialToken lives in core/Core/Licensing/)
@@ -290,7 +304,7 @@ app/src/           Composition root only (spec 0076): everything else moved to c
 ├── Benchmark/       --benchmark-hotpath driver
 ├── ThirdParty/       Vendored single-file libraries built directly into the executable
 └── API/GRPC/        gRPC service glue (protoc custom command stays with the executable)
-app/qml/             Commands/, DatabaseExplorer/, MainWindow/, ProjectEditor/, Widgets/,
+app/qml/             AI/ (assistant panel, chat, key and memory dialogs), Commands/, DatabaseExplorer/, MainWindow/, ProjectEditor/, Widgets/,
                      Dialogs/ (incl. ProblemCenter, RemoteAttach, ExtensionConsent)
 app/rcc/             icons/ + commands/ (spec 0028), properties/dataset.json (spec 0036),
                      extensions/ (bundled widget-extension packages, spec 0038), ai/ corpus

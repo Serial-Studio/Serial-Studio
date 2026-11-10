@@ -29,8 +29,10 @@
   empty frame never wipes an adopted template), plus the two static path rules
   `sanitizeTitle(title, fallback)` and `sessionDir(workspaceKey, title, fallback)` — a title can
   neither escape the workspace nor scrub away to nothing. The fallback is a parameter because the
-  three lanes disagree: CSV and Sessions fall back to `"Untitled"`, MDF4 to `"SerialStudio"`, so
-  no lane's folder name changed when the three copies collapsed into one.
+  lanes disagree: CSV and Sessions fall back to `"Untitled"`, MDF4 to `"SerialStudio"`, so
+  no lane's folder name changed when the copies collapsed into one. `sessionDir()` is used by CSV
+  and MDF4 only; Sessions calls `sanitizeTitle(..., "Untitled")` (via
+  `Sessions/DatabaseManager/SessionExporter.cpp`).
 - **A write failure is not silent.** `Sessions::Export` checks every
   `transaction()` / `commit()` / `exec()` result into `noteWriteFailure`: a latched
   `writeFailed` flag, a `droppedBlocks` count, a queued `writeErrorChanged` to the GUI, `isOpen()`
@@ -83,7 +85,7 @@
     arrays (one timestamp vector per group plus one value vector per channel, appended in
     `OnSample` order) and merges them k-way by key, so the memory bound is samples x
     channels-in-group rather than the old dense per-instant map.
-- **Sessions store one unified `blocks` table (spec 0055, schema `user_version` 3)**: one row per
+- **Sessions store one unified `blocks` table (spec 0055, introduced at schema `user_version` 3; `kUserVersion` is now 4)**: one row per
   dataset per published block, for both lanes. `values_blob` + `raw_values` are little-endian
   float64, `texts`/`raw_texts` length-prefixed UTF-8 (a recorded value may contain commas, quotes
   or NULs, so delimiting would corrupt exactly the values worth recording), `times` present only
@@ -113,8 +115,9 @@
     `stream_blocks` are read-only legacy, see below); a second lock-free queue carries raw bytes
     from `ConnectionManager::onRawDataReceived` and shares the block lane's flush trigger through
     `noteSecondaryEnqueued`, counting `rawOverruns` when it cannot keep up. WAL mode, batch
-    transactions. Recording is refused outside a data mode: `setExportEnabled` returns false in
-    ConsoleOnly, so there is no console-only raw-DB recording branch.
+    transactions. Recording is refused outside a data mode: `setExportEnabled` (void) does not
+    enable in ConsoleOnly and emits `enabledChanged`, so there is no console-only raw-DB recording
+    branch.
   - `Sessions::Player`: replays a stored session through the FrameBuilder pipeline using the
     **final** (post-transform) reading columns, with a uid->cell replay column map installed via
     `FrameBuilder::setReplayColumnMap` (same mechanism as MDF4). **All three players count as
@@ -197,7 +200,7 @@
   transformsPresent / tablesPresent / virtualDatasets), and the link-loss counters sampled
   at 1 Hz on the main thread (`Export::sampleSessionHealth`, delta-accumulated,
   decrease = reader reset). All new `sessions` columns are nullable; NULL means legacy
-  capture. `PRAGMA user_version = 1`; migration is `migrateSessionsTable` (additive ALTERs,
+  capture. The schema `PRAGMA user_version` is `kUserVersion` (4); migration is `migrateSessionsTable` (additive ALTERs,
   same pattern as `migrateColumnsTable`).
 - **Verification is a child process** (`--verify-session <db> [--verify-session-id N]
   [--verify-keep-regen]`, pair with `--headless`): `CLI::runSessionVerification()` builds
@@ -229,7 +232,7 @@
   (stored-project-invalid / stored-project-rejected / export-not-licensed via an explicit
   `SerialStudio::activated()` check / export-start-failed / feed-failed) and mapped to
   prose by `Verifier::reparseFailureText`. Parent-side, `childFailureReport` (file-local in
-  `DatabaseManager.cpp`) synthesizes `child-spawn-failed` / `child-crashed` /
+  `DatabaseManager/ReproducibilityVerifier.cpp`) synthesizes `child-spawn-failed` / `child-crashed` /
   `child-output-invalid` reports with the exit code and a stderr tail — no failure path
   concludes with an empty verdict map.
 

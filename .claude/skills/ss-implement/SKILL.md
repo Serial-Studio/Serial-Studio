@@ -4,7 +4,7 @@ description: >-
   Phase 4 of Serial Studio's spec-driven workflow: execute an approved tasks.md top to bottom,
   verifying each task and keeping the checklist current. Use after /ss-tasks is approved, or
   "implement the spec", "build it", "work the tasks". Honors the hotpath, verify, and trust
-  rules; never commits without explicit permission.
+  rules; lands the verified change as one commit.
 argument-hint: "[spec number or slug]"
 ---
 

@@ -71,14 +71,14 @@ class name against the Qt Quick Controls table:
 
 | Role | Qt classes | Repository components |
 |------|-----------|-----------------------|
-| `button` | `QQuickButton`, `QQuickToolButton`, `QQuickRoundButton`, `QQuickItemDelegate`, `QQuickAbstractButton` (last resort) | `ToolbarButton`, `TaskbarButton`, `BigButton`, `MenuButton` |
-| `checkbox` / `radiobutton` / `switch` | `QQuickCheckBox` / `QQuickRadioButton` / `QQuickSwitch` | |
+| `button` | `QQuickButton`, `QQuickToolButton`, `QQuickRoundButton`, `QQuickItemDelegate`, `QQuickAbstractButton` (last resort) | `ToolbarButton`, `TaskbarButton`, `BigButton`, `MenuButton`, `HardwarePushButton`, `HardwareEmergencyStop` |
+| `checkbox` / `radiobutton` / `switch` | `QQuickCheckBox` / `QQuickRadioButton` / `QQuickSwitch` | `HardwareLever` (switch) |
 | `pagetab` | `QQuickTabButton` | `SegmentedControl` |
 | `menuitem` | `QQuickMenuItem` | |
 | `combobox` | `QQuickComboBox` | |
 | `editabletext` | `QQuickTextField`, `QQuickTextInput`, `QQuickTextArea`, `QQuickTextEdit` | `SearchField` |
 | `spinbox` | `QQuickSpinBox` | |
-| `slider` | `QQuickSlider`, `QQuickRangeSlider`, `QQuickDial` | |
+| `slider` | `QQuickSlider`, `QQuickRangeSlider`, `QQuickDial` | `HardwareKnob`, `HardwareSelector` |
 | `tile` | | `WidgetDelegate`, `WidgetTitleBar` |
 | `item` | a `QQuickItem` of no other kind carrying a dotted identifier | palette cards, start-menu entries |
 

@@ -31,7 +31,7 @@ writes it only through `advancePlotClock`, so the single clear path is still
 Note also that the `PlotClock&` `advancePlotClock` resolves must not outlive the call —
 `reconfigureDashboard` move-assigns `m_plotClocks`.
 
-`Dashboard::hotpathRxFrame` does no per-frame container lookups; everything is resolved at
+`DashboardIngest::applyBlock` (entered through `Dashboard::applyBlock`) does no per-frame container lookups; everything is resolved at
 reconfigure and the per-frame walk is pointer-only.
 
 - **Value propagation** (`m_valuePushes`, built by `buildValuePushes` per source in row-major
@@ -64,14 +64,16 @@ reconfigure and the per-frame walk is pointer-only.
 `Dashboard::onDisplayTick` (the `uiTimeout` slot) is now the single entry point for data on
 the GUI thread, and it runs in this order:
 
-1. **Block ring drain** — pop every finished `DataModel::DataBlockPtr` the pipeline thread
-   queued (`PipelineHost::dequeueDashboardBlock`) and run `hotpathRxFrame` on each. The publisher no
-   longer calls the Dashboard directly; nothing about the push tables or `structureGeneration`
-   revalidation changed, only who calls them and when.
-2. **Stream worker drain** — for each `IO::StreamWorker`, publish the current display budget
-   into its atomics (bucket count = `points()/2`, window = `plotTimeRange`) and apply every
-   pending `DataBlock` through `applyBlock` (spec 0055: one ring, one drain, both lanes).
-3. **One coalesced `updated()`** if anything set `m_updateRequired`.
+1. **Structure snapshots** — `drainStructureSnapshots()`.
+2. **Block ring drain** — `drainBlockRing(clock, budget)` pops finished `DataModel::DataBlockPtr`s
+   the pipeline thread queued (`PipelineHost::dequeueDashboardBlock`) and runs `Dashboard::applyBlock`
+   (-> `DashboardIngest::applyBlock`) on each until the time budget runs out; past it, all but the
+   newest block are discarded (the newest is still applied) and `noteDisplayDrops` records the
+   count. The publisher no longer calls the Dashboard directly; nothing about the push tables or
+   `structureGeneration` revalidation changed, only who calls them and when (spec 0055: one ring,
+   one drain, both lanes).
+3. `FrameBuilder::drainTableSnapshot()` and `drainLatestFrameSnapshot()`.
+4. **One coalesced `updated()`** if anything set `m_updateRequired`.
 
 **`applyBlock` splits into per-block and per-sample work, and the per-sample half is bounded
 twice.** Per **block**: `applyBlockValues` writes the widget dataset copies once, from the
@@ -100,7 +102,7 @@ ring nodes, so cached pointers would dangle): `plotIndexes`, `multiplotCurves`, 
 **Contract (moved verbatim from CLAUDE.md, 2026-11-04):** Whether a dataset's bands are drawn has ONE home, `SerialStudio::datasetRendersAlarmBands` (Bar, Gauge, Meter, or a Bar Panel / LED Panel member); whether they alarm is `datasetRaisesBandAlarms` beside it (drawn, non-empty, `suppressAlarms` off) and, with `alarmsWhileVisible`, `datasetAlarmsNow` (a widget on screen). A second copy of one lets a band drawn nowhere sound while the editor refuses to open it. Bands on other datasets are kept and ignored, never cleared.
 
 Alarm-band *notifications* are dataset-level, not widget-level. `UI::AlarmMonitor` (singleton,
-wired in `ModuleManager::setupCrossModuleConnections`) rebuilds per-dataset trackers from
+wired in `ModuleManager::wireAnnunciator` via `AlarmMonitor::setupExternalConnections(UISessionRegistry&)`, called from `setupCrossModuleConnections`) rebuilds per-dataset trackers from
 `Dashboard::datasets()` on `widgetCountChanged` / `dataReset` and evaluates them on `updated()`
 (UI rate, not hotpath). Trackers resolve datasets by `uniqueId` on every pass — never cache
 `Dataset*` across signals; `resetData(true)` emits `updated()` *before* `widgetCountChanged`,
@@ -228,8 +230,7 @@ that window writes its own key; nothing ever writes back to the unscoped one.
 ## Dashboard Tools — External Windows Only
 
 The four tools (terminal/Console, notification log [Pro], clock, stopwatch) are **never canvas
-widgets**. `reconfigureDashboard` registers them in the widget map unconditionally (predicate:
-`SerialStudio::isDashboardTool`); `Taskbar::rebuildModel` skips them, so they never appear in
+widgets**. `reconfigureDashboard` does not register them in the widget map; their state lives in `UI::DashboardTools`, and `SerialStudio::isDashboardTool` is the predicate `Taskbar` (skips them) and `DashboardCanvas.qml` use, so they never appear in
 workspaces, search, or saved canvas layouts. The `Dashboard::*Enabled` flags are pure
 view-state: setters persist to QSettings and emit only their own changed signal — **toggling a
 tool must not emit `widgetCountChanged` or touch the widget map** (that re-introduces the
@@ -287,7 +288,7 @@ Load-bearing rules, all earned against a 48 kHz audio stream (2026-08-17):
   `minSpanBytes`; merging on the gap alone collapsed a lane of legible records separated by one
   delimiter byte.
 - **Persistence is two-sided.** `widgetSettings("console")` carries the decoder with the `.ssproj`
-  but is a **no-op outside `ProjectFile` mode** (`ProjectModel.cpp:1203`), so `Settings { category:
+  but is a **no-op outside `ProjectFile` mode** (the `widget_settings_active()` guard in `ProjectPresentation::saveWidgetSetting`), so `Settings { category:
   "ConsoleAnnotations" }` also stores decoder code/enabled plus window bytes, current tab and the
   payload hex toggle. Project copy wins when present; the app copy is the Quick Plot / Console
   Only fallback. Superseded once the decoder becomes a `Source` field.
@@ -301,8 +302,8 @@ plot resolves whenever its `xAxisId` names a live dataset (the `xAxisId >= 0 &&
 datasets.contains(...)` check in `Plot.cpp` / `Dashboard::registerXAxisIfNeeded`); an unresolved
 id **falls through to Samples** via the shared carrier in `configureLineSeries`. Samples is live: a shared monotonic index ring
 (`m_pltXAxis`, `fillRange`) + the per-dataset y ring, rendered via `downsampleMonotonic`.
-Deserialize **preserves `-1` verbatim** (Frame.cpp:301, `ss_jsr(obj, Keys::XAxis, kXAxisTime)`);
-`migrateLegacyXAxisIds` (ProjectModelLoading.cpp:158) keeps Time and Samples untouched, remaps
+Deserialize (`DatasetSerialization.cpp`) defaults a missing key to `-2` (`kXAxisTime`) and **preserves a stored `-1` verbatim**;
+`ProjectLoader::migrateLegacyXAxisIds` keeps Time and Samples untouched, remaps
 legacy positive frame-indices to dataset uniqueIds, and maps any other `<= 0` / unresolvable id
 to Time. **Selector reality**: the per-dataset X combo lists Time | Samples | every dataset
 (`ProjectModel::xDataSources`); the multiplot **group** combo is Time | Samples only and fans the
@@ -310,7 +311,7 @@ chosen value into every member dataset's `xAxisId` (`ProjectEditor` `kGroupView_
 canonically from `datasets.front()` (`useTimeXAxisGroup`), a known encoding wart slated for a
 group-level `xAxisId` field. **Carrier invariant**: `m_pltValues` holds one `DSP::LineSeries` per
 plot widget **including time plots** (index-aligned with the widget list; `m_pltValues.size() !=
-plotCount` is the reconfigure trigger, Dashboard.cpp:2008, asserted at :2151); a time plot's
+plotCount` is the reconfigure trigger in `DashboardIngest.cpp`, asserted at the end of the series configure); a time plot's
 carrier is effectively a placeholder, since its curve renders from the `TimeRing`, not the
 carrier's y ring. **Time plots do NOT use the raw sample ring.** They use a per-curve
 `DSP::TimeRing` (`DSP.h`): a bounded `(time, value)` ring that **decimates on ingest** to a
@@ -354,7 +355,7 @@ re-grouped every render and shimmered like heat haze. This is why 10 s of 48 kHz
 the ring caps at `RingCapacity::kMaxSamples` and `appendDecimated` collapses bursts into bounded
 envelope slots, bounded memory/CPU, axis fixed at `[-T, 0]` (never recompute the axis from raw
 extremes). **Display
-clock** (`m_plotClocks.displayTimeSec`, `hotpathRxFrame`): sources without a cadence stamp many frames
+clock** (`m_plotClocks.displayTimeSec`, advanced by `DashboardIngest::advancePlotClock`): sources without a cadence stamp many frames
 at one coarse wall-clock tick (~15 ms on Windows), which would compress them onto a single
 decimator interval and lose temporal spread; the display clock spreads same-timestamp frames
 by a smoothed per-sample period so sub-tick windows still render. It is self-correcting
@@ -367,7 +368,7 @@ plots, FFT, GPS, 3D keep the raw-ring + downsample path.
 
 ## Downsampler Cost Model
 
-All three downsamplers in `DSP.h` (`downsampleMonotonic`,
+All three downsamplers in `DSPDownsample.h` (included by `DSP.h`) (`downsampleMonotonic`,
 `downsampleTimeWindow`, `downsampleWindowAbsolute`) are single-pass — the visible span resolves
 via `dsLowerBound`/`dsUpperBound` binary searches (monotonic X/time is a hard precondition,
 including for `downsampleMonotonic`'s endpoint-derived X bounds), the bucket accumulation is the
@@ -488,8 +489,8 @@ scatter).
 ## Plot Time Range
 
 `Dashboard::plotTimeRange` (seconds, default 10, **1 ms min**) is the ring
-window `T`; `setPlotTimeRange` rebuilds each `TimeRing` at the new capacity (configurePlot /
-configureMultiPlot in `Dashboard.cpp`). **Per-project, mirroring `pointCount`**: in ProjectFile
+window `T`; `setPlotTimeRange` rebuilds each `TimeRing` at the new capacity (`configureLineSeries` /
+`configureMultiLineSeries`, with `Dashboard::rebuildLineSeriesPreservingState` keeping the carrier state). **Per-project, mirroring `pointCount`**: in ProjectFile
 it lives in the `.ssproj` (`ProjectModel::plotTimeRange` / `Keys::PlotTimeRange`, edited in the
 project overview); elsewhere it's QSettings `Dashboard/PlotTimeRange` (edited in Settings).
 Dashboard syncs `m_plotTimeRange` from the project on `operationModeChanged` and persists to
@@ -557,8 +558,7 @@ is phase-locked to its interpolated `t0`, so successive completed sweeps overlay
 (frozen, phase-locked overlay), but windows wider than the threshold return the live `back` while `sweeping`
 so long ranges grow left-to-right in real time instead of stalling a multi-second hold; before the first
 completion it always returns `back`. The Dashboard holds `m_plotSweep`/`m_multiplotSweep` (keyed by widget index),
-fed from `TimePush::sweep`/`MultiPush::sweep` in `updateLineSeries`/`updateDataSeries` via the
-`feedSweep`/`feedMultiSweep` lambdas; engines are created config-only in `configureLineSeries`/`configureMultiLineSeries`
+fed through the `feedSweep`/`feedMultiSweep` lambdas, which look the engine up by the push's `plotIndex` (`TimePush` carries only consumers, `plotIndex` and `value`); engines are created config-only in `configureLineSeries`/`configureMultiLineSeries`
 for time plots (spec 0097: `setShape` stores the shape, `PlotControlBank` allocates after the license
 gate admits an enable and releases on disable, at the history ring's density via
 `TimeRingSizing::shapeSweep`, and a growing history ring re-shapes an enabled sweep) and the config (including `timebaseSec`) survives a Time-Range rebuild via
@@ -645,7 +645,7 @@ Chrome hides via `WidgetDelegate.frozen` (`headerVisible`/`shadowEnabled`) and t
 (close/minimize/toggleAutoLayout — the shortcut path opens the license dialog when the
 setter refuses an enable) and in `Taskbar.qml` (entry-click restore, right-click
 remove-from-workspace, auto-layout button). Freeze is orthogonal to `taskbarHidden` and
-deliberately mode-agnostic (persists across operation-mode switches within a session).
+gated by `Dashboard::frozen()`: the project's frozen flag AND `operationMode() == ProjectFile` AND `Core::License::activated()`, so Quick Plot / Console Only is never frozen.
 
 Freeze title mode is per widget (`widgetDisplay.freezeTitle`, key `<widgetType>:<uniqueId>`):
 `bar` (panel header only), `painted` (face title only; Bar/Gauge/Meter, their default), `both`
@@ -658,8 +658,8 @@ Manual-mode (auto-layout off) drag/resize snapping lives in `UI::Snap`
 (`core/Ui/UI/SnapGuides.h/.cpp`): a pure, stateless resolver (`resolveMoveSnap` /
 `resolveResizeSnap`) that `WindowManager` feeds per mouse move with the candidate rect, the
 sibling rects cached at gesture start (`cacheSnapSiblings`), and the grid settings. Rules the
-resolver encodes: nearest candidate within 6 px per axis, edges beat centers beat spacing on
-ties, any smart candidate suppresses grid quantization on that axis, all candidates stay
+resolver encodes: nearest candidate within 6 px per axis, ties rank edge, then center = size, then
+spacing, then fraction (`SnapGuides.cpp` `kRank*`), any smart candidate suppresses grid quantization on that axis, all candidates stay
 canvas-bounded, and resize picks never move a non-moving edge. Alt (sampled from the move
 event's modifiers) bypasses snapping; the geometry badge still tracks. Visuals publish through
 `WindowManager` notify properties (`alignmentGuides`, `spacingIndicators`, `sizeMatchRect`,
@@ -740,8 +740,8 @@ gated by `registry-verify.py` + `tests/scripts/test_widget_manifests.py`.
   `Misc::ContextRegistry::objectNames()`, the same table the composition root registers through.
   `Misc::ContextRegistry` (`core/Ui/Misc/ContextRegistry.{h,cpp}`, spec 0075 G4) is the
   collect-then-apply helper `ModuleManager` fills with `registry.add(name, object)` and flushes
-  once with `registry.apply(ctx)` — twice per session, once for the common globals and once for
-  the commercial ones. `registry-verify.py` compares that table against the `registry.add` call
+  once with `registry.apply(ctx)` — four times per session: the common globals, the commercial
+  ones, the build-variant values and the image export. `registry-verify.py` compares that table against the `registry.add` call
   sites in both directions and asserts the forwarding, so a name can no longer drift out of one
   side.
 - Every load-time rejection is a `Misc::ProblemCenter` finding through the `extension.widget`
@@ -754,7 +754,7 @@ gated by `registry-verify.py` + `tests/scripts/test_widget_manifests.py`.
 
 `app/qml/MainWindow/Panes/Dashboard/Taskbar.qml`: user-defined dashboard tabs.
 Persisted under `"workspaces"`. **Workspace IDs ≥ 1000**, group IDs < 1000.
-`Taskbar::deleteWorkspace(id)` branches on the threshold — don't cross-wire. Edits stage
+`Taskbar::deleteWorkspace(id)` branches on `customizeWorkspaces()`: customized deletes a workspace (floor `AutoStart` 1000), auto-generated hides the group behind it (floor `PerGroupStart` 1002) — don't cross-wire. Edits stage
 in memory + `setModified(true)`; no autosave.
 
 **Tile identity, then ordinal (spec 0083).** A `WidgetRef` carries `groupUniqueId` and
@@ -777,7 +777,7 @@ a `QQuickPaintedItem`. Toggle via `DatasetWaterfall = 0b01000000`; persists as `
 dataset's value (e.g. RPM) instead of time. `commercialCfg()` flags any project using waterfall.
 
 The widget composes four sub-objects under `UI/Widgets/Waterfall/`: `WaterfallColorMap` (the
-eight maps plus a 256-entry LUT bake, so the spectrogram indexes a table instead of evaluating a
+fifteen maps plus a 256-entry LUT bake, so the spectrogram indexes a table instead of evaluating a
 map per pixel), `WaterfallOverlay` (the cached raster of border, axes, markers and hover cursor,
 re-rendered only when a drawn readout actually moved), `WaterfallTiles` (the pure decomposition
 of the visible span into per-band quads across the ring seam) and `WaterfallSpectrogramNodes`

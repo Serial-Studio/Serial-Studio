@@ -74,7 +74,8 @@ legacy CSV text path, so the branch inside `Audio::processInputBuffer` is delibe
 
 **Contract (moved verbatim from CLAUDE.md, 2026-11-04):** A project with transforms or user tables refuses to CONNECT unlicensed (`IO::EntitlementGate`, rule in `SerialStudio::proContentSummary`), and a live unlicensed session ends when its content grows past what its connect admitted; it never runs with the math switched off, because uncalibrated values on a dashboard are worse than a refusal. A new authoring path (API command, importer, generator) needs the license refusal too, and removal paths stay ungated on purpose. Playback is not gated: replay never runs a transform.
 
-`DeviceManager::open(mode)` starts the `FrameReader` if it is null and then calls
+`DeviceManager::open(mode)` attaches to the pipeline if it is not attached yet
+(`attachToPipeline(m_frameConfig)`; `PipelineHost` creates the reader) and then calls
 `m_driver->open(mode)` directly. There is no orchestration layer: `DeviceManager` owns no
 task runner, and nothing sits between `ConnectionManager::connectDevice()` and the driver.
 What *has* changed (spec 0075) is how many drivers finish inside that call: most now return
@@ -146,8 +147,9 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   1 s `m_reconnectTimer` in `handleError()` on a `QSerialPort::ResourceError` (live instances
   recover too — the timer belongs to the instance, not the UI driver's 1 Hz rescan), matches
   the returned port by name, and `close()` disarms both so a manual disconnect is always final.
-  MQTT funnels every configuration change and error into `scheduleReconnectIfActive()`. Modbus
-  and Network TCP dial asynchronously with driver-local timer retries (below). Modbus TCP also
+  MQTT funnels every configuration change and error into `scheduleReconnectIfActive()`. Network
+  TCP dials through `AsyncTcpDial` and Modbus TCP through its own `m_probe`, both with a 5 s
+  deadline and no driver-local retry loop (below). Modbus TCP also
   re-dials (2026-11-06): a refused dial (`failDial`) or a dropped link (`ModbusRedial::reportDrop`,
   which also raises the drop notification) arms `ModbusRedial`, one 10 s single-shot that
   `close()` cancels. The driver never reaches for the manager: the sub-object's `due()` and
@@ -191,10 +193,9 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   when its source has no Connection Sequence. (`OpcUaSession::isConnecting()` exists too but is not an override — the session is not a
   `HAL_Driver`.) `toggleConnection()` aborts when any device reports an in-flight dial, and
   `ConnectionManager::isConnecting` (NOTIFY `connectingChanged`, published by the same
-  idempotent snapshot) drives the toolbar button's "Connecting…" label. Modbus mirrors
-  Network's timer-driven dial (10 refusal retries at 300 ms, 15 s timeout, `close()`
-  cancels; RTU gets one attempt) and its 500 ms endpoint-edit reopen debounce (host, port,
-  protocol, serial parameters — a closed driver never dials on its own). Process reports
+  idempotent snapshot) drives the toolbar button's "Connecting…" label. Modbus TCP
+  probes once with a 5 s deadline (`kDialDeadlineMs`; `close()` cancels the probe and the
+  redial; RTU gets one attempt), and its only retry is the 10 s `ModbusRedial` above. Process reports
   the launch phase and the pipe's wait-for-writer window as connecting instead of faking an
   open channel. Audio arms miniaudio's stopped notification while open: a backend-initiated
   stop (device yanked, exclusive-mode steal) disconnects the device instead of streaming
@@ -258,9 +259,10 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   on-demand re-run (`UART::runSequence`) keeps `isOpen()` true, so no session boundary fires,
   and gates bytes and writes the same way. Steps act on the port through
   `UartSequencePort`, never the persisting setters, so a baud step never rewrites the saved rate.
-- **Every async dial failure must still reach `ConnectionManager::disconnectDevice(this)`** —
-  BLE (`onControllerError`), Modbus (`failDial`), MQTT (dial-window `onErrorChanged`) all do —
-  so a pending verdict settles and "connecting" always resolves; the earlier design stranded
+- **Every async dial failure must settle its verdict** — BLE (`onControllerError`) and MQTT
+  (dial-window `onErrorChanged`) call `ConnectionManager::disconnectDevice(this)`; Modbus and
+  Network `failDial` call `reportOpenFinished(false, ...)` and the manager closes the device on
+  that failed verdict — so a pending verdict settles and "connecting" always resolves; the earlier design stranded
   those verdicts and wedged the connect button. The prior async retry/watchdog stack
   (10x300 ms + 15 s + peerPort validation) bounced healthy links and earned a telehack.com
   IP ban; do not reintroduce it. An ESTABLISHED link that errors reports once and stays
@@ -493,7 +495,8 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   while source 1 was still dialing). A drop is a link event; the session outlives it.
 - **The verdict has ONE owner per attempt (spec 0050).** Sync drivers: the `open()` return
   value, passed by `connectDevice(int)` to `onDeviceOpenFinished(deviceId, ok, reason)`.
-  Async drivers (BLE, Modbus, MQTT, Process, async CAN plugins): the
+  Async drivers (BLE, Network TCP/WebSocket/HTTP, Modbus, MQTT, OPC UA, S7, EtherNet/IP,
+  IEC 104, Process, UART with a Connection Sequence, async CAN plugins): the
   `HAL_Driver::openFinished(ok, reason)` signal, emitted **exactly once per attempt**
   through the base-class latch (`armOpenReport()` by the manager before `open()`;
   `reportOpenFinished()` by the driver on BOTH outcomes; disarmed on first report, on a
@@ -566,8 +569,9 @@ and nothing is extracted to disk. The rules a change must keep:
 
 The facade owns its concerns as member sub-objects under `core/Devices/IO/ConnectionManager/`, one
 class per `.h/.cpp` pair (`BusBridge`, `ConnectFanOut`, `DeviceIoRouter`, `DeviceTableQuery`,
-`DriverFactory`, `DriverUiRegistry`, `ReplyCapture`, `StreamConfigBuilder`, `UiDriverSync`).
-The four that matter on the connect path:
+`DriverFactory`, `DriverUiRegistry`, `EntitlementGate`, `ExclusiveResourceGuard`,
+`ReplyCapture`, `StreamConfigBuilder`, `UiDriverSync`; the gate and guard are covered under
+"Opening a Link"). The ones that matter on the connect path:
 What stays in `ConnectionManager.cpp` is connect/disconnect orchestration, because
 it needs `QObject::sender()` (`onDriverOpenFinished` resolves which driver reported), `Q_EMIT`,
 `connect(...)` with `this` as context, and the facade's own Q_INVOKABLE per-bus QML accessors.

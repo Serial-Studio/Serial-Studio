@@ -51,7 +51,8 @@ checklist (`qt-qml-review-checklist.md`) wherever the two conflict. Sources of t
 
 ## Dashboard widgets
 
-- Instrument widgets extend `InstrumentBase` and take their data through required properties
+- Dashboard widgets (an `Item` root; Clock, Compass, Gauge and Meter extend `InstrumentBase`)
+  take their data through required properties
   (`model`, `windowRoot`, `widgetId`, `color`); they render from the model the GUI drained on
   the display tick. A widget reaching into another `Cpp_*` module for per-frame data is a
   finding.

@@ -8,6 +8,8 @@ editing a skill, keep that step adjacent to the action it guards.
 
 | Skill | Use it when |
 |-------|-------------|
+| `qt-qml` | QML is the primary subject: writing, fixing, refactoring or debugging files under `app/qml`. Corrects LLM habits (versioned imports, anchors-in-layouts, binding-killing assignments) and encodes the `Cpp_*` surface, registry-driven icons/menus, the motion contract and the dashboard widget pattern. |
+| `qt-qml-review` | Reviewing/auditing QML (or "before I commit" QML). Runs `code-verify.py` as phase 1 plus optional `qmllint`, then six parallel read-only agents (bindings, layout, loading/lifecycle, delegates, states/motion, perf). |
 | `ss-hotpath` | Editing/reviewing the data hotpath (`FrameReader`, `CircularBuffer`, `FrameBuilder`, `Dashboard` draw). Invoke it yourself before the first edit; nothing loads it for you. Encodes the SPSC/DirectConnection/slot-pool rules and the `--benchmark-hotpath` 256 kHz check. |
 | `ss-new-driver` | Adding a new I/O driver / data source under `core/Devices/IO/Drivers/`. Encodes the `BluetoothLE` reference pattern and every registration touch-point. |
 | `ss-verify` | Before committing, or any "lint / check conventions / sanitize" request. Wraps `code-verify.py` + `sanitize-commit.py`. |
@@ -30,4 +32,4 @@ phase until the maintainer approves the previous artifact.
 | `ss-spec` | Starting any non-trivial feature. Phase 1: captures WHAT & WHY (problem, goals, non-goals, testable requirements, acceptance criteria) into `spec.md`. No implementation detail. Gates on approval. |
 | `ss-plan` | A spec is approved and needs a design. Phase 2: turns `spec.md` into `plan.md` — affected files, data flow, required hotpath/threading answer, tradeoffs as decisions, risks, test plan. Reads the sub-docs and real code. Gates on approval. |
 | `ss-tasks` | A plan is approved. Phase 3: decomposes `plan.md` into an ordered, individually-verifiable checklist (`tasks.md`) plus a Definition of Done. Gates on approval. |
-| `ss-implement` | Tasks are approved. Phase 4: executes `tasks.md` task by task, `code-verify`-ing each and keeping the checklist current; finishes with `qt-cpp-review` + `sanitize-commit`. Honors the hotpath/trust rules; never commits without permission. |
+| `ss-implement` | Tasks are approved. Phase 4: executes `tasks.md` task by task, `code-verify`-ing each and keeping the checklist current; finishes with `qt-cpp-review` + `sanitize-commit`. Honors the hotpath/trust rules; lands the verified change as one commit. |

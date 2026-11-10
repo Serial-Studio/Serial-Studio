@@ -29,7 +29,8 @@ Wiring: the four user-facing options (`DEBUG_SANITIZER`, `PRODUCTION_OPTIMIZATIO
 `PGO_STAGE` and the internal `DISABLE_LTO` live in `Optimization.cmake`, `ENABLE_TSAN` in
 `Sanitizers.cmake`. The modules are `include()`d in `CMakeLists.txt` (MiMalloc ->
 Optimization -> Sanitizers, then Hardening, then Signing). The PGO two-stage flow is driven
-by `.github/workflows/ci.yml` (the only workflow file).
+by `.github/workflows/ci.yml` (the other workflows, `docs.yml`, `supply-chain.yml` and
+`test-suite.yml`, set no compiler flags).
 
 ## This skill does NOT build
 
@@ -62,20 +63,20 @@ not an optimization:
   output must be bit-stable across builds and platforms. This is the one rule most likely to be
   "helpfully" violated.
 - **Unwind tables on every TU (non-MSVC).** `-fexceptions -funwind-tables
-  -fasynchronous-unwind-tables`; on macOS the lua54 target additionally opts out of LTO with
-  `-fno-lto -femit-dwarf-unwind=no-compact-unwind` (Xcode 26's ld drops fallback DWARF unwind
-  under `-flto`, llvm#135888, and made `-Wl,-keep_dwarf_unwind` a no-op). Lua is compiled as
-  C++ and throws across the VM stack; without unwind metadata, `--gc-sections`/`-dead_strip`
-  + LTO can drop a personality routine and turn a routine Lua error into `std::terminate`. See
-  [[ss-cpp-modern]] and the Lua exception-safety setup. Do not remove these to "shrink" the
-  binary.
+  -fasynchronous-unwind-tables`. The LuaJIT runtime (spec 0051, which replaced Lua 5.4 compiled
+  as C++) delivers Lua errors by external frame unwinding, so every linked object needs unwind
+  metadata for the error path to walk out of the VM into the host's pcall/catch guards. macOS
+  builds force `DISABLE_LTO` (Xcode 26's ld drops fallback DWARF unwind under `-flto`,
+  llvm#135888), and the `luajit` target is out of IPO on every platform
+  (`lib/luajit/CMakeLists.txt`; on Apple Clang it also gets `-fno-lto
+  -fno-whole-program-vtables`). Do not remove these to "shrink" the binary.
 - **x86-64-v2 is the conservative baseline (SSE4.2, 2012+ CPUs).** Every non-MSVC x86-64
   branch uses `-march=x86-64-v2`; clang-cl passes `/clang:-march=x86-64-v2`; cl.exe gets no
   `-march` (the x64 ABI's SSE2 baseline stands). Do not bump to `v3`/`v4` or `-march=native`
   for shipped binaries -- it would SIGILL on older CPUs. ARM baselines: aarch64 -> `armv8-a`
   (+`-latomic`); armv7l -> `armv7-a -mfpu=neon -mfloat-abi=hard` (hardfloat pinned on purpose).
 - **`-msse4.1` is added for DSP/FFT on non-MSVC x86-64**, separate from the `-march` baseline.
-  MSVC/clang-cl are skipped (the x64 ABI guarantees SSE2; no explicit SSE4.1 there).
+  clang-cl gets `/clang:-msse4.1`; only cl.exe is skipped (the x64 ABI guarantees SSE2).
 - **Hardening auto-enables for optimized configs.** A manual `Release` that forgets
   `-DENABLE_HARDENING=ON` still gets hardened (belt-and-suspenders in `Hardening.cmake`). Don't
   "simplify" that away.

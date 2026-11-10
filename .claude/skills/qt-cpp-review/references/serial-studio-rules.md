@@ -8,20 +8,21 @@ the review-time *what*.
 
 ## Hotpath (blockers, not advisories)
 
-Data flow: `Driver -> FrameReader::processData (main) -> DeviceManager::onReadyRead ->
-ConnectionManager::onFrameReady -> FrameBuilder -> TimestampedFramePtr -> Dashboard / async
-sinks`. A violation here causes silent frame drops, not a compile error.
+Data flow: `Driver::dataReceived -> FrameReader::processData -> FrameReader::readyRead ->
+PipelineHost::routeFrames -> FrameBuilder -> Dashboard / async sinks`, all on
+`IO::PipelineHost`'s processing thread (spec 0051 M3), wired in `PipelineHost::attach()` and
+`registerFrameReader()`. A violation here causes silent frame drops, not a compile error.
 
-- **SS-HOT-1**: No mutex in `FrameReader` or `CircularBuffer`. They are main-thread / SPSC.
-  Reconfigure by recreating via `resetFrameReader()` / `reconfigure()`. A lock here is a
-  blocker.
-- **SS-HOT-2**: Hotpath signal hops are `Qt::DirectConnection`. A queued connection between
-  two main-thread objects fills the 65536-slot queue at 10+ kHz and drops frames (that is
-  `FrameReader`'s enqueue queue, `m_queue(65536)`; the 4096 figure is `kCapturedPoolSize`, a
-  different structure). Applies to
-  `DeviceManager` ready-read, `ConnectionManager::onFrameReady`, and
-  `sourceStructureChanged -> rebuildDevices` (queued there lets a stale `m_devices[0]` survive
-  into Connect).
+- **SS-HOT-1**: No mutex in `FrameReader` or `CircularBuffer`. They are pipeline-thread SPSC.
+  Reconfigure by recreating the reader through `PipelineHost`. A lock here is a blocker
+  (code-verify `spsc-lock`).
+- **SS-HOT-2**: In-pipeline signal hops are `Qt::DirectConnection` (code-verify
+  `pipeline-queued-hop`). A queued hop inside the pipeline fills the 65536-slot queue at 10+ kHz
+  and drops frames (that is `FrameReader`'s enqueue queue, `m_queue(65536)`; the 4096 figure is
+  `kCapturedPoolSize`, a different structure). GUI↔pipeline traffic is chunk/command/tick rate
+  only, and never a plain `BlockingQueuedConnection` from the GUI into the pipeline. Also
+  `sourceStructureChanged -> rebuildDevices` stays direct (queued there lets a stale
+  `m_devices[0]` survive into Connect).
 - **SS-HOT-3**: No allocation and no block copy on the dashboard path. The Dashboard block
   comes from the pooled block slots (`DataModel::BlockStager` on the frame lane,
   `StreamProcessor::claimBlockSlot()` on the stream lane), never a direct
@@ -39,8 +40,8 @@ sinks`. A violation here causes silent frame drops, not a compile error.
 
 ## Threading (general)
 
-- **SS-THR-1**: `FrameReader` is no longer threaded (commit beeda4c0); `DeviceManager` signals
-  must be `DirectConnection`.
+- **SS-THR-1**: `FrameReader` lives on `IO::PipelineHost`'s processing thread, not the GUI
+  thread, and its in-pipeline hops must be `DirectConnection`.
 - **SS-THR-2**: All `buildTreeModel` / `groupsChanged` connections in ProjectEditor use
   `Qt::QueuedConnection` (deliberate — avoids re-entrant model rebuilds).
 - **SS-THR-3**: Sessions/DB singletons hold `QSqlDatabase`/`QSqlQuery` via `std::optional` and

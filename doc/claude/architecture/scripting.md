@@ -63,7 +63,7 @@ path runs under a protected bootstrap so `lua_atpanic` is unreachable.
   `app/rcc/scripts/native/<id>.md` (exposed via
   `FrameParserModel::templateDocumentation`). The bridge is
   `DataModel::FrameParserModel` (registered as QML type `FrameParserModel` in the
-  `SerialStudio` module, see ModuleManager.cpp:545).
+  `SerialStudio` module, in `ModuleManager`'s QML type registration).
 - **The frame parser test dialog is QML** (`app/qml/Dialogs/FrameParserTest.qml`, one dialog
   for all three languages), backed by the same `FrameParserModel` bridge: pipeline
   get/setters write through `ProjectModel::updateSource`, and `dryRun()` branches by source
@@ -118,8 +118,8 @@ path runs under a protected bootstrap so `lua_atpanic` is unreachable.
   `FrameParser::engineForSource()`. JS/Lua templates in `app/rcc/scripts/parser/{js,lua}/`
   + `templates.json`; native templates are compiled in (`nativeTemplates()` registry,
   delimited/comma is the default).
-- **New projects/sources default to Native CSV** (`seedDefaultFrameParser` in
-  ProjectModel.cpp: language = Native, template = delimited, params = schema defaults).
+- **New projects/sources default to Native CSV** (`ProjectSources::seedDefaultFrameParser` in
+  `core/Pipeline/DataModel/Project/ProjectSources.cpp`, called from ProjectModel: language = Native, template = delimited, params = schema defaults).
   `frameParserCode` is not seeded; the switch mapping generates the equivalent script
   template on demand.
 
@@ -224,7 +224,7 @@ never in the hosts to begin with — they live inside `EmbeddedCodeEditor`
 (`syncWidgetPosition()`, `handleShortcutOverride()`, `handleKeyPress()`), and the hosts only
 forwarded into them; the base forwards into exactly the same three. The five copies were
 byte-identical except that `MacroEditor` also repainted on focus in/out, and the base adopts that
-superset, so the four Project-Editor editors now repaint on focus change too.
+superset, so the Project-Editor editors now repaint on focus change too.
 
 - `renderWidget()` first calls `syncWidgetPosition()` (moves the hidden top-level to the
   item's screen position — completer popups and drag auto-scroll resolve global coordinates
@@ -239,7 +239,7 @@ superset, so the four Project-Editor editors now repaint on focus change too.
 in the Output Widget view; it lives in `TransmitCodeDialog.qml`, an application-modal window behind
 a `Loader` that goes `active: false` on close. The item is therefore destroyed with the window
 rather than kept alive by the right-panel Loader, so its `WindowVisible` gate has nothing left to
-gate -- the cost is zero by construction, not by check. The other three Project-Editor hosts still
+gate -- the cost is zero by construction, not by check. The other four Project-Editor hosts still
 live in retained views and still need the gate.
 
 **Every embedded editor is gated; none grabs unconditionally (2026-08-18).** The old rule here
@@ -255,7 +255,7 @@ with `sample` on a live app with the editor **not open**: the host's `renderWidg
 `QLineNumberArea::paintEvent` 11%, `QCodeEditor::getFirstVisibleBlock` 5% — **56% of the GUI
 thread**, 4x the 2026-08-17 incident. The gate is `EmbeddedCodeEditor`'s `renderable()` helper,
 selected by the `RenderGate` each host passes: `WindowVisible` additionally requires
-`window() && window()->isVisible()`, which is what the four Project-Editor hosts need.
+`window() && window()->isVisible()`, which is what the five Project-Editor hosts need.
 
 **`MacroEditor` is the pattern all of them follow (2026-08-17).** It is embedded in the main
 window (Macros dialog, and the console annotations decoder tab), where an unconditional
@@ -448,10 +448,11 @@ don't render until the next frame. Two SDK calls close that gap, both running th
 transform-only pass (`reprocessDatasetValues`) over the live frames (per-source frames when
 populated, else `m_frame`) and sharing the private `republishFrames(RepublishLane)` helper:
 `reprocessFrames()` (`dashboard.reprocess` → `FrameBuilder::reprocessFrames`, the dashboard
-lane) runs **synchronously** and publishes to `Dashboard::hotpathRxFrame` directly, skipping
+lane) runs **synchronously for non-GUI callers** (the control-script worker waits via
+`invokeOnBuilderThreadBlocking`; a GUI-thread caller queues the pass and gets `false`) and publishes to `Dashboard::hotpathRxFrame` directly, skipping
 the sink fan-out so a synthetic refresh never re-records samples already
 exported on arrival; `dashboardTick()` (`dashboard.tick` → `FrameBuilder::dashboardTick`,
-the export lane) runs **synchronously**: the call seeds the source frames (from the project
+the export lane) runs synchronously under the same caller rule: the call seeds the source frames (from the project
 template when none has arrived yet, so it works from the very first `loop()`) and runs one
 export-lane `republishFrames()` immediately, publishing *through* `BlockPublisher::publish` so a table-driven
 control-script simulation both renders and feeds the CSV/MDF4/session/MQTT/API exports (still

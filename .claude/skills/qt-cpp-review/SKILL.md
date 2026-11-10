@@ -155,11 +155,12 @@ judging anything on the `Driver -> FrameReader -> FrameBuilder -> Dashboard` pat
 - Non-atomic shared counters; `QTimer`/`QObject` ops from a non-owner thread.
 
 **Check for** (Serial Studio hotpath — these are blockers, not advisories):
-- A **mutex added to `FrameReader` or `CircularBuffer`** — they are main-thread/SPSC; never
-  lock. Reconfigure via `resetFrameReader()` / `reconfigure()`.
-- A hotpath signal hop that is **queued instead of `Qt::DirectConnection`** (queued between
-  two main-thread objects fills the 65536-slot queue at 10+ kHz and drops frames). Includes
-  `DeviceManager` ready-read and `sourceStructureChanged -> rebuildDevices`.
+- A **mutex added to `FrameReader` or `CircularBuffer`** — they are pipeline-thread SPSC
+  (`IO::PipelineHost`'s processing thread); never lock. Reconfigure by recreating the reader.
+- An in-pipeline signal hop that is **queued instead of `Qt::DirectConnection`** (it fills the
+  65536-slot queue at 10+ kHz and drops frames), or a plain `BlockingQueuedConnection` from the
+  GUI into the pipeline. Includes `FrameReader::readyRead -> routeFrames` and
+  `sourceStructureChanged -> rebuildDevices`.
 - **Allocation or a block copy on the dashboard path** — the Dashboard block must come from
   the pooled block slots (`DataModel::BlockStager` on the frame lane,
   `StreamProcessor::claimBlockSlot()` on the stream lane), never a direct

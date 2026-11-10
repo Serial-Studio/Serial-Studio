@@ -67,9 +67,9 @@ source and prints the ratio per lane; it asserts only bit-identity with the scal
 
 Mechanical check: `app/tests/tst_dsp_kernels.cpp` carries a `level` column on every data table,
 so each kernel is compared bitwise against the scalar oracle at every level the machine
-supports; CI additionally gates `--benchmark-hotpath --min-fps 256000 --simd sse4` on the x86-64
-jobs, because the runners take the AVX2 lane on Auto and the baseline lane would otherwise never
-be measured.
+supports. CI's benchmark gate runs `--benchmark-hotpath --min-fps 256000` on Auto only (no
+`--simd` pin), so on the AVX2 runners the baseline lane is covered by the bitwise
+`tst_dsp_kernels` comparison, not by a throughput gate.
 
 ## Hotpath Optimization Macros (`core/Core/HotpathOptimization.h`)
 

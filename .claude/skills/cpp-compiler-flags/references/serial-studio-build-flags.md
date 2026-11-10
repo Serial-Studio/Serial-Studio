@@ -21,9 +21,8 @@ GCC/MinGW.
 
 ### Always-on (every non-MSVC TU, when PRODUCTION_OPTIMIZATION)
 ```
--fexceptions -funwind-tables -fasynchronous-unwind-tables      # Lua throws across the VM; see below
-# macOS: lua54 compiles -fno-lto -femit-dwarf-unwind=no-compact-unwind (lib/lua/CMakeLists.txt) --
-# Xcode 26's ld drops fallback DWARF unwind under -flto (llvm#135888) and made -keep_dwarf_unwind a no-op
+-fexceptions -funwind-tables -fasynchronous-unwind-tables      # LuaJIT errors unwind externally; see below
+# macOS: DISABLE_LTO is forced ON -- Xcode 26's ld drops fallback DWARF unwind under -flto (llvm#135888)
 add_compile_definitions(NDEBUG)
 ```
 
@@ -34,7 +33,7 @@ add_compile_definitions(NDEBUG)
 -O3 -funroll-loops -fomit-frame-pointer                   # macOS keeps FP: -fno-omit-frame-pointer (arm64 ABI)
 -momit-leaf-frame-pointer                                 # macOS only: leaf frames may drop x29 (ABI-legal)
 -fvisibility=hidden -fvisibility-inlines-hidden           # macOS + Linux-Clang only
--fwhole-program-vtables                                   # Linux-Clang, needs LTO; lua54 negates it
+-fwhole-program-vtables                                   # Linux-Clang, needs LTO
 -fno-fast-math -fno-unsafe-math-optimizations            # IEEE-stable, non-negotiable
 -ffunction-sections -fdata-sections                       # paired with --gc-sections / -dead_strip
 -flto=auto                                                # unless DISABLE_LTO; never on macOS
@@ -48,10 +47,11 @@ and the LTO link dominated the macOS PGO-use stage. The guarded blocks stay in t
 local build can flip it back.
 Hidden visibility + `-fwhole-program-vtables` mirror the clang-cl branch (whole-program
 devirtualization of app-internal interfaces; safe because the app is one monolithic executable
-with no in-tree shared libs). LuaJIT compiles `-fno-lto` on every platform (its asm VM and generated
-tables interact badly with IPO), and clang hard-errors on
-`-fwhole-program-vtables` without LTO, so `lib/luajit/CMakeLists.txt` gives the
-`luajit` target both flags together.
+with no in-tree shared libs). The `luajit` target is out of IPO on every platform
+(`INTERPROCEDURAL_OPTIMIZATION FALSE`; its asm VM and generated tables interact badly with
+IPO), and on Apple Clang `lib/luajit/CMakeLists.txt` also passes `-fno-lto
+-fno-whole-program-vtables` together, because clang hard-errors on `-fwhole-program-vtables`
+without LTO.
 Arch baseline appended by platform: x86-64 -> `-march=x86-64-v2`; aarch64 -> `-march=armv8-a`
 + link `-latomic`; armv7l -> `-march=armv7-a -mfpu=neon -mfloat-abi=hard` + `-latomic`.
 IntelLLVM also adds `-static`.
@@ -66,8 +66,8 @@ IntelLLVM also adds `-static`.
 
 **clang-cl (Windows, MSVC ABI):**
 ```
-/O2 /Oi /Ot /Gy /Gw /clang:-march=x86-64-v2 /fp:precise /DNDEBUG
-/clang:-flto=thin                                         # compile only, unless DISABLE_LTO
+/O2 /clang:-O3 /Oi /Ot /Gy /Gw /clang:-march=x86-64-v2 /fp:precise /DNDEBUG   # -O3 last wins
+/clang:-flto=thin /clang:-fwhole-program-vtables          # compile only, unless DISABLE_LTO
 # link (lld-link, native flags only): /OPT:REF /OPT:ICF
 #                                     /lldltocache:${CMAKE_BINARY_DIR}/lto.cache  unless DISABLE_LTO
 ```
@@ -79,7 +79,7 @@ cl.exe-only).
 
 ### SIMD (separate from -march)
 ```
--msse4.1     # non-MSVC x86-64 only, for vectorized DSP/FFT. MSVC/clang-cl skipped (x64 ABI = SSE2 baseline).
+-msse4.1     # x86-64 DSP/FFT; clang-cl gets /clang:-msse4.1; only cl.exe is skipped (x64 ABI = SSE2).
 ```
 
 ### PGO (ENABLE_PGO, staged by PGO_STAGE)
@@ -97,9 +97,10 @@ multithreaded and racy increments tear counts, making worker-side hot code look 
 | Clang/AppleClang | `-fprofile-generate=<dir>` on **compile AND link**, `-fprofile-update=atomic` (compile) | `-fprofile-use=<merged.profdata>` on **compile AND link** | `*.profraw` -> `merged.profdata` (via `llvm-profdata merge`) |
 | GCC | `-fprofile-generate -fprofile-dir=<dir>` (compile+link), `-fprofile-update=atomic` (compile) | `-fprofile-use -fprofile-dir=<dir> -fprofile-correction` (compile+link) | `*.gcda` |
 
-The Clang USE stages also pass `-Werror=profile-instr-out-of-date` as a GENERATE/USE drift
-tripwire (a function whose control flow changed between stages would otherwise silently lose
-its profile), and the `llvm-profdata merge` now always re-runs so a stale `merged.profdata`
+GENERATE/USE drift is not promoted to an error: it surfaces as `-Wbackend-plugin` "function
+control flow change detected" warnings (`-Wprofile-instr-out-of-date` belongs to frontend
+instrumentation and never fires for the IR PGO used here), because COMDAT template copies
+legitimately hash differently across unity TUs. And the `llvm-profdata merge` now always re-runs so a stale `merged.profdata`
 can't shadow fresh `.profraw` files in an incremental build dir.
 
 Why the link-side differs: Clang/AppleClang link through the clang **driver**, so `-fprofile-*`
@@ -177,7 +178,8 @@ PRIVATE (so `lib/` static libs built with `/w`/`-w` are untouched), no-op unless
   compile flags.
 - **macOS:** `-fstack-protector-strong`, `_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST`,
   `-ftrivial-auto-var-init=zero` (via `_ss_add_auto_var_init`).
-- **Linux:** `_FORTIFY_SOURCE=3` (upgraded from the directory block's `=2`),
+- **Linux:** `_FORTIFY_SOURCE=3` when `SS_FORTIFY3_SUPPORTED` (GCC/Clang 12+ AND glibc 2.34+,
+  probed at configure time; otherwise it stays `=2`), optimized configs only,
   `_GLIBCXX_ASSERTIONS`, `-ftrivial-auto-var-init=zero`.
 
 `_ss_add_auto_var_init` only fires on GCC 12+ / Clang 16+ / AppleClang 15+ (zero-inits
@@ -205,9 +207,10 @@ Process-wide allocator override on Windows/MSVC (incl. clang-cl), Linux, and mac
 interpose, spec 0025; on by default, `SS_MIMALLOC_ENABLE_APPLE`). On macOS `-Wl,-force_load` of
 the static archive pulls both the malloc `__interpose` entries and the operator new/delete
 overrides the archive already defines under `MI_OVERRIDE` — do **not** also include
-`mimalloc-new-delete.h` (duplicate-symbol link error). FetchContent-builds mimalloc v3.4.3 with
-`MI_OVERRIDE` (shared on Windows/Linux; static on macOS). Pinned to v3.4.3, not v3.4.1: 3.4.1
-crashed on macOS in the cross-thread free path (mimalloc#1333, fixed in 3.4.3). Rationale: the frame-parse hotpath allocates many small QString/QByteArray/Lua buffers
+`mimalloc-new-delete.h` (duplicate-symbol link error). FetchContent-builds mimalloc v3.4.5 with
+`MI_OVERRIDE` (shared on Windows/Linux; static on macOS), pinned by commit in
+`cmake/MiMalloc.cmake`. Never go back below v3.4.3: 3.4.1 crashed on macOS in the cross-thread
+free path (mimalloc#1333). Rationale: the frame-parse hotpath allocates many small QString/QByteArray/Lua buffers
 per frame; the system heap (MSVC CRT / glibc) is slower, and glibc thrashes per-thread arenas
 under the main-allocates / worker-frees pattern. clang-cl builds mimalloc as C++ (`MI_USE_CXX`)
 to dodge a C-atomics miscompile in `segment-map.c`. Included **before** Optimization.cmake so
@@ -224,17 +227,16 @@ it isn't swept into LTO/PGO. Call `target_link_mimalloc(<target>)`:
 
 - **No fast-math** -> bit-stable telemetry output across builds/platforms. A reproducible
   number is a feature; a faster wrong-in-the-last-bit number is a regression.
-- **Unwind tables everywhere** -> Lua (compiled as C++) throws across the VM stack on any
-  runtime error; without unwind metadata, `--gc-sections`/`-dead_strip` + LTO can strip a
-  personality routine and a routine Lua type error becomes `std::terminate`.
+- **Unwind tables everywhere** -> LuaJIT delivers Lua errors by external frame unwinding;
+  without unwind metadata on every linked object, the error path cannot walk out of the VM into
+  the host's pcall/catch guards and a routine Lua error becomes `std::terminate`.
 - **No pac-ret on Apple ARM** -> `-mbranch-protection` signs LR with PACIASP; macOS compact
   unwind can't encode RA signing (arm64e-only), so every function falls back to DWARF and
   the system unwinder fails to authenticate the signed return addresses during a throw --
   the same Lua error then aborts even though all unwind metadata is present and valid.
-- **lua54 out of LTO on macOS** -> Xcode 26's ld drops fallback DWARF unwind under `-flto`
-  (llvm#135888, open). With pac-ret off the app rides compact unwind; lua54 compiles
-  `-fno-lto` (real objects, so `-femit-dwarf-unwind=no-compact-unwind` is honored -- under
-  bitcode it never reaches the LTO backend) so no Lua throw frame depends on LTO codegen.
+- **No LTO on macOS** -> Xcode 26's ld drops fallback DWARF unwind under `-flto`
+  (llvm#135888, open), so macOS forces `DISABLE_LTO` and no Lua error frame depends on LTO
+  codegen.
 - **x86-64-v2 baseline** -> runs on 2012+ CPUs; `v3`/`v4`/`native` would SIGILL on older
   hardware that the shipped binary must support.
 - **Hardening auto-on for optimized configs** -> can't accidentally ship an unhardened release.

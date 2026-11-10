@@ -51,7 +51,8 @@ block. Never per-sample across a thread boundary.
   intentional (slow export path, gated on a sink being on, keeps a backlog from pinning the
   pool) — not a violation.
 - **The hotpath reads cached flags** (`m_operationMode`, `m_playerOpen`, `m_anyAsyncSink`,
-  `m_captureLatestFrame`, `m_changeDriven`, Dashboard `m_streamAvailable`). A new input to any
+  `m_captureLatestFrame`, `m_captureDatasetValues`, `m_changeDriven`, Dashboard
+  `m_streamAvailable`). A new input to any
   of them must wire its change signal to the cache refresh, or frames/exports silently stop
   (mechanics in `doc/claude/architecture/dataflow.md` "Cached Hotpath Flags"; see also
   `doc/claude/common-mistakes.md`). `streamAvailable()` also reads the spec-0040 mirror flag —
@@ -62,11 +63,12 @@ block. Never per-sample across a thread boundary.
   `assign_string_in_place`, never implicit-share assignment — a share-assign re-links buffers
   and degrades back to per-frame mallocs), zero steady-state allocation. Keep anything you add
   to that lane allocation-free.
-- **Every dashboard publish site stamps `structureGeneration = m_framePoolGeneration`** —
-  pool slot and heap fallback alike. The dashboard skips per-frame `compare_frames()`
-  revalidation when the cached per-source generation matches; a frame left at the default `0`
-  (or stale) makes `Dashboard::hotpathRxFrame` reconfigure every frame or never reconfigure
-  after a real layout change. The generation only advances via `invalidateFramePool()`.
+- **Every published block carries `structureGeneration`** — `BlockStager` binds
+  `m_framePoolGeneration` and stamps it on every `DataBlock` it stages. `DashboardIngest`
+  drops a block whose generation mismatches the current structure as stale; generation `0`
+  means an unversioned producer and gates on its template. A new publish path that skips the
+  stamp either drops every block or applies blocks across a layout change. The generation only
+  advances via `invalidateFramePool()`.
 - **`m_captureLatestFrame`** (control script running or API server on) gates the latest-frame
   capture behind `io.getLatestFrame`: one retained `CapturedDataPtr` per source (the pool probe
   skips pinned slots) plus the channel tokens. Keep it gated and allocation-free.
@@ -169,7 +171,7 @@ Mechanics and readouts:
   (`native lane: list`). Every row prints `Alloc/frame`, counted only in a
   `-DSS_ALLOC_STATS=ON` build (`n/a` otherwise); the Native rows must read 0 there.
 
-Source: `app/src/Benchmark/HotpathBenchmark.cpp`. CI (`ci.yml`, the only workflow) runs it on
+Source: `app/src/Benchmark/HotpathBenchmark.cpp`. CI (`ci.yml`, the only workflow that benchmarks) runs it on
 every push/PR as a hard gate on the PGO-optimized binary — the same binary that ships (PGO
 GENERATE → `--min-fps 1` training run → PGO USE → gated `--min-fps 256000`). The same engine backs the in-app
 About → Benchmark dialog (`Benchmark::BenchmarkRunner`, exposed as `Cpp_Benchmark_Runner`).

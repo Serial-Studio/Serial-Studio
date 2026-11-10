@@ -139,7 +139,7 @@ hotpath change.
 ## Atomics with explicit ordering
 
 Publish-then-observe across threads uses `release` on the writer and `acquire` on the reader.
-The SPSC ring (`CircularBuffer` + `FrameReader`) is main-thread and needs none of this — this
+The SPSC ring (`CircularBuffer` + `FrameReader`) is confined to the pipeline thread and needs none of this — this
 is for the cases that genuinely cross threads (watchdog flag, shared counters).
 
 ```cpp

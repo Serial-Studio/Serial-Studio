@@ -35,7 +35,7 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
 
 ## Publisher side — never on the frame path
 
-- `MirrorPublisher` wakes on `UI::Dashboard::updated()` (display tick) and is wired **only
+- `MirrorPublisher` wakes on the `Core::Bus::DashboardUpdated` bus topic (the display tick's `updated()`) and is wired **only
   while a viewer is subscribed**: first subscriber `activate()`, last `deactivate()`, with
   `SS_ASSERT_LOG(!m_updatedLink)` guarding the symmetry. An unwatched instance runs zero
   mirror code per tick.
@@ -52,17 +52,18 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
 
 ## Viewer side — `MirrorSession`
 
-- Injects frames via `dashboard.hotpathRxFrame(...)` from pre-built per-source
-  `TimestampedFramePtr` templates (values assigned in place, timestamp rewritten against a
-  local anchor). It **never** reaches the sink fan-out — a viewer's export
+- Injects through `dashboard.applyBlock(buildSnapshotBlock(...))`, a single-sample `DataBlock`
+  built from pre-built per-source `TimestampedFramePtr` templates (values assigned in place,
+  timestamp rewritten against a local anchor). It **never** reaches the sink fan-out — a viewer's export
   sinks never see mirrored data.
 - Mirrored frames carry `structureGeneration = kMirrorGenerationBase + epoch`
   (base `1ULL << 48`) so they can't alias a local frame-pool generation.
-- **`Dashboard::streamAvailable()` gains `API::MirrorSession::mirroring()` as a leading
-  `[[unlikely]]` disjunct** — a plain module-static `bool s_mirroring`, because
+- **`Dashboard::streamAvailable()` gains `API::MirrorSession::mirroring()` as a `[[unlikely]]`
+  disjunct, checked after `Core::Runtime::benchmarkActive()`** — a plain module-static `bool s_mirroring`, because
   `streamAvailable()` is reached from Dashboard's ctor inside the pinned order and must not
   construct `MirrorSession` (built after `restoreLastProject()`). The flag is written
-  **before** `attachedChanged` fires (DirectConnection into
+  **before** `attachedChanged` fires (DirectConnection into a lambda that publishes
+  `Core::Bus::MirrorAttachedChanged`; `DashboardWiring`'s bus subscription calls
   `Dashboard::updateStreamAvailable`, like every other stream input); reversing that order
   drops the first snapshot.
 - A mirrored project loads with an **empty source path** — that is what stops the debounced
@@ -89,8 +90,9 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
 - Attach is exclusive with a local stream (`canAttach` requires no local
   `streamAvailable()`); concurrent local+remote needs spec 0039 M3. Detach must restore the
   captured `LocalState` on every exit path, including fatal transport failure.
-- `MirrorPublisher` and `MirrorSession` take `SessionContext&` by injection (spec 0039
-  pilots) and are constructed in `ModuleManager` after the pinned order; QML sees
+- `MirrorPublisher` and `MirrorSession` are function-static singletons whose `instance()` builds
+  from `Core::services().bus`, `API::handlerContext().dashboard` and `DataModel::pipelineModules()`
+  (not `SessionContext&` injection); `ModuleManager` only calls `instance()` after the pinned order; QML sees
   `Cpp_API_Mirror` (registered in the core, non-commercial block).
 
 ## Gating & access
@@ -100,10 +102,11 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
   loopback binding, `--api-external` / `--api-token <hex>` for headless opt-in. A spoofed or
   hostile publisher is harmless to a viewer by the two strips above, not by authentication. The
   RemoteAttach dialog remembers tokens per endpoint (`Mirror/EndpointTokens` QSettings map,
-  plaintext by design — same protection as the publisher's own token); `forgetEndpoint()`
+  each value `SimpleCrypt`-encrypted under `endpointTokenKey()` with hash integrity
+  protection; a value that fails to decrypt is treated as no token); `forgetEndpoint()`
   drops the token with the endpoint, and an attach with an empty token clears any stored one.
 - Command surface: `app.remoteAttach` in `app/rcc/commands/app.json` (contexts app +
-  dashboard), icons `commands/{16,24,32}/remote-attach.svg`. While attached, the toolbar's
+  dashboard), icons `commands/{16,24,32}/remote-attach.png` (+`@2x`) in the Basic pack and `commands/48/remote-attach.svg` in `fine-line`. While attached, the toolbar's
   right-pinned Connect button hides and a "Remote Dashboard" button (same `app.remoteAttach`
   entry) takes its place; per-widget disconnected overlays are suppressed via
   `Cpp_API_Mirror.attached` in `WidgetDelegate.qml`. Detach pops the UI back to the console

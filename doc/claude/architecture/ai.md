@@ -126,7 +126,7 @@ a project (the `LoadsProject` capability in `API::CommandCapabilities`).
 Separately, `API::CommandRegistry::execute()` takes its own pre-mutation snapshot for any mutating
 command, whatever the origin; the assistant's debounce is on top of that, not instead of it.
 
-## The Meta-Tool Seam — ~50 Tools, ~300 Commands
+## The Meta-Tool Seam — ~53 Essential Tools, 11 Meta Tools, ~460 Commands
 
 The model's tool list is deliberately small. `AI::MetaToolCatalog::essentialToolNames()` returns
 a curated set (trimmed further when the provider's `needsSmallToolSurface` capability is set,
@@ -144,7 +144,7 @@ meta tools: `meta.listCategories`, `meta.listCommands`, `meta.search`, `meta.des
   implements the sink. The interface is abstract on purpose: the streaming state stays
   facade-private, so a meta-tool handler cannot touch the assistant row, the dirty flags or the
   flush timer.
-- A discovery-heavy turn is cheap by design; the alternative (300 tool definitions in every
+- A discovery-heavy turn is cheap by design; the alternative (~460 tool definitions in every
   request) costs the context window the conversation needs.
 - **`meta.searchDocs` reads `app/rcc/ai/search_index.json`**, a BM25 index over the skills, the
   scripting references, the bundled scripts and examples, and the manual's published pages. A

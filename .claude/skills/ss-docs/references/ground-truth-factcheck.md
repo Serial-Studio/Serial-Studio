@@ -16,8 +16,8 @@ Extract anything a `Grep`/`Read` could settle:
 |------|---------|----------------------|
 | Default value | "Baud rate default: 9600" | Driver ctor init list / member init in `core/Devices/IO/Drivers/` |
 | Range / options | "Data bits: 5, 6, 7, 8" | The enum, combo-box model, or validator that feeds the UI |
-| UI label / menu path | "Settings → Miscellaneous → Enable API Server" | `app/qml/**` strings; the label must match verbatim |
-| Edition gating | "Requires a Pro license" | `SerialStudio::activated()` / `commercialCfg()` call sites guarding the feature |
+| UI label / menu path | "Preferences → General → Enable API Server" | `app/qml/**` strings; the label must match verbatim |
+| Edition gating | "Requires a Pro license" | `Core::License::activated()` / `SerialStudio::commercialCfg()` call sites guarding the feature |
 | Behavior | "Reconnects automatically on disconnect" | The slot/handler implementing it |
 | File / format | "Exports MDF4" / port name examples | The exporter/driver code; platform-specific literals |
 | CLI flag | "`--benchmark-hotpath`" | Grep the exact flag string in `app/src` / `core/` |

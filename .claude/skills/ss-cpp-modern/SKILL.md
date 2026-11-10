@@ -89,7 +89,8 @@ fixed data. Don't use a dynamically-sized container for statically-sized data (V
 `std::array`.
 
 ### Lock-free / atomics (the SPSC ring)
-`CircularBuffer` + `FrameReader` are a single-producer/single-consumer, main-thread design —
+`CircularBuffer` + `FrameReader` are a single-producer/single-consumer design confined to
+`IO::PipelineHost`'s processing thread —
 **no mutex** (SS-HOT-1). When you genuinely need cross-thread coordination elsewhere, use
 `std::atomic` with explicit memory ordering (`acquire`/`release` to publish-then-observe), not
 ad-hoc volatile or relaxed-everywhere. Shared counters across threads are `std::atomic` or

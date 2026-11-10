@@ -8,7 +8,7 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
 
 - **The frame pipeline runs on `IO::PipelineHost`'s processing thread (spec 0051 M3), not the
   GUI thread.** FrameReaders, `FrameParser` and `FrameBuilder` all live there; the GUI drains
-  finished pooled frames from an SPSC ring in `Dashboard::onDisplayTick`. Public
+  pooled `DataBlock`s and structure snapshots from SPSC rings in `Dashboard::onDisplayTick`. Public
   FrameBuilder/FrameParser mutators SELF-MARSHAL — GUI→pipeline waits go through
   `IO::PipelineHost::runOnObjectThread` (event-loop-backed), pipeline→GUI reads through
   `runOnGuiThreadBlocking`. Never add a plain `BlockingQueuedConnection` from the GUI into the

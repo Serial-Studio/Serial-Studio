@@ -9,7 +9,7 @@ human approves before the next begins. The contract moves from "did the agent gu
 This is not a generic framework bolted on top of the repo. It reuses what is already here — the
 `doc/claude/` sub-docs as the knowledge base the plan reads, the `scripts/` linters as the
 verification gate, the existing skills (`ss-hotpath`, `ss-new-driver`, `ss-verify`,
-`qt-cpp-review`, `ss-cpp-modern`, `cpp-compiler-flags`, `ss-docs`, `ss-ai-audit`), and the
+`qt-cpp-review`, `ss-cpp-modern`, `cpp-compiler-flags`, `qt-qml`, `qt-qml-review`, `ss-docs`, `ss-ai-audit`), and the
 Trust Contract from CLAUDE.md.
 The workflow just sequences them.
 
@@ -99,8 +99,8 @@ obvious, and a reviewer could not reasonably prefer a different approach, just m
   staged files, and `sanitize-commit.py` runs only when a generator input changed;
   `qt-cpp-review` runs on the C++ diff before handoff.
 - **Trust Contract** — the plan's file list *is* the lane. Anything outside it is named in chat,
-  not slipped into the diff. Foreign working-tree files are never touched. Nothing is committed
-  without explicit per-turn permission. A self-review ("what was asked, and only that") is part
+  not slipped into the diff. Foreign working-tree files are never touched. A verified change lands as one commit
+  (see Landing). A self-review ("what was asked, and only that") is part
   of the Definition of Done.
 - **Tests** — acceptance criteria map to concrete checks: `tests/scripts/` JS units the agent
   can run, and `pytest` integration/security/perf suites the maintainer runs against a live

@@ -35,8 +35,11 @@ section a pointer names before working there. The inline blocks are pointers, no
 | [architecture.md](architecture.md) | Before touching any subsystem: the index into `doc/claude/architecture/` — dataflow (hotpath), startup, io, project, scripting, dashboard, kernels, export, mirror, ai, commands-icons. |
 | [architecture/ai.md](architecture/ai.md) | Before touching `core/Ui/AI/`, `app/rcc/ai/` or `app/qml/AI/`: the command safety tiers, checkpoint-not-save semantics, the meta-tool discovery seam, the provider/reply contract, and the `FileSandbox` / `KeyVault` trust boundaries. |
 | [common-mistakes.md](common-mistakes.md) | The silent-breakage lookup: gotchas the linter can't catch (timestamp capture, queued-vs-direct hotpath, `operator[]` inserts, macOS file-dialog reentrancy, the GUI-stall sampling recipe). |
-| [code-style.md](code-style.md) | Full style spec + NASA Power of Ten. The Code Style block below is the inline essentials. |
-| [trust-contract.md](trust-contract.md) | Full text of the Trust Contract above, with the incidents behind each rule. |
+| [code-style.md](code-style.md) | Full style spec + NASA Power of Ten. The Code Style section of CLAUDE.md is the inline essentials. |
+| [trust-contract.md](trust-contract.md) | Full text of the Trust Contract in CLAUDE.md, with the incidents behind each rule. |
+| [hotpath-rules.md](hotpath-rules.md) | Before editing the Driver -> FrameReader -> FrameBuilder -> Dashboard path: every threading and hotpath rule in full (the inline block in CLAUDE.md is the summary). |
+| [subsystem-contracts.md](subsystem-contracts.md) | The table of what breaks silently in each subsystem (undo, registries, alarms, mirror, HDR, AI tiers, ...); read the row for the area being edited. |
+| [delegation.md](delegation.md) | Before spawning a subagent or splitting work: advisor economics, what stays in the main session, how to brief an executor. |
 | [directory-map.md](directory-map.md) | The `core/` / `app/src` / `app/qml` / `lib` tree, one line of role per subsystem. |
 | [scripts.md](scripts.md) | The per-script table for `scripts/`. |
 | [working-relationship.md](working-relationship.md) | How to collaborate here: recommend don't enumerate, push back when a choice will cost, ground truth outranks on-paper reasoning. Read once per session. |

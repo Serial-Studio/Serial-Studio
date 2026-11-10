@@ -29,12 +29,13 @@ always blockers. To auto-fix formatting in place: `python scripts/code-verify.py
 The commit hooks already lint the staged files. Run the top-level driver when a generator
 input changed (`api-schema.json`, `dataset.json`, a command manifest, `command_safety.json`,
 doc/help) and before a push; it chains: chmod (POSIX) → expand-doxygen →
-clang-format → code-verify --fix → clang-format → code-verify --check → singleton-census gate
+clang-format → code-verify --fix → clang-format → singleton-census gate
 (spec 0039, blocking) → tu-census gate (blocking) → black (Python) → documentation-verify →
-claim-verify gate (blocking) → generate-sdk (regenerates
+claim-verify gate (blocking) → ledger-verify gate (blocking) → generate-sdk (regenerates
 `SerialStudio.js`/`.lua` from `api-schema.json`) → generate-command-strings →
-generate-property-registry (regen + --check + --check-snapshot, specs 0036/0037) →
-registry-verify → search-index rebuild → changed-file summary. It only sanitizes the
+generate-command-safety → generate-property-registry (regen + --check + --check-snapshot,
+specs 0036/0037) → registry-verify → art-verify → search-index rebuild → baseline-manifest
+refresh → code-verify --check (last) → changed-file summary. It only sanitizes the
 working tree — committing and pushing stay with the developer:
 
 ```

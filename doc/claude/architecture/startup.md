@@ -16,8 +16,9 @@ invariants hold it together:
 - **All `setupExternalConnections()` run before `restoreLastProject()`.** Every module's wiring
   runs before `restoreLastProject()` inside `setupCrossModuleConnections`; a module that reacts
   to project load must have its wiring in place first. `restoreLastProject` is no longer the
-  literal last call — the widget-extension refresh and the `MirrorPublisher`/`MirrorSession`
-  construction (spec 0040) follow it, deliberately after the pinned order and project restore.
+  literal last call — `checkForUpdatesOnStartup`, a few late connects, the
+  `MirrorPublisher`/`MirrorSession` construction (spec 0040) and `relocateProcessingObjects()`
+  follow it. The widget-extension `rescan()` runs BEFORE it.
 - **Context properties come after wiring, before the QML load.** `registerCoreContextProperties` /
   `registerCommercialContextProperties` / `registerAppMetadataProperties` run after
   `setupCrossModuleConnections()` and before `registerImageProvidersAndLoadQml` (`m_engine.load`),
@@ -96,13 +97,12 @@ Two entries in that list carry their own reason to sit where they do:
   `--deactivate` can wait on a verdict instead of a timeout. A **refused** deactivation no longer
   clears the local cache: only `deactivated == true` does.
 
-**The `ProjectModel`-before-`AppState` rule kills a live hazard.** `AppState`'s ctor calls
-`deriveFrameConfig()`, whose ProjectFile branch calls `ProjectModel::instance()` (AppState.cpp), so
-on a machine whose saved `operation_mode` is ProjectFile, ProjectModel is constructed *inside*
-AppState's ctor; on a QuickPlot machine it is constructed later. `ProjectModel`'s ctor then calls
-`newJsonFile()`, which emits `groupsChanged` while AppState is still mid-init (the fenced comment above
-the `newJsonFile()` call in ProjectModel's ctor exists for exactly this reason). Constructing ProjectModel first makes the
-settings-conditional edge impossible.
+**The `ProjectModel`-before-`AppState` rule kills a live hazard.** `AppState`'s ctor takes
+`ProjectModel::instance()` unconditionally in its init list (AppState.cpp), so with the wrong order
+ProjectModel would be constructed *inside* AppState's ctor on every machine. `ProjectModel`'s ctor
+then calls `newJsonFile()`, which emits `groupsChanged` while AppState is still mid-init (the fenced
+comment above the `newJsonFile()` call in ProjectModel's ctor exists for exactly this reason).
+Constructing ProjectModel first keeps that edge out of AppState's ctor.
 
 **The list above is machine-checked.** `scripts/doc-anchors.json` carries an `ordered` anchor,
 `composition-root-order`, that extracts every construction site out of `instantiateCoreModules()`
@@ -176,9 +176,10 @@ it is skipped).
 ## Session Context (spec 0039)
 
 `SessionContext` (`app/src/SessionContext.h`) is the session/application ownership split: a
-plain non-QObject, non-copyable class holding nine `unique_ptr` slots — AppState,
-`UI::Dashboard`, `Console::Handler`, `FrameParser`, `FrameBuilder`, `ProjectModel`,
-`IO::PipelineHost`, `IO::ConnectionManager`, `NotificationCenter`. Those classes have private
+plain non-QObject, non-copyable class holding ten `unique_ptr` slots — the message bus plus nine
+modules: AppState, `UI::Dashboard`, `Console::Handler`, `FrameParser`, `FrameBuilder`,
+`ProjectModel`, `IO::PipelineHost`, `IO::ConnectionManager`, `NotificationCenter`. `sealed()` tests
+all ten. Those classes have private
 ctors with `friend class ::SessionContext`; the composition root constructs them via
 `SessionContext::create<T>()` and `adopt*()` inside `instantiateCoreModules()`. The contract:
 
@@ -194,8 +195,10 @@ ctors with `friend class ::SessionContext`; the composition root constructs them
   empty and the pointer non-null; there is no re-adopt.
 - **INV-6: `shutdown()` runs while `qApp` is alive, after the QML engine dies** (`main.cpp`,
   plus the benchmark harness). Never move it into a destructor or atexit path — that
-  reinstates the `__cxa_finalize` teardown-crash class. Release order in `shutdown()` is the
-  exact reverse of the pinned instantiation order; update the two in lockstep.
+  reinstates the `__cxa_finalize` teardown-crash class. `shutdown()` releases the Dashboard first, then
+  `FrameParser`, `Console::Handler`, `ConnectionManager`, `PipelineHost`, `FrameBuilder`,
+  AppState, `ProjectModel`, `NotificationCenter`, the bus last (not the exact reverse of the
+  pinned order: `FrameParser` resets right after the Dashboard); update the two in lockstep.
 - **Never call `SessionContext::current()` from a method body.** The one sanctioned site is the
   composition root: `adopt*()` binds the module's private `s_instance` (`bindInstance()`) and
   `shutdown()` clears it before each release, so the nine `instance()` accessors read a pointer

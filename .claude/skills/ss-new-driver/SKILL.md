@@ -37,7 +37,7 @@ the Setup pane's (a sub-object that writes settings itself gets `setPersistent()
    plus signal forwarding; the bus lookups live in `ConnectionManager/DriverUiRegistry.cpp`
    (`forBusType()`) and the live-instance switch in `ConnectionManager/DriverFactory.cpp`
    (`DriverFactory::create()`, spec 0070). Update both.
-4. `core/Devices/CMakeLists.txt` — add `IO/Drivers/<Name>.cpp` to the source list (sources are
+4. `core/Devices/CMakeLists.txt` — add `IO/Drivers/<Name>.h` and `.cpp` to the source lists (sources are
    listed explicitly, not globbed; commercial drivers go in the guarded
    `if(BUILD_COMMERCIAL)` block).
 5. QML configuration UI — the driver panes are bespoke forms (only the Project Editor renders
@@ -53,16 +53,27 @@ the Setup pane's (a sub-object that writes settings itself gets `setPersistent()
    `#ifdef BUILD_COMMERCIAL` block).
 7. `core/Ui/ProjectEditor/ProjectEditorIcons.h` — add the bus to the `busTypeIcon()`
    switch, and `core/Ui/ProjectEditor/EditorForms.cpp` — add it to the `busTypes`
-   combobox list in the source form model.
-8. Icon — add the driver SVG under `app/rcc/icons/devices/<tier>/` (16/24/32) and register it with a
-   `<file>` entry in `app/rcc/rcc.qrc` (`busTypeIcon()` returns its `qrc:/` path).
-9. CLI (optional) — if it should be launchable headless, add options in `app/src/Misc/CLI.{h,cpp}`
-   following the existing `setupUartConnection` / `setupTcpConnection` pattern.
-10. `tests/utils/api_client.py` (optional) — add the bus to `bus_map` if integration tests should
-    reach it via `io.setBusType` (known drift: `mqtt` is missing from it today).
+   combobox list in the source form model (positional: it must follow enum order), plus the
+   name array in `app/qml/ProjectEditor/Views/FlowDiagram/DiagramIcons.qml` (indexed by enum
+   value).
+8. Icons — icons resolve by name through `Cpp_Misc_IconRegistry.icon("devices", name, size)`,
+   never a `qrc:/` path. Add `app/rcc/iconpacks/basic/devices/{16,24,32}/<name>.png` (plus
+   `@2x`) with `<file>` entries in `app/rcc/basic.qrc`, and
+   `app/rcc/iconpacks/fine-line/devices/48/<name>.svg` in `app/rcc/art-free.qrc`.
+9. QML context and command — `registry.add("Cpp_IO_<Name>", ...)` in
+   `app/src/Misc/ModuleManager.cpp`, the matching name in `core/Ui/Misc/ContextRegistry.cpp`, and
+   a `driver.<bus>` toggle in `app/rcc/commands/app.json` bound in
+   `app/qml/Commands/AppCommandBindings.qml` (`registry-verify.py` checks the pair).
+10. API — a per-driver `io.<bus>.*` handler under `core/Api/API/Handlers/`, registered in
+    `core/Api/API/CommandHandler.cpp` and listed in `core/Api/CMakeLists.txt`.
+11. CLI (optional) — options are declared in `app/src/Misc/CLI.h` and added in `CLI.cpp`; the
+    wiring lives in `app/src/Misc/CLI/CliBusConfig.cpp` (`setupUartConnection` /
+    `setupTcpConnection`) or, for industrial buses, `CliIndustrialConfig.cpp`.
+12. Tests — the bus's slug and label rows in `app/tests/tst_enum_labels.cpp`, and `bus_map` in
+    `tests/utils/api_client.py` if integration tests should reach it via `io.setBusType`.
 
 The list above drifts as the app grows. Before declaring done, grep a recently added bus value
-(e.g. `grep -rn "BusType::HidDevice" app/src core`) and mirror every switch/list it appears in.
+(e.g. `grep -rni "iec104" app core tests scripts`) and mirror every switch/list it appears in.
 
 ## Rules
 
