@@ -1,7 +1,7 @@
 ---
 spec: 0113-material-themes-panel-hardware
 title: Material Themes, the Millennium Theme and Panel-Hardware Controls
-status: in-progress  # approved 2026-11-06 (maintainer, relayed through the session)
+status: done          # draft -> approved -> in-progress -> done | shelved; closed by the maintainer 2026-11-10
 created: 2026-11-06
 author: Alex Spataru
 ---

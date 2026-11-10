@@ -1,7 +1,7 @@
 ---
 spec: 0113-material-themes-panel-hardware
 phase: plan
-status: draft        # not reviewed on its own; see the note under the title
+status: done          # draft -> approved -> in-progress -> done | shelved; closed by the maintainer 2026-11-10
 updated: 2026-11-06
 ---
 
