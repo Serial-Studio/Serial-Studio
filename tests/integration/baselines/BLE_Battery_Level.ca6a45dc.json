@@ -39,7 +39,6 @@
           "graph": false,
           "groupId": 0,
           "index": 1,
-          "led": false,
           "ledHigh": 1,
           "log": false,
           "numericValue": 0,

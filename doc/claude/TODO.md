@@ -59,9 +59,6 @@ With a current build:
 
 - [ ] Spec 0113 T22: the `project.outputWidget.update` and `.get` descriptions now name `style`
   and `labels`; build, then `--dump-api-schema` and `scripts/generate-sdk.py`.
-- [ ] With the app up, recapture what spec 0114 moved:
-  `SS_CAPTURE_BASELINES=1 pytest tests/integration/test_property_registry.py`, then
-  `tests/fixtures/mirror/generate_fixtures.py`.
 - [ ] The tests marked `gui`, which CI deselects: specs 0109 (T19) and 0110 (T22).
 - [ ] `tests/integration/test_uart_sequence.py` with `socat` installed: CI has none, so four of
   its five tests have never run.

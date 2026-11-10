@@ -11,7 +11,7 @@
       0,
       1
     ],
-    "structureBytes": 113549,
+    "structureBytes": 113882,
     "title": "Dual Drone Telemetry"
   },
   "small": {
@@ -25,7 +25,7 @@
     "sourceIds": [
       0
     ],
-    "structureBytes": 11983,
+    "structureBytes": 13518,
     "title": "Lorenz Attractor"
   },
   "wide": {
@@ -39,7 +39,7 @@
     "sourceIds": [
       0
     ],
-    "structureBytes": 28869,
+    "structureBytes": 34666,
     "title": "System Monitor"
   }
 }
