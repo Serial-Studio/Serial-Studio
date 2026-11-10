@@ -45,6 +45,17 @@
 static constexpr int kTerminateGraceMs = 2000;
 
 /**
+ * @brief True where PATH outranks extraSearchPaths(): a Windows app inherits the full user PATH,
+ *        and WindowsApps ahead of it shadows the interpreter a parent put first with the Store's
+ *        python3.exe alias (a stub, or a Python without the user's packages).
+ */
+#ifdef Q_OS_WIN
+static constexpr bool kPathFirst = true;
+#else
+static constexpr bool kPathFirst = false;
+#endif
+
+/**
  * @brief Constructs the launcher with an empty process table and an unbound consent (no project
  *        yet); LaunchConsent applies the headless override.
  */
@@ -159,7 +170,8 @@ int API::ProcessLauncher::launch(const QString& program,
     const QChar sep = QLatin1Char(':');
 #endif
     const QString current = env.value(QStringLiteral("PATH"));
-    env.insert(QStringLiteral("PATH"), extra.join(sep) + sep + current);
+    const QString added   = extra.join(sep);
+    env.insert(QStringLiteral("PATH"), kPathFirst ? current + sep + added : added + sep + current);
     process->setProcessEnvironment(env);
   }
 
@@ -277,15 +289,22 @@ QStringList API::ProcessLauncher::extraSearchPaths()
 }
 
 /**
- * @brief Resolves a bare program name to an absolute path. The common user-install directories
- *        (Homebrew, pyenv, user-local) are searched BEFORE the bare system PATH so the user's
- *        real interpreter with their pip packages wins over the package-less /usr/bin fallback
- *        that a GUI app sees on its minimal PATH.
+ * @brief Resolves a bare program name to an absolute path. On macOS and Linux the user-install
+ *        directories (Homebrew, pyenv, user-local) outrank the minimal PATH a GUI app sees, so
+ *        the interpreter with the user's packages wins; on Windows PATH comes first (kPathFirst).
  */
 QString API::ProcessLauncher::resolveExecutable(const QString& name)
 {
   if (QFileInfo::exists(name))
     return name;
+
+  if (kPathFirst) {
+    const QString onPath = QStandardPaths::findExecutable(name);
+    if (!onPath.isEmpty())
+      return onPath;
+
+    return QStandardPaths::findExecutable(name, extraSearchPaths());
+  }
 
   const QString preferred = QStandardPaths::findExecutable(name, extraSearchPaths());
   if (!preferred.isEmpty())
