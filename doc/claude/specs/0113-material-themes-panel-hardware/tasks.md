@@ -54,8 +54,11 @@ updated: 2026-11-06
   control applies a radius, border, face or indicator colour from it.
 - [ ] **T9** `display` surface (black glass behind plots): declared in the theme, consumed
   nowhere; plots need a second text colour first. The terminal is black glass by colour table.
-- [ ] **T10** `toolbar` and `taskbar` surfaces are colour-table gradients, not `MaterialSurface`
-  sites; the open-tab indicator bar and its glow are not drawn.
+- [x] **T10** (2026-11-10) The toolbar and the taskbar are `MaterialSurface` sites over their
+  colour-table gradients (Millennium's `strip` repeats those colours, so it looks the same; a
+  theme can now give the strip another recipe). The open tab: `Widgets/PanelTab.qml`, a
+  `TabButton` that draws `styles.tab.indicator` as a bar over a soft glow, replaces all 23 tab
+  buttons; no rule, no mark. Not yet seen in the app.
 - [x] **T11** `app/tests` unit for AC2 and AC3: `tst_theme_sections` over
   `Misc::unknownThemeNames` (extracted from `ThemeManager`, which now also warns on an unknown
   material parameter, so a path-like key is named and ignored). AC4's list membership is not

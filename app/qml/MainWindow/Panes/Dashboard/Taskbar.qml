@@ -198,6 +198,14 @@ Item {
   }
 
   //
+  // Theme material over the gradient; loads nothing for a colour-only theme
+  //
+  Widgets.MaterialSurface {
+    surface: "taskbar"
+    anchors.fill: parent
+  }
+
+  //
   // Taskbar components
   //
   RowLayout {

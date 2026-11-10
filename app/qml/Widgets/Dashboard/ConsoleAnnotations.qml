@@ -212,25 +212,25 @@ Item {
       Layout.fillWidth: true
       onCurrentIndexChanged: Cpp_UI_Alarms.playEvent("button")
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Track")
         height: _tabs.height + 3
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Table")
         height: _tabs.height + 3
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Payload")
         height: _tabs.height + 3
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Decoder")
         height: _tabs.height + 3
         width: implicitWidth + 2 * 8

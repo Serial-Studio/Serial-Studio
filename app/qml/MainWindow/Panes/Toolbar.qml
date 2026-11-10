@@ -157,6 +157,15 @@ Rectangle {
   }
 
   //
+  // Theme material over the gradient; loads nothing for a colour-only theme
+  //
+  Widgets.MaterialSurface {
+    surface: "toolbar"
+    anchors.fill: parent
+    anchors.topMargin: root.titlebarHeight
+  }
+
+  //
   // Toolbar border
   //
   Rectangle {

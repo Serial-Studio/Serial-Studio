@@ -326,25 +326,25 @@ Widgets.SmartDialog {
       implicitHeight: 24
       Layout.fillWidth: true
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("General")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Taskbar")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Logging")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Contents")
         height: _tab.height + 3
         visible: root.packageMode

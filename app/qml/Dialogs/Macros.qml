@@ -508,13 +508,13 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             Layout.maximumHeight: 24
 
-            TabButton {
+            Widgets.PanelTab {
               text: qsTr("Terminal")
               width: implicitWidth + 2 * 8
               height: rightTabBar.height + 3
             }
 
-            TabButton {
+            Widgets.PanelTab {
               text: qsTr("Script")
               width: implicitWidth + 2 * 8
               height: rightTabBar.height + 3

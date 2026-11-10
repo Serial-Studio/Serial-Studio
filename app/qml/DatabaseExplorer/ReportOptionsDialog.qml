@@ -221,25 +221,25 @@ Widgets.SmartDialog {
       implicitHeight: 24
       Layout.fillWidth: true
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Branding")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Page")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Sections")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         text: qsTr("Datasets")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8

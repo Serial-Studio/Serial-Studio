@@ -61,7 +61,7 @@ Widgets.SmartDialog {
       Layout.fillWidth: true
       onCurrentIndexChanged: Cpp_UI_Alarms.playEvent("button")
 
-      TabButton {
+      Widgets.PanelTab {
         objectName: "settings.page.general"
 
         text: qsTr("General")
@@ -69,7 +69,7 @@ Widgets.SmartDialog {
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         objectName: "settings.page.startup"
 
         text: qsTr("Startup")
@@ -77,7 +77,7 @@ Widgets.SmartDialog {
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         objectName: "settings.page.plotting"
 
         text: qsTr("Plotting")
@@ -85,7 +85,7 @@ Widgets.SmartDialog {
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         objectName: "settings.page.layout"
 
         text: qsTr("Layout")
@@ -93,7 +93,7 @@ Widgets.SmartDialog {
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         objectName: "settings.page.taskbar"
 
         text: qsTr("Taskbar")
@@ -101,7 +101,7 @@ Widgets.SmartDialog {
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         objectName: "settings.page.console"
 
         text: qsTr("Console")
@@ -109,7 +109,7 @@ Widgets.SmartDialog {
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         objectName: "settings.page.export"
 
         text: qsTr("Export")
@@ -117,7 +117,7 @@ Widgets.SmartDialog {
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         objectName: "settings.page.sounds"
 
         text: qsTr("Sounds")
@@ -125,7 +125,7 @@ Widgets.SmartDialog {
         width: implicitWidth + 2 * 8
       }
 
-      TabButton {
+      Widgets.PanelTab {
         objectName: "settings.page.notifications"
 
         height: _tab.height + 3

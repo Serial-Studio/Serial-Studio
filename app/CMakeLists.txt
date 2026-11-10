@@ -441,6 +441,7 @@ set(QML_SOURCES
   qml/Widgets/MaterialSurface.qml
   qml/Widgets/MenuButton.qml
   qml/Widgets/MenuSurface.qml
+  qml/Widgets/PanelTab.qml
   qml/Widgets/MiniWindow.qml
   qml/Widgets/Pane.qml
   qml/Widgets/PaneSplitter.qml
