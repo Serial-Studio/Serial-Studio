@@ -141,6 +141,16 @@ labelled position per Step from Min to Max. Three positions are Min 0, Max 2, St
 function receives the selected position's value, so a `switch` on it gives each position its
 own payload.
 
+Turn on **Spring Return** for a selector that only holds a position while it is pressed, like a
+jog switch. The position under the pointer, or the one an arrow key moves to, is sent when you
+press. When you let go, the selector goes back to its **Initial Value** position and sends that
+value once. Releasing it at rest sends nothing, and the mouse wheel does not move it.
+
+A selector with a state source shows the position the device reports. The report can be a
+position's value (`2`) or one of the position labels (`Hand`, in any letter case). A report that
+matches no position shows the selector as unknown rather than pointing between two marks.
+Showing a reported position never sends anything.
+
 ## Limits
 
 Min and Max are enforced by the control, before the transmit function runs. A slider, a knob and a Number text field never hand `transmit()` a value outside that range, whether it came from the pointer, the keyboard or an API client driving the dashboard, so the function needs no range check of its own. The slider and knob cannot be moved past either end; a Number field refuses the value and says so.

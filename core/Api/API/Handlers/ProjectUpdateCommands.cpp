@@ -228,6 +228,9 @@ static void applyOutputWidgetFields(DataModel::OutputWidget& w,
   if (take(QStringLiteral("labels")))
     w.positionLabels = params.value(QStringLiteral("labels")).toString();
 
+  if (take(QStringLiteral("springReturn")))
+    w.springReturn = params.value(QStringLiteral("springReturn")).toBool();
+
   if (take(QStringLiteral("style")))
     w.style =
       static_cast<DataModel::OutputWidgetStyle>(params.value(QStringLiteral("style")).toInt());
@@ -381,43 +384,45 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
 
   registry.registerCommand(
     QStringLiteral("project.outputWidget.update"),
-    QStringLiteral("Patch output-widget fields by id (params: groupId, widgetId, plus any "
-                   "of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, "
-                   "checkable, color, size, onLabel, offLabel, minValue, maxValue, "
-                   "stepSize, initialValue, stateSource, stateDatasetId, stateTable, "
-                   "stateVariable, stateOnValue, stateConfirmMs, inputKind, decimals, "
-                   "units, quantize, style, labels, replyTokenDatasetId, replyCodeDatasetId, "
-                   "replyMessageDatasetId). style is 0=standard, 1=illuminated and "
-                   "2=emergency stop for a button (an emergency stop always latches), and "
-                   "3=selector for a knob, with one detent per stepSize from minValue to "
-                   "maxValue named by labels (comma-separated, one per position); a style "
-                   "the control type does not take reverts to standard. A checkable button "
-                   "latches and transmits 1 (on) / 0 (off) like a toggle, instead of "
-                   "pulsing a single value on click; color is a hex fill override (empty "
-                   "= group accent) and size is 0=small, 1=normal, 2=large, 3=extra "
-                   "large. stateSource binds the displayed state to feedback (0=none, "
-                   "1=dataset via stateDatasetId, 2=variable via stateTable/"
-                   "stateVariable); stateOnValue is the value that reads as on (empty = "
-                   "any non-zero) and stateConfirmMs how long a request stays "
-                   "outstanding. The reply ids are dataset uniqueIds (-1 = unbound): the "
-                   "device echoes the token transmit(value, token) was given in the token "
-                   "dataset and reports a result code (0 acknowledges, anything else "
-                   "refuses) with an optional message; token and code must both be set. "
-                   "inputKind is 0=text, 1=number for a text field; a "
-                   "number field, slider and knob enforce minValue to maxValue before "
-                   "transmit() runs and refuse a value outside it as out of range, so a "
-                   "transmitFunction needs no range clamp. decimals (-1 = automatic) and "
-                   "units are display only; quantize snaps a typed number field value to "
-                   "stepSize counted from minValue. The transmitFunction is "
-                   "**JavaScript only** -- runs in QJSEngine to convert UI state into "
-                   "device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} "
-                   "before authoring** for the function signature (transmit(value) "
-                   "returning a Uint8Array / string), the per-widget value semantics, and "
-                   "the injected Modbus/CAN helper globals (modbusWriteRegister / "
-                   "modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat, each with an "
-                   "optional trailing unit 1..247 to write to another unit on the bus / "
-                   "canSendFrame / canSendValue). "
-                   "Validate first with project.outputWidget.dryRun."),
+    QStringLiteral(
+      "Patch output-widget fields by id (params: groupId, widgetId, plus any "
+      "of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, "
+      "checkable, color, size, onLabel, offLabel, minValue, maxValue, "
+      "stepSize, initialValue, stateSource, stateDatasetId, stateTable, "
+      "stateVariable, stateOnValue, stateConfirmMs, inputKind, decimals, "
+      "units, quantize, style, labels, springReturn, replyTokenDatasetId, replyCodeDatasetId, "
+      "replyMessageDatasetId). style is 0=standard, 1=illuminated and "
+      "2=emergency stop for a button (an emergency stop always latches), and "
+      "3=selector for a knob, with one detent per stepSize from minValue to "
+      "maxValue named by labels (comma-separated, one per position) and, with "
+      "springReturn, going back to initialValue (sent once) when let go; a style "
+      "the control type does not take reverts to standard. A checkable button "
+      "latches and transmits 1 (on) / 0 (off) like a toggle, instead of "
+      "pulsing a single value on click; color is a hex fill override (empty "
+      "= group accent) and size is 0=small, 1=normal, 2=large, 3=extra "
+      "large. stateSource binds the displayed state to feedback (0=none, "
+      "1=dataset via stateDatasetId, 2=variable via stateTable/"
+      "stateVariable); stateOnValue is the value that reads as on (empty = "
+      "any non-zero) and stateConfirmMs how long a request stays "
+      "outstanding. The reply ids are dataset uniqueIds (-1 = unbound): the "
+      "device echoes the token transmit(value, token) was given in the token "
+      "dataset and reports a result code (0 acknowledges, anything else "
+      "refuses) with an optional message; token and code must both be set. "
+      "inputKind is 0=text, 1=number for a text field; a "
+      "number field, slider and knob enforce minValue to maxValue before "
+      "transmit() runs and refuse a value outside it as out of range, so a "
+      "transmitFunction needs no range clamp. decimals (-1 = automatic) and "
+      "units are display only; quantize snaps a typed number field value to "
+      "stepSize counted from minValue. The transmitFunction is "
+      "**JavaScript only** -- runs in QJSEngine to convert UI state into "
+      "device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} "
+      "before authoring** for the function signature (transmit(value) "
+      "returning a Uint8Array / string), the per-widget value semantics, and "
+      "the injected Modbus/CAN helper globals (modbusWriteRegister / "
+      "modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat, each with an "
+      "optional trailing unit 1..247 to write to another unit on the bus / "
+      "canSendFrame / canSendValue). "
+      "Validate first with project.outputWidget.dryRun."),
     makeSchema({
       { QStringLiteral("groupId"),QStringLiteral("integer"),QStringLiteral("Target group id")                           },
       {QStringLiteral("widgetId"),

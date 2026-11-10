@@ -339,7 +339,8 @@ void Widgets::Output::Base::refreshState()
   if (!m_stateBinding.bound())
     return;
 
-  const auto verdict  = m_stateBinding.verdict(now);
+  auto verdict = m_stateBinding.verdict(now);
+  adjustVerdict(verdict);
   const bool pending  = m_stateBinding.pending(now);
   const bool announce = verdictDiffers(verdict) || pending != m_statePendingShown;
 
@@ -504,6 +505,15 @@ QVariantMap Widgets::Output::Base::automationState() const
  * @brief Base controls display nothing of their own; each concrete control overrides this.
  */
 void Widgets::Output::Base::applyStateVerdict(const StateBinding::Verdict& verdict)
+{
+  Q_UNUSED(verdict);
+}
+
+/**
+ * @brief Lets a control narrow what counts as a believable report before it is shown; the base
+ *        accepts every verdict the binding produced.
+ */
+void Widgets::Output::Base::adjustVerdict(StateBinding::Verdict& verdict) const
 {
   Q_UNUSED(verdict);
 }
@@ -705,6 +715,7 @@ QVariantMap Widgets::Output::Base::presentation(const DataModel::OutputWidget& c
   map[QStringLiteral("checkable")]    = config.checkable;
   map[QStringLiteral("style")]        = static_cast<int>(config.style);
   map[QStringLiteral("labels")]       = config.positionLabels;
+  map[QStringLiteral("springReturn")] = config.springReturn;
   map[QStringLiteral("hideTitle")]    = config.hideTitle;
   map[QStringLiteral("color")]        = config.color;
   map[QStringLiteral("sizeScale")]    = DataModel::outputSizeScale(config.size);

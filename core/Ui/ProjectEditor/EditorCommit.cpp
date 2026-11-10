@@ -1310,8 +1310,8 @@ void EditorCommit::syncDatasetItemCache(int groupId, int datasetId)
 }
 
 /**
- * @brief Applies the presentation-only fields added with the hardware looks (spec 0113): whether
- *        the title is drawn, and a selector's position labels.
+ * @brief Applies the fields added with the hardware looks (spec 0113): whether the title is
+ *        drawn, a selector's position labels and its spring return.
  */
 static void applyPresentationField(const OutputWidgetItem id,
                                    const QVariant& value,
@@ -1319,6 +1319,8 @@ static void applyPresentationField(const OutputWidgetItem id,
 {
   if (id == kOutputWidget_ShowTitle)
     widget.hideTitle = !value.toBool();
+  else if (id == kOutputWidget_SpringReturn)
+    widget.springReturn = value.toBool();
   else
     widget.positionLabels = value.toString().simplified();
 }
@@ -1356,6 +1358,7 @@ void EditorCommit::applyOutputWidgetField(QStandardItem* item, DataModel::Output
       DataModel::applyStyleChoice(widget, value.toInt());
       break;
     case kOutputWidget_ShowTitle:
+    case kOutputWidget_SpringReturn:
     case kOutputWidget_PositionLabels:
       applyPresentationField(static_cast<OutputWidgetItem>(id.toInt()), value, widget);
       break;

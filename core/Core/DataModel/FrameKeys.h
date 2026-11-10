@@ -168,6 +168,7 @@ inline constexpr KeyView OutputColor("outputColor");
 inline constexpr KeyView OutputSize("outputSize");
 inline constexpr KeyView OutputStyle("outputStyle");
 inline constexpr KeyView OutputPositionLabels("outputLabels");
+inline constexpr KeyView OutputSpringReturn("outputSpringReturn");
 inline constexpr KeyView OutputHideTitle("outputHideTitle");
 inline constexpr KeyView OutputColumns("outputColumns");
 inline constexpr KeyView TransmitFunction("transmitFunction");

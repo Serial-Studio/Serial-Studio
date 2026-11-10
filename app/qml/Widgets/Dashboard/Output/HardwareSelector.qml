@@ -25,8 +25,13 @@ Item {
   property real value: 0
   property var labels: []
   property bool dimmed: false
+  property bool springReturn: false
+  property bool keyHeld: false
 
   signal moved(real value)
+  signal released()
+
+  readonly property bool pressed: area.pressed || root.keyHeld
 
   readonly property real cx: width / 2
   readonly property real cy: height / 2
@@ -78,8 +83,36 @@ Item {
 
   activeFocusOnTab: true
   opacity: root.dimmed ? 0.45 : 1.0
-  Keys.onLeftPressed: root.select(root.position - 1)
-  Keys.onRightPressed: root.select(root.position + 1)
+  Keys.onLeftPressed: (event) => root.stepBy(event, -1)
+  Keys.onRightPressed: (event) => root.stepBy(event, 1)
+  Keys.onReleased: (event) => {
+    if (!root.springReturn || event.isAutoRepeat || !root.keyHeld)
+      return
+
+    if (event.key !== Qt.Key_Left && event.key !== Qt.Key_Right)
+      return
+
+    root.keyHeld = false
+    root.released()
+  }
+
+  //
+  // Arrow keys step one position; a spring-return selector holds it until the key is let go
+  //
+  function stepBy(event, delta) {
+    if (event.isAutoRepeat && root.springReturn)
+      return
+
+    root.keyHeld = root.springReturn
+    root.select(root.position + delta)
+  }
+
+  //
+  // The position a press or click picks: the other one of two, else the nearest mark
+  //
+  function picked(mouse) {
+    return root.count === 2 ? (root.position === 0 ? 1 : 0) : root.nearest(mouse.x, mouse.y)
+  }
 
   Widgets.PanelBezel {
     knurled: false
@@ -220,14 +253,29 @@ Item {
   }
 
   MouseArea {
+    id: area
+
     anchors.fill: parent
-    onClicked: (mouse) => {
+    onPressed: (mouse) => {
       root.forceActiveFocus()
-      if (root.count === 2)
-        root.select(root.position === 0 ? 1 : 0)
-      else
-        root.select(root.nearest(mouse.x, mouse.y))
+      if (root.springReturn)
+        root.select(root.picked(mouse))
     }
-    onWheel: (wheel) => root.select(root.position + (wheel.angleDelta.y > 0 ? 1 : -1))
+    onClicked: (mouse) => {
+      if (!root.springReturn)
+        root.select(root.picked(mouse))
+    }
+    onReleased: {
+      if (root.springReturn)
+        root.released()
+    }
+    onCanceled: {
+      if (root.springReturn)
+        root.released()
+    }
+    onWheel: (wheel) => {
+      if (!root.springReturn)
+        root.select(root.position + (wheel.angleDelta.y > 0 ? 1 : -1))
+    }
   }
 }

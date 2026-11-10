@@ -52,7 +52,7 @@ protected:
 private:
   bool m_checked;
   bool m_checkable;
-  bool m_emergencyStop;
+  DataModel::OutputWidgetStyle m_style;
 };
 
 }  // namespace Output

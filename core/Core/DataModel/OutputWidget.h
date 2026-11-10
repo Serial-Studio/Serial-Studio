@@ -163,7 +163,8 @@ struct alignas(8) OutputWidget {
   OutputInputKind inputKind = OutputInputKind::Text;  ///< Text field: Text or Number (spec 0109)
   int decimals              = -1;  ///< Displayed decimals, -1 = automatic from Step
   QString units;                   ///< Suffix shown beside the value, e.g. "%"
-  bool quantize = false;           ///< Number field: snap a typed value to Step from Min
+  bool quantize     = false;       ///< Number field: snap a typed value to Step from Min
+  bool springReturn = false;       ///< Selector: returns to Initial Value on release
 };
 
 static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned OutputWidget struct");
@@ -233,5 +234,43 @@ struct OutputLimits {
 [[nodiscard]] OutputAdmission admitOutputValue(const OutputLimits& limits,
                                                const QVariant& value,
                                                double& out);
+
+/**
+ * @brief Most detents a selector draws; HardwareSelector.qml applies the same 2 to 12 rule.
+ */
+inline constexpr int kMaxSelectorPositions = 12;
+
+/**
+ * @brief Number of detents a selector shows: one per Step from Min to Max, 2 to 12.
+ */
+[[nodiscard]] int selectorPositionCount(const OutputLimits& limits);
+
+/**
+ * @brief The detent a reported state names (spec 0113 R23): text equal to a position label
+ *        (case-insensitive), or a number on a detent; -1 when no position matches.
+ */
+[[nodiscard]] int selectorPosition(const OutputLimits& limits,
+                                   const QString& labels,
+                                   double value,
+                                   const QString& text);
+
+/**
+ * @brief The value a spring-return selector sends when let go (spec 0113 R22): true with Initial
+ *        Value on its detent in @p out when the knob is elsewhere, false when it already rests.
+ */
+[[nodiscard]] bool selectorReleaseValue(
+  const OutputLimits& limits, bool springReturn, double initialValue, double current, double& out);
+
+/**
+ * @brief The latch a button starts with (spec 0113 R26): an emergency stop is always released, a
+ *        latching button follows Initial Value, a momentary one holds nothing.
+ */
+[[nodiscard]] bool outputStartsLatched(const OutputWidget& w);
+
+/**
+ * @brief True when a latch change skips the pacing window (spec 0113 R26): only an emergency
+ *        stop being pressed; its release is paced like any other change.
+ */
+[[nodiscard]] bool outputSendsUnpaced(OutputWidgetStyle style, bool latched);
 
 }  // namespace DataModel

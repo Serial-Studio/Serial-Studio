@@ -158,6 +158,7 @@ public slots:
 protected:
   [[nodiscard]] QByteArray evaluateTransmitFunction(const QVariant& value, const int token);
   virtual void applyStateVerdict(const StateBinding::Verdict& verdict);
+  virtual void adjustVerdict(StateBinding::Verdict& verdict) const;
   void noteOperatorRequest(const QVariant& value, const int token, const bool bytesSent);
   void sendValueNow(const QVariant& value);
 

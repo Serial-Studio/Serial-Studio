@@ -2639,6 +2639,17 @@ ss_add_unit_test(tst_output_write_limits
           SerialStudio::Core
 )
 
+#
+# The selector and emergency-stop decisions (spec 0113 AC10 to AC12) are pure functions in
+# OutputWidget.cpp: the controls that call them need most of the Ui library and a licence to send.
+#
+ss_add_unit_test(tst_output_hardware_decisions
+  SOURCES tst_output_hardware_decisions.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          SerialStudio::Core
+)
+
 ss_add_unit_test(tst_transmit_script_check
   SOURCES tst_transmit_script_check.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/TransmitScriptCheck.cpp

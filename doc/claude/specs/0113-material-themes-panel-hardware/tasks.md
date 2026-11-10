@@ -131,8 +131,11 @@ updated: 2026-11-06
 - [x] **T22** Regenerate `app/rcc/api/api-schema.json` with `--dump-api-schema`, then
   `scripts/generate-sdk.py`. The two commands' descriptions name `style` and `labels`; dumped
   2026-11-10, the SDKs came out unchanged (descriptions only).
-- [ ] **T23** Units for AC12 (latch, guard, unpaced press) and a `style` case in
-  `tst_frame_serialization`.
+- [x] **T23** Units for AC12 and a `style` case in `tst_frame_serialization` (2026-11-10). A
+  `Button` cannot be built in a unit (its link set is most of the Ui library and delivery is
+  licence-gated), so the starting latch and the unpaced press are Core decisions
+  (`outputStartsLatched`, `outputSendsUnpaced`) pinned by `tst_output_hardware_decisions`. The
+  double-press guard is QML (`HardwareEmergencyStop.actuate`) and stays a maintainer observation.
 - [ ] **T24** Lit illuminated button and emergency stop are not `HdrBoost` targets yet.
 - [ ] **T25** Toggle styles (Lever switch, Rotary selector) and the knob's hardware look.
 - [x] **T26** Selector, built as a knob style instead of a new control type (maintainer asked
@@ -142,8 +145,11 @@ updated: 2026-11-06
   Style and Position Labels editor rows, `style` and `labels` in the API. Compiled in the
   maintainer's Qt Creator build; rendered in the harness with 2, 3 and 6 positions. Not yet
   seen in the app on a real control.
-- [ ] **T26b** Selector leftovers: spring return to centre (R22), per-position state feedback
-  beyond the knob's numeric feedback (R23), unit tests (AC10, AC11), help page text.
+- [x] **T26b** Selector leftovers (2026-11-10). R22 as amended by the maintainer: a Spring Return
+  checkbox (`outputSpringReturn`, written only when on) returns to Initial Value on release and
+  sends it once; the selector picks on press and the wheel is off. R23: a report selects a
+  position by value or label, anything else is unknown (`Base::adjustVerdict`). AC10 and AC11 in
+  `tst_output_hardware_decisions`; help and the AI skill updated. Not yet seen in the app.
 - [ ] **T27** The hardware looks are plain `Item`s: confirm the automation catalogue reports
   them as buttons, or pin a role for them (`tst_ui_automation`).
 - [x] **T28** Translations for the new strings (maintainer's `lupdate` pass, 2026-11-10).

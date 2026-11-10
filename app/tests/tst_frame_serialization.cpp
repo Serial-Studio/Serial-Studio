@@ -62,6 +62,9 @@ private slots:
   void outputWidgetRoundTripsEveryField();
   void outputWidgetWithoutATitleIsRejected();
   void outputWidgetDefaultsOmitTheWriteLimitKeys();
+  void outputWidgetStyleRoundTripsPerType();
+  void outputWidgetStandardStyleOmitsTheStyleKey();
+  void outputWidgetNormalizeDropsAStyleTheTypeCannotShow();
   void outputWidgetReplyBindingRoundTrips();
   void outputWidgetUnboundReplyWritesNoReplyKeys();
   void outputWidgetIdentityIsAssignedByTheGroupReader();
@@ -454,6 +457,92 @@ void TstFrameSerialization::outputWidgetDefaultsOmitTheWriteLimitKeys()
   QCOMPARE(restored->decimals, -1);
   QVERIFY(restored->units.isEmpty());
   QVERIFY(!restored->quantize);
+}
+
+/**
+ * @brief Every non-Standard style survives the file under the type it is valid for, with the
+ *        selector's position labels, so a saved emergency stop or selector never reloads as a
+ *        plain control (spec 0113).
+ */
+void TstFrameSerialization::outputWidgetStyleRoundTripsPerType()
+{
+  OutputWidget button;
+  button.title = QStringLiteral("Light");
+  button.type  = OutputWidgetType::Button;
+  button.style = OutputWidgetStyle::Illuminated;
+
+  const auto lit = fromJson<OutputWidget>(toJson(button));
+  QVERIFY(lit.has_value());
+  QCOMPARE(lit->style, OutputWidgetStyle::Illuminated);
+
+  button.title = QStringLiteral("Stop");
+  button.style = OutputWidgetStyle::EmergencyStop;
+
+  const auto stop = fromJson<OutputWidget>(toJson(button));
+  QVERIFY(stop.has_value());
+  QCOMPARE(stop->style, OutputWidgetStyle::EmergencyStop);
+  QVERIFY(stop->checkable);
+
+  OutputWidget knob;
+  knob.title          = QStringLiteral("Mode");
+  knob.type           = OutputWidgetType::Knob;
+  knob.style          = OutputWidgetStyle::Selector;
+  knob.positionLabels = QStringLiteral("Off,Auto,Hand");
+  knob.springReturn   = true;
+
+  const auto selector = fromJson<OutputWidget>(toJson(knob));
+  QVERIFY(selector.has_value());
+  QCOMPARE(selector->style, OutputWidgetStyle::Selector);
+  QCOMPARE(selector->positionLabels, QStringLiteral("Off,Auto,Hand"));
+  QVERIFY(selector->springReturn);
+}
+
+/**
+ * @brief A Standard widget writes no style key, so a project saved before spec 0113 reads back and
+ *        saves byte-identical (R28).
+ */
+void TstFrameSerialization::outputWidgetStandardStyleOmitsTheStyleKey()
+{
+  OutputWidget w;
+  w.title = QStringLiteral("Throttle");
+  w.style = OutputWidgetStyle::Standard;
+
+  QVERIFY(!toJson(w).contains(Keys::OutputStyle));
+  QVERIFY(!toJson(w).contains(Keys::OutputSpringReturn));
+
+  w.title = QStringLiteral("Lamp");
+  w.type  = OutputWidgetType::Button;
+  w.style = OutputWidgetStyle::Illuminated;
+  QVERIFY(toJson(w).contains(Keys::OutputStyle));
+}
+
+/**
+ * @brief A style the widget's type cannot draw falls back to Standard, so a hand-edited file
+ *        cannot give a Button the selector's chrome, and an emergency stop is forced checkable.
+ */
+void TstFrameSerialization::outputWidgetNormalizeDropsAStyleTheTypeCannotShow()
+{
+  OutputWidget w;
+  w.title        = QStringLiteral("Mismatch");
+  w.type         = OutputWidgetType::Button;
+  w.style        = OutputWidgetStyle::Selector;
+  w.springReturn = true;
+  normalize(w);
+  QCOMPARE(w.style, OutputWidgetStyle::Standard);
+  QVERIFY(!w.springReturn);
+
+  w.type      = OutputWidgetType::Knob;
+  w.style     = OutputWidgetStyle::EmergencyStop;
+  w.checkable = false;
+  normalize(w);
+  QCOMPARE(w.style, OutputWidgetStyle::Standard);
+
+  w.type      = OutputWidgetType::Button;
+  w.style     = OutputWidgetStyle::EmergencyStop;
+  w.checkable = false;
+  normalize(w);
+  QCOMPARE(w.style, OutputWidgetStyle::EmergencyStop);
+  QVERIFY(w.checkable);
 }
 
 /**

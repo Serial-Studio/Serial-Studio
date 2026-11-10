@@ -39,13 +39,19 @@ public:
   [[nodiscard]] double currentValue() const noexcept;
 
 public slots:
+  void release();
   void setCurrentValue(double value);
 
 protected:
+  void adjustVerdict(StateBinding::Verdict& verdict) const override;
   void applyStateVerdict(const StateBinding::Verdict& verdict) override;
 
 private:
+  bool m_selector;
+  bool m_springReturn;
   double m_currentValue;
+  double m_initialValue;
+  QString m_labels;
 };
 
 }  // namespace Output

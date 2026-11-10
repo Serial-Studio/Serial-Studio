@@ -175,8 +175,9 @@ static void appendTextRow(QStandardItemModel* model,
 }
 
 /**
- * @brief Appends the knob's style row and, for a selector, its position labels. A selector has
- *        one detent per Step from Min to Max, so three positions are Min 0, Max 2, Step 1.
+ * @brief Appends the knob's style row and, for a selector, its position labels and spring return.
+ *        A selector has one detent per Step from Min to Max, so three positions are Min 0, Max 2,
+ *        Step 1; a spring-return selector rests at Initial Value.
  */
 static void appendSelectorRows(QStandardItemModel* model, const DataModel::OutputWidget& widget)
 {
@@ -200,14 +201,23 @@ static void appendSelectorRows(QStandardItemModel* model, const DataModel::Outpu
                 ParameterDescription);
   model->appendRow(item);
 
-  if (selector)
-    appendTextRow(
-      model,
-      widget.positionLabels,
-      kOutputWidget_PositionLabels,
-      QCoreApplication::translate("DataModel::ProjectEditor", "Position Labels"),
-      QCoreApplication::translate("DataModel::ProjectEditor",
-                                  "Comma-separated, one per position (Off, Low, High)"));
+  if (!selector)
+    return;
+
+  appendTextRow(model,
+                widget.positionLabels,
+                kOutputWidget_PositionLabels,
+                QCoreApplication::translate("DataModel::ProjectEditor", "Position Labels"),
+                QCoreApplication::translate("DataModel::ProjectEditor",
+                                            "Comma-separated, one per position (Off, Low, High)"));
+  appendRow(model,
+            CheckBox,
+            widget.springReturn,
+            kOutputWidget_SpringReturn,
+            QCoreApplication::translate("DataModel::ProjectEditor", "Spring Return"),
+            QCoreApplication::translate(
+              "DataModel::ProjectEditor",
+              "When let go, return to the Initial Value position and send it once"));
 }
 
 /**

@@ -86,22 +86,24 @@ void API::Handlers::ProjectOutputWidgetCommands::registerCommands()
 
   registry.registerCommand(
     QStringLiteral("project.outputWidget.get"),
-    QStringLiteral("Read the current configuration of an output widget "
-                   "(params: groupId, widgetId). Returns title, icon, type, "
-                   "checkable, color, size, on/offLabel, min/max/step/initialValue, "
-                   "transmitFunction, and the state binding (stateSource with its "
-                   "stateDatasetId or stateTable/stateVariable, stateOnValue, "
-                   "stateConfirmMs) when one is set, and the reply binding "
-                   "(replyTokenDatasetId, replyCodeDatasetId, replyMessageDatasetId, with "
-                   "stateConfirmMs) when one is set. Also returns inputKind "
-                   "(0=text, 1=number; a text field only), decimals (-1 = automatic), "
-                   "units and quantize, the style (0=standard, 1=illuminated button, "
-                   "2=emergency stop, 3=selector knob) and labels (the selector's "
-                   "comma-separated position labels): a slider, a knob and a number field refuse a "
-                   "value outside minValue to maxValue as out of range, so read these "
-                   "before driving a control. Use BEFORE "
-                   "rewriting the transmitFunction so you preserve the user's "
-                   "current ranges and labels."),
+    QStringLiteral(
+      "Read the current configuration of an output widget "
+      "(params: groupId, widgetId). Returns title, icon, type, "
+      "checkable, color, size, on/offLabel, min/max/step/initialValue, "
+      "transmitFunction, and the state binding (stateSource with its "
+      "stateDatasetId or stateTable/stateVariable, stateOnValue, "
+      "stateConfirmMs) when one is set, and the reply binding "
+      "(replyTokenDatasetId, replyCodeDatasetId, replyMessageDatasetId, with "
+      "stateConfirmMs) when one is set. Also returns inputKind "
+      "(0=text, 1=number; a text field only), decimals (-1 = automatic), "
+      "units and quantize, the style (0=standard, 1=illuminated button, "
+      "2=emergency stop, 3=selector knob) and labels (the selector's "
+      "comma-separated position labels, springReturn when it returns to initialValue on "
+      "release): a slider, a knob and a number field refuse a "
+      "value outside minValue to maxValue as out of range, so read these "
+      "before driving a control. Use BEFORE "
+      "rewriting the transmitFunction so you preserve the user's "
+      "current ranges and labels."),
     makeSchema({
       { QStringLiteral("groupId"),QStringLiteral("integer"),QStringLiteral("Owning group id")                 },
       {QStringLiteral("widgetId"),
@@ -258,6 +260,7 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetGet
   result[QStringLiteral("checkable")]        = w.checkable;
   result[QStringLiteral("style")]            = static_cast<int>(w.style);
   result[QStringLiteral("labels")]           = w.positionLabels;
+  result[QStringLiteral("springReturn")]     = w.springReturn;
   result[QStringLiteral("showTitle")]        = !w.hideTitle;
   result[QStringLiteral("color")]            = w.color;
   result[QStringLiteral("size")]             = static_cast<int>(w.size);

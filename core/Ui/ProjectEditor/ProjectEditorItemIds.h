@@ -133,6 +133,7 @@ typedef enum {
   kOutputWidget_Style,
   kOutputWidget_PositionLabels,
   kOutputWidget_ShowTitle,
+  kOutputWidget_SpringReturn,
 } OutputWidgetItem;
 
 /**

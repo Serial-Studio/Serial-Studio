@@ -21,6 +21,7 @@
 
 #include "Core/DataModel/OutputWidget.h"
 
+#include <algorithm>
 #include <cmath>
 #include <QDebug>
 #include <utility>
@@ -66,6 +67,9 @@ void DataModel::normalize(OutputWidget& w)
 
   if (w.style == OutputWidgetStyle::EmergencyStop)
     w.checkable = true;
+
+  if (w.style != OutputWidgetStyle::Selector)
+    w.springReturn = false;
 
   const int encoding = w.txEncoding;
   w.txEncoding       = qBound(0, encoding, static_cast<int>(SerialStudio::EncEucKr));
@@ -187,6 +191,115 @@ DataModel::OutputAdmission DataModel::admitOutputValue(const OutputLimits& limit
 }
 
 //--------------------------------------------------------------------------------------------------
+// Selector and emergency-stop decisions (spec 0113)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief One detent per Step from Min to Max, held to 2 to 12 so a degenerate range still draws a
+ *        switch; the same rule HardwareSelector.qml draws by.
+ */
+int DataModel::selectorPositionCount(const OutputLimits& limits)
+{
+  SS_ASSERT(std::isfinite(limits.minValue) && std::isfinite(limits.maxValue), return 2);
+  SS_ASSERT(std::isfinite(limits.stepSize), return 2);
+
+  const double step = std::max(limits.stepSize, 1e-9);
+  const double span = std::round((limits.maxValue - limits.minValue) / step);
+  const double n    = std::isfinite(span) ? span + 1 : 2;
+  return static_cast<int>(std::clamp(n, 2.0, static_cast<double>(kMaxSelectorPositions)));
+}
+
+/**
+ * @brief Matches a label first, so a device reporting "Auto" selects the Auto position; a text
+ *        that is not a number and names no label matches nothing, rather than its parsed zero.
+ *        A number matches only when it sits on a detent inside the drawn range.
+ */
+int DataModel::selectorPosition(const OutputLimits& limits,
+                                const QString& labels,
+                                const double value,
+                                const QString& text)
+{
+  const int count = selectorPositionCount(limits);
+  SS_ASSERT(count >= 2 && count <= kMaxSelectorPositions, return -1);
+
+  const auto reported = text.trimmed();
+  const auto names    = labels.split(QLatin1Char(','));
+  const int named     = std::min(count, static_cast<int>(names.size()));
+  for (int i = 0; i < named && !reported.isEmpty(); ++i)
+    if (names[i].trimmed().compare(reported, Qt::CaseInsensitive) == 0)
+      return i;
+
+  bool numeric = true;
+  if (!reported.isEmpty())
+    (void)SerialStudio::toDouble(reported, &numeric);
+
+  if (!numeric || !std::isfinite(value))
+    return -1;
+
+  const double step  = std::max(limits.stepSize, 1e-9);
+  const double index = std::round((value - limits.minValue) / step);
+  SS_ASSERT(std::isfinite(index), return -1);
+  if (index < 0 || index >= count)
+    return -1;
+
+  const double detent = limits.minValue + index * step;
+  if (std::abs(detent - value) > step * 1e-6)
+    return -1;
+
+  return static_cast<int>(index);
+}
+
+/**
+ * @brief The rest position is Initial Value on its detent; letting go anywhere else returns there
+ *        and sends it once, and letting go at rest sends nothing.
+ */
+bool DataModel::selectorReleaseValue(const OutputLimits& limits,
+                                     const bool springReturn,
+                                     const double initialValue,
+                                     const double current,
+                                     double& out)
+{
+  SS_ASSERT(std::isfinite(limits.minValue) && std::isfinite(limits.stepSize), return false);
+  if (!springReturn)
+    return false;
+
+  const int count   = selectorPositionCount(limits);
+  const double step = std::max(limits.stepSize, 1e-9);
+  const double raw  = std::isfinite(initialValue) ? (initialValue - limits.minValue) / step : 0;
+  const double rest = limits.minValue + std::clamp(std::round(raw), 0.0, count - 1.0) * step;
+  SS_ASSERT(std::isfinite(rest), return false);
+  if (std::abs(rest - current) <= step * 1e-6)
+    return false;
+
+  out = rest;
+  return true;
+}
+
+/**
+ * @brief An emergency stop never starts latched, whatever Initial Value says: a dashboard that
+ *        opened already stopped would hide that nothing was sent.
+ */
+bool DataModel::outputStartsLatched(const OutputWidget& w)
+{
+  SS_ASSERT_LOG(std::isfinite(w.initialValue));
+  SS_ASSERT_LOG(w.style != OutputWidgetStyle::EmergencyStop || w.type == OutputWidgetType::Button);
+  if (w.style == OutputWidgetStyle::EmergencyStop)
+    return false;
+
+  return w.checkable && w.initialValue != 0;
+}
+
+/**
+ * @brief A stop press must never wait behind the pacing window; everything else keeps it.
+ */
+bool DataModel::outputSendsUnpaced(const OutputWidgetStyle style, const bool latched)
+{
+  SS_ASSERT_LOG(static_cast<int>(style) >= 0);
+  SS_ASSERT_LOG(style <= OutputWidgetStyle::Selector);
+  return style == OutputWidgetStyle::EmergencyStop && latched;
+}
+
+//--------------------------------------------------------------------------------------------------
 // JSON serialization
 //--------------------------------------------------------------------------------------------------
 
@@ -223,6 +336,7 @@ bool DataModel::read(OutputWidget& w, const QJsonObject& obj)
   w.stateVariable         = ss_jsr(obj, Keys::OutputStateVariable, "").toString().simplified();
   w.stateOnValue          = ss_jsr(obj, Keys::OutputStateOnValue, "").toString();
   w.positionLabels        = ss_jsr(obj, Keys::OutputPositionLabels, "").toString().simplified();
+  w.springReturn          = ss_jsr(obj, Keys::OutputSpringReturn, false).toBool();
   w.stateConfirmMs        = ss_jsr(obj, Keys::OutputStateConfirmMs, 3000).toInt();
   w.replyTokenDatasetId   = ss_jsr(obj, Keys::OutputReplyTokenId, -1).toInt();
   w.replyCodeDatasetId    = ss_jsr(obj, Keys::OutputReplyCodeId, -1).toInt();
@@ -276,6 +390,9 @@ QJsonObject DataModel::serialize(const OutputWidget& w)
 
   if (!w.positionLabels.isEmpty())
     obj.insert(Keys::OutputPositionLabels, w.positionLabels);
+
+  if (w.springReturn)
+    obj.insert(Keys::OutputSpringReturn, true);
 
   obj.insert(Keys::TransmitFunction, w.transmitFunction);
   obj.insert(Keys::OutputTxEncoding, w.txEncoding);

@@ -43,7 +43,10 @@ Each widget has:
   An on-screen emergency stop is a command over the data link, never a
   substitute for a hardwired one
 - `style` 3 on a knob is a rotary selector: one position per `stepSize` from
-  `minValue` to `maxValue`, named by `labels` (comma-separated)
+  `minValue` to `maxValue`, named by `labels` (comma-separated). With
+  `springReturn` true it holds a position only while pressed and, when let go,
+  returns to `initialValue` and sends it once. State feedback matches a
+  position's value or label; anything else shows unknown
 - `color`: hex fill override for the control; empty = group accent color
 - `size`: 0 = small, 1 = normal, 2 = large, 3 = extra large
 - `onLabel`, `offLabel`: captions for a latching button or a toggle

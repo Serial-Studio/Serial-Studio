@@ -24,13 +24,10 @@ Widgets::Output::Button::Button(const DataModel::OutputWidget& config,
                                 TransmitTarget target,
                                 QQuickItem* parent)
   : Base(config, std::move(target), parent)
-  , m_checked(config.checkable && config.initialValue != 0)
+  , m_checked(DataModel::outputStartsLatched(config))
   , m_checkable(config.checkable)
-  , m_emergencyStop(config.style == DataModel::OutputWidgetStyle::EmergencyStop)
-{
-  if (m_emergencyStop)
-    m_checked = false;
-}
+  , m_style(config.style)
+{}
 
 //--------------------------------------------------------------------------------------------------
 // Property getters
@@ -77,7 +74,7 @@ void Widgets::Output::Button::setChecked(bool checked)
     Q_EMIT checkedChanged();
   }
 
-  if (m_emergencyStop && m_checked)
+  if (DataModel::outputSendsUnpaced(m_style, m_checked))
     sendValueNow(1);
   else
     sendValue(m_checked ? 1 : 0);

@@ -45,6 +45,8 @@ OutputValueControl {
       Layout.fillHeight: true
 
       sourceComponent: HardwareSelector {
+        id: selectorPart
+
         to: root.to
         from: root.from
         step: root.step
@@ -52,8 +54,17 @@ OutputValueControl {
         value: root.desiredValue
         labels: root.positionLabels
         objectName: root.idPrefix.length > 0 ? root.idPrefix + ".knob" : ""
+        springReturn: root.widget ? root.widget.springReturn === true : false
 
         onMoved: (value) => root.commitMove(value)
+        onReleased: {
+          if (root.model)
+            root.model.release()
+        }
+        onPressedChanged: {
+          if (selectorPart.springReturn)
+            root.trackPress(selectorPart)
+        }
       }
     }
 
