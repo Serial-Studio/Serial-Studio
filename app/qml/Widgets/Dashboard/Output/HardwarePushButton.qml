@@ -93,6 +93,18 @@ Item {
         x: root.cx + root.ring * 0.785
       }
     }
+  }
+
+  //
+  // The head on its own shape, so a lit head can be the HDR target without its socket
+  //
+  Shape {
+    id: head
+
+    smooth: true
+    antialiasing: true
+    anchors.fill: parent
+    preferredRendererType: Shape.CurveRenderer
 
     ShapePath {
       strokeColor: Qt.darker(root.face, 1.45)
@@ -125,6 +137,13 @@ Item {
         x: root.cx + root.headRadius
       }
     }
+  }
+
+  Widgets.HdrBoost {
+    target: head
+    anchors.fill: parent
+    active: root.illuminated && root.lit
+    boost: Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
   }
 
   //

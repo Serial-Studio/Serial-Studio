@@ -138,7 +138,10 @@ updated: 2026-11-06
   licence-gated), so the starting latch and the unpaced press are Core decisions
   (`outputStartsLatched`, `outputSendsUnpaced`) pinned by `tst_output_hardware_decisions`. The
   double-press guard is QML (`HardwareEmergencyStop.actuate`) and stays a maintainer observation.
-- [ ] **T24** Lit illuminated button and emergency stop are not `HdrBoost` targets yet.
+- [x] **T24** The lit illuminated push button's head is its own `Shape` and an `HdrBoost`
+  target on the steady tier (2026-11-10). The emergency stop is deliberately not boosted:
+  it is not a lamp, its latch is shown by depth, and a glowing pressed head would read as
+  the opposite of stopped. Not yet seen in the app.
 - [ ] **T25** Toggle styles (Lever switch, Rotary selector) and the knob's hardware look.
 - [x] **T26** Selector, built as a knob style instead of a new control type (maintainer asked
   for selector knobs with two, three or n labelled positions, 2026-11-06): `Selector` style,
