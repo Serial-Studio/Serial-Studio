@@ -52,8 +52,6 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
   maintainer's decision.
 - [ ] Spec 0099 deferrals: span-lane writeback (T3, benchmark-gated) and ZMODEM backpressure and
   ZEOF timing (T15, needs a cross-layer HAL drain API). Briefs in its `findings.md`.
-- [ ] Close-out that needs no build: spec 0103 T39 to T42 (hotpath re-read, C++ review, docs
-  sweep, sanitize and close), and the review and handoff of specs 0093 (T16) and 0105 (T18).
 - [ ] Spec 0104 consolidation quarter, T3 to T19 in its `tasks.md`. T10 reads on 2026-12-01 and
   T14 on 2027-01-01.
 - [ ] A `LicenseStateChanged` lands about 0.4 s after an operator-mode auto-connect and re-syncs
@@ -99,9 +97,8 @@ Observations by hand:
 - [ ] Connect a project with several devices while one endpoint is down, and check the
   notification and the `sources` list of `io.getStatus`.
 - [ ] Screenshots: spec 0113 AC1 and the spec 0114 CAN Bus example before and after (AC4).
-- [ ] Walks and rigs: specs 0093 (T15) and 0105 (T17) in the editor, spec 0097 T22 (audio rig and
-  AC10 side by side), the observations in specs 0108 (T26), 0109 (AC4), 0110 (AC5, on a board)
-  and 0115 (T22).
+- [ ] Walks and rigs: spec 0097 T22 (audio rig and AC10 side by side), the observations in specs
+  0108 (T26), 0109 (AC4), 0110 (AC5, on a board) and 0115 (T22).
 - [ ] Spec 0111 T60, steps 5 and 6: measure `MPU6050.ino` and the declared sketch on an Uno (AC6),
   and send a declaration line to the first 0106 release (AC8). CI compiles only `Minimal`, so the
   two declared example sketches have never been compiled.

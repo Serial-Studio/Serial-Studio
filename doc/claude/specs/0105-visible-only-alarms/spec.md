@@ -1,7 +1,7 @@
 ---
 spec: 0105-visible-only-alarms
 title: Alarms only while visible
-status: in-progress  # approved 2026-10-28; implementation started 2026-10-28
+status: done  # approved 2026-10-28; implementation started 2026-10-28; closed 2026-11-09
 approved: 2026-10-28 # visibility rule, reveal rules, key and label, live toggle, API state decided
 created: 2026-10-28
 author: Alex Spataru
@@ -152,7 +152,7 @@ base.
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R2, R3, R6)** — A unit test tabulates the rule over option on/off, visible/hidden,
+- [x] **AC1 (R2, R3, R6)** — A unit test tabulates the rule over option on/off, visible/hidden,
   Suppress Alarms on/off and applicable/not: only {option on, visible, not suppressed,
   applicable} and {option off, not suppressed, applicable} alarm; the drawn-bands table of spec
   0093 AC1 is unchanged by the option.
@@ -166,7 +166,7 @@ base.
   widget through the window-state command removes the point within a second; restoring it
   raises the point again. The same holds for minimizing and restoring the whole window where the
   API can drive it.
-- [ ] **AC5 (R2)** — Maintainer observation with two dashboard windows: the point exists while
+- [x] **AC5 (R2)** — Maintainer observation with two dashboard windows: the point exists while
   the marked dataset's workspace is the active tab of either window, and disappears when neither
   shows it; a popped-out widget keeps it while the pop-out is open; switching the main window to
   the Console pane while it is the only window showing the workspace removes the point, and
@@ -179,20 +179,20 @@ base.
   brings the point back while the value is still in the band.
 - [x] **AC6 (R6)** — Integration: the AC2 dataset with both options on raises no point visible or
   hidden; its gauge still shows the band colour.
-- [ ] **AC7 (R7)** — Integration: with the master enable off, a project whose only bands sit on a
+- [x] **AC7 (R7)** — Integration: with the master enable off, a project whose only bands sit on a
   marked, hidden dataset still reports the alarms-disabled finding.
-- [ ] **AC8 (R8, R10)** — Integration: the option set through the API is present in the exported
+- [x] **AC8 (R8, R10)** — Integration: the option set through the API is present in the exported
   project and survives a reload; a project that never set it exports without the key; the
   existing serialization round-trip units stay green.
-- [ ] **AC9 (R9)** — Maintainer observation in the running editor: the checkbox appears beside
+- [x] **AC9 (R9)** — Maintainer observation in the running editor: the checkbox appears beside
   Suppress Alarms for a Gauge with bands and is absent otherwise; a multi-selection whose members
   disagree shows Mixed; toggling is one undo step; the Alarm Bands button stays enabled.
 - [x] **AC10 (R11)** — The documentation, terminology and claim checks pass with the reworded
   contract.
-- [ ] **AC11 (R5, constraint)** — Nothing runs per frame on the acquisition pipeline and the
+- [x] **AC11 (R5, constraint)** — Nothing runs per frame on the acquisition pipeline and the
   hotpath benchmark gate is unchanged; the existing band-entry integration tests stay green with
   no change to the workspace.
-- [ ] **AC12 (motivating case)** — The APU test cell project, with its GTCP85 tier marked and the
+- [x] **AC12 (motivating case)** — The APU test cell project, with its GTCP85 tier marked and the
   APS500 simulator profile running, raises no GTCP85 point while the APS500 workspace is shown
   and raises the GTCP85 Oil Temperature point within a second of switching to the GTCP85 tab.
 

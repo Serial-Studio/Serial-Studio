@@ -397,7 +397,10 @@ updated: 2026-10-06
   after 41, nothing renumbered or dropped versus HEAD. **ctest blocked:** that build has
   `SS_BUILD_TESTS` off (CI's unit tier is `-DSS_BUILD_TESTS=ON`, `ctest` under
   `QT_QPA_PLATFORM=offscreen`), and it has no compile database for `syntax-check.py`.
-- [ ] done
+- **Close-out (2026-11-09):** ctest answered by CI run 42708945583 (`2aa8879a4`, Linux x86_64):
+  221 of 221 pass, `tst_alarm_band_applicability`, `tst_frame_serialization`,
+  `tst_frame_json_legacy` and `tst_annunciator_sequence` among them.
+- [x] done
 
 ### T15 — Live run and editor walk (AC7, AC14)
 
@@ -418,7 +421,9 @@ updated: 2026-10-06
   rerun once it was answered. Enable Sounds was off, so AC6 and AC15 ran rather than
   skipped. AC2, AC3, AC4, AC5, AC6, AC10, AC11, AC13 and AC15 are ticked in `spec.md`. AC8's
   integration half passed; its unit half waits on ctest. Remaining: the AC7 and AC14 walk.
-- [ ] done
+- **Close-out (2026-11-09):** the maintainer reported the build and the editor walks done; AC7
+  and AC14 are ticked on that report, not observed from a session.
+- [x] done
 
 ### T16 — Review and handoff
 
@@ -446,24 +451,30 @@ updated: 2026-10-06
   flag missed edits that emit no `groupsChanged`) closed by moving T21 to the 1 Hz tick on
   the maintainer's decision. The snapshot item is T14. Final sweep: 23 files lint-clean,
   censuses flat, generator and registry clean, no format drift, 38 tests collect.
+- **Close-out (2026-11-09):** `qt-qml-review` on the three-file QML diff (`DatasetView.qml`,
+  `MultiSelectionView.qml`, `ProjectEditorMenuBindings.qml`): lint 0 errors, no findings. The
+  menu's `datasetHasTransform()` binding cannot go stale because `clearTarget()` resets the ids on
+  every close. Counterfactual re-run on today's tree: the drawn-bands rule lives in
+  `WidgetResolution.cpp` and the editor reads it only through `alarmBandsApplicable`. The two
+  investigation targets above stay recorded, unchanged in code.
 - **Deps:** T15
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
   `--tu-census --check` and `--singleton-census --check` show no growth.
-- [ ] `scripts/syntax-check.py` passed on every edited C++ file, or each SKIP is named.
-- [ ] `qt-cpp-review` and `qt-qml-review` run on the diff; findings addressed or noted.
-- [ ] Hotpath not touched: no edit to `Dashboard`, `FrameBuilder`, `FrameReader` or
+- [x] `scripts/syntax-check.py` passed on every edited C++ file, or each SKIP is named.
+- [x] `qt-cpp-review` and `qt-qml-review` run on the diff; findings addressed or noted.
+- [x] Hotpath not touched: no edit to `Dashboard`, `FrameBuilder`, `FrameReader` or
   `CircularBuffer`, and the rule is not called from `evaluateAlarms`.
-- [ ] `tst_alarm_band_applicability` and both integration suites pass (T14, T15).
-- [ ] `registry-verify.py` and `generate-property-registry.py --check` are clean, and
+- [x] `tst_alarm_band_applicability` and both integration suites pass (T14, T15).
+- [x] `registry-verify.py` and `generate-property-registry.py --check` are clean, and
   `api-schema.json` is refreshed from a build so CI's strict snapshot check passes.
-- [ ] The generated API files shared with spec 0094 are committed consistently with their
+- [x] The generated API files shared with spec 0094 are committed consistently with their
   inputs: both specs together, or the second one regenerated on top of the first.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that*: no example project, no `.ts` / `.qm`, no file
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that*: no example project, no `.ts` / `.qm`, no file
   outside the plan's table.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

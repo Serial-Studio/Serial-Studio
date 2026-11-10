@@ -357,7 +357,10 @@ updated: 2026-10-28
   verbs); `sanitize-commit.py` then regenerated the SDK, command strings, registry, ledger,
   typed proto and search index: `alarmsWhileVisible = 44` appended after 43, nothing
   renumbered; `--check-snapshot --strict` passes (41 dataset fields). ctest pending.
-- [ ] done
+- **Close-out (2026-11-09):** ctest answered by CI run 42708945583 (`2aa8879a4`, Linux x86_64):
+  221 of 221 pass, `tst_alarm_band_applicability`, `tst_frame_serialization` and
+  `tst_frame_json_legacy` among them.
+- [x] done
 
 ### T17 — Live run and walks (AC5, AC9, AC11, AC12)
 
@@ -382,7 +385,11 @@ updated: 2026-10-28
   ticked in `spec.md`; AC8's integration half passed and its unit half waits on ctest.
   Remaining: the AC5, AC9 and AC12 walks, AC7 with Enable Sounds off, and the hotpath
   benchmark formality.
-- [ ] done
+- **Close-out (2026-11-09):** the maintainer reported the build and the live checks done; AC5,
+  AC7, AC9 and AC12 are ticked on that report, not observed from a session. The benchmark
+  formality is CI run 42708945583's gated table: every tier passes (native(numeric) 2.75 M
+  frames/s against 1.024 M, lua(numeric) 874 k against 256 k).
+- [x] done
 
 ### T18 — Review and handoff
 
@@ -408,25 +415,33 @@ updated: 2026-10-28
   `qt-qml-review` not run
   on the five-line QML diff, pending the maintainer's call as in 0093. SC unverified: no
   compile database in this checkout, so every C++ edit awaits T16's build.
-- [ ] done
+- **Close-out (2026-11-09):** CI compiled every C++ edit (run 42708945583). `qt-qml-review` on
+  the three QML files: lint 0 errors, no findings. Every pop-out teardown goes through `close()`,
+  so `setPopOutOpen(false)` always runs. One observation, not changed: a minimized widget pop-out
+  still counts as shown, while the main and external dashboard windows stop counting when
+  minimized. Counterfactual re-run on today's tree: `alarmsWhileVisible` is decided in
+  `WidgetResolution.cpp` (`datasetAlarmsNow`) and read for the trackers in `AlarmMonitor.cpp`;
+  the other hits are generated form, API and serialization plumbing. Visibility is asked only
+  through `WidgetVisibility::isShown`.
+- [x] done
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
   `--tu-census --check` and `--singleton-census --check` show no growth.
-- [ ] `scripts/syntax-check.py` passed on every edited C++ file, or each SKIP is named.
-- [ ] `qt-cpp-review` and `qt-qml-review` run on the diff; findings addressed or noted.
-- [ ] Hotpath not touched: no edit to `Dashboard.cpp`, `FrameBuilder`, `FrameReader` or
+- [x] `scripts/syntax-check.py` passed on every edited C++ file, or each SKIP is named.
+- [x] `qt-cpp-review` and `qt-qml-review` run on the diff; findings addressed or noted.
+- [x] Hotpath not touched: no edit to `Dashboard.cpp`, `FrameBuilder`, `FrameReader` or
   `CircularBuffer`; `evaluateAlarms` gained one bool test and no lookup; one
   `--benchmark-hotpath` run recorded.
-- [ ] `tst_alarm_band_applicability` and both integration suites pass (T16, T17).
-- [ ] `registry-verify.py`, `layer-verify.py` and `generate-property-registry.py --check` are
+- [x] `tst_alarm_band_applicability` and both integration suites pass (T16, T17).
+- [x] `registry-verify.py`, `layer-verify.py` and `generate-property-registry.py --check` are
   clean, and `api-schema.json` is refreshed from a commercial build so CI's strict snapshot
   check passes.
-- [ ] Generated artifacts shared with any other in-flight spec are committed consistently with
+- [x] Generated artifacts shared with any other in-flight spec are committed consistently with
   their inputs.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that*: no example project, no `.ts` / `.qm`, no file
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that*: no example project, no `.ts` / `.qm`, no file
   outside the plan's table.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

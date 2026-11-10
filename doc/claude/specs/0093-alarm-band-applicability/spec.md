@@ -1,7 +1,7 @@
 ---
 spec: 0093-alarm-band-applicability
 title: Alarm-band applicability
-status: in-progress  # approved 2026-10-06
+status: done  # approved 2026-10-06; closed 2026-11-09
 created: 2026-10-06
 author: Alex Spataru
 ---
@@ -130,7 +130,7 @@ opt-out, off by default (amendment 1).
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1)** — A unit test tabulates the rule: Bar, Gauge, Meter and LED are applicable;
+- [x] **AC1 (R1)** — A unit test tabulates the rule: Bar, Gauge, Meter and LED are applicable;
   no widget, Compass and plot-only are not; a hidden Gauge is not; a Bar Panel member is,
   hidden or not; a Canvas group member with no widget is not.
 - [x] **AC2 (R2, R3)** — Integration, live data: a banded dataset with no widget driven into
@@ -144,11 +144,11 @@ opt-out, off by default (amendment 1).
 - [x] **AC6 (R5)** — Integration: with the master enable off, a project whose only bands sit on
   a widget-less dataset reports no alarms-disabled finding; giving that dataset a Gauge makes
   the finding appear.
-- [ ] **AC7 (R6, R7)** — Maintainer observation in the running editor: the Alarm Bands button is
+- [x] **AC7 (R6, R7)** — Maintainer observation in the running editor: the Alarm Bands button is
   enabled for Bar, Gauge, Meter, LED and Bar Panel member datasets and disabled for a
   plot-only dataset and a hidden Gauge; on a mixed multi-selection, applying bands changes the
   applicable datasets and leaves the others as they were.
-- [ ] **AC8 (R8)** — Integration: bands written to a plot-only dataset are still present in the
+- [x] **AC8 (R8)** — Integration: bands written to a plot-only dataset are still present in the
   exported project; the existing serialization round-trip units stay green.
 - [x] **AC9 (R9)** — The documentation and claim checks pass with the reworded contract.
 - [x] **AC10 (R10)** — The existing band-entry integration test passes with its dataset given a
@@ -156,12 +156,12 @@ opt-out, off by default (amendment 1).
 - [x] **AC11 (R11, R14)** — Integration, live data: a suppressed Gauge dataset driven into its
   Critical band raises no alarm point and posts no band notification; turning the option off
   through the API and sending more in-band frames raises the point.
-- [ ] **AC12 (R11)** — Unit: a second rule table shows that a suppressed Gauge, LED and Bar
+- [x] **AC12 (R11)** — Unit: a second rule table shows that a suppressed Gauge, LED and Bar
   Panel member raise no alarms while the first table still reports their bands as drawn.
 - [x] **AC13 (R12, R14)** — Integration: `suppressAlarms` set through the API is present in the
   exported project and survives a reload; a project that never set it exports with no
   `suppressAlarms` key at all.
-- [ ] **AC14 (R13)** — Maintainer observation in the running editor: the row appears for a
+- [x] **AC14 (R13)** — Maintainer observation in the running editor: the row appears for a
   Gauge with bands and is absent for a Gauge without bands and for a plot-only dataset;
   toggling it is one undo step; a multi-selection whose members disagree shows Mixed; the
   Alarm Bands button stays enabled for a suppressed Gauge.
