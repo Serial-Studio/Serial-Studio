@@ -107,7 +107,6 @@ UI::DashboardIngest::DashboardIngest(const IngestBindings& bindings, IngestHost&
   , m_layoutValid(bindings.layoutValid)
   , m_streamAvailable(bindings.streamAvailable)
   , m_updateRequired(bindings.updateRequired)
-  , m_updateRetryInProgress(bindings.updateRetryInProgress)
   , m_widgetCount(bindings.widgetCount)
 #ifdef BUILD_COMMERCIAL
   , m_points(bindings.points)
@@ -275,8 +274,6 @@ bool UI::DashboardIngest::applyBlockValues(const DataModel::DataBlock& block,
     m_host.handleMissingDataset(m_sourceRawFrames.value(block.sourceId));
     return false;
   }
-
-  m_updateRetryInProgress = false;
 
   const auto slot = static_cast<std::size_t>(index);
   for (std::size_t c = 0; c < columns; ++c) {

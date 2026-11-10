@@ -1059,6 +1059,58 @@ void DataModel::FrameBuilder::publishSourceTemplate(int sourceId)
 }
 
 /**
+ * @brief Publishes the session's template layouts as the connect edge does: one per source in a
+ *        multi-source project, the whole frame for an image-only single source. Any other
+ *        single-source layout goes out with its first block.
+ */
+void DataModel::FrameBuilder::publishSessionTemplates()
+{
+  SS_ASSERT(m_operationMode == SerialStudio::ProjectFile, return);
+  SS_ASSERT_LOG(!m_frame.title.isEmpty());
+
+  const auto& sources = m_frame.sources;
+  if (sources.size() > 1) {
+    for (const auto& src : sources)
+      publishSourceTemplateFrame(src);
+
+    return;
+  }
+
+  const bool allImageGroups =
+    !m_frame.groups.empty()
+    && std::all_of(m_frame.groups.begin(), m_frame.groups.end(), [](const DataModel::Group& g) {
+         return g.widget == QLatin1String("image");
+       });
+
+  if (allImageGroups)
+    ensureStructurePublished(m_frame.sourceId, m_frame);
+}
+
+/**
+ * @brief Announces every layout again after a live project re-sync, once the dashboard dropped its
+ *        caches: forgets the marks, then sends the connect-time and stream templates, so no
+ *        source's widgets vanish until its next frame. Marshals itself onto the builder thread.
+ */
+void DataModel::FrameBuilder::republishSessionTemplates()
+{
+  if (QThread::currentThread() != thread()) {
+    invokeOnBuilderThread([this] { republishSessionTemplates(); });
+    return;
+  }
+
+  if (!m_lastConnectedState || m_operationMode != SerialStudio::ProjectFile)
+    return;
+
+  if (m_frame.groups.empty() || m_frame.title.isEmpty())
+    return;
+
+  m_publishedStructureGeneration.clear();
+  publishSessionTemplates();
+  for (const int sourceId : std::as_const(m_streamSourceIds))
+    publishSourceTemplate(sourceId);
+}
+
+/**
  * @brief Builds and publishes the QuickPlot audio structure for a stream-lane session (spec
  *        0051 T25): the text path no longer runs, so the frame is synthesized here once at
  *        connect from the channel count.
@@ -1188,10 +1240,10 @@ bool DataModel::FrameBuilder::emitRepublishedFrame(const DataModel::Frame& frame
 }
 
 /**
- * @brief Re-runs every dataset transform from the last raw values and republishes the live
- *        frames: dashboard only on the dashboard lane, full sink fan-out on the export lane. A
- *        frame republishes only on a changed dataset value or its first publish, so a synthetic
- *        tick never touches the plot clock of a source whose data did not change.
+ * @brief Re-runs every transform and republishes the live frames (dashboard lane: display only,
+ *        export lane: every sink), each only on a change or first publish, so a synthetic tick
+ *        never moves an unchanged source's plot clock. The combined frame stands in only for a
+ *        single-source project: in a multi-source one it claims every layout as source 0's.
  */
 bool DataModel::FrameBuilder::republishFrames(Lane lane)
 {
@@ -1220,7 +1272,8 @@ bool DataModel::FrameBuilder::republishFrames(Lane lane)
     published  = republishOneFrame(frame, frame.sourceId, lane) || published;
   }
 
-  if (!any_source && !m_frame.groups.empty() && !m_frame.title.isEmpty())
+  const bool single_source = m_frame.sources.size() <= 1;
+  if (!any_source && single_source && !m_frame.groups.empty() && !m_frame.title.isEmpty())
     published = republishOneFrame(m_frame, combined_frame_key, lane) || published;
 
   return published;
@@ -1428,22 +1481,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
         Qt::QueuedConnection);
     }
 
-  const auto& sources = m_frame.sources;
-  if (sources.size() > 1) {
-    for (const auto& src : sources)
-      publishSourceTemplateFrame(src);
-
-    return;
-  }
-
-  const bool allImageGroups =
-    !m_frame.groups.empty()
-    && std::all_of(m_frame.groups.begin(), m_frame.groups.end(), [](const DataModel::Group& g) {
-         return g.widget == QLatin1String("image");
-       });
-
-  if (allImageGroups)
-    ensureStructurePublished(m_frame.sourceId, m_frame);
+  publishSessionTemplates();
 }
 
 //--------------------------------------------------------------------------------------------------

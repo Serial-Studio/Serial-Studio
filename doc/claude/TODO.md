@@ -85,6 +85,14 @@ Left after the sweep (`scripts/icon-report.py`, tier holes):
   sweep, sanitize and close), and the review and handoff of specs 0093 (T16) and 0105 (T18).
 - [ ] Spec 0104 consolidation quarter, T3 to T19 in its `tasks.md`. T10 reads on 2026-12-01 and
   T14 on 2027-01-01.
+- [ ] A `LicenseStateChanged` lands about 0.4 s after an operator-mode auto-connect and re-syncs
+  the project mid-session (APU-DAQ simulator, 2026-11-09). Since the re-sync fix it costs one
+  dashboard rebuild near connect. Find which emitter fires (`LemonSqueezy::activatedChanged` or
+  `Trial::enabledChanged`) before calling it redundant; licensing is a protected surface.
+- [ ] The `Resolved: ` prefix that clears an annunciator point is a literal in three places
+  (`NotificationCenter::resolve`, `AlarmAnnunciator`, `ModbusRedial`). Make it one constant.
+- [ ] A ctest for a live re-sync of a multi-source session: no combined frame published as source
+  0's layout, every connect-time template re-announced, one retry per (source, generation).
 
 ## Maintainer steps
 

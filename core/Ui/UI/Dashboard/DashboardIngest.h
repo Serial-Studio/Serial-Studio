@@ -185,7 +185,6 @@ struct IngestBindings {
   const bool& layoutValid;
   const bool& streamAvailable;
   bool& updateRequired;
-  bool& updateRetryInProgress;
   const int& widgetCount;
   const int& points;
   PlotClockState& plotClocks;
@@ -329,7 +328,6 @@ private:
   const bool& m_layoutValid;
   const bool& m_streamAvailable;
   bool& m_updateRequired;
-  bool& m_updateRetryInProgress;
   const int& m_widgetCount;
 #ifdef BUILD_COMMERCIAL
   const int& m_points;

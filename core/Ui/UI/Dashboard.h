@@ -548,7 +548,6 @@ private:
   bool m_updateRequired;
   bool m_thinningActive;
 
-  bool m_updateRetryInProgress;
   DataModel::CachedFlagChecker m_flagChecker;
 
   // False while cached Dataset*/ring pointers are stale (post-reset, pre-reconfigure)
@@ -610,6 +609,7 @@ private:
   // Subordinate to m_sourceRawFrames (validated by its contains(sid) check); never cleared alone.
   QHash<int, quint64> m_sourceStructureGen;
   QHash<int, quint64> m_quarantinedSources;
+  QHash<int, quint64> m_retriedSources;
 
   // Declared last: these bind the members above by reference, in declaration order
   PlotMemoryLedger m_plotMemory;

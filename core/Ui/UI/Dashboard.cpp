@@ -154,7 +154,6 @@ UI::Dashboard::Dashboard(Core::Bus::MessageBus& bus, IO::ConnectionManager& conn
   , m_widgetCount(0)
   , m_updateRequired(false)
   , m_thinningActive(false)
-  , m_updateRetryInProgress(false)
   , m_flagChecker(this)
   , m_layoutValid(false)
   , m_streamAvailable(m_flagChecker, kStreamAvailableSpec, false)
@@ -208,27 +207,26 @@ UI::Dashboard::Dashboard(Core::Bus::MessageBus& bus, IO::ConnectionManager& conn
                        *m_projectModel,
                        *m_widgetRegistry,
                        UI::WidgetExtensions::instance())
-  , m_ingest(UI::IngestBindings{.layoutValid           = m_layoutValid,
-                                .streamAvailable       = m_streamAvailable,
-                                .updateRequired        = m_updateRequired,
-                                .updateRetryInProgress = m_updateRetryInProgress,
-                                .widgetCount           = m_widgetCount,
-                                .points                = m_points,
-                                .plotClocks            = m_plotClocks,
-                                .widgetMap             = m_widgetMap,
-                                .xAxisData             = m_xAxisData,
-                                .yAxisData             = m_yAxisData,
-                                .plotTimeRings         = m_plotTimeRings,
-                                .multiplotTimeRings    = m_multiplotTimeRings,
-                                .plotSweep             = m_plotSweep,
-                                .multiplotSweep        = m_multiplotSweep,
-                                .activePlots           = m_activePlots,
-                                .activeFFTPlots        = m_activeFFTPlots,
-                                .activeMultiplots      = m_activeMultiplots,
-                                .gpsValues             = m_gpsValues,
-                                .fftValues             = m_fftValues,
-                                .pltValues             = m_pltValues,
-                                .multipltValues        = m_multipltValues,
+  , m_ingest(UI::IngestBindings{.layoutValid        = m_layoutValid,
+                                .streamAvailable    = m_streamAvailable,
+                                .updateRequired     = m_updateRequired,
+                                .widgetCount        = m_widgetCount,
+                                .points             = m_points,
+                                .plotClocks         = m_plotClocks,
+                                .widgetMap          = m_widgetMap,
+                                .xAxisData          = m_xAxisData,
+                                .yAxisData          = m_yAxisData,
+                                .plotTimeRings      = m_plotTimeRings,
+                                .multiplotTimeRings = m_multiplotTimeRings,
+                                .plotSweep          = m_plotSweep,
+                                .multiplotSweep     = m_multiplotSweep,
+                                .activePlots        = m_activePlots,
+                                .activeFFTPlots     = m_activeFFTPlots,
+                                .activeMultiplots   = m_activeMultiplots,
+                                .gpsValues          = m_gpsValues,
+                                .fftValues          = m_fftValues,
+                                .pltValues          = m_pltValues,
+                                .multipltValues     = m_multipltValues,
 #ifdef BUILD_COMMERCIAL
                                 .activeWaterfalls = m_activeWaterfalls,
                                 .waterfallValues  = m_waterfallValues,
@@ -262,7 +260,8 @@ UI::Dashboard::Dashboard(Core::Bus::MessageBus& bus, IO::ConnectionManager& conn
 /**
  * @brief Wires every input that invalidates the dashboard's data: a player opening or closing, a
  *        device disconnect that leaves no stream behind, a project-file swap, an operation-mode
- *        change, and the builder's source-map edits.
+ *        change, and the builder's source-map edits, after which a live session has every layout
+ *        announced again (cleared sources whose marks read "published" would otherwise go dark).
  */
 void UI::Dashboard::connectSessionResets()
 {
@@ -276,6 +275,10 @@ void UI::Dashboard::connectSessionResets()
     m_sourceRawFrames.clear();
     m_datasetReferences.clear();
     m_valuePushes.clear();
+    if (!m_streamAvailable || m_appState->operationMode() != SerialStudio::ProjectFile)
+      return;
+
+    m_frameBuilder->republishSessionTemplates();
   }, Qt::QueuedConnection);
   connect(m_appState, &AppState::operationModeChanged, this, &UI::Dashboard::applyOperationModeDefaults, Qt::QueuedConnection);
   // clang-format on
@@ -1072,8 +1075,6 @@ void UI::Dashboard::resetData(const bool notify)
 
   m_lastFrame = DataModel::Frame();
   m_sourceRawFrames.clear();
-  m_quarantinedSources.clear();
-  m_updateRetryInProgress = false;
 
   if (notify && m_appState->operationMode() == SerialStudio::ProjectFile) {
     DataModel::Frame templateFrame;
@@ -1085,6 +1086,8 @@ void UI::Dashboard::resetData(const bool notify)
 
   if (notify) {
     m_datasetExtremes.clear();
+    m_retriedSources.clear();
+    m_quarantinedSources.clear();
 
     // code-verify off
     // Only a HARD reset (player open, disconnect) forgets the builder's published-structure
@@ -1285,10 +1288,10 @@ void UI::Dashboard::resetPlotClocks()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles a frame that does not match the widget model: one rebuild retry, then the
- *        (sourceId, structureGeneration) pair is quarantined and its frames dropped cheaply.
- *        The link, session, and players stay alive because a dashboard build failure is a
- *        rendering problem, never a reason to take the device away; a new generation retries.
+ * @brief Handles a block that does not match the widget model: one rebuild per (sourceId,
+ *        structureGeneration), then that pair is quarantined and its blocks dropped; the link
+ *        stays up and a new generation retries. Tracked per source, so a healthy source's blocks
+ *        can never re-arm another's retry and turn one bad layout into an endless rebuild loop.
  */
 void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 {
@@ -1300,17 +1303,17 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
   if (qit != m_quarantinedSources.cend() && qit.value() == generation)
     return;
 
-  if (m_updateRetryInProgress) {
+  const auto rit = m_retriedSources.constFind(frame.sourceId);
+  if (rit != m_retriedSources.cend() && rit.value() == generation) {
     qWarning() << "[Dashboard] widget model build failed twice for source" << frame.sourceId
                << "-- dropping its blocks until the structure changes";
     m_quarantinedSources.insert(frame.sourceId, generation);
-    m_updateRetryInProgress = false;
     return;
   }
 
+  m_retriedSources.insert(frame.sourceId, generation);
   m_sourceRawFrames[frame.sourceId] = frame;
   reconfigureDashboard(combineSourceFrames(frame));
-  m_updateRetryInProgress = true;
 }
 
 /**

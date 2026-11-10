@@ -243,6 +243,7 @@ public slots:
   void refreshStreamDrivenFrames();
   void refreshAsyncSinks();
   void forgetPublishedStructures();
+  void republishSessionTemplates();
   void releaseReplayPoolStorage();
   void onPlayerOpenChanged();
 
@@ -423,6 +424,7 @@ private:
                            const DataModel::Frame& src,
                            const DataModel::TimestampedFrame::SteadyTimePoint& ts);
   void publishSourceTemplateFrame(const DataModel::Source& src);
+  void publishSessionTemplates();
   [[nodiscard]] bool republishFrames(Lane lane);
   void wireDisplayTickHooks(Misc::TimerEvents& timers, IO::PipelineHost& pipeline);
   void wireAsyncSinkHooks();
