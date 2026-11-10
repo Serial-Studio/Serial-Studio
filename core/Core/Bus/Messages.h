@@ -154,6 +154,8 @@ struct LicenseStateChanged final {
   int tier;
   bool trialExpired;
   int trialDaysRemaining;
+
+  [[nodiscard]] bool operator==(const LicenseStateChanged&) const = default;
 };
 
 /**

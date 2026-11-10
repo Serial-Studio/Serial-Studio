@@ -778,9 +778,9 @@ void Misc::ModuleManager::initializeQmlInterface()
 
 #ifdef BUILD_COMMERCIAL
 /**
- * @brief Publishes the licensing facts into Core::License, the flag every layer reads instead of
- *        the token (spec 0077): once after the licensing block constructs, then on every real
- *        activation transition, so late or offline activation re-derives like startup does.
+ * @brief Publishes the licensing facts into Core::License (spec 0077): once at startup, then only
+ *        when one changes. Trial forwards every licence refresh as enabledChanged, and a repeat
+ *        would re-sync the project and rebuild the dashboard for nothing.
  */
 static void publishLicenseState(Core::Bus::MessageBus& bus, const Licensing::Trial& trial)
 {
@@ -789,8 +789,10 @@ static void publishLicenseState(Core::Bus::MessageBus& bus, const Licensing::Tri
   const bool expired = trial.trialExpired();
   const int days     = trial.trialEnabled() ? trial.daysRemaining() : (expired ? 0 : -1);
   Core::License::set(token.isValid() && SS_LICENSE_GUARD(), tier, expired, days);
-  bus.publishState<Core::Bus::LicenseStateChanged>(
-    Core::License::activated(), static_cast<int>(tier), expired, days);
+  const Core::Bus::LicenseStateChanged state{Core::License::activated(), tier, expired, days};
+  const auto last = bus.latest<Core::Bus::LicenseStateChanged>();
+  if (!last || *last != state)
+    bus.publishState<Core::Bus::LicenseStateChanged>(state);
 }
 #endif
 
