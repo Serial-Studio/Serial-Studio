@@ -110,7 +110,9 @@ updated: 2026-11-06
   highlight over it, lamp tint when off; the disc stays the bloom source and the HDR target.
   Verify: lint. Not rendered in the harness (the panel needs its C++ model).
 - [x] **T13b** Lamp rows take the control box's cell: radius 4, group box colours, 42 px tall.
-- [ ] **T14** `LedIndicator.qml` (two Project Editor views) keeps the disc.
+- [x] **T14** `LedIndicator.qml` takes the lamp look under a theme that selects it: the
+  panel's bezel (whose halo shows a lit lamp with effects off), the lamp's lit and off
+  lens colours, and the facets over the disc (2026-11-10). Not yet seen in the app.
 
 ### Stage C — output controls
 

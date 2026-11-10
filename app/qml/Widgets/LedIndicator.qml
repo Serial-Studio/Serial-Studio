@@ -25,8 +25,8 @@ import QtQuick.Effects
 import SerialStudio
 
 //
-// LED indicator with the same bloom-glow effect as the dashboard LED panel.
-// Use `on` to switch between the lit color and a darkened off color.
+// LED indicator with the dashboard LED panel's bloom; the lamp look (spec 0113) adds the
+// panel's bezel and faceted lens. `on` switches between the lit and the darkened off color.
 //
 Item {
   id: root
@@ -36,8 +36,23 @@ Item {
   property color onColor: Cpp_ThemeManager.colors["highlight"]
   property color offColor: Cpp_ThemeManager.colors["alarm"]
 
+  readonly property bool lampLook: Cpp_ThemeManager.widgetLooks["led"] === "lamp"
+  readonly property color lampColor: root.on ? root.onColor : root.offColor
+
   implicitWidth: diameter
   implicitHeight: diameter
+
+  Loader {
+    height: width
+    active: root.lampLook
+    anchors.centerIn: led
+    width: Math.round(led.width * 1.45)
+
+    sourceComponent: PanelBezel {
+      halo: root.on
+      haloColor: root.onColor
+    }
+  }
 
   Rectangle {
     id: led
@@ -47,11 +62,31 @@ Item {
     height: root.diameter
     radius: width / 2
     border.width: 1
-    border.color: Cpp_ThemeManager.colors["widget_border"]
-    color: root.on ? root.onColor : Qt.darker(root.offColor, 1.2)
+    border.color: root.lampLook ? Cpp_ThemeManager.colors["window_border"]
+                                : Cpp_ThemeManager.colors["widget_border"]
+    color: {
+      if (!root.lampLook)
+        return root.on ? root.onColor : Qt.darker(root.offColor, 1.2)
+
+      const hue = Math.max(0, root.lampColor.hsvHue)
+      if (root.on)
+        return Qt.hsva(hue, root.lampColor.hsvSaturation, Math.max(0.96, root.lampColor.hsvValue), 1)
+
+      return Qt.hsva(hue, root.lampColor.hsvSaturation * 0.7,
+                     Math.min(1, root.lampColor.hsvValue * 0.55 + 0.12), 1)
+    }
 
     Behavior on color {
       ColorAnimation { duration: 180 }
+    }
+  }
+
+  Loader {
+    anchors.fill: led
+    active: root.lampLook
+
+    sourceComponent: PanelLensFacets {
+      lit: root.on
     }
   }
 
