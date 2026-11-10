@@ -714,6 +714,8 @@ QVariantMap Widgets::Output::Base::presentation(const DataModel::OutputWidget& c
   map[QStringLiteral("monoIcon")]     = config.monoIcon;
   map[QStringLiteral("checkable")]    = config.checkable;
   map[QStringLiteral("style")]        = static_cast<int>(config.style);
+  map[QStringLiteral("effectiveStyle")] =
+    static_cast<int>(DataModel::effectiveTextFieldStyle(config));
   map[QStringLiteral("labels")]       = config.positionLabels;
   map[QStringLiteral("springReturn")] = config.springReturn;
   map[QStringLiteral("hideTitle")]    = config.hideTitle;

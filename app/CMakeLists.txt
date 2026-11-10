@@ -576,6 +576,8 @@ if(BUILD_COMMERCIAL)
     qml/Widgets/Dashboard/Output/DashboardSlider.qml
     qml/Widgets/Dashboard/Output/DashboardToggle.qml
     qml/Widgets/Dashboard/Output/DashboardTextField.qml
+    qml/Widgets/Dashboard/Output/TextFieldReadout.qml
+    qml/Widgets/Dashboard/Output/TextFieldKeypad.qml
     qml/Widgets/Dashboard/Output/DashboardKnob.qml
     qml/Widgets/Dashboard/Output/OutputSectionLabel.qml
     qml/Widgets/Dashboard/Output/OutputValueControl.qml

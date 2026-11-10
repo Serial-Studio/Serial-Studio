@@ -61,16 +61,20 @@ enum class OutputWidgetSize : quint8 {
 };
 
 /**
- * @brief What a control is, chosen per control in the project and independent of the theme (spec
- *        0113 R17). Standard is every control written before styles existed. Illuminated and
- *        EmergencyStop are button styles (an emergency stop always latches); Selector is a knob
- *        style with one labelled detent per Step from Min to Max.
+ * @brief What a control is, chosen per control and independent of the theme (spec 0113 R17):
+ *        Standard is every control written before styles existed; then two button styles, the
+ *        knob's Selector, and the text-field styles of spec 0118 (ReadoutDisplay and
+ *        KeypadEntry for a Number field, CommandLine for a Text field, Compact for either).
  */
 enum class OutputWidgetStyle : quint8 {
-  Standard      = 0,
-  Illuminated   = 1,
-  EmergencyStop = 2,
-  Selector      = 3,
+  Standard       = 0,
+  Illuminated    = 1,
+  EmergencyStop  = 2,
+  Selector       = 3,
+  ReadoutDisplay = 4,
+  KeypadEntry    = 5,
+  CommandLine    = 6,
+  Compact        = 7,
 };
 
 /**
@@ -194,6 +198,12 @@ void normalize(OutputWidget& w);
  *        of which turns it into a two-position selector knob labelled from its captions.
  */
 void applyStyleChoice(OutputWidget& w, int index);
+
+/**
+ * @brief The style a control is drawn with (spec 0118 R6): a text-field style its Text/Number
+ *        kind cannot take draws as Standard, while the stored style is kept for a later switch.
+ */
+[[nodiscard]] OutputWidgetStyle effectiveTextFieldStyle(const OutputWidget& w);
 
 /**
  * @brief True when the control waits for a device reply (spec 0110): token and code both bound.

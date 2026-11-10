@@ -17,6 +17,7 @@ import QtQuick.Controls
 ColumnLayout {
   id: root
 
+  property real textScale: 1
   property string text: ""
   property color labelColor: Cpp_ThemeManager.colors["pane_section_label"]
 
@@ -27,8 +28,8 @@ ColumnLayout {
     elide: Text.ElideRight
     color: root.labelColor
     Layout.fillWidth: true
-    font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
     Component.onCompleted: font.capitalization = Font.AllUppercase
+    font: Cpp_Misc_CommonFonts.customUiFont(0.75 * root.textScale, true)
   }
 
   Rectangle {

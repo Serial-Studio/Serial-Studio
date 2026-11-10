@@ -972,6 +972,15 @@ ColumnLayout {
           property var modelActive: model.active
           property var comboBoxData: model.comboBoxData
           property var editableValue: model.editableValue
+          property var comboBoxDisabled: model.comboBoxDisabled
+
+          //
+          // Entries the row lists but refuses, drawn greyed and never activated
+          //
+          function refused(index) {
+            const list = comboBoxLoader.comboBoxDisabled
+            return list !== undefined && list !== null && Array.from(list).indexOf(index) >= 0
+          }
 
           sourceComponent: ComboBox {
             id: _comboBox
@@ -980,6 +989,11 @@ ColumnLayout {
             model: comboBoxLoader.comboBoxData
             enabled: comboBoxLoader.modelActive
             onActivated: {
+              if (comboBoxLoader.refused(currentIndex)) {
+                currentIndex = comboBoxLoader.editableValue
+                return
+              }
+
               if (currentIndex !== comboBoxLoader.editableValue) {
                 view.model.setData(
                       view.index(comboBoxLoader.modelRow, comboBoxLoader.modelColumn),
@@ -990,6 +1004,19 @@ ColumnLayout {
             font: Cpp_Misc_CommonFonts.monoFont
             currentIndex: comboBoxLoader.editableValue
             opacity: comboBoxLoader.modelActive ? 1 : 0.5
+
+            delegate: MenuItem {
+              required property int index
+              required property var modelData
+
+              text: modelData
+              width: ListView.view.width
+              hoverEnabled: _comboBox.hoverEnabled
+              enabled: !comboBoxLoader.refused(index)
+              highlighted: _comboBox.highlightedIndex === index
+              font: _comboBox.currentIndex === index ? Cpp_Misc_CommonFonts.customMonoFont(1, true)
+                                                      : _comboBox.font
+            }
 
             contentItem: Text {
               font: _comboBox.font

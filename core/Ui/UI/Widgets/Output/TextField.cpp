@@ -13,6 +13,8 @@
 
 #include <utility>
 
+#include "Core/DataModel/OutputTextEntry.h"
+
 //--------------------------------------------------------------------------------------------------
 // Constructor
 //--------------------------------------------------------------------------------------------------
@@ -24,7 +26,37 @@ Widgets::Output::TextField::TextField(const DataModel::OutputWidget& config,
                                       TransmitTarget target,
                                       QQuickItem* parent)
   : Base(config, std::move(target), parent)
+  , m_keypadSign(DataModel::keypadOffersSign(config))
+  , m_keypadDecimal(DataModel::keypadOffersDecimal(config))
 {}
+
+//--------------------------------------------------------------------------------------------------
+// Property getters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Whether the keypad offers the sign key (spec 0118 R3): Min allows a negative value.
+ */
+bool Widgets::Output::TextField::keypadSign() const noexcept
+{
+  return m_keypadSign;
+}
+
+/**
+ * @brief Whether the keypad offers a decimal point: the field does not take whole numbers only.
+ */
+bool Widgets::Output::TextField::keypadDecimal() const noexcept
+{
+  return m_keypadDecimal;
+}
+
+/**
+ * @brief How many sent lines the command line can recall this session (spec 0118 R4).
+ */
+int Widgets::Output::TextField::historyCount() const noexcept
+{
+  return static_cast<int>(m_history.size());
+}
 
 //--------------------------------------------------------------------------------------------------
 // Public slots
@@ -37,7 +69,35 @@ Widgets::Output::TextField::TextField(const DataModel::OutputWidget& config,
 bool Widgets::Output::TextField::sendText(const QString& text)
 {
   sendValue(text);
-  return rangeMessage().isEmpty();
+  const bool admitted = rangeMessage().isEmpty();
+  if (admitted && !numeric() && DataModel::pushCommandHistory(m_history, text))
+    Q_EMIT historyChanged();
+
+  return admitted;
+}
+
+/**
+ * @brief The sent line @p index steps back, 0 being the newest; empty past either end. Reading it
+ *        never sends: only sendText() does.
+ */
+QString Widgets::Output::TextField::historyAt(const int index) const
+{
+  if (index < 0 || index >= m_history.size())
+    return QString();
+
+  return m_history.at(index);
+}
+
+/**
+ * @brief The keypad entry after the key named by @p key's first character; the keypad edits a
+ *        local entry and only its Enter key sends.
+ */
+QString Widgets::Output::TextField::keypadApply(const QString& entry, const QString& key) const
+{
+  if (key.isEmpty())
+    return entry;
+
+  return DataModel::keypadApply(entry, key.at(0));
 }
 
 //--------------------------------------------------------------------------------------------------

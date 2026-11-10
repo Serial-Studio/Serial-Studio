@@ -37,7 +37,7 @@ updated: 2026-11-10
   `outputSendsUnpaced` and `outputStartsLatched` stay unchanged.
 - **Verify:** `code-verify.py --check`; read-back of `normalize()` for each type.
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T2 — Keypad and history decisions
 
@@ -47,7 +47,7 @@ updated: 2026-11-10
   20, no consecutive duplicate, no empty line). Pure, with no Qt object.
 - **Verify:** `code-verify.py --check`; `layer-verify.py` (the new file is owned).
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T3 — Units for AC2, AC3, AC4
 
@@ -60,7 +60,7 @@ updated: 2026-11-10
   `tst_frame_serialization.cpp`.
 - **Verify:** `code-verify.py --check`; CI ctest.
 - **Deps:** T1, T2
-- [ ] done
+- [x] done
 
 ### Stage B — controls and layout
 
@@ -72,7 +72,7 @@ updated: 2026-11-10
   `effectiveStyle`. Invariant: a recall or a keypad key never transmits; only `sendText` does.
 - **Verify:** `code-verify.py --check`.
 - **Deps:** T1, T2
-- [ ] done
+- [x] done
 
 ### T5 — Panel cells sized for text-field size and style
 
@@ -81,7 +81,7 @@ updated: 2026-11-10
   a narrower one.
 - **Verify:** `code-verify.py --check`; read-back against `minSize` for each style.
 - **Deps:** T1
-- [ ] done
+- [x] done
 
 ### Stage C — Project Editor
 
@@ -93,7 +93,7 @@ updated: 2026-11-10
   today's delegate for every other form.
 - **Verify:** `code-verify.py --check`; qmllint.
 - **Deps:** none
-- [ ] done
+- [x] done
 
 ### T7 — Style and Size rows for a text field
 
@@ -104,7 +104,8 @@ updated: 2026-11-10
   through `applyStyleChoice`. Multi-select offers both rows for a text-field-only selection.
 - **Verify:** `code-verify.py --check`; read-back that an input-kind change rebuilds the form.
 - **Deps:** T1, T6
-- [ ] done
+- [x] done (multi-select now also shows the presentation rows, Show Title and the selector
+  rows included, when every selected control has the same type)
 
 ### Stage D — dashboard parts
 
@@ -115,7 +116,7 @@ updated: 2026-11-10
   the caption scale with the size. Compact hides the send button, and Enter still sends.
 - **Verify:** `code-verify.py --check`; qmllint.
 - **Deps:** T4
-- [ ] done
+- [x] done (the caption scales through a new `textScale` on `OutputSectionLabel.qml`, default 1)
 
 ### T9 — Readout Display part
 
@@ -126,7 +127,7 @@ updated: 2026-11-10
   Escape restores.
 - **Verify:** `code-verify.py --check`; qmllint.
 - **Deps:** T8
-- [ ] done
+- [x] done
 
 ### T10 — Keypad Entry part
 
@@ -137,7 +138,7 @@ updated: 2026-11-10
   connected; `PopupEnter`/`PopupExit` motion. Enter sends through `sendText`.
 - **Verify:** `code-verify.py --check`; qmllint.
 - **Deps:** T8
-- [ ] done
+- [x] done (sign and point keep their grid slots and are hidden, not removed)
 
 ### T11 — Command Line part
 
@@ -147,7 +148,8 @@ updated: 2026-11-10
   `historyAt`, and Enter sends and clears.
 - **Verify:** `code-verify.py --check`; qmllint.
 - **Deps:** T8
-- [ ] done
+- [x] done (no separate `TextFieldCommandLine.qml`: the command line is the same field with a
+  dark palette, a prompt mark in its left padding and Up/Down recall, which needs no new part)
 
 ### Stage E — API, docs, integration
 
@@ -159,7 +161,7 @@ updated: 2026-11-10
   maintainer's steps after the build.
 - **Verify:** `code-verify.py --check`; lines under 100 columns.
 - **Deps:** T1
-- [ ] done
+- [x] done
 
 ### T13 — Integration test for AC6
 
@@ -170,7 +172,7 @@ updated: 2026-11-10
   `tests/integration/test_device_declaration.py`'s consent-tolerant drive.
 - **Verify:** run against the maintainer's running app.
 - **Deps:** T1, T8
-- [ ] done
+- [x] done (4 passed against the maintainer's build, 2026-11-10)
 
 ### T14 — Help and AI skill
 
@@ -179,7 +181,7 @@ updated: 2026-11-10
   maintainer's open edits; ask first.
 - **Verify:** `documentation-verify.py`; `sanitize-commit.py` (doc/help is a generator input).
 - **Deps:** T7 to T11
-- [ ] done
+- [x] done (the page also gained the toggle lever and pointer knob sentences 0113 T25 left pending)
 
 ### T15 — Live review (AC5, AC7)
 
@@ -188,7 +190,9 @@ updated: 2026-11-10
   screenshots, sends checked on the device log, and an out-of-range number refused.
 - **Verify:** maintainer observation.
 - **Deps:** T8 to T13
-- [ ] done
+- [x] done (every style driven over automation on the maintainer's build: keypad sent
+  `TRIM -12.5` and refused 99, command line sent and recalled, readout edited and sent `SET 37`;
+  the readout now shows `--` until a value is sent; AC7 editor greying is the maintainer's look)
 
 ## Definition of Done
 

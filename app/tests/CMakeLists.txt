@@ -2650,6 +2650,17 @@ ss_add_unit_test(tst_output_hardware_decisions
           SerialStudio::Core
 )
 
+#
+# The keypad entry rules and the command-line history (spec 0118 AC3, AC4) are pure functions in
+# OutputTextEntry.cpp, already part of SerialStudio::Core.
+#
+ss_add_unit_test(tst_output_text_entry
+  SOURCES tst_output_text_entry.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          SerialStudio::Core
+)
+
 ss_add_unit_test(tst_transmit_script_check
   SOURCES tst_transmit_script_check.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/TransmitScriptCheck.cpp

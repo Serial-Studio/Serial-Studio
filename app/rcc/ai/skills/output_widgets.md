@@ -48,7 +48,12 @@ Each widget has:
   returns to `initialValue` and sends it once. State feedback matches a
   position's value or label; anything else shows unknown
 - `color`: hex fill override for the control; empty = group accent color
-- `size`: 0 = small, 1 = normal, 2 = large, 3 = extra large
+- `size`: 0 = small, 1 = normal, 2 = large, 3 = extra large (a button or a
+  text field)
+- `style` on a text field: 4 = readout display and 5 = keypad entry (Number
+  `inputKind`), 6 = command line (Text `inputKind`, keeps 20 sent lines on
+  Up/Down), 7 = compact (no send button). A style the kind cannot take draws as
+  standard but is kept
 - `onLabel`, `offLabel`: captions for a latching button or a toggle
 - `minValue`, `maxValue`, `stepSize`, `initialValue`: numeric range
   (sliders, knobs); `initialValue != 0` starts a latching button on

@@ -12,6 +12,7 @@
 #include <cmath>
 #include <QFontMetricsF>
 
+#include "Core/SSAssert.h"
 #include "Misc/CommonFonts.h"
 
 namespace Widgets::Output {
@@ -54,7 +55,8 @@ PanelLayout::SizeClass PanelLayout::classify(OWT type)
 QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
 {
   const auto type    = widget.type;
-  const double scale = type == OWT::Button ? DataModel::outputSizeScale(widget.size) : 1.0;
+  const bool scaled  = type == OWT::Button || type == OWT::TextField;
+  const double scale = scaled ? DataModel::outputSizeScale(widget.size) : 1.0;
 
   static const auto& fonts = Misc::CommonFonts::instance();
   const QFontMetricsF fm(fonts.uiFont());
@@ -66,7 +68,7 @@ QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
 
   const qreal labelH  = std::ceil(fontH * 0.75) + 1 + 2;
   const qreal btnH    = qMax(fontH * scale + 8 * scale, 28.0 * scale);
-  const qreal inputH  = qMax(monoH + 10, 28.0);
+  const qreal inputH  = qMax(monoH * scale + 10 * scale, 28.0 * scale);
   const qreal leverH  = 84.0;
   const qreal sliderH = 24.0;
   const qreal rangeH  = std::ceil(fontH * 0.7);
@@ -88,12 +90,34 @@ QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
     case OWT::Toggle:
       return {charW * 12 + 2 * m, 2 * m + labelH + s + leverH};
     case OWT::TextField:
-      return {charW * 24 + 2 * m, 2 * m + labelH + s + qMax(inputH, btnH)};
+      return textFieldSize(widget, charW * scale, labelH + s + qMax(inputH, btnH), fontH * scale);
     case OWT::Knob:
       return {charW * 18 + 2 * m, 2 * m + labelH + s + charW * 12 + s + valueH};
     default:
       return {charW * 14 + 2 * m, 2 * m + btnH};
   }
+}
+
+/**
+ * @brief A text field's cell by the style it is drawn with (spec 0118): a readout is tall enough
+ *        for its large digits, a compact field drops the send button's width. @p charW and
+ *        @p fontH are already scaled by the size class; @p body is the standard field's height.
+ */
+QSizeF PanelLayout::textFieldSize(const DataModel::OutputWidget& widget,
+                                  const qreal charW,
+                                  const qreal body,
+                                  const qreal fontH)
+{
+  SS_ASSERT(charW > 0 && fontH > 0, return {});
+  SS_ASSERT(body > 0, return {});
+
+  const qreal m     = 8;
+  const auto style  = DataModel::effectiveTextFieldStyle(widget);
+  const qreal width = (style == DataModel::OutputWidgetStyle::Compact ? 16 : 24) * charW;
+  if (style == DataModel::OutputWidgetStyle::ReadoutDisplay)
+    return {charW * 20 + 2 * m, 2 * m + body + std::ceil(fontH * 2.2) + 12};
+
+  return {width + 2 * m, 2 * m + body};
 }
 
 //--------------------------------------------------------------------------------------------------

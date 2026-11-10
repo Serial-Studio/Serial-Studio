@@ -57,6 +57,10 @@ private:
   [[nodiscard]] static SizeClass classify(DataModel::OutputWidgetType type);
   [[nodiscard]] static bool fillsHeight(DataModel::OutputWidgetType type);
   [[nodiscard]] static QSizeF minSize(const DataModel::OutputWidget& widget);
+  [[nodiscard]] static QSizeF textFieldSize(const DataModel::OutputWidget& widget,
+                                            qreal charW,
+                                            qreal body,
+                                            qreal fontH);
 
   static QVector<Column> buildColumns(const QVector<Item>& items, int n, qreal height, qreal gap);
 

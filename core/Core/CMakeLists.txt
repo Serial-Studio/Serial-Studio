@@ -77,6 +77,8 @@ qt_add_library(
   DataModel/Frame.cpp
   DataModel/OutputWidget.h
   DataModel/OutputWidget.cpp
+  DataModel/OutputTextEntry.h
+  DataModel/OutputTextEntry.cpp
   DataModel/FrameKeys.h
   DataModel/WorkspaceProfile.h
   DataModel/DataBlock.h

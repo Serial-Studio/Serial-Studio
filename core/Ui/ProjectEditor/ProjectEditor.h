@@ -336,6 +336,8 @@ public:
 
     TreeViewEnabled     = Qt::UserRole + 24,
     TreeViewSelfEnabled = Qt::UserRole + 25,
+
+    ComboBoxDisabled = Qt::UserRole + 26,
   };
   Q_ENUM(CustomRoles)
 
@@ -733,6 +735,7 @@ public:
       {ProjectEditor::TreeViewWorkspaceStale, BAL("treeViewWorkspaceStale")},
       {ProjectEditor::TreeViewEnabled,        BAL("treeViewEnabled")},
       {ProjectEditor::TreeViewSelfEnabled,    BAL("treeViewSelfEnabled")},
+      {ProjectEditor::ComboBoxDisabled,       BAL("comboBoxDisabled")},
       {ProjectEditor::MinValue,               BAL("minValue")},
       {ProjectEditor::MaxValue,               BAL("maxValue")},
     };

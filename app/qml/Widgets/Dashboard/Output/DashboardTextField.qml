@@ -24,6 +24,65 @@ Item {
   property string idPrefix: ""
 
   readonly property string title: root.widget ? (root.widget.title || "") : ""
+
+  //
+  // Style drawn and size class (spec 0118): the C++ side already resolved the kind rule
+  //
+  readonly property bool keypad: root.style === 5
+  readonly property bool commandLine: root.style === 6
+
+  property int recall: -1
+
+  //
+  // Command line (spec 0118 R4): Up steps back through the sent lines, Down forward to an empty
+  // line. A recall fills the field and never sends.
+  //
+  function recallStep(delta) {
+    if (!root.model)
+      return
+
+    const last  = root.model.historyCount - 1
+    root.recall = Math.max(-1, Math.min(last, root.recall + delta))
+    input.text  = root.recall < 0 ? "" : root.model.historyAt(root.recall)
+  }
+  readonly property bool compact: root.style === 7
+  readonly property bool readout: root.style === 4
+  readonly property real scale: root.widget ? (root.widget.sizeScale || 1) : 1
+  readonly property int style: root.widget ? (root.widget.effectiveStyle || 0) : 0
+
+  readonly property bool unknown: root.model
+                                  ? (root.model.stateBound && !root.model.stateKnown)
+                                  : false
+
+  property bool editing: false
+  property bool sentOnce: false
+
+  //
+  // The readout's value: what the source reports when bound, else the last value admitted
+  //
+  readonly property string readoutText: {
+    if (!root.model)
+      return ""
+
+    if (root.model.stateBound)
+      return root.model.stateKnown ? root.model.formatted(root.model.stateValue) : ""
+
+    return root.sentOnce && isFinite(root.model.admittedValue)
+           ? root.model.formatted(root.model.admittedValue) : ""
+  }
+
+  //
+  // Opens the readout for typing, starting from the value it shows
+  //
+  function beginEdit() {
+    if (!root.model)
+      return
+
+    root.editing = true
+    input.text = root.readoutText
+    input.forceActiveFocus()
+    input.selectAll()
+  }
   readonly property bool numeric: root.widget ? root.widget.inputKind === 1 : false
   readonly property string units: root.widget ? (root.widget.units || "") : ""
   readonly property string rangeMessage: root.model && root.numeric ? root.model.rangeMessage : ""
@@ -64,14 +123,18 @@ Item {
 
     if (!root.numeric) {
       root.model.sendText(input.text)
+      root.recall = -1
       input.clear()
       return
     }
 
     const sent = root.typedNumber()
-    if (root.model.sendText(input.text))
-      input.text = root.model.formatted(root.model.admittedValue !== undefined
-                                        ? root.model.admittedValue : sent)
+    if (!root.model.sendText(input.text))
+      return
+
+    root.sentOnce = true
+    input.text    = root.model.formatted(root.model.admittedValue !== undefined
+                                         ? root.model.admittedValue : sent)
   }
 
   ColumnLayout {
@@ -81,19 +144,38 @@ Item {
 
     OutputSectionLabel {
       text: root.title
+      textScale: root.scale
       labelColor: root.color
       visible: !(root.widget && root.widget.hideTitle === true)
+    }
+
+    Loader {
+      Layout.fillWidth: true
+      active: root.readout && !root.editing
+      visible: root.readout && !root.editing
+
+      sourceComponent: TextFieldReadout {
+        units: root.units
+        accent: root.color
+        dimmed: root.unknown
+        textScale: root.scale
+        text: root.readoutText
+        objectName: root.idPrefix.length > 0 ? root.idPrefix + ".readout" : ""
+
+        onActivated: root.beginEdit()
+      }
     }
 
     RowLayout {
       spacing: 4
       Layout.fillWidth: true
+      visible: !root.readout || root.editing
 
       Widgets.LineField {
         id: input
 
         Layout.fillWidth: true
-        font: Cpp_Misc_CommonFonts.customMonoFont(0.8, false)
+        font: Cpp_Misc_CommonFonts.customMonoFont(0.8 * root.scale, false)
         objectName: root.idPrefix.length > 0 ? root.idPrefix + ".input" : ""
         placeholderText: {
           if (root.hint.length > 0)
@@ -112,12 +194,62 @@ Item {
         inputMethodHints: root.numeric ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
 
         palette.highlight: root.color
+        leftPadding: root.commandLine ? promptMark.implicitWidth + 10 : 4
+        palette.text: root.commandLine ? Qt.rgba(0.82, 0.92, 0.84, 1) : root.palette.text
+        palette.base: root.commandLine ? Qt.rgba(0.06, 0.07, 0.08, 1) : root.palette.base
 
-        onAccepted: root.send()
+        Text {
+          id: promptMark
+
+          x: 6
+          visible: root.commandLine
+          text: String.fromCharCode(0x203A)
+          color: Qt.rgba(0.47, 0.86, 0.55, 1)
+          anchors.verticalCenter: parent.verticalCenter
+          font: Cpp_Misc_CommonFonts.customMonoFont(0.9 * root.scale, true)
+        }
+
+        onAccepted: {
+          root.send()
+          if (root.readout && root.rangeMessage.length === 0)
+            root.editing = false
+        }
+        Keys.onEscapePressed: {
+          if (root.readout)
+            root.editing = false
+        }
+
+        TapHandler {
+          enabled: root.keypad && root.enabled && Cpp_IO_Manager.isConnected
+          onTapped: {
+            keypadPopup.entry = ""
+            keypadPopup.open()
+          }
+        }
+
+        TextFieldKeypad {
+          id: keypadPopup
+
+          model: root.model
+          y: input.height + 4
+          textScale: root.scale
+          idPrefix: root.idPrefix
+
+          onEntered: (text) => {
+            input.text = text
+            root.send()
+          }
+        }
 
         Keys.onPressed: (event) => {
-          if (!root.numeric)
+          if (!root.numeric) {
+            if (!root.commandLine || (event.key !== Qt.Key_Up && event.key !== Qt.Key_Down))
+              return
+
+            root.recallStep(event.key === Qt.Key_Up ? 1 : -1)
+            event.accepted = true
             return
+          }
 
           const factor = (event.modifiers & Qt.ShiftModifier) ? 10 : 1
           if (event.key === Qt.Key_Up)
@@ -141,15 +273,16 @@ Item {
         visible: root.numeric && root.units.length > 0
         text: root.units
         color: Cpp_ThemeManager.colors["placeholder_text"]
-        font: Cpp_Misc_CommonFonts.customUiFont(0.8, false)
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8 * root.scale, false)
       }
 
       Widgets.IconButton {
         id: sendButton
 
-        iconSize: 16
-        font: Cpp_Misc_CommonFonts.customUiFont(0.8, false)
+        visible: !root.compact
+        iconSize: Math.round(16 * root.scale)
         text: root.caption.length > 0 ? root.caption : qsTr("Send")
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8 * root.scale, false)
         icon.source: root.sendIcon.length > 0 ? root.sendIcon : "qrc:/icons/buttons/send.svg"
 
         palette.button: root.color
@@ -167,7 +300,7 @@ Item {
       text: root.rangeMessage
       visible: root.rangeMessage.length > 0
       color: Cpp_ThemeManager.colors["alarm"]
-      font: Cpp_Misc_CommonFonts.customUiFont(0.75, false)
+      font: Cpp_Misc_CommonFonts.customUiFont(0.75 * root.scale, false)
       objectName: root.idPrefix.length > 0 ? root.idPrefix + ".outOfRange" : ""
     }
   }

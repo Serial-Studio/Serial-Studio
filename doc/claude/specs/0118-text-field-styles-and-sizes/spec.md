@@ -1,7 +1,7 @@
 ---
 spec: 0118-text-field-styles-and-sizes
 title: Text Field Output Control Styles and Sizes
-status: approved     # draft -> approved -> in-progress -> done | shelved; approved by the maintainer 2026-11-10
+status: in-progress  # draft -> approved -> in-progress -> done | shelved; implementation started 2026-11-10
 created: 2026-11-10
 author: Alex Spataru
 ---
@@ -91,7 +91,7 @@ should use the size classes buttons already have.
 - [ ] **AC5** (R2, R3, R4, R5, R7) — Maintainer observation on a running build: a panel with
       one field of each style at each size. Each looks as described, sends what the console
       shows, and refuses an out-of-range number with the existing message.
-- [ ] **AC6** (R9) — `project.outputWidget.get` reports `style` and `size` for a text field,
+- [x] **AC6** (R9) — `project.outputWidget.get` reports `style` and `size` for a text field,
       and an API patch of either one changes the dashboard without a reload (integration test
       against the running app).
 - [ ] **AC7** (R8) — In the Project Editor, a Number field offers all five styles and greys

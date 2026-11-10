@@ -57,12 +57,14 @@ void DataModel::normalize(OutputWidget& w)
   w.size = static_cast<OutputWidgetSize>(
     qBound(0, static_cast<int>(w.size), static_cast<int>(OutputWidgetSize::ExtraLarge)));
   w.style = static_cast<OutputWidgetStyle>(
-    qBound(0, static_cast<int>(w.style), static_cast<int>(OutputWidgetStyle::Selector)));
+    qBound(0, static_cast<int>(w.style), static_cast<int>(OutputWidgetStyle::Compact)));
   const bool knobStyle = w.style == OutputWidgetStyle::Selector;
+  const bool textStyle = w.style >= OutputWidgetStyle::ReadoutDisplay;
   const bool buttonStyle =
     w.style == OutputWidgetStyle::Illuminated || w.style == OutputWidgetStyle::EmergencyStop;
   if ((buttonStyle && w.type != OutputWidgetType::Button)
-      || (knobStyle && w.type != OutputWidgetType::Knob))
+      || (knobStyle && w.type != OutputWidgetType::Knob)
+      || (textStyle && w.type != OutputWidgetType::TextField))
     w.style = OutputWidgetStyle::Standard;
 
   if (w.style == OutputWidgetStyle::EmergencyStop)
@@ -109,6 +111,14 @@ void DataModel::normalize(OutputWidget& w)
  */
 void DataModel::applyStyleChoice(OutputWidget& w, const int index)
 {
+  if (w.type == OutputWidgetType::TextField) {
+    const int first = static_cast<int>(OutputWidgetStyle::ReadoutDisplay);
+    const int last  = static_cast<int>(OutputWidgetStyle::Compact);
+    w.style         = index <= 0 ? OutputWidgetStyle::Standard
+                                 : static_cast<OutputWidgetStyle>(qMin(first + index - 1, last));
+    return;
+  }
+
   if (w.type == OutputWidgetType::Knob) {
     w.style = index == 1 ? OutputWidgetStyle::Selector : OutputWidgetStyle::Standard;
     return;
@@ -290,12 +300,32 @@ bool DataModel::outputStartsLatched(const OutputWidget& w)
 }
 
 /**
+ * @brief Readout and keypad edit a number, the command line text; a style the kind cannot take
+ *        draws as Standard. Any other control is drawn with the style it stores.
+ */
+DataModel::OutputWidgetStyle DataModel::effectiveTextFieldStyle(const OutputWidget& w)
+{
+  SS_ASSERT_LOG(w.style <= OutputWidgetStyle::Compact);
+  SS_ASSERT_LOG(w.inputKind <= OutputInputKind::Number);
+  if (w.type != OutputWidgetType::TextField)
+    return w.style;
+
+  const bool number = w.inputKind == OutputInputKind::Number;
+  const bool numberStyle =
+    w.style == OutputWidgetStyle::ReadoutDisplay || w.style == OutputWidgetStyle::KeypadEntry;
+  if ((numberStyle && !number) || (w.style == OutputWidgetStyle::CommandLine && number))
+    return OutputWidgetStyle::Standard;
+
+  return w.style;
+}
+
+/**
  * @brief A stop press must never wait behind the pacing window; everything else keeps it.
  */
 bool DataModel::outputSendsUnpaced(const OutputWidgetStyle style, const bool latched)
 {
   SS_ASSERT_LOG(static_cast<int>(style) >= 0);
-  SS_ASSERT_LOG(style <= OutputWidgetStyle::Selector);
+  SS_ASSERT_LOG(style <= OutputWidgetStyle::Compact);
   return style == OutputWidgetStyle::EmergencyStop && latched;
 }
 

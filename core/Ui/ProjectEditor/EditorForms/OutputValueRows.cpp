@@ -12,6 +12,7 @@
 #include <QStandardItemModel>
 
 #include "Core/IconRegistry.h"
+#include "Core/SerialStudio.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
 #include "ProjectEditor/ProjectEditor.h"
@@ -221,12 +222,67 @@ static void appendSelectorRows(QStandardItemModel* model, const DataModel::Outpu
 }
 
 /**
+ * @brief Appends a text field's Style and Size rows (spec 0118). The styles its Text/Number kind
+ *        cannot take stay listed but greyed, and a stored one of them draws as Standard (R6).
+ */
+static void appendTextFieldLookRows(QStandardItemModel* model,
+                                    const DataModel::OutputWidget& widget)
+{
+  using Style       = DataModel::OutputWidgetStyle;
+  const bool number = widget.inputKind == DataModel::OutputInputKind::Number;
+  const int first   = static_cast<int>(Style::ReadoutDisplay);
+  const int stored  = static_cast<int>(widget.style);
+  SS_ASSERT(stored >= 0 && stored <= static_cast<int>(Style::Compact), return);
+
+  auto* item = new QStandardItem();
+  item->setEditable(true);
+  item->setData(true, Active);
+  item->setData(ComboBox, WidgetType);
+  item->setData(
+    QStringList{QCoreApplication::translate("DataModel::ProjectEditor", "Standard"),
+                QCoreApplication::translate("DataModel::ProjectEditor", "Readout Display"),
+                QCoreApplication::translate("DataModel::ProjectEditor", "Keypad Entry"),
+                QCoreApplication::translate("DataModel::ProjectEditor", "Command Line"),
+                QCoreApplication::translate("DataModel::ProjectEditor", "Compact")},
+    ComboBoxData);
+  item->setData(number ? QVariantList{3} : QVariantList{1, 2}, ComboBoxDisabled);
+  item->setData(stored >= first ? stored - first + 1 : 0, EditableValue);
+  item->setData(kOutputWidget_Style, ParameterType);
+  item->setData(QCoreApplication::translate("DataModel::ProjectEditor", "Text Field Style"),
+                ParameterName);
+  item->setData(
+    number ? QCoreApplication::translate(
+               "DataModel::ProjectEditor",
+               "How the field looks. Command Line needs a Text field and draws as Standard here")
+           : QCoreApplication::translate("DataModel::ProjectEditor",
+                                         "How the field looks. Readout Display and Keypad Entry "
+                                         "need a Number field and draw as Standard here"),
+    ParameterDescription);
+  model->appendRow(item);
+
+  auto* size = new QStandardItem();
+  size->setEditable(true);
+  size->setData(true, Active);
+  size->setData(ComboBox, WidgetType);
+  size->setData(SerialStudio::outputControlSizes(), ComboBoxData);
+  size->setData(static_cast<int>(widget.size), EditableValue);
+  size->setData(kOutputWidget_Size, ParameterType);
+  size->setData(QCoreApplication::translate("DataModel::ProjectEditor", "Text Field Size"),
+                ParameterName);
+  size->setData(QCoreApplication::translate("DataModel::ProjectEditor",
+                                            "Scales the field, its text and its send button"),
+                ParameterDescription);
+  model->appendRow(size);
+}
+
+/**
  * @brief Appends what a text field lets the user dress: the placeholder, and the send button's
  *        caption, icon and colour. They reuse the off label, on label, icon and colour a button
  *        already stores, so the project file gains no key.
  */
 static void appendTextFieldRows(QStandardItemModel* model, const DataModel::OutputWidget& widget)
 {
+  appendTextFieldLookRows(model, widget);
   appendTextRow(
     model,
     widget.offLabel,

@@ -65,6 +65,12 @@ private slots:
   void outputWidgetStyleRoundTripsPerType();
   void outputWidgetStandardStyleOmitsTheStyleKey();
   void outputWidgetNormalizeDropsAStyleTheTypeCannotShow();
+  void outputWidgetTextFieldStylesRoundTrip();
+  void outputWidgetSizesRoundTrip();
+  void outputWidgetNormalTextFieldOmitsStyleAndSizeKeys();
+  void outputWidgetKeepsATextFieldStyleTheKindCannotShow();
+  void outputWidgetNormalizeResetsATextFieldStyleOnAButton();
+  void outputWidgetApplyStyleChoiceMapsTextFieldIndexes();
   void outputWidgetReplyBindingRoundTrips();
   void outputWidgetUnboundReplyWritesNoReplyKeys();
   void outputWidgetIdentityIsAssignedByTheGroupReader();
@@ -543,6 +549,127 @@ void TstFrameSerialization::outputWidgetNormalizeDropsAStyleTheTypeCannotShow()
   normalize(w);
   QCOMPARE(w.style, OutputWidgetStyle::EmergencyStop);
   QVERIFY(w.checkable);
+}
+
+/**
+ * @brief Each text-field style survives the file on a TextField whose kind fits it, so a saved
+ *        keypad, readout or command line never reloads as a plain field (spec 0118 AC2).
+ */
+void TstFrameSerialization::outputWidgetTextFieldStylesRoundTrip()
+{
+  const OutputWidgetStyle styles[] = {OutputWidgetStyle::ReadoutDisplay,
+                                      OutputWidgetStyle::KeypadEntry,
+                                      OutputWidgetStyle::CommandLine,
+                                      OutputWidgetStyle::Compact};
+  for (const auto style : styles) {
+    OutputWidget w;
+    w.title = QStringLiteral("Field");
+    w.type  = OutputWidgetType::TextField;
+    w.inputKind =
+      style == OutputWidgetStyle::CommandLine ? OutputInputKind::Text : OutputInputKind::Number;
+    w.style = style;
+
+    const auto restored = fromJson<OutputWidget>(toJson(w));
+    QVERIFY(restored.has_value());
+    QCOMPARE(restored->style, style);
+    QCOMPARE(effectiveTextFieldStyle(*restored), style);
+  }
+}
+
+/**
+ * @brief Each non-default size survives the file, so a resized field keeps its size on reload.
+ */
+void TstFrameSerialization::outputWidgetSizesRoundTrip()
+{
+  const OutputWidgetSize sizes[] = {
+    OutputWidgetSize::Small, OutputWidgetSize::Large, OutputWidgetSize::ExtraLarge};
+  for (const auto size : sizes) {
+    OutputWidget w;
+    w.title = QStringLiteral("Field");
+    w.type  = OutputWidgetType::TextField;
+    w.size  = size;
+
+    const auto restored = fromJson<OutputWidget>(toJson(w));
+    QVERIFY(restored.has_value());
+    QCOMPARE(restored->size, size);
+  }
+}
+
+/**
+ * @brief A Standard, Normal field writes neither key, so a project saved before spec 0118 reads
+ *        back and saves byte-identical.
+ */
+void TstFrameSerialization::outputWidgetNormalTextFieldOmitsStyleAndSizeKeys()
+{
+  OutputWidget w;
+  w.title = QStringLiteral("Field");
+  w.type  = OutputWidgetType::TextField;
+  w.style = OutputWidgetStyle::Standard;
+  w.size  = OutputWidgetSize::Normal;
+
+  const auto json = toJson(w);
+  QVERIFY(!json.contains(Keys::OutputStyle));
+  QVERIFY(!json.contains(Keys::OutputSize));
+}
+
+/**
+ * @brief A style the Text/Number kind cannot take is stored as chosen but draws as Standard
+ *        (R6), so switching the kind back restores the look instead of losing it.
+ */
+void TstFrameSerialization::outputWidgetKeepsATextFieldStyleTheKindCannotShow()
+{
+  OutputWidget w;
+  w.title     = QStringLiteral("Field");
+  w.type      = OutputWidgetType::TextField;
+  w.inputKind = OutputInputKind::Text;
+  w.style     = OutputWidgetStyle::ReadoutDisplay;
+
+  const auto readout = fromJson<OutputWidget>(toJson(w));
+  QVERIFY(readout.has_value());
+  QCOMPARE(readout->style, OutputWidgetStyle::ReadoutDisplay);
+  QCOMPARE(effectiveTextFieldStyle(*readout), OutputWidgetStyle::Standard);
+
+  w.inputKind = OutputInputKind::Number;
+  w.style     = OutputWidgetStyle::CommandLine;
+
+  const auto command = fromJson<OutputWidget>(toJson(w));
+  QVERIFY(command.has_value());
+  QCOMPARE(command->style, OutputWidgetStyle::CommandLine);
+  QCOMPARE(effectiveTextFieldStyle(*command), OutputWidgetStyle::Standard);
+}
+
+/**
+ * @brief A text-field style on a non-text control is reset, so a hand-edited file cannot give a
+ *        Button the keypad's chrome.
+ */
+void TstFrameSerialization::outputWidgetNormalizeResetsATextFieldStyleOnAButton()
+{
+  OutputWidget w;
+  w.title = QStringLiteral("Mismatch");
+  w.type  = OutputWidgetType::Button;
+  w.style = OutputWidgetStyle::KeypadEntry;
+  normalize(w);
+  QCOMPARE(w.style, OutputWidgetStyle::Standard);
+}
+
+/**
+ * @brief The editor's style combo holds five entries for a text field; index 0 must be Standard
+ *        and the rest map onto the four text-field styles in order.
+ */
+void TstFrameSerialization::outputWidgetApplyStyleChoiceMapsTextFieldIndexes()
+{
+  OutputWidget w;
+  w.title = QStringLiteral("Field");
+  w.type  = OutputWidgetType::TextField;
+
+  applyStyleChoice(w, 1);
+  QCOMPARE(w.style, OutputWidgetStyle::ReadoutDisplay);
+
+  applyStyleChoice(w, 4);
+  QCOMPARE(w.style, OutputWidgetStyle::Compact);
+
+  applyStyleChoice(w, 0);
+  QCOMPARE(w.style, OutputWidgetStyle::Standard);
 }
 
 /**

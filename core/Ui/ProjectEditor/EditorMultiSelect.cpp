@@ -21,6 +21,7 @@
 
 #include "ProjectEditor/EditorMultiSelect.h"
 
+#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <QDirIterator>
@@ -36,6 +37,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/Project/PropertyHooks.h"
 #include "DataModel/ProjectModel.h"
+#include "ProjectEditor/EditorForms/OutputValueRows.h"
 #include "ProjectEditor/ProjectEditor.h"
 #include "ProjectEditorItemIds.h"
 
@@ -314,6 +316,13 @@ void EditorMultiSelect::buildMultiOutputWidgetModel()
   m_editor.m_forms.buildOutputWidgetCommonRows(m_editor.m_selectedOutputWidget);
   m_editor.m_forms.buildOutputWidgetTransmitRow(m_editor.m_selectedOutputWidget);
   m_editor.m_forms.buildOutputWidgetValueRows(m_editor.m_selectedOutputWidget);
+
+  const auto type = sel.first().type;
+  const bool alike =
+    std::all_of(sel.cbegin(), sel.cend(), [type](const auto& w) { return w.type == type; });
+  if (alike)
+    DataModel::appendOutputPresentationRows(m_editor.m_outputWidgetModel,
+                                            m_editor.m_selectedOutputWidget);
 
   const int rows = m_editor.m_outputWidgetModel->rowCount();
   for (int r = 0; r < rows; ++r) {

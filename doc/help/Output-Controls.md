@@ -123,6 +123,10 @@ Binary on/off switch.
 
 Passes `1` to `transmit()` when switched on, `0` when switched off.
 
+When there is room for it, a toggle is drawn as a lever switch: the handle points up for on and
+down for off, with the On and Off labels above and below it. A theme that asks for the plain
+look keeps the switch.
+
 ### Text Field
 
 Accepts typed input and sends it. The **Input** property selects how the typed text is read.
@@ -149,9 +153,29 @@ A value outside Min to Max, or text that is not a number, is out of range: nothi
 
 Keyboard and wheel editing of a Number field is described in [Limits](#limits). A Text-mode field still clears after sending.
 
+#### Text Field Style
+
+Text Field Style sets how the field looks and how it is used. **Text Field Size** scales the
+field, its text and its Send button with the same four sizes a button has.
+
+| Style | Input | Behavior |
+|-------|-------|----------|
+| Standard | Text or Number | The field and Send button described above. |
+| Readout Display | Number | The value in large digits on a dark display, with its units. With a state source it shows the reported value, otherwise the last value sent. Click it to type a new value; Enter sends and Escape cancels. |
+| Keypad Entry | Number | Clicking the field opens a numeric keypad for touch screens. The sign key appears only when Min is below zero, and the point only when Decimals is not 0. Enter sends the value through the same range check as typing. |
+| Command Line | Text | A dark command prompt. Enter sends and clears the line. Up and Down recall the last 20 lines sent from this field during the session. |
+| Compact | Text or Number | The field without the Send button. Enter sends. |
+
+A style that does not match the Input setting is greyed in the list and the field draws as
+Standard. The style is kept, so switching Input back restores it.
+
 ### Knob
 
 Rotary dial for continuous setpoint adjustment. It has the same numeric properties as Slider (Min 0, Max 100, Step 1, Decimals Automatic, Units empty, Initial Value 0) and is displayed as a circular dial. The value passed to `transmit()` is a number inside [Min, Max].
+
+A knob is drawn as a pointer knob with a detent mark per Step (eleven marks when there are more
+than 24 steps). Drag it round, or use the wheel or the arrow keys, with Shift for ten steps. A
+theme that asks for the plain look keeps the dial.
 
 #### Knob Style
 
