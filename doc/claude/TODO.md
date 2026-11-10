@@ -22,11 +22,7 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 
 ## Code follow-ups
 
-- [ ] Spec 0111 runtime checks (need a running app):
-  - fixed in code 2026-11-10, confirm live: no packed decode before the reader takes the
-    declared framing, and a reader back on lines behind a missed reconnect drops the stale
-    declaration (`QuickPlotBuilder::noteReaderFraming`, `tst_quickplot_reader_framing`);
-  - the binary lane converts each value to text and back, and has no benchmark row.
+- [ ] Spec 0111 binary lane: it converts each value to text and back, and has no benchmark row.
 - [ ] Spec 0113 (material themes, panel hardware), open tasks in its `tasks.md`: consumers for
   the theme `styles` section (T8), the `display` surface behind plots (T9), the toolbar and
   taskbar surfaces and the open-tab indicator (T10), what the colour table cannot reach (T11c),
