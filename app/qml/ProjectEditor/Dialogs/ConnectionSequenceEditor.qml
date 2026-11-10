@@ -819,6 +819,9 @@ Widgets.SmartDialog {
         ToolTip.text: qsTr("Apply the sequence; it runs on the next connection.")
         onClicked: {
           forceActiveFocus()
+          if (root.verdict.message.length > 0)
+            return
+
           root.applied(JSON.stringify(root.toSequence()))
           root.close()
         }

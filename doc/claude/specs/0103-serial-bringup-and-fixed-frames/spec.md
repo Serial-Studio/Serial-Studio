@@ -1,7 +1,7 @@
 ---
 spec: 0103-serial-bringup-and-fixed-frames
 title: Serial Bring-Up Sequences, Line Control and Fixed-Length Frames
-status: approved     # draft -> approved -> in-progress -> done | shelved
+status: done         # closed 2026-11-09; see tasks.md T42 for how each criterion was met
 created: 2026-10-26
 author: Alex Spataru
 ---
@@ -188,50 +188,50 @@ the port" and "write and ship a second program".
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1)** — A UART source saved with Hold RTS on reopens with RTS asserted; the API
+- [x] **AC1 (R1)** — A UART source saved with Hold RTS on reopens with RTS asserted; the API
   reads the setting back; the Setup Panel and the Project Editor show the same value.
   Integration test over the API plus a maintainer observation with a line-state LED or a
   second port's CTS input.
-- [ ] **AC2 (R2)** — A BREAK of 55 ms requested through the API measures between 55 and 65 ms
+- [x] **AC2 (R2)** — A BREAK of 55 ms requested through the API measures between 55 and 65 ms
   on a logic analyser on each supported platform with a native and a USB serial adapter;
   bytes received during the BREAK are absent from the frame parser's input. Maintainer
   observation; a unit test covers the discard rule.
-- [ ] **AC3 (R3)** — Changing the baud rate of a connected source through the API keeps the
+- [x] **AC3 (R3)** — Changing the baud rate of a connected source through the API keeps the
   connected state, frames continue at the new rate, and the project's saved rate is unchanged
   after a save. Integration test over the API with a loopback adapter.
-- [ ] **AC4 (R5 to R8)** — A sequence of BREAK, wait, expect, send, set-baud and send steps
+- [x] **AC4 (R5 to R8)** — A sequence of BREAK, wait, expect, send, set-baud and send steps
   brings up the test-cell adapter from the Connect button, from the API, from the command
   line and after its power is cycled with auto-reconnect on, with no vendor software and no
   script; with the adapter unplugged from its bus power the connect fails within the budget
   and the console names the expect step. Maintainer observation on the adapter; a unit test
   drives the sequence's step logic against a scripted fake port covering success, each
   failure kind, the optional flag and the budget.
-- [ ] **AC5 (R7)** — With a sequence configured, no auto-execute action fires and the control
+- [x] **AC5 (R7)** — With a sequence configured, no auto-execute action fires and the control
   script's `setup()` does not run until the sequence has completed; a frame counter read
   through the API is zero during the sequence. Integration test over the API with a loopback
   adapter and a sequence that waits.
-- [ ] **AC6 (R9)** — Every byte of the handshake is visible in the console with the bring-up
+- [x] **AC6 (R9)** — Every byte of the handshake is visible in the console with the bring-up
   marker, and none appears in a CSV export of the same session. Maintainer observation plus
   an integration test that reads the console and the export.
-- [ ] **AC7 (R10)** — A project saved with a sequence loads with the same sequence; a project
+- [x] **AC7 (R10)** — A project saved with a sequence loads with the same sequence; a project
   saved before this spec loads with an empty one; the API replaces a sequence and the Project
   Editor shows the change. Integration test over the API with fixture projects.
-- [ ] **AC8 (R12)** — Every new command resolves to a capability classification and a sealed
+- [x] **AC8 (R12)** — Every new command resolves to a capability classification and a sealed
   policy entry (the existing registry tests fail otherwise), appears in the API reference, is
   refused to the assistant when Allow device control is off, and is reachable from a control
   script. Existing ctest registry tests plus an integration test.
-- [ ] **AC9 (R14, R15)** — Frame-reader unit tests cover: plain cutting at the length; a frame
+- [x] **AC9 (R14, R15)** — Frame-reader unit tests cover: plain cutting at the length; a frame
   split across chunks; a header rule skipping leading garbage; a body-rule violation dropping
   to the next header; checksum accepted, rejected and incomplete; a length of one; a length
   above the buffer rejected at configuration. Expressed as ctest units beside the existing
   frame-reader mode tests.
-- [ ] **AC10 (R14, R16)** — A project with the Fixed Length mode and the Binary decoder shows
+- [x] **AC10 (R14, R16)** — A project with the Fixed Length mode and the Binary decoder shows
   the parser exactly the frame's bytes in the frame-parser test dialog and live; Quick Plot
   ignores the mode; a zero length repairs to No Delimiters with a log line. Integration test
   over the API plus maintainer observation.
-- [ ] **AC11 (R16)** — The hotpath benchmark gate passes unchanged with Fixed Length selected
+- [x] **AC11 (R16)** — The hotpath benchmark gate passes unchanged with Fixed Length selected
   on a saturated source and with the mode absent.
-- [ ] **AC12 (R13, R17)** — The manual pages, the API reference and the control-script
+- [x] **AC12 (R13, R17)** — The manual pages, the API reference and the control-script
   reference describe the features; the documentation, terminology and claim checks pass.
 
 ## Constraints & Invariants

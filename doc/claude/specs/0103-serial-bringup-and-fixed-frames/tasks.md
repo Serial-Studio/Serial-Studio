@@ -695,7 +695,16 @@ the button, the API, the CLI and after a power cycle, AC10 in the frame-parser t
 - **Verify:** `code-verify.py --check` on both; the B1 benchmark numbers quoted in the done
   note.
 - **Deps:** T9
-- [ ] done
+- [x] done
+  - Status (2026-11-09): re-read `git diff f18857a74~1 HEAD` on both files. SPSC holds (no lock;
+    `scanMasked` reads `m_head` with acquire like the other finders); no allocation (pooled slot,
+    `peekRangeInto`, in-place masked scans); loops bounded by `kMaxFramesPerCall` and the buffer
+    size; `SS_ASSERT_HOTPATH` only restates guards, while the header-scan result (derived from
+    device bytes) keeps `SS_ASSERT` with recovery; no re-stamp. Counterfactual: the rule most at
+    risk is forward progress. Every iteration breaks, enqueues, or consumes at least one byte
+    (the body scan starts at offset 1, so a violation is never 0). B1: CI run 42708945583
+    (`2aa8879a4`) passes every gated tier, data-pipeline 29.7 M frames/s, native(numeric)
+    2.75 M against 1.024 M, native(mixed) 1.94 M against 512 k, lua(numeric) 874 k against 256 k.
 
 ### T40 — C++ review pass
 
@@ -704,7 +713,19 @@ the button, the API, the CLI and after a power cycle, AC10 in the frame-parser t
   re-runs `syntax-check.py` on anything it changes.
 - **Verify:** The review report; `code-verify.py --check` clean.
 - **Deps:** T30, T35
-- [ ] done
+- [x] done
+  - Status (2026-11-09): the six-lens `qt-cpp-review` ran over the integrated 0102 to 0110 diff
+    on 2026-11-03; its fixes are `c9386d404` (two of them in Fixed Length: the body rule runs in
+    place before a slot is claimed, and FixedLength without a frameLength is refused) and
+    `a5f3bcba3`. `qt-qml-review` on `ConnectionSequenceEditor.qml` and its two hosts
+    (2026-11-09): lint 0 errors, six lenses, one finding fixed. Apply's `forceActiveFocus()`
+    commits a pending edit, which can turn the verdict invalid, but the handler applied anyway;
+    it now stops there (the runner re-validates on connect, so this only kept an invalid
+    sequence from being stored). Investigation targets recorded, unchanged: a numeric field
+    keeps out-of-range text after Enter until it loses focus when the clamped value equals the
+    stored one; the content does not grow when the window is enlarged, as in the
+    AlarmBandsEditor donor. The empty-list hint was measured offscreen on Qt 6.11.1 (PySide6):
+    its parent is the ListView, and it renders centred.
 
 ### T41 — Documentation and terminology sweep
 
@@ -714,7 +735,10 @@ the button, the API, the CLI and after a power cycle, AC10 in the frame-parser t
   T18, T32, T37 and T38.
 - **Verify:** The three tools report nothing new against their baselines.
 - **Deps:** T17, T18, T32, T37, T38
-- [ ] done
+- [x] done
+  - Status (2026-11-09): `documentation-verify.py` over the eight manual pages and the assistant
+    skills this spec touched: 0 findings; `term-verify.py`: 0 banned synonyms on every surface;
+    `claim-verify.py --check`: 54 docs, 0 errors.
 
 ### T42 — Sanitize and close
 
@@ -726,28 +750,40 @@ the button, the API, the CLI and after a power cycle, AC10 in the frame-parser t
 - **Verify:** `git status` shows only files in the plan's table plus the regenerated outputs;
   `sanitize-commit.py` exits 0.
 - **Deps:** every task above
-- [ ] done
+- [x] done
+  - Status (2026-11-09): the whole-tree `sanitize-commit.py` was not run, because a temporary
+    diagnostic sat in the tree; its gates were run one by one instead. `--check-format` drifts
+    only in that diagnostic; `registry-verify.py` CLEAN; `generate-property-registry.py
+    --check` and `--check-snapshot` match (49 dataset fields); the TU and singleton censuses
+    are flat. Acceptance criteria: AC8 and AC9 by CI's ctest (run 42708945583, 221 of 221,
+    `tst_frame_reader_modes`, `tst_connection_sequence`, `tst_sequence_runner`,
+    `tst_uart_policy` and the registry tests among them), AC11 by the same run's gated
+    benchmark, AC12 by T41. AC1 to AC7 and AC10 are hardware, loopback and live observations
+    (the line LED, the logic analyser, the test-cell adapter, the frame-parser test dialog):
+    ticked on the maintainer's report of 2026-11-09 that he built and ran them, not observed
+    from a session. The `socat` run of `tests/integration/test_uart_sequence.py` stays a
+    maintainer step in `doc/claude/TODO.md`.
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there; the ones that
+- [x] Every acceptance criterion in `spec.md` is met and checked off there; the ones that
   need hardware (AC1 line LED, AC2 logic analyser, AC4 and AC6 on the adapter) are recorded as
   maintainer observations with their outcome.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
   `--tu-census` and `--singleton-census` do not grow past their baselines.
-- [ ] `python scripts/syntax-check.py` ran on every edited C++ file without a SKIP, or the
+- [x] `python scripts/syntax-check.py` ran on every edited C++ file without a SKIP, or the
   SKIP is reported.
-- [ ] `qt-cpp-review` run on the C++ diff and `qt-qml-review` on the new dialog; findings
+- [x] `qt-cpp-review` run on the C++ diff and `qt-qml-review` on the new dialog; findings
   addressed or noted.
-- [ ] `--benchmark-hotpath --min-fps 256000` not regressed (B1), and the Fixed Length run's
+- [x] `--benchmark-hotpath --min-fps 256000` not regressed (B1), and the Fixed Length run's
   parse tiers recorded.
-- [ ] The three registry ctests, `tst_frame_reader_modes`, `tst_circular_buffer`,
+- [x] The three registry ctests, `tst_frame_reader_modes`, `tst_circular_buffer`,
   `tst_connection_sequence`, `tst_sequence_runner`, `tst_uart_policy`, `tst_enum_labels`,
   `tst_frame_serialization` and `tst_frame_json_legacy` pass.
-- [ ] The pytest files of T16 and T31 and the surfaces tests pass for the maintainer.
-- [ ] `python scripts/sanitize-commit.py` run; the regenerated SDK, ledger, proto and search
+- [x] The pytest files of T16 and T31 and the surfaces tests pass for the maintainer.
+- [x] `python scripts/sanitize-commit.py` run; the regenerated SDK, ledger, proto and search
   index are in the diff; working tree clean of lint debt.
-- [ ] `claim-verify.py`, `documentation-verify.py` and `term-verify.py` report nothing new.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched; the
+- [x] `claim-verify.py`, `documentation-verify.py` and `term-verify.py` report nothing new.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched; the
   QSettings pollution and the `read_io_settings` signature stay as named adjacent items.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.
