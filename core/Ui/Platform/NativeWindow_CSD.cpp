@@ -379,7 +379,8 @@ void NativeWindow::onWindowStateChanged(Qt::WindowState state)
 }
 
 /**
- * @brief Handles the active state change of a window.
+ * @brief Applies the Windows 11 caption color; it ignores focus so the caption stays continuous
+ *        with the toolbar.
  */
 void NativeWindow::onActiveChanged()
 {
@@ -398,10 +399,8 @@ void NativeWindow::onActiveChanged()
   if (m_colors.contains(window) && !m_colors[window].isEmpty())
     colorName = m_colors[window];
 
-  else if (window->isActive())
-    colorName = colors.value("toolbar_top").toString();
   else
-    colorName = colors.value("toolbar_bottom").toString();
+    colorName = colors.value("toolbar_top").toString();
 
   const QColor color(colorName);
   const COLORREF colorref = color.red() | (color.green() << 8) | (color.blue() << 16);
