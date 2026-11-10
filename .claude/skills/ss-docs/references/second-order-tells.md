@@ -71,6 +71,28 @@ Report each hit with file:line and a quoted example. Thresholds are per page unl
     (SD < 4 words). Technical prose still breathes: a short declarative after a long
     qualified one.
 
+15. **Announced structure.** A page or section that lists what it is about to cover before
+    covering it ("This page covers X, Y and Z", "Below we walk through..."). The sidebar and
+    headings already do that. Flag every instance. Exception: a one-line pointer to a
+    different page.
+
+16. **Legacy-contrast setup.** Opening a section by positioning Serial Studio against a
+    strawman ("Unlike traditional serial monitors...", "Instead of manually parsing...").
+    Describe what the feature does, not what it replaces. Flag every instance outside
+    comparison pages.
+
+17. **The tidy template.** Taken together: claim first, structure announced, contrast set up,
+    confident institutional "we", summary close. One of these alone is normal manual shape.
+    Three or more on one page means the page follows the default template, not the
+    feature. Rebuild it around what the code actually does.
+
+Tells 15-17 come from SlopShape (Madler, arXiv:2609.15369, 2026). Across five 2026 models it
+separated AI blog text from human text at 97 macro-F1 using structural features alone, and the
+score dropped only about one point after the text was reworded. That is why tells like these
+outlast a vocabulary fix. Human pages were the structural outliers; AI pages clustered on a few
+common shapes. "Claim first" is not a tell by itself in a manual, where stating behavior first
+is correct.
+
 ## Running the pass
 
 - Read the whole page first; the tells are page-level patterns, not line-level phrases.
@@ -90,5 +112,5 @@ Report each hit with file:line and a quoted example. Thresholds are per page unl
 | 1 | Hedge stacking | 3 | "typically may need..." (Drivers-Foo.md:42) |
 | ... | ... | ... | ... |
 
-Verdict: PASS / FAIL (fail on any hit for tells 1, 2, 10, 12; thresholds otherwise)
+Verdict: PASS / FAIL (fail on any hit for tells 1, 2, 10, 12, 15, 16; thresholds otherwise)
 ```
