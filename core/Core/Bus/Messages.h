@@ -154,9 +154,16 @@ struct LicenseStateChanged final {
   int tier;
   bool trialExpired;
   int trialDaysRemaining;
-
-  [[nodiscard]] bool operator==(const LicenseStateChanged&) const = default;
 };
+
+/**
+ * @brief Whether two licence states carry the same facts; the publisher drops a repeat.
+ */
+[[nodiscard]] inline bool operator==(const LicenseStateChanged& a, const LicenseStateChanged& b)
+{
+  return a.activated == b.activated && a.tier == b.tier && a.trialExpired == b.trialExpired
+      && a.trialDaysRemaining == b.trialDaysRemaining;
+}
 
 /**
  * @brief The operation mode (SerialStudio::OperationMode ordinal) the application runs in.

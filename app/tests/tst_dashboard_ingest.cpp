@@ -94,12 +94,11 @@ constexpr quint64 kGeneration = 7;
  *        the facade's configure* pass would leave it, then resolves the push tables from it.
  */
 struct Stores {
-  bool layoutValid           = true;
-  bool streamAvailable       = true;
-  bool updateRequired        = false;
-  bool updateRetryInProgress = false;
-  int widgetCount            = 3;
-  int points                 = kPoints;
+  bool layoutValid     = true;
+  bool streamAvailable = true;
+  bool updateRequired  = false;
+  int widgetCount      = 3;
+  int points           = kPoints;
 
   UI::PlotClockState plotClocks;
   SerialStudio::WidgetMap widgetMap;
@@ -135,27 +134,26 @@ struct Stores {
 
   [[nodiscard]] UI::IngestBindings bindings()
   {
-    return UI::IngestBindings{.layoutValid           = layoutValid,
-                              .streamAvailable       = streamAvailable,
-                              .updateRequired        = updateRequired,
-                              .updateRetryInProgress = updateRetryInProgress,
-                              .widgetCount           = widgetCount,
-                              .points                = points,
-                              .plotClocks            = plotClocks,
-                              .widgetMap             = widgetMap,
-                              .xAxisData             = xAxisData,
-                              .yAxisData             = yAxisData,
-                              .plotTimeRings         = plotTimeRings,
-                              .multiplotTimeRings    = multiplotTimeRings,
-                              .plotSweep             = plotSweep,
-                              .multiplotSweep        = multiplotSweep,
-                              .activePlots           = activePlots,
-                              .activeFFTPlots        = activeFFTPlots,
-                              .activeMultiplots      = activeMultiplots,
-                              .gpsValues             = gpsValues,
-                              .fftValues             = fftValues,
-                              .pltValues             = pltValues,
-                              .multipltValues        = multipltValues,
+    return UI::IngestBindings{.layoutValid        = layoutValid,
+                              .streamAvailable    = streamAvailable,
+                              .updateRequired     = updateRequired,
+                              .widgetCount        = widgetCount,
+                              .points             = points,
+                              .plotClocks         = plotClocks,
+                              .widgetMap          = widgetMap,
+                              .xAxisData          = xAxisData,
+                              .yAxisData          = yAxisData,
+                              .plotTimeRings      = plotTimeRings,
+                              .multiplotTimeRings = multiplotTimeRings,
+                              .plotSweep          = plotSweep,
+                              .multiplotSweep     = multiplotSweep,
+                              .activePlots        = activePlots,
+                              .activeFFTPlots     = activeFFTPlots,
+                              .activeMultiplots   = activeMultiplots,
+                              .gpsValues          = gpsValues,
+                              .fftValues          = fftValues,
+                              .pltValues          = pltValues,
+                              .multipltValues     = multipltValues,
 #ifdef BUILD_COMMERCIAL
                               .activeWaterfalls = activeWaterfalls,
                               .waterfallValues  = waterfallValues,
