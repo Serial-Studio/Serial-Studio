@@ -25,9 +25,6 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 - [ ] Spec 0111 binary lane: it converts each value to text and back, and has no benchmark row.
 - [ ] Spec 0113 T9, deferred 2026-11-10: the `display` surface (black glass behind plots) needs a
   light plot ink (axes, labels, grid) for plot, FFT and multiplot under a glass surface.
-- [ ] Spec 0113 T11c leftovers: the command palette header paints with the main toolbar keys,
-  and a gauge's face, bezel and plot grid all derive from `widget_base` and `widget_border`.
-  A look decision for the maintainer, not a defect.
 - [ ] Spec 0099 deferrals: span-lane writeback (T3, benchmark-gated) and ZMODEM backpressure and
   ZEOF timing (T15, needs a cross-layer HAL drain API). Briefs in its `findings.md`.
 - [ ] Spec 0104 consolidation quarter, T3 to T19 in its `tasks.md`. T10 reads on 2026-12-01 and

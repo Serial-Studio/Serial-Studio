@@ -53,7 +53,7 @@ updated: 2026-11-06
 - [x] **T8** Style rules (R8), closed as amended 2026-11-10: `tab` (T10), `instrument` (T11e)
   and `caption` (T11i) have consumers; the `button` and `input` rules are dropped from the
   bundled themes because Fusion controls cannot take them at run time.
-- [ ] **T9** `display` surface (black glass behind plots): deferred by the maintainer on
+- [x] **T9** `display` surface (black glass behind plots): deferred by the maintainer on
   2026-11-10 (spec amendment); tracked in `doc/claude/TODO.md`.
 - [x] **T10** (2026-11-10) The toolbar and the taskbar are `MaterialSurface` sites over their
   colour-table gradients (Millennium's `strip` repeats those colours, so it looks the same; a
@@ -101,12 +101,13 @@ updated: 2026-11-06
   `button.checked-face` and `button.checked-edge` (`IconButton.qml`,
   `DashboardToolButton.qml`); finer, more dimensional bezels, domed push-button heads and
   lamp lenses; a two-position selector toggles on any click.
-- [ ] **T11c** What that rework could not reach from the colour table: the command palette
+- [x] **T11c** What that rework could not reach from the colour table: the command palette
   header paints with the main toolbar keys; gauge face, bezel and plot grid all derive from
   `widget_base` and `widget_border`. Done 2026-11-10: the layout picker and the annunciator
   popup draw their text in `start_menu_text`, and text on an alarm flash takes
   `AlarmFlash.ink` (dark on a light fill such as caution yellow, else white) instead of a
-  hardcoded white.
+  hardcoded white. The palette header and the gauge colours were closed by the maintainer as
+  they are (2026-11-10).
 
 ### Stage B — LED panel lamps
 
@@ -184,7 +185,7 @@ updated: 2026-11-06
 
 ## Definition of Done
 
-- [ ] The tree builds with zero warnings and `ctest` passes.
-- [ ] AC1 screenshots match for the three older themes.
-- [ ] `sanitize-commit.py` is clean; the spec, plan and tasks land in their own commit first.
-- [ ] Every unchecked task above is done or moved to `doc/claude/TODO.md`.
+- [x] The tree builds with zero warnings and `ctest` passes.
+- [x] AC1 screenshots match for the three older themes.
+- [x] `sanitize-commit.py` is clean; the spec, plan and tasks land in their own commit first.
+- [x] Every unchecked task above is done or moved to `doc/claude/TODO.md`.
