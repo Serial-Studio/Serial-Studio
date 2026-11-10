@@ -206,9 +206,20 @@ def test_diagnostics_command_icon_resolves_in_the_icon_tree():
     entry = next(c for c in manifest["commands"] if c["id"] == UI_COMMAND)
     category, name = entry["icon"].split("/", 1)
 
-    tree = ROOT / "app" / "rcc" / "icons" / category
-    tiers = [t for t in ICON_TIERS if (tree / str(t) / f"{name}.svg").is_file()]
-    assert tiers, f"icon '{entry['icon']}' resolves in no tier of the icon tree"
+    roots = (
+        ROOT / "app" / "rcc" / "icons" / category,
+        ROOT / "app" / "rcc" / "iconpacks" / "basic" / category,
+    )
+    found = [
+        root / str(t) / f"{name}{suffix}"
+        for root in roots
+        for t in ICON_TIERS
+        for suffix in (".svg", ".png")
+        if (root / str(t) / f"{name}{suffix}").is_file()
+    ]
+    assert (
+        found
+    ), f"icon '{entry['icon']}' resolves in neither the fixed tree nor the basic pack"
 
 
 def test_diagnostics_command_is_bound_in_both_contexts():
