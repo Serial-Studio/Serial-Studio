@@ -95,11 +95,12 @@ void IO::Drivers::ModbusRedial::reportRecovered(Core::Bus::MessageBus* bus)
     return;
 
   if (bus)
-    bus->publish<Core::Bus::NotificationRaised>(Core::Bus::kSeverityInfo,
-                                                QStringLiteral("Modbus"),
-                                                QString(),
-                                                QStringLiteral("Resolved: %1").arg(m_raisedTitle),
-                                                tr("The connection was restored"));
+    bus->publish<Core::Bus::NotificationRaised>(
+      Core::Bus::kSeverityInfo,
+      QStringLiteral("Modbus"),
+      QString(),
+      QString(Core::Bus::kResolvedTitlePrefix).append(m_raisedTitle),
+      tr("The connection was restored"));
 
   m_raisedTitle.clear();
 }

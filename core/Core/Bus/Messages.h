@@ -92,6 +92,13 @@ inline constexpr int kSeverityWarning  = 1;
 inline constexpr int kSeverityCritical = 2;
 
 /**
+ * @brief Title prefix of the Info that clears the point a Warning or Critical with the rest of the
+ *        title raised on the same channel: what NotificationCenter::resolve() posts and what the
+ *        alarm annunciator pairs on. Never translated: it is a protocol, not text.
+ */
+inline constexpr QLatin1StringView kResolvedTitlePrefix("Resolved: ");
+
+/**
  * @brief The notification center accepted an event (after dedup and clamping): what the history
  *        holds, for sinks that forward notifications (the MQTT publisher). origin carries the
  *        kNotificationOrigin* provenance ordinal, so a reader that must treat the app's own

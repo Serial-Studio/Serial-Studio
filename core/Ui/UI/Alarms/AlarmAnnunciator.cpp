@@ -59,7 +59,6 @@ static constexpr int kTestStepCount                          = 4;
 static constexpr float kVolumeScale                          = 0.01f;
 static constexpr int kMaxRetryTicks                          = 30;
 static constexpr qint64 kReflashMinMs                        = 300;
-static const QString kResolvedPrefix                         = QStringLiteral("Resolved: ");
 static const QString kProblemsChannel                        = QStringLiteral("Problems");
 static const QString kSystemChannel                          = QStringLiteral("System");
 static const QString kCheckerId                              = QStringLiteral("alarms.sounds");
@@ -853,8 +852,8 @@ void UI::Alarms::AlarmAnnunciator::onNotificationPosted(const Core::Bus::Notific
     return;
   }
 
-  if (event.title.startsWith(kResolvedPrefix)) {
-    const QString title = event.title.mid(kResolvedPrefix.size());
+  if (event.title.startsWith(Core::Bus::kResolvedTitlePrefix)) {
+    const QString title = event.title.mid(Core::Bus::kResolvedTitlePrefix.size());
     clearPoint(PointKey{PointKind::Notification, notificationId(event.channel, title)});
     return;
   }

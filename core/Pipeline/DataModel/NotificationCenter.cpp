@@ -245,9 +245,10 @@ void DataModel::NotificationCenter::resolve(const QString& channel,
                                             const QString& title,
                                             const QString& subtitle)
 {
-  const QString resolvedTitle = title.trimmed().isEmpty()
+  const QString trimmed       = title.trimmed();
+  const QString resolvedTitle = trimmed.isEmpty()
                                 ? QStringLiteral("Resolved")
-                                : QStringLiteral("Resolved: %1").arg(title.trimmed());
+                                : QString(Core::Bus::kResolvedTitlePrefix).append(trimmed);
   post(Info, channel, resolvedTitle, subtitle);
 }
 

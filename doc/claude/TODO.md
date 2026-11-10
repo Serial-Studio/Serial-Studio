@@ -87,8 +87,6 @@ Left after the sweep (`scripts/icon-report.py`, tier holes):
   the project mid-session (APU-DAQ simulator, 2026-11-09). Since the re-sync fix it costs one
   dashboard rebuild near connect. Find which emitter fires (`LemonSqueezy::activatedChanged` or
   `Trial::enabledChanged`) before calling it redundant; licensing is a protected surface.
-- [ ] The `Resolved: ` prefix that clears an annunciator point is a literal in three places
-  (`NotificationCenter::resolve`, `AlarmAnnunciator`, `ModbusRedial`). Make it one constant.
 - [ ] A ctest for a live re-sync of a multi-source session: no combined frame published as source
   0's layout, every connect-time template re-announced, one retry per (source, generation).
 
