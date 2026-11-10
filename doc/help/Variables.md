@@ -1,77 +1,78 @@
 # Variables (Pro)
 
-*Formerly called Data Tables. The feature and the `RegisterDef`/`registers` project JSON keys are unchanged — only the name shown in the UI and docs changed.*
+Your Arduino prints a raw ADC count, three datasets need the same volts-per-count slope, and you would rather not paste that number into three scripts. Variables, a Pro feature of the Project Editor (Project Editor > Variables), hold it once, in a table saved with the project. A variable has a name and a default value, and stores a number or a string:
 
-Shared variables that any dataset transform can read and write. Use them for project-wide constants (calibration factors, thresholds, scale values) and for computed values that flow between transforms, either within a single frame or across frames (running filters, integrators, latched state).
+| Table `calibration` | Permissions | Default |
+|---------------------|-------------|---------|
+| `slope`             | Read-Only   | `0.01`  |
 
-Variables are a **Pro feature**: creating, duplicating, or importing a table, and adding a variable, need a license or an active trial. So does connecting with a project that defines a table; deleting the table is always free and makes the project connect again.
-
-## Overview
-
-A **Variables table** is a named collection of **variables**. Each variable has a name, a type, and a default value, and it stores either a number or a string. Tables are defined once in the Project Editor and saved with the project file. At runtime, every transform can read and write them through a small four-function API.
-
-```mermaid
-flowchart LR
-    A["Dataset 1<br/>transform()"] -->|tableSet| C["Variables table"]
-    C -->|tableGet| B["Dataset 2<br/>transform()"]
-    D["Project File"] -->|defaults| C
-```
-
-Tables are useful when:
-
-- Several datasets share the same calibration constant and you want to edit it in one place.
-- One transform derives a value (total current, RMS error, CRC) that another transform needs to consume.
-- You want a named, typed place for "magic numbers" instead of hard-coding them inside transform scripts.
-
-## Variable types
-
-Every variable is one of two types:
-
-| Type         | Written at                     | Readable by    | Lifetime                                    |
-|--------------|--------------------------------|----------------|---------------------------------------------|
-| **Constant** | Project load only              | All transforms | Fixed for the session                       |
-| **Computed** | Any transform via `tableSet()` | All transforms | Holds the last value written, indefinitely  |
-
-Constants are the right tool for configuration: sensor slopes, offsets, thresholds, full-scale ranges. They can't be modified by `tableSet()` at runtime.
-
-Computed variables behave like ordinary memory: once you write a value, it stays there until you (or another transform) write again. That matches the way state lives in control and embedded systems: Kalman states, integrators, PID controllers, edge counters, latched flags. If you specifically want a variable to start each frame at a known value, write that value at the top of an early transform with `tableSet()`.
-
-## The system table
-
-Serial Studio maintains one built-in table called `__datasets__`, generated automatically from your project. You don't define it. It surfaces in the Project Editor only as a read-only **Dataset Values** node under Variables, which lists each dataset's unique ID and its `datasetGetFinal()` access code; you can't edit it. It mirrors every dataset as two variables:
-
-| Variable          | Contents                                                          |
-|-------------------|-------------------------------------------------------------------|
-| `raw:<uniqueId>`  | Raw value from the frame parser, before the dataset's transform runs |
-| `final:<uniqueId>`| Final value after the dataset's transform has run                 |
-
-`<uniqueId>` is the integer unique ID shown next to each dataset in the Project Editor. For the rules around `uniqueId`, `datasetId`, and `index`, see the [Dataset Identity Model](Identity-Model.md).
-
-If a dataset has an alias set (the **Script Alias** field in the Project Editor), the same two variables are also exposed under that name, `raw:<alias>` and `final:<alias>`. This is how a Control Loop or the API reads a dataset value by alias: `tableGet("__datasets__", "final:ATAM1-CH1")` resolves the same value that `datasetGetFinal("ATAM1-CH1")` returns from a transform.
-
-In practice you'll rarely read `__datasets__` directly. The convenience functions `datasetGetRaw(uid)` and `datasetGetFinal(uid)` wrap it with a cleaner API and are the recommended way to read dataset values inside a transform.
-
-## The transform API
-
-Four functions are injected into every transform engine. Lua and JavaScript behave identically.
-
-| Function                       | Arguments                               | Returns |
-|--------------------------------|-----------------------------------------|---------|
-| `tableGet(table, reg)`         | table name, variable name               | number / string / nil (Lua) / undefined (JS) |
-| `tableSet(table, reg, value)`  | table name, variable name, number or string | nothing (no-op if the variable is a constant or doesn't exist) |
-| `datasetGetRaw(uniqueId \| alias)`   | integer uniqueId or alias string        | number / string / nil / undefined |
-| `datasetGetFinal(uniqueId \| alias)` | integer uniqueId or alias string        | number / string / nil / undefined |
-
-**Read a constant from a user table:**
+A **transform** is a small Lua or JavaScript function attached to a dataset in the Project Editor. It receives the parsed value and returns the value to display; see [Dataset Value Transforms](Dataset-Transforms.md). This one multiplies every value by the slope:
 
 ```lua
 function transform(value)
-  local k = tableGet("calibration", "voltage_scale")
-  return value * (k or 1.0)
+  return value * tableGet("calibration", "slope")
 end
 ```
 
-**Publish a value from one transform, consume it in another:**
+You create the table and the variable in the Project Editor ([steps below](#defining-tables-in-the-project-editor)), then paste the function into a dataset's transform. Variables are what transforms share: project-wide constants (calibration factors, thresholds) and values that flow between transforms, within a frame or across frames (running filters, integrators, latched state).
+
+**Edition.** Creating, duplicating or importing a table, and adding a variable, need a Pro license or an active trial. So does connecting with a project that defines a table. The first time you use a Pro feature without a license, Serial Studio asks whether to start the Pro trial (it needs an internet connection to register); declining leaves the feature locked, and once a trial has ended the prompt offers activation or purchase instead. Deleting the table is free and lets the project connect again. See [Pro vs Free](Pro-vs-Free.md#dataset-transforms-variables-and-custom-workspaces).
+
+## Defining tables in the Project Editor
+
+Variables (Pro), Project Editor > Variables. **Add Variables Table** and **Add Variable** need a Pro license or trial (see Edition above).
+
+1. Open the project in the Project Editor.
+2. Select the **Variables** node in the tree.
+3. Click **Add Variables Table** and give it a name, for example `calibration` or `runtime`.
+4. Select the table and click **Add Variable**. Type a name; the new variable is Read/Write with a default of `0`. Then set:
+
+| Field             | Accepts                                    | Effect                                                                                                                      |
+|-------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| **Variable Name** | text; a duplicate gets a `_2` suffix       | The name transforms pass to `tableGet()` and `tableSet()`.                                                                  |
+| **Permissions**   | Read-Only, Read/Write                      | Read-Only is a constant; Read/Write is a computed variable ([Variable types](#variable-types)).                                                     |
+| **Default Value** | a number or a string                       | The value at project load. A constant keeps it all session; a computed variable starts there and holds what transforms write. |
+
+Tables are saved with the project file, so anyone who opens it gets the same tables and defaults.
+
+The table toolbar also has **Insert Constant**, which adds a physical constant (speed of light, standard gravity, gas constants) as a Read-Only variable, and **Import** and **Export**, which move a table to and from CSV. The file starts with the header `name,permissions,value`. Permissions accepts `read-only` or `read-write` (also `read/write`, `rw`, `computed`). Import needs Pro.
+
+The same edits are scriptable: the `project.dataTable.*` commands add, rename and delete tables and variables, and read or write a variable's live runtime value from outside a transform. See the [API Reference](API-Reference.md#data-table-commands-13).
+
+### Naming rules
+
+- Table and variable names are case-sensitive and free-form.
+- Runs of whitespace collapse to one space, so a name typed with two spaces does not match the string in your script. Short ASCII names without spaces keep scripts readable.
+- A duplicate table name gets a numeric suffix (`Calibration 2`); a duplicate variable name gets `_2`.
+- A new table's name has any `/` removed, because `/` joins a folder to a table in its full path.
+- Do not name a table `__datasets__`; the name belongs to the system table.
+
+## Variable types
+
+A variable is one of two types, picked with the **Permissions** field. This manual calls them a **constant** (Read-Only) and a **computed variable** (Read/Write); the editor only shows Read-Only and Read/Write, and a computed variable has nothing to do with a [computed dataset](Dataset-Transforms.md#computed-datasets).
+
+A constant is written at project load and is fixed for the session. It is for configuration: sensor slopes, offsets, thresholds, full-scale ranges. `tableSet()` cannot modify it.
+
+A computed variable behaves like ordinary memory. Once a transform writes a value it stays until the next write, which matches how state lives in embedded systems: filter states, integrators, edge counters, latched flags. To start each frame from a known value, write it with `tableSet()` at the top of an early transform.
+
+## The transform API
+
+Four functions read and write variables. Lua and JavaScript have the same names and semantics; a missing value is `nil` in Lua and `undefined` in JavaScript. For transforms that touch the same variables on every value, `tableGetH` and `tableSetH` resolve a name once to a handle; see [Fast table access with handles](SerialStudio-SDK.md#handles-the-fast-path-for-table-heavy-parsers).
+
+| Function                             | Arguments                                   | Returns                                                         |
+|--------------------------------------|---------------------------------------------|-----------------------------------------------------------------|
+| `tableGet(table, variable)`          | table name, variable name                   | the value, or nil/undefined if the variable doesn't exist       |
+| `tableSet(table, variable, value)`   | table name, variable name, number or string | nothing; ignored if the variable is a constant or doesn't exist |
+| `datasetGetRaw(uniqueId \| alias)`   | integer uniqueId or alias string            | the value, or nil/undefined for an unknown dataset              |
+| `datasetGetFinal(uniqueId \| alias)` | integer uniqueId or alias string            | the value, or nil/undefined for an unknown dataset              |
+
+A `uniqueId` is the integer shown next to each dataset in the Project Editor tree; see the [Dataset Identity Model](Identity-Model.md).
+
+- A table filed in a folder is addressed by its full path: `tableGet("sensors/calibration", "slope")`.
+- A string argument to `datasetGetRaw` and `datasetGetFinal` is always an alias, even if it looks like a number, so `datasetGetFinal("10")` looks for an alias named `10`.
+- An unknown ID, alias or variable returns nil and logs a warning once.
+
+Publish a value from one transform and consume it in another:
 
 ```lua
 -- Earlier dataset writes a shared value
@@ -84,101 +85,63 @@ end
 ```lua
 -- Later dataset reads it
 function transform(value)
-  local i = tableGet("runtime", "pack_current") or 0
+  local i = tableGet("runtime", "pack_current")
   return value * i
 end
 ```
 
-**Compute a derived value in a computed dataset:**
-
-```lua
-function transform(value)
-  local a = datasetGetFinal(10)
-  local b = datasetGetFinal(11)
-  if a == nil or b == nil then return 0 end
-  return (a + b) / 2
-end
-```
-
-See [Dataset Value Transforms](Dataset-Transforms.md#table-api) for the per-language quick reference, including the equivalent JavaScript examples.
+See [Dataset Value Transforms](Dataset-Transforms.md#table-api) for the per-language reference, including the JavaScript equivalents.
 
 ## Processing order and visibility
 
-Transforms are applied sequentially: groups in project order, datasets in group order. Each dataset is processed in a single pass before moving to the next:
+A dataset sees the final values of the datasets listed above it in the Project Editor tree: earlier groups first, then earlier datasets inside the same group. For everything below it, it sees whatever the previous frame left behind. If dataset B depends on dataset A, list A before B.
 
-1. The dataset's raw value is written to the system table.
-2. The dataset's transform runs (if it has one).
-3. The dataset's final value is written to the system table.
+Each dataset is processed in one pass before the next: its raw value is written to the system table, its transform runs, and its final value is written. So `datasetGetRaw(uid)` is current only for the running dataset and those above it. Computed variables written by earlier transforms are visible to later ones in the same frame and on every later frame, until the next write.
 
-That gives these guarantees:
+## The system table
 
-- `datasetGetRaw(uid)` returns a meaningful value only for the current dataset and for datasets earlier in project order. A dataset later in the order still holds whatever raw value the previous frame left there, because its raw write hasn't happened yet.
-- `datasetGetFinal(uid)` only returns a meaningful value for datasets that have already been transformed (that is, datasets earlier in the same group, or in an earlier group).
-- Computed variables written by earlier transforms are visible to later ones, inside the same frame and on every subsequent frame, until the next write.
+Serial Studio builds one table called `__datasets__` from your project. You don't define it. The Project Editor shows it as a read-only **Dataset Values** node under Variables, listing each dataset's unique ID and its `datasetGetFinal()` access code. It mirrors every dataset as two variables:
 
-If dataset B depends on dataset A's final value, make sure A is listed before B in the Project Editor tree. Otherwise `datasetGetFinal(A)` will return whatever the previous frame left in the variable, almost certainly not what you want.
+| Variable           | Contents                                                             |
+|--------------------|----------------------------------------------------------------------|
+| `raw:<uniqueId>`   | Raw value from the frame parser, before the dataset's transform runs |
+| `final:<uniqueId>` | Final value after the dataset's transform has run                    |
 
-## Defining tables in the Project Editor
-
-1. Open the project in the Project Editor.
-2. Select the **Variables** node in the tree.
-3. Click **Add Variables Table** and give it a name (for example `calibration` or `runtime`).
-4. Add variables with **Add Variable**. For each variable, set:
-   - **Variable Name.** Unique within the table.
-   - **Permissions.** **Read-Only** (a Constant variable) or **Read/Write** (a Computed variable).
-   - **Default Value.** The numeric or string value used at project load. Read-Only (Constant) variables stay at this value for the whole session; Read/Write (Computed) variables start the session at this value and hold whatever transforms write thereafter.
-
-Tables are saved with the project file. When the project is shared, anyone opening it gets the same table definitions and defaults.
-
-The same edits are scriptable: the `project.dataTable.*` commands add, rename and delete tables and their variables, and read or write a variable's live runtime value from outside a transform. See the Variables commands in the [API Reference](API-Reference.md#data-table-commands-13).
-
-### Naming rules
-
-Table and variable names are free-form strings, but keep them short and descriptive. They appear as string literals in every transform that uses them. Avoid whitespace and non-ASCII characters to keep scripts readable. The name `__datasets__` is reserved for the built-in system table.
+A dataset with a **Script Alias** is also exposed as `raw:<alias>` and `final:<alias>`. Outside a transform, read it with `tableGet("__datasets__", "final:ATAM1-CH1")`; inside one, use `datasetGetFinal("ATAM1-CH1")`, which returns the same value.
 
 ## Common use cases
 
-Here's a tour of patterns that come up repeatedly in real projects. Each one is a small recipe you can adapt rather than a fully finished template. The shipped calibration transform template, which reads its slope and offset from a Variables table, covers the first pattern; open the transform editor's template picker and use it as a starting point.
-
 ### Sensor calibration constants
 
-Problem: several datasets share the same calibration, and every firmware rev, lab recalibration, or field swap forces you to edit each transform by hand.
-
-Solution: store the calibration in a Constant variable and read it from the transform.
+Several datasets share one calibration, and every firmware revision, lab recalibration or field swap would otherwise mean editing each transform by hand. Store the calibration in constants, so a recalibration is one edit in the Project Editor. The same pattern covers per-deployment unit factors such as `m_to_ft` or `counts_per_rev`. This recipe is also the shipped calibration transform template: open the transform editor's template picker and start there.
 
 Table `calibration`:
 
-| Variable | Type     | Default | Purpose                       |
-|----------|----------|---------|-------------------------------|
-| `slope`  | Constant | `0.01`  | V per ADC count               |
-| `offset` | Constant | `0.0`   | Zero-offset in volts          |
+| Variable | Permissions | Default | Purpose              |
+|----------|-------------|---------|----------------------|
+| `slope`  | Read-Only   | `0.01`  | V per ADC count      |
+| `offset` | Read-Only   | `0.0`   | Zero-offset in volts |
 
 ```lua
 function transform(value)
-  local slope  = tableGet("calibration", "slope")  or 1.0
-  local offset = tableGet("calibration", "offset") or 0.0
+  local slope  = tableGet("calibration", "slope")
+  local offset = tableGet("calibration", "offset")
   return slope * value + offset
 end
 ```
 
-When the sensor is recalibrated, edit the defaults in the Project Editor. Every dataset using this transform picks up the new values on the next project load.
-
-### Unit conversions that change per deployment
-
-Same pattern, different use. A variable called `units_per_count` lets you keep one generic transform but ship the project to customers on metric or imperial units without code changes. Good candidates: `m_to_ft`, `c_to_f`, `psi_to_bar`, `counts_per_rev`.
-
 ### Thresholds and alarm limits
 
-Store your warning and critical levels in Constant variables and let a transform return a status code that downstream widgets can color by:
+Store warning and critical levels in constants and let a transform return a status code (0 ok, 1 warning, 2 critical) for you to plot or display. For coloring a widget by level, see [Alarm bands](Widget-Reference.md#alarm-bands).
 
 Table `limits`:
 
-| Variable  | Type     | Default |
-|-----------|----------|---------|
-| `warn_lo` | Constant | `10`    |
-| `warn_hi` | Constant | `80`    |
-| `crit_lo` | Constant | `0`     |
-| `crit_hi` | Constant | `95`    |
+| Variable  | Permissions | Default |
+|-----------|-------------|---------|
+| `warn_lo` | Read-Only   | `10`    |
+| `warn_hi` | Read-Only   | `80`    |
+| `crit_lo` | Read-Only   | `0`     |
+| `crit_hi` | Read-Only   | `95`    |
 
 ```lua
 function transform(value)
@@ -192,13 +155,11 @@ function transform(value)
 end
 ```
 
-Pair this with a [computed dataset](Dataset-Transforms.md#computed-datasets) so the status has its own channel without consuming a frame index.
+Pair this with a [computed dataset](Dataset-Transforms.md#computed-datasets) so the status gets its own channel without consuming a frame index.
 
 ### Derived quantities from other datasets
 
-The classic case: compute power from voltage and current. Create a computed dataset whose transform reads both channels with `datasetGetFinal()`. The ordering rule matters: both source datasets must come before the derived one in project order.
-
-Assume voltage has uniqueId 10, current has 11:
+To compute power from voltage and current, create a computed dataset whose transform reads both channels with `datasetGetFinal()`. Both source datasets must be listed above it in the Project Editor tree (see [Processing order and visibility](#processing-order-and-visibility)). Here voltage has unique ID 10 and current has 11:
 
 ```lua
 function transform(value)
@@ -209,24 +170,28 @@ function transform(value)
 end
 ```
 
-If the source datasets have aliases, the same transform reads by name, which keeps it readable in a large project: `datasetGetFinal("voltage")` and `datasetGetFinal("current")`.
-
-Other classics that fit this shape: IMU accelerometer magnitude `sqrt(ax² + ay² + az²)`, RMS of three phase currents, torque × angular velocity, differential pressure from two absolute pressure channels.
+If the source datasets have aliases, the transform reads them by name, which stays readable in a large project: `datasetGetFinal("voltage")` and `datasetGetFinal("current")`. The same shape fits IMU acceleration magnitude, RMS of three phase currents and torque times angular velocity.
 
 ### Cross-dataset scratch pad
 
-If two transforms both need the output of an expensive calculation (an FFT peak, a filtered value, a CRC), compute it once in an earlier dataset, publish it to a Computed variable, and read it from the later datasets. The value persists, so the downstream readers see whatever the earlier transform last wrote, within the same frame or carried over from the previous frame if the upstream transform didn't run this time.
+When two transforms need the output of an expensive calculation (an FFT peak, a filtered value, a CRC), compute it once in an earlier dataset, publish it to a computed variable and read it from the later datasets. The writing dataset must be listed above the readers. The value persists, so readers see what the earlier transform last wrote, in this frame or carried over from the previous one.
+
+The same pattern carries a "data valid" flag: one transform sets `probe_ok` to 0 or 1 after a range check, the others branch on it, and one out-of-range channel taints several derived channels. Declare `probe_ok` with a default of `1`, or every reader sees invalid data until the probe's transform has run once.
 
 Table `runtime`:
 
-| Variable      | Type     | Default |
-|---------------|----------|---------|
-| `filtered_v`  | Computed | `0`     |
+| Variable     | Permissions | Default |
+|--------------|-------------|---------|
+| `filtered_v` | Read/Write  | `0`     |
+
+A variable always reads as its default before the first write, never as nil. Seed on `info.frameNumber == 1`, not on a nil test. `info.frameNumber` counts frames per source, so in a multi-source project seed a shared variable from one source only.
 
 ```lua
 -- Earlier dataset: compute and publish
-function transform(value)
-  local smoothed = 0.9 * (tableGet("runtime", "filtered_v") or value) + 0.1 * value
+function transform(value, info)
+  local f = tableGet("runtime", "filtered_v")
+  if info.frameNumber == 1 then f = value end
+  local smoothed = 0.9 * f + 0.1 * value
   tableSet("runtime", "filtered_v", smoothed)
   return smoothed
 end
@@ -235,118 +200,54 @@ end
 ```lua
 -- Later dataset: consume without recomputing
 function transform(value)
-  local f = tableGet("runtime", "filtered_v") or 0
-  return value - f  -- residual vs filtered baseline
+  return value - tableGet("runtime", "filtered_v")
 end
 ```
 
-### Quality flags that downstream transforms respect
+### Tunable filters and cross-frame state
 
-Set a Computed variable to a "data valid" flag from one transform and have the others branch on it. Useful when a single out-of-range channel should taint several derived channels:
+Put the knob (cutoff, alpha, window size) in a constant and the filter's running state in a computed variable. Configuration stays separate from state, and you re-tune the filter without touching its code. The same split serves integrators, derivatives, edge counters, peak detectors and latched alarms, because a computed variable keeps its value between frames.
 
-```lua
--- Range check on a temperature probe
-function transform(value)
-  if value < -50 or value > 150 then
-    tableSet("runtime", "probe_ok", 0)
-  else
-    tableSet("runtime", "probe_ok", 1)
-  end
-  return value
-end
-```
+An exponential moving average, with `ema_alpha` Read-Only (default `0.1`) and `ema_state` Read/Write in table `filters`:
 
 ```lua
--- Downstream dataset
-function transform(value)
-  if (tableGet("runtime", "probe_ok") or 0) == 0 then
-    return 0  -- or a sentinel your widgets recognize
-  end
-  return value
-end
-```
-
-### Tunable filter parameters
-
-Put the knob (cutoff, alpha, window size) in a Constant variable. Keep the filter's running state in a Computed variable (or a transform-local upvalue; both work, since Computed variables persist). That separates *configuration* (in a Constant) from *running state*, and lets you re-tune the filter without editing its code.
-
-```lua
-function transform(value)
-  local alpha = tableGet("filters", "ema_alpha") or 0.1
+function transform(value, info)
+  local alpha = tableGet("filters", "ema_alpha")
   local ema   = tableGet("filters", "ema_state")
-  if ema == nil then ema = value end
+  if info.frameNumber == 1 then ema = value end
   ema = alpha * value + (1 - alpha) * ema
   tableSet("filters", "ema_state", ema)
   return ema
 end
 ```
 
-### Cross-frame state: integrators, derivatives, latches
-
-Because Computed variables hold the last value written, they're a natural place for state that has to survive between frames, the things every controls engineer recognizes: integrators, derivatives, edge counters, peak detectors, latched alarms. A discrete-time derivative `dT/dt`:
-
-Table `runtime`:
-
-| Variable        | Type     | Default |
-|-----------------|----------|---------|
-| `last_temp`     | Computed | `0`     |
-| `last_t_ms`     | Computed | `0`     |
+A discrete-time derivative `dT/dt` of the dataset with unique ID 2 (the temperature), using `info.timestampMs` and `info.frameNumber`, which restarts at 1 after a disconnect (see [Dataset Value Transforms](Dataset-Transforms.md)). Table `runtime` holds `last_temp` and `last_t_ms`, both Read/Write with default `0`:
 
 ```lua
 function transform(_, info)
-  if not info then return 0 end
-  local T  = datasetGetFinal(2)
+  local T = datasetGetFinal(2)
   if T == nil then return 0 end
-  local ts = info.timestampMs or 0
 
   local prevT  = tableGet("runtime", "last_temp")
   local prevTs = tableGet("runtime", "last_t_ms")
 
   tableSet("runtime", "last_temp", T)
-  tableSet("runtime", "last_t_ms", ts)
+  tableSet("runtime", "last_t_ms", info.timestampMs)
 
-  if prevTs == 0 then return 0 end
-  local dt = ts - prevTs
+  if info.frameNumber == 1 then return 0 end
+  local dt = info.timestampMs - prevTs
   if dt <= 0 then return 0 end
   return (T - prevT) / (dt / 1000)
 end
 ```
 
-### Nameplate and identity strings
-
-Variables can hold strings, not just numbers. A Constant variable with a device serial number, firmware version, or site ID is occasionally useful when a transform produces a string output (for a log message, an MQTT topic, or a console line).
-
-```lua
-function transform(value)
-  local serial = tableGet("device", "serial") or "unknown"
-  return string.format("%s=%.2f", serial, value)
-end
-```
-
-### What *not* to do
-
-- **Don't put arrays in a variable.** Variables are scalars. Use multiple variables or multiple datasets.
-- **Don't use a Variables table as a configuration dialog.** Tables persist with the project file, so editing a Constant variable always means saving the project. For UI knobs that change at runtime, use an Output widget instead.
-- **Don't assume "first frame" gives sentinel zeros.** Computed variables start at their declared default at project load and then hold whatever transforms write. If your transform depends on detecting the very first sample, branch on `info.frameNumber == 1` rather than on a variable being "still zero".
-
-## Computed datasets
-
-A computed dataset has no Frame Index. It receives no value from the frame parser and computes its entire output from transforms. Pair a computed dataset with a transform that reads other datasets or table variables, and you can add a derived channel that's plotted, exported, and broadcast to the API alongside the real data.
-
-See [Computed Datasets](Dataset-Transforms.md#computed-datasets) in the Dataset Transforms reference for usage patterns.
-
-## Multi-source projects
-
-Variables tables span all sources in a project. A transform on source A can read a computed variable written by a transform on source B, as long as both transforms run within the same frame cycle. In practice, per-source frames are processed independently, so cross-source table communication is rarely useful. Prefer keeping each source's tables self-contained unless you specifically need to fuse values across sources.
-
 ## Rules and limitations
 
-1. Variables hold a number or a string, not arrays or tables. For a vector of values, use multiple variables or multiple datasets.
-2. `tableSet()` on a constant variable has no effect. Constants are frozen at project load, and Serial Studio logs a warning to the Console panel when the write is attempted.
-3. `tableSet()` on a variable that doesn't exist is also ignored. There's no auto-creation. Define the variable in the Project Editor first.
-4. Computed variables hold their last written value indefinitely. If you want one to start each frame at a known value, write that value with `tableSet()` at the top of an early transform.
-5. The `__datasets__` table name is reserved for the built-in system table. The Project Editor doesn't stop you from naming a user table `__datasets__`; avoid it anyway to prevent a naming collision with the system table's variables.
-6. Table and variable names are case-sensitive.
+1. `tableSet()` on a constant is ignored and Serial Studio logs a `[DataTableStore]` warning to the application log. Constants are frozen at project load.
+2. A variable holds one number or one string, such as a device serial number. For a vector, use several variables or several datasets.
+3. A Variables table is not a settings dialog. For a knob that changes while you watch the data, use an Output widget.
+4. Tables are shared across all sources in a project. Each source processes its frames on its own, so a transform reading a value another source writes gets the latest write, with no ordering guarantee between sources.
+5. Variables were called Data Tables before the rename. The API namespace is still `project.dataTable.*` and the project file still stores them under the `registers` key.
 
 ## See also
 

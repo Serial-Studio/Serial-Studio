@@ -1,134 +1,75 @@
 # Project Lock
 
-A password gate for the Project Editor. Lock a project once, and from that point on the editor opens behind a blurred "Project Locked" screen until someone enters the password. The dashboard keeps running normally; only editing is gated.
+You built a dashboard for a machine on the shop floor, and you would rather the person running it did not rewire the frame parser. Project Lock puts a password in front of the Project Editor. The dashboard keeps running.
 
-This is a lightweight feature by design. The goal is **operator/engineer separation**: keep curious operators from rewiring frame parsers or moving widgets around mid-shift, without pretending to defend against an attacker with a text editor and ten minutes.
+Project Lock is available in the free and Pro editions. It covers the Project Editor only; the [Historian](Historian.md) session database has its own, separate password.
 
-> **Available in all builds.** Project Lock is not license-gated. The Lock button lives in the Project Editor toolbar's Restore section and works the same in Free/GPL and Pro builds. Locked projects open the same way everywhere.
+## Lock a project
 
-## What the lock does
+1. Open the project in the Project Editor.
+2. Click **Lock** in the Project Editor toolbar. It sits in its own section, right of Undo, Redo and Restore. The command palette entry is **Lock Project Editor**.
+3. Enter a password in the **Lock Project** prompt.
+4. Type the same password again in the confirmation prompt. The two entries must match exactly.
 
-The Project Editor has a **Lock** button on the toolbar (in the Restore section, next to the backup-restore button, before Add Device). Click it once and Serial Studio walks you through two prompts:
+The editor body is then replaced by a blurred screen titled "This project is password protected". Locking clears the Undo and Redo history and saves the project at once if it passes validation. If validation fails, the lock is active in memory only; fix the validation error and save to write the hash. Any non-empty password is accepted; there is no length or complexity rule. The stored format is described in [What lives in the project file](#what-lives-in-the-project-file).
 
-1. **Choose a password.** The password you want operators to type when they need to unlock.
-2. **Confirm the password.** Paranoia check, exact-match.
-
-Once both prompts close cleanly:
-
-- The password is hashed (salted PBKDF2-SHA256) and stored in the project file under `passwordHash`.
-- The editor body is replaced by a blurred backdrop with a padlock and a single **Unlock** button.
-- The project is marked modified and saved automatically.
-
-To unlock, click **Unlock** on the blurred overlay. Enter the password. If it matches, the hash is cleared, the editor body returns, and the project is saved again with the password field gone.
-
-```mermaid
-flowchart LR
-    A["Project Editor<br/>(unlocked)"] -- Lock + password --> B["Project Editor<br/>(locked, blurred)"]
-    B -- Unlock + correct password --> A
-    B -- Open in another build --> C["Same lock screen<br/>everywhere"]
-```
-
-> **Legend:** The lock state lives in the project file, not in app settings. Move the `.ssproj` to another machine and the lock comes with it.
+Leaving the first field empty, or clicking Cancel on it, cancels silently. An empty or mismatched confirmation, or Cancel on the confirmation prompt, shows a "Passwords do not match" warning and leaves the project unlocked.
 
 ## What the dashboard sees
 
-Nothing changes. Locking a project does **not** affect the live dashboard, frame parsers, dataset transforms, output widgets, exports, the API server, or any other runtime feature. Operators can connect, disconnect, switch workspaces, change widget layouts, and run reports; all of it works exactly as before.
+Nothing changes. The lock gates the Project Editor body and nothing else: connecting, switching workspaces, widget layouts on the dashboard, frame parsing, exports, reports and the API Server still runs.
 
-The lock is scoped to the **Project Editor body** only. If an operator clicks the wrench icon, they get the lock screen instead of the form panes; everything else in Serial Studio is untouched.
+## Unlock a project
 
-## What the lock does *not* do
+In Project File mode, a locked project shows the Project Editor's blurred screen with three buttons:
 
-Be honest with yourself about the threat model. The password hash sits in plain JSON inside the project file. The hash itself is salted PBKDF2-SHA256, so the password is not trivially recoverable, but anyone who can open that file in a text editor can delete the `passwordHash` line and remove the lock outright. So:
+- **Unlock** asks for the password.
+- **Open Other Project** opens a different project file.
+- **Create New Project** starts a blank one.
 
-| Question                                              | Answer |
-|-------------------------------------------------------|--------|
-| Will it stop a curious operator clicking around?      | Yes.   |
-| Will it stop someone from accidentally moving widgets in the editor? | Yes. |
-| Will it stop someone who knows the password?          | No, by design. |
-| Will it stop someone with a text editor and patience? | No.    |
-| Is it a substitute for OS-level file permissions?     | No.    |
+Only **Unlock** opens this project's editor. A correct password clears the hash, restores the editor and saves the project again (validation permitting), and clears the Undo and Redo history. A wrong password shows an "Incorrect password" warning and the lock stays.
 
-If you need the project file itself protected from tampering (locked away from operators entirely), use your operating system's file ACLs, an admin-only network share, or a signed/read-only deployment. The lock here is a UI gate, not a vault.
+Unlocking is also how you remove the lock for good or change the password. Unlock, then either leave the project unlocked or click **Lock** again with a new password.
 
-## Lifecycle
+Loading a locked project never asks for the password. The dashboard runs, and the editor stays hidden until someone clicks **Unlock**.
 
-### Setting a lock
+## What the lock does not do
 
-1. Open the project in the Project Editor.
-2. Click **Lock** in the toolbar.
-3. Enter and confirm the password.
-4. Done. The project is saved with the new lock; the editor switches to its locked state immediately.
+The lock stops accidental edits and curious clicking. It does not stop anyone who opens the `.ssproj` in a text editor and deletes the `passwordHash` line. That is also the recovery path if you forget the password: delete the `passwordHash` line in a text editor and save the file. The next time Serial Studio loads it, the project is unlocked. Keep the JSON valid, including commas around the removed line.
 
-If the two passwords don't match, Serial Studio shows a warning and leaves the project as it was. Leaving the first password field empty silently cancels the lock, with no dialog, the same as clicking Cancel. Leaving only the confirmation field empty is treated as a mismatch and shows the same warning as non-matching passwords.
+If the project file itself must be protected, use operating-system file permissions, an admin-only network share or a read-only deployment. The lock is a UI gate, not a vault.
 
-### Unlocking
+There is no command-line way to set a lock. Lock a project once in the editor, then distribute the saved file; the lock travels with it, because the hash is part of the project JSON.
 
-While the editor is locked, the toolbar is disabled and covered by the overlay, so there is a single way in:
+## Why the Project Editor is blurred
 
-- **Unlock** button on the locked overlay.
+The Project Editor body is blurred when the project is locked, or when the app is not in Project File mode (a device is connected or a playback is open). The heading and buttons tell the cases apart:
 
-It prompts for the password. Correct password → hash is cleared, the editor opens, the project is saved. Wrong password → warning dialog, lock stays in place.
+| Situation                                       | Heading                                       | Buttons |
+|-------------------------------------------------|-----------------------------------------------|---------|
+| Project locked, app in Project File mode        | "This project is password protected"          | **Unlock**, **Open Other Project**, **Create New Project** |
+| Connected, not in Project File mode             | "Disconnect to edit the project"              | **Disconnect and Edit**, **Close** |
+| Playback open, not in Project File mode         | "Close the playback to edit the project"      | **Close** |
 
-### Changing the password
-
-There's no separate "change password" flow. Unlock the project, then lock it again with the new password. Each Lock click overwrites the stored hash.
-
-### Removing the lock entirely
-
-Unlock the project. The Lock toolbar button reappears; just don't press it. Save the project, and the `passwordHash` field is no longer written to the file.
+The password prompt appears only in Project File mode. A locked project that is connected or playing back shows the Disconnect or Close message first; end the session, and the lock screen follows. The session keeps running until you end it. See [Operation Modes](Operation-Modes.md) for how the modes relate.
 
 ## What lives in the project file
 
-A locked project carries a single extra key under the JSON root:
+A locked project carries one extra key under the JSON root:
 
-```json
+```jsonc
 {
   "title": "Production Cell A",
   "passwordHash": "pbkdf2-sha256$600000$<saltB64>$<hashB64>",
-  "groups": [ ... ],
-  "actions": [ ... ]
+  "groups": [ /* ... */ ]
 }
 ```
 
-| Field          | Meaning |
-|----------------|---------|
-| `passwordHash` | Salted PBKDF2-SHA256 digest of the password (`pbkdf2-sha256$<iterations>$<salt>$<hash>`). Bare 32-hex-char MD5 hashes written by Serial Studio 3.2.x are still accepted on load. Empty/absent means no lock. |
-
-When Serial Studio loads the file, `passwordHash` being non-empty is the entire trigger: the editor opens locked. There is no separate `locked` boolean: the hash is the lock.
-
-> The lock state is **never** prompted at file-open time. Loading a locked project doesn't ask for the password; it just hides the editor body until the user explicitly clicks Unlock. This keeps live dashboards from being held hostage by a forgotten password during a shift change.
-
-## Project mode and the lock screen
-
-The blurred overlay does double duty. You'll see the same backdrop in two situations:
-
-| Trigger                                               | Backdrop says                          | Primary button |
-|-------------------------------------------------------|----------------------------------------|----------------|
-| Project is locked, app is in Project mode             | "This project is password protected"   | **Unlock**     |
-| Editor opened while in Quick Plot or Console Only mode | "Editing is available in Project mode" | **Switch to Project Mode** |
-
-Both states use the same blurred-glass treatment so the editor's chrome (toolbar, window caption) stays visible and you don't lose your place. Only the call to action changes.
-
-## Frequently asked
-
-**Can I lock a project from the command line?**
-Not directly. The `lockProject()` slot is editor-only. Scripted deployments should ship a pre-locked `.ssproj` file by locking it once and then distributing the saved file.
-
-**What if I forget the password?**
-Open the `.ssproj` file in any text editor and delete the `passwordHash` line. Save. The next open will be unlocked. This is intentional, as described in the threat model above.
-
-**Does the lock travel with the project file?**
-Yes. The hash is part of the project JSON. Email it, commit it, copy it onto a USB stick: it stays locked wherever the file goes.
-
-**Does the lock affect the API or MCP commands?**
-No. The lock is purely a UI gate around the Project Editor. The API still serves frames, the MCP server still answers commands, and all scripting endpoints continue to work.
-
-**Will the dashboard still receive frames while the editor is locked?**
-Yes. The dashboard, exports, reports, and notifications are completely independent of the lock state.
+`passwordHash` has the form `pbkdf2-sha256$<iterations>$<salt>$<hash>`. Empty or absent means no lock, and there is no separate `locked` flag: a non-empty hash is the lock. New locks use 600000 iterations; a stored hash with more than 10,000,000 iterations, or a malformed one, never verifies. Bare 32-character MD5 hashes written by Serial Studio 3.2.x still load.
 
 ## See also
 
 - [Project Editor](Project-Editor.md): the editor that the lock gates.
-- [Operator Deployments](Operator-Deployments.md): pair the lock with a runtime-mode deployment for a clean kiosk-style operator dashboard.
-- [Operation Modes](Operation-Modes.md): how Project mode, Quick Plot, and Console Only relate to the editor overlay.
-- [Pro vs Free Features](Pro-vs-Free.md): what's included with a Pro license.
+- [Operator Deployments](Operator-Deployments.md): pair the lock with a runtime-mode deployment for a kiosk-style operator dashboard.
+- [Operation Modes](Operation-Modes.md): Project File, Quick Plot and Console Only modes.
+- [Pro vs Free Features](Pro-vs-Free.md): the feature comparison.

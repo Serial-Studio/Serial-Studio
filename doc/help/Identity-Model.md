@@ -1,112 +1,88 @@
 # Dataset Identity Model
 
-A dataset in Serial Studio carries three integer identifiers: `index`, `datasetId`, and `uniqueId`. They look interchangeable from the outside but mean very different things, and using the wrong one is the most common reason API calls and transform scripts mysteriously stop working. This page explains each of them in one place, with a copy-pastable rule of thumb at the end.
+Your board prints `25.3,1013.2,42`. Serial Studio splits that line into three values and shows each one as a dataset: the first has `index = 1`, the second `index = 2`, the third `index = 3`. That is all most projects ever need, and the Project Editor sets it for you.
 
-## The three IDs
+You only need the rest of this page if you write transform scripts or call the API. There, mixing up `datasetId` and `uniqueId` reads the wrong dataset, or nothing. A transform script that reads a dataset by its stable id looks like this:
 
-A dataset lives inside a group, which lives inside a source. Each level of that hierarchy contributes one number.
+```js
+var t = datasetGetRaw(4137);
+```
+
+## The identifiers
+
+A dataset lives inside a group, which lives inside a source. `sourceId`, `groupId` and `datasetId` locate a dataset by position; `index`, `uniqueId` and `alias` do other jobs.
+
+### `index`
+
+`index` is the only identifier you set for ordinary dashboards. It is the 1-based position of the dataset's value in the parsed frame: with `25.3,1013.2,42`, the three datasets have `index = 1`, `2` and `3`. Counting starts at 1 because `0` is not a valid frame position; a dataset whose `index` is 0, negative or larger than the number of fields in the parsed frame is skipped and keeps its last value.
+
+Select the dataset in the Project Editor and edit its index there. Several datasets can share one `index` to style the same raw value in different ways. `index` has no relation to `datasetId`, and the two often differ.
+
+A short frame never clears or errors a dataset; it just stops updating. A widget that stays frozen while the others move has an `index` past the end of the frame.
 
 ### `sourceId`
 
-The index of the source the dataset reads from. `0` for the default (and only) source in single-source projects. With multi-source projects (Pro) sources are numbered `0`, `1`, `2`… in the order they were added.
+`sourceId` is the zero-based index of the source a dataset reads from. A single-source project has only source `0`. Multi-source projects (Pro) number sources `0`, `1`, `2`… in the order they were added.
 
 ### `groupId`
 
-The **positional** index of the group inside the project: `0` for the first group, `1` for the second, and so on. It is *not* a stable identity, because adding, deleting, or reordering groups renumbers it. For a group identifier that survives reorders, use the group's own `uniqueId` field. Workspace IDs live in a separate reserved range that starts at `1000` (Overview = `1000`, All Data = `1001`, per-group workspaces from `1002`, user workspaces from `5000`), so a workspace ID never collides with a positional `groupId`.
-
-One naming trap to know about: **workspace widget refs store the group's `uniqueId` under the JSON key `groupId`**. When you read workspace data (`project.workspace.get`, widget refs) and see a "groupId" that is far larger than the number of groups in the project, you are looking at a group `uniqueId`, not a positional index. Group `uniqueId` values come from the same sparse project counter as dataset `uniqueId`s: allocated once, never reused or compacted after deletes, so a valid id can be in the hundreds on a project with 80 groups. Passing such a value to a positional-id command (`project.group.update`, dataset CRUD) will hit the wrong group or fail. `project.group.get` accepts either id space explicitly: pass `groupId` for the positional index or `uniqueId` for the stable id.
+`groupId` is the positional index of the group inside the project: `0` for the first group, `1` for the second, and so on. Adding, deleting, or reordering groups renumbers it, so it is not a stable identity. Groups also have a `uniqueId` that survives reorders (see [`uniqueId`](#uniqueid)). `project.group.get` accepts either one.
 
 ### `datasetId`
 
-The dataset's slot inside its group. A group with three datasets will have `datasetId = 0, 1, 2`. If you reorder, insert, or delete datasets, `datasetId` is reassigned to match the new array index.
+`datasetId` is the dataset's slot inside its group. A group with three datasets has `datasetId = 0, 1, 2`. Delete the first dataset and the Pressure you cached as `datasetId` 1 now answers to 0. Refresh it from the API after every change.
 
-This is the ID you pass to **mutating** API calls:
+You pass `datasetId`, together with `groupId`, to the API calls that change the project (update, delete). Connect to the API Server (off by default; enable it under **Preferences > General > API & Plugins**, port 7777) and send the JSON followed by a newline; the [API Reference](API-Reference.md) shows the transport:
 
-```jsonc
+```json
 {
   "method": "project.dataset.update",
   "params": { "groupId": 5, "datasetId": 0, "title": "Pressure" }
 }
 ```
 
-Patched fields go at the top level of `params`, not inside an `options` object.
-
-### `index`
-
-A separate field unrelated to identity. `index` is the **frame offset**, that is, the position of the dataset's value inside the parsed frame. With a CSV like `25.3,1013.2,42` and three datasets, the first dataset has `index = 1`, the second `index = 2`, the third `index = 3`. (Index `0` is reserved.) Multiple datasets can share the same `index` if you want the same raw value styled in different ways. `index` has no relation to `datasetId` and the two often diverge.
-
-If a parsed frame has fewer fields than a dataset's `index` requires, that dataset keeps its previous value instead of clearing or erroring: the widget looks frozen rather than blank. This is the usual cause of a dashboard element that stops updating while others keep moving.
+`project.dataset.update` takes `groupId`, `datasetId` and the fields to change directly in `params`, not inside an `options` object.
 
 ### `uniqueId`
 
-A single integer that identifies a dataset *globally* across the whole project. It's **persisted in the project file** (each dataset stores its `uniqueId` directly) and **assigned once** from a project-level counter when the dataset is created, duplicated, or imported. Reordering or renaming a dataset never changes its `uniqueId`.
+`uniqueId` is allocated from a per-project counter when a dataset is created, duplicated, or imported, and saved in the project file. Reordering, renaming, or moving a dataset between sources never changes it. Treat it as opaque: you cannot compute `(sourceId, groupId, datasetId)` from it, and you cannot predict the next value. Projects saved by older versions get their ids filled in once on load.
 
-Treat the integer as opaque: it's allocated, not derived. Two assumptions you'd otherwise make are no longer safe:
+A duplicated or copy-pasted dataset receives a fresh `uniqueId`, so the original and the copy stay distinguishable.
 
-- You **cannot** recover `(sourceId, groupId, datasetId)` from a `uniqueId` by arithmetic. The legacy formula `sourceId * 1'000'000 + groupId * 10'000 + datasetId` is only used as a one-shot back-fill when loading a project file from before this scheme existed; once the project is saved again, the values are persisted and no longer follow the formula.
-- You **cannot** guess what `uniqueId` a new dataset will receive. It's just the next value from the project's counter (`nextUniqueId`).
-
-`uniqueId` is what transform scripts and Variables tables use, because they need a single key that's stable across sources. It's what you read from the live data API and what the system table (`__datasets__`) uses for its `raw:<uniqueId>` and `final:<uniqueId>` variables. The Group struct has its own `uniqueId` field with the same semantics, used inside workspace widget refs.
+Transform scripts and [Variables](Variables.md) tables use `uniqueId` because they need one key that is stable across sources. The `dashboard.getData` response lists each dataset with its `uniqueId`. The system table (`__datasets__`) uses it for its `raw:<uniqueId>` variable (the value as parsed) and `final:<uniqueId>` variable (the value after the dataset's [transform](Dataset-Transforms.md)).
 
 ### `alias`
 
-An optional, human-readable name for a dataset, set in the **Script Alias** field of the Project Editor's dataset form. Empty by default. Unlike the numeric IDs, you choose it, and the editor requires it to be unique across the project. Like `uniqueId`, it survives reorders, renames, and moves between sources; unlike `uniqueId`, it is a name you pick (for example `ATAM1-CH1`) rather than a number the counter allocates.
+An `alias` is an optional name you set in the **Script Alias** field of the Project Editor's dataset form. It is empty by default and must be unique across the project. `datasetGetRaw(4137)` tells you nothing six months later; `datasetGetRaw("ATAM1-CH1")` does. A string argument is always an alias and a number is always a `uniqueId`, so the two never coerce into each other. Transform and frame-parser scripts accept it wherever they accept a `uniqueId`: `datasetGetRaw("ATAM1-CH1")` and `datasetGetFinal("ATAM1-CH1")` look up by alias, and the `__datasets__` table exposes `raw:<alias>` and `final:<alias>` variables next to the numeric ones. `uniqueId` stays the persisted identity that stored cross-references point at.
 
-The alias is a second key for the same dataset, not a replacement for `uniqueId`. `uniqueId` stays the persisted identity that stored cross-references point at (x-axis, waterfall, and workspace refs remain numeric); the alias is layered on top for scripts and the API to read by. Transform and frame-parser scripts accept it wherever they accept a `uniqueId`: `datasetGetRaw("ATAM1-CH1")` and `datasetGetFinal("ATAM1-CH1")` look up by alias, and the `__datasets__` table exposes `raw:<alias>` and `final:<alias>` variables alongside the numeric ones. A string argument is always an alias and a number is always a `uniqueId`, so the two never coerce into each other.
+A duplicate alias is cleared 800 ms after you stop typing, and the editor reports it. An all-digit alias such as `123` gets a warning, because a quoted `"123"` is still looked up as an alias, not as `uniqueId` 123.
 
-In a project with hundreds of datasets an alias like `ATAM1-CH1` is self-documenting where a bare number is not, and it stays meaningful across restructuring (re-import, copy-paste) that hands a dataset a fresh `uniqueId`. The Project Editor tree context menu has a **Seed Aliases from Titles** action that fills every empty alias from its dataset title, deduplicated, and leaves existing aliases untouched.
+The Project Editor tree context menu has a **Seed Aliases from Titles** action that fills every empty alias from its dataset title, deduplicated, and leaves existing aliases untouched.
+
+## Workspace refs: "groupId" there is a group `uniqueId`
+
+Workspace widget refs store the group's `uniqueId` under the JSON key `groupId`. When you read workspace data (`project.workspace.get`) and see a "groupId" far larger than the number of groups, it is a group `uniqueId`, not a positional index. Those values come from the same counter as dataset `uniqueId`s, so a `groupId` larger than the group count is normal. Passing one to a positional-id command (`project.group.update`, `project.dataset.update`, `project.dataset.delete`) hits the wrong group or fails; resolve it with `project.group.get` and `uniqueId`.
+
+Workspace IDs are a separate range: Overview is `1000`, All Data is `1001`, auto per-group workspaces start at `1002`, auto per-folder workspaces start at `3000`, and user workspaces start at `5000`.
 
 ## Where each ID is used
 
-| ID         | Used by                                                                                          |
-|------------|--------------------------------------------------------------------------------------------------|
-| `sourceId` | Source-scoped API calls (`project.source.update`, `project.source.setFrameParserCode`, etc.)     |
-| `groupId`  | Group-scoped API calls (`project.group.update`, dataset CRUD addressing)                         |
-| `datasetId`| Dataset CRUD addressing (`project.dataset.update`, `project.dataset.setOptions`, `project.dataset.delete`) |
-| `index`    | Maps each slot of the parser's returned array to a dataset; set per dataset in the Project Editor |
-| `uniqueId` | Live-data API (`dashboard.getData`, `dashboard.tailFrames`), transform scripts (`datasetGetRaw(uniqueId)`, `datasetGetFinal(uniqueId)`), Variables tables (`raw:<uniqueId>`, `final:<uniqueId>`) |
-| `alias`    | Optional user-chosen name; script dataset lookups (`datasetGetRaw("name")`, `datasetGetFinal("name")`), Variables tables (`raw:<alias>`, `final:<alias>`), and any API parameter that accepts a `uniqueId` |
+| ID          | Used by                                                                       |
+|-------------|-------------------------------------------------------------------------------|
+| `sourceId`  | `project.source.update`, `project.source.setFrameParserCode` (multi-source: Pro) |
+| `groupId`   | `project.group.update`, `project.dataset.update`, `project.dataset.delete`    |
+| `datasetId` | `project.dataset.update`, `project.dataset.setOptions`, `project.dataset.delete` |
+| `index`     | Maps each slot of the parser's returned array to a dataset                    |
+| `uniqueId`  | `dashboard.getData`, `dashboard.tailFrames`, `datasetGetRaw`, `datasetGetFinal`, `raw:<uniqueId>`, `final:<uniqueId>` |
+| `alias`     | `datasetGetRaw("name")`, `datasetGetFinal("name")`, `raw:<alias>`, `final:<alias>` |
 
 ## Rule of thumb
 
-The mental shortcut that covers 95% of cases:
-
-> **Mutate by `(groupId, datasetId)`. Read by `uniqueId`. Position by `index`.**
-
-In other words:
-
-- Editing or deleting a dataset? Address it by the group it lives in plus its slot inside that group.
-- Reading a live value, looking up a table variable, calling `datasetGetRaw` / `datasetGetFinal` from a transform? Use `uniqueId`, or the dataset's alias if you've set one.
-- Wiring a frame-parser script to pick the right column out of the parsed frame? That's `index`.
-
-## Lifecycle gotchas
-
-- **`datasetId` shifts when you rearrange.** Inserting a dataset at slot 0 renumbers everything that came after. If you cache `datasetId` in your script and then edit the project, refresh it from the API after every mutation.
-- **`uniqueId` does NOT follow `datasetId`.** It's persisted with the dataset and stays the same across reorders, renames, retypes, and moves between sources. The one exception is duplicate / copy-paste: a duplicated dataset receives a fresh `uniqueId` from the counter so the original and the copy stay distinguishable.
-- **`groupId` shifts when you rearrange.** Adding a new group at the top renumbers everything that came after. For a stable group identifier, use `Group.uniqueId` (returned by `project.group.list` under `uniqueId`); that's what workspace widget refs persist, and they label it `groupId` in their JSON (see the naming trap above). `project.group.get` resolves either form.
-- **`index` is yours to set.** The parser returns a positional array; you set each dataset's
-  `index` in the Project Editor to choose which array slot it reads. The editor seeds sequential
-  defaults, which you can override.
-
-## Quick reference
-
-```text
-Dataset
-├─ sourceId   → which source produced the frame
-├─ groupId    → positional slot of the parent group (shifts on group reorder)
-├─ datasetId  → slot within the group, used for mutations (shifts on dataset reorder)
-├─ index      → which column of the parsed frame to read
-├─ uniqueId   → opaque, persisted, stable identity (used for reads, refs, transforms)
-└─ alias      → optional user-chosen name; second key for script/API reads by string
-```
-
-If something is ever ambiguous, default to looking it up fresh from the project snapshot rather than caching it across an edit.
+> **Mutate by `(groupId, datasetId)`. Read by `uniqueId` or alias. Pick the frame value with `index`.**
 
 ## See also
 
 - [Project Editor](Project-Editor.md): where datasets, groups, and sources are created and where their IDs come from.
 - [Frame Parser Scripting](Frame-Parser.md): the parser that picks values out of the frame and assigns them to datasets by `index`.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset scripts that read and write variables by `uniqueId`.
-- [Variables](Variables.md): the system table (`__datasets__`) keyed by `raw:<uniqueId>` and `final:<uniqueId>`.
 - [API Reference](API-Reference.md): the JSON-RPC surface that exposes mutating CRUD by `(groupId, datasetId)` and live reads by `uniqueId`.
-- [Glossary](Glossary.md): definitions for `uniqueId`, `datasetId`, and frame `index`.

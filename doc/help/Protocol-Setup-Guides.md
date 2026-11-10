@@ -1,6 +1,12 @@
 # Protocol Setup Guides
 
-Step-by-step setup instructions for every communication protocol supported by Serial Studio. Each guide walks through the exact UI steps required to establish a connection. For protocol overviews and selection guidance, see [Communication Protocols](Communication-Protocols.md); for the driver model and multi-device projects, see [Devices](Devices.md).
+An Arduino running `Serial.println("1,2,3")` at 115200 baud is the shortest path: select **UART/COM**, pick the port, set **Baud Rate** to 115200 and click **Connect** in the toolbar. The console then shows the raw text, and [Getting Started](Getting-Started.md#your-first-connection-quick-plot-mode) turns it into plots. Quick Plot mode needs no project: it expects comma-separated values ending in a newline, which is what `Serial.println("1,2,3")` sends.
+
+The **Setup Panel** is the **Device Setup** panel on the right edge of the window, where you pick a driver and set its connection fields. Project-level settings, such as the MQTT Publisher, live in the Project Editor.
+
+UART, Network and Bluetooth LE are free; the rest need Pro. OPC UA, EtherNet/IP, S7 and IEC 104 have their own pages: [OPC UA](Drivers-OPC-UA.md), [EtherNet/IP](Drivers-EtherNet-IP.md), [S7](Drivers-S7.md), [IEC 104](Drivers-IEC-104.md). For protocol selection, see [Communication Protocols](Communication-Protocols.md); for the driver model, see [Devices](Devices.md).
+
+Sections marked Pro need a Pro license. The first time you use a Pro feature, Serial Studio offers a trial with a Yes/No prompt (internet connection required); see [Pro vs Free](Pro-vs-Free.md).
 
 ## Serial/UART Setup
 
@@ -10,20 +16,19 @@ Step-by-step setup instructions for every communication protocol supported by Se
 
 ### Steps
 
-1. Open Serial Studio.
-2. In the **Setup Panel**, select **UART/COM** from the Connection dropdown. Alternatively, click the **UART** button in the toolbar if visible.
-3. Select the COM port (Windows), `/dev/ttyUSBx` / `/dev/ttyACMx` (Linux), or `/dev/cu.usbserial-*` (macOS) from the **COM Port** dropdown. If the port does not appear, check the Troubleshooting entries for this driver.
-4. Set the **Baud Rate** to match your device. Default: 9600. Common values: 9600, 115200, 921600. The field is editable, so rates not in the list can be typed directly.
-5. **Data Bits** defaults to 8, **Parity** to None, **Stop Bits** to 1, and **Flow Control** to None; change any of these to match your device.
-6. Leave **Send DTR Signal** enabled (the default) if your device uses DTR for reset signaling, as Arduino boards do; disable it if a DTR pulse resets your device unexpectedly.
-7. Optionally enable **Auto Reconnect** (off by default) to reconnect when the device is unplugged and re-plugged.
-8. Click **Connect**.
+1. In the **Setup Panel**, select **UART/COM** from the Connection dropdown.
+2. Select the COM port (Windows), `/dev/ttyUSBx` / `/dev/ttyACMx` (Linux), or `/dev/cu.usbserial-*` (macOS) from the **COM Port** dropdown.
+3. Set the **Baud Rate** to match your device. Default: 9600. Common values: 9600, 115200, 921600. The field is editable, so rates not in the list can be typed directly.
+4. **Data Bits** defaults to 8, **Parity** to None, **Stop Bits** to 1, and **Flow Control** to None; change any of these to match your device.
+5. Leave **Send DTR Signal** enabled (the default) if your device uses DTR, the line Arduino boards use to reset on connect, for reset signaling; disable it if a DTR pulse resets your device unexpectedly.
+6. Optionally enable **Auto Reconnect** (off by default) to reconnect when the device is unplugged and re-plugged.
+7. Click **Connect**.
 
 ### Troubleshooting
 
 - **Port not listed:** On Linux, see [Serial port permissions](Linux-Installation.md#serial-port-permissions). On Windows, install the appropriate USB-serial driver. On all platforms, try a different USB cable or port.
-- **No data after connecting:** Verify the baud rate matches the device exactly. Check that your frame delimiters are configured correctly. Try toggling **Send DTR Signal**.
-- **Garbled data:** Baud rate mismatch is the most common cause. Double-check the device documentation.
+- **No data after connecting:** Confirm the baud rate matches `Serial.begin()` on the device. If text shows in the console but nothing plots, Serial Studio did not see a newline-terminated line of comma-separated values; see [Frame Parser](Frame-Parser.md). Try toggling **Send DTR Signal**.
+- **Garbled data:** Garbled characters are the sound of two devices speaking at different speeds. Double-check the baud rate in the device documentation.
 
 Full driver reference: [UART](Drivers-UART.md).
 
@@ -35,13 +40,13 @@ Full driver reference: [UART](Drivers-UART.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **Network Socket** from the Connection dropdown.
+1. In the **Setup Panel**, select **Network** from the Connection dropdown.
 2. Set the **Socket Type** to **TCP**.
 3. Enter the **Remote Address** (IP address or hostname of the device). Default: `127.0.0.1`.
-4. Enter the **Remote Port** the device is listening on. Default: 23.
+4. Enter the **Remote Port** the device is listening on. Default: 23, a placeholder; set the port your device listens on.
 5. Click **Connect**.
 
-Serial Studio will resolve the hostname (if provided) and attempt a TCP connection. The Connect button stays disabled until the name resolves.
+Serial Studio resolves the hostname when it dials. An unresolvable host shows up as a connection error, not a disabled **Connect** button.
 
 Serial Studio is a TCP client only: it dials out to a listening server and never accepts inbound connections. If the device expects to push data to a listener, run a small TCP relay in front of Serial Studio, or switch to UDP.
 
@@ -60,17 +65,17 @@ Full driver reference: [Network](Drivers-Network.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **Network Socket** from the Connection dropdown.
+1. In the **Setup Panel**, select **Network** from the Connection dropdown.
 2. Set the **Socket Type** to **UDP**.
 3. Enter the **Remote Address** (IP address of the device, or multicast group address). Default: `127.0.0.1`.
-4. Enter the **Remote Port** (the destination port when Serial Studio writes data back). Default: 53. This field is hidden while **Multicast** is checked.
+4. Enter the **Remote Port** (the destination port when Serial Studio writes data back). Default: 53, a placeholder; set the port your device receives on. This field is hidden while **Multicast** is checked.
 5. Set the **Local Port** to the port your computer should bind to for receiving data. Use `0` (the default) for automatic port assignment; bind a fixed port when the device sends to a known destination.
 6. Optionally enable **Multicast** if the remote address is a multicast group (e.g., `239.x.x.x`). Serial Studio joins the group on connect.
 7. Click **Connect**.
 
 ### Troubleshooting
 
-- **No data received.** Check that the device is sending to your computer's IP and the correct local port. Check firewall rules: UDP is often blocked by default. If you're using multicast, verify both devices are on the same multicast-capable network segment.
+- **No data received:** Check that the device is sending to your computer's IP and the correct local port. Check firewall rules: UDP is often blocked by default. If you're using multicast, verify the device and this computer are on the same multicast-capable network segment.
 - **Data from wrong source:** UDP is connectionless. Any device sending to your bound port will be received. Use firewall rules or application-level filtering if needed.
 
 Full driver reference: [Network](Drivers-Network.md).
@@ -85,10 +90,10 @@ Full driver reference: [Network](Drivers-Network.md).
 
 1. In the **Setup Panel**, select **Bluetooth LE** from the Connection dropdown.
 2. Ensure Bluetooth is enabled on your computer. Serial Studio starts scanning for BLE devices as soon as the driver is selected.
-3. Wait for device scanning to complete. Your device should appear in the **Device** dropdown.
+3. Your device appears in the **Device** dropdown within a few seconds; if it does not, see Troubleshooting below.
 4. Select your device from the dropdown.
 5. If the device exposes multiple GATT services, select the appropriate **Service** from the dropdown.
-6. Select the **Characteristic** that carries your telemetry data (typically a notify characteristic).
+6. Select the **Characteristic** that carries your telemetry data (typically a notify characteristic, one that pushes new values to Serial Studio). Your firmware's documentation or a BLE scanner app lists which characteristic notifies; the one that sends your readings is the one to pick.
 7. Click **Connect**.
 
 ### Troubleshooting
@@ -105,27 +110,27 @@ Full driver reference: [Bluetooth LE](Drivers-Bluetooth-LE.md).
 
 **Prerequisites:** Access to an MQTT broker. Broker hostname, port, and credentials (if any). Topic filter (subscriber) or base topic (publisher).
 
-MQTT now has two distinct surfaces in Serial Studio. Pick the one that matches what you want to do; both can run in the same project.
+Your sensors already publish to a broker, or you want Serial Studio to publish to one. MQTT has two surfaces in Serial Studio; both can run in the same project.
 
-- **Subscriber (per-source driver).** Treats a broker topic as if it were a serial or network device. Configured under **Devices** in the project editor, exactly like UART or Network. Use this when the data already lives on a broker.
-- **Publisher (per-project).** Pushes parsed frames, raw bytes, or notifications out to a broker. Configured under the **MQTT Publisher** node in the project editor (directly below Devices). Use this when Serial Studio is the producer and downstream tools subscribe.
+- **Subscriber (per-source driver).** Treats a broker topic as if it were a serial or network device. Configured under **Devices** in the Project Editor, exactly like UART or Network. Use this when the data already lives on a broker.
+- **Publisher (per-project).** Pushes parsed frames, raw bytes, or notifications out to a broker. Configured under the **MQTT Publisher** node in the Project Editor (directly below Devices). Use this when Serial Studio is the producer and downstream tools subscribe.
 
 ### Subscriber: add an MQTT source
 
 For a single-device setup, select **MQTT Subscriber** from the Connection dropdown in the **Setup Panel** and fill in the same fields there. For multi-device projects:
 
-1. Open the project editor.
+1. Open the Project Editor.
 2. Add a new source under **Devices** (or pick an existing one) and set its **Bus Type** to **MQTT Subscriber**.
 3. Under **Connection Settings**, enter:
    - **Hostname** and **Port** (`1883` plaintext, `8883` TLS; default `1883`).
    - **Username** / **Password** if the broker requires authentication.
    - **Client ID** (auto-generated; click **Regenerate** to pick a new one).
-   - **Topic Filter**. Examples: `sensors/#`, `device/+/telemetry`, `mydevice/data`. Connecting is blocked while this is empty.
+   - **Topic Filter**. Examples: `sensors/#`, `device/+/telemetry`, `mydevice/data`. Connecting is blocked while this is empty, unless Sparkplug is enabled.
    - **Version** (MQTT 3.1, 3.1.1, or 5.0).
    - **Clean Session** on (default) for interactive use.
 4. To use TLS, enable **Use SSL/TLS** and pick an **SSL Protocol** and **Peer Verify** mode. For a private CA, set **CA Certificates** to **Load From Folder…** and pick the directory holding the PEM files.
-5. Configure frame detection on the source. Each MQTT message preserves payload boundaries, so **No Delimiters** is usually the right choice — one publish becomes one frame.
-6. Save the project and click **Connect** in the Setup panel.
+5. Configure frame detection on the source. Each MQTT message preserves payload boundaries, so set the source's frame detection method to **No Delimiters**: each MQTT message becomes one frame.
+6. Save the project and click **Connect** in the toolbar.
 
 Repeat with another source set to **MQTT Subscriber** to add a second broker connection (or a second topic on the same broker). Each MQTT source has its own broker session, credentials, and TLS configuration.
 
@@ -133,14 +138,14 @@ See [MQTT Subscriber](Drivers-MQTT.md) for the full protocol primer.
 
 ### Publisher: configure the project-level publisher
 
-1. Open the project editor and select **MQTT Publisher** in the left tree (immediately below **Devices**).
+1. Open the Project Editor and select **MQTT Publisher** in the left tree.
 2. Under **Publishing**, turn on **Enable Publishing**.
 3. Pick **Payload**:
    - **Dashboard Data (JSON)** publishes each parsed frame as compact JSON.
    - **Dashboard Data (CSV)** publishes each parsed frame as a CSV row.
    - **Raw RX Data** republishes the bytes that arrived on any active driver, unmodified.
    - **Custom Script** publishes the value returned by the `mqtt(frame)` script hook.
-4. Set **Publish Rate (Hz)** — how often the publisher emits (1-30 Hz, default 10).
+4. Set **Publish Rate (Hz)**, how often the publisher emits (1-30 Hz, default 10).
 5. Set **Topic Base**. The Publisher silently produces no traffic when this is empty.
 6. Turn on **Publish Notifications** to mirror dashboard events to MQTT; set **Notification Topic** if you want them on a separate topic from the frame stream (it defaults to the Topic Base when empty).
 7. Under **Broker**, fill in hostname, port, credentials, protocol version, and keep-alive.
@@ -172,20 +177,21 @@ See [MQTT Publisher](MQTT-Publisher.md) for the full reference, including the `m
 5. Set **Parity** (commonly Even for Modbus), **Data Bits** (usually 8), and **Stop Bits** (usually 1).
 6. Set the **Slave Address** (device address on the bus, 1-247; default 1).
 7. Click **Configure Register Groups…** and add one or more groups, each specifying:
-   - **Register Type**: Holding Registers (0x03), Input Registers (0x04), Coils (0x01), or Discrete Inputs (0x02).
+   - **Register Type**: Holding Registers (0x03, 16-bit read/write values at numbered addresses), Input Registers (0x04, 16-bit read-only values), Coils (0x01, single read/write bits), or Discrete Inputs (0x02, single read-only bits).
    - **Start Address**: The first register to read (0-65535).
    - **Register Count**: How many consecutive registers to read (1-125).
-8. Set the **Poll Interval (ms)**. Default: 100 ms, which polls at 10 Hz.
+   - **Slave Address**: optional per-group unit (1-247). Leave it empty to use the Slave Address from the Setup Panel, which is how you poll several units on one bus.
+8. Set the **Poll Interval (ms)**. Default: 100 ms, which polls at 10 Hz; the range is 50-60000 ms and values outside it are clamped.
 9. Click **Connect**.
 
 ### Generate Project from Register Groups
 
 Once you have configured your register groups, you can auto-generate a Serial Studio project file instead of building one by hand:
 
-1. Configure all register groups as described above.
+1. In the Setup Panel with **Modbus** selected, click **Configure Register Groups…** and add your groups.
 2. Click **Generate Project** in the **Modbus Register Groups** dialog.
-3. You will be prompted to save the `.ssproj` file.
-4. The project editor opens for further customization.
+3. Serial Studio asks you to save the `.ssproj` file.
+4. The Project Editor opens for further customization.
 
 The generated project includes one group per register block, one dataset per register/coil, and a generated Lua frame parser. See [How Multi-Group Polling Works](#how-multi-group-polling-works) for details on the frame parser.
 
@@ -210,20 +216,21 @@ Full driver reference: [Modbus](Drivers-Modbus.md).
 3. Enter the **Host** (device IP address or hostname).
 4. Enter the **Port** (Serial Studio prefills 5020; standard Modbus TCP devices listen on 502).
 5. Set the **Slave Address** (usually 1 for TCP gateways, but may vary).
-6. Click **Configure Register Groups…** and add one or more groups, with the same fields as in the Modbus RTU steps.
-7. Set the **Poll Interval (ms)**.
+6. Click **Configure Register Groups…** and add one or more groups: **Register Type** (Holding, Input, Coils or Discrete Inputs), **Start Address** (0-65535), **Register Count** (1-125) and an optional per-group **Slave Address**.
+7. Set the **Poll Interval (ms)**. Default: 100 ms; the range is 50-60000 ms and values outside it are clamped.
 8. Click **Connect**.
 
 ### Troubleshooting
 
 - **Connection refused:** Verify the device is listening on the specified port. Check firewall rules. Confirm the IP address is correct.
+- **Connection times out:** The dial gives up after 5 seconds; check the IP address and routing.
 - **No data:** Verify the slave address, register type, start address, and count match the device's register map documentation.
 
 ## Modbus Register Map Import (Pro)
 
 **License:** Pro
 
-Instead of manually adding register groups one by one, you can import a register map file that describes all registers for your device. Serial Studio will auto-generate a complete project with register groups, datasets, a Lua frame parser, and appropriate dashboard widgets.
+A register map file describes every register of a device. Serial Studio reads it and generates a project with register groups, datasets, a Lua frame parser and dashboard widgets.
 
 ### Supported Formats
 
@@ -235,14 +242,14 @@ Serial Studio auto-detects the format from the file extension and accepts **CSV*
 2. Click **Import Register Map…**.
 3. Select a CSV, XML, or JSON register map file.
 4. Review the registers in the **Modbus Register Map Preview** dialog.
-5. Click **Create Project**. You will be prompted to save the `.ssproj` file.
+5. Click **Create Project**. Serial Studio asks you to save the `.ssproj` file.
 6. The register groups are also loaded into the Modbus driver automatically.
 
 ### CSV Format
 
 CSV is the most common format for Modbus register maps. Most PLC vendors, SCADA tools, and device datasheets can export or be converted to this format.
 
-**Columns** (header row required, order is flexible):
+**Columns** (header row required, order is flexible; only `address` is required, and `name` is the first one to add):
 
 | Column        | Aliases                                           | Required | Default    |
 |---------------|---------------------------------------------------|----------|------------|
@@ -265,7 +272,7 @@ The last four columns describe how the device is wired rather than what a regist
 
 - **`slave`**: the unit the register lives on. Registers from different units become separate polled blocks, each read from its own unit, and the generated parser tells the replies apart by the unit byte they carry. Leave it empty for a single-device bus. (`unit` alone still means the units column.)
 - **`bit`**: a bit index inside a holding or input register (0 = least significant). The row becomes a light in the block's LED Panel group, following that bit; the rest of the word stays untouched.
-- **`rw`**: `w`, `rw`, `write`, `yes` or `true` marks the register writable. A writable row also produces an output control in a generated Controls panel that writes the register (a toggle for coils and bit rows, a slider for numeric registers) and reads its state back from the block's table.
+- **`rw`**: `w`, `rw`, `write`, `yes` or `true` marks the register writable. A writable row also produces an output control in a generated Controls panel that writes the register (a toggle for coils and bit rows, a slider for numeric registers) and reads its state back from the block's table. A single write covers at most 123 registers.
 - **`order`**: the word/byte order of a 32-bit or 64-bit value: `abcd` (big-endian, the default), `cdab` (word swap), `badc` (byte swap) or `dcba` (little-endian). `big`/`little`/`swap` are accepted as aliases.
 
 **Register type values:** `holding` (or `0x03`, `3`, `hr`), `input` (or `0x04`, `4`, `ir`), `coil` (or `0x01`, `1`), `discrete` (or `0x02`, `2`, `di`).
@@ -276,17 +283,7 @@ The same four optional fields are accepted as XML attributes and JSON keys under
 
 Lines starting with `#` are treated as comments and skipped.
 
-**Example:**
-
-```csv
-address,name,type,dataType,units,min,max,scale,offset
-0,Temperature,holding,uint16,°C,0,150,0.1,0
-1,Pressure,holding,uint16,PSI,0,5000,1,0
-2,RPM,holding,uint16,RPM,0,3000,1,0
-4,Flow Rate,holding,float32,GPM,0,50,1,0
-0,E-Stop,coil,bool,,0,1,,
-1,Motor Run,coil,bool,,0,1,,
-```
+A complete map is in [Example Files](#example-files).
 
 ### Converting Vendor Data to CSV
 
@@ -294,11 +291,9 @@ Most Modbus device documentation provides register maps as tables in PDF or Exce
 
 1. **Identify the columns:** Look for register address, name/description, data type, and units.
 2. **Map register types:** Holding registers (function code 03), input registers (04), coils (01), discrete inputs (02).
-3. **Note multi-register values.** A 32-bit value (`float32`, `uint32`, `int32`) occupies two consecutive 16-bit registers; a 64-bit value occupies four. Set the address to the first register. Serial Studio handles the rest.
+3. **Note multi-register values.** A 32-bit value (`float32`, `uint32`, `int32`) occupies two consecutive 16-bit registers; a 64-bit value occupies four. Set the address to the first register and Serial Studio reads the rest as one value.
 4. **Add scaling if needed:** If the device stores temperature as raw value × 0.1, add `scale,0.1` to the CSV.
 5. **Save as `.csv`** with UTF-8 encoding.
-
-**Tip:** You only need the `address` and `name` columns to get started. Everything else has sensible defaults.
 
 ### XML Format
 
@@ -370,9 +365,7 @@ The importer produces:
 
 ### Example Files
 
-Below is the same hydraulic test stand register map in all three supported formats.
-
-**CSV:**
+A hydraulic test stand register map in CSV:
 
 ```csv
 address,name,type,dataType,units,min,max,scale,offset
@@ -394,95 +387,23 @@ address,name,type,dataType,units,min,max,scale,offset
 1,Level Switch,discrete,bool,,0,1,,
 ```
 
-**JSON (flat format):**
-
-```json
-{
-  "registers": [
-    {"address": 0, "type": "holding", "name": "Temperature", "dataType": "uint16", "units": "°C", "min": 0, "max": 150, "scale": 0.1},
-    {"address": 1, "type": "holding", "name": "Pressure", "dataType": "uint16", "units": "PSI", "min": 0, "max": 5000},
-    {"address": 2, "type": "holding", "name": "RPM", "dataType": "uint16", "units": "RPM", "min": 0, "max": 3000},
-    {"address": 3, "type": "holding", "name": "Valve Position", "dataType": "uint16", "units": "%", "min": 0, "max": 100, "scale": 0.1},
-    {"address": 4, "type": "holding", "name": "Flow Rate", "dataType": "float32", "units": "GPM", "min": 0, "max": 50},
-    {"address": 6, "type": "holding", "name": "Motor Load", "dataType": "uint16", "units": "%", "min": 0, "max": 100, "scale": 0.1},
-    {"address": 7, "type": "holding", "name": "Vibration", "dataType": "uint16", "units": "mm/s", "min": 0, "max": 50, "scale": 0.1},
-    {"address": 0, "type": "input", "name": "Pump Inlet Temp", "dataType": "int16", "units": "°C", "min": -40, "max": 150, "scale": 0.1},
-    {"address": 1, "type": "input", "name": "Pump Outlet Temp", "dataType": "int16", "units": "°C", "min": -40, "max": 150, "scale": 0.1},
-    {"address": 2, "type": "input", "name": "Ambient Temp", "dataType": "int16", "units": "°C", "min": -40, "max": 80, "scale": 0.1},
-    {"address": 0, "type": "coil", "name": "E-Stop", "dataType": "bool"},
-    {"address": 1, "type": "coil", "name": "Motor Run", "dataType": "bool"},
-    {"address": 2, "type": "coil", "name": "Valve Open", "dataType": "bool"},
-    {"address": 3, "type": "coil", "name": "Alarm Active", "dataType": "bool"},
-    {"address": 0, "type": "discrete", "name": "Door Sensor", "dataType": "bool"},
-    {"address": 1, "type": "discrete", "name": "Level Switch", "dataType": "bool"}
-  ]
-}
-```
-
-**XML:**
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<modbus>
-  <holding-registers>
-    <register address="0" name="Temperature" dataType="uint16" units="°C" min="0" max="150" scale="0.1"/>
-    <register address="1" name="Pressure" dataType="uint16" units="PSI" min="0" max="5000"/>
-    <register address="2" name="RPM" dataType="uint16" units="RPM" min="0" max="3000"/>
-    <register address="3" name="Valve Position" dataType="uint16" units="%" min="0" max="100" scale="0.1"/>
-    <register address="4" name="Flow Rate" dataType="float32" units="GPM" min="0" max="50"/>
-    <register address="6" name="Motor Load" dataType="uint16" units="%" min="0" max="100" scale="0.1"/>
-    <register address="7" name="Vibration" dataType="uint16" units="mm/s" min="0" max="50" scale="0.1"/>
-  </holding-registers>
-  <input-registers>
-    <register address="0" name="Pump Inlet Temp" dataType="int16" units="°C" min="-40" max="150" scale="0.1"/>
-    <register address="1" name="Pump Outlet Temp" dataType="int16" units="°C" min="-40" max="150" scale="0.1"/>
-    <register address="2" name="Ambient Temp" dataType="int16" units="°C" min="-40" max="80" scale="0.1"/>
-  </input-registers>
-  <coils>
-    <register address="0" name="E-Stop"/>
-    <register address="1" name="Motor Run"/>
-    <register address="2" name="Valve Open"/>
-    <register address="3" name="Alarm Active"/>
-  </coils>
-  <discrete-inputs>
-    <register address="0" name="Door Sensor"/>
-    <register address="1" name="Level Switch"/>
-  </discrete-inputs>
-</modbus>
-```
+The same map in JSON uses the flat layout (`"registers": [...]`) with one object per row, for example `{"address": 4, "type": "holding", "name": "Flow Rate", "dataType": "float32", "units": "GPM", "min": 0, "max": 50}`. In XML it is the nested layout with one `<register .../>` element per row under `<holding-registers>`, `<input-registers>`, `<coils>` and `<discrete-inputs>`.
 
 ## How Multi-Group Polling Works
 
-When a Modbus connection has multiple register groups, the driver and the auto-generated frame parser coordinate through a simple sequential protocol. Understanding this mechanism helps when debugging or customizing the generated parser.
+Modbus (Pro) polls register groups in order, and the generated Lua frame parser decodes each reply.
 
 ### Driver Side
 
-Each poll cycle, the Modbus driver iterates through the configured register groups in order:
-
-1. Poll group 0 → wait for response → emit frame
-2. Poll group 1 → wait for response → emit frame
-3. Poll group 2 → wait for response → emit frame
-4. (next poll timer tick) → start again at group 0
-
-The groups are always polled in the same fixed order (the order they appear in the register groups list). Each response is emitted as a separate frame to the data pipeline.
+Each poll tick, the Modbus driver polls group 0, then 1, then 2, and so on in list order, and emits one frame per response.
 
 ### Parser Side
 
-The generated Lua parser keeps a poll cursor that starts at the first register block. Each time a response frame arrives, the parser reads the Modbus function code (the second byte of the response) and matches it against the configured blocks, probing in cursor order. It decodes the matching block, publishes the extracted values into the block's Variables table, then advances the cursor to the block after the one it just decoded. Because matching is keyed on the function code rather than on cursor position alone, the parser snaps to the correct block even if a response is missing or arrives out of order.
-
-Values are latched through the Variables tables: each register block updates only its own table variables, and every dataset reads its current value back from the table inside its transform, so values from other blocks carry over between frames. A single contiguous block decodes on every frame; with multiple blocks, the cursor walks through them as their responses arrive.
-
-For two groups (e.g., holding registers at address 0 and coils at address 100), the response for the holding registers carries function code `0x03` and updates the temperature and pressure datasets, while the coils response carries function code `0x01` and updates the E-Stop and Motor Run datasets.
-
-Frame with function `0x03` arrives → parser matches the holding-register block → extracts holding register values → advances the cursor.
-Frame with function `0x01` arrives → parser matches the coil block → extracts coil values → advances the cursor.
+The Modbus frame parser matches each reply to a register block by its function code (the second byte of the response) and keeps the other blocks' last values in their Variables tables. For two groups, holding registers carry function code `0x03` and coils `0x01`, so each reply updates only its own block's datasets. If a response times out, the parser keeps that block's previous values and resynchronizes on the next matching reply.
 
 ### Practical Considerations
 
-- **Typical group count:** Most Modbus devices use 1–3 register groups. A single contiguous block of holding registers is the most common configuration.
-- **Synchronization.** Each poll cycle is sequential: group N+1 isn't polled until group N's response arrives. The parser also matches each response to a block by its Modbus function code, so it stays aligned even when block types differ.
-- **Frame loss:** If a Modbus response times out or is dropped (rare over TCP, uncommon over RTU), the parser latches the previous values for that block and resynchronizes on the next matching response. At typical poll rates (100 ms or slower), this causes at most a brief glitch.
-- **Customization:** The generated parser is editable Lua. Each register is one line in the `BLOCKS` spec (`name`, `offset`, `type`, optional `scale`/`shift`); to add a register, add a line there plus a matching table variable and a dataset that reads it back with `tableGet()`. For larger changes, adjust the register groups and regenerate the project.
+- **Customization:** The generated Modbus parser is editable Lua. Each register is one line in the `BLOCKS` spec (`name`, `offset`, `type`, optional `scale`/`shift`); to add a register, add a line there plus a matching table variable and a dataset that reads it back with `tableGet()`. For larger changes, adjust the register groups and regenerate the project.
 
 ## CAN Bus Setup (Pro)
 
@@ -496,23 +417,23 @@ Frame with function `0x01` arrives → parser matches the coil block → extract
 2. Select the **CAN Driver** (backend). The Qt plugins are `socketcan` (Linux), `peakcan`, `vectorcan`, `systeccan`, `tinycan`, and `virtualcan`; Serial Studio adds its own `canable_gsusb` (CANable USB), `slcan` (Serial CAN), and `seeed_usbcan` (Seeed / Waveshare) backends.
 3. Select the **Interface** from the dropdown (e.g., `can0`, `PCAN_USBBUS1`).
 4. Set the **Bitrate** to match the CAN network exactly. Default: 500000. Common values: 125000, 250000, 500000, 1000000 bps.
-5. Optionally enable **Flexible Data-Rate** if the network uses CAN FD frames. **Listen-Only** and **Loopback** toggles are available for passive monitoring and self-test.
+5. Optionally enable **Flexible Data-Rate** if the network uses CAN FD frames. **Listen-Only** (passive monitoring) and **Loopback** (self-test) are off by default.
 6. Click **Connect**.
 
-To skip writing a project by hand, click **Import DBC File…** under **DBC Database**: the importer generates a complete project from a CAN signal database (see [Auto-Generating Projects](Auto-Generating-Projects.md)). Without a DBC, frames reach the [frame parser](Frame-Parser.md) as binary records (ID, DLC, payload); decode them with the Binary decoder and your own parse function.
+To skip writing a project by hand, click **Import DBC File…** under **DBC Database**: the importer generates a complete project from a CAN signal database (see [Auto-Generating Projects](Auto-Generating-Projects.md)). Without a DBC, frames reach the [frame parser](Frame-Parser.md) as binary records (ID, DLC, payload); decode them with the **Binary (Direct)** decoder and your own parse function.
 
 ### Linux SocketCAN Preparation
 
 Before connecting in Serial Studio, bring up the CAN interface from a terminal:
 
-```
+```bash
 sudo ip link set can0 type can bitrate 500000
 sudo ip link set up can0
 ```
 
 For CAN FD, add the data bitrate:
 
-```
+```bash
 sudo ip link set can0 type can bitrate 500000 dbitrate 2000000 fd on
 sudo ip link set up can0
 ```
@@ -590,7 +511,7 @@ Full driver reference: [USB](Drivers-USB.md).
 2. Wait for device enumeration. HID devices are re-enumerated every 2 seconds automatically.
 3. Pick the device from the **HID Device** dropdown. Devices are listed as `Product Name (VID:PID)`.
 4. Click **Connect**.
-5. Once connected, the **Usage Page** and **Usage** fields show which HID collection is active — useful when a device exposes several interfaces.
+5. Once connected, the **Usage Page** and **Usage** fields show which HID collection is active, which helps when a device exposes several interfaces.
 
 ### Troubleshooting
 
@@ -599,7 +520,7 @@ Full driver reference: [USB](Drivers-USB.md).
 
 Full driver reference: [HID](Drivers-HID.md).
 
-## Process I/O setup: Launch mode (Pro)
+## Process I/O Launch Mode Setup (Pro)
 
 **License:** Pro
 
@@ -624,7 +545,7 @@ Serial Studio spawns the process, reads its merged stdout and stderr, and feeds 
 
 Full driver reference: [Process I/O](Drivers-Process-IO.md).
 
-## Process I/O setup: Named Pipe mode (Pro)
+## Process I/O Named Pipe Setup (Pro)
 
 **License:** Pro
 
@@ -637,7 +558,7 @@ Full driver reference: [Process I/O](Drivers-Process-IO.md).
 3. Enter the **Pipe Path**, or click **Browse** to select it.
    - Linux/macOS: `/tmp/myfifo`. Serial Studio creates the FIFO automatically if it doesn't already exist.
    - Windows: `\\.\pipe\MyPipeName`. The external process must create the named pipe before you connect.
-4. Optionally click **Pick Running Process…** to choose a running process and derive a pipe-path suggestion from it.
+4. Optionally click **Pick Running Process…** to choose a running process from a list.
 5. Click **Connect**.
 
 Serial Studio opens the named pipe for reading and streams data into the pipeline. The external process must open the pipe for writing.
@@ -645,7 +566,7 @@ Serial Studio opens the named pipe for reading and streams data into the pipelin
 ### Troubleshooting
 
 - **Cannot open pipe:** On Windows, the pipe must be created by the writing process before Serial Studio connects. On Linux/macOS, Serial Studio creates the FIFO itself if it's missing; if opening still fails, check that the path is writable and not already claimed by another process.
-- **No data:** Ensure the external process is actively writing to the pipe. Named pipes block until both reader and writer are connected.
+- **No data:** Ensure the external process is actively writing to the pipe. A pipe delivers nothing until a writer has it open.
 
 Full driver reference: [Process I/O](Drivers-Process-IO.md).
 

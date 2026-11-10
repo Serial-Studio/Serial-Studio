@@ -1,43 +1,56 @@
 # Macros
 
-An in-process command terminal and script editor. The Macros window runs single API commands and multi-line JavaScript or Lua scripts against the running application, with the same command surface that the API server exposes over TCP, but without a socket, a client program, or the API server being enabled.
+You want to send the same command to your board at the start of every session, or check the link state without clicking through three panels. The Macros window does that: type one command and read the reply, or save a short JavaScript or Lua script and run it whenever you need it.
 
 ## Overview
 
-Serial Studio registers every operation it can perform as a named command (`io.connect`, `project.dataset.add`, `dashboard.tick`, and so on). Remote programs reach those commands through the [API server](API-Reference.md); frame parsers, transforms, and the Control Loop reach them through the [SDK](SerialStudio-SDK.md). Macros are the third way in: type a command by hand, or write a script that calls several, and watch the replies in a scrollback.
+Every action in Serial Studio is a named command, such as `io.connect` or `project.dataset.add`. The Macros window runs them inside the app; no API server needs to be on.
 
-Macros are available in every edition, GPL builds included. Commands that belong to Pro drivers exist only in a build that ships them, so the catalog in the window is exactly what the running build registers.
+Macros are available in every edition, GPL builds included. The window opens only in author mode: in a runtime-mode (operator) deployment the Macros command does nothing. The command catalog is whatever the running build registers; a command from a driver the build does not ship is not listed, and calling it returns the unknown-command error.
 
-Open the window from the [command palette](Command-Palette.md): press **Ctrl+K**, type `Macros`, and press Enter. Its entry sits in the **Tools** category and is listed from the main window and the dashboard. There is no toolbar button and no Start menu entry.
+Press **Ctrl+K** (**Cmd+K** on macOS) to open the [command palette](Command-Palette.md), type `Macros`, and press Enter. The **Macros** entry is in the **Tools** category and appears in the palette from both the main window and the dashboard. The main toolbar also has a **Macros** button, next to the Remote Attach and Problems buttons.
 
-Two panes make up the window. The left pane is the command catalog: a search field, the command list grouped by scope, and a documentation panel for the selected command. The right pane holds two tabs, **Terminal** and **Script**.
+The left pane of the window is the command catalog: a search field, the command list grouped by scope, and a documentation panel for the selected command. The right pane holds two tabs, **Terminal** and **Script**.
 
-Commands run as the local user, so device writes issued from a macro go straight through; the consent prompt that remote API clients receive before a device write does not apply here.
+A macro acts immediately: it can change your project and write to the connected device with no confirmation prompt. Macros run in the application as the local user, with no remote client in the loop.
 
 ## Quick start
 
 1. Press **Ctrl+K**, type `Macros`, and press Enter.
-2. Open the **Script** tab. It is pre-filled with a starter macro that calls `api.getCommands` and prints the first five command names.
-3. Click the **Run macro** button (the play icon). The window switches to the **Terminal** tab and prints:
+2. Open the **Script** tab. It is pre-filled with a JavaScript starter macro that calls `api.getCommands` and prints the first five command names (abbreviated here to one).
+3. Click the **Run macro** button (the play icon). The window switches to the **Terminal** tab and prints output like this; `N` is the number of commands in your build. The starter ends each line with `\n`, so blank lines appear between entries:
 
-```
+```text
 > [macro] run (js)
-Hello from Serial Studio! ... commands available.
+Hello from Serial Studio! N commands available.
+
   api.getCommands - Returns every command the live server exposes ...
+
   ...
 [macro] finished
 ```
 
 4. Switch back to **Script**, edit the macro, and run it again. Click **Verify macro** first to catch a syntax error without executing anything.
 
+To talk to the board, connect the device from the main window, then replace the macro with this one. `apiCall(name, params)` runs one command and returns `{ ok: true, result: ... }` or `{ ok: false, error: "..." }`; the three lines check for the second form. `console.send` uses the Console's line ending and encoding settings. With no device connected it writes nothing but still replies `sent: true`, so check `io.getStatus` `isConnected` first if that matters:
+
+```javascript
+const reply = apiCall("console.send", { data: "LED ON" })
+if (!reply.ok)
+  throw new Error(reply.error)
+```
+
 ## Terminal tab
 
-The Terminal tab runs one command per line. The input row at the bottom takes a command name followed by an optional JSON object of parameters:
+The Macros window's Terminal tab runs one command per line. The input row at the bottom takes a command name followed by an optional JSON object of parameters:
 
-```
+```text
 io.getStatus
+project.getStatus
 project.group.add { "title": "Sensors", "widgetType": 5 }
 ```
+
+The first two lines only read state. The third adds a group titled `Sensors` to the open project; `5` is the `NoGroupWidget` value of `widgetType`, a plain container for related datasets.
 
 Whitespace after the name starts the parameters. The parameters must parse as a JSON object; a malformed object or a JSON array is refused with `Invalid parameter JSON` or `Parameters must be a JSON object` before anything is dispatched. Press Enter or click the **Run command** button to run the line. The scrollback echoes the line with a `>` prefix, then prints the reply as indented JSON in the same shape the API server sends over the wire, including the error object for an unknown command.
 
@@ -47,11 +60,11 @@ With the popup closed, **Up** and **Down** recall earlier lines. History lives o
 
 ## Command catalog
 
-The search field filters the list by command name and description. The list is grouped by scope, the part of the name before the first dot, and each row shows the verb after the dot with its description underneath. Selecting a row, or typing an exact command name in the input row, fills the documentation panel below the list with the full name, the description, and every parameter as `name (type)`, with an asterisk after the parameters a command requires. A command without parameters shows `No parameters`.
+The left pane of the Macros window is the command catalog. Its search field filters the list by command name and description. The list is grouped by scope, the part of the name before the first dot, and each row shows the verb after the dot with its description underneath. Selecting a row, or typing an exact command name in the Terminal tab's input row, fills the documentation panel below the list with the full name, the description, and every parameter as `name (type)`, with an asterisk after the parameters a command requires. A command without parameters shows `No parameters`.
 
 ## Script tab
 
-The Script tab holds the macro editor, a code editor with syntax highlighting for the selected language, and a toolbar:
+The Script tab holds the macro editor, a code editor with syntax highlighting for the selected language, and a toolbar. The toolbar buttons are icons; hover one to see the name used below.
 
 | Control | Effect |
 |---------|--------|
@@ -74,28 +87,28 @@ A failed run prints one line prefixed with `[macro]`:
 | Message | Meaning |
 |---------|---------|
 | `[macro] Line 4: Error: boom` | A JavaScript macro threw or hit a runtime error on line 4. |
-| `[macro] macro:4: boom` | A Lua macro raised an error on line 4. |
+| `[macro] [string "macro"]:4: boom` | A Lua macro raised an error on line 4. |
 | `[macro] Macro stopped by user` | **Stop macro** interrupted a JavaScript macro. |
 | `[macro] Macro exceeded the 5000 ms script budget between API calls and was interrupted` | A JavaScript macro spent more than 5 s in script code without calling the host. |
 | `[macro] macro exceeded the 30000 ms safety deadline` | A Lua macro ran for more than 30 s in total. |
 | `[macro] Macro is empty` | The editor held only whitespace. |
 
-**Verify macro** prints `[macro] verify: no syntax errors` or `[macro] verify failed: <error>`. Both languages name the line: JavaScript as `Line 3: SyntaxError: Expected token ';'`, Lua as `macro:3: '=' expected near 'x'`. Verifying never executes the script; a JavaScript source is compiled inside a function wrapper under a 2 s budget.
+**Verify macro** prints `[macro] verify: no syntax errors` or `[macro] verify failed: <error>`. Both languages name the line: JavaScript as `Line 3: SyntaxError: Expected token ';'`, Lua as `[string "macro"]:3: '=' expected near 'x'`. Verify compiles the text without running it. A JavaScript source is compiled inside a function wrapper under a 2 s budget, so a top-level `return` passes Verify but fails at run time.
 
 ## JavaScript and Lua macros
 
-The two languages run under different execution models, and the difference matters for anything longer than a few calls:
+Use JavaScript unless the macro needs `actionFire()` or a dashboard setter. A Lua macro runs on the main window thread and freezes the window until it returns, so one that loops forever holds the whole application for thirty seconds. A host call is any `apiCall`, `delay` or `deviceWriteAndWait`; it hands control back to Serial Studio. The two languages run under different execution models:
 
 | | JavaScript | Lua |
 |---|---|---|
-| Runs on | Its own worker thread. Window and dashboard stay responsive. | The interface thread. Everything else waits until the macro returns. |
+| Runs on | Its own worker thread. Window and dashboard stay responsive. | The main window thread. Everything else waits until the macro returns. |
 | **Stop macro** | Interrupts at the next host call, sleep, or device wait, and within 5 s of pure script code. | Not available. |
 | Time limit | 5 s of script time between host calls. Each `apiCall`, `delay`, and `deviceWriteAndWait` restarts the budget. | 30 s for the whole run. |
 | `delay(ms)` | Sleeps the macro without blocking the interface; capped at 1 hour. | Not available. |
-| Output | `console.log()`, `console.info()`, `console.warn()`, `console.error()`, and `print()` all write one line to the scrollback. | `print()` writes one line, arguments joined by tabs. |
+| Output | `console.log()`, `console.info()`, `console.warn()`, `console.error()`, and `print()` each write one line to the scrollback, arguments joined by a space. | `print()` writes one line, arguments joined by a tab. |
 | Engine | A fresh engine per run; no variable survives into the next run. | A fresh state per run. The `ffi` and `jit` modules are removed and the JIT compiler is off. |
 
-A JavaScript macro that loops forever with no host call is interrupted by the 5 s budget on its own. A Lua macro in the same loop freezes the interface until the 30 s deadline fires, so pace long Lua work through host calls or keep it in JavaScript.
+A JavaScript macro that loops forever with no host call is interrupted by the 5 s budget on its own. A Lua macro in the same loop freezes the interface until the 30 s deadline ends the run, and host calls do not extend it. Split long work into several runs, or write it in JavaScript.
 
 ### SDK helpers inside a macro
 
@@ -112,7 +125,7 @@ The direct host helpers are not installed uniformly:
 | `notify*` (Pro) | yes, routed through `apiCall` | yes |
 | `deviceWrite`, `actionFire`, dashboard setters (`clearPlots`, `setActiveWorkspace`, ...) | no | yes |
 
-In JavaScript, `console.send(...)` takes the place of `deviceWrite()`. Firing an action and toggling the dashboard utilities have no command equivalents, so a macro that needs `actionFire()` or the dashboard setters runs in Lua. Calling an absent helper raises a `ReferenceError`.
+In JavaScript, `apiCall("console.send", { data: "..." })` takes the place of `deviceWrite()`. A macro that needs `actionFire()` or the dashboard setters runs in Lua. Calling an absent helper raises a `ReferenceError`.
 
 ### Examples
 
@@ -150,7 +163,7 @@ end
 
 ## Macro files
 
-Macros are plain text files with a `.js` or `.lua` suffix. **Load macro** and **Save macro** open in the `Macros` folder under the application data directory (`<AppData>/Macros`, created on first use), and any other folder can be chosen from the dialog. Loading picks the language from the suffix: `.lua` selects Lua, anything else selects JavaScript. Saving writes the file atomically and prints `[macro] saved <name>`; loading prints `[macro] loaded <name>`.
+A macro is a plain text file with a `.js` or `.lua` suffix. The Macros window's **Load macro** and **Save macro** dialogs open in the `Macros` folder of the application data directory (created on first use); any other folder can be chosen from the dialog. Loading picks the language from the suffix: `.lua` selects Lua, anything else selects JavaScript. Saving writes the file atomically and prints `[macro] saved <name>`; loading prints `[macro] loaded <name>`.
 
 ## Limits
 
@@ -160,14 +173,12 @@ Macros are plain text files with a `.js` or `.lua` suffix. **Load macro** and **
 | Lua run deadline | 30000 ms |
 | `delay()` cap | 3600000 ms (1 hour) |
 | Verify budget (JavaScript) | 2000 ms |
-| Command history | Current session only |
-| Macro draft | Kept while the window is closed, discarded on quit |
 
-A macro can do exactly what a local API client can do: every registered command, including the mutating `project.*` commands. Commands that offer a `dryRun` parameter honor it from a macro as well.
+A macro can call any command the catalog lists, including the mutating `project.*` commands. Commands that offer a `dryRun` parameter honor it from a macro as well.
 
 ## See also
 
+- [API server](API-Reference.md) and [SDK](SerialStudio-SDK.md): remote programs reach the same commands through the API server; frame parsers, transforms and the Control Loop reach them through the SDK.
 - [SDK Reference](SerialStudio-SDK.md): the `apiCall` envelope, the generated wrappers, and the helper groups.
 - [API Reference](API-Reference.md): every command, its parameters, and the reply shapes the Terminal tab prints.
 - [Control Loop](Control-Loop.md): the project-scoped script that runs for the life of a connection, the counterpart to an ad-hoc macro.
-- [Command Palette](Command-Palette.md): the **Ctrl+K** palette that opens the Macros window.

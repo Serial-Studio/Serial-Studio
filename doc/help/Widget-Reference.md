@@ -2,27 +2,47 @@
 
 ## Overview
 
-Serial Studio has 15+ widget types for real-time data visualization. Widgets fall into two categories: **group widgets** (display multiple datasets from a group) and **dataset widgets** (display a single dataset value).
+Your board prints `21.5,48` once a second. In the [Project Editor](Project-Editor.md) each value becomes a **dataset**, and datasets live in a **group**. A dataset shows one value and a group shows several together. To give the first dataset a gauge, select it in the Project Editor and set its **Widget** to Gauge, with a range. The project file stores that as the JSON below. You never have to edit it by hand, and the keys on this page are project-file keys.
 
-## Widget type hierarchy
-
-The diagram below shows all widget types organized by category, with their configuration keys and dataset requirements.
-
-```mermaid
-flowchart TD
-    Root(["Dashboard Widgets"])
-    Root --> Group["Group Widgets"]
-    Root --> Dataset["Dataset Widgets"]
-
-    Group --> G1["Data Grid · Multi-Plot<br/>Accelerometer · Gyroscope"]
-    Group --> G2["GPS Map · LED Panel<br/>3D Plot · Image View"]
-    Group --> G3["Canvas (user-scripted)<br/>Web View"]
-
-    Dataset --> D1["Plot · FFT Plot · Waterfall<br/>Bar · Gauge · Compass · Meter"]
-
-    Root --> Utility["Utility Widgets"]
-    Utility --> U1["Clock · Stopwatch"]
+```json
+{ "title": "Temperature", "units": "C", "widget": "gauge", "widgetMin": 0, "widgetMax": 100 }
 ```
+
+The gauge sweeps to 21.5 on a 0 to 100 dial, with C beneath it.
+
+Widgets come in three kinds:
+
+- **Group widgets** display the datasets of one group, such as a GPS map or a data grid. Choose the widget type when you add the group with **Add Group**.
+- **Dataset widgets** display a single value: Plot, FFT Plot, Waterfall (Pro), Bar, Gauge, Compass, Meter. Click **Plot**, **FFT Plot** or **Waterfall** on the dataset toolbar in the Project Editor. Bar, Gauge, Compass and Meter are chosen in the dataset's **Widget** setting.
+- **Utility widgets** (Clock, Stopwatch, Terminal) belong to no group. Turn them on from the dashboard taskbar or the Start menu.
+
+New to Serial Studio? [Getting Started](Getting-Started.md) takes you from a first connection to a first dashboard.
+
+## Picking the right widget
+
+For a single number from your Arduino, start with [Plot](#plot); add a [Gauge](#gauge) once you know the range. Group widgets need several datasets in one group.
+
+| Data type                                                                     | Recommended widget         |
+|-------------------------------------------------------------------------------|----------------------------|
+| Temperature                                                                   | [Gauge](#gauge), [Plot](#plot), or [Bar](#bar) |
+| Pressure, voltage, signal level                                               | Plot, Gauge, [Meter](#meter), or Bar |
+| Several related signals overlaid on one chart                                 | [Multi-Plot](#multi-plot) (group) |
+| GPS coordinates                                                               | [GPS Map](#gps-map) (group) |
+| Acceleration (X, Y, Z)                                                        | [Accelerometer](#accelerometer) (group) |
+| Orientation angles (yaw, pitch, roll); for angular rate (deg/s) see Gyroscope | [Gyroscope](#gyroscope) (group) |
+| Heading or bearing                                                            | [Compass](#compass)        |
+| Audio or vibration frequency                                                  | [FFT Plot](#fft-plot)      |
+| Time-frequency / spectrogram                                                  | [Waterfall](#waterfall-pro) (Pro) |
+| Boolean status flags                                                          | [LED Panel](#led-panel) (group) |
+| Many related channels, color by severity                                      | [Bar Panel](#bar-panel) (group) |
+| Mixed numeric and text values                                                 | [Data Grid](#data-grid) (group) |
+| 3D trajectory or position                                                     | [3D Plot](#3d-plot-pro) (group, Pro) |
+| Live camera or image stream                                                   | [Image View](#image-view-pro) (group, Pro) |
+| Custom instrument mimic or layout no widget covers                            | [Canvas](#canvas-pro) (group, Pro) |
+| Embedded web page / map / 3D model                                            | [Web View](#web-view) (group) |
+| Wall-clock time / session timestamp                                           | [Clock](#clock) (utility)  |
+| Manual elapsed-time / lap timing                                              | [Stopwatch](#stopwatch) (utility) |
+| Raw text stream, typing to the device                                         | [Terminal](#terminal) (utility) |
 
 ## Group widgets
 
@@ -32,40 +52,29 @@ flowchart TD
 - Displays all datasets in a tabular format with titles, values, and units.
 - Best for: overview of multiple channels, status monitoring.
 - Configuration: none required beyond adding datasets to the group.
-- Supports pause/resume, with different semantics than a Plot widget: a paused Data Grid stops refreshing, and Resume pulls a fresh snapshot of current values immediately, discarding whatever arrived while paused. A paused Plot, by contrast, just stops appending new samples to its buffer and keeps its existing history intact.
+- Pause freezes the grid. Resume shows the current values immediately and discards what arrived while paused.
 
 ### Bar Panel
 
 - Widget key: `"barpanel"`.
 - One labeled bar per dataset in the group: title, alarm-band-zoned track, live value.
-- Alarm bands are always drawn in full as muted zones on each track; the fill takes the
-  active band's color (green while normal, yellow/red as the value crosses band edges).
-- **Bar Style** option in the Project Editor: Auto (default, picks by panel shape),
-  Horizontal (labeled rows), or Vertical (rake-style columns).
-- Datasets with **Hold Min/Max Markers** enabled show tick marks at the lowest and highest
-  values observed since the last data reset.
-- Best for: monitoring many related channels at a glance (temperatures, pressures, EGT
-  rakes) where color should mean severity and nothing else.
-- Configuration: set `widgetMin`/`widgetMax` per dataset for the track range; define
-  alarm bands for severity coloring.
+- Alarm bands are always drawn in full as muted zones on each track; the fill takes the active band's color (green while normal, yellow/red as the value crosses band edges).
+- **Bar Style** (group key `barPanelStyle`: empty = Auto, `horizontal`, or `vertical`) in the Project Editor: Auto (default, picks by panel shape), Horizontal (labeled rows), or Vertical (rake-style columns).
+- Datasets with **Hold Min/Max Markers** enabled show tick marks at the lowest and highest values observed since the last data reset.
+- Best for: monitoring many related channels at a glance (temperatures, pressures, EGT rakes) where color should mean severity and nothing else.
+- Configuration: set `widgetMin`/`widgetMax` per dataset for the track range; define alarm bands for severity coloring.
 
 ### Multi-Plot
 
 - Widget key: `"multiplot"`.
-- Overlays multiple dataset curves on shared axes.
-- Per-curve visibility toggles.
-- Auto-scaling Y-axis.
+- Overlays multiple dataset curves on shared axes, with per-curve visibility toggles and an auto-scaling Y-axis.
 - Best for: comparing related signals (for example a 3-axis accelerometer over time).
-- Configuration: add datasets with `graph: true` to the group.
+- Configuration: switch **Plot** on for each dataset in the group (project-file key `graph: true`).
 
 ### GPS Map
 
 - Widget key: `"map"` (the Project Editor writes this for new GPS Map groups; `"gps"` is also accepted).
-- Tile-based map with real-time position tracking.
-- Plots the trajectory path.
-- Shows latitude, longitude, and altitude.
-- Auto-centers on the latest position.
-- Zoom and pan with the mouse.
+- Tile-based map that plots the trajectory path and shows latitude, longitude, and altitude. The view follows the latest position; zoom and pan with the mouse.
 - Best for: vehicle tracking, drone telemetry, field measurements.
 - Requires: datasets with latitude, longitude, and optionally altitude.
 - Needs an internet connection for map tiles. Previously viewed areas are cached.
@@ -76,17 +85,15 @@ flowchart TD
 - Widget key: `"gyro"` (also accepts `"gyroscope"`).
 - Attitude indicator showing yaw, pitch, roll.
 - Best for: IMU visualization, drone orientation, robotics.
-- Requires: exactly 3 datasets (yaw, pitch, roll).
+- Requires: exactly 3 datasets, in group order yaw, pitch, roll.
 - Expects absolute angles in degrees. If your sensor only provides angular rates (deg/s), integrate them with the **Integrate Rate to Angle** transform template.
 
 ### Accelerometer
 
 - Widget key: `"accelerometer"`.
-- 3-axis acceleration visualization with a computed total G-force.
-- Shows pitch, roll, peak G, magnitude.
-- Configurable max G range.
+- 3-axis acceleration visualization with a computed total G-force: pitch, roll, peak G and magnitude, over a configurable max G range.
 - Best for: vibration analysis, impact detection, motion sensing.
-- Requires: exactly 3 datasets (X, Y, Z acceleration).
+- Requires: exactly 3 datasets, in group order X, Y, Z acceleration.
 
 ### LED Panel
 
@@ -99,14 +106,6 @@ flowchart TD
 - Configuration: set the group widget to **LED Panel**, then either define `alarmBands` (see [Alarm bands](#alarm-bands)) or set `ledHigh` on each dataset.
 - Projects saved by an earlier version flagged individual datasets with `led: true` instead. On load, each group that had lights gains a `<Group> LEDs` group right after it holding copies of those datasets, saved workspaces keep pointing at the panel, and the project is marked modified so you can save the new form. A flagged dataset that was also hidden showed no light and is not copied.
 
-### Terminal
-
-- Special widget. Always available when the console is enabled.
-- VT-100 emulation with ANSI color support.
-- Shows the raw text data stream.
-- Configurable font and display settings.
-- Keyboard input is forwarded to the connected device.
-
 ### 3D Plot (Pro)
 
 - Widget key: `"plot3d"`.
@@ -117,7 +116,7 @@ flowchart TD
 - Best for: 3D position tracking, spatial data, point clouds.
 - Recommended: 3 datasets tagged x/y/z; any axis without a tagged dataset renders at 0.
 - Renders through Serial Studio's custom QPainter-based 3D pipeline. No GPU or OpenGL driver required. Runs on low-end hardware including Raspberry Pi.
-- Pro feature (license or free trial).
+- Pro. The first use offers a free trial (internet needed); see [Pro vs Free](Pro-vs-Free.md).
 
 ### Image View (Pro)
 
@@ -132,18 +131,18 @@ flowchart TD
   - `imgStartSequence`: hex start delimiter (manual mode only).
   - `imgEndSequence`: hex end delimiter (manual mode only).
 - No datasets required inside the group. The widget reads raw image bytes directly from the transport stream.
-- Pro feature (license or free trial).
+- Pro. The first use offers a free trial (internet needed); see [Pro vs Free](Pro-vs-Free.md).
 
 ### Canvas (Pro)
 
 - Widget key: `"painter"`.
 - User-scripted dashboard widget. The script defines a JavaScript `paint(ctx, w, h)` callback (and an optional `onFrame()` callback) that renders directly into the widget's bitmap on every dashboard tick.
-- Eighteen built-in templates are bundled with Serial Studio: oscilloscope, sparkline grid, dial gauge, polar plot, radar sweep, artificial horizon, heatmap, LED matrix, vector field, XY scope, and others.
+- Eighteen templates ship, one of them blank. Examples: Oscilloscope, Dial gauge, Polar plot, Radar sweep, Artificial horizon and Heatmap; the full list is under [Built-in templates](Canvas-Widget.md#built-in-templates).
 - The script reads the group's datasets through a `datasets` global and dashboard tick metadata through `frame.number` / `frame.timestampMs`.
 - Best for visualizations not covered by any built-in widget: instrument mimics, project-specific layouts, lab-equipment-style readouts.
 - Repaints at the dashboard refresh rate (60 Hz by default, configurable 1-240 Hz). A 250 ms watchdog terminates the script if a single call does not return.
 - See the [Canvas Widget](Canvas-Widget.md) reference for the full API.
-- Pro feature (license or free trial).
+- Pro. The first use offers a free trial (internet needed); see [Pro vs Free](Pro-vs-Free.md).
 
 ### Web View
 
@@ -158,19 +157,19 @@ flowchart TD
 
 ## Dataset widgets
 
+Bar, Gauge, Compass and Meter each have two pages; see their sections.
+
 ### Plot
 
-- Auto-created for datasets with `graph: true` (field name `plt`).
-- Single-curve 2D time-series line chart.
-- Auto-scaling Y-axis.
-- Configurable plot range via the `plotMin` and `plotMax` project-file keys (C++ fields `pltMin`/`pltMax`).
-- Optional custom X-axis from another dataset via the `xAxis` project-file key (C++ field `xAxisId`), which enables XY/scatter plots.
-- Pause/resume.
+- One per dataset with **Plot** switched on in the Project Editor (project-file key `graph: true`).
+- Single-curve 2D time-series line chart with an auto-scaling Y-axis, or a fixed range with `plotMin` and `plotMax`.
+- Optional custom X-axis from another dataset (`xAxis`), which enables XY/scatter plots.
+- Pause stops appending samples and keeps the history you already have.
 - Best for: individual signal monitoring, trend analysis.
 
 ### FFT Plot
 
-- Auto-created for datasets with `fft: true`.
+- One per dataset with **FFT Plot** switched on in the Project Editor (`fft: true`).
 - Real-time frequency spectrum analysis via Fast Fourier Transform (KissFFT).
 - Configurable FFT window size: 8 to 262144 samples (powers of 2). Default 256.
 - Selectable window function applied before the transform to reduce spectral leakage (15 options, from Rectangular to Flat Top). Default Blackman-Harris. The same window is used by the Waterfall widget.
@@ -182,66 +181,80 @@ flowchart TD
 
 ### Waterfall (Pro)
 
-- Auto-created for datasets with `waterfall: true`.
+- One per dataset with **Waterfall** switched on in the Project Editor (`waterfall: true`).
 - Scrolling time-frequency plot (spectrogram). Each row is one FFT magnitude spectrum, with the newest row drawn at the top and older rows scrolling down.
-- Reuses the dataset's FFT settings (`fftSamples`, `fftWindow`, `fftSamplingRate`, `fftMin`, `fftMax`). Enable both `fft: true` and `waterfall: true` if you want the FFT plot alongside the waterfall.
+- Reuses the dataset's [FFT Plot](#fft-plot) settings (`fftSamples`, `fftWindow`, `fftSamplingRate`, `fftMin`, `fftMax`). The Waterfall caps the transform at 65536 samples; a larger `fftSamples` is clamped. Enable both `fft: true` and `waterfall: true` if you want the FFT plot alongside the waterfall.
 - Magnitude is converted to dB. The dynamic range (`minDb` / `maxDb`) is adjustable from the widget toolbar.
 - Built-in color maps, sequential: Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Cividis, Cubehelix, SDR Classic, Grayscale, Grayscale (Inverted). Diverging (mid-scale neutral, so an idle spectrogram reads as the low-end color rather than black): Spectral, Red/Blue, Coolwarm.
 - Mouse wheel to zoom, drag to pan, hover for a frequency/time readout. Reset view from the toolbar.
-- Configurable history depth (number of stored rows).
+- Configurable history depth: 16 to 4096 stored rows.
 - Draws the same [frequency markers](#frequency-markers) as the FFT Plot.
 - **Y-axis source.** Defaults to elapsed time. Set `waterfallYAxis` to another dataset's `uniqueId` to drive the Y axis from that dataset's value instead. This is typically used for order-tracking plots (for example RPM vs. frequency).
 - Best for: vibration order tracking, audio spectrograms, RF band monitoring, transient frequency events.
-- Configuration fields: `waterfall: true`, `waterfallYAxis` (0 = time; otherwise the `uniqueId` of the dataset to use as the Y axis), plus the FFT fields above.
-- Pro feature (license or free trial).
+- Configuration fields: `waterfall: true`, `waterfallYAxis` (0 = time; otherwise the `uniqueId` of the dataset to use as the Y axis), plus the FFT fields listed in this section.
+- Pro. The first use offers a free trial (internet needed); see [Pro vs Free](Pro-vs-Free.md).
 
 ### Bar
 
-- Dataset widget key: `"bar"`.
-- Horizontal bar gauge with min/max range.
-- Color-banded alarm zones with per-band severity (Info / OK / Warning / Critical).
-- Shows current value and units.
-- Best for: bars, resource usage, bounded values.
-- Configuration fields (project-file keys): `widgetMin` (default 0), `widgetMax` (default 0), `alarmBands` (array; see [Alarm bands](#alarm-bands)). The `widgetMin`/`widgetMax` keys map to the C++ fields `wgtMin`/`wgtMax`.
-- **Two-page swipe view.** Page 0 is the analog bar; page 1 is a large monospace digital readout. Swipe horizontally (or use the page indicator dots at the bottom) to flip. The active page is saved per-widget in the project file, so each Bar tile remembers its own preference.
+- Widget key: `"bar"`.
+- Horizontal bar gauge with min/max range, current value and units, and color-banded alarm zones with per-band severity (Info / OK / Warning / Critical).
+- Two pages: analog display and large digital readout. Swipe horizontally or use the page dots at the bottom; each tile remembers its page in the project file.
+- Best for: bounded values such as a tank level or a battery percentage.
+- Configuration fields (project-file keys): `widgetMin` (default 0), `widgetMax` (default 0), `alarmBands` (array; see [Alarm bands](#alarm-bands)). Swapped min and max values are put in order.
 
 ### Gauge
 
-- Dataset widget key: `"gauge"`.
+- Widget key: `"gauge"`.
 - Circular or arc gauge display with colored outer-rim arc segments for each alarm band.
-- Same configuration as Bar (min/max, bands).
-- Best for: speedometers, RPM, pressure, temperature.
-- Configuration fields (project-file keys): `widgetMin`, `widgetMax`, `alarmBands`. The `widgetMin`/`widgetMax` keys map to the C++ fields `wgtMin`/`wgtMax`.
-- **Two-page swipe view.** Page 0 is the analog dial; page 1 is a large digital readout. The active page is persisted per widget.
+- Two pages: analog display and large digital readout; swipe or use the page dots.
+- Configuration fields (project-file keys): `widgetMin` (default 0), `widgetMax` (default 0), `alarmBands`.
 
 ### Compass
 
-- Dataset widget key: `"compass"`.
-- Heading indicator (0 to 360 degrees).
-- Auto-converts a numeric heading to a cardinal direction (N, NE, E, SE, S, SW, W, NW).
-- Best for: heading and bearing, wind direction, orientation.
-- **Two-page swipe view.** Page 0 is the compass rose; page 1 is a large digital readout (heading plus cardinal direction). The active page is persisted per widget.
+- Widget key: `"compass"`.
+- Heading indicator (0 to 360 degrees) that converts a numeric heading to a cardinal direction (N, NE, E, SE, S, SW, W, NW).
+- Two pages: analog display and large digital readout, which adds the cardinal direction; swipe or use the page dots.
+- Configuration: none beyond the value itself (0 to 360).
 
 ### Meter
 
-- Dataset widget key: `"meter"`.
+- Widget key: `"meter"`.
 - Analog half-arc meter with a sweeping needle, tick marks, colored arc bands, and value readout.
-- Same min/max + bands model as Bar and Gauge.
-- Best for: VU-style readouts, signal strength, pressure, voltage.
-- Configuration fields (project-file keys): `widgetMin` (default 0), `widgetMax` (default 0), `alarmBands`. The `widgetMin`/`widgetMax` keys map to the C++ fields `wgtMin`/`wgtMax`.
-- **Two-page swipe view.** Page 0 is the analog half-arc meter; page 1 is a large digital readout. The active page is persisted per widget.
+- Two pages: analog display and large digital readout; swipe or use the page dots.
+- Configuration fields (project-file keys): `widgetMin` (default 0), `widgetMax` (default 0), `alarmBands`.
 
 ## Alarm bands
 
-Bar, Gauge, Meter, Bar Panel, and LED Panel widgets render one or more **alarm bands**. Each band is a contiguous value range with a color and a severity tier. The bands are always drawn in full — muted zones along the bar track (Bar / Bar Panel) or arc segments on the dial rim (Gauge / Meter) — and the fill or needle takes the active band's color at all times, so a value in the normal range reads as a positive green signal. A value outside every band clamps to the nearest band's severity, so overrange data always renders as critical rather than unclassified; LED Panel entries light in the active band's color. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
+An alarm band is a value range with a color and a severity. This gauge draws an 80 to 100 Warning zone on the dial and raises a Warning when the value gets there:
+
+```json
+{ "title": "Coolant", "widget": "gauge", "widgetMin": 0, "widgetMax": 120,
+  "alarmBands": [ { "min": 80, "max": 100, "severity": 2, "label": "Hot" } ] }
+```
+
+Edit bands with the **Alarm Bands** button in the dataset toolbar (next to **Transform**). It opens a dialog with presets (Tachometer, Speedometer, Engine Temperature, Pressure, Battery Voltage, Fuel Level, Signal Strength, CPU / System Load, OK / Warning / Critical, Indicator (On / Off), Fault Indicator), a per-band color picker, severity selector, blink toggle, and a live preview strip.
+
+Bar, Gauge, Meter, Bar Panel, and LED Panel widgets render alarm bands. Bands are always drawn in full: muted zones along the bar track (Bar / Bar Panel) or arc segments on the dial rim (Gauge / Meter). The fill or needle takes the active band's color, so a value in the normal range reads as a green signal. A value outside every band takes the nearest band's severity, so overrange data renders as critical rather than unclassified. LED Panel entries light in the active band's color. The tachometer convention (white below normal, green operating range, yellow caution, red redline) is one setup; any combination of ranges and colors is allowed.
 
 Bands take effect only on a dataset that one of these widgets shows: a dataset with a Bar, Gauge, or Meter widget, or any dataset in a Bar Panel or LED Panel group. **Hide on Dashboard** removes the first case, because a hidden dataset gets no widget of its own; Bar Panel rows and LED Panel lights are unaffected. On any other dataset (a plot-only dataset, for example) the bands are kept in the project file but are not drawn, post no notification, and raise no [alarm point](Aural-Alerts.md). Assigning one of the widgets again brings them back.
 
-To keep a dataset's bands on screen without alerting, turn on **Suppress Alarms** in the dataset's Widget Settings (`suppressAlarms: true` in the project file). The widgets draw the bands exactly as before, but the dataset posts no band notification and raises no alarm point. A tachometer redline that should be seen but not heard is the usual case.
+Three dataset options in the Widget Settings control when bands alert:
 
-To alert only while the dataset is in front of the operator, turn on **Alarms only while visible** instead (`alarmsWhileVisible: true`). The bands stay drawn and the dataset keeps recording, but it posts a band notification, raises an alarm point and sounds only while a widget showing it is on screen: the widget sits on the active tab of the main window's dashboard (with the Dashboard pane shown and the window not minimized) or of an external dashboard window that is not minimized, and the widget itself is neither minimized nor closed. An open pop-out counts, and so does a frozen dashboard. Revealing the dataset while its value already sits in a Warning or Critical band counts as entering the band, so the point and the notification arrive at once, under the usual 3 s cooldown; hiding it again removes the point, and nothing is recorded for the time it was hidden. **Suppress Alarms** wins when both are on. This is how one project carries several device profiles on their own workspaces: the idle profile's tabs are off screen, so only the profile the operator is looking at alerts.
+| Option (project-file key)                      | Effect | Default |
+|------------------------------------------------|--------|---------|
+| **Suppress Alarms** (`suppressAlarms`)         | Bands stay drawn, but the dataset posts no notification, raises no alarm point and plays no sound. A redline that should be seen but not heard is the usual case. | Off |
+| **Alarms only while visible** (`alarmsWhileVisible`) | The dataset alerts only while a widget showing it is on screen. **Suppress Alarms** wins when both are on. | Off |
+| **Alarm Deadband** (`alarmDeadband`)           | Hysteresis in the dataset's units: an active band holds until the value leaves it by more than the deadband. | 0 |
 
-A value that hovers on a band edge would otherwise enter and leave the band on every frame, raising a point each time. **Alarm Deadband** (`alarmDeadband`, in the dataset's units, default 0) adds hysteresis: once a band is active it stays the reported band until the value has left it by more than the deadband. The hold only ever delays a step down: a move into a more severe band takes effect immediately, so a deadband never postpones a Critical. A temperature with a Warning band at 80 and a deadband of 1 alarms at 80.0 and clears at 78.9, not at 79.9.
+**Alarms only while visible.** The bands stay drawn and the dataset keeps recording, but a notification, an alarm point and a sound happen only while a widget showing the dataset is on screen. A widget showing the dataset counts as on screen when all of these hold:
+
+- It sits on the active tab of the main dashboard (Dashboard pane shown) or of an external dashboard window.
+- The window is not minimized.
+- The widget itself is neither minimized nor closed.
+
+An open pop-out counts, and so does a frozen dashboard. Revealing the dataset while its value already sits in a Warning or Critical band counts as entering the band, so the point and the notification arrive at once. Hiding it removes the point, and nothing is recorded for the time it was hidden. One project can carry several device profiles on their own workspaces this way: only the profile the operator is looking at alerts.
+
+**Alarm Deadband.** A value that hovers on a band edge would enter and leave the band on every frame, raising a point each time. The hold only ever delays a step down: a move into a more severe band takes effect immediately, so a deadband never postpones a Critical. A temperature with a Warning band at 80 and a deadband of 1 alarms at 80.0 and clears at 78.9, not at 79.9.
 
 **Band schema.** Under the dataset's `alarmBands` array, each entry is an object:
 
@@ -249,21 +262,21 @@ A value that hovers on a band edge would otherwise enter and leave the band on e
 |------------|--------|----------|-------|
 | `min`      | double | yes      | Lower bound of the band (inclusive). |
 | `max`      | double | yes      | Upper bound of the band (inclusive: a value is in the band when `min <= value <= max`). |
-| `severity` | int    | yes      | `0` = Info, `1` = OK, `2` = Warning, `3` = Critical. Drives the default color and whether the band raises a notification on entry. This is a separate scale from [notification](Notifications.md) `level` (`0` = Info, `1` = Warning, `2` = Critical): a band entering `Warning` (2) or `Critical` (3) posts a notification at the matching `Warning` or `Critical` level, but a band's `Info` (0) or `OK` (1) severity never posts one. The numbers look alike but come from different scales — don't read one against the other. |
+| `severity` | int    | yes      | `0` = Info, `1` = OK, `2` = Warning, `3` = Critical. Drives the default color. Only `2` and `3` raise a notification on entry. |
 | `color`    | string | no       | Hex override (`"#rrggbb"`). When empty, the severity's theme color is used (theme switches re-tint live). |
 | `label`    | string | no       | Optional human-readable name. Surfaces in the band-edge notification subtitle and next to the dataset title on LED panels. |
 | `blink`    | bool   | no       | When `true`, LED panels flash the LED while the value sits in this band. Defaults to `false`. |
 | `sound`    | string | no       | WAV file played instead of the priority's default when the value enters this band (see [Aural Alerts](Aural-Alerts.md)). Relative paths resolve against the project file's folder. Omitted when empty. |
 
-Bands may have gaps, may overlap, and need not cover the full range. Overlaps resolve to the FIRST matching band in list order, not the last. A gap only leaves the painted track/background uncolored: the bar fill or needle itself still takes a band's color, clamped to whichever band is nearest. Editing is via the **Alarm Bands** button in the dataset toolbar (next to **Transform**), which opens a dedicated dialog with presets (Tachometer, Speedometer, Engine Temperature, Pressure, Battery Voltage, Fuel Level, Signal Strength, CPU / System Load, OK / Warning / Critical, Indicator (On / Off), Fault Indicator), per-band color picker, severity selector, blink toggle, and a live preview strip.
+Severity is a separate scale from [notification](Notifications.md) `level` (`0` = Info, `1` = Warning, `2` = Critical): band severity 2 posts level `Warning` (1) and severity 3 posts level `Critical` (2).
 
-**Notifications and aural alerts.** Entering a Warning or Critical band also raises an alarm point on the master annunciator (see [Aural Alerts](Aural-Alerts.md)); leaving it returns the point to normal. When the value enters a band with severity ≥ Warning, Serial Studio posts a notification on the "Alarms" channel: band severity 2 posts `Warning`, severity 3 posts `Critical` (with the band's `label` in the subtitle). Alarm tracking runs per dataset at the dashboard level, so notifications fire even when the widget displaying the dataset is hidden or not instantiated. The cooldown is per severity tier, not per dataset: a Warning is suppressed for 3 seconds by a recent Warning or Critical, but a Critical is only suppressed by a recent Critical, so escalating from Warning to Critical always posts immediately.
-
-**Legacy compatibility.** Project files written by older Serial Studio releases carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[wgtMin..alarmLow]` and `[alarmHigh..wgtMax]`). The legacy keys are not written back; re-saved projects carry only `alarmBands`. For canvas scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
+Bands may have gaps, may overlap, and need not cover the full range. Overlaps resolve to the FIRST matching band in list order, not the last. A gap only leaves the painted track/background uncolored: the bar fill or needle itself still takes a band's color, clamped to whichever band is nearest.
+**Notifications and aural alerts.** Entering a Warning or Critical band also raises an alarm point on the master annunciator, the bell in the taskbar tray (see [Aural Alerts](Aural-Alerts.md)); leaving it returns the point to normal. When the value enters a band with severity ≥ Warning, Serial Studio posts a notification on the "Alarms" channel, with the band's `label` in the subtitle. Alarm tracking runs per dataset at the dashboard level, so notifications fire even when the widget displaying the dataset is hidden or not instantiated. The 3 second cooldown is tracked per dataset and per severity tier: a dataset's Warning is suppressed by its own Warning or Critical within 3 seconds, a Critical only by its own Critical, so escalating from Warning to Critical always posts.
+**Legacy compatibility.** Project files written by older Serial Studio releases carry `alarmEnabled` / `alarmLow` / `alarmHigh` instead of `alarmBands`. On load, those are converted to two `Warning`-severity bands (`[widgetMin..alarmLow]` and `[alarmHigh..widgetMax]`). The legacy keys are not written back; re-saved projects carry only `alarmBands`. For canvas scripts (Pro), `dataset.alarmLow` and `dataset.alarmHigh` remain readable as derived values (first / last `Warning+` band edges) so existing scripts keep working.
 
 ## Frequency markers
 
-A frequency marker names a frequency or a range on a dataset's FFT Plot and Waterfall and shows the live level there, which keeps a known line in view: mains hum, a resonance, the band where a bearing defect appears. Markers are free on the FFT Plot. The Waterfall is a Pro feature (license or free trial).
+A frequency marker names a frequency or a range on a dataset's FFT Plot and Waterfall and shows the live level there, which keeps a known line in view: mains hum, a resonance, the band where a bearing defect appears. Markers are free on the FFT Plot. The Waterfall is Pro (see [Pro vs Free](Pro-vs-Free.md)).
 
 In the [Project Editor](Project-Editor.md), select a dataset with FFT or Waterfall enabled and click **Freq. Markers** on the dataset toolbar. The **Frequency Markers** dialog holds one row per marker, and a strip at the bottom previews them from 0 Hz to the top of the range.
 
@@ -294,47 +307,51 @@ On load, an entry whose `freq` is not above 0 is dropped, an `endFreq` not above
 
 ## Utility widgets
 
-Clock and Stopwatch are dashboard-level utility widgets. They are not attached to any group or dataset; toggle them from the **Start menu** (Dashboard pane) and they appear as overview entries in the taskbar alongside Terminal and Notifications. Enabled state persists in `QSettings` under `Dashboard/ClockEnabled` and `Dashboard/StopwatchEnabled`.
+Terminal, Clock and Stopwatch are dashboard-level utility widgets, free in every build. They are not attached to any group or dataset. Toggle them with the **Console**, **Clock** and **Stopwatch** buttons on the dashboard taskbar, or from the **Start menu**. Each remembers between sessions whether it was on; all three start off.
+
+### Terminal
+
+- Shows the raw text stream from the device, with VT-100 emulation and ANSI colors.
+- Keystrokes typed into it go to the connected device.
+- The taskbar calls it **Console**.
 
 ### Clock
 
-- Toggle from the Dashboard Start menu.
-- **Two-page swipe view.** Page 0 is an analog clock face (silver-bezel gauge style, hour/minute/second hands, 12-hour numerals); page 1 is a large monospace digital readout (12-hour time + full date).
-- Driven by the system clock, ticks once per second.
-- Active page is persisted in application `QSettings` (`ClockWidget/clockPageIndex`).
+- Page 0 is an analog face, page 1 a digital readout (12-hour time and date). Driven by the system clock, ticks once per second.
+- The active page is remembered between sessions.
 - Best for: visible session timestamps in screen recordings, lab/operator dashboards.
 
 ### Stopwatch
 
-- Toggle from the Dashboard Start menu.
 - Single-page widget: large `HH:MM:SS.mmm` readout, **Start/Stop**, **Lap**, **Reset** buttons, and a scrollable lap table.
 - Local-only timing; data is not persisted to the project, transmitted, or sent to the device.
 - Best for: bench testing, run/test timing during a session.
 
 ## Widget configuration summary
 
-| Widget        | Type    | Key            | Min datasets | Key settings                                 |
-|---------------|---------|----------------|--------------|----------------------------------------------|
-| Data Grid     | Group   | `datagrid`     | 1+           | (none)                                       |
-| Bar Panel     | Group   | `barpanel`     | 1+           | `widgetMin`/`widgetMax`, `alarmBands[]`, `barPanelStyle` |
-| Multi-Plot    | Group   | `multiplot`    | 1+           | `graph: true` on datasets                    |
-| GPS Map       | Group   | `map`          | 2-3          | lat, lon, (alt) datasets                     |
-| Gyroscope     | Group   | `gyro`         | 3            | yaw, pitch, roll                             |
-| Accelerometer | Group   | `accelerometer`| 3            | x, y, z accel                                |
-| LED Panel     | Group   | `ledpanel`     | 1+           | `alarmBands[]` or `ledHigh` per dataset       |
-| 3D Plot       | Group   | `plot3d`       | 0+           | x, y, z coords (Pro)                         |
-| Image View    | Group   | `image`        | 0            | binary stream (Pro)                          |
-| Canvas        | Group   | `painter`      | 0+           | user `paint(ctx, w, h)` JS script (Pro)      |
-| Web View      | Group   | `webview`      | 0            | `webViewUrl` (Qt WebEngine build)            |
-| Plot          | Dataset | auto           | n/a          | `graph: true`, `plotMin`/`plotMax`           |
-| FFT Plot      | Dataset | auto           | n/a          | `fft: true`, `fftSamples`, `fftSamplingRate` |
-| Waterfall     | Dataset | auto           | n/a          | `waterfall: true`, FFT fields, `waterfallYAxis` (Pro) |
-| Bar           | Dataset | `bar`          | n/a          | `widgetMin`/`widgetMax`, `alarmBands[]`, swipe to digital page |
-| Gauge         | Dataset | `gauge`        | n/a          | `widgetMin`/`widgetMax`, `alarmBands[]`, swipe to digital page |
-| Compass       | Dataset | `compass`      | n/a          | value 0-360, swipe to digital page           |
-| Meter         | Dataset | `meter`        | n/a          | `widgetMin`/`widgetMax`, `alarmBands[]`, swipe to digital page |
-| Clock         | Utility | (toggle)       | 0            | system-clock driven; swipe between analog face / digital readout |
-| Stopwatch     | Utility | (toggle)       | 0            | local Start/Stop/Lap/Reset with lap table    |
+| Widget        | Type    | Key             | Edition                   | Datasets | Key settings                                               |
+|---------------|---------|-----------------|---------------------------|----------|------------------------------------------------------------|
+| Data Grid     | Group   | `datagrid`      | Free                      | 1+       | (none)                                                     |
+| Bar Panel     | Group   | `barpanel`      | Free                      | 1+       | `widgetMin`/`widgetMax`, `alarmBands[]`, `barPanelStyle`   |
+| Multi-Plot    | Group   | `multiplot`     | Free                      | 1+       | `graph: true` on datasets                                  |
+| GPS Map       | Group   | `map`           | Free; extra base maps Pro | 2-3      | lat, lon, (alt) datasets                                   |
+| Gyroscope     | Group   | `gyro`          | Free                      | 3        | yaw, pitch, roll                                           |
+| Accelerometer | Group   | `accelerometer` | Free                      | 3        | x, y, z accel                                              |
+| LED Panel     | Group   | `ledpanel`      | Free                      | 1+       | `alarmBands[]` or `ledHigh` per dataset                    |
+| 3D Plot       | Group   | `plot3d`        | Pro                       | 0+       | x, y, z coords                                             |
+| Image View    | Group   | `image`         | Pro                       | 0        | binary stream                                              |
+| Canvas        | Group   | `painter`       | Pro                       | 0+       | user `paint(ctx, w, h)` JS script                          |
+| Web View      | Group   | `webview`       | Free                      | 0        | `webViewUrl` (Qt WebEngine build)                          |
+| Plot          | Dataset | flag `graph`    | Free                      | any      | `graph: true`, `plotMin`/`plotMax`                         |
+| FFT Plot      | Dataset | flag `fft`      | Free                      | any      | `fft: true`, `fftSamples`, `fftSamplingRate`               |
+| Waterfall     | Dataset | flag `waterfall` | Pro                       | any      | `waterfall: true`, FFT fields, `waterfallYAxis`            |
+| Bar           | Dataset | `bar`           | Free                      | any      | `widgetMin`/`widgetMax`, `alarmBands[]`                    |
+| Gauge         | Dataset | `gauge`         | Free                      | any      | `widgetMin`/`widgetMax`, `alarmBands[]`                    |
+| Compass       | Dataset | `compass`       | Free                      | any      | value 0-360                                                |
+| Meter         | Dataset | `meter`         | Free                      | any      | `widgetMin`/`widgetMax`, `alarmBands[]`                    |
+| Terminal      | Utility | (toggle)        | Free                      | 0        | raw text stream with VT-100 emulation; taskbar **Console** |
+| Clock         | Utility | (toggle)        | Free                      | 0        | system clock; analog face / digital readout                |
+| Stopwatch     | Utility | (toggle)        | Free                      | 0        | Start/Stop/Lap/Reset with lap table                        |
 
 ## Dataset fields reference
 
@@ -346,16 +363,16 @@ Every dataset in a project file supports these visualization-related fields:
 | `title`            | string | (none)  | Human-readable display name. |
 | `units`            | string | (none)  | Measurement units (for example "m/s", "degC"). |
 | `widget`           | string | `""`    | Dataset widget type: `"bar"`, `"gauge"`, `"compass"`, or `"meter"`. |
-| `plt` (graph)      | bool   | false   | Enable time-series plot. |
+| `graph`            | bool   | false   | Enable time-series plot. |
 | `fft`              | bool   | false   | Enable FFT spectrum plot. |
 | `waterfall`        | bool   | false   | Enable waterfall (spectrogram) plot. Pro. |
 | `waterfallYAxis`   | int    | 0       | Waterfall Y-axis source: 0 = time, otherwise the `uniqueId` of another dataset (order tracking). |
 | `log`              | bool   | false   | Enable logging to file. |
 | `overviewDisplay`  | bool   | false   | Show in the overview/status bar. |
-| `plotMin`          | double | 0       | Plot Y-axis minimum (0 = auto-scale). C++ field `pltMin`. |
-| `plotMax`          | double | 0       | Plot Y-axis maximum (0 = auto-scale). C++ field `pltMax`. |
-| `widgetMin`        | double | 0       | Widget (bar/gauge/meter) minimum. C++ field `wgtMin`. |
-| `widgetMax`        | double | 0       | Widget (bar/gauge/meter) maximum. C++ field `wgtMax`. |
+| `plotMin`          | double | 0       | Plot Y-axis minimum (0 = auto-scale). |
+| `plotMax`          | double | 0       | Plot Y-axis maximum (0 = auto-scale). |
+| `widgetMin`        | double | 0       | Widget (bar/gauge/meter) minimum. |
+| `widgetMax`        | double | 0       | Widget (bar/gauge/meter) maximum. |
 | `displayTickCount` | int    | 5       | Major-tick count on the dial scale (0 = auto-fit to widget size). Editor label "Tick Count". |
 | `displayFormat`    | string | `"0d"`  | Decimal places on analog widget ticks and captions; Hexadecimal and Binary apply wherever the value is shown as text. Editor label "Label Format". |
 | `decimalPoints`    | int    | -1      | Fixed decimal places for the value display; overrides `displayFormat` (-1 = auto). Editor label "Decimal Points". |
@@ -365,7 +382,7 @@ Every dataset in a project file supports these visualization-related fields:
 | `suppressAlarms`   | bool   | false   | Keeps the dataset's alarm bands drawn but stops its band notifications, alarm points, and sounds. Written only when true. Editor label "Suppress Alarms". |
 | `alarmsWhileVisible` | bool | false   | The dataset's alarm bands notify, raise alarm points, and sound only while a widget showing it is on screen (see [Alarm bands](#alarm-bands)); `suppressAlarms` wins when both are set. Written only when true. Editor label "Alarms only while visible". |
 | `alarmDeadband`    | double | 0       | Hysteresis in the dataset's units: the active alarm band holds until the value leaves it by more than this; escalation is never delayed. Must be >= 0; written only when positive. Editor label "Alarm Deadband". |
-| `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 262144). |
+| `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 262144). The Waterfall clamps it to 65536. |
 | `fftWindow`        | int    | 5       | FFT window function, applied to both the FFT plot and the waterfall: 0 = Rectangular, 1 = Bartlett, 2 = Hann, 3 = Hamming, 4 = Blackman, 5 = Blackman-Harris, 6 = Nuttall, 7 = Blackman-Nuttall, 8 = Flat Top, 9 = Welch, 10 = Bartlett-Hann, 11 = Bohman, 12 = Cosine, 13 = Lanczos, 14 = Parzen. |
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |
 | `fftMin`           | double | 0       | FFT frequency axis minimum. |
@@ -373,41 +390,13 @@ Every dataset in a project file supports these visualization-related fields:
 | `fftMarkers`       | array  | none    | [Frequency markers](#frequency-markers) drawn on the FFT Plot and Waterfall. Written only when not empty. |
 | `labels`           | array  | none    | Value-to-text table, entries `{"value": <integer>, "text": <string>}`. Editor button "Labels"; see the [Project Editor](Project-Editor.md). |
 | `labelsDefault`    | string | ""      | Text shown for a value no `labels` entry lists; empty shows the number. Editor row "Any other". |
-| `xAxis`            | int    | -2      | X-axis source: `-2` = time (default), `-1` = sample count (the **Samples** choice in the X-Axis Source combo), or the `uniqueId` of another dataset for an XY plot. C++ field `xAxisId`. |
+| `xAxis`            | int    | -2      | X-axis source: `-2` = time (default), `-1` = sample count (the **Samples** choice in the X-Axis Source combo), or the `uniqueId` of another dataset for an XY plot. |
 
 ## Dashboard layout
 
-- Widgets appear as mini-windows on the dashboard canvas.
-- Drag title bars to move them.
-- Resize from edges and corners.
-- Minimize individual widgets to the taskbar.
-- Maximize to fill the canvas.
-- Right-click the canvas for a context menu: tile windows, set wallpaper.
-- Widget positions and sizes are saved per project via `widgetSettings` and persist between sessions.
-- The Actions panel (if the project defines actions) shows up as a horizontal bar above the widgets.
-- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, Meter, Clock, Stopwatch, Web View, ImageView, OutputPanel, NotificationLog, Waterfall, and `Painter` (the Canvas Widget).
+Widgets are windows on the dashboard canvas. Drag the title bar to move one, resize from edges and corners, minimize to the taskbar or maximize to fill the canvas. Right-click the canvas to tile windows or set a wallpaper. Positions and sizes are saved per project via `widgetSettings`. For the Actions panel, see [Actions](Actions.md).
 
 Most widgets carry a small toolbar of icon buttons along their top edge that appears once the widget is large enough to fit it. Every button on every widget toolbar is listed in the [Toolbar & Button Reference](Toolbar-Reference.md#dashboard-widget-toolbars).
-
-## Picking the right widget
-
-| Data type                        | Recommended widget                  |
-|----------------------------------|-------------------------------------|
-| Temperature                      | Gauge, Plot, or Bar                 |
-| Pressure, voltage, signal level  | Plot, Gauge, Meter, or Bar          |
-| GPS coordinates                  | GPS Map (group)                     |
-| Acceleration (X, Y, Z)           | Accelerometer (group)               |
-| Rotation (X, Y, Z)               | Gyroscope (group)                   |
-| Heading or bearing               | Compass                             |
-| Audio or vibration frequency     | FFT Plot                    |
-| Time-frequency / spectrogram     | Waterfall (Pro)             |
-| Boolean status flags             | LED Panel (group)           |
-| Mixed numeric and text values    | Data Grid (group)           |
-| 3D trajectory or position        | 3D Plot (group, Pro)        |
-| Live camera or image stream      | Image View (group, Pro)     |
-| Embedded web page / map / 3D model | Web View (group)          |
-| Wall-clock time / session timestamp | Clock (utility)          |
-| Manual elapsed-time / lap timing | Stopwatch (utility)         |
 
 ## See also
 

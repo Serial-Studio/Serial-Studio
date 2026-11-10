@@ -2,121 +2,98 @@
 
 ## Overview
 
-Actions let you put buttons on the Serial Studio dashboard that send commands back to the connected device. Typical uses include resetting a microcontroller, toggling an output pin, asking for a sensor reading, or sending calibration sequences. Each action is configured in the Project Editor and shows up automatically on the dashboard when you connect.
+Your sketch reads a line from `Serial` and resets itself when it sees `RST`. In a serial monitor you would type `RST` and press Enter. An action puts that same command on a dashboard button.
 
-For interactive controls with continuous values (sliders, knobs) or custom JavaScript data formatting, see [Output Controls](Output-Controls.md) (a Pro feature, available with a license or during the free trial).
-
-## How actions work
-
-```mermaid
-flowchart LR
-    A["Dashboard Button"] --> B["Action Triggered"]
-    B --> C["TX Data + EOL"]
-    C --> D["Target Device"]
+```cpp
+void loop() {
+  if (Serial.available()) {
+    String cmd = Serial.readStringUntil('\n');
+    if (cmd == "RST") resetDevice();
+  }
+}
 ```
 
-When you click an action button (or a timer fires), Serial Studio transmits the action's payload (the **Transmit Data** string followed by the configured **End-of-Line Sequence**) to the target device over the active connection. If **Send as Binary** is on, the payload is interpreted as hexadecimal bytes instead of plain text.
+To make the button, create an action with these fields in the Project Editor:
+
+| Property             | Value           |
+|----------------------|-----------------|
+| Action Title         | Reset Device    |
+| Transmit Data        | `RST`           |
+| End-of-Line Sequence | New Line (`\n`) |
+
+The **Reset Device** button sits in a strip above the dashboard widgets and becomes clickable once you connect. Clicking it sends the four bytes `52 53 54 0A` (the letters R, S, T, then a newline) and saves you typing `RST` and Enter on every reset. The steps are under [Creating an action](#creating-an-action).
+
+Actions are available in the free edition. They belong to a project file, so open or create a project first (see [Project Editor](Project-Editor.md)). For continuous controls such as sliders and knobs, or for custom JavaScript transmit functions, see [Output Controls](Output-Controls.md): a Pro feature, and the first use offers a free trial (internet needed to register).
 
 ## Creating an action
 
-1. Open the Project Editor (toolbar wrench icon).
+1. Open or create a project, then open the Project Editor (toolbar wrench icon).
 2. Click **Action** in the Project Editor toolbar (in the Output section).
-3. Select the new action in the tree to configure it in the property panel.
+3. Select the new action in the project tree. Its properties open in the panel on the right. Rename it in **Action Title**.
 
 ## Action properties
 
 ### General information
 
-- **Action Title.** The label shown on the dashboard button (for example "Reset Device", "Start Logging").
-- **Action Icon.** Pick one from the built-in icon set. The icon appears on both the dashboard button and the flow diagram in the Project Editor.
-- **Target Device.** In a multi-source project, pick which connected device receives the command. The dropdown only appears when the project has more than one source; single-source projects send to the only available device.
+**Action Title** is the label on the dashboard button (for example "Reset Device"), and **Action Icon** is picked from the built-in icon set; the icon also appears in the Project Editor flow diagram.
+
+**Target Device** picks which connected device receives the command. The dropdown appears only when the project has more than one source. It lists the sources by title, and the default is the first source (shown as Device A unless you renamed it). The flow diagram draws an arrow from each action to its target.
 
 ### Data payload
 
-- **Send as Binary.** When checked, the payload field becomes **Transmit Data (Hex)** and is interpreted as hexadecimal bytes (for example `FF 01 A3`) instead of text.
-- **Transmit Data.** The command string or hex bytes to send when the action fires.
-  - Text mode example: `RST` or `GET_TEMP`. C-style escape sequences (`\n`, `\r`, `\t`, `\\`) are resolved before transmission.
-  - Binary mode example: `FF 01 00 A3`.
-- **Text Encoding.** In text mode, the character encoding used to serialize the payload. This option is hidden when **Send as Binary** is enabled.
-- **End-of-Line Sequence.** Characters appended after the payload. Only editable while **Send as Binary** is off; if a sequence was already configured before switching to binary mode, it is still appended as raw bytes after the hex payload. Set it back to None before switching to binary mode to avoid the leftover bytes, or account for it directly in the hex payload.
+- **Send as Binary.** When checked, the payload field becomes **Transmit Data (Hex)** and is read as hexadecimal bytes (for example `FF 01 A3`), with or without spaces. Anything else (a `0x` prefix, commas, an odd digit count) empties the payload.
+- **Transmit Data.** The command to send, such as `RST` or `GET_TEMP`. In text mode these escapes are resolved before sending: `\n`, `\r`, `\t`, `\a`, `\b`, `\f`, `\v` and `\\`. Other escapes such as `\x41` are sent literally; use **Send as Binary** for arbitrary bytes.
+- **Text Encoding.** The character encoding of the payload, default UTF-8. The list also offers UTF-16 LE/BE, Latin-1, System, GBK, GB18030, Big5, Shift-JIS, EUC-JP and EUC-KR. Hidden when **Send as Binary** is on.
+- **End-of-Line Sequence.** Characters appended after the payload. If your sketch waits for a line, as with `readStringUntil('\n')`, choose New Line.
+- **Checksum.** Default **No Checksum**. Any other choice appends the checksum bytes after the payload and the EOL, and the checksum covers both. It works in text and binary mode.
 
-| Option                  | Bytes sent         |
+The bytes go out in this order: payload, EOL, checksum.
+
+| End-of-Line option      | Bytes sent         |
 |-------------------------|--------------------|
 | None                    | Nothing appended   |
 | New Line (`\n`)         | `0x0A`             |
 | Carriage Return (`\r`)  | `0x0D`             |
 | CRLF (`\r\n`)           | `0x0D 0x0A`        |
 
+In text mode the EOL is encoded with the action's Text Encoding, so the byte values above hold for single-byte encodings such as UTF-8 and Latin-1; a UTF-16 action sends two bytes per character.
+
+The End-of-Line Sequence is greyed out while **Send as Binary** is on, but a sequence you chose earlier is still appended after the hex bytes. Set it to None before you switch to binary, or put the bytes in the hex payload.
+
 ### Execution behavior
 
-- **Auto-Execute on Connect.** When enabled, the action fires automatically as soon as the device connects. Handy for initialization sequences (for example sending a configuration command or enabling a sensor).
+**Auto-Execute on Connect** sends the action once as soon as the device connects, which suits initialization commands such as a configuration string. On-connect sends go out in project-tree order.
+
+The on-connect send is separate from the timer (see [Timer behavior](#timer-behavior)). If **Timer Mode** is not Off, Auto-Execute also starts the timer, so Start on Trigger and Toggle on Trigger begin repeating without a click, and Repeat N Times starts its series. Auto Start starts the timer without Auto-Execute. Either way the timer's first send comes one Interval after connect, so Repeat N Times with Auto-Execute sends Repeat Count + 1 messages in total.
 
 ### Timer behavior
 
-Actions can repeat on a timer, which is useful for periodic polling or keep-alive commands.
+Actions can repeat on a timer, which suits periodic polling or keep-alive commands. In the Project Editor, select an action and set **Timer Mode** (free edition).
 
-- **Timer Mode:**
+| Timer Mode        | Behavior |
+|-------------------|----------|
+| Off               | Manual trigger only (default). Each click sends the command once. |
+| Auto Start        | The timer starts when the device connects and repeats at the interval until the device disconnects. |
+| Start on Trigger  | The timer starts on the first click and repeats until the device disconnects or the project's actions are rebuilt by an edit. Later clicks send the command once more without restarting the timer. To get a stop button, use Toggle on Trigger. |
+| Toggle on Trigger | Each click starts or stops the repeating timer. Every click, including the one that stops it, also sends the command once. |
+| Repeat N Times    | On a click, the first send is immediate, then one per interval until **Repeat Count** sends have gone out. Clicking again restarts the count. |
 
-| Mode             | Behavior |
-|------------------|----------|
-| Off              | Manual trigger only (default). The button sends the command once per click. |
-| Auto Start       | Timer starts automatically when the device connects. The command repeats at the configured interval until the device disconnects. |
-| Start on Trigger | Timer starts on the first click. The command repeats at the configured interval until stopped. |
-| Toggle on Trigger| Each click toggles the repeating timer on or off. |
-| Repeat N Times   | Each click sends the command a fixed number of times, waiting the configured interval between each send. |
+- **Action Interval (ms).** Milliseconds between repeats. Default 100, which is 10 commands per second and can overflow a small UART buffer. It must be greater than 0, otherwise the action never repeats (the app log shows a warning). It is greyed out while Timer Mode is Off.
+- **Repeat Count.** Editable only in Repeat N Times mode. Default 3, minimum 1.
 
-- **Interval (ms).** The repeat interval in milliseconds. Default is 100 ms. Set it to match your desired polling or command rate (for example 1000 ms for once per second).
-- **Repeat Count.** Only used by the **Repeat N Times** mode. The number of times the command is sent on each trigger. Default is 3.
-
-## Multi-source actions
-
-In projects with multiple sources (devices), the **Target Device** dropdown in the action properties selects which device an action transmits to, and the flow diagram in the Project Editor draws an arrow from each action to its target device. When the action fires, its payload is sent to the selected source.
-
-```mermaid
-flowchart RL
-    A1["Action: Poll Sensor A"] -->|TX| D1["Device A"]
-    A2["Action: Poll Sensor B"] -->|TX| D2["Device B"]
-    A3["Action: Reset All"] -->|TX| D1
-```
-
-If you don't set a target device, the action defaults to the first source (Device A).
+Timers keep ticking while the connection is paused. A tick sends nothing, but a Repeat N Times series still counts it, so it can run out with nothing sent. Timers exist only while a device is connected, and editing any action stops every running timer. Auto Start timers come back on the next connect.
 
 ## Dashboard appearance
 
-When the device is connected, action buttons show up on the dashboard alongside your data widgets. Each button has:
+The actions panel is a horizontal strip of buttons across the top of the dashboard, above the widgets. Each button shows the action icon and title. Buttons are greyed out until a device is connected, and while the connection is paused (nothing is sent then). In Toggle on Trigger mode the button shows as checked while its timer runs; no other mode changes the button.
 
-- The action **icon** on the left.
-- The action **title** as the button label.
-
-Clicking the button sends the configured payload immediately. If a timer mode is active, the button label reflects the timer state.
+The panel is hidden when the project has no actions or when **Show Actions Panel** is off in **Settings** -> **Layout**. Actions are also listed in the dashboard's start menu and in the Console's send library, so they stay reachable when the panel is hidden.
 
 ## Examples
 
-### Simple text command
+### Poll a sensor
 
-Send a reset command followed by a newline:
-
-| Property             | Value        |
-|----------------------|--------------|
-| Action Title         | Reset Device |
-| Transmit Data        | `RST`        |
-| End-of-Line Sequence | New Line (`\n`) |
-| Send as Binary       | Off          |
-
-### Binary initialization sequence
-
-Send a binary configuration packet on connect:
-
-| Property                | Value               |
-|-------------------------|---------------------|
-| Action Title            | Initialize Sensor   |
-| Transmit Data (Hex)     | `AA 01 FF 00 55`    |
-| Send as Binary          | On                  |
-| Auto-Execute on Connect | On                  |
-
-### Periodic data polling
-
-Request a sensor reading every 500 ms:
+Request a reading every 500 ms:
 
 | Property             | Value             |
 |----------------------|-------------------|
@@ -126,27 +103,27 @@ Request a sensor reading every 500 ms:
 | Timer Mode           | Auto Start        |
 | Interval (ms)        | 500               |
 
-### Toggle command
+### Send bytes on connect
 
-Toggle an LED on or off with each click:
+Send a binary packet as soon as the device connects. The bytes come from your device's datasheet; `AA 01 FF 00 55` is a placeholder.
 
-| Property             | Value           |
-|----------------------|-----------------|
-| Action Title         | Toggle LED      |
-| Transmit Data        | `LED_TOGGLE`    |
-| End-of-Line Sequence | New Line (`\n`) |
-| Timer Mode           | Off             |
+| Property                | Value               |
+|-------------------------|---------------------|
+| Action Title            | Initialize Sensor   |
+| Transmit Data (Hex)     | `AA 01 FF 00 55`    |
+| Send as Binary          | On                  |
+| Auto-Execute on Connect | On                  |
 
 ## Common mistakes
 
-### Action button doesn't appear
+### Action button doesn't appear or is greyed out
 
-**Symptom.** The action is configured in the Project Editor but no button shows up on the dashboard.
+**Symptom.** The action is configured in the Project Editor but no button shows up, or the button cannot be clicked.
 
 **Fix:**
 
-1. Make sure the device is connected. Action buttons only appear on the dashboard while a connection is active.
-2. Check Settings -> Dashboard -> Layout -> Show Actions Panel is enabled; when it's off, the action panel stays hidden even while connected.
+1. If the button is greyed out, connect the device and un-pause the connection. Buttons are clickable only while a connection is active and not paused.
+2. If there is no panel at all, open **Settings**, go to the **Layout** tab and turn on **Show Actions Panel**. When it is off, the panel stays hidden even while connected.
 
 ### Command not received by the device
 
@@ -154,30 +131,18 @@ Toggle an LED on or off with each click:
 
 **Fix:**
 
-1. Check the Console view to confirm the data is being sent.
-2. Make sure the EOL setting matches what the device firmware expects. Many embedded parsers need `\n` or `\r\n`.
-3. If you're in binary mode, make sure the hex string is valid and well-formatted (pairs of hex digits, optionally separated by spaces).
-4. In multi-source projects, check that the Target Device is set correctly.
-
-### Timer fires too fast
-
-**Symptom.** The device is overwhelmed with commands or the serial buffer overflows.
-
-**Fix.** Increase the Timer Interval. A value of 100 ms sends 10 commands per second. Reduce this if your device can't keep up. For most polling scenarios, 500 to 2000 ms is enough.
+1. Open the Console view and confirm the data is being sent.
+2. Make sure the EOL setting matches what the firmware expects. Many embedded parsers need `\n` or `\r\n`.
+3. In binary mode, make sure the hex is valid: pairs of hex digits, optionally separated by spaces. An odd digit count or any character other than 0-9, A-F and spaces (so no `0x` prefix, no commas) empties the payload. The EOL and checksum are still sent, and the only warning is in the app log.
+4. In multi-source projects, check that **Target Device** is set correctly.
+5. Check that the connection is not paused. Nothing is sent while it is.
 
 ## Tips
 
-- Use **Auto-Execute on Connect** for initialization commands that must run before data collection starts.
-- Combine a timed action with a frame parser to implement a request/response protocol: the action sends the request, the parser decodes the response.
-- Use clear titles and icons so dashboard buttons are self-explanatory.
-- Test actions with the Console view open so you can see the exact bytes being sent.
-- For complex multi-step initialization, create multiple actions with **Auto-Execute on Connect** enabled. They fire in the order they appear in the project tree.
+- For a request/response protocol, pair a timed action with a [frame parser](Frame-Parser.md): the action sends the request, the parser decodes the reply.
 
 ## See also
 
-- [Output Controls](Output-Controls.md): interactive dashboard controls (button, slider, toggle, text field, knob) with custom JavaScript transmit functions; the richer, Pro-only alternative to an Action.
+- [Output Controls](Output-Controls.md): interactive dashboard controls (button, slider, toggle, text field, knob) with custom JavaScript transmit functions; a Pro feature, and the first use offers a free trial.
 - [Control Loop (setup / loop)](Control-Loop.md): automates a connected device with `setup()`/`loop()` scripts; the automated counterpart to a manual Action.
 - [Project Editor](Project-Editor.md): full guide to creating and configuring projects.
-- [Widget Reference](Widget-Reference.md): all dashboard widget types.
-- [Devices](Devices.md): configuring device connections.
-- [Communication Protocols](Communication-Protocols.md): protocol-specific setup and considerations.

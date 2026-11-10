@@ -1,406 +1,217 @@
 # Communication protocols
 
-Serial Studio supports 10 communication protocols across wired serial links, wireless radios, network sockets, industrial buses, and local inter-process channels. This page describes each one, covers when to pick it, and highlights the configuration parameters and platform details that matter in practice. For deeper per-protocol primers (theory, framing, common pitfalls, references), see the [Drivers section](Drivers-UART.md) of the docs.
+Your Arduino prints `Serial.println(temperature)` at 115200 baud. In the **Setup Panel**, pick **UART/COM** from the **Connection** dropdown, choose the port, set **Baud Rate** to the number in your `Serial.begin()` call and click **Connect**. The default is 9600, so a 115200 sketch shows garbage until you change it. The other protocols on this page are for devices that talk another way. Click-by-click steps are in [Protocol Setup Guides](Protocol-Setup-Guides.md); your first dashboard is in [Getting Started](Getting-Started.md).
 
-## Protocol landscape
+## Which protocol fits
 
-The diagram below maps all supported protocols by throughput range and license tier.
+| Situation | Connection dropdown entry | Edition | Driver page |
+|---|---|---|---|
+| Microcontroller connected via USB cable | UART/COM | Free | [Drivers: UART](Drivers-UART.md) |
+| Device on the same WiFi or Ethernet network (TCP, UDP, WebSocket, HTTP) | Network | Free | [Drivers: Network](Drivers-Network.md) |
+| Battery-powered wireless sensor nearby | Bluetooth LE | Free | [Drivers: Bluetooth LE](Drivers-Bluetooth-LE.md) |
+| Device publishing to an MQTT broker | MQTT Subscriber | Pro | [MQTT Subscriber](Drivers-MQTT.md) |
+| Industrial equipment with Modbus registers (RTU or TCP) | Modbus | Pro | [Drivers: Modbus](Drivers-Modbus.md) |
+| Vehicle CAN bus or OBD-II port | CAN Bus | Pro | [Drivers: CAN Bus](Drivers-CAN-Bus.md) |
+| PLC or SCADA server with an OPC UA server | OPC UA | Pro | [Drivers: OPC UA](Drivers-OPC-UA.md) |
+| Siemens S7 controller without OPC UA (S7comm) | Siemens S7 | Pro | [Drivers: S7](Drivers-S7.md) |
+| Allen-Bradley or Omron controller | EtherNet/IP | Pro | [Drivers: EtherNet/IP](Drivers-EtherNet-IP.md) |
+| Substation, RTU or utility SCADA gateway | IEC 60870-5-104 | Pro | [Drivers: IEC 104](Drivers-IEC-104.md) |
+| Analyzing audio signals or vibrations (Audio input) | Audio | Pro | [Drivers: Audio](Drivers-Audio.md) |
+| Custom USB device with bulk or isochronous endpoints (Raw USB) | USB Device | Pro | [Drivers: USB](Drivers-USB.md) |
+| Gamepad, joystick or HID-class sensor | HID Device | Pro | [Drivers: HID](Drivers-HID.md) |
+| Script or simulator writing to stdout or a pipe (Process I/O) | Process | Pro | [Drivers: Process I/O](Drivers-Process-IO.md) |
 
-```mermaid
-flowchart TD
-    Q{"Connection type?"}
-    Q -->|USB cable| A1["Serial/UART"]
-    Q -->|WiFi / Ethernet| A2["TCP/UDP"]
-    Q -->|Wireless sensor| A3["Bluetooth LE"]
-    Q -->|Cloud / IoT| A4["MQTT · Pro"]
-    Q -->|Vehicle / PLC| A5["CAN · Modbus · Pro"]
-```
-
-## Protocol summary
-
-| Protocol           | License | Medium                  | Typical throughput         | Primary use case                       |
-|--------------------|---------|-------------------------|----------------------------|----------------------------------------|
-| Serial/UART        | Free    | USB / RS-232 / RS-485   | 110 bps to 1 Mbps+         | Microcontrollers, embedded dev         |
-| TCP/UDP network    | Free    | Ethernet / WiFi         | Network-dependent          | WiFi-enabled boards, remote telemetry  |
-| Bluetooth LE       | Free    | 2.4 GHz radio           | ~250 kbps (practical payload) | Battery-powered wireless sensors       |
-| MQTT               | Pro     | Internet / LAN          | Network-dependent          | IoT cloud, distributed systems         |
-| Modbus             | Pro     | RS-485 / Ethernet       | 9600 bps to network speed  | PLCs, SCADA, industrial equipment      |
-| CAN Bus            | Pro     | Twisted pair            | Up to 1 Mbps (arbitration) | Automotive, industrial machinery       |
-| Audio input        | Pro     | Analog audio            | Device-dependent, up to 384 kHz sampling | Sound analysis, vibration monitoring   |
-| Raw USB            | Pro     | USB cable               | Up to 480 Mbps (USB 2.0)   | Custom firmware, bulk/iso endpoints    |
-| HID                | Pro     | USB cable               | Up to 64 KB/s              | Gamepads, custom HID sensors           |
-| Process I/O        | Pro     | Local IPC               | OS-dependent               | Scripts, simulators, named pipes       |
+Serial Studio has 14 drivers in total. The Pro ones are built into the official binary and unlock with a license or the trial; a GPL build from source (without `BUILD_COMMERCIAL`) lists only UART/COM, Network and Bluetooth LE in the dropdown. You pick the protocol with the **Connection** dropdown in the **Setup Panel**, and the options for that protocol appear under it. See [Pro vs Free Features](Pro-vs-Free.md) for the edition split.
 
 ## Free protocols
 
 ### Serial/UART
 
-Serial/UART is the most common way to connect microcontrollers to a computer. It covers USB-to-serial adapters (CH340, FTDI, CP210x, PL2303), native hardware UARTs, and RS-232/RS-485 transceivers.
-
-**When to use it:**
-
-- Arduino, ESP32, STM32, or any board with a USB-serial bridge.
-- Direct hardware UART wiring between two devices.
-- RS-232 lab instruments and RS-485 industrial sensors.
-- Quick prototyping where simplicity matters most.
-
-**Key configuration parameters:**
+An Arduino running `Serial.begin(115200); Serial.println(temperature);` already speaks UART. Choose **UART/COM** in the **Connection** dropdown, pick the port, set 115200 and connect. The same driver covers USB-to-serial adapters (CH340, FTDI, CP210x, PL2303), native hardware UARTs and RS-232/RS-485 transceivers. Full reference: [Drivers: UART](Drivers-UART.md). Only the baud rate usually needs changing; leave the rest at their defaults.
 
 | Parameter      | Description |
 |----------------|-------------|
-| Baud rate      | Has to match the device. Common values: 9600, 115200, 921600. Serial Studio supports custom rates up to 1 Mbps and beyond. |
-| Data bits      | 5, 6, 7, or 8 (8 is standard for nearly all modern devices). |
-| Parity         | None, Even, Odd, Space, or Mark. Most devices use None. |
-| Stop bits      | 1, 1.5, or 2. Almost always 1. |
-| Flow control   | None, RTS/CTS (hardware), or XON/XOFF (software). Use None unless your device needs it. |
-| DTR signal     | Some boards (notably Arduino) use DTR to trigger a reset on connect. Enable or disable based on whether you want auto-reset. |
-| Auto reconnect | Reconnects automatically if the device is unplugged and replugged. |
+| Baud Rate      | Must equal the value in your firmware's `Serial.begin()`. Default: 9600. Common values: 9600, 115200, 921600. |
+| Data bits      | 5, 6, 7 or 8. Default: 8. |
+| Parity         | None, Even, Odd, Space or Mark. Default: None. |
+| Stop bits      | 1, 1.5 or 2. Default: 1. |
+| Flow control   | None, RTS/CTS (hardware) or XON/XOFF (software). Use None unless your device needs it. |
+| Send DTR Signal | On by default. Arduino boards such as the Uno restart when the DTR line goes high, so a board that reboots every time you connect is doing exactly that. Turn DTR off to connect without a reset. |
+| Auto Reconnect | Off by default. When on, Serial Studio reconnects after the device is unplugged and replugged. |
 
-**Platform considerations:**
+- **Linux:** Reading `/dev/ttyUSBx` and `/dev/ttyACMx` without root depends on group membership; see [Serial port permissions](Linux-Installation.md#serial-port-permissions).
+- **Windows and macOS:** If the port does not appear, install the adapter vendor's driver (CH340, PL2303, CP210x and FTDI each have one).
 
-- **Linux:** Access to `/dev/ttyUSBx` and `/dev/ttyACMx` without root depends on group membership; see [Serial port permissions](Linux-Installation.md#serial-port-permissions).
-- **Windows:** CH340 and PL2303 adapters may need a manually installed driver. FTDI and CP210x drivers are bundled with Windows 10+.
-- **macOS:** Most USB-serial adapters work without setup. Older CP210x chips may need a signed kext or VCP driver.
+### Network (TCP, UDP, WebSocket, HTTP)
 
-### TCP/UDP network
-
-The Network driver connects to devices over TCP or UDP sockets. It's the natural fit for WiFi-enabled microcontrollers (ESP32, ESP8266), Ethernet-connected instruments, and remote data acquisition systems. Full driver reference: [Drivers: Network](Drivers-Network.md).
-
-**When to use it:**
-
-- ESP32/ESP8266 sending telemetry over WiFi.
-- Ethernet-connected lab instruments or PLCs.
-- Receiving multicast or broadcast sensor data on a LAN.
-- Remote monitoring where the device and computer aren't in the same place.
-
-**TCP vs UDP:**
-
-| Property            | TCP                                | UDP                              |
-|---------------------|------------------------------------|----------------------------------|
-| Delivery guarantee  | Yes (retransmits lost segments)    | No                               |
-| Connection model    | Connection-oriented (handshake)    | Connectionless (fire-and-forget) |
-| Ordering            | Guaranteed in-order                | No ordering guarantee            |
-| Latency             | Slightly higher                    | Lower                            |
-| Best for            | Reliable streams, file-like data   | Low-latency datagrams, multicast |
-
-**Key configuration parameters:**
+The Network driver connects to devices over TCP or UDP sockets, a WebSocket, or an HTTP endpoint that Serial Studio polls. All four are client connections; Serial Studio does not listen for incoming TCP connections. Choose **Network** in the **Connection** dropdown (free). If your ESP32 or ESP8266 sketch opens a `WiFiServer`, choose TCP. TCP delivers every byte in order; UDP is faster but can drop or reorder packets, so use it for multicast or low-latency datagrams. Full reference: [Drivers: Network](Drivers-Network.md).
 
 | Parameter       | Description |
 |-----------------|-------------|
-| Socket type     | TCP or UDP. |
-| Remote address  | IP address or hostname of the device. Default: `127.0.0.1`. |
-| TCP port        | Remote port for TCP connections. Default: 23. |
-| UDP remote port | Port the device is listening on or sending from. Default: 53. |
-| UDP local port  | Port Serial Studio binds to for receiving. Set to 0 for automatic assignment. |
-| UDP multicast   | Join a multicast group specified by the remote address. |
+| Socket type     | TCP, UDP, WebSocket or HTTP. |
+| Remote address  | IP address or hostname of the device. |
+| TCP port        | Remote port for TCP connections. Default: 23 (a placeholder; use your firmware's port). |
+| UDP remote port | Port the device listens on or sends from. Default: 53 (a placeholder). |
+| UDP local port  | Port Serial Studio binds to for receiving. Default: 0, which lets the OS pick a random port, so nothing reaches you; set it to the port the device sends to. |
+| UDP multicast   | Join a multicast group given by the remote address. |
 
-**Platform considerations:**
+WebSocket and HTTP have their own URL fields, and HTTP has a polling interval (default 1000 ms); see [Drivers: Network](Drivers-Network.md).
 
-- Firewall rules on any OS may block incoming UDP datagrams or outgoing TCP connections. Allow Serial Studio through if connections fail.
-- On macOS, the first network connection may trigger a system permission dialog.
-- DNS resolution runs asynchronously.
+If connections fail, check that your firewall allows Serial Studio through. On macOS, the first network connection can show a system permission dialog; allow it.
 
 ### Bluetooth Low Energy
 
-The BLE driver talks to Bluetooth Low Energy peripherals via GATT. It auto-discovers advertising devices, enumerates their services and characteristics, and streams notification data into Serial Studio's pipeline.
-
-**When to use it:**
-
-- Battery-powered wireless sensors (temperature, humidity, IMU, heart rate).
-- Wearables and fitness trackers.
-- BLE modules like HM-10, nRF52, or ESP32 BLE.
-- Any scenario where wiring isn't practical and low power matters.
-
-**Key configuration parameters:**
+A BLE module such as an HM-10, nRF52 or ESP32 BLE that advertises sensor data appears under the **Bluetooth LE** entry of the **Connection** dropdown (free): pick the device, then the characteristic that sends notifications. The driver discovers advertising devices, lists their GATT services and characteristics (GATT is the BLE data profile), and streams notification data into the pipeline. Full reference: [Drivers: Bluetooth LE](Drivers-Bluetooth-LE.md).
 
 | Parameter      | Description |
 |----------------|-------------|
-| Device         | Selected from the auto-discovered list. Scanning starts automatically when BLE is chosen. |
-| Service        | If the device exposes multiple GATT services, pick the one carrying your data. |
-| Characteristic | The specific characteristic that sends notifications or indications with your telemetry payload. |
+| Device         | Picked from the discovered list. Scanning starts when you choose Bluetooth LE. The list is shared by every source that uses BLE. |
+| Service        | The GATT service that carries your data, when the device exposes several. |
+| Characteristic | The characteristic that sends notifications or indications with your telemetry. |
 
-**How discovery works.** Serial Studio uses a shared static discovery agent. All BLE driver instances share the same device list, so scanning happens once no matter how many sources reference BLE. The device list is append-only during a scan, and device indices stay stable, so combobox selections aren't disrupted by new discoveries.
-
-**Platform considerations:**
-
-- **Windows:** Needs Windows 10 version 1803 or later with a Bluetooth 4.0+ adapter.
-- **macOS:** Needs macOS 14+ and Bluetooth entitlement. The system may prompt for Bluetooth permission.
-- **Linux:** Needs BlueZ 5.44+ and a Bluetooth 4.0+ adapter. The user may need to be in the `bluetooth` group. Some distros require `bluetoothd` to be running.
-- **All platforms:** The BLE device must be advertising and not already connected to another host. Move it closer if it doesn't show up in the scan.
+- **Windows:** Windows 10 version 1803 or later and a Bluetooth 4.0+ adapter.
+- **macOS:** macOS 14 or later. The first scan shows a Bluetooth permission prompt; allow it.
+- **Linux:** BlueZ 5.44 or later and a Bluetooth 4.0+ adapter. If the device does not appear, add yourself to the `bluetooth` group and check that `bluetoothd` is running.
+- **All platforms:** The device must be advertising and not connected to another host.
 
 ## Pro protocols
 
-These protocols need a Serial Studio Pro license.
+These drivers are Pro features and exist only in the official binary. The first time you use one, Serial Studio asks whether to start a 14-day trial (a Yes/No prompt; registering the trial needs an internet connection). After the trial expires, the prompt offers activation or purchase instead. See [Pro vs Free Features](Pro-vs-Free.md).
 
 ### MQTT
 
-MQTT (Message Queuing Telemetry Transport) is a lightweight publish/subscribe messaging protocol designed for constrained devices and unreliable networks. Serial Studio Pro can act as an MQTT subscriber (receiving telemetry from a broker) or as a publisher (forwarding received frame data to a broker).
-
-**When to use it:**
-
-- Cloud-connected IoT devices publishing to AWS IoT, Azure IoT Hub, or a self-hosted Mosquitto broker.
-- Distributed sensor networks where multiple subscribers need the same data.
-- Remote monitoring over the internet without direct device access.
-- Bridging Serial Studio data to other MQTT-aware applications.
-
-**Key configuration parameters:**
+The MQTT driver (Pro; dropdown entry **MQTT Subscriber**) subscribes to a broker and feeds the messages into the pipeline. The subscriber is a per-source bus type; the publisher, which forwards frames to a broker, is a project-level export configured separately.
 
 | Parameter            | Description |
 |----------------------|-------------|
 | Hostname             | Broker address. Default: `127.0.0.1`. |
-| Port                 | Broker port. Default: 1883. For TLS brokers, set this manually; commonly 8883. |
-| Client ID            | Auto-generated 16-character random string. Regenerate via the button. |
+| Port                 | Broker port. Default: 1883. TLS brokers commonly use 8883; set it yourself. |
+| Client ID            | Random 16-character lowercase string; the button generates a new one. |
 | Username / password  | Broker authentication. |
-| MQTT version         | 3.1, 3.1.1, or 5.0. |
-| Topic filter         | Topic the subscriber listens on. Supports MQTT wildcards (`+` single level, `#` multi-level). The publisher uses a separate per-project topic base configured on the [MQTT Publisher](MQTT-Publisher.md) page. |
-| TLS/SSL              | Optional encryption with configurable protocol version, peer verification mode, peer verification depth, and CA certificates. |
-| Keep alive           | Interval in seconds for PING packets. Supports automatic keep-alive. |
+| MQTT version         | 3.1, 3.1.1 or 5.0. Default: 5.0. |
+| Topic filter         | Topic the subscriber listens on. Supports the wildcards `+` (one level) and `#` (all remaining levels). The publisher uses a separate per-project topic base; see [MQTT Publisher](MQTT-Publisher.md). |
+| TLS/SSL              | Off by default. When on: protocol version, peer verification mode, verification depth and CA certificates. |
+| Keep alive           | Seconds between PING packets. Default: 60. Automatic keep-alive is on by default. |
 
-Subscriptions are made at QoS 0, and Last Will configuration is not exposed. The subscriber and publisher are configured separately: the subscriber is a per-source bus type, the publisher a project-level export.
+Subscriptions use QoS 0, and Last Will is not exposed. TLS connections need valid CA certificates, either the system store or a custom bundle.
 
-**Platform considerations:**
-
-- Needs network or internet access to the broker.
-- TLS connections need valid CA certificates. Load system certificates or point to a custom CA bundle.
-- MQTT 5.0 extended authentication is supported when the broker requires it.
-
-For the protocol vocabulary, see [MQTT Topics & Semantics](MQTT-Topics.md). The inbound side (per-source subscriber) is documented at [MQTT Subscriber](Drivers-MQTT.md); the outbound side (project-level publisher) at [MQTT Publisher](MQTT-Publisher.md).
+See [MQTT Topics & Semantics](MQTT-Topics.md) for the vocabulary, [MQTT Subscriber](Drivers-MQTT.md) for the inbound side and [MQTT Publisher](MQTT-Publisher.md) for the outbound side.
 
 ### Modbus
 
-Modbus is an industrial communication protocol for reading and writing registers on PLCs, SCADA devices, and other industrial equipment. Serial Studio Pro supports both Modbus RTU (over RS-485 serial) and Modbus TCP (over TCP/IP).
-
-**When to use it:**
-
-- Reading holding registers, input registers, coils, or discrete inputs from a PLC.
-- Industrial automation monitoring and factory floor dashboards.
-- Building management systems (HVAC, power meters).
-- Any Modbus-enabled equipment with a documented register map.
-
-**Key configuration parameters:**
+The Modbus driver (Pro; dropdown entry **Modbus**) reads registers from PLCs, power meters and other industrial equipment over Modbus RTU (RS-485 serial) or Modbus TCP. It needs a device with a documented register map. Full reference: [Drivers: Modbus](Drivers-Modbus.md).
 
 | Parameter       | Description |
 |-----------------|-------------|
 | Protocol        | Modbus RTU or Modbus TCP. |
-| Slave address   | Device address on the bus (1 to 247). |
-| Register groups | One or more groups, each specifying a register type (coil, discrete input, input register, holding register), start address, and count. |
-| Poll interval   | How often to query registers, in milliseconds. |
-| RTU-specific    | Serial port, baud rate, data bits, parity, stop bits. |
-| TCP-specific    | Host address, port (default 5020). |
+| Slave address   | Device address on the bus, 1 to 247. Default: 1. |
+| Register groups | One or more groups, each with a register type, start address and count. |
+| Poll interval   | Milliseconds between queries. Default: 100. |
+| RTU settings    | Serial port, baud rate, data bits, parity, stop bits. |
+| TCP settings    | Host address and port. The default port is 5020, not the standard 502; set 502 for most real devices. |
 
-**Register types:**
+| Register type     | Read function code | Access      | Size    |
+|-------------------|--------------------|-------------|---------|
+| Coil              | 01                 | Read/Write  | 1 bit   |
+| Discrete input    | 02                 | Read-only   | 1 bit   |
+| Holding register  | 03                 | Read/Write  | 16 bits |
+| Input register    | 04                 | Read-only   | 16 bits |
 
-| Type              | Code | Access      | Size    |
-|-------------------|------|-------------|---------|
-| Coil              | 01   | Read/Write  | 1 bit   |
-| Discrete input    | 02   | Read-only   | 1 bit   |
-| Holding register  | 03   | Read/Write  | 16 bits |
-| Input register    | 04   | Read-only   | 16 bits |
-
-**Platform considerations:**
-
-- Modbus RTU needs an RS-485-to-USB adapter. Make sure A/B terminal polarity is correct and use 120-ohm termination resistors at each end of the bus.
-- Modbus TCP runs over standard Ethernet. No special hardware beyond network access.
-- The serial port list is refreshed automatically. On Linux, make sure the user has permission to access `/dev/ttyUSBx`.
+Modbus RTU needs an RS-485-to-USB adapter, correct A/B polarity and a 120-ohm termination resistor at each end of the bus. Modbus TCP needs only network access. On Linux, make sure you can access `/dev/ttyUSBx`.
 
 ### CAN Bus
 
-Controller Area Network (CAN) is a vehicle and industrial bus standard. Serial Studio Pro reads and writes CAN frames through the host platform's CAN interface layer.
-
-**When to use it:**
-
-- Automotive diagnostics and OBD-II data logging.
-- Racing or electric vehicle telemetry.
-- Industrial machinery with CAN networks.
-- CAN FD (Flexible Data-rate) applications needing up to 64 bytes per frame.
-
-**Key configuration parameters:**
+The CAN Bus driver (Pro; dropdown entry **CAN Bus**) reads and writes CAN frames through the host's CAN interface layer, including CAN FD. Full reference: [Drivers: CAN Bus](Drivers-CAN-Bus.md).
 
 | Parameter | Description |
 |-----------|-------------|
-| Plugin    | The CAN backend. Platform-dependent: Linux uses `socketcan`; Windows uses `peakcan`, `vectorcan`, or `systeccan`; macOS support is limited and needs third-party drivers. |
-| Interface | The CAN interface name (for example `can0`, `PCAN_USBBUS1`). |
-| Bitrate   | Has to match the network exactly. Common: 125, 250, 500 kbps, 1 Mbps. |
+| Plugin    | The CAN backend. Linux uses `socketcan`; Windows uses `peakcan`, `vectorcan` or `systeccan`; macOS needs third-party drivers. |
+| Interface | The interface name, for example `can0` or `PCAN_USBBUS1`. |
+| Bitrate   | Must match the network exactly. Common: 125, 250, 500 kbps, 1 Mbps. |
 | CAN FD    | Enable for Flexible Data-rate frames (up to 64 data bytes per frame). |
 
-**CAN frame format emitted by the driver.** The driver converts each received CAN frame into a byte array. Standard frames (11-bit identifiers) use `[ID_high, ID_low, DLC, data_0, data_1, ...]`; extended frames (29-bit identifiers) carry the full identifier in four bytes with bit 7 of the first byte set: `[0x80|ID_28..24, ID_23..16, ID_15..8, ID_7..0, DLC, data_0, ...]`. Standard identifiers never exceed 0x7FF, so the first byte's top bit tells the two forms apart. This array is passed to Serial Studio's frame parser for decoding.
+Each received frame reaches your frame parser as a byte array, zero-padded to a fixed size. The DLC byte holds the real payload length, so read it rather than the array length.
 
-**Platform considerations:**
+| Frame type | Layout | Padded size |
+|---|---|---|
+| Standard (11-bit identifier) | `[ID_high, ID_low, DLC, data_0, data_1, ...]` | 11 bytes |
+| Extended (29-bit identifier) | 4 identifier bytes (the first has its top bit set to mark an extended frame), then `DLC, data_0, ...` | 13 bytes |
 
-- **Linux:** SocketCAN is a kernel-level CAN interface. Configure with `ip link set can0 type can bitrate 500000 && ip link set up can0`. No extra drivers needed for most USB-CAN adapters.
-- **Windows:** Needs vendor-specific drivers (PEAK, Vector, Systec). Install the driver before connecting the adapter.
-- **macOS:** Native CAN support is limited. Third-party CAN adapters with their own drivers may work through the Qt CAN bus plugin system, but support isn't guaranteed.
+FD frames longer than the padded size and the reassembly rules are in [Drivers: CAN Bus](Drivers-CAN-Bus.md).
+
+- **Linux:** SocketCAN is built into the kernel. Bring an interface up with `ip link set can0 type can bitrate 500000 && ip link set up can0`.
+- **Windows:** Install the vendor driver (PEAK, Vector, Systec) before connecting the adapter.
+
+### OPC UA, S7comm, EtherNet/IP and IEC 60870-5-104
+
+These four Pro drivers (dropdown entries **OPC UA**, **Siemens S7**, **EtherNet/IP** and **IEC 60870-5-104**) are clients that read from industrial controllers over Ethernet. None of them writes to the machine.
+
+- **OPC UA** browses a server's tags and subscribes to the ones you pick, so any controller or gateway that ships an OPC UA server works. See [Drivers: OPC UA](Drivers-OPC-UA.md).
+- **S7comm** polls absolute addresses on Siemens S7-300, S7-400, S7-1200 and S7-1500 controllers (port 102); use it when the controller has no OPC UA server. See [Drivers: S7](Drivers-S7.md).
+- **EtherNet/IP** polls symbolic tag names on Allen-Bradley Logix, MicroLogix, Micro800 and SLC 500 controllers, and Omron NJ/NX. See [Drivers: EtherNet/IP](Drivers-EtherNet-IP.md).
+- **IEC 60870-5-104** receives the monitor-direction data of a substation or RTU over TCP port 2404 after a general interrogation on connect. See [Drivers: IEC 104](Drivers-IEC-104.md).
 
 ### Audio input
 
-The Audio Input driver captures raw PCM audio from the computer's sound input (microphone, line-in, audio interface) and feeds it into Serial Studio's data pipeline. It uses the miniaudio library for cross-platform low-latency audio capture.
-
-**When to use it:**
-
-- Audio spectrum analysis and FFT visualization.
-- Vibration monitoring via audio-coupled accelerometers or piezo sensors.
-- Acoustic measurements and sound-level monitoring.
-- Analog signal visualization within the audio frequency range (roughly 20 Hz to 24 kHz).
-
-**Key configuration parameters:**
+The Audio input driver (Pro; dropdown entry **Audio**) captures raw PCM audio from a microphone, line-in or audio interface using the miniaudio library. Full reference: [Drivers: Audio](Drivers-Audio.md).
 
 | Parameter             | Description |
-|------------------------|-------------|
-| Input device           | Pick from enumerated audio capture devices. |
-| Sample rate            | Depends on the device. Common: 44100, 48000 Hz. |
-| Sample format          | Bit depth (for example 16-bit integer, 32-bit float). |
-| Channel configuration  | Mono or stereo. |
+|-----------------------|-------------|
+| Input device          | Picked from the enumerated capture devices. |
+| Sample rate           | Depends on the device. Common: 44100, 48000 Hz. |
+| Sample format         | Bit depth, for example 16-bit integer or 32-bit float. |
+| Channel configuration | Mono or stereo. |
 
-The driver also exposes output device settings for audio passthrough, though the primary use case is capture.
-
-**Platform considerations:**
-
-- **macOS:** May need Microphone permission in System Settings > Privacy & Security.
-- **Windows:** May need "Stereo Mix" enabled or a specific input in Sound Settings.
-- **Linux:** Works with ALSA and PulseAudio. Use `arecord -l` to list capture devices.
-- For sensor measurement, prefer line-in over microphone input to avoid automatic gain control.
+- **macOS:** Allow Microphone access in System Settings > Privacy & Security > Microphone.
+- **Windows:** To record what the computer plays, enable "Stereo Mix" or pick the right input in Sound Settings.
+- **Linux:** Works with ALSA and PulseAudio. `arecord -l` lists capture devices.
+- For sensor measurements, use line-in rather than the microphone input, which applies automatic gain control.
 
 ### Raw USB
 
-The Raw USB driver gives direct access to USB device endpoints via libusb, bypassing operating system serial and HID drivers. It supports bulk, control, and isochronous transfer modes.
-
-**When to use it:**
-
-- Custom USB firmware with bulk endpoints (STM32, TinyUSB, PIC, and so on).
-- High-bandwidth sensors that exceed UART throughput.
-- Devices that need vendor-specific USB control transfers.
-- Isochronous USB devices for fixed-rate streaming (audio endpoints, custom DAQ).
-
-**Transfer modes:**
-
-| Mode                   | Description |
-|------------------------|-------------|
-| Bulk/Interrupt Stream  | Synchronous bulk IN/OUT transfers. Default and most common. |
-| Advanced control       | Bulk transfers plus vendor-specific control transfers. Requires user confirmation. |
-| Isochronous            | Asynchronous isochronous transfers for time-sensitive fixed-rate streams. |
-
-**Key configuration parameters:**
+The Raw USB driver (Pro; dropdown entry **USB Device**) reads USB device endpoints directly through libusb, bypassing the operating system's serial and HID drivers. It suits custom firmware with bulk endpoints (STM32, TinyUSB, PIC) and isochronous streaming devices. Full reference: [Drivers: USB](Drivers-USB.md).
 
 | Parameter        | Description |
-|-------------------|-------------|
-| Device            | Pick from the enumerated list (VID:PID and product string). |
-| IN endpoint       | The endpoint to read data from. |
-| OUT endpoint      | The endpoint to write data to. |
-| Transfer mode     | Bulk/Interrupt Stream, Advanced Control, or Isochronous. |
-| ISO packet size   | Packet size for isochronous transfers (only relevant in Isochronous mode). |
+|------------------|-------------|
+| Device           | Picked from the enumerated list (VID:PID and product string). |
+| IN endpoint      | The endpoint to read from. |
+| OUT endpoint     | The endpoint to write to. |
+| Transfer mode    | Bulk/Interrupt Stream (default), Advanced (Bulk + Control) (bulk plus vendor control transfers; a Yes/No confirmation appears once, because a vendor control write can brick a device) or Isochronous. |
+| ISO packet size  | Packet size for isochronous transfers. Only used in Isochronous mode. |
 
-**Platform considerations:**
-
-- **Linux:** Needs `udev` rules granting the user access to the USB device, or root privileges. Hotplug detection is supported natively.
-- **macOS:** The system may hold a kernel driver claim on some devices. libusb will try to detach it. Hotplug is supported.
-- **Windows:** Needs a WinUSB or libusb-compatible driver installed for the target device (for example via Zadig). Hotplug is supported on Windows 8+.
-- A dedicated event thread runs `libusb_handle_events_timeout()` continuously to service hotplug callbacks and isochronous completions.
+- **Linux:** Needs `udev` rules that grant your user access to the device, or root.
+- **macOS:** If the system holds a kernel driver on the device, libusb tries to detach it.
+- **Windows:** Needs a WinUSB or libusb-compatible driver for the device, for example installed with Zadig.
 
 ### HID
 
-The HID driver accesses Human Interface Devices via the hidapi library. It reads interrupt reports from gamepads, joysticks, custom USB HID firmware, and HID-class sensors without custom OS drivers.
+The HID driver (Pro; dropdown entry **HID Device**) reads interrupt reports from gamepads, joysticks, custom USB HID firmware and HID-class sensors using the hidapi library, with no custom OS driver. Full reference: [Drivers: HID](Drivers-HID.md).
 
-**When to use it:**
+Pick a device from the list, shown as `Product Name (VID:PID)`, or just `VID:PID` when the device has no product string. After you select it, Serial Studio shows its Usage Page and Usage. The list refreshes every 2 seconds, so plugged and unplugged devices appear on their own. Each report is 65 bytes (1 report ID byte plus 64 data bytes), and the driver forwards all of it.
 
-- Gamepad or joystick telemetry for robotics dashboards.
-- Custom HID firmware on Arduino (HID library), STM32, or nRF52.
-- Sensors and measurement instruments that enumerate as USB HID.
-- Any USB device where you want driver-free cross-platform access.
-
-**Key configuration parameters.** Pick a device from the auto-enumerated list, shown as `Product Name (VID:PID)` (or just `VID:PID` when no product string is available). Once selected, Serial Studio shows the device's Usage Page and Usage for reference, identifying the HID function.
-
-**How enumeration works.** The driver re-enumerates all HID devices every 2 seconds via a QTimer. The device list updates automatically when devices are plugged in or removed.
-
-**Platform considerations:**
-
-- **Windows:** Uses WinAPI (`hid.dll`). Most HID devices work without extra drivers.
-- **macOS:** Uses IOHIDManager / IOKit. No extra drivers needed.
-- **Linux:** Uses the `hidraw` kernel interface. The user may need `udev` rules to access `/dev/hidrawX` without root. The hidraw backend avoids conflicts with the libusb-based Raw USB driver.
-- HID reports are 65 bytes (1 report ID byte + 64 data bytes). The driver forwards the full report to the data pipeline.
+- **Windows and macOS:** No extra drivers.
+- **Linux:** Uses the `hidraw` interface. Add `udev` rules for `/dev/hidrawX` to avoid running as root.
 
 ### Process I/O
 
-The Process I/O driver captures data from child processes or named pipes, so Serial Studio can visualize output from scripts, simulators, and external programs.
-
-**When to use it:**
-
-- Python, Node.js, or shell scripts that aggregate sensor data and print CSV to stdout.
-- Physics engines or flight simulators emitting telemetry.
-- Protocol bridge programs translating proprietary formats to Serial Studio frames.
-- Testing dashboards with synthetic data generators.
-- Reading from a named pipe (FIFO) written by an external app.
-
-**Modes:**
+A Python script that prints CSV can pose as a sensor. The Process I/O driver (Pro; dropdown entry **Process**) reads data from a child process or a named pipe, which also suits simulators and synthetic data generators for testing dashboards. Full reference: [Drivers: Process I/O](Drivers-Process-IO.md).
 
 | Mode       | Description |
 |------------|-------------|
-| Launch     | Serial Studio spawns the process, reads its merged stdout+stderr, and can write to its stdin. |
-| Named pipe | Serial Studio reads from a named pipe or FIFO. On POSIX it creates the FIFO with `mkfifo` if it does not already exist; on Windows it acts as the named-pipe server. The external process writes to the pipe. |
+| Launch     | Serial Studio starts the process, reads its merged stdout and stderr, and can write to its stdin. |
+| Named pipe | Serial Studio reads from a named pipe or FIFO. On Linux and macOS it creates the FIFO with `mkfifo` if it does not exist. On Windows it acts as the named-pipe server, using the `\\.\pipe\PipeName` convention. The external process writes to the pipe; set the pipe path in the setup pane. |
 
-**Launch mode parameters:**
+| Launch parameter  | Description |
+|-------------------|-------------|
+| Executable        | Path to the program, with a file dialog. |
+| Arguments         | Command-line arguments. |
+| Working directory | The directory the process runs in. |
 
-| Parameter          | Description |
-|---------------------|-------------|
-| Executable          | Path to the program. Supports browsing via file dialog. Serial Studio searches standard PATH locations plus platform-specific extras. |
-| Arguments           | Command-line arguments passed to the process. |
-| Working directory   | The directory the process runs in. Supports browsing. |
-
-**Named pipe parameters.** Pipe path: the filesystem path to the named pipe or FIFO. Supports browsing.
-
-**Platform considerations:**
-
-- **Linux and macOS:** Named pipes are created with `mkfifo`. Make sure the pipe exists before connecting.
-- **Windows:** Named pipes use the `\\.\pipe\PipeName` convention.
-- If the child process crashes or exits unexpectedly, Serial Studio shows a warning and triggers a disconnect.
-- The process's stdout and stderr are merged into a single stream. Make sure your script writes only data frames to stdout if you want clean parsing.
-
-## Picking the right protocol
-
-**By situation:**
-
-| Situation                                  | Recommended protocol   |
-|--------------------------------------------|------------------------|
-| Microcontroller connected via USB cable    | Serial/UART            |
-| Device on the same WiFi or Ethernet network| TCP/UDP Network        |
-| Battery-powered wireless sensor nearby     | Bluetooth LE           |
-| Device publishing to a cloud MQTT broker   | MQTT (Pro)             |
-| Industrial PLC with Modbus registers       | Modbus (Pro)           |
-| Vehicle CAN bus or OBD-II port             | CAN Bus (Pro)          |
-| Analyzing audio signals or vibrations      | Audio Input (Pro)      |
-| Custom USB device with bulk or ISO endpoints| Raw USB (Pro)         |
-| Gamepad, joystick, or HID-class sensor     | HID (Pro)              |
-| Script or simulator writing to stdout      | Process I/O (Pro)      |
-
-**By priority:**
-
-- **Simplest setup:** Serial/UART, then HID, then Process I/O.
-- **Highest throughput:** Raw USB, then CAN Bus (FD), then TCP Network.
-- **Longest range:** MQTT (global via internet), then TCP/UDP (LAN/internet), then BLE (~100 m).
-- **Lowest power on the device side:** Bluetooth LE.
-- **No special hardware:** Process I/O (just a script), Audio Input (just a microphone).
-
-## Hardware requirements
-
-| Protocol       | Required hardware |
-|----------------|-------------------|
-| Serial/UART    | USB cable or USB-to-serial adapter (CH340, FTDI, CP210x) |
-| TCP/UDP        | Ethernet or WiFi connectivity |
-| Bluetooth LE   | Bluetooth 4.0+ adapter on the computer |
-| MQTT           | Network or internet access to an MQTT broker |
-| Modbus RTU     | RS-485-to-USB adapter with termination resistors |
-| Modbus TCP     | Ethernet connectivity |
-| CAN Bus        | CAN-to-USB adapter (PEAK PCAN, Kvaser, CANable, SocketCAN-compatible) |
-| Audio input    | Audio capture device (microphone, line-in, audio interface) |
-| Raw USB        | USB device with accessible bulk, control, or isochronous endpoints |
-| HID            | USB HID-class device |
-| Process I/O    | None (runs a local program or reads a named pipe) |
+Because stdout and stderr are merged, write only data frames to stdout if you want clean parsing. If the child process exits unexpectedly, Serial Studio shows a warning and disconnects.
 
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step instructions for each protocol.
-- [MQTT Topics & Semantics](MQTT-Topics.md): protocol vocabulary used by both the subscriber driver and the publisher.
-- [MQTT Subscriber](Drivers-MQTT.md): the inbound, per-source side of MQTT.
-- [MQTT Publisher](MQTT-Publisher.md): the outbound, project-level side of MQTT.
 - [Getting Started](Getting-Started.md): first-time setup tutorial.
 - [Troubleshooting](Troubleshooting.md): fixes for common connection problems.
-- [Pro vs Free Features](Pro-vs-Free.md): compare protocol availability across editions.
+- [Pro vs Free Features](Pro-vs-Free.md): protocol availability across editions.

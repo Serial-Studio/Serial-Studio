@@ -1,115 +1,101 @@
 # Remote Dashboard
 
-Remote Dashboard lets one Serial Studio instance watch another instance's dashboard over the
-network. The instance connected to the hardware (the *publisher*) keeps parsing, logging, and
-displaying as usual; the watching instance (the *viewer*) attaches to it and renders the same
-groups, datasets, and live values. The view is read-only: nothing done on the viewer reaches
-the remote device, and the viewer's own project on disk is never modified.
+The hardware is on a test stand in another room, and you want its dashboard on your desk. Remote Dashboard does that: the Serial Studio next to the hardware is the *publisher*, the one on your desk is the *viewer*, and the viewer shows the same groups, datasets, and live values. Remote Dashboard is in both the free and Pro editions; no license is needed on either side.
 
-The link rides the same TCP API server used by scripts and external tools (port 7777), so
-there is nothing extra to install. It is available in every edition.
+The view is read-only. Nothing you do on the viewer reaches the device, and the viewer's own project on disk is never modified. The device stays plugged into the publisher; the viewer only needs a network route to it. The link uses Serial Studio's API Server (a network port, 7777 by default), which is off until you turn it on.
 
-Typical uses:
+## Try it on one machine
 
-- A test stand in another room, watched from a desk.
-- One operator machine wired to the hardware, several read-only observers.
-- A headless data logger on an embedded PC, checked from a laptop on the same network.
+1. Open **Preferences**, **General** tab, **API & Plugins** group, and turn on **Enable API Server**.
+2. Open a project so there is a dashboard to show. Do not connect a device: attaching is refused while a local device is connected.
+3. Run the **Remote Dashboard** command from the [command palette](Command-Palette.md) (**Ctrl+K**, **Cmd+K** on macOS).
+4. Leave Host `127.0.0.1`, Port `7777`, Token empty, and press **Attach**.
+
+Local connections need no token. With no device connected, expect the status line "connected, the remote is not producing data": a one-machine test shows the layout, not live values. For live values, run the viewer on a second machine and follow the next two sections.
 
 ## Publisher: allow incoming viewers
 
-1. Open **Preferences** and enable **Enable API Server (Port 7777)** in the **API & Plugins**
-   group of the **General** tab.
-2. For viewers on the *same machine*, that is all: local connections are pre-authorized and
-   need no token.
-3. For viewers on *another machine*, also enable **Allow External API Connections** and copy
-   the **API Access Token** shown below it. The refresh button generates a new token and
-   invalidates the old one.
+Viewers on the same machine need only step 1; another machine also needs step 2.
 
-On a headless publisher the same provisioning is done from the command line:
+1. Turn on **Enable API Server** (**Preferences**, **General** tab, **API & Plugins** group). It is off by default. The **API Server Port** field below it sets the port (1024-65535, default 7777).
+2. Turn on **Allow External API Connections** and copy the **API Access Token** below it. A confirmation dialog, **Allow External API Connections?**, appears; press **Yes** (**No** leaves the toggle off). The token field stays disabled, and read-only, until the toggle is on. Read [Trust model](#trust-model) first: the link is not encrypted.
 
-```
-serial-studio --headless --api-server --api-external --api-token <token>
-```
+With **Allow External API Connections** off, the server listens on loopback only. Turning **Enable API Server** off also turns **Allow External API Connections** off, so switch it back on after re-enabling the server.
 
-`--api-token` expects at least 32 hexadecimal characters. `--api-external` is the
-non-interactive equivalent of the "Allow External API Connections" confirmation: once set,
-any machine that can reach port 7777 may connect after presenting the token.
+The refresh button next to the token generates a new one and invalidates the old one.
+
+The viewer needs the publisher's LAN address, for example `192.168.1.20`, and TCP port 7777 (or your port) allowed through the publisher's firewall.
+
+The publisher accepts at most 32 simultaneous viewers, the API server's client limit. The `API/MaxViewers` key in the application settings can only lower that cap, and `0` refuses viewers while leaving the rest of the API available. There is no UI field for it.
 
 ## Viewer: attach
 
-1. Run the **Remote Dashboard** command from the [command palette](Command-Palette.md). The
-   **Attach to Remote Dashboard** dialog opens.
+Before attaching, the publisher must have **Enable API Server** on, plus **Allow External API Connections** and a token if the viewer is another machine (see [Publisher](#publisher-allow-incoming-viewers)).
+
+1. Run the **Remote Dashboard** command from the [command palette](Command-Palette.md) (**Ctrl+K**, **Cmd+K** on macOS). The **Attach to Remote Dashboard** dialog opens.
 2. Fill in the connection fields:
 
 | Field | Meaning | Default |
 |-------|---------|---------|
-| Recent | Previously used `host:port` endpoints; selecting one fills the fields below, including the token that was used with it | shown once an endpoint has been used |
+| Recent | The 12 most recent `host:port` endpoints; selecting one fills the fields below, including the token used with it | shown once an endpoint has been used |
 | Host | Host name or IP address of the publisher | `127.0.0.1` |
-| Port | The publisher's API server port | `7777` |
-| Token | The publisher's API access token; required only for connections from another machine | empty |
+| Port | The publisher's API Server Port (**Preferences**, **General**, **API & Plugins**) | `7777` |
+| Token | The publisher's API Access Token; required only for connections from another machine | empty |
 
-3. Press **Attach**. The status box reports the link state:
-   - *Attached … live, N datasets at N Hz* — values are flowing.
-   - *Attached … connected, the remote is not producing data* — the link is up but the
-     publisher's device is idle or disconnected.
-   - *Attached … no response, the link may be down* — heartbeats stopped; the viewer keeps
-     the last values and recovers on its own when the link returns.
+3. Press **Attach**.
 
-**Detach** restores whatever the viewer was doing before the attach — its own project,
-operation mode, and connection state come back exactly as they were.
+A viewer cannot attach while its own device connection or a recording is active. The dialog shows "Disconnect the local device or close the open recording first." and **Attach** stays disabled.
 
-A viewer cannot attach while its own device connection or a file recording is active; the
-dialog says so and the **Attach** button stays disabled until the local stream is closed.
+The status line shows the link state:
 
-The update rate is automatic: the viewer receives values as fast as the publisher's own
-display refreshes, never faster, so there is nothing to tune. Endpoints and their tokens are
-remembered in the viewer's application settings; the dialog reopens with the last used
-publisher filled in.
+| Status text | What to do |
+|-------------|------------|
+| Not attached. | Nothing yet; press **Attach**. |
+| Attached to *host:port* - live, *N* datasets at *N* Hz. | Values are flowing. |
+| Attached to *host:port* - connected, the remote is not producing data. | The link is up but the publisher is producing no data. Connect a device or open a project on the publisher. |
+| Attached to *host:port* - no response, the link may be down. | Heartbeats stopped. Check that the publisher is running and that host, port, and token are right. The viewer keeps the last values and recovers when the link returns. |
 
-## What travels, what does not
+If an attach fails, the status line shows the failure reason instead.
 
-The publisher sends its whole project document, including the dashboard structure (groups,
-datasets, titles, units), and the live values the dashboard displays. The project is not trimmed
-to a layout on the way out: the viewer removes the publisher's logic when it loads it (see
-[Trust model](#trust-model)). The publisher does not send raw frames: the viewer's console stays
-empty, and the viewer's CSV/MDF4 export, MQTT publisher, and Historian never see mirrored
-data — recording stays the publisher's job. If the remote project changes while attached, the
-viewer picks up the new layout automatically.
+While attached, the toolbar's **Connect** button is replaced by a **Remote Dashboard** button. Click it to reopen the dialog and press **Detach**. Detach restores whatever the viewer was doing before: its own project, operation mode, and connection state.
+
+The viewer asks for 60 Hz; the publisher grants the lower of that and its own dashboard refresh rate, between 1 and 60 Hz. The status line shows the negotiated rate.
+
+Endpoints and their tokens are remembered in the viewer's application settings, and the dialog reopens with the last used publisher filled in.
+
+## Headless publisher
+
+Only needed for a machine with no screen, such as an embedded PC. `serial-studio` is the installed application executable (see [Command Line Interface](Command-Line-Interface.md)). Provision the publisher from the command line:
+
+```bash
+serial-studio --headless --api-server --api-external --api-token-file /etc/serial-studio/token
+```
+
+`--api-external` is the non-interactive form of the **Allow External API Connections** toggle and skips its confirmation dialog. The token must be at least 32 hexadecimal characters; `openssl rand -hex 16` makes one. `--api-port <port>` replaces 7777 and accepts 1-65535, wider than the Settings field's 1024-65535. With no token source, the publisher generates a token.
+
+Pass the token with `--api-token-file <path>` or the `SS_API_TOKEN` environment variable. `--api-token <token>` also works but shows the token in the process list of the machine.
+
+## What a Remote Dashboard viewer receives
+
+The publisher sends its project document (groups, datasets, titles, units) and the live values the dashboard displays. It does not send raw frames. On the viewer, the console is empty, and CSV/MDF4 export, the MQTT publisher, and the Historian record nothing; record on the publisher. If the publisher's project changes while attached, the viewer picks up the new layout.
+
+FFT Plot, Waterfall, and 3D Plot are unavailable on a viewer: they need every raw sample, and the link carries only displayed values. Those widgets show "Not available on a Remote Dashboard."
+
+The project is sent whole, but the viewer strips the publisher's logic when it loads it (see [Trust model](#trust-model)).
 
 ## Trust model
 
-A viewer only displays. It never runs the publisher's logic, so a publisher that is hostile or
-spoofed can make a viewer show wrong values but cannot make it run anything:
+On a home or lab network this is fine; across the internet, tunnel it. The link is not encrypted, so use Remote Dashboard on a trusted network, or through an SSH tunnel or a VPN when it must cross an untrusted one. Keep **Allow External API Connections** off when no remote viewer is expected.
 
-- **Viewers never run publisher logic.** Before the viewer loads the remote project it removes
-  the frame parsers, dataset transforms and transform libraries, the Control Loop, the output
-  widgets' transmit functions, every source's connection settings, and the MQTT publisher and
-  InfluxDB blocks. Nothing in them runs on the viewer: it parses nothing, transforms nothing,
-  writes to no device, and opens no connection of its own.
-- **Canvas code on a viewer can only draw.** Canvas widgets the publisher defines still draw on
-  the viewer, but their script runs on a draw-only surface. It cannot call the API or reach
-  devices, files, or processes; those calls answer `{ ok: false, error: "dryRun" }`. Every widget
-  that renders from data renders as it does on the publisher. See [Canvas widget](Canvas-Widget.md#canvas-code-on-a-remote-dashboard).
+A viewer only displays. A spoofed publisher can make it show a wrong number. It cannot make it run anything. Before the viewer loads the publisher's project it removes the frame parsers, dataset transforms and transform libraries, the Control Loop, the output widgets' transmit functions, every source's connection settings, and the MQTT publisher and InfluxDB blocks. The viewer parses nothing, writes to no device, and opens no connection of its own.
 
-The link itself has these limits to understand before opening it up:
+Canvas widgets (user-written drawing scripts) still draw, but their script runs on a draw-only surface that cannot call the API or reach devices, files, or processes. See [Canvas widget](Canvas-Widget.md#canvas-code-on-a-remote-dashboard).
 
-- **The transport is not encrypted.** The token authorizes the connection but does not
-  protect what travels over it. Anyone who can capture the traffic can read the telemetry and
-  the project document, including its scripts and connection settings.
-- **The token is the full API credential, not a viewer-only pass.** A holder can also issue
-  API commands on the publisher, exactly as any API client can. There is no read-only token.
-- **Local connections skip the token.** Any process on the publisher's machine may attach.
-- **Remembered tokens are stored as plain text.** A token saved with a recent endpoint sits in
-  the viewer's application settings with the same protection as any other setting; anyone with
-  access to the viewer's user profile can read it.
+Known exposures:
 
-Use Remote Dashboard on a trusted network, or wrap the connection in a tunnel (SSH port
-forwarding or a VPN) when it must cross an untrusted one. Keep **Allow External API
-Connections** off when no remote viewer is expected.
-
-The number of simultaneous viewers is capped at the API server's client limit (32 connections)
-by default; the `API/MaxViewers` entry in the application settings lowers it (a value of `0`
-refuses viewers while leaving the rest of the API available).
+- Anyone who can capture the traffic can read the telemetry and the project document, including its scripts and connection settings. The token authorizes the connection but does not protect what travels over it.
+- A token holder can also issue API commands on the publisher. There is no read-only token.
+- Remembered tokens are stored in the viewer's application settings, encrypted under a machine-specific key. This is obfuscation, not a vault: anyone running as the viewer's user can still attach with them. A settings file copied to another machine yields no token.
 
 ## See also
 

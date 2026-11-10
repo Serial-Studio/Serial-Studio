@@ -1,12 +1,24 @@
 # Dataset value transforms (Pro)
 
-Per-dataset scripting for calibration, unit conversion, filtering, and signal conditioning. Each dataset can optionally define a `transform(value)` function that converts the raw parsed value into an engineering value before it reaches the dashboard.
+Your pressure sensor prints `2048`, and an ADC count of 2048 is not a pressure. A dataset transform turns it into PSI before it reaches the dashboard. In Lua, the whole transform is three lines:
 
-Dataset transforms are a **Pro feature**: opening the transform editor needs a license or an active trial, and so does connecting with a project that contains a transform. To run such a project without one, right-click the dataset in the Project Editor and choose **Remove Transform**; removing is always free and can be undone.
+```lua
+function transform(value)
+  return value * 100 / 4095
+end
+```
+
+You paste it into the **Transform** dialog of a dataset in the Project Editor (see [Using the transform dialog](#using-the-transform-dialog)). You need a project first; see [Project Editor](Project-Editor.md#step-4-add-datasets) for adding datasets. The **dataset** is one channel of your data, such as `pressure`. The **raw value** is the number the [frame parser](Frame-Parser.md) extracted for it; by default a comma-separated line like `2048,3.3` becomes one raw value per comma. Whatever the transform returns replaces the raw value in every plot, widget, export, and alarm.
+
+A dataset transform can be written in **Lua**, **JavaScript**, or **Expression**, a single arithmetic formula such as `v * 0.01 + 273.15` with no function around it. If you are unsure, pick Expression for scaling and clamping and Lua for anything with memory (filters, counters). Lua and JavaScript transforms use a `transform(value)` function; Expression transforms are covered in [Expression transforms](#expression-transforms).
+
+Dataset transforms of all three languages are a **Pro feature**. Opening the transform editor needs a license or an active trial, and so does connecting with a project that contains a transform. The first time you use one without either, Serial Studio asks in a Yes/No box whether to start the free 14-day trial. Nothing starts automatically, and registering the trial needs an internet connection. See [Pro vs Free](Pro-vs-Free.md).
+
+To run a project without a license, right-click the dataset in the Project Editor and choose **Remove Transform**. Removing is always free and can be undone.
 
 ## Overview
 
-The frame parser (`parse(frame)`) produces an array of raw values. Each value is mapped to a dataset by its Frame Index. Before the value reaches the dashboard, an optional transform function can modify it:
+The frame parser (`parse(frame)`) produces an array of raw values, and each value is mapped to a dataset by its Frame Index (the position of the value in the parsed array). An optional transform sits between the parser and the dashboard:
 
 ```mermaid
 flowchart LR
@@ -15,31 +27,21 @@ flowchart LR
     C --> D["Dashboard"]
 ```
 
-Transforms are useful when:
-
-- Your device sends raw ADC counts that need calibration (slope + offset).
-- You need unit conversion (Celsius to Fahrenheit, radians to degrees).
-- The signal is noisy and needs filtering (moving average, EMA, low-pass).
-- You want derived values (rate of change, running total, dB conversion).
-- Sensor non-linearity needs polynomial correction or a lookup table.
-
-Transforms are optional. Datasets without one display the raw parsed value unchanged.
+Calibration, unit conversion, filtering, and derived values (rate of change, running total, decibels) belong here; protocol decoding stays in the parser. A dataset without a transform shows the raw parsed value unchanged. You can reuse one parser across projects with different calibrations by changing only the per-dataset transforms.
 
 ### When a format is enough
 
-A linear scale and offset, a fixed-point or bit-field decode, a hexadecimal or binary display, and value-to-text labels need no script: set them on the dataset page under **Value Format**, **Label Format**, and **Labels** (see [Project Editor](Project-Editor.md#step-4-add-datasets)). Formats and labels are not Pro content, so a project that uses them without a transform connects with no license.
+A linear scale and offset need no script: set them under **Value Format** on the dataset page (see [Project Editor](Project-Editor.md#step-4-add-datasets)). The same page holds fixed-point and bit-field decoding, hexadecimal and binary display (**Label Format**), and value-to-text **Labels**. Formats and labels are not Pro content, so a project that uses them without a transform connects with no license.
 
-A dataset can combine a format, a transform, and labels. They apply in this order:
+A dataset can combine a format, a transform, and labels. The format decodes the parsed value first, and the transform receives the decoded number. On a computed dataset, whose transform is its only source, the format decodes the transform's result instead. Labels and the hexadecimal or binary notation apply last, to the text on screen only; every plot, alarm, and export reads the number the format and transform produced.
 
-1. The format decodes the parsed value, and the transform receives the decoded number.
-2. On a computed dataset, whose transform is its only source, the format decodes the transform's result instead.
-3. Labels and the hexadecimal or binary notation apply last, to the text on screen only. The number every plot, alarm, and export reads is the one the first two steps produced.
-
-A transform can also read and write [Variables](Variables.md) tables: constants defined at project time, and computed variables that hold their value across frames. That's how you pass a calibration value into several channels, have one transform compute a value that another consumes, or keep state for an integrator, filter, or latch. See [Variables](Variables.md) for the full reference.
+A transform can also read and write [Variables](Variables.md) tables: constants defined at project time, and computed variables that hold their value across frames. Use them to pass one calibration value into several channels, to have one transform feed another, or to keep state for an integrator, filter, or latch.
 
 ## The `transform()` function
 
-### Signature
+Lua and JavaScript transforms use this function. An Expression transform has no function.
+
+### Transform function signature
 
 **Lua:**
 
@@ -57,21 +59,101 @@ function transform(value) {
 }
 ```
 
-### Input
+### Transform function input
 
 The `value` parameter is the value already parsed from the frame and mapped to this dataset by its Frame Index. When the parsed value is numeric it arrives as a floating-point number (Lua `number` / JS `number`); when it isn't, it arrives as a string (Lua `string` / JS `string`).
 
 Non-numeric dataset values are still passed to the transform as a string. If the transform returns a number, the dataset becomes numeric; if it returns a string, the string value is kept.
 
-### Output
+### Transform function output
 
-The function returns a number, or a string for text datasets (a returned string is kept as the dataset value). The returned value replaces the raw value everywhere: dashboard widgets, plots, CSV export, MDF4 export, and the API.
+In Lua and JavaScript, the function returns a number, or a string for a text dataset. The returned value replaces the raw value everywhere: dashboard widgets, plots, CSV export, MDF4 export, and the API.
 
-If the function returns `nil` (Lua), `undefined`/`NaN`/`Infinity` (JS), or if an error happens, the raw value is kept unchanged so the data stream isn't interrupted. Both a JS exception and a Lua error log a warning (with the error message and dataset ID) to the application log; only the non-error fallback cases (`nil`/`undefined`/`NaN`/`Infinity`) are silent.
+| Condition | Result |
+|-----------|--------|
+| Returns a number | The dataset value is that number. |
+| Returns a string | The string is kept as the dataset value. |
+| Returns `nil` (Lua) or `undefined` (JavaScript), or a `NaN` or infinite number in either language | The raw value is kept. |
+| Throws or errors, or runs longer than 100 ms | The raw value is kept and a warning with the error message and dataset ID goes to the application log. |
+
+## Using the transform dialog
+
+1. Open the Project Editor and select a dataset in the tree (see [Project Editor](Project-Editor.md#step-4-add-datasets) for adding datasets).
+2. Click the **Transform** button in the dataset toolbar.
+3. A dialog titled "Dataset Value Transform" opens, with:
+   - **Language selector.** Lua, JavaScript, or Expression. Defaults to the source's frame parser language, but each dataset can pick its own.
+   - **Template dropdown.** 34 ready-made transforms for common operations. Disabled for Expression.
+   - **Code editor.** Syntax-highlighted, with auto-completion.
+   - **Clear** button. Resets the editor to the placeholder.
+   - **Parameters table.** Named values the transform reads as `params.<name>`; see [Dataset parameters](#dataset-parameters).
+   - **Test area.** Enter a raw value, click Test, see the transformed output. The test loads the shared library and the parameter table first, so a transform that calls a library function tests like it runs.
+4. Write or pick a `transform(value)` function.
+5. Click **Apply** to save the transform to the dataset.
+
+On a dataset with no transform yet, the editor is pre-filled with a comment that explains `transform(value)`. The comment is a placeholder, not a transform. What **Apply** does depends on the editor content:
+
+| Editor content | Apply result |
+|----------------|--------------|
+| Placeholder only, or empty | Nothing is saved, the dataset keeps showing raw values, and the dialog closes. |
+| Text or comments with no `transform()` function | Refused with "The value transform must define a transform(value) function."; the dialog stays open until you define `transform()` or click **Clear**. |
+| A valid transform | Saved to the dataset. |
+
+### Switching languages
+
+When you switch the language dropdown, the editor loads the equivalent template in the new language automatically (if the current code matches a known template). Custom code is left unchanged and not translated, so rewrite it for the new language yourself.
+
+## Practical examples
+
+The pressure example at the top is the simplest case. Three more:
+
+### Example 1: noisy temperature sensor
+
+An RTD sensor fluctuates ±0.5°C around the true value. Smooth it with EMA:
+
+```lua
+local alpha = 0.15
+local ema
+
+function transform(value)
+  if ema == nil then
+    ema = value
+  end
+
+  ema = alpha * value + (1 - alpha) * ema
+  return ema
+end
+```
+
+The state rules are in [Persistent state](#persistent-state).
+
+### Example 2: compass heading normalization
+
+A magnetometer reports heading in radians. Convert to degrees and wrap into 0 to 360:
+
+```lua
+function transform(value)
+  local degrees = value * 180 / math.pi
+  return degrees % 360
+end
+```
+
+### Example 3: battery voltage with dead zone
+
+A battery monitor fluctuates around 0 V when disconnected. Suppress noise below 0.5 V:
+
+```lua
+function transform(value)
+  if value < 0.5 then
+    return 0
+  end
+
+  return value
+end
+```
 
 ## Expression transforms
 
-A third language sits beside Lua and JavaScript in the language dropdown: **Expression**. It has no function, no statements, and no script engine. The editor holds one arithmetic expression, and its value is the dataset's new reading:
+**Expression** is the third language in the transform dialog's language dropdown, beside Lua and JavaScript, and is Pro like the other two. It has no function, no statements, and no script engine. The editor holds one arithmetic expression, and its value is the dataset's new reading:
 
 ```text
 v * 0.01 + 273.15
@@ -81,17 +163,17 @@ Expressions compile to a flat program that runs without allocating, which makes 
 
 Lines starting with `#` are comments and run to the end of the line.
 
-### Inputs
+### Expression inputs
 
 | Name | Value |
 |------|-------|
 | `v`  | This sample's raw value |
 | `t`  | The frame's timestamp in seconds, on the app's monotonic clock (same clock as the JS transform's `info.timestampMs`). Not zero-based at stream start: use `dt`, or subtract the first sample's `t`, for an elapsed-time value. |
-| `dt` | Seconds since the previous sample |
+| `dt` | Seconds since the previous sample; 0 on the first sample after a connect or recompile |
 | `n`  | Sample index, starting at 0 |
 | `pi`, `e`, `nan`, `inf` | Constants |
 
-Other datasets of the same source are read by their **Script Alias**, the same identifier `datasetGetRaw` and the API accept. Dataset titles do not resolve: titles are display text and change freely, while the alias is stable.
+Other datasets of the same source are read by their **Script Alias**, the same identifier `datasetGetRaw` and the API accept. Set the alias in the dataset's Script Alias field in the Project Editor. Dataset titles do not resolve: titles are display text and change freely, while the alias is stable.
 
 ```text
 v * shunt_current
@@ -103,7 +185,7 @@ A dataset with no alias is addressed by its **dataset ID**, wrapped in braces be
 v * {12}
 ```
 
-Braces also carry an alias containing spaces. If a project defines an alias that is itself all digits, the alias wins over the ID of the same number.
+Braces also carry an alias containing spaces.
 
 A sibling holds the latest value published for it, so a dataset processed later in the tree contributes its previous sample. Order datasets in the Project Editor accordingly.
 
@@ -115,7 +197,7 @@ v - sample(shunt_current, 1)
 
 The name is bare or braced, never quoted.
 
-### Variables tables
+### Expression: reading Variables tables
 
 Expressions read table variables with `table(name, variable)`, the same constants and computed variables `tableGet` reaches from Lua and JavaScript:
 
@@ -127,9 +209,9 @@ Both names are bare, or braced when they contain spaces. The variable is resolve
 
 Access is **read-only**. Writing a variable from an expression would give it an execution-order dependency, which is where a Lua or JavaScript transform with `tableSet` belongs. Computed variables carry the same processing-order caveat as sibling datasets: an expression sees the last value written, which for a variable written later in the same frame is the previous frame's.
 
-`table()` is available on the frame pipeline. On a source running the stream lane (a dense source such as audio, or one with the stream lane forced on) an expression using `table()` fails to compile, since the variable store belongs to another thread and a per-sample cross-thread read is not on the table.
+`table()` fails to compile on an audio source or any source running the stream lane, since the variable store belongs to another thread.
 
-### Operators and functions
+### Expression operators and functions
 
 Operators, loosest binding first: `||`, `&&`, `==` `!=`, `<` `<=` `>` `>=`, `+` `-`, `*` `/` `%`, `^` (right-associative), unary `-` and `!`, and the conditional `condition ? a : b`.
 
@@ -141,7 +223,7 @@ Operators, loosest binding first: `||`, `&&`, `==` `!=`, `<` `<=` `>` `>=`, `+` 
 
 `log` is the natural logarithm. `deg` and `rad` convert between radians and degrees.
 
-### Examples
+### Expression examples
 
 ```text
 # Scale and offset an ADC reading
@@ -163,17 +245,27 @@ bus_voltage == 0 ? 0 : v / bus_voltage
 v - sample(flow, 1)
 ```
 
-### Limits
+```text
+# Rate per second, guarding the first sample where dt is 0
+dt == 0 ? 0 : (v - sample(flow, 1)) / dt
+```
 
-An expression compiles to at most 512 operations; a longer one is rejected with `expression too long`. History reaches 256 samples back. A compile error is reported once and the dataset publishes its raw value.
+### Expression limits
+
+An Expression transform (Pro) compiles to at most 512 nodes (each operator, function call, number, or name counts as one); a longer one is rejected with `expression too long`. `sample(name, k)` accepts `k` up to 256. A compile error is reported once and the dataset publishes its raw value.
 
 The Template dropdown is disabled for Expression: the built-in templates are Lua and JavaScript code and have no expression equivalent.
 
 ## Persistent state
 
-Variables declared at the top level of the transform code (outside the `transform()` function) persist between frames. That's how filters, accumulators, and other stateful transforms keep state across calls.
+In a Lua or JavaScript dataset transform (Pro), variables declared at the top level of the transform code, outside the `transform()` function, keep their value between frames. That is how a filter remembers its last output or a counter remembers its count. Each dataset gets its own copy, so two EMAs on two channels never share a variable. A filter that remembers the last reading is a transform with a short memory; it forgets everything when you disconnect.
 
-The key rule: use `local` (Lua) or `var` (JavaScript) at the top of the file. Don't rely on bare globals. Serial Studio isolates each dataset's top-level state so two datasets using the same template (for example two EMAs on two different channels) can't clobber each other's variables.
+Declare stateful variables with `local` (Lua) or `var` (JavaScript) at the top of the file. Someone scanning the top of the transform then sees which variables carry state. The two languages differ on bare globals:
+
+| Language | Top-level `local` / `var` | Bare global (no declaration) |
+|----------|--------------------------|------------------------------|
+| Lua | Private to the dataset | Also private; still use `local` |
+| JavaScript | Private to the dataset | Written to the shared engine and leaks across datasets |
 
 **Lua: declare `local` at the top of the file:**
 
@@ -191,7 +283,7 @@ function transform(value)
 end
 ```
 
-`alpha` and `ema` are chunk locals. Lua captures them as upvalues of the `transform` closure, so they survive between calls and they're private to this dataset. Another dataset on the same source with its own `local ema` won't see or overwrite this one.
+`alpha` and `ema` survive between calls and are private to this dataset. Another dataset on the same source with its own `local ema` neither sees nor overwrites them.
 
 **JavaScript: declare `var` at the top of the file:**
 
@@ -208,25 +300,14 @@ function transform(value) {
 }
 ```
 
-Serial Studio wraps every JavaScript transform in an IIFE at compile time, so top-level `var` declarations are scoped to that dataset's closure, not the shared engine's global object. You get the same isolation as Lua without any extra effort.
+Serial Studio wraps each JavaScript transform so top-level `var` declarations belong to that dataset, not to the shared engine.
 
-### What NOT to do
+### Bare globals in JavaScript
 
-In JavaScript, avoid bare globals: an implicit global is written to the shared engine's global object and will collide with other datasets on the same source. In Lua each dataset chunk gets its own private environment, so a bare global stays isolated per dataset and won't collide. Declaring `local` is still recommended in Lua for clarity and to match the JavaScript rule:
-
-```lua
--- Lua: this works (ema is isolated to this dataset), but local is clearer
-function transform(value)
-  ema = ema or value
-  ema = 0.1 * value + 0.9 * ema
-  return ema
-end
-```
+An implicit global in JavaScript is written to the shared engine's global object, so another dataset with the same mistake clobbers it:
 
 ```javascript
-// WRONG in JavaScript: ema without var is an implicit global
-// on the shared engine, so another dataset with the same mistake
-// would clobber it. Always declare var at the top.
+// WRONG: ema has no var, so it is a global on the shared engine.
 function transform(value) {
   if (typeof ema === 'undefined') ema = value;
   ema = 0.1 * value + 0.9 * ema;
@@ -234,29 +315,13 @@ function transform(value) {
 }
 ```
 
-Always declare stateful variables with `local`/`var` at the top of the file. It also makes the code easier to read: someone scanning the top of the transform can see at a glance which variables carry state.
+Declare `var ema;` at the top instead. Lua has no such problem; see the table above.
 
 ### Helper functions
 
-In JavaScript, helpers defined at the top of the file (for example `function clamp(x, lo, hi) { ... }`) are also closed over by the IIFE and private per dataset. Safe to use.
+In JavaScript, helpers defined at the top of the file (for example `function clamp(x, lo, hi) { ... }`) are also private per dataset. Safe to use.
 
-### Computed datasets
-
-A dataset can be marked as **computed** in the Project Editor. A computed dataset has no Frame Index: nothing in the incoming frame feeds it. Its value is computed entirely by the `transform()` function, typically by reading other datasets or table variables. The `value` argument passed in is always `0`.
-
-```lua
-function transform(value)
-  local a = datasetGetFinal(10)   -- reads the final value of dataset with unique ID 10
-  local b = datasetGetFinal(11)
-  return (a + b) / 2              -- average of two channels
-end
-```
-
-Use computed datasets for derived metrics (averages, ratios, sums, percentage-of-total) that should show up on the dashboard and be exported alongside the raw channels, but that aren't present in the wire format.
-
-**Auto-detection.** You don't have to tick the checkbox yourself: on project load, any dataset whose transform code never references the free identifier `value` (as opposed to `something.value` or `obj:value`) is flagged computed automatically, and its Frame Index field greys out. Write a transform that reads `value` at least once if you want the dataset to stay driven by the incoming frame.
-
-In Lua, use `local function` for helpers so they share the isolation:
+In Lua, write helpers as `local function`:
 
 ```lua
 local function clamp(x, lo, hi)
@@ -270,17 +335,33 @@ function transform(value)
 end
 ```
 
-A plain `function foo() end` at chunk top level in Lua defines a global, but that global stays in this dataset's private environment, so it won't collide with other datasets. Prefixing helpers with `local function` is still recommended for clarity.
+A plain `function foo() end` at the top level also stays private to the dataset in Lua; `local function` is just clearer.
 
 ### When state resets
 
-Persistent state (both top-level Lua/JS upvalues *and* Computed table variables) is cleared when:
+Persistent state (top-level Lua and JavaScript variables and computed table variables) is cleared when:
 
 - The device is disconnected (transform engines are destroyed).
 - The user clicks **Apply** in the transform editor (engines are recompiled with fresh state).
 - The project is reloaded or saved with changes.
 
-So filters and accumulators start from scratch on each new connection session, which is usually what you want. Within a connection session, Computed variables and transform upvalues hold their values indefinitely; they aren't wiped between frames.
+Filters and accumulators start from scratch on each connection; nothing wipes them between frames within one connection.
+
+## Computed datasets
+
+In the Project Editor, if a Lua or JavaScript transform never reads `value`, Serial Studio marks its dataset **computed** when the project loads, and the Frame Index field greys out. The check looks for the free identifier `value`, not `something.value` or `obj:value`. A transform that ignores `value` but expects a frame-driven column loses its Frame Index this way; read `value` at least once to keep the dataset driven by the incoming frame.
+
+A computed dataset has no Frame Index, so nothing in the incoming frame feeds it. You can also tick the computed checkbox yourself in the Project Editor. The transform computes the value entirely, usually by reading other datasets or table variables, and the `value` argument is always `0`.
+
+```lua
+function transform(value)
+  local a = datasetGetFinal(10)   -- final value of the dataset with ID 10
+  local b = datasetGetFinal(11)
+  return (a + b) / 2              -- average of two channels
+end
+```
+
+Use computed datasets for derived metrics (averages, ratios, sums, percentage-of-total) that should appear on the dashboard and in exports but are not in the wire format. A computed dataset still runs every frame in tree order, so place it after the datasets it reads.
 
 ## Shared library and parameters
 
@@ -320,16 +401,16 @@ With `transformParams` set to `{"scale": 0.1, "offset": -40, "r0": 100}` on one 
 
 ## Table API
 
-Lua and JavaScript transforms have four built-in functions for reading and writing the project's Variables tables. An Expression transform reads variables with `table(name, variable)` instead, and cannot write. Tables are covered in full in [Variables](Variables.md). This section documents the API surface from the transform's point of view.
+Lua and JavaScript dataset transforms (Pro) have four built-in functions for reading and writing the project's Variables tables. An Expression transform reads variables with `table(name, variable)` instead, and cannot write. Tables are covered in full in [Variables](Variables.md). This section documents the API surface from the transform's point of view.
 
 | Function                       | Returns                        | Purpose |
 |--------------------------------|--------------------------------|---------|
 | `tableGet(table, reg)`         | number, string, or nil/undefined | Read a user-defined variable |
 | `tableSet(table, reg, value)`  | nothing                        | Write a **computed** variable (constants are read-only) |
-| `datasetGetRaw(uniqueId \| alias)`   | number, string, or nil/undefined | Raw (pre-transform) value of any dataset in the current frame |
-| `datasetGetFinal(uniqueId \| alias)` | number, string, or nil/undefined | Final (post-transform) value of any dataset already processed in the current frame |
+| `datasetGetRaw(id_or_alias)`   | number, string, or nil/undefined | Raw (pre-transform) value of any dataset in the current frame |
+| `datasetGetFinal(id_or_alias)` | number, string, or nil/undefined | Final (post-transform) value of any dataset already processed in the current frame |
 
-The API is identical in Lua and JavaScript. `table` and `reg` are strings. The dataset lookup takes either the integer `uniqueId` shown next to each dataset in the Project Editor, or the dataset's alias string (the **Script Alias** field). A number argument is always a uniqueId and a string is always an alias, so `datasetGetRaw(128)` and `datasetGetRaw("128")` are different lookups. An unknown alias returns `nil`/`undefined` with a one-time console warning, the same as an unknown uniqueId.
+The API is identical in Lua and JavaScript. `table` and `reg` are strings. The dataset lookup takes either the integer dataset ID (`uniqueId` in the API) shown next to each dataset in the Project Editor, or the dataset's alias string (the **Script Alias** field). A number argument is always a dataset ID and a string is always an alias, so `datasetGetRaw(128)` and `datasetGetRaw("128")` are different lookups. An unknown alias returns `nil`/`undefined` with a one-time console warning, the same as an unknown dataset ID.
 
 For a transform that touches the same variables on every value, resolving a name once to a **handle** and using `tableGetH` / `tableSetH` avoids the per-call name lookup. See [Fast table access with handles](SerialStudio-SDK.md#handles-the-fast-path-for-table-heavy-parsers).
 
@@ -375,22 +456,26 @@ Transforms are applied in order: groups in frame order, datasets in group order.
 
 - `datasetGetRaw(uid)` returns the current frame's raw value only for the current dataset and the ones already processed before it. Later datasets still hold the previous frame's raw value, because raw and final values are written incrementally per dataset, not in a pre-pass.
 - `datasetGetFinal(uid)` only works for datasets that have already been transformed (earlier datasets in the same group, or any dataset in an earlier group).
-- Computed variables hold their last written value, so a value written in one frame is still visible in the next, handy for integrators, derivatives, and latched flags. If you specifically want a variable to start each frame fresh, write the reset value yourself at the top of an early transform.
+- Computed variables hold their last written value, so a value written in one frame is still visible in the next, which suits integrators, derivatives, and latched flags. To start a variable fresh each frame, write the reset value yourself at the top of an early transform.
 
 If you need dataset B to consume dataset A's final value, make sure A comes before B in the Project Editor tree.
 
 ## Change-driven transforms (opt-in)
 
-By default every dataset's transform runs on every frame. For a large table-driven project, where the frame parser writes table variables and many computed datasets each read one variable, that means a frame for one device re-runs the transforms of *every* dataset, even the ones whose data did not change.
+The **Change-Driven Transforms** option is a project setting for dataset transforms (Pro). By default every dataset's transform runs on every frame. For a large table-driven project, where the frame parser writes table variables and many computed datasets each read one variable, that means a frame for one device re-runs the transforms of *every* dataset, even the ones whose data did not change.
 
-The **Change-Driven Transforms** toggle turns on a faster mode: a computed dataset's transform runs only when one of the variables (or datasets) it reads has changed since it last ran; otherwise it keeps its previous output for that frame. Serial Studio discovers what each transform reads automatically, so you change nothing in your scripts. The dashboard shows the same values either way; the option just skips recomputing values that did not change.
+The toggle turns on a faster mode for computed datasets only; non-computed datasets still run every frame. A computed dataset's transform runs only when one of the variables (or datasets) it reads has changed since it last ran; otherwise it keeps its previous output for that frame. Serial Studio detects reads of table variables and datasets automatically, so you change nothing in your scripts. The dashboard shows the same values either way; the option skips recomputing values that did not change.
 
-Find it in the Project Editor: select the project root, click the **Settings** button (wrench icon) next to the Project Title, and toggle **Change-Driven Transforms** in the popup, alongside Time Range and Point Count.
+To turn it on in the Project Editor:
+
+1. Select the project root.
+2. Click the **Settings** button (wrench icon) next to the Project Title.
+3. Toggle **Change-Driven Transforms** in the popup, alongside Time Range and Point Count.
 
 It is **off by default** and saved per project. Turn it on for heavy table-driven dashboards that are dropping frames. Two things to know:
 
-- A per-sample filter (an EMA, a deadband) then steps once per *real* new sample of its input rather than once per global frame, which is what you usually want.
-- If a computed dataset's output depends on something Serial Studio cannot see as an input — wall-clock time read directly inside the transform (`Date.now()`, `os.time()`) rather than a value passed through a table or `frameInfo` — leave this off for that project, or keep such datasets non-computed, since the transform may not re-run on time alone.
+- A per-sample filter (an EMA, a deadband) then steps once per *real* new sample of its input rather than once per global frame.
+- Serial Studio cannot detect clock reads. A computed dataset that reads the clock (`Date.now()`, `os.time()`) re-runs only when one of its inputs changes; leave the option off for that project, or keep such datasets non-computed.
 
 ## Frame metadata: the second `frameInfo` argument
 
@@ -445,9 +530,11 @@ function transform(value, info) {
 
 ## Writing back to the device: `deviceWrite()`
 
-Transforms can send bytes back to the connected device with `deviceWrite(data, sourceId?)`. The intended use is **closed-loop control**: read a sensor value, compute a setpoint or correction, and push it back to the device in one step.
+Lua and JavaScript dataset transforms (Pro) can send bytes back to the connected device with `deviceWrite(data, sourceId?)`. `deviceWrite` is for **closed-loop control**: read a sensor value, compute a setpoint or correction, and push it back to the device in one step.
 
-### Signature
+Lua and JavaScript only; Expression transforms cannot call `deviceWrite`.
+
+### deviceWrite signature
 
 ```text
 deviceWrite(data, sourceId?)
@@ -480,11 +567,11 @@ The transform returns the raw temperature unchanged (so the dashboard still show
 ### JavaScript example: alarm latch
 
 ```javascript
-let triggered = false;
+var triggered = false;
 
 function transform(value) {
   if (!triggered && value > 100) {
-    const r = deviceWrite("ALARM=1\n");
+    var r = deviceWrite("ALARM=1\n");
     if (r.ok) triggered = true;
     else console.warn("alarm write failed:", r.error);
   }
@@ -492,7 +579,7 @@ function transform(value) {
 }
 ```
 
-The `triggered` upvalue keeps `deviceWrite` from firing on every subsequent frame after the alarm condition latches.
+The `triggered` variable stops `deviceWrite` from firing again on later frames once the alarm has latched.
 
 ### Targeting another source
 
@@ -507,7 +594,7 @@ function transform(value)
 end
 ```
 
-### Failure modes
+### deviceWrite failure modes
 
 `deviceWrite` never throws. Possible `error` values:
 
@@ -516,15 +603,15 @@ end
 - `"deviceWrite: data must be a string"` (Lua) / `"... string or byte array"` (JS).
 - `"deviceWrite: sourceId must be a number"`.
 
-### When NOT to use it
+### When not to use deviceWrite
 
 - For a button or slider the user clicks, use an **Output Widget**. Transforms run on every frame; an Output Widget runs when the user acts.
-- Don't `deviceWrite` from a computed dataset unless you understand its execution order. Computed datasets are processed in tree order like any other dataset (they are not automatically processed last), so a computed dataset only sees the *final* values of datasets that come before it. Place it after its inputs. It still fires every frame.
-- Don't write large payloads on every frame. The transform stage of the acquisition pipeline is shared with all datasets in the source; a noisy `deviceWrite` saturates the link.
+- A computed dataset can call `deviceWrite`, but it runs in tree order like any other dataset, not last, and fires every frame unless Change-Driven Transforms is on, in which case it runs only when an input changes. Put it after the datasets it reads.
+- Keep payloads short. `deviceWrite` runs inside the transform, and a transform that runs longer than 100 ms is stopped and its dataset keeps the raw value.
 
 ## Firing actions: `actionFire()`
 
-Transforms can also trigger any **Action** already defined in the project (see [Actions](Actions.md)). Reuse an existing action (with its prebuilt payload, encoding, and timer mode) instead of hardcoding bytes in a `deviceWrite`.
+Lua and JavaScript dataset transforms (Pro) can also trigger any **Action** already defined in the project (see [Actions](Actions.md)). Reuse an existing action (with its prebuilt payload, encoding, and timer mode) instead of hardcoding bytes in a `deviceWrite`.
 
 ```text
 actionFire(actionId)
@@ -565,28 +652,9 @@ end
 
 Full reference, including argument types and longer examples (GPS fix reset, mode-driven workspace switching, focus mode): see [Controlling the dashboard](Frame-Parser.md#controlling-the-dashboard-clearplots-and-friends) in the Frame Parser Scripting Reference.
 
-## Using the transform dialog
-
-1. Select a dataset in the Project Editor tree.
-2. Click the **Transform** button in the dataset toolbar.
-3. A dialog opens (titled "Dataset Value Transform", or "Transform — &lt;dataset title&gt;" once one is set) with:
-   - **Language selector.** Lua, JavaScript, or Expression. Defaults to the source's frame parser language, but each dataset can pick its own.
-   - **Template dropdown.** 34 ready-made transforms for common operations. Disabled for Expression.
-   - **Code editor.** Syntax-highlighted, with auto-completion.
-   - **Parameters table.** Named values the transform reads as `params.<name>`; see [Dataset parameters](#dataset-parameters).
-   - **Test area.** Enter a raw value, click Test, see the transformed output. The test loads the shared library and the parameter table first, so a transform that calls a library function tests like it runs.
-4. Write or pick a `transform(value)` function.
-5. Click **Apply** to save the transform to the dataset.
-
-When you open the editor on a dataset with no transform yet, it's pre-filled with a multiline comment explaining how `transform(value)` works and how top-level `local`/`var` state is captured. The placeholder isn't a real transform. If you click Apply without defining a `transform()` function, the placeholder is discarded and the dataset keeps showing raw values. Clearing the code entirely behaves the same way: nothing is saved, and the dialog closes. Writing non-empty text or comments that never define `transform()` is different: Apply refuses, showing "The value transform must define a transform(value) function." and leaving the dialog open until you either define `transform()` or click Clear.
-
-### Switching languages
-
-When you switch the language dropdown, the editor loads the equivalent template in the new language automatically (if the current code matches a known template). Custom code is left unchanged. Only the syntax highlighter switches.
-
 ## Built-in templates
 
-The Transform Editor includes 34 ready-to-use templates. Pick one from the Template dropdown and it loads into the editor ready to tune.
+The Transform Editor includes 34 ready-to-use templates for Lua and JavaScript. Pick one from the Template dropdown and it loads into the editor ready to tune.
 
 ### Calibration and conversion
 
@@ -595,7 +663,7 @@ The Transform Editor includes 34 ready-to-use templates. Pick one from the Templ
 | Linear Calibration      | `y = slope × value + offset`. Sensor calibration. |
 | Polynomial (2nd order)  | `y = a×x² + b×x + c`. Non-linear response curves. |
 | Map Range               | Rescale from `[inMin, inMax]` to `[outMin, outMax]`. |
-| ADC to Voltage          | 10-bit ADC count to voltage (3.3 V reference). |
+| ADC to Voltage          | `value * v_ref / resolution` with `v_ref = 3.3` and `resolution = 1024`, both constants in the code. Edit them for your ADC; a 10-bit full scale is 1023 counts. |
 | Calibration from a Variables table | Read slope/offset from a table variable and apply it. |
 
 ### Smoothing filters
@@ -662,98 +730,14 @@ The Transform Editor includes 34 ready-to-use templates. Pick one from the Templ
 |-----------------------------|-------------|
 | Steinhart-Hart Thermistor   | NTC resistance to temperature (°C). |
 
-## How transforms fit into the data pipeline
-
-Serial Studio processes data in a clear pipeline. Knowing where transforms sit helps you decide what belongs in `parse()` vs `transform()`.
-
-| Stage                 | Function          | Scope        | Purpose |
-|-----------------------|-------------------|--------------|---------|
-| **Frame parser**      | `parse(frame)`    | Per-source   | Decode raw bytes into an array of values |
-| **Dataset transform** | `transform(value)`| Per-dataset  | Convert raw values to engineering units |
-| **Dashboard**         | (n/a)             | Per-widget   | Display the final values |
-
-**Rule of thumb:**
-
-- The frame parser handles protocol decoding: byte extraction, bit manipulation, CRC validation, multi-message state machines. It deals with the wire format.
-- The dataset transform handles value conditioning: calibration, unit conversion, filtering, derived calculations. It deals with physical meaning.
-
-That separation keeps parsers focused on protocol logic and transforms focused on sensor characteristics. You can reuse the same parser across different projects with different calibrations by changing only the per-dataset transforms.
-
-## Practical examples
-
-### Example 1: linear calibration
-
-A pressure sensor outputs raw ADC counts (0 to 4095). The datasheet says 0 = 0 PSI, 4095 = 100 PSI:
-
-```lua
-function transform(value)
-  return value * 100 / 4095
-end
-```
-
-### Example 2: noisy temperature sensor
-
-An RTD sensor fluctuates ±0.5°C around the true value. Smooth it with EMA:
-
-```lua
-local alpha = 0.15
-local ema
-
-function transform(value)
-  if ema == nil then
-    ema = value
-  end
-
-  ema = alpha * value + (1 - alpha) * ema
-  return ema
-end
-```
-
-Both `alpha` and `ema` are declared `local` at the top of the file, so Lua captures them as upvalues of the `transform` closure. State persists between frames and is private to this dataset. Another dataset on the same source can use the same EMA template with its own `local ema` without interference.
-
-### Example 3: compass heading normalization
-
-A magnetometer reports heading in radians. Convert to degrees and clamp to 0 to 360:
-
-```lua
-function transform(value)
-  local degrees = value * 180 / math.pi
-  return degrees % 360
-end
-```
-
-### Example 4: battery voltage with dead zone
-
-A battery monitor fluctuates around 0 V when disconnected. Suppress noise below 0.5 V:
-
-```lua
-function transform(value)
-  if value < 0.5 then
-    return 0
-  end
-
-  return value
-end
-```
-
-### Example 5: speed in km/h from m/s
-
-```lua
-function transform(value)
-  return value * 3.6
-end
-```
-
 ## Rules and limitations
 
 1. The function has to be named `transform` (case-sensitive).
 2. It takes one required parameter (`value`), plus an optional second parameter (`info`) with frame metadata (`frameNumber`, `sourceId`, `timestampMs`).
 3. It has to return a number, or a string for text datasets (a returned string is kept as the dataset value).
-4. Returning `nil`, `NaN`, or `Infinity` falls back to the raw value, as does a script error (logged in both languages; only the non-error `nil`/`NaN`/`Infinity` fallback is silent).
-5. Each dataset picks its own transform language (Lua, JavaScript, or Expression); datasets on the same source can mix them. The source's frame parser language is only the default when none is picked. Rules 1 to 4 describe the `transform()` function and apply to Lua and JavaScript; an Expression dataset has no function and publishes the value of its single expression.
-6. Datasets on the same source share one underlying scripting engine, but each dataset's top-level state is isolated. In JavaScript, declare stateful variables with `var`: an implicit (undeclared) global is written to the shared engine and leaks across datasets. In Lua each dataset chunk has its own environment, so bare globals (and `function foo() end` at chunk top level) stay isolated per dataset; `local` is still recommended for clarity and consistency with the JavaScript rule.
-7. The engine is sandboxed: no file I/O, no network, no OS commands.
-8. Transforms run on every incoming frame, so keep them fast. Avoid unbounded loops or heavy computation. A per-call watchdog kills a transform after 100 ms (Lua: a deadline armed before the call; JavaScript: an interrupt armed once per frame); a timed-out transform logs a warning and falls back to the raw value, same as rule 4.
+4. Each dataset picks its own transform language (Lua, JavaScript, or Expression); datasets on the same source can mix them. The source's frame parser language is only the default when none is picked. Rules 1 to 3 describe the `transform()` function and apply to Lua and JavaScript; an Expression dataset has no function and publishes the value of its single expression.
+5. The engine is sandboxed: no file I/O, no network, no OS commands.
+6. Transforms run on every incoming frame, so keep them fast. Avoid unbounded loops or heavy computation. A per-call watchdog kills a transform after 100 ms (Lua: a deadline armed before the call; JavaScript: an interrupt armed once per frame); a timed-out transform logs a warning and falls back to the raw value. Expression transforms are limited to 512 nodes instead (see [Expression limits](#expression-limits)).
 
 ## See also
 

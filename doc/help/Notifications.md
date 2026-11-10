@@ -1,165 +1,87 @@
 # Notifications (Pro)
 
-Dashboard-level notification system for publishing **Info**, **Warning**, and **Critical** events from frame parsers, dataset transforms, output widget scripts, the Control Loop, C++ code, and the MCP API. Every event shows up in a scrollable log on the dashboard and can optionally surface as a native OS desktop notification.
+Your board prints a battery voltage. When it drops under 11 V you want a line on the dashboard saying so. A dataset is one value per frame, such as the battery voltage column. Its transform runs once per frame with that value. To place the code, select the dataset in the Project Editor, click **Transform** in the dataset toolbar and pick Lua or JavaScript (see [Dataset Value Transforms](Dataset-Transforms.md)). Paste one of these two versions, not both.
 
-Notifications are a **Pro feature**. The `notify*` functions are exposed to every scripting engine Serial Studio runs; without a valid Pro license, calls from frame parsers, dataset transforms, and output widgets raise a clear `notify() requires a Pro license` error, while Control Loop calls return an error result instead. Level constants (`Info`, `Warning`, `Critical`) stay available at every tier so Pro-authored projects parse-load cleanly under GPL builds.
-
-## Overview
-
-Notifications are a single shared bus. Any caller can post an event; the dashboard's Notification Log widget subscribes to the bus and renders events in time order, oldest at the top. Events carry four fields:
-
-| Field      | Type   | Purpose |
-|------------|--------|---------|
-| `level`    | int    | `0` = Info, `1` = Warning, `2` = Critical. This is a separate scale from a [dataset's alarm band](Widget-Reference.md#alarm-bands) `severity` (`0` = Info, `1` = OK, `2` = Warning, `3` = Critical): a band posts a notification only on entering `Warning` or `Critical` severity, at the matching notification level. The numbers look alike but come from different scales. |
-| `channel`  | string | Free-form label (for example `"Power Events"`, `"Engine"`). Spaces allowed. |
-| `title`    | string | Short event headline shown in bold in the log. |
-| `subtitle` | string | Optional detail line shown under the title with word wrap. |
-
-Channels are not declared up front. They come into existence as soon as something posts to them. The Notification Log has a **Filter by channel** box that live-filters rows by a case-sensitive substring match on the channel name.
-
-```mermaid
-flowchart LR
-    A["Script or C++<br/>(parser, transform, widget)"] --> B["notifyInfo/Warning/Critical"]
-    B --> C["NotificationCenter<br/>(ring buffer, dedup, tray)"]
-    C --> D["Notification Log widget"]
-    C --> E["OS tray toast (opt-in)"]
-```
-
-> **Legend:** 1024-event ring buffer &bull; 100 ms dedup window per `(level, channel, title, subtitle)` tuple &bull; Main-thread only &bull; Cleared on disconnect
-
-## Where notifications come from
-
-### Dataset transforms
-
-Every dataset transform (Lua or JavaScript) has the `notify*` functions injected into its engine at compile time. They behave identically to any other transform-scope function.
-
-### Frame parsers
-
-Frame parser scripts (`parse(frame)`) have the same five functions available. Use them to flag protocol errors, malformed frames, out-of-range fields, or heartbeat timeouts directly from the parser.
-
-### Output widget scripts
-
-The `transmit(value)` function in output widgets can post notifications too. Useful for logging commands sent to the device, flagging clamped inputs, or warning when a setpoint exceeds a safe range.
-
-### Control Loop
-
-The Control Loop's `setup()` and `loop()` functions have the same five functions available, for example to raise a communication-loss alarm from a staleness watchdog. See [Control Loop (setup / loop)](Control-Loop.md) for a worked example.
-
-### C++ and the MCP API
-
-Notifications can also be posted from the command-line MCP API (`notifications.post` with a `level` parameter, plus `notifications.resolve`, `notifications.list`, `notifications.listChannels`, etc.). That makes it easy to tie Serial Studio into larger test harnesses: your Python test driver posts an event, it shows up on the operator's dashboard immediately.
-
-## The function family
-
-Five functions are available everywhere:
-
-| Function                                               | Level         | Purpose                                |
-|--------------------------------------------------------|---------------|----------------------------------------|
-| `notify(level, channel, title, subtitle)`              | caller chosen | Generic form. `level` is `0`, `1`, or `2`, or use the `Info`/`Warning`/`Critical` constants. |
-| `notifyInfo(channel, title, subtitle)`                 | `Info`        | Informational event. Does not increment the unread counter. |
-| `notifyWarning(channel, title, subtitle)`              | `Warning`     | Something worth attention but not critical. Increments the unread badge. |
-| `notifyCritical(channel, title, subtitle)`             | `Critical`    | Alarm-class event. Increments the unread badge. |
-| `notifyClear(channel, title, subtitle)`                | `Info`        | Emits a companion `Resolved: <title>` Info event. The original remains in history, so the resolution is visible in the timeline. |
-
-### Argument overloads
-
-Every `notifyInfo` / `notifyWarning` / `notifyCritical` / `notifyClear` accepts one, two, or three arguments. When you don't pass a channel, the event is posted to the default `"Dashboard"` channel:
-
-| Arguments                              | Behaviour                                                                  |
-|----------------------------------------|----------------------------------------------------------------------------|
-| `notifyInfo("Ready")`                  | Channel = `"Dashboard"`, title = `"Ready"`, subtitle empty.                |
-| `notifyInfo("Ready", "System armed")`  | Channel = `"Dashboard"`, title = `"Ready"`, subtitle = `"System armed"`.   |
-| `notifyInfo("Engine", "Ready", "")`    | Channel = `"Engine"`, title = `"Ready"`, subtitle = `""`.                  |
-
-The generic `notify()` form always starts with the level, then follows the same 1/2/3-argument overload for the remaining fields.
-
-Level constants are available as globals:
-
-```
-Info     = 0
-Warning  = 1
-Critical = 2
-```
-
-So `notify(Critical, "Engine", "EGT exceeded", "1052 C")` is equivalent to `notifyCritical("Engine", "EGT exceeded", "1052 C")`.
-
-### Deduplication
-
-The `NotificationCenter` drops events whose `(level, channel, title, subtitle)` tuple matches the previous event within 100 ms. That keeps transforms running at 10+ kHz from flooding the log with identical rows. A rising-value alarm whose subtitle includes the measured value (for example `"1049 C"`, then `"1050 C"`) is never collapsed, because the subtitle is part of the dedup key.
-
-## Examples
-
-The examples below use dataset transforms, but the function signatures are identical in frame parsers and output widgets.
-
-### Example 1: simple informational event
-
-A magnetometer reports headings in radians. Log the first converted value so you can confirm the transform loaded:
-
-**Lua:**
-
-```lua
-local announced = false
-
-function transform(value)
-  if not announced then
-    notifyInfo("Transform loaded")
-    announced = true
-  end
-
-  return value * 180 / math.pi
-end
-```
-
-**JavaScript:**
-
-```javascript
-var announced = false;
-
-function transform(value) {
-  if (!announced) {
-    notifyInfo("Transform loaded");
-    announced = true;
-  }
-
-  return value * 180 / Math.PI;
-}
-```
-
-### Example 2: threshold warning with subtitle
-
-A battery monitor drops below 11 V. Warn on the "Power" channel with the measured value in the subtitle:
-
-**Lua:**
+Lua version:
 
 ```lua
 function transform(value)
   if value < 11.0 then
-    notifyWarning("Power", "Battery low",
-                  string.format("%.2f V", value))
+    notifyWarning("Power", "Battery low", string.format("%.2f V", value))
   end
 
   return value
 end
 ```
 
-**JavaScript:**
+JavaScript version:
 
 ```javascript
 function transform(value) {
   if (value < 11.0) {
-    notifyWarning("Power", "Battery low",
-                  value.toFixed(2) + " V");
+    notifyWarning("Power", "Battery low", value.toFixed(2) + " V");
   }
 
   return value;
 }
 ```
 
-### Example 3: critical alarm with latch and resolve
+Each call adds a row to the Notification Log on the dashboard and, if you opt in, raises an OS desktop notification. Open the log from **Start menu > Tools > Notifications** on the dashboard (see [The Notification Log widget](#the-notification-log-widget)).
 
-Don't re-trigger a critical alarm on every frame. Latch the state, post once on entry, then post a `Resolved` Info event when the condition clears:
+Notifications are a Pro feature. The first time you use a Pro feature, Serial Studio offers a 14-day trial with a Yes/No prompt (it needs an internet connection); after the trial expires, the prompt offers activation or purchase instead. See [Pro vs Free Features](Pro-vs-Free.md). Without an active Pro license, a JavaScript transform throws an error and a Lua one silently does nothing; details in [Rules and limits](#rules-and-limits).
 
-**Lua:**
+## Overview
+
+Any caller posts an event, and the Notification Log widget lists events in time order, oldest at the top. An event has four fields:
+
+| Field      | Type   | Purpose |
+|------------|--------|---------|
+| `level`    | int    | `0` = Info, `1` = Warning, `2` = Critical. |
+| `channel`  | string | Free-form label such as `"Power"` or `"Engine"`. Spaces allowed. |
+| `title`    | string | Short headline, shown in bold in the log. |
+| `subtitle` | string | Optional detail line under the title, word-wrapped. |
+
+[Alarm bands](Widget-Reference.md#alarm-bands) on a dataset post notifications automatically (channel `Alarms`); you do not call anything. A band-sourced row does not create a second annunciator point, because the band already drives it.
+
+Channels are not declared up front; they exist once something posts to them. Channel names are case-sensitive.
+
+## Where notifications come from
+
+| Place | Where you write it | Entry point |
+|-------|--------------------|-------------|
+| Dataset transform | Project Editor, dataset, **Transform** | `transform(value)` |
+| Frame parser | Project Editor, source, frame parser | `parse(frame)` |
+| Output widget | Output widget script | `transmit(value)` |
+| [Control Loop](Control-Loop.md) | Control Loop script | `setup()` and `loop()` |
+| API Server | An external program | `notifications.post` |
+
+The four script places in the table (transform, parser, output widget, Control Loop) all expose `notify`, `notifyInfo`, `notifyWarning`, `notifyCritical` and `notifyClear`, described in [The function family](#the-function-family). Use them in a parser to flag a malformed frame, in an output widget to log a clamped setpoint, or in the Control Loop to raise a communication-loss alarm.
+
+The API Server is off by default. Enable it in **Preferences** (port 7777), then send `notifications.post` with `level`, `channel`, `title` and `subtitle`. The other notification commands are `notifications.resolve`, `notifications.list`, `notifications.listChannels`, `notifications.getUnreadCount`, `notifications.clearChannel`, `notifications.clearAll` and `notifications.markRead`. See [API Reference](API-Reference.md).
+
+## The function family
+
+| Function                                  | Level         | Purpose |
+|-------------------------------------------|---------------|---------|
+| `notify(level, channel, title, subtitle)` | caller chosen | Generic form. `level` is `0`, `1` or `2`, or the `Info`/`Warning`/`Critical` constants. |
+| `notifyInfo(channel, title, subtitle)`    | `Info`        | Informational event. |
+| `notifyWarning(channel, title, subtitle)` | `Warning`     | Worth attention, not critical. |
+| `notifyCritical(channel, title, subtitle)`| `Critical`    | Alarm-class event. |
+| `notifyClear(channel, title, subtitle)`   | `Info`        | Posts an Info event titled `Resolved: <title>` (just `Resolved` if the title is empty). The original row stays in the log. It also returns the matching alarm point on the annunciator to normal (see [Aural Alerts](Aural-Alerts.md)). |
+
+### Argument overloads
+
+`notifyInfo`, `notifyWarning`, `notifyCritical` and `notifyClear` accept one, two or three arguments. With one argument it is the title; with two it is title and subtitle; the channel then defaults to `"Dashboard"`. With three, the first is the channel. `notifyInfo("Ready", "System armed")` posts to `"Dashboard"` with title `"Ready"` and subtitle `"System armed"`.
+
+The generic `notify()` starts with the level and then follows the same overloads for the remaining fields. The level constants are globals (`Info = 0`, `Warning = 1`, `Critical = 2`), so `notify(Critical, "Engine", "EGT exceeded", "1052 C")` equals `notifyCritical("Engine", "EGT exceeded", "1052 C")`.
+
+## Examples
+
+Paste these into the **Transform** field of a dataset (pick Lua or JavaScript in the Transform editor). The signatures are identical in frame parsers and output widgets. The battery-voltage example is in the page introduction.
+
+### Critical alarm with latch and resolve
+
+A transform runs on every frame. Without a latch, a value stuck above 900 would post a row on every frame. A 10 kHz transform would otherwise fill the log with the same row ten thousand times a second. Latch the state, post once on entry, then post a `Resolved` event when the condition clears:
 
 ```lua
 local latched = false
@@ -179,8 +101,6 @@ function transform(value)
 end
 ```
 
-**JavaScript:**
-
 ```javascript
 var latched = false;
 
@@ -199,47 +119,9 @@ function transform(value) {
 }
 ```
 
-### Example 4: generic notify() with a chosen level
+### One-argument shorthand from a frame parser
 
-Pick the level from a table or a computed expression:
-
-**Lua:**
-
-```lua
-local function levelFor(rpm)
-  if rpm > 9500 then return Critical end
-  if rpm > 8500 then return Warning end
-  return Info
-end
-
-function transform(value)
-  notify(levelFor(value), "RPM", "Engine speed",
-         string.format("%.0f rpm", value))
-  return value
-end
-```
-
-**JavaScript:**
-
-```javascript
-function levelFor(rpm) {
-  if (rpm > 9500) return Critical;
-  if (rpm > 8500) return Warning;
-  return Info;
-}
-
-function transform(value) {
-  notify(levelFor(value), "RPM", "Engine speed",
-         value.toFixed(0) + " rpm");
-  return value;
-}
-```
-
-### Example 5: single-argument shorthand from a frame parser
-
-A parser detects a bad checksum. Post a one-liner without specifying a channel; the event is posted to the default `"Dashboard"` channel:
-
-**Lua:**
+A parser drops frames with too few fields and posts a one-liner to the default `"Dashboard"` channel:
 
 ```lua
 function parse(frame)
@@ -248,9 +130,8 @@ function parse(frame)
     table.insert(parts, token)
   end
 
-  local crc = tonumber(parts[#parts])
-  if crc ~= computeCrc(parts) then
-    notifyWarning("Frame dropped: bad CRC")
+  if #parts < 3 then
+    notifyWarning("Frame dropped: too few fields")
     return {}
   end
 
@@ -258,14 +139,11 @@ function parse(frame)
 end
 ```
 
-**JavaScript:**
-
 ```javascript
 function parse(frame) {
   var parts = frame.split(",");
-  var crc = parseInt(parts[parts.length - 1], 10);
-  if (crc !== computeCrc(parts)) {
-    notifyWarning("Frame dropped: bad CRC");
+  if (parts.length < 3) {
+    notifyWarning("Frame dropped: too few fields");
     return [];
   }
 
@@ -273,9 +151,11 @@ function parse(frame) {
 }
 ```
 
-### Example 6: output widget logging a command
+A stream that stays malformed posts this row about ten times a second (the 100 ms dedup window collapses only identical rows within that span); latch it as in the EGT example if that matters.
 
-An output widget formats a setpoint command. Log the outgoing value so the operator can see what was sent:
+### Output widget logging a command
+
+An output widget is a dashboard control that sends a command to the device (see [Output Controls](Output-Controls.md)). This one formats a setpoint command and logs the outgoing value so the operator sees what was sent:
 
 ```javascript
 function transmit(value) {
@@ -287,63 +167,56 @@ function transmit(value) {
 
 ## The Notification Log widget
 
-The Notification Log is a Pro-only dashboard widget that renders events from the shared bus. Enable it from the Start Menu (**Notifications** toggle) or from the taskbar's bell icon while the dashboard is visible.
+The Notification Log is a Pro dashboard widget. Turn it on from **Start menu > Tools > Notifications** on the dashboard, or from the **Notifications** pinned shortcut on the taskbar (choose pinned shortcuts in **Preferences > Taskbar > Pinned Buttons**). The free build hides both.
 
-| Behaviour                   | Description |
-|-----------------------------|-------------|
-| Layout                      | One row per event, icon + title + channel pill + timestamp, optional subtitle on a wrapped second line. |
-| Auto-scroll                 | Follows the tail automatically when new events arrive, unless the user has scrolled up to inspect history. |
-| Alarm-colored title         | The event title renders in the alarm color for Warning and Critical events. |
-| Unread badge                | A count badge next to the filter box tracks unread Warning and Critical events, capped at "99+". |
-| Filter by channel           | Case-sensitive substring match on the channel name. Live; rows hide and re-show as you type. |
-| Clear all                   | Wipes the in-memory history. The ring buffer and the dedup window reset to empty. |
-| Empty state                 | When the log is empty, the widget shows a large icon and a "No notifications yet" heading. |
+| Element | Behaviour |
+|---------|-----------|
+| Rows | Icon, title, channel pill and timestamp, with the subtitle on a wrapped second line. Warning and Critical titles use the alarm color. The log follows new events unless you scrolled up. |
+| Unread badge | Counts unread Warning and Critical events, capped at `99+`. Info events do not count. |
+| **Filter by channel** | Case-sensitive substring match on the channel name, live as you type. |
+| **Clear all notifications** | Wipes the in-memory history and the dedup window. |
 
-The widget is global: only one exists per dashboard, and it isn't tied to any dataset group. Its position and size are saved with the project layout like any other dashboard widget.
+There is one log per dashboard. It is not tied to any dataset group, and its position and size are saved with the project layout. With no events, it shows "No notifications yet".
 
-### History is cleared between sessions
-
-The log is wiped automatically on every dashboard reset (disconnect, project reload, playback stop). This keeps the dashboard honest: events from the previous session don't bleed into the new one.
+The history is wiped on every dashboard reset: disconnect, project reload and playback stop. Events from the previous session do not bleed into the new one.
 
 ## OS desktop notifications
 
-For Warning and Critical events, Serial Studio can also raise a native desktop notification via the system tray. This is opt-in and off by default. Enable it under **Preferences → Notifications → System Notifications**.
+OS desktop notifications are a Pro feature. Open **Preferences**, select the **Notifications** tab (hidden in the free build) and turn on **System Notifications**. It is off by default.
 
-When enabled, Warning and Critical events fire a tray toast even when Serial Studio isn't the foreground window. The toast shows the channel and title on one line and the subtitle on a second line. `Info` events never produce OS notifications; they're logged in the widget only.
+With it on, Warning and Critical events raise a tray toast even when Serial Studio is not the foreground window. The toast shows the channel and title on one line and the subtitle on a second. Info events never produce a toast.
 
-Requires a system tray to be available. On macOS the tray is always present; on Linux, the result depends on the desktop environment (GNOME, KDE, Wayland compositors all behave slightly differently).
+It needs a system tray; the condition is that the platform reports one. Where it reports none, no toast appears and the log still records the event. Some Linux desktops, stock GNOME for one, hide tray icons without an extension.
 
 ## Routing Qt log messages
 
-Serial Studio already routes every `qDebug()`, `qWarning()`, `qCritical()`, and `qFatal()` call to the in-app Console widget. The NotificationCenter can additionally route Qt log messages:
+Serial Studio's own critical errors appear in the log on a `System` channel, with the title `Critical` and the message as the subtitle. To see its warnings there too, turn on **Route Warnings to Notifications** on the same **Notifications** tab (title `Warning`). This setting is on the Pro-only **Notifications** tab. It is off by default because Qt and QML emit warnings often during normal operation. With **System Notifications** also on, routed events raise tray toasts like any Warning or Critical.
 
-| Qt level               | Where it goes by default                             | Toggle |
-|------------------------|------------------------------------------------------|--------|
-| `qCriticalMsg` / `qFatalMsg` | Console **and** NotificationCenter (`System` channel) | Always on. |
-| `qWarningMsg`          | Console only                                         | Opt-in under **Preferences → Notifications → Route Warnings to Notifications**. |
-| `qInfoMsg` / `qDebugMsg` | Console only                                       | Not routed to notifications. |
+Events on the `System` and `Problems` channels never become alarm points on the annunciator, so a routed warning does not sound a siren.
 
-Warnings are off by default because Qt and QML emit them frequently during normal operation (setGeometry hints, deprecation notices, platform quirks). Routing them unfiltered would drown out real alarms. Critical messages are rare and always meaningful, so they route unconditionally.
+## Rules and limits
 
-## Rules and limitations
+| Rule | Value |
+|------|-------|
+| Ring buffer | The most recent 1024 events. Older ones drop as new ones arrive. |
+| Deduplication | An event is dropped if the same `(level, channel, title, subtitle)` was posted in the last 100 ms, even with other events in between. A rising value in the subtitle (`"1049 C"`, then `"1050 C"`) is never collapsed. |
+| Normalizing | Channel and title are trimmed. An event with both empty is ignored. Levels outside `0` to `2` clamp to Info or Critical. |
+| Threads | `notify*` works from any engine. Off the GUI thread the event is queued to it, and Control Loop scripts reach the same bus through the `notifications.post` and `notifications.resolve` commands. |
 
-1. Notifications are Pro-only at runtime. Under GPL, `notify*` calls from frame parser, dataset transform, and output widget engines raise a clear `"notify() requires a Pro license. See https://serial-studio.com/pricing"` error; Control Loop calls return an error result from the `notifications.post` command instead (see rule 8).
-2. Level constants (`Info`, `Warning`, `Critical`) are always defined so Pro-authored scripts parse-load cleanly on GPL builds. Only the call itself fails.
-3. The ring buffer holds the most recent 1024 events. Older events are dropped when new events arrive.
-4. De-duplication collapses identical `(level, channel, title, subtitle)` tuples posted within 100 ms. Include the live value in the subtitle if you want rising-value events to stay visible.
-5. `notifyInfo` does not increment the unread badge; only Warning and Critical do.
-6. Channel names are case-sensitive. `"Power"` and `"power"` are different channels.
-7. History is wiped on every dashboard reset (disconnect, project reload, playback open/close). Intentional: new sessions start with a clean log.
-8. Posting from a worker thread is not allowed directly. Dataset transform, frame parser, and output widget engines run on the main thread already. The Control Loop engine is the exception: it runs on its own worker thread, so its `notify*` calls are marshalled through the `notifications.post` / `notifications.resolve` API commands instead of posting to the bus directly. C++ callers on a worker thread must route via `QMetaObject::invokeMethod(&nc, Qt::QueuedConnection, ...)`.
-9. Projects that use `notify*` in transforms are flagged as commercial by `SerialStudio::commercialCfg`, so the Pro-required overlay appears on the dashboard when loaded under GPL.
+Without an active Pro license (a GPL build, or an official binary with no license or trial):
+
+| Engine | Result |
+|--------|--------|
+| JavaScript (parser, transform, output widget) | Checked when the script engine is created. The call throws `notify() requires a Pro license. See https://serial-studio.com/pricing`. |
+| Lua | Checked on every call. The call does nothing, and Serial Studio logs one warning per session in the Console: `Script notify*() ignored: requires an active Serial Studio Pro license or trial`. |
+| Control Loop and API Server | `notifications.post` and `notifications.resolve` are refused. |
+
+The level constants `Info`, `Warning` and `Critical` are defined at every tier, so a Pro project still loads. Opening a project that uses `notify*` in the free edition shows the Pro-required overlay on the dashboard.
 
 ## See also
 
-- [Aural Alerts](Aural-Alerts.md): Warning and Critical notifications become alarm points that sound and flash the master annunciator; `notifyClear()` returns them to normal.
-- [Dataset Value Transforms](Dataset-Transforms.md): where `notify*` is most commonly used.
-- [Frame Parser Scripting](Frame-Parser.md): the `parse(frame)` function has the same notification API.
-- [Output Controls](Output-Controls.md): `transmit(value)` can also post notifications.
-- [Control Loop (setup / loop)](Control-Loop.md): `setup()` and `loop()` can also post notifications, marshalled from the worker thread.
-- [API Reference](API-Reference.md): `notifications.post`, `notifications.list`, and related commands for external drivers.
+- [Dataset Value Transforms](Dataset-Transforms.md): where `notify*` is most often used.
+- [Frame Parser Scripting](Frame-Parser.md): `parse(frame)` has the same notification API.
+- [Aural Alerts](Aural-Alerts.md): Warning and Critical notifications become alarm points that sound and flash the master annunciator, and `notifyClear()` returns them to normal.
+- [API Reference](API-Reference.md): `notifications.post`, `notifications.list` and the rest, for external drivers.
 - [MQTT Publisher](MQTT-Publisher.md): the **Publish Notifications** option republishes every event on this bus to MQTT.
-- [Pro vs Free Features](Pro-vs-Free.md): what's gated behind a Pro license.

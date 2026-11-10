@@ -1,35 +1,47 @@
 # Plots
 
-Serial Studio's line plots turn a stream of numbers into a moving chart. This page covers the two plot widgets, how their axes work, the toolbar controls they share, and the oscilloscope-style Sweep / Trigger mode.
+Your board prints `23.5`, then `23.6`, once a second. A **Plot** turns that stream into a line that scrolls across the screen, newest reading at the right edge.
 
-## The two plot widgets
+```cpp
+Serial.println(temp);   // sends 23.5 and a newline: one frame, one value, one moving line
+```
 
-| Widget       | Source  | Curves | Enable with                           |
-|--------------|---------|--------|---------------------------------------|
-| **Plot**     | Dataset | One    | `graph: true` on a dataset            |
-| **Multi-Plot**| Group   | Many   | Set the group's widget to Multi-Plot (plots every dataset in the group) |
+If you have no project yet, follow [Getting Started](Getting-Started.md) first. Then, in the [Project Editor](Project-Editor.md), select the dataset that holds the value and tick its **Plot** widget (`graph: true` on the dataset in the project file).
 
-A **Plot** draws a single signal. A **Multi-Plot** overlays several signals from the same group on one chart with a shared axis and a color legend, which is the right choice when you want to compare channels (the three axes of an accelerometer, several thermocouples, a setpoint against a measured value).
+## Plot and Multi-Plot
 
-Both are configured in the [Project Editor](Project-Editor.md) and behave the same way at runtime. Everything below applies to both unless noted.
+A **Plot** shows one dataset (enable it with `graph: true`). A **Multi-Plot** overlays several signals from one group on a shared axis with a color legend, which suits comparing channels such as the three axes of an accelerometer (set the group's widget to Multi-Plot). Both are configured in the Project Editor.
+
+| You want to                           | Use                                                            |
+|---------------------------------------|----------------------------------------------------------------|
+| Watch one signal over time            | Plot                                                           |
+| Compare several signals on one chart  | Multi-Plot                                                     |
+| Plot one value against another        | Plot with a custom X axis                                      |
+| Hold a repeating waveform still       | Plot or Multi-Plot with Sweep (Pro)                            |
+| See a frequency spectrum              | FFT Plot (see [Widget Reference](Widget-Reference.md#fft-plot)) |
 
 ## How the X axis works
 
-A plot's X axis is one of three kinds, chosen automatically from the dataset configuration:
+Time is the default. Change it with the **X-Axis Source** field in the Project Editor (`xAxis` in the project file): on a dataset it offers Time, Samples, or another dataset; on a Multi-Plot group it offers Time or Samples.
 
-| X axis      | When                                        | Reads as                          |
-|-------------|---------------------------------------------|-----------------------------------|
-| **Time**    | Default for a plotted dataset               | Seconds, newest sample at the right |
-| **Samples** | X axis set to Samples                        | Sample index, 0 to N (newest at the right) |
-| **Custom**  | `xAxisId` points at another dataset (Plot only) | That dataset's value (XY / scatter) |
+| X axis      | Set by X-Axis Source                              | Reads as                                  |
+|-------------|---------------------------------------------------|-------------------------------------------|
+| **Time**    | Time (default)                                    | Seconds, newest sample at the right       |
+| **Samples** | Samples                                           | Sample index, 0 to N, newest at the right |
+| **Custom**  | Another dataset (Plot only)                       | That dataset's value (XY / scatter)       |
 
-A **time** plot scrolls: it shows the most recent window of data, spanning `[-T, 0]` where `T` is the dashboard time range. The newest reading is always pinned at the right edge.
+A **time** plot scrolls: it shows the most recent window of data, as wide as the dashboard time range, with the newest reading pinned at the right edge. A **custom X axis** plots one dataset against another instead of against time, which gives XY traces such as a phase plot or an I-V curve.
 
-Two settings control how much history a plot keeps, and both sit next to each other in two places: the **Time Range** and **Point Count** fields in the Project Editor's project toolbar, and the same two fields on the **Plotting** tab of the **Preferences** dialog. **Time Range** is the width `T` of the scrolling time window, in seconds (it sets how far back a time plot looks). **Point Count** is the number of samples retained per signal, which sizes the history buffer and is the window width for a plot drawn against sample number rather than time. The Project Editor values are saved into the project file (as `plotTimeRange` and `pointCount`); the Preferences dialog applies them to the live dashboard.
+Two settings control how much history a plot keeps:
 
-A **custom X axis** plots one dataset against another instead of against time, producing XY traces (a phase plot, an I-V curve, a Lissajous figure). This mode is available only on a **Plot**; a **Multi-Plot** group's shared X axis is limited to Time or Samples.
+| Setting         | Meaning                                         | Range and default                                                            | Where                                                                                 |
+|-----------------|-------------------------------------------------|------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| **Time Range**  | Width of the scrolling time window              | Presets: 1, 2, 5, 10, 20, 50, 100, 200, 500 ms; 1, 2, 5, 10, 20, 30, 60, 120, 300 s. Typed values snap to the nearest. Default 10 s.  | Project Editor toolbar (saved as `plotTimeRange`) and Preferences, Plotting tab       |
+| **Point Count** | Samples kept per signal (window width on a Samples plot) | 10 to 100000 in steps of 10. Default 1000.                           | Project Editor toolbar (saved as `pointCount`) and Preferences, Plotting tab          |
 
-The Y axis auto-scales to fit the data by default. Pin it to a fixed range with `pltMin` / `pltMax` in the Project Editor, or from the **Axis Range** dialog on the toolbar.
+The Project Editor values are saved into the project file; the Preferences dialog applies them to the live dashboard.
+
+The Y axis auto-scales to the data by default. Pin it with `plotMin` / `plotMax` in the project file (the Y-axis minimum and maximum fields in the Project Editor), or from the **Axis Range** dialog on the toolbar. **Logarithmic Y Axis** scales it in decades, and values at or below zero are drawn at the bottom. **Logarithmic X Axis** (Project Editor, dataset form) is available when X-Axis Source is Samples or another dataset, not Time.
 
 ## Toolbar controls
 
@@ -37,27 +49,30 @@ When a plot is large enough to show its toolbar, these controls appear left to r
 
 | Control | Icon | What it does |
 |---------|------|--------------|
-| **Interpolation** | <img src="icon:commands/interpolate-on" alt="interpolate on" width="16" height="16"> <img src="icon:commands/interpolate-off" alt="interpolate off" width="16" height="16"> | Cycles line style: none (raw points), linear, ZOH (stepped), or stem. |
-| **Area** | <img src="icon:commands/area" alt="area" width="16" height="16"> | Fills the region under the curve. Available with line interpolation. Plot only. |
+| **Interpolation** | <img src="icon:commands/interpolate-on" alt="interpolate on" width="16" height="16"> <img src="icon:commands/interpolate-off" alt="interpolate off" width="16" height="16"> | Cycles line style: none (raw points), linear, ZOH (stepped: holds the last value until the next sample), or stem (a vertical line from zero to each point). |
+| **Area** | <img src="icon:commands/area" alt="area" width="16" height="16"> | Plot only. Fills the region under the curve. Enabled for linear and ZOH; disabled for none and stem. |
 | **X / Y label** | <img src="icon:commands/x" alt="x" width="16" height="16"> <img src="icon:commands/y" alt="y" width="16" height="16"> | Shows or hides each axis label. |
 | **Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Shows a tracking crosshair that follows the cursor. |
-| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the device are unaffected. |
-| **Sweep / Trigger Mode** | <img src="icon:commands/sweep" alt="sweep" width="16" height="16"> | Turns Sweep / Trigger mode on or off (Pro). |
+| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Freezes this plot. Readings that arrive while paused are not drawn after Resume. Other widgets keep updating. |
+| **Sweep / Trigger Mode** | <img src="icon:commands/sweep" alt="sweep" width="16" height="16"> | Turns [Sweep / Trigger mode](#sweep--trigger-mode-pro) on or off. A repeating waveform holds still, like on an oscilloscope (Pro, time-axis plots only). |
 | **Trigger Settings** | <img src="icon:commands/trigger" alt="trigger" width="16" height="16"> | Opens the trigger settings (Pro). Enabled only while Sweep is on. |
+| **Past sweeps** | A stepper with `‹` and `›` arrows | Plot only. Shown next to Trigger Settings while Sweep is on. Keeps 0, 1, 2, 4, 8, 16, 32 or 64 earlier sweeps drawn behind the live trace, dimmed by age. |
 | **Reset View** | <img src="icon:commands/return" alt="return" width="16" height="16"> | Returns pan and zoom to the default view. |
-| **Axis Range Settings** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Sets fixed minimum and maximum values for the axes. |
+| **Axis Range Settings** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Opens the Axis Range dialog to set fixed minimum and maximum values for the axes. The button shows the gear (Preferences) icon. |
 
 Drag inside the plot to pan and scroll to zoom; **Reset View** undoes both. These buttons and the toolbars of every other widget are catalogued in the [Toolbar & Button Reference](Toolbar-Reference.md#plot).
 
 ## Sweep / Trigger mode (Pro)
 
-A scrolling plot is good for watching a signal drift over time, but it is poor for reading the shape of a repeating waveform: each cycle slides past before you can study it. **Sweep / Trigger mode** solves this the way a benchtop oscilloscope does. It starts every sweep at the same point on the waveform, so the trace holds still and you can read it.
+A scrolling sine wave slides past too fast to read, like carriage numbers on a passing train. **Sweep / Trigger mode** works the way a benchtop oscilloscope does: every sweep starts at the same point on the waveform, so the trace holds still and you can read it.
 
-Turn it on with the **Sweep** button, then open the **Trigger Settings** dialog to set it up.
+Sweep / Trigger is Pro and works only on plots with a Time X axis; otherwise, or without a license, the Sweep and Trigger Settings buttons are hidden. The first Pro-feature use shows a Yes/No prompt offering a trial, which needs an internet connection to register. See [Pro vs Free](Pro-vs-Free.md).
+
+Turn it on with the **Sweep** button, then open **Trigger Settings**. For a first stable trace, set **Level** to the middle of your signal (0 for a sine that swings from -1 to 1), **Slope** to Rising, **Mode** to Auto, and **Timebase** to two or three cycles of the signal.
 
 ### Trigger: what starts each sweep
 
-A **trigger** is the event that begins a new sweep. You choose the value the signal must cross (the **Level**) and the direction of the crossing (the **Slope**, Rising or Falling). Each time the signal crosses that level in that direction, a fresh sweep starts at exactly that point, which is what keeps successive sweeps aligned on top of each other.
+In Sweep / Trigger mode (Pro), the Trigger Settings dialog sets the **trigger**, the event that begins a new sweep. You choose the value the signal must cross (the **Level**) and the direction of the crossing (the **Slope**, Rising or Falling). Each time the signal crosses that level in that direction, a fresh sweep starts there, which keeps successive sweeps aligned. While the dialog is open, a horizontal line on the plot marks the Level; drag it to change Level and the dialog field follows.
 
 There are three **modes**:
 
@@ -67,32 +82,18 @@ There are three **modes**:
 | **Normal** | Triggers only on a crossing. The trace holds the last sweep until the next one. |
 | **Single** | Captures one sweep, then stops. Use **Capture Next** to arm another.      |
 
-Auto is the everyday choice and matches the Auto button on a scope. Use Normal for an intermittent signal you don't want redrawn by noise, and Single to freeze one event.
+Auto is the everyday choice. Use Normal for an intermittent signal you don't want redrawn by noise, and Single to freeze one event.
 
 On a **Multi-Plot**, the **Source** setting picks which curve the trigger watches. All curves are captured together and stay aligned to that one signal.
 
 ### Timing: width and rate
 
-**Timebase** sets how much time one sweep shows. Leave it empty to use the plot's full time range. Lower it to zoom in: a shorter timebase shows fewer cycles but draws them larger, which is how you read the shape of a fast signal. This is the setting to reach for when a fast waveform looks like a solid band.
+In Sweep / Trigger mode (Pro), the **Timebase:** field in Trigger Settings sets how much time one sweep shows, in milliseconds. Leave it empty (the field reads "Match time range") to use the plot's full time range. Lower it to zoom in: a shorter timebase shows fewer cycles but draws them larger, which is the setting to reach for when a fast waveform looks like a solid band. The trace begins at the left edge, time zero, and runs for one timebase to the right.
 
-A short timebase also refreshes the trace many times per second and holds it stationary, like a scope. A long timebase (more than about a tenth of a second) instead draws the trace as it fills, growing left to right in real time so it never appears to stall.
+A Timebase longer than the plot's time range is capped at the time range.
 
-**Holdoff** ignores new triggers for a set time after each one. Raise it when a complex waveform crosses the level several times per cycle and you want to lock onto just the first crossing.
-
-### Reading the markers
-
-While the Trigger Settings dialog is open, a horizontal line marks the trigger level on the plot. The trace begins at the left edge (time zero) and runs for one timebase to the right.
+The **Holdoff:** field, also in milliseconds (default 0), ignores new triggers for that long after each one. Raise it when a complex waveform crosses the level several times per cycle and you want to lock onto just the first crossing.
 
 ## Performance
 
-Plots draw from a decimating ring buffer sized to the time range, so a plot stays responsive whether it holds a few hundred points or millions. Rendering happens on the UI thread at a fixed refresh rate. **Pause** stops the widget from pushing new samples into that buffer, so data received while paused is dropped for that widget; the rest of the application, including other widgets, exports, and the underlying device, keeps running.
-
-## Choosing a plot
-
-| You want to                                  | Use                          |
-|----------------------------------------------|------------------------------|
-| Watch one signal over time                   | Plot                         |
-| Compare several signals on one chart          | Multi-Plot                    |
-| Plot one value against another               | Plot with a custom X axis    |
-| Read the shape of a repeating waveform        | Plot or Multi-Plot with Sweep |
-| See a frequency spectrum                      | FFT Plot (see [Widget Reference](Widget-Reference.md#fft-plot)) |
+A plot redraws at the **UI Refresh Rate** (Preferences, Plotting tab; 1 to 240 Hz).
