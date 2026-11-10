@@ -17,6 +17,9 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 - [ ] `editor/frequency-markers`: the dataset toolbar's Frequency Markers button uses `editor/fft`.
 - [ ] `editor/add-profile`: the Workspaces toolbar's Add Profile button borrows `editor/add-group`
   since it moved beside Add Workspace on 2026-11-07.
+- [ ] `scripts/icon-packs.py check` reports "no house icons found", and
+  `test_diagnostics_command_icon_resolves_in_the_icon_tree` fails on every OS: both still look for
+  the house set under `app/rcc/icons/<category>`, which the 2026-11-09 icon move emptied.
 
 <!-- claim-verify on -->
 
@@ -44,8 +47,10 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 - [ ] A project source's live driver writes the Setup pane's saved defaults: opening a project
   whose Modbus source uses port 5521 left `ModbusDriver/port` at 5521 for the next Quick Plot
   session (seen 2026-11-06). The driver setters persist whoever calls them, and
-  `applyConnectionSettings` on a `DriverFactory` instance goes through those setters. Map which
-  drivers do this before choosing a fix.
+  `ConnectionManager` applies every source's `connectionSettings` to its live driver through
+  them. Fourteen drivers persist from setters (MQTT, Network, USB, Modbus, UART, OPC UA and its
+  security sub-object, CAN, IEC 104, S7, Process, EtherNet/IP, HID, Audio), so the fix is one
+  design choice applied to all of them.
 - [ ] Spec 0099 deferrals: span-lane writeback (T3, benchmark-gated) and ZMODEM backpressure and
   ZEOF timing (T15, needs a cross-layer HAL drain API). Briefs in its `findings.md`.
 - [ ] Close-out that needs no build: spec 0103 T39 to T42 (hotpath re-read, C++ review, docs
