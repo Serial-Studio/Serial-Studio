@@ -335,7 +335,7 @@ references. The user creates them via:
 
 ```
 project.workspace.setCustomizeMode{enabled: true}    // required for edits
-project.workspace.add{title, icon}                    // -> workspaceId
+project.workspace.add{title, icon}                    // -> {id: <wsId>}
 project.workspace.addWidget{workspaceId, widgetType, groupId}
                                                       // groupId here is Group.uniqueId (stable across reorders)
                                                       // relativeIndex auto-computed

@@ -1,8 +1,14 @@
 # Frame Parser API (Lua)
 
-Lua 5.4 mirror of the JavaScript frame-parser API. Functionally identical to
-the JS version; choose Lua when your team is already Lua-fluent or when
-you want Lua's table semantics for batched parsing.
+LuaJIT (Lua 5.1 syntax and semantics) mirror of the JavaScript frame-parser
+API. Functionally identical to the JS version; choose Lua when your team is
+already Lua-fluent or when you want Lua's table semantics for batched parsing.
+
+Not available (syntax errors or nil): integer division `//`, the bitwise
+operators `& | ~ << >>` (use `bit.band`/`bit.bor`/`bit.bxor`/`bit.lshift`/
+`bit.rshift`), `string.pack`/`string.unpack`, `utf8`, `table.move`,
+`math.tointeger`, and `os`. There is no integer subtype: every number is a
+double.
 
 ## Contract
 
@@ -45,7 +51,9 @@ against Lua 5.1/5.2 conventions still work:
 
 ## Sandbox
 
-- No `io.*`, no `os.execute`, no `package.loadlib`, no filesystem.
+- No `io.*`, no `os` at all (no `os.time`/`os.clock`; a restricted `os` exists
+  only for MQTT publisher scripts), no `package.loadlib`, no filesystem.
+  Only `base`, `table`, `string`, `math` and `bit` are loaded.
 - `require` is disabled. Single-file scripts.
 - Top-level `local` declarations stay scoped to your script (each source
   has its own Lua state).
@@ -69,6 +77,12 @@ little-endian, the rest big-endian) and `checksumHex(algorithm, data)` the same 
 `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32`). `data` is a string or a table of byte
 values; an unknown algorithm raises a Lua error. A trailer check is one line:
 `if checksumHex("XOR-8", body) ~= trailer:lower() then return {} end`.
+
+## Notifications (Pro)
+
+`notify`, `notifyInfo`, `notifyWarning`, `notifyCritical` and `notifyClear` (with
+the `Info`/`Warning`/`Critical` constants) are Pro-only. Without a Pro license or
+trial the Lua calls are silent no-ops (one warning is logged per session).
 
 ## Console logging
 
@@ -150,17 +164,34 @@ function parse(frame)
 end
 ```
 
-`string.unpack` (floats, multi-byte integers, endianness) needs a string —
-convert the table once at the top of `parse()` (one small allocation per
-frame; frames are short):
+There is no `string.unpack`. Decode multi-byte integers from the byte table
+with the `bit` library and arithmetic (little-endian signed int16 from bytes 5
+and 6 shown):
 
 ```lua
 function parse(frame)
-  if type(frame) == "table" then
-    frame = string.char(table.unpack(frame))
-  end
   if #frame < 6 then return {} end
-  return { string.unpack("<f", frame, 1), string.unpack("<i2", frame, 5) }
+  local raw = bit.lshift(frame[6], 8) + frame[5]
+  if raw >= 32768 then raw = raw - 65536 end
+  return { raw }
+end
+```
+
+A float32 field needs a manual IEEE-754 decode (big-endian shown; reverse the
+byte order for little-endian):
+
+```lua
+local function readFloat32(b1, b2, b3, b4)
+  local sign = bit.band(b1, 0x80) ~= 0 and -1 or 1
+  local expo = bit.band(b1, 0x7F) * 2 + bit.rshift(b2, 7)
+  local mant = bit.band(b2, 0x7F) * 65536 + b3 * 256 + b4
+  if expo == 0 then return sign * mant * 2 ^ (-126 - 23) end
+  return sign * (1 + mant / 2 ^ 23) * 2 ^ (expo - 127)
+end
+
+function parse(frame)
+  if #frame < 4 then return {} end
+  return { readFloat32(frame[1], frame[2], frame[3], frame[4]) }
 end
 ```
 

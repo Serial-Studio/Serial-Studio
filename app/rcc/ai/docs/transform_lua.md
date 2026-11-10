@@ -1,7 +1,11 @@
 # Per-Dataset Value Transform (Lua)
 
-Lua 5.4 mirror of the JS transform API. Use Lua when your team is
-Lua-fluent or when you want closure-captured local state semantics.
+LuaJIT (Lua 5.1 syntax and semantics) mirror of the JS transform API. Use Lua
+when your team is Lua-fluent or when you want closure-captured local state
+semantics. Absent: `//`, the bitwise operators `& | ~ << >>` (use
+`bit.band`/`bit.bor`/`bit.lshift`/`bit.rshift`), `string.pack`/`unpack`, `utf8`,
+`table.move`, `math.tointeger`, and `os` (no `os.time`/`os.clock`; use
+`info.timestampMs` for time).
 (When the project's opt-in `changeDrivenTransforms` property is on, a computed
 dataset's transform is skipped on a frame where none of the table
 variables/datasets it reads changed; input discovery is automatic.)
@@ -15,8 +19,11 @@ end
 ```
 
 - `value` is a Lua number (or string for string datasets).
-- Return a finite number. NaN/Inf or non-numeric returns fall back to the
-  raw value silently.
+- Return a finite number (or a string, which is used as the value). NaN/Inf
+  and `nil`, table or boolean returns fall back to the raw value and record
+  a "transform returned NaN" / "transform returned no value" error.
+- `params` is a global in the transform's chunk environment: the dataset's
+  parameter map (a table of name -> value), e.g. `params.gain`.
 
 ## Computed vs regular datasets
 
@@ -30,7 +37,7 @@ the body references the `value` argument, leave `virtual` alone.
 ## Isolation
 
 Each dataset's chunk is loaded with its own per-dataset environment table
-(an `_ENV` sandbox), so even globals — including `function transform` —
+(a `setfenv`-style chunk environment; LuaJIT has no `_ENV`), so even globals — including `function transform` —
 are private per dataset; top-level `local` declarations are additionally
 chunk-private. Two datasets that define `local ema = 0` get independent
 state, even though the Lua state itself is shared across the source.
@@ -44,6 +51,12 @@ function transform(value)
   return ema
 end
 ```
+
+## Notifications (Pro)
+
+`notify`, `notifyInfo`, `notifyWarning`, `notifyCritical` and `notifyClear` (with
+the `Info`/`Warning`/`Critical` constants) are Pro-only. Without a Pro license or
+trial the Lua calls are silent no-ops (one warning is logged per session).
 
 ## Shared-table API
 
@@ -279,5 +292,7 @@ These affect the active dashboard window only. They do NOT modify the project fi
 
 ## Errors
 
-A Lua error logs a watchdog warning and the raw value is used. Returning a
-non-number falls back silently. Don't rely on errors for control flow.
+A Lua error logs a watchdog warning and the raw value is used. Returning
+`nil`, a table or a boolean (or NaN/Inf) falls back to the raw value and records
+a transform error; a string return is accepted as the value. Don't rely on
+errors for control flow.

@@ -14,7 +14,9 @@ Frame parsers turn one logical frame (the bytes between `frameStart` and
 
 ## Pick Lua first
 
-- **Lua** (language=1): **recommended default.** Embedded Lua 5.4. The
+- **Lua** (language=1): **recommended default.** Embedded LuaJIT (Lua 5.1
+  semantics: no `//`, no `& | ~ << >>` operators, no `string.pack`/`unpack`, no
+  `utf8`, no `os`; use the `bit` library). The
   interpreter is faster than `QJSEngine` on the parser hotpath, the
   per-call overhead is lower, and at high frame rates (audio at
   48 kHz, multi-channel UART at 1 kHz+) that compounds. We ship a
@@ -222,9 +224,12 @@ Adapt the closest match.
   with Lua `bad argument #1 to 'byte' (string expected, got table)` or
   JS `frame.split is not a function`. NEVER use `string.byte` /
   `charCodeAt` / `split` on a Binary frame: index it directly
-  (`frame[1]` Lua, `frame[0]` JS). When Lua `string.unpack` is needed
-  (floats, endian fields), convert once at the top of `parse()`:
-  `if type(frame) == "table" then frame = string.char(table.unpack(frame)) end`.
+  (`frame[1]` Lua, `frame[0]` JS). Lua has no `string.unpack`: decode
+  multi-byte and endian fields from the byte table with `bit` and arithmetic,
+  e.g. little-endian signed int16:
+  `local v = bit.lshift(frame[6], 8) + frame[5]; if v >= 32768 then v = v - 65536 end`.
+  Floats need a manual IEEE-754 decode (sign, exponent, mantissa from the four
+  bytes).
 - Each return-array index `i` maps to the dataset whose `index` is
   `i + 1`. Off-by-one errors are common; verify with a dryRun first.
 - The string vs binary distinction is set by `decoderMethod`, NOT by

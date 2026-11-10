@@ -159,7 +159,7 @@ setActiveWorkspace(idOrName)  // workspaceId (>= 1000) OR title (case-insensitiv
 `deviceWrite`, `actionFire`, and the dashboard helpers: call from
 `onFrame()`, NOT `paint()`. `paint` runs every UI tick (60 Hz default);
 writing or `clearPlots`-ing on every tick saturates the link / yanks
-the plot. Use `onFrame()` (once per parsed frame) or guard with state.
+the plot. Use `onFrame()` (UI tick rate, only before a paint that follows new data) or guard with state.
 
 ## Color from theme
 
@@ -197,8 +197,8 @@ before you tune visuals:
   `.units`, `.widgetMin`, `.widgetMax` already carry this; read them
   off the proxy.
 - **Doherty threshold: stay under 400 ms.** `paint` runs at 60 Hz by
-  default (~16 ms budget) and `onFrame` runs immediately before each
-  `paint`. If a single tick's `onFrame + paint` cost exceeds ~16 ms,
+  default (~16 ms budget) and `onFrame` runs immediately before a
+  `paint` that follows new data (not before idle ticks). If a single tick's `onFrame + paint` cost exceeds ~16 ms,
   the UI feels laggy regardless of how good the visualization is. Push heavy math
   into transforms (per-frame, runs on the frame thread); keep `onFrame`
   bounded; keep `paint` to layout + draw against cached arrays.

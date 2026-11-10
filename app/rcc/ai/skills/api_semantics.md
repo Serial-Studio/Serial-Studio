@@ -402,10 +402,14 @@ When NOT to use:
 project.dataset.addMany {
   groupId:      0,
   count:        40,
-  options:      32,                  // bitfield, OR an array of slugs
+  options:      0,                   // bitfield, OR an array of slugs
                                      //   ["plot","fft"]  -> 1|2 = 3
                                      // bits: 1=Plot, 2=FFT, 4=Bar, 8=Gauge,
-                                     //       16=Compass, 64=Waterfall (Pro)
+                                     //       16=Compass, 64=Waterfall (Pro),
+                                     //       128=Meter. 32 enables nothing.
+                                     // Lights: groupId must be a group created with
+                                     // project.group.add{widgetType: 11} (LEDPanel);
+                                     // there is no LED option bit.
   titlePattern: "LED {n}",           // {n} -> startNumber + i, {i} -> 0-based
   startNumber:  1,                   // optional, default 1
   startIndex:   1                    // optional: -1 = auto-assign next slot,

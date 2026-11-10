@@ -14,7 +14,8 @@ needs to interpret data from one or more devices.
   group → one tile-shape on the dashboard.
 - **Dataset**: one channel of incoming numeric (or string) data. Maps
   one position in the parser's output array. Has visualization options
-  (plot, FFT, bar, gauge, LED, compass, waterfall, meter) as bit flags.
+  (plot, FFT, bar, gauge, compass, waterfall, meter) as bit flags. Lights are
+  not a dataset option: put the dataset in a group with `widgetType` 11 (LEDPanel).
 - **Action**: a button on the toolbar that transmits a fixed payload.
   Optional repeat-on-timer.
 
@@ -238,14 +239,18 @@ so the user can approve it on its own.
 {
   "groupId":      0,
   "count":        40,
-  "options":      32,
+  "options":      0,
   "titlePattern": "LED {n}",
   "startNumber":  1,
   "startIndex":   1
 }
 ```
+For lights, first create the group with `project.group.add {title: "Status",
+widgetType: 11}` (LEDPanel) and use the returned `groupId`; every dataset in an
+LEDPanel group is a light, so `options` stays 0.
+
 `options` accepts the bitfield (1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass,
-32=LED, 64=Waterfall, 128=Meter) or an array of slugs (`["plot","fft"]`).
+64=Waterfall, 128=Meter; 32 enables nothing) or an array of slugs (`["plot","fft"]`).
 `titlePattern` substitutes `{n}` with `startNumber + i` and `{i}` with
 the 0-based loop counter. Returns `{count, created: [{groupId,
 datasetId, title, index, uniqueId}, ...]}`. Capture those `datasetId`s

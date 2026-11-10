@@ -179,7 +179,7 @@ colored value ranges (aviation-tachometer style: white / green / yellow
 ```js
 {
   min:      Number,   // lower bound (inclusive)
-  max:      Number,   // upper bound (exclusive at top of range)
+  max:      Number,   // upper bound (inclusive: value >= min && value <= max)
   severity: Number,   // 0=Info, 1=OK, 2=Warning, 3=Critical
   color:    String,   // "#rrggbb" override; empty -> severity's theme color
   label:    String,   // optional name (used in notifications)
@@ -569,7 +569,7 @@ function paint(ctx, w, h) {
 The Pro build ships ~18 reference canvas scripts. Read them with:
 
 ```
-scripts.list {kind: "painter"}    -> [{id, name, datasetCount}, ...]
+scripts.list {kind: "painter"}    -> {kinds: [...], entries: [{id, name, kind, datasetCount?}, ...], total, hint}
 scripts.get  {kind: "painter", id: "<id>"}   -> {body: "<full source>"}
 ```
 
@@ -705,7 +705,8 @@ function paint(ctx, w, h) {
 ## Performance
 
 `paint` runs at up to 60 Hz by default (configurable 1–240 via
-`dashboard.setFps`), and only while dashboard data is updating. Cheap:
+`dashboard.setFps`) on every UI tick, including idle ticks with no new data
+(only `onFrame` is tied to new data). Cheap:
 lineTo / arc / fillText calls,
 arithmetic. Avoid: building intermediate strings every frame
 (`toFixed(1)` is fine; `JSON.stringify` is not), creating new gradients
@@ -713,6 +714,8 @@ per call (cache in a top-level `var`).
 
 ## Errors
 
-Throwing inside `paint` logs a watchdog warning and the canvas keeps the
-last successful frame on screen. The error surfaces in the editor's
-status pane.
+The canvas cache is cleared before each `paint` call. Throwing inside `paint`
+records the error in the editor's status pane and marks the script not-OK:
+`paint`, `onFrame` and the input handlers all stop running until the script is
+recompiled (edit and re-apply it), and the canvas is not redrawn from the last
+good frame.

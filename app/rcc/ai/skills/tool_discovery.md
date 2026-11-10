@@ -1,6 +1,6 @@
 # Tool Discovery and Documentation Lookup
 
-Serial Studio exposes ~300 commands. Your default tool list contains only
+Serial Studio exposes ~460 commands. Your default tool list contains only
 ~50 of them, the curated essentials. Anything else, you discover.
 
 ## Four discovery layers
@@ -9,8 +9,10 @@ Serial Studio exposes ~300 commands. Your default tool list contains only
    — the first dotted segment of each command name (project, io, console,
    csvExport, csvPlayer, consoleExport, mdf4Export, mdf4Player, dashboard,
    ui, sessions, licensing, notifications, extensions, scripts,
-   controlScript, system, api, assistant, fs, meta) with one-line
-   descriptions. MQTT commands live under `project.mqtt.*`, not a
+   controlScript, system, api, assistant, fs, meta, plus alarms (alarm
+   state, mute, silence, sounds), diagnostics (run/status), influx
+   (InfluxDB export config), mirror (mirror-server info), problems (project
+   checkers), stream (stream sources/info)) with one-line descriptions. MQTT commands live under `project.mqtt.*`, not a
    top-level scope. Call this when you need to know what's even
    possible.
 
@@ -124,9 +126,10 @@ Top-level `io.*` itself has bus-management and tail/peek commands; use
 
 ## Bundled reference scripts
 
-`scripts.list{kind}` enumerates the ~50 reference scripts bundled with
-Pro: canvas widgets, frame parsers, transforms, output widget transmit
-functions. `scripts.get{kind, id}` returns the full source.
+`scripts.list{kind}` enumerates the 100+ reference scripts bundled with
+Pro (roughly 18 canvas widgets, 28 frame parsers, 34 transforms, 16 output
+widget transmit functions; the parser and transform templates cover both JS
+and Lua). `scripts.get{kind, id}` returns the full source.
 
 Adapt a real reference instead of writing from scratch. The ones already
 in the codebase have been tested against real edge cases.

@@ -96,7 +96,8 @@ they close the See -> Decide -> Act loop:
   the last satisfied spec is memoized so calling it every `loop()` is free.
   Group `widget`: datagrid | barpanel | accelerometer | gyroscope | gps |
   multiplot | none | plot3d | image | painter. Dataset flags: plot, fft, bar,
-  gauge, compass, led, waterfall (or a raw `options` bitfield). Created items are real
+  gauge, compass, waterfall (or a raw `options` bitfield; `meter` is not a flag,
+  use bit 128, and there is no `led` flag: lights come from a `ledpanel` group). Created items are real
   project edits and persist with the project.
 
 Control loops also get the shared-table globals `tableGet(table, register)` and

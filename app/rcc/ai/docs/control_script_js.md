@@ -32,6 +32,11 @@ nothing executes (no `apiCall`, no `tableSet` side effects).
   second and visibly stalls the whole dashboard. `delay(20)` (~50 Hz) is smooth for
   dashboard-feeding simulations; 50-250 ms is plenty for device polling.
 - A `loop()` exception or watchdog timeout stops the script and reports the error.
+- Optional `onConnect()` hook: runs synchronously BEFORE the connection opens, in a
+  throwaway engine on the GUI thread (so a script can, for example, launch a server
+  the connection then dials). `apiCall` dispatches inline there, and the hook has a
+  2000 ms watchdog. State set in it does not carry over to `setup()`/`loop()`, which
+  run in a fresh engine.
 
 ## Globals available inside the script
 
@@ -39,14 +44,15 @@ nothing executes (no `apiCall`, no `tableSet` side effects).
 |---|---|
 | `apiCall(method, params)` | Call ANY API command by name; marshalled (blocking) to the GUI thread. Returns the command's response object (`{ok, result?, error?}`). |
 | `delay(ms)` | Sleep without tripping the watchdog. |
-| `newFrame(sourceId?)` | Latest received frame, returned exactly once per arrival; `null` when nothing new. Fields: `sourceId`, `sequence`, `timestampMs` (monotonic clock; never compare with `Date.now()`), `ageMs` (milliseconds since arrival; use this for staleness/watchdogs), `mirrorAgeMs` (how long ago the host refreshed the copy you read; subtract it from `ageMs` so GUI lag never reads as bus silence), `values` (the parser tokens, with `valueCount` and optional `base64`), `text`. |
+| `newFrame(sourceId?)` | Latest received frame, returned exactly once per arrival; `null` when nothing new. Fields: `sourceId`, `sequence`, `timestampMs` (monotonic clock; never compare with `Date.now()`), `ageMs` (milliseconds since arrival; use this for staleness/watchdogs), `mirrorAgeMs` (how long ago the host refreshed the copy you read; subtract it from `ageMs` so GUI lag never reads as bus silence), `values` (the parser tokens, with `valueCount`), `text`. `base64` is never present: `newFrame()` requests the default `text` encoding. |
 | `refreshDashboard()` | Re-runs every dataset transform from the last received values and republishes to the dashboard (no export side effects). Call after `tableSet()` writes so they render while the device is silent. |
 | `ensureDashboard(spec)` | Declaratively create missing groups/datasets (matched by title / parser index). Existing items are never modified; memoized, so calling it every `loop()` is free. |
 | `dashboardTick()` | Wraps `dashboard.tick`: synthesizes a frame from current dataset values and fans it out to every consumer (dashboard AND CSV/MDF4/Historian/MQTT/API exports), unlike `refreshDashboard()`, which has no export side effects. |
 | `tableGet(table, register)` | Read a shared-table variable; `undefined` when missing (so `tableGet(t, r) \|\| fallback` works). |
 | `tableSet(table, register, value)` | Write a Computed variable; rejected for parser-owned or constant variables. Follow with `refreshDashboard()` to render. |
-| `notify(level, ...)`, `notifyInfo`, `notifyWarning`, `notifyCritical`, `notifyClear` | Notification center (Pro). Accept `(title)`, `(title, subtitle)`, or `(channel, title, subtitle)`. Constants `Info`, `Warning`, `Critical`. |
-| `modbusWriteRegister/Coil/Float`, `canSendFrame`, `canSendValue` | Pure protocol encoders returning byte strings for transmission. |
+| `notify(level, ...)`, `notifyInfo`, `notifyWarning`, `notifyCritical`, `notifyClear` | Notification center (Pro only: without a Pro license or trial these throw `notify() requires a Pro license`). Accept `(title)`, `(title, subtitle)`, or `(channel, title, subtitle)`. Constants `Info`, `Warning`, `Critical`. |
+| `modbusWriteRegister(address, value, unit?)`, `modbusWriteRegisters(address, values[], unit?)`, `modbusWriteCoil(address, on, unit?)`, `modbusWriteFloat(address, value, unit?)`, `canSendFrame(id, payload)`, `canSendValue(id, value, bytes?)` | Pure protocol encoders returning byte strings for transmission. `unit` (1..247) targets a specific Modbus unit; omit it to use the connection's own. |
+| `deviceWriteAndWait(data, timeoutMs, until, source)` | Write `data`, then block the worker (never the GUI) until the reply satisfies `until` (a terminator string, an expected byte length as a number, or `undefined` for the first non-empty reply) or `timeoutMs` elapses. `source` defaults to 0. Returns `{ok, data, bytesRead, timedOut}`. |
 | `checksum(algorithm, data)`, `checksumHex(algorithm, data)`, `checksumAlgorithms()` | Digest of a binary string or byte array as a wire-order byte string / lowercase hex; algorithms `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32`. An unknown algorithm throws. |
 | `io.*`, `project.*`, `dashboard.*`, ... | Generated SDK wrappers over `apiCall` for every API command (e.g. `io.getLatestFrame()`, `io.writeData(...)`, `io.ble.writeCharacteristic(uuid, hex, SerialStudio.Hex)`). |
 | `console.log(...)` | Goes to the application log. |

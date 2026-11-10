@@ -36,15 +36,25 @@ the body references the `value` argument, leave `virtual` alone.
 Your script is automatically wrapped in an IIFE at compile time:
 
 ```js
-(function() {
+(function(params) {
   /* your code */
   return typeof transform === 'function' ? transform : null;
-})()
+})(<paramsJson>)
 ```
+
+`params` is the dataset's parameter map (a plain object of name -> value,
+e.g. `params.gain`), available to your top-level code and `transform`.
 
 That means top-level `var/let/const` are private per dataset, even when
 several datasets in the same source share a JS engine. Two datasets can
 both define `let alpha = 0.2` without clobbering each other.
+
+## Notifications (Pro)
+
+`notify*` (`notify`, `notifyInfo`, `notifyWarning`, `notifyCritical`,
+`notifyClear`) are Pro-only. Without a Pro license or trial the JS globals throw
+`notify() requires a Pro license`; guard with try/catch if the script must run
+on free builds.
 
 ## Shared-table API: the central data bus
 
@@ -135,8 +145,8 @@ single pass. A transform can read:
 - raw and final values of **later** datasets: the **previous** frame's
 
 Reading `datasetGetRaw`/`datasetGetFinal` of a dataset processed later
-silently returns the previous frame's (stale) value; an unknown `uniqueId`
-silently returns `undefined` (no warning is emitted in either case). Use
+silently returns the previous frame's (stale) value (no warning); an unknown
+`uniqueId` returns `undefined` and logs a one-time warning. Use
 `project.dataset.getExecutionOrder` to confirm the order of execution
 when peer reads return stale values.
 
@@ -318,5 +328,5 @@ These affect the active dashboard window only. They do NOT modify the project fi
 
 Returning `NaN` or `Infinity` falls back to the raw value silently. Throwing
 an exception also falls back to the raw value, and logs a
-`[FrameBuilder] JS transform call failed` warning with the error text (as do
+`[TransformDispatch] JS transform call failed` warning with the error text (as do
 timeouts). Don't rely on exceptions for control flow.

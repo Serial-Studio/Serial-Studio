@@ -34,8 +34,9 @@ The QJSEngine running parsers is isolated from the host system. Available:
 `console`, `gc()`, plain JS built-ins, and the injected host API —
 `deviceWrite`, `actionFire`, the seven dashboard helpers,
 `tableGet`/`tableSet`/`datasetGetRaw`/`datasetGetFinal`, the handle fast path
-`tableHandle`/`tableHandleMany`/`tableGetH`/`tableSetH`, `notify*`,
-`apiCall`, the checksum helpers `checksum(algorithm, data)` /
+`tableHandle`/`tableHandleMany`/`tableGetH`/`tableSetH`, `notify*` (Pro-only:
+without a Pro license or trial these globals throw `notify() requires a Pro
+license`), `apiCall`, the checksum helpers `checksum(algorithm, data)` /
 `checksumHex(algorithm, data)` / `checksumAlgorithms()` (the frame reader's own
 CRC library: `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`,
 `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32`; `data` is a string or a
