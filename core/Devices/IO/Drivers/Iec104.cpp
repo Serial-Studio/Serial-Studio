@@ -79,7 +79,6 @@ IO::Drivers::Iec104::Iec104()
   , m_open(false)
   , m_loading(true)
   , m_started(false)
-  , m_persistent(true)
   , m_clockValid(false)
   , m_port(Iec104Proto::kDefaultPort)
   , m_commonAddress(1)
@@ -161,7 +160,7 @@ void IO::Drivers::Iec104::loadSettings()
  */
 void IO::Drivers::Iec104::savePoints()
 {
-  if (!m_persistent || m_loading)
+  if (!persistent() || m_loading)
     return;
 
   m_settings.setValue("Iec104Driver/points",
@@ -198,18 +197,6 @@ void IO::Drivers::Iec104::applyProtocolParameters()
 }
 
 /**
- * @brief Only the UI-config instance writes settings; the per-source live instance is fed by the
- *        manager and must never echo its state back into QSettings.
- */
-void IO::Drivers::Iec104::setPersistent(const bool persistent) noexcept
-{
-  if (m_persistent == persistent)
-    return;
-
-  m_persistent = persistent;
-}
-
-/**
  * @brief Points this UI-config instance at the per-source instance that owns the live session, so
  *        the pane and the API read the counters and the discovered points of the running link.
  */
@@ -241,7 +228,7 @@ void IO::Drivers::Iec104::setSessionPeer(Iec104* peer)
  */
 const IO::Drivers::Iec104* IO::Drivers::Iec104::sessionPeer() const
 {
-  return m_persistent ? m_sessionPeer.data() : nullptr;
+  return persistent() ? m_sessionPeer.data() : nullptr;
 }
 
 /**
@@ -1015,8 +1002,7 @@ void IO::Drivers::Iec104::setHost(const QString& host)
     return;
 
   m_host = trimmed;
-  if (m_persistent)
-    m_settings.setValue("Iec104Driver/host", m_host);
+  persistSetting(m_settings, "Iec104Driver/host", m_host);
 
   Q_EMIT hostChanged();
 }
@@ -1031,8 +1017,7 @@ void IO::Drivers::Iec104::setPort(const int port)
     return;
 
   m_port = clamped;
-  if (m_persistent)
-    m_settings.setValue("Iec104Driver/port", m_port);
+  persistSetting(m_settings, "Iec104Driver/port", m_port);
 
   Q_EMIT portChanged();
 }
@@ -1047,8 +1032,7 @@ void IO::Drivers::Iec104::setCommonAddress(const int address)
     return;
 
   m_commonAddress = clamped;
-  if (m_persistent)
-    m_settings.setValue("Iec104Driver/commonAddress", m_commonAddress);
+  persistSetting(m_settings, "Iec104Driver/commonAddress", m_commonAddress);
 
   Q_EMIT commonAddressChanged();
 }
@@ -1063,8 +1047,7 @@ void IO::Drivers::Iec104::setWindowK(const int k)
 
   m_windowK = k;
   applyProtocolParameters();
-  if (m_persistent)
-    m_settings.setValue("Iec104Driver/windowK", m_windowK);
+  persistSetting(m_settings, "Iec104Driver/windowK", m_windowK);
 
   Q_EMIT protocolParametersChanged();
 }
@@ -1079,8 +1062,7 @@ void IO::Drivers::Iec104::setWindowW(const int w)
 
   m_windowW = w;
   applyProtocolParameters();
-  if (m_persistent)
-    m_settings.setValue("Iec104Driver/windowW", m_windowW);
+  persistSetting(m_settings, "Iec104Driver/windowW", m_windowW);
 
   Q_EMIT protocolParametersChanged();
 }
@@ -1095,8 +1077,7 @@ void IO::Drivers::Iec104::setTimeoutT1(const int ms)
 
   m_timeoutT1 = ms;
   applyProtocolParameters();
-  if (m_persistent)
-    m_settings.setValue("Iec104Driver/timeoutT1", m_timeoutT1);
+  persistSetting(m_settings, "Iec104Driver/timeoutT1", m_timeoutT1);
 
   Q_EMIT protocolParametersChanged();
 }
@@ -1111,8 +1092,7 @@ void IO::Drivers::Iec104::setTimeoutT2(const int ms)
 
   m_timeoutT2 = ms;
   applyProtocolParameters();
-  if (m_persistent)
-    m_settings.setValue("Iec104Driver/timeoutT2", m_timeoutT2);
+  persistSetting(m_settings, "Iec104Driver/timeoutT2", m_timeoutT2);
 
   Q_EMIT protocolParametersChanged();
 }
@@ -1127,8 +1107,7 @@ void IO::Drivers::Iec104::setTimeoutT3(const int ms)
 
   m_timeoutT3 = ms;
   applyProtocolParameters();
-  if (m_persistent)
-    m_settings.setValue("Iec104Driver/timeoutT3", m_timeoutT3);
+  persistSetting(m_settings, "Iec104Driver/timeoutT3", m_timeoutT3);
 
   Q_EMIT protocolParametersChanged();
 }

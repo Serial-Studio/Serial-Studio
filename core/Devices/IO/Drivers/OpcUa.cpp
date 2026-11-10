@@ -64,7 +64,6 @@ using IO::Drivers::OpcUaEndpointSelection::policyIsDeprecated;
 IO::Drivers::OpcUa::OpcUa()
   : m_connecting(false)
   , m_discovering(false)
-  , m_persistent(true)
   , m_hasDeferred(false)
   , m_pendingDial(PendingDial::None)
   , m_authMode(0)
@@ -184,7 +183,7 @@ void IO::Drivers::OpcUa::loadSettings()
  */
 void IO::Drivers::OpcUa::saveTags()
 {
-  if (!m_persistent)
+  if (!persistent())
     return;
 
   m_settings.setValue("OpcUaDriver/tags", QJsonDocument(tagsJson()).toJson(QJsonDocument::Compact));
@@ -193,18 +192,6 @@ void IO::Drivers::OpcUa::saveTags()
 //--------------------------------------------------------------------------------------------------
 // HAL-driver implementation
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Only the UI-config instance writes settings and the credential vault; the per-source
- *        live instance is fed by the manager and must never echo state back into QSettings.
- */
-void IO::Drivers::OpcUa::setPersistent(const bool persistent) noexcept
-{
-  if (m_persistent == persistent)
-    return;
-
-  m_persistent = persistent;
-}
 
 /**
  * @brief Points this UI-config instance at the per-source instance that owns the live session.
@@ -232,7 +219,7 @@ void IO::Drivers::OpcUa::setSessionPeer(OpcUa* peer)
  */
 const IO::Drivers::OpcUa* IO::Drivers::OpcUa::sessionPeer() const
 {
-  return m_persistent ? m_sessionPeer.data() : nullptr;
+  return persistent() ? m_sessionPeer.data() : nullptr;
 }
 
 /**
@@ -1029,8 +1016,7 @@ void IO::Drivers::OpcUa::setEndpointUrl(const QString& url)
     return;
 
   m_endpointUrl = trimmed;
-  if (m_persistent)
-    m_settings.setValue("OpcUaDriver/endpointUrl", m_endpointUrl);
+  persistSetting(m_settings, "OpcUaDriver/endpointUrl", m_endpointUrl);
 
   m_endpoints.clear();
   publishEndpointSelection(-1);
@@ -1084,8 +1070,7 @@ void IO::Drivers::OpcUa::setAuthMode(const int mode)
     return;
 
   m_authMode = clamped;
-  if (m_persistent)
-    m_settings.setValue("OpcUaDriver/authMode", m_authMode);
+  persistSetting(m_settings, "OpcUaDriver/authMode", m_authMode);
 
   Q_EMIT authModeChanged();
   Q_EMIT securityChanged();
@@ -1102,7 +1087,7 @@ void IO::Drivers::OpcUa::setUsername(const QString& username)
 
   m_username = username;
   const QUrl url(m_endpointUrl);
-  if (m_persistent) {
+  if (persistent()) {
     m_settings.setValue("OpcUaDriver/username", m_username);
     if (url.isValid() && !url.host().isEmpty())
       m_vault.setCredentials(url.host(),
@@ -1124,7 +1109,7 @@ void IO::Drivers::OpcUa::setPassword(const QString& password)
 
   m_password = password;
   const QUrl url(m_endpointUrl);
-  if (m_persistent && url.isValid() && !url.host().isEmpty())
+  if (persistent() && url.isValid() && !url.host().isEmpty())
     m_vault.setCredentials(
       url.host(), static_cast<quint16>(url.port(OpcUaTypes::kDefaultPort)), m_username, m_password);
 
@@ -1141,8 +1126,7 @@ void IO::Drivers::OpcUa::setPublishingInterval(const int interval)
     return;
 
   m_publishingInterval = clamped;
-  if (m_persistent)
-    m_settings.setValue("OpcUaDriver/publishingInterval", m_publishingInterval);
+  persistSetting(m_settings, "OpcUaDriver/publishingInterval", m_publishingInterval);
 
   m_subscriptions.applyPublishingInterval(m_publishingInterval);
 
@@ -1304,8 +1288,7 @@ void IO::Drivers::OpcUa::setSecurityPolicy(const QString& policyUri)
     return;
 
   m_securityPolicy = policyUri;
-  if (m_persistent)
-    m_settings.setValue("OpcUaDriver/securityPolicy", m_securityPolicy);
+  persistSetting(m_settings, "OpcUaDriver/securityPolicy", m_securityPolicy);
 
   if (m_securityPolicy == QLatin1String(kPolicyNoneUri))
     m_securityMode = static_cast<int>(OpcUaTypes::SecurityMode::None);
@@ -1346,10 +1329,8 @@ void IO::Drivers::OpcUa::setSecurityMode(const int mode)
   if (clamped == static_cast<int>(OpcUaTypes::SecurityMode::None))
     m_securityPolicy = QString::fromLatin1(kPolicyNoneUri);
 
-  if (m_persistent) {
-    m_settings.setValue("OpcUaDriver/securityMode", m_securityMode);
-    m_settings.setValue("OpcUaDriver/securityPolicy", m_securityPolicy);
-  }
+  persistSetting(m_settings, "OpcUaDriver/securityMode", m_securityMode);
+  persistSetting(m_settings, "OpcUaDriver/securityPolicy", m_securityPolicy);
 
   m_endpointIndex = -1;
   Q_EMIT securityChanged();
@@ -1366,8 +1347,7 @@ void IO::Drivers::OpcUa::setUserCertificatePath(const QString& value)
     return;
 
   m_userCertificatePath = path;
-  if (m_persistent)
-    m_settings.setValue("OpcUaDriver/userCertificate", m_userCertificatePath);
+  persistSetting(m_settings, "OpcUaDriver/userCertificate", m_userCertificatePath);
 
   Q_EMIT securityChanged();
 }
@@ -1383,8 +1363,7 @@ void IO::Drivers::OpcUa::setUserKeyPath(const QString& value)
     return;
 
   m_userKeyPath = path;
-  if (m_persistent)
-    m_settings.setValue("OpcUaDriver/userKey", m_userKeyPath);
+  persistSetting(m_settings, "OpcUaDriver/userKey", m_userKeyPath);
 
   Q_EMIT securityChanged();
 }

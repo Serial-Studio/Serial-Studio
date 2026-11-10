@@ -365,7 +365,7 @@ void IO::Drivers::Process::setMode(int mode)
 
   if (m_mode != newMode) {
     m_mode = newMode;
-    m_settings.setValue("ProcessDriver/mode", mode);
+    persistSetting(m_settings, "ProcessDriver/mode", mode);
     Q_EMIT modeChanged();
     Q_EMIT configurationChanged();
   }
@@ -378,7 +378,7 @@ void IO::Drivers::Process::setExecutable(const QString& path)
 {
   if (m_executable != path) {
     m_executable = path;
-    m_settings.setValue("ProcessDriver/executable", path);
+    persistSetting(m_settings, "ProcessDriver/executable", path);
     Q_EMIT executableChanged();
     Q_EMIT configurationChanged();
   }
@@ -391,7 +391,7 @@ void IO::Drivers::Process::setArguments(const QString& args)
 {
   if (m_arguments != args) {
     m_arguments = args;
-    m_settings.setValue("ProcessDriver/arguments", args);
+    persistSetting(m_settings, "ProcessDriver/arguments", args);
     Q_EMIT argumentsChanged();
     Q_EMIT configurationChanged();
   }
@@ -404,7 +404,7 @@ void IO::Drivers::Process::setWorkingDir(const QString& dir)
 {
   if (m_workingDir != dir) {
     m_workingDir = dir;
-    m_settings.setValue("ProcessDriver/workingDir", dir);
+    persistSetting(m_settings, "ProcessDriver/workingDir", dir);
     Q_EMIT workingDirChanged();
     Q_EMIT configurationChanged();
   }
@@ -417,7 +417,7 @@ void IO::Drivers::Process::setPipePath(const QString& path)
 {
   if (m_pipePath != path) {
     m_pipePath = path;
-    m_settings.setValue("ProcessDriver/pipePath", path);
+    persistSetting(m_settings, "ProcessDriver/pipePath", path);
     Q_EMIT pipePathChanged();
     Q_EMIT configurationChanged();
   }

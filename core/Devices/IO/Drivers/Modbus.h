@@ -143,6 +143,7 @@ public:
   Modbus& operator=(const Modbus&) = delete;
 
   void close() override;
+  void setPersistent(const bool persistent) noexcept override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isConnecting() const noexcept override;

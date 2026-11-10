@@ -280,7 +280,7 @@ void IO::Drivers::HID::setDeviceIndex(const int index)
       return;
 
     m_deviceIndex = index;
-    m_settings.setValue("HID/deviceIndex", index);
+    persistSetting(m_settings, "HID/deviceIndex", index);
 
     const uint16_t up = m_deviceUsagePages.value(index, 0);
     const uint16_t u  = m_deviceUsages.value(index, 0);
@@ -481,11 +481,11 @@ int IO::Drivers::HID::restoreHidSelectionIndex(const QString& prevPath)
       newIndex = idx;
     else {
       newIndex = 0;
-      m_settings.setValue("HID/deviceIndex", 0);
+      persistSetting(m_settings, "HID/deviceIndex", 0);
     }
   } else if (newIndex >= m_deviceLabels.size()) {
     newIndex = 0;
-    m_settings.setValue("HID/deviceIndex", 0);
+    persistSetting(m_settings, "HID/deviceIndex", 0);
   }
 
   return newIndex;

@@ -187,7 +187,6 @@ public:
   S7& operator=(const S7&) = delete;
 
   void close() override;
-  void setPersistent(const bool persistent) noexcept;
   void setSessionPeer(S7* peer);
 
   [[nodiscard]] bool isOpen() const noexcept override;
@@ -251,7 +250,6 @@ private:
 
   bool m_open;
   bool m_connecting;
-  bool m_persistent;
   int m_rack;
   int m_slot;
   int m_pollInterval;

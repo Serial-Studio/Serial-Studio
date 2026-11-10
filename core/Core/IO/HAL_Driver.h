@@ -29,6 +29,7 @@
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
+#include <QSettings>
 #include <QString>
 #include <QVariant>
 #include <utility>
@@ -216,7 +217,7 @@ signals:
 
 public:
   explicit HAL_Driver(QObject* parent = nullptr)
-    : QObject(parent), m_openReportArmed(false), m_bus(nullptr)
+    : QObject(parent), m_persistent(true), m_openReportArmed(false), m_bus(nullptr)
   {}
 
   virtual ~HAL_Driver() = default;
@@ -237,6 +238,16 @@ public:
   void disarmOpenReport() { m_openReportArmed = false; }
 
   [[nodiscard]] bool openReportArmed() const { return m_openReportArmed; }
+
+  /**
+   * @brief Turns setter persistence off for a project source's live instance: only the Setup
+   *        pane's instance owns the saved defaults, so a project's connection settings never
+   *        overwrite them. Virtual so a driver forwards it to a sub-object that persists on its
+   *        own.
+   */
+  virtual void setPersistent(const bool persistent) noexcept { m_persistent = persistent; }
+
+  [[nodiscard]] bool persistent() const noexcept { return m_persistent; }
 
   virtual void close()                               = 0;
   [[nodiscard]] virtual bool isOpen() const noexcept = 0;
@@ -286,6 +297,24 @@ public slots:
 
 protected:
   [[nodiscard]] Core::Bus::MessageBus* messageBus() const noexcept { return m_bus; }
+
+  /**
+   * @brief Writes one saved default; a non-persistent (live) instance writes nothing.
+   */
+  void persistSetting(QSettings& settings, QAnyStringView key, const QVariant& value) const
+  {
+    if (m_persistent)
+      settings.setValue(key, value);
+  }
+
+  /**
+   * @brief Removes one saved default; a non-persistent (live) instance removes nothing.
+   */
+  void forgetSetting(QSettings& settings, QAnyStringView key) const
+  {
+    if (m_persistent)
+      settings.remove(key);
+  }
 
   /**
    * @brief Reports the outcome of the open attempt exactly once: the latch is armed by the
@@ -355,6 +384,7 @@ protected:
   }
 
 private:
+  bool m_persistent;
   bool m_openReportArmed;
   Core::Bus::MessageBus* m_bus;
 };

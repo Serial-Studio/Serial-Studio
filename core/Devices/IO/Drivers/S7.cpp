@@ -502,7 +502,6 @@ IO::Drivers::S7::S7()
   : m_generatedProject(this)
   , m_open(false)
   , m_connecting(false)
-  , m_persistent(true)
   , m_rack(0)
   , m_slot(kS7DefaultSlot)
   , m_pollInterval(kS7DefaultIntervalMs)
@@ -556,7 +555,7 @@ void IO::Drivers::S7::loadSettings()
  */
 void IO::Drivers::S7::saveVariables()
 {
-  if (!m_persistent)
+  if (!persistent())
     return;
 
   m_settings.setValue("S7Driver/variables",
@@ -590,18 +589,6 @@ void IO::Drivers::S7::refreshItems()
 }
 
 /**
- * @brief Only the UI-config instance writes settings; the per-source live instance is fed by the
- *        manager and must never echo its state back into QSettings.
- */
-void IO::Drivers::S7::setPersistent(const bool persistent) noexcept
-{
-  if (m_persistent == persistent)
-    return;
-
-  m_persistent = persistent;
-}
-
-/**
  * @brief Points this UI-config instance at the per-source instance that owns the live session, so
  *        the pane and the API read the counters of the link that is actually running.
  */
@@ -624,7 +611,7 @@ void IO::Drivers::S7::setSessionPeer(S7* peer)
  */
 const IO::Drivers::S7* IO::Drivers::S7::sessionPeer() const
 {
-  return m_persistent ? m_sessionPeer.data() : nullptr;
+  return persistent() ? m_sessionPeer.data() : nullptr;
 }
 
 /**
@@ -1044,8 +1031,7 @@ void IO::Drivers::S7::setHost(const QString& host)
     return;
 
   m_host = trimmed;
-  if (m_persistent)
-    m_settings.setValue("S7Driver/host", m_host);
+  persistSetting(m_settings, "S7Driver/host", m_host);
 
   Q_EMIT hostChanged();
 }
@@ -1060,8 +1046,7 @@ void IO::Drivers::S7::setRack(const int rack)
     return;
 
   m_rack = clamped;
-  if (m_persistent)
-    m_settings.setValue("S7Driver/rack", m_rack);
+  persistSetting(m_settings, "S7Driver/rack", m_rack);
 
   Q_EMIT rackChanged();
 }
@@ -1076,8 +1061,7 @@ void IO::Drivers::S7::setSlot(const int slot)
     return;
 
   m_slot = clamped;
-  if (m_persistent)
-    m_settings.setValue("S7Driver/slot", m_slot);
+  persistSetting(m_settings, "S7Driver/slot", m_slot);
 
   Q_EMIT slotChanged();
 }
@@ -1092,8 +1076,7 @@ void IO::Drivers::S7::setPollInterval(const int interval)
     return;
 
   m_pollInterval = clamped;
-  if (m_persistent)
-    m_settings.setValue("S7Driver/pollInterval", m_pollInterval);
+  persistSetting(m_settings, "S7Driver/pollInterval", m_pollInterval);
 
   Q_EMIT pollIntervalChanged();
   Q_EMIT statusChanged();

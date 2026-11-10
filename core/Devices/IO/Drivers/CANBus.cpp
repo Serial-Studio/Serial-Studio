@@ -684,7 +684,7 @@ void IO::Drivers::CANBus::setCanFD(const bool enabled)
     return;
 
   m_canFD = enabled;
-  m_settings.setValue("CanBusDriver/canFD", enabled);
+  persistSetting(m_settings, "CanBusDriver/canFD", enabled);
   Q_EMIT canFDChanged();
 }
 
@@ -697,7 +697,7 @@ void IO::Drivers::CANBus::setLoopback(const bool enabled)
     return;
 
   m_loopback = enabled;
-  m_settings.setValue("CanBusDriver/loopback", enabled);
+  persistSetting(m_settings, "CanBusDriver/loopback", enabled);
   Q_EMIT loopbackChanged();
 }
 
@@ -710,7 +710,7 @@ void IO::Drivers::CANBus::setListenOnly(const bool enabled)
     return;
 
   m_listenOnly = enabled;
-  m_settings.setValue("CanBusDriver/listenOnly", enabled);
+  persistSetting(m_settings, "CanBusDriver/listenOnly", enabled);
   Q_EMIT listenOnlyChanged();
 }
 
@@ -726,7 +726,7 @@ void IO::Drivers::CANBus::setTpReassembly(const bool enabled)
     return;
 
   m_tpReassembly = enabled;
-  m_settings.setValue("CanBusDriver/tpReassembly", enabled);
+  persistSetting(m_settings, "CanBusDriver/tpReassembly", enabled);
 
   m_j1939.reset();
   m_isoTp.reset();
@@ -743,7 +743,7 @@ void IO::Drivers::CANBus::setBitrate(const quint32 bitrate)
     return;
 
   m_bitrate = bitrate;
-  m_settings.setValue("CanBusDriver/bitrate", bitrate);
+  persistSetting(m_settings, "CanBusDriver/bitrate", bitrate);
   Q_EMIT bitrateChanged();
 }
 
@@ -756,7 +756,7 @@ void IO::Drivers::CANBus::setDataBitrate(const quint32 bitrate)
     return;
 
   m_dataBitrate = bitrate;
-  m_settings.setValue("CanBusDriver/dataBitrate", bitrate);
+  persistSetting(m_settings, "CanBusDriver/dataBitrate", bitrate);
   Q_EMIT dataBitrateChanged();
 }
 
@@ -767,7 +767,7 @@ void IO::Drivers::CANBus::setPluginIndex(const quint8 index)
 {
   if (index < m_pluginList.count() && m_pluginIndex != index) {
     m_pluginIndex = index;
-    m_settings.setValue("CanBusDriver/pluginIndex", index);
+    persistSetting(m_settings, "CanBusDriver/pluginIndex", index);
     refreshInterfaces();
     Q_EMIT pluginIndexChanged();
   }
@@ -780,7 +780,7 @@ void IO::Drivers::CANBus::setInterfaceIndex(const quint8 index)
 {
   if (index < m_interfaceList.count() && m_interfaceIndex != index) {
     m_interfaceIndex = index;
-    m_settings.setValue("CanBusDriver/interfaceIndex", index);
+    persistSetting(m_settings, "CanBusDriver/interfaceIndex", index);
     Q_EMIT interfaceIndexChanged();
     Q_EMIT interfaceSupportsFDChanged();
   }
@@ -1159,7 +1159,7 @@ void IO::Drivers::CANBus::refreshInterfaces()
 
   if (m_interfaceIndex >= m_interfaceList.count() && m_interfaceIndex != 0) {
     m_interfaceIndex = 0;
-    m_settings.setValue("CanBusDriver/interfaceIndex", 0);
+    persistSetting(m_settings, "CanBusDriver/interfaceIndex", 0);
     Q_EMIT interfaceIndexChanged();
   }
 
@@ -1183,7 +1183,7 @@ void IO::Drivers::CANBus::refreshPlugins()
       m_pluginIndex = m_pluginList.isEmpty()
                       ? 0
                       : qMin(m_pluginIndex, static_cast<quint8>(m_pluginList.count() - 1));
-      m_settings.setValue("CanBusDriver/pluginIndex", m_pluginIndex);
+      persistSetting(m_settings, "CanBusDriver/pluginIndex", m_pluginIndex);
       Q_EMIT pluginIndexChanged();
     }
 

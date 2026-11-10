@@ -485,9 +485,9 @@ void IO::Drivers::USB::setDeviceIndex(const int index)
 
   buildEndpointLists();
 
-  m_settings.setValue("USB/deviceIndex", index);
-  m_settings.setValue("USB/inEndpointIndex", m_inEndpointIndex);
-  m_settings.setValue("USB/outEndpointIndex", m_outEndpointIndex);
+  persistSetting(m_settings, "USB/deviceIndex", index);
+  persistSetting(m_settings, "USB/inEndpointIndex", m_inEndpointIndex);
+  persistSetting(m_settings, "USB/outEndpointIndex", m_outEndpointIndex);
 
   Q_EMIT deviceIndexChanged();
   Q_EMIT endpointListChanged();
@@ -533,9 +533,9 @@ void IO::Drivers::USB::setTransferMode(const int mode)
 
   buildEndpointLists();
 
-  m_settings.setValue("USB/transferMode", mode);
-  m_settings.setValue("USB/inEndpointIndex", m_inEndpointIndex);
-  m_settings.setValue("USB/outEndpointIndex", m_outEndpointIndex);
+  persistSetting(m_settings, "USB/transferMode", mode);
+  persistSetting(m_settings, "USB/inEndpointIndex", m_inEndpointIndex);
+  persistSetting(m_settings, "USB/outEndpointIndex", m_outEndpointIndex);
 
   Q_EMIT endpointListChanged();
   Q_EMIT inEndpointIndexChanged();
@@ -554,13 +554,13 @@ void IO::Drivers::USB::setInEndpointIndex(const int index)
     return;
 
   m_inEndpointIndex = index;
-  m_settings.setValue("USB/inEndpointIndex", index);
+  persistSetting(m_settings, "USB/inEndpointIndex", index);
 
   if (m_transferMode == TransferMode::Isochronous && index > 0) {
     const int suggested = m_inEndpoints.at(index - 1).maxPacketSize;
     if (suggested > 0 && suggested != m_isoPacketSize) {
       m_isoPacketSize = suggested;
-      m_settings.setValue("USB/isoPacketSize", suggested);
+      persistSetting(m_settings, "USB/isoPacketSize", suggested);
       Q_EMIT isoPacketSizeChanged();
     }
   }
@@ -578,7 +578,7 @@ void IO::Drivers::USB::setOutEndpointIndex(const int index)
     return;
 
   m_outEndpointIndex = index;
-  m_settings.setValue("USB/outEndpointIndex", index);
+  persistSetting(m_settings, "USB/outEndpointIndex", index);
 
   Q_EMIT outEndpointIndexChanged();
   Q_EMIT configurationChanged();
@@ -593,7 +593,7 @@ void IO::Drivers::USB::setIsoPacketSize(const int size)
     return;
 
   m_isoPacketSize = size;
-  m_settings.setValue("USB/isoPacketSize", size);
+  persistSetting(m_settings, "USB/isoPacketSize", size);
 
   Q_EMIT isoPacketSizeChanged();
   Q_EMIT configurationChanged();

@@ -65,6 +65,7 @@ public:
 
   void clear();
   void restore();
+  void setPersistent(const bool persistent) noexcept;
 
   [[nodiscard]] int count() const;
   [[nodiscard]] bool isEmpty() const;
@@ -82,6 +83,7 @@ public:
 private:
   void persist();
 
+  bool m_persistent;
   QSettings& m_settings;
   QVector<ModbusRegisterGroup> m_groups;
 };

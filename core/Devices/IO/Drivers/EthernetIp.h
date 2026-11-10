@@ -169,7 +169,6 @@ public:
   EthernetIp& operator=(const EthernetIp&) = delete;
 
   void close() override;
-  void setPersistent(const bool persistent) noexcept;
   void setSessionPeer(EthernetIp* peer);
 
   [[nodiscard]] bool isOpen() const noexcept override;
@@ -232,7 +231,6 @@ private:
 
   bool m_open;
   bool m_connecting;
-  bool m_persistent;
   int m_plcTypeIndex;
   int m_pollInterval;
   qint64 m_lastStampNs;

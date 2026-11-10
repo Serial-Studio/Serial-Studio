@@ -495,7 +495,6 @@ IO::Drivers::EthernetIp::EthernetIp()
   : m_generatedProject(this)
   , m_open(false)
   , m_connecting(false)
-  , m_persistent(true)
   , m_plcTypeIndex(0)
   , m_pollInterval(kEipDefaultIntervalMs)
   , m_lastStampNs(0)
@@ -551,22 +550,10 @@ void IO::Drivers::EthernetIp::loadSettings()
  */
 void IO::Drivers::EthernetIp::saveTags()
 {
-  if (!m_persistent)
+  if (!persistent())
     return;
 
   m_settings.setValue("EipDriver/tags", QJsonDocument(tagsJson()).toJson(QJsonDocument::Compact));
-}
-
-/**
- * @brief Only the UI-config instance writes settings; the per-source live instance is fed by the
- *        manager and must never echo its state back into QSettings.
- */
-void IO::Drivers::EthernetIp::setPersistent(const bool persistent) noexcept
-{
-  if (m_persistent == persistent)
-    return;
-
-  m_persistent = persistent;
 }
 
 /**
@@ -596,7 +583,7 @@ void IO::Drivers::EthernetIp::setSessionPeer(EthernetIp* peer)
  */
 const IO::Drivers::EthernetIp* IO::Drivers::EthernetIp::sessionPeer() const
 {
-  return m_persistent ? m_sessionPeer.data() : nullptr;
+  return persistent() ? m_sessionPeer.data() : nullptr;
 }
 
 /**
@@ -1036,8 +1023,7 @@ void IO::Drivers::EthernetIp::setHost(const QString& host)
     return;
 
   m_host = trimmed;
-  if (m_persistent)
-    m_settings.setValue("EipDriver/host", m_host);
+  persistSetting(m_settings, "EipDriver/host", m_host);
 
   Q_EMIT hostChanged();
 }
@@ -1052,8 +1038,7 @@ void IO::Drivers::EthernetIp::setCipPath(const QString& path)
     return;
 
   m_cipPath = trimmed;
-  if (m_persistent)
-    m_settings.setValue("EipDriver/cipPath", m_cipPath);
+  persistSetting(m_settings, "EipDriver/cipPath", m_cipPath);
 
   Q_EMIT cipPathChanged();
 }
@@ -1068,8 +1053,7 @@ void IO::Drivers::EthernetIp::setPlcTypeIndex(const int index)
     return;
 
   m_plcTypeIndex = clamped;
-  if (m_persistent)
-    m_settings.setValue("EipDriver/plcType", m_plcTypeIndex);
+  persistSetting(m_settings, "EipDriver/plcType", m_plcTypeIndex);
 
   Q_EMIT plcTypeChanged();
 }
@@ -1084,8 +1068,7 @@ void IO::Drivers::EthernetIp::setPollInterval(const int interval)
     return;
 
   m_pollInterval = clamped;
-  if (m_persistent)
-    m_settings.setValue("EipDriver/pollInterval", m_pollInterval);
+  persistSetting(m_settings, "EipDriver/pollInterval", m_pollInterval);
 
   Q_EMIT pollIntervalChanged();
   Q_EMIT statusChanged();

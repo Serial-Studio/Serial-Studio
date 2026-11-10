@@ -563,7 +563,7 @@ void IO::Drivers::UART::setBaudRate(const qint32 rate)
 {
   if (m_baudRate != rate && rate > 0) {
     m_baudRate = rate;
-    m_settings.setValue("IO_Serial_Baud_Rate", rate);
+    persistSetting(m_settings, "IO_Serial_Baud_Rate", rate);
 
     if (port() && !m_runner) {
       if (!port()->setBaudRate(baudRate())) {
@@ -586,7 +586,7 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
     return;
 
   m_dtrEnabled = enabled;
-  m_settings.setValue("UartDriver/dtr", enabled);
+  persistSetting(m_settings, "UartDriver/dtr", enabled);
 
   if (portOpen() && !m_runner)
     port()->setDataTerminalReady(enabled);
@@ -604,7 +604,7 @@ void IO::Drivers::UART::setRtsEnabled(const bool enabled)
     return;
 
   m_rtsEnabled = enabled;
-  m_settings.setValue("UartDriver/rts", enabled);
+  persistSetting(m_settings, "UartDriver/rts", enabled);
 
   if (portOpen() && !m_runner && UartPolicy::rtsSettable(port()->flowControl()))
     applyRts(enabled);
@@ -630,10 +630,10 @@ void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 
   const auto name = portList().at(m_portIndex);
   if (!name.isEmpty() && m_portIndex > 0)
-    m_settings.setValue("IO_Serial_SelectedDevice", name);
+    persistSetting(m_settings, "IO_Serial_SelectedDevice", name);
 
   else if (m_portIndex == 0)
-    m_settings.remove("IO_Serial_SelectedDevice");
+    forgetSetting(m_settings, "IO_Serial_SelectedDevice");
 
   Q_EMIT portIndexChanged();
 }
@@ -686,7 +686,7 @@ void IO::Drivers::UART::setParity(const quint8 parityIndex)
     return;
 
   m_parityIndex = parityIndex;
-  m_settings.setValue("UartDriver/parity", parityIndex);
+  persistSetting(m_settings, "UartDriver/parity", parityIndex);
 
   switch (parityIndex) {
     case 0:
@@ -726,7 +726,7 @@ void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
     return;
 
   m_dataBitsIndex = dataBitsIndex;
-  m_settings.setValue("UartDriver/dataBits", dataBitsIndex);
+  persistSetting(m_settings, "UartDriver/dataBits", dataBitsIndex);
 
   switch (dataBitsIndex) {
     case 0:
@@ -763,7 +763,7 @@ void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
     return;
 
   m_stopBitsIndex = stopBitsIndex;
-  m_settings.setValue("UartDriver/stopBits", stopBitsIndex);
+  persistSetting(m_settings, "UartDriver/stopBits", stopBitsIndex);
 
   switch (stopBitsIndex) {
     case 0:
@@ -792,7 +792,7 @@ void IO::Drivers::UART::setAutoReconnect(const bool autoreconnect)
     return;
 
   m_autoReconnect = autoreconnect;
-  m_settings.setValue("UartDriver/autoReconnect", autoreconnect);
+  persistSetting(m_settings, "UartDriver/autoReconnect", autoreconnect);
   Q_EMIT autoReconnectChanged();
 }
 
@@ -810,7 +810,7 @@ void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
     return;
 
   m_flowControlIndex = flowControlIndex;
-  m_settings.setValue("UartDriver/flowControl", flowControlIndex);
+  persistSetting(m_settings, "UartDriver/flowControl", flowControlIndex);
 
   switch (flowControlIndex) {
     case 0:
@@ -1119,7 +1119,7 @@ void IO::Drivers::UART::setConnectionSequence(const QVariant& value)
     return;
 
   m_sequence = sequence;
-  m_settings.setValue("UartDriver/connectionSequence", connectionSequenceJson());
+  persistSetting(m_settings, "UartDriver/connectionSequence", connectionSequenceJson());
   Q_EMIT connectionSequenceChanged();
 }
 

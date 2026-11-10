@@ -77,7 +77,6 @@ template<typename Driver>
     return nullptr;
 
   auto* plc = static_cast<Driver*>(driver.get());
-  plc->setPersistent(false);
   if (!uiDriver)
     return driver;
 
@@ -111,8 +110,9 @@ IO::DriverFactory::DriverFactory([[maybe_unused]] DriverUiRegistry& uiDrivers,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Creates a fresh driver instance for the given bus @p type with the message bus attached,
- *        or nullptr when this build or this licence does not carry that bus.
+ * @brief Creates a fresh live driver for the given bus @p type with the message bus attached, or
+ *        nullptr when this build or this licence does not carry that bus. Live instances never
+ *        persist: the settings a project source applies must not become the Setup pane's defaults.
  */
 std::unique_ptr<IO::HAL_Driver> IO::DriverFactory::create(SerialStudio::BusType type) const
 {
@@ -120,9 +120,11 @@ std::unique_ptr<IO::HAL_Driver> IO::DriverFactory::create(SerialStudio::BusType 
             return nullptr);
 
   auto driver = build(type);
-  if (driver)
-    driver->attachMessageBus(m_bus);
+  if (!driver)
+    return nullptr;
 
+  driver->setPersistent(false);
+  driver->attachMessageBus(m_bus);
   return driver;
 }
 
@@ -188,8 +190,8 @@ std::unique_ptr<IO::HAL_Driver> IO::DriverFactory::createMqtt() const
 }
 
 /**
- * @brief Builds the live OPC UA session driver: non-persistent (only the UI instance saves its
- *        settings) and mirroring its status onto the UI-config instance the pane binds to.
+ * @brief Builds the live OPC UA session driver, mirroring its status onto the UI-config instance
+ *        the pane binds to.
  */
 std::unique_ptr<IO::HAL_Driver> IO::DriverFactory::createOpcUa() const
 {
@@ -197,9 +199,7 @@ std::unique_ptr<IO::HAL_Driver> IO::DriverFactory::createOpcUa() const
   if (!driver)
     return nullptr;
 
-  auto* opcUa = static_cast<IO::Drivers::OpcUa*>(driver.get());
-  opcUa->setPersistent(false);
-
+  auto* opcUa   = static_cast<IO::Drivers::OpcUa*>(driver.get());
   auto* opcUaUi = m_uiDrivers.opcUa();
   if (opcUaUi) {
     opcUaUi->setSessionPeer(opcUa);

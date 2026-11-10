@@ -203,7 +203,6 @@ public:
   OpcUa& operator=(const OpcUa&) = delete;
 
   void close() override;
-  void setPersistent(const bool persistent) noexcept;
   void setSessionPeer(OpcUa* peer);
 
   [[nodiscard]] bool configurationOk() const noexcept override;
@@ -432,7 +431,6 @@ private:
 
   bool m_connecting;
   bool m_discovering;
-  bool m_persistent;
   bool m_hasDeferred;
   PendingDial m_pendingDial;
   int m_authMode;

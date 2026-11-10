@@ -556,7 +556,7 @@ void IO::Drivers::MQTT::setPort(const quint16 port)
     return;
 
   m_port = port;
-  m_settings.setValue(settingsKey("port"), port);
+  persistSetting(m_settings, settingsKey("port"), port);
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -570,7 +570,7 @@ void IO::Drivers::MQTT::setKeepAlive(const quint16 keepAlive)
     return;
 
   m_keepAlive = keepAlive;
-  m_settings.setValue(settingsKey("keepAlive"), keepAlive);
+  persistSetting(m_settings, settingsKey("keepAlive"), keepAlive);
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -584,7 +584,7 @@ void IO::Drivers::MQTT::setAutoKeepAlive(const bool autoKeepAlive)
     return;
 
   m_autoKeepAlive = autoKeepAlive;
-  m_settings.setValue(settingsKey("autoKeepAlive"), autoKeepAlive);
+  persistSetting(m_settings, settingsKey("autoKeepAlive"), autoKeepAlive);
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -598,7 +598,7 @@ void IO::Drivers::MQTT::setCleanSession(const bool cleanSession)
     return;
 
   m_cleanSession = cleanSession;
-  m_settings.setValue(settingsKey("cleanSession"), cleanSession);
+  persistSetting(m_settings, settingsKey("cleanSession"), cleanSession);
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -615,7 +615,7 @@ void IO::Drivers::MQTT::setMqttVersion(const quint8 version)
         return;
 
       m_protocolVersion = i.value();
-      m_settings.setValue(settingsKey("mqttVersion"), version);
+      persistSetting(m_settings, settingsKey("mqttVersion"), version);
       scheduleReconnectIfActive();
       Q_EMIT mqttConfigurationChanged();
       return;
@@ -634,7 +634,7 @@ void IO::Drivers::MQTT::setSslEnabled(const bool enabled)
     return;
 
   m_sslEnabled = enabled;
-  m_settings.setValue(settingsKey("sslEnabled"), enabled);
+  persistSetting(m_settings, settingsKey("sslEnabled"), enabled);
   scheduleReconnectIfActive();
   Q_EMIT sslConfigurationChanged();
 }
@@ -651,7 +651,7 @@ void IO::Drivers::MQTT::setSslProtocol(const quint8 protocol)
         return;
 
       m_sslConfiguration.setProtocol(i.value());
-      m_settings.setValue(settingsKey("sslProtocol"), protocol);
+      persistSetting(m_settings, settingsKey("sslProtocol"), protocol);
       scheduleReconnectIfActive();
       Q_EMIT sslConfigurationChanged();
       return;
@@ -677,7 +677,7 @@ void IO::Drivers::MQTT::setPeerVerifyMode(const quint8 verifyMode)
           << "[MQTT input] TLS peer verification disabled -- connection vulnerable to MITM";
 
       m_sslConfiguration.setPeerVerifyMode(i.value());
-      m_settings.setValue(settingsKey("peerVerifyMode"), verifyMode);
+      persistSetting(m_settings, settingsKey("peerVerifyMode"), verifyMode);
       scheduleReconnectIfActive();
       Q_EMIT sslConfigurationChanged();
       return;
@@ -696,7 +696,7 @@ void IO::Drivers::MQTT::setPeerVerifyDepth(const int depth)
     return;
 
   m_sslConfiguration.setPeerVerifyDepth(depth);
-  m_settings.setValue(settingsKey("peerVerifyDepth"), depth);
+  persistSetting(m_settings, settingsKey("peerVerifyDepth"), depth);
   scheduleReconnectIfActive();
   Q_EMIT sslConfigurationChanged();
 }
@@ -710,7 +710,7 @@ void IO::Drivers::MQTT::setClientId(const QString& id)
     return;
 
   m_clientId = id;
-  m_settings.setValue(settingsKey("clientId"), id);
+  persistSetting(m_settings, settingsKey("clientId"), id);
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -724,7 +724,7 @@ void IO::Drivers::MQTT::setHostname(const QString& hostname)
     return;
 
   m_hostname = hostname;
-  m_settings.setValue(settingsKey("hostname"), hostname);
+  persistSetting(m_settings, settingsKey("hostname"), hostname);
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -738,7 +738,9 @@ void IO::Drivers::MQTT::setUsername(const QString& username)
     return;
 
   m_username = username;
-  m_vault.setCredentials(m_hostname, m_port, m_username, m_password);
+  if (persistent())
+    m_vault.setCredentials(m_hostname, m_port, m_username, m_password);
+
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -754,7 +756,9 @@ void IO::Drivers::MQTT::applyCredentials(const QString& username, const QString&
 
   m_username = username;
   m_password = password;
-  m_vault.setCredentials(m_hostname, m_port, m_username, m_password);
+  if (persistent())
+    m_vault.setCredentials(m_hostname, m_port, m_username, m_password);
+
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -768,7 +772,9 @@ void IO::Drivers::MQTT::setPassword(const QString& password)
     return;
 
   m_password = password;
-  m_vault.setCredentials(m_hostname, m_port, m_username, m_password);
+  if (persistent())
+    m_vault.setCredentials(m_hostname, m_port, m_username, m_password);
+
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
 }
@@ -782,7 +788,7 @@ void IO::Drivers::MQTT::setTopicFilter(const QString& topic)
     return;
 
   m_topicFilter = topic;
-  m_settings.setValue(settingsKey("topicFilter"), topic);
+  persistSetting(m_settings, settingsKey("topicFilter"), topic);
   refreshTopicFilterCache();
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
@@ -801,7 +807,7 @@ void IO::Drivers::MQTT::setSparkplugEnabled(const bool enabled)
   if (!enabled)
     m_sparkplugTimer.stop();
 
-  m_settings.setValue(settingsKey("sparkplugEnabled"), enabled);
+  persistSetting(m_settings, settingsKey("sparkplugEnabled"), enabled);
   refreshTopicFilterCache();
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
@@ -819,7 +825,7 @@ void IO::Drivers::MQTT::setSparkplugGroupId(const QString& groupId)
     return;
 
   m_sparkplugGroupId = groupId;
-  m_settings.setValue(settingsKey("sparkplugGroupId"), groupId);
+  persistSetting(m_settings, settingsKey("sparkplugGroupId"), groupId);
   refreshTopicFilterCache();
   scheduleReconnectIfActive();
   Q_EMIT mqttConfigurationChanged();
@@ -1319,7 +1325,7 @@ void IO::Drivers::MQTT::setClientCertificatePath(const QString& path)
     return;
 
   m_clientCertificatePath = path;
-  m_settings.setValue(settingsKey("clientCertPath"), path);
+  persistSetting(m_settings, settingsKey("clientCertPath"), path);
   reloadTlsIdentity(false);
   scheduleReconnectIfActive();
   Q_EMIT sslConfigurationChanged();
@@ -1334,7 +1340,7 @@ void IO::Drivers::MQTT::setPrivateKeyPath(const QString& path)
     return;
 
   m_privateKeyPath = path;
-  m_settings.setValue(settingsKey("privateKeyPath"), path);
+  persistSetting(m_settings, settingsKey("privateKeyPath"), path);
   reloadTlsIdentity(false);
   scheduleReconnectIfActive();
   Q_EMIT sslConfigurationChanged();
@@ -1349,7 +1355,9 @@ void IO::Drivers::MQTT::setKeyPassphrase(const QString& passphrase)
     return;
 
   m_keyPassphrase = passphrase;
-  m_vault.setKeyPassphrase(m_hostname, m_port, m_keyPassphrase);
+  if (persistent())
+    m_vault.setKeyPassphrase(m_hostname, m_port, m_keyPassphrase);
+
   reloadTlsIdentity(false);
   scheduleReconnectIfActive();
   Q_EMIT sslConfigurationChanged();
@@ -1365,7 +1373,7 @@ void IO::Drivers::MQTT::setAlpnEnabled(const bool enabled)
     return;
 
   m_alpnEnabled = enabled;
-  m_settings.setValue(settingsKey("alpnEnabled"), enabled);
+  persistSetting(m_settings, settingsKey("alpnEnabled"), enabled);
   ::MQTT::applyTlsIdentity(
     m_sslConfiguration, m_tlsIdentity, m_alpnEnabled ? m_alpnProtocol.toUtf8() : QByteArray());
   scheduleReconnectIfActive();
@@ -1381,7 +1389,7 @@ void IO::Drivers::MQTT::setAlpnProtocol(const QString& protocol)
     return;
 
   m_alpnProtocol = protocol;
-  m_settings.setValue(settingsKey("alpnProtocol"), protocol);
+  persistSetting(m_settings, settingsKey("alpnProtocol"), protocol);
   ::MQTT::applyTlsIdentity(
     m_sslConfiguration, m_tlsIdentity, m_alpnEnabled ? m_alpnProtocol.toUtf8() : QByteArray());
   scheduleReconnectIfActive();

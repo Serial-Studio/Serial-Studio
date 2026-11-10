@@ -52,8 +52,21 @@ static const IO::Drivers::ModbusRegisterGroup kInvalidGroup;
 /**
  * @brief Binds the group list to the settings scope it persists into.
  */
-IO::Drivers::ModbusRegisterGroups::ModbusRegisterGroups(QSettings& settings) : m_settings(settings)
+IO::Drivers::ModbusRegisterGroups::ModbusRegisterGroups(QSettings& settings)
+  : m_persistent(true), m_settings(settings)
 {}
+
+/**
+ * @brief Turns persistence off for a live driver's groups: they still hold the project's list,
+ *        but never write it over the Setup pane's.
+ */
+void IO::Drivers::ModbusRegisterGroups::setPersistent(const bool persistent) noexcept
+{
+  if (m_persistent == persistent)
+    return;
+
+  m_persistent = persistent;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Persistence
@@ -95,6 +108,9 @@ void IO::Drivers::ModbusRegisterGroups::restore()
  */
 void IO::Drivers::ModbusRegisterGroups::persist()
 {
+  if (!m_persistent)
+    return;
+
   m_settings.beginWriteArray(kSettingsArray);
   for (int i = 0; i < m_groups.size(); ++i) {
     m_settings.setArrayIndex(i);

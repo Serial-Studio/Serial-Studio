@@ -588,7 +588,7 @@ void IO::Drivers::Network::setTcpPort(const quint16 port)
     return;
 
   m_tcpPort = port;
-  m_settings.setValue("NetworkDriver/tcpPort", port);
+  persistSetting(m_settings, "NetworkDriver/tcpPort", port);
   Q_EMIT portChanged();
 }
 
@@ -601,7 +601,7 @@ void IO::Drivers::Network::setUdpLocalPort(const quint16 port)
     return;
 
   m_udpLocalPort = port;
-  m_settings.setValue("NetworkDriver/udpLocalPort", port);
+  persistSetting(m_settings, "NetworkDriver/udpLocalPort", port);
   Q_EMIT portChanged();
 }
 
@@ -614,7 +614,7 @@ void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
     return;
 
   m_udpRemotePort = port;
-  m_settings.setValue("NetworkDriver/udpRemotePort", port);
+  persistSetting(m_settings, "NetworkDriver/udpRemotePort", port);
   Q_EMIT portChanged();
 }
 
@@ -640,7 +640,7 @@ void IO::Drivers::Network::setRemoteAddress(const QString& address)
   if (!address.isEmpty() && m_resolvedAddress.isNull())
     lookup(address);
 
-  m_settings.setValue("NetworkDriver/address", address);
+  persistSetting(m_settings, "NetworkDriver/address", address);
   Q_EMIT addressChanged();
 }
 
@@ -668,7 +668,7 @@ void IO::Drivers::Network::setUdpMulticast(const bool enabled)
     return;
 
   m_udpMulticast = enabled;
-  m_settings.setValue("NetworkDriver/udpMulticastEnabled", enabled);
+  persistSetting(m_settings, "NetworkDriver/udpMulticastEnabled", enabled);
   Q_EMIT udpMulticastChanged();
 }
 
@@ -695,7 +695,7 @@ void IO::Drivers::Network::setWebSocketUrl(const QString& url)
     return;
 
   m_webSocketUrl = url;
-  m_settings.setValue("NetworkDriver/webSocketUrl", url);
+  persistSetting(m_settings, "NetworkDriver/webSocketUrl", url);
   Q_EMIT webSocketChanged();
 }
 
@@ -708,7 +708,7 @@ void IO::Drivers::Network::setWebSocketFormatIndex(const int index)
     return;
 
   m_webSocketFormat = index;
-  m_settings.setValue("NetworkDriver/webSocketFormat", index);
+  persistSetting(m_settings, "NetworkDriver/webSocketFormat", index);
   Q_EMIT webSocketChanged();
 }
 
@@ -721,7 +721,7 @@ void IO::Drivers::Network::setIgnoreTlsErrors(const bool enabled)
     return;
 
   m_ignoreTlsErrors = enabled;
-  m_settings.setValue("NetworkDriver/ignoreTlsErrors", enabled);
+  persistSetting(m_settings, "NetworkDriver/ignoreTlsErrors", enabled);
   Q_EMIT ignoreTlsErrorsChanged();
 }
 
@@ -735,7 +735,7 @@ void IO::Drivers::Network::setHttpUrl(const QString& url)
     return;
 
   m_httpUrl = url;
-  m_settings.setValue("NetworkDriver/httpUrl", url);
+  persistSetting(m_settings, "NetworkDriver/httpUrl", url);
   Q_EMIT httpChanged();
 }
 
@@ -748,7 +748,7 @@ void IO::Drivers::Network::setHttpBody(const QString& body)
     return;
 
   m_httpBody = body;
-  m_settings.setValue("NetworkDriver/httpBody", body);
+  persistSetting(m_settings, "NetworkDriver/httpBody", body);
   Q_EMIT httpChanged();
 }
 
@@ -761,7 +761,7 @@ void IO::Drivers::Network::setHttpHeaders(const QString& headers)
     return;
 
   m_httpHeaders = headers;
-  m_settings.setValue("NetworkDriver/httpHeaders", headers);
+  persistSetting(m_settings, "NetworkDriver/httpHeaders", headers);
   Q_EMIT httpChanged();
 }
 
@@ -774,7 +774,7 @@ void IO::Drivers::Network::setHttpMethodIndex(const int index)
     return;
 
   m_httpMethod = index;
-  m_settings.setValue("NetworkDriver/httpMethod", index);
+  persistSetting(m_settings, "NetworkDriver/httpMethod", index);
   Q_EMIT httpChanged();
 }
 
@@ -790,7 +790,7 @@ void IO::Drivers::Network::setHttpInterval(const int interval)
     return;
 
   m_httpInterval = bounded;
-  m_settings.setValue("NetworkDriver/httpInterval", bounded);
+  persistSetting(m_settings, "NetworkDriver/httpInterval", bounded);
   Q_EMIT httpChanged();
 }
 
@@ -803,7 +803,7 @@ void IO::Drivers::Network::setSocketType(const SocketType type)
     return;
 
   m_socketType = type;
-  m_settings.setValue("NetworkDriver/socketType", static_cast<int>(type));
+  persistSetting(m_settings, "NetworkDriver/socketType", static_cast<int>(type));
   Q_EMIT socketTypeChanged();
 }
 

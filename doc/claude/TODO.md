@@ -44,13 +44,12 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
   `LedIndicator.qml` (T14), the HDR boost on lit hardware (T24), the toggle and knob hardware
   looks (T25), the Selector leftovers (T26b), automation roles for the hardware looks (T27),
   and the unit tests for AC2, AC3 and AC12 (T11, T23).
-- [ ] A project source's live driver writes the Setup pane's saved defaults: opening a project
-  whose Modbus source uses port 5521 left `ModbusDriver/port` at 5521 for the next Quick Plot
-  session (seen 2026-11-06). The driver setters persist whoever calls them, and
-  `ConnectionManager` applies every source's `connectionSettings` to its live driver through
-  them. Fourteen drivers persist from setters (MQTT, Network, USB, Modbus, UART, OPC UA and its
-  security sub-object, CAN, IEC 104, S7, Process, EtherNet/IP, HID, Audio), so the fix is one
-  design choice applied to all of them.
+- [ ] A project's connection settings still reach the Setup pane's saved defaults through the
+  UI-config driver: `UiDriverSync::syncFromSource0` (a saved single-source project) and
+  `driverForEditing` (a source opened in the Project Editor) apply them to the persistent
+  instance. Live drivers stopped persisting on 2026-11-09. Pausing persistence while a project is
+  mirrored in would close this, but it changes what the Setup pane remembers, so it waits for the
+  maintainer's decision.
 - [ ] Spec 0099 deferrals: span-lane writeback (T3, benchmark-gated) and ZMODEM backpressure and
   ZEOF timing (T15, needs a cross-layer HAL drain API). Briefs in its `findings.md`.
 - [ ] Close-out that needs no build: spec 0103 T39 to T42 (hotpath re-read, C++ review, docs

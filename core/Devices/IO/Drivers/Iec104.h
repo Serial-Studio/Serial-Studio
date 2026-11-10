@@ -135,7 +135,6 @@ public:
   Iec104& operator=(const Iec104&) = delete;
 
   void close() override;
-  void setPersistent(const bool persistent) noexcept;
   void setSessionPeer(Iec104* peer);
 
   [[nodiscard]] bool isOpen() const noexcept override;
@@ -219,7 +218,6 @@ private:
   bool m_open;
   bool m_loading;
   bool m_started;
-  bool m_persistent;
   bool m_clockValid;
   int m_port;
   int m_commonAddress;

@@ -1530,10 +1530,14 @@ void IO::Drivers::Audio::applyConnectionSettings(const QJsonObject& settings)
 }
 
 /**
- * @brief Writes the current selection to QSettings using stable identifiers.
+ * @brief Writes the current selection to QSettings using stable identifiers; a live instance
+ *        writes nothing.
  */
 void IO::Drivers::Audio::persistSettings()
 {
+  if (!persistent())
+    return;
+
   m_settings.setValue(QStringLiteral("AudioDriver/normalization"), m_normalization);
   m_catalog.persistSelection(m_settings);
 }

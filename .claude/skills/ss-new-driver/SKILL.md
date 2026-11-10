@@ -23,7 +23,10 @@ virtuals: `close`, `isOpen`, `isReadable`, `isWritable`, `configurationOk`, `wri
 bodies — `deviceIdentifier()`, `selectByIdentifier()`, `applyConnectionSettings()` — which
 drive device selection and reconnection. Received bytes are published via
 `publishReceivedData(...)` — **stamp the timestamp at the driver boundary** (source owns time;
-see [ss-hotpath]). Never re-stamp downstream.
+see [ss-hotpath]). Never re-stamp downstream. A setter saves its default through
+`persistSetting(m_settings, key, value)` / `forgetSetting(...)`, never `m_settings.setValue`: the
+factory turns persistence off on live instances, so a project source's settings never overwrite
+the Setup pane's (a sub-object that writes settings itself gets `setPersistent()` forwarded).
 
 ## Touch-points to wire (verify each against an existing driver)
 

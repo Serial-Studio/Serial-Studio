@@ -10,7 +10,12 @@
 - `ConnectionManager` (singleton, `Cpp_IO_Manager`) owns one **UI-config** instance per type:
   `instance().uart()`, `.network()`, `.bluetoothLE()`, etc. QML context properties
   (`Cpp_IO_Serial`, etc.) point at these.
-- `IO::DriverFactory::create()` (spec 0070) makes **fresh** instances for live connections, owned by `DeviceManager`.
+- `IO::DriverFactory::create()` (spec 0070) makes **fresh** instances for live connections, owned
+  by `DeviceManager`, with `setPersistent(false)`: setters save through
+  `HAL_Driver::persistSetting()` / `forgetSetting()`, so a project source's settings never
+  overwrite the Setup pane's defaults (seen 2026-11-06: a Modbus source's port 5521 became the
+  next Quick Plot session's). The UI-config instance still persists whatever is applied to it,
+  including a project mirrored in by `UiDriverSync::syncFromSource0` or `driverForEditing`.
 - `driverProperties()` is the persistence snapshot AND the Project Editor's form, so a row another
   mode does not use is never left out: it carries `DriverProperty::visibleWhen` rules (sibling key
   plus the values that show it, ANDed; `IO::driverPropertyVisible()` evaluates them) and the

@@ -57,6 +57,7 @@ private slots:
   void groupsSurviveARestore();
   void aRestoreDropsAnOutOfRangeEntry();
   void removalAndClearTruncateThePersistedArray();
+  void aLiveDriversGroupsLeaveTheSavedArrayAlone();
   void jsonCarriesEveryFieldOfEveryGroup();
   void perGroupSlaveAddressesSurviveAndStayDistinct();
   void functionCodesFollowTheRegisterType();
@@ -231,6 +232,29 @@ void TstModbusRegisterGroups::removalAndClearTruncateThePersistedArray()
   empty.restore();
   QVERIFY(empty.isEmpty());
   QCOMPARE(empty.totalDatasets(), 0);
+}
+
+/**
+ * @brief A project source's live driver holds the project's groups but never writes them: they
+ *        used to replace the Setup pane's saved list for the next Quick Plot session.
+ */
+void TstModbusRegisterGroups::aLiveDriversGroupsLeaveTheSavedArrayAlone()
+{
+  ModbusRegisterGroups setup(settings());
+  QVERIFY(setup.add(kHolding, 0, 4));
+
+  ModbusRegisterGroups live(settings());
+  live.setPersistent(false);
+  QVERIFY(live.add(kInput, 100, 8));
+  QVERIFY(live.add(kCoils, 200, 16));
+  QCOMPARE(live.count(), 2);
+  live.clear();
+
+  ModbusRegisterGroups restored(settings());
+  restored.restore();
+  QCOMPARE(restored.count(), 1);
+  QCOMPARE(restored.at(0).registerType, kHolding);
+  QCOMPARE(restored.at(0).count, quint16(4));
 }
 
 /**
