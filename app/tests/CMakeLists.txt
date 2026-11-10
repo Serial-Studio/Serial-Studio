@@ -3208,6 +3208,20 @@ ss_add_unit_test(tst_connection_verdicts
 )
 
 #
+# A project's connection settings mirrored onto the Setup pane's driver stay out of its saved
+# defaults: the persistence hold gates writes without changing which instance owns them.
+# HAL_Driver.h is a source for AUTOMOC, as in tst_connection_verdicts.
+#
+ss_add_unit_test(tst_driver_persistence_hold
+  SOURCES tst_driver_persistence_hold.cpp
+          ${SS_CORE_SRC}/Core/IO/HAL_Driver.h
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+          SerialStudio::Core
+)
+
+#
 # Licensing::MachineID's startup contract (spec 0075): a machine that already has a persisted
 # fingerprint must answer from it instead of spawning ioreg/reg/powershell inside the composition
 # root. SerialStudio::Core comes with it for the SimpleCrypt the store sits under; QtWidgets

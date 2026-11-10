@@ -611,7 +611,7 @@ void IO::Drivers::S7::setSessionPeer(S7* peer)
  */
 const IO::Drivers::S7* IO::Drivers::S7::sessionPeer() const
 {
-  return persistent() ? m_sessionPeer.data() : nullptr;
+  return ownsSavedDefaults() ? m_sessionPeer.data() : nullptr;
 }
 
 /**

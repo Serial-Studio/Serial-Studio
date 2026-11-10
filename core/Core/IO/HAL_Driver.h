@@ -217,7 +217,11 @@ signals:
 
 public:
   explicit HAL_Driver(QObject* parent = nullptr)
-    : QObject(parent), m_persistent(true), m_openReportArmed(false), m_bus(nullptr)
+    : QObject(parent)
+    , m_persistent(true)
+    , m_persistenceHeld(false)
+    , m_openReportArmed(false)
+    , m_bus(nullptr)
   {}
 
   virtual ~HAL_Driver() = default;
@@ -242,12 +246,27 @@ public:
   /**
    * @brief Turns setter persistence off for a project source's live instance: only the Setup
    *        pane's instance owns the saved defaults, so a project's connection settings never
-   *        overwrite them. Virtual so a driver forwards it to a sub-object that persists on its
-   *        own.
+   *        overwrite them.
    */
-  virtual void setPersistent(const bool persistent) noexcept { m_persistent = persistent; }
+  void setPersistent(const bool persistent) noexcept
+  {
+    m_persistent = persistent;
+    onPersistenceChanged();
+  }
 
-  [[nodiscard]] bool persistent() const noexcept { return m_persistent; }
+  /**
+   * @brief Suspends saved-default writes on the Setup pane's instance while a project's settings
+   *        are mirrored onto it, without changing which instance it is (ownsSavedDefaults()).
+   */
+  void setPersistenceHeld(const bool held) noexcept
+  {
+    m_persistenceHeld = held;
+    onPersistenceChanged();
+  }
+
+  [[nodiscard]] bool persistent() const noexcept { return m_persistent && !m_persistenceHeld; }
+
+  [[nodiscard]] bool ownsSavedDefaults() const noexcept { return m_persistent; }
 
   virtual void close()                               = 0;
   [[nodiscard]] virtual bool isOpen() const noexcept = 0;
@@ -299,20 +318,26 @@ protected:
   [[nodiscard]] Core::Bus::MessageBus* messageBus() const noexcept { return m_bus; }
 
   /**
-   * @brief Writes one saved default; a non-persistent (live) instance writes nothing.
+   * @brief Called after persistent() may have changed, so a driver forwards it to a sub-object
+   *        that persists on its own.
+   */
+  virtual void onPersistenceChanged() noexcept {}
+
+  /**
+   * @brief Writes one saved default; a live instance, or a held one, writes nothing.
    */
   void persistSetting(QSettings& settings, QAnyStringView key, const QVariant& value) const
   {
-    if (m_persistent)
+    if (persistent())
       settings.setValue(key, value);
   }
 
   /**
-   * @brief Removes one saved default; a non-persistent (live) instance removes nothing.
+   * @brief Removes one saved default; a live instance, or a held one, removes nothing.
    */
   void forgetSetting(QSettings& settings, QAnyStringView key) const
   {
-    if (m_persistent)
+    if (persistent())
       settings.remove(key);
   }
 
@@ -385,6 +410,7 @@ protected:
 
 private:
   bool m_persistent;
+  bool m_persistenceHeld;
   bool m_openReportArmed;
   Core::Bus::MessageBus* m_bus;
 };

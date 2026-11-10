@@ -219,7 +219,7 @@ void IO::Drivers::OpcUa::setSessionPeer(OpcUa* peer)
  */
 const IO::Drivers::OpcUa* IO::Drivers::OpcUa::sessionPeer() const
 {
-  return persistent() ? m_sessionPeer.data() : nullptr;
+  return ownsSavedDefaults() ? m_sessionPeer.data() : nullptr;
 }
 
 /**

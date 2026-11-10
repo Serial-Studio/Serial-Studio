@@ -583,7 +583,7 @@ void IO::Drivers::EthernetIp::setSessionPeer(EthernetIp* peer)
  */
 const IO::Drivers::EthernetIp* IO::Drivers::EthernetIp::sessionPeer() const
 {
-  return persistent() ? m_sessionPeer.data() : nullptr;
+  return ownsSavedDefaults() ? m_sessionPeer.data() : nullptr;
 }
 
 /**

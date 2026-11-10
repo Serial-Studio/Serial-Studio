@@ -33,12 +33,6 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
   `LedIndicator.qml` (T14), the HDR boost on lit hardware (T24), the toggle and knob hardware
   looks (T25), the Selector leftovers (T26b), automation roles for the hardware looks (T27),
   and the unit tests for AC2, AC3 and AC12 (T11, T23).
-- [ ] A project's connection settings still reach the Setup pane's saved defaults through the
-  UI-config driver: `UiDriverSync::syncFromSource0` (a saved single-source project) and
-  `driverForEditing` (a source opened in the Project Editor) apply them to the persistent
-  instance. Live drivers stopped persisting on 2026-11-09. Pausing persistence while a project is
-  mirrored in would close this, but it changes what the Setup pane remembers, so it waits for the
-  maintainer's decision.
 - [ ] Spec 0099 deferrals: span-lane writeback (T3, benchmark-gated) and ZMODEM backpressure and
   ZEOF timing (T15, needs a cross-layer HAL drain API). Briefs in its `findings.md`.
 - [ ] Spec 0104 consolidation quarter, T3 to T19 in its `tasks.md`. T10 reads on 2026-12-01 and

@@ -14,8 +14,12 @@
   by `DeviceManager`, with `setPersistent(false)`: setters save through
   `HAL_Driver::persistSetting()` / `forgetSetting()`, so a project source's settings never
   overwrite the Setup pane's defaults (seen 2026-11-06: a Modbus source's port 5521 became the
-  next Quick Plot session's). The UI-config instance still persists whatever is applied to it,
-  including a project mirrored in by `UiDriverSync::syncFromSource0` or `driverForEditing`.
+  next Quick Plot session's). A project mirrored onto the UI-config instance
+  (`UiDriverSync::syncFromSource0`, `driverForEditing`) is applied under
+  `setPersistenceHeld(true)`, which gates writes only: `ownsSavedDefaults()` keeps the role the
+  industrial drivers' `sessionPeer()` routes status by, and `onPersistenceChanged()` is how a
+  sub-object that persists itself (Modbus register groups) hears both switches. A user's later
+  Setup-pane edit still persists. Pinned by `tst_driver_persistence_hold`.
 - `driverProperties()` is the persistence snapshot AND the Project Editor's form, so a row another
   mode does not use is never left out: it carries `DriverProperty::visibleWhen` rules (sibling key
   plus the values that show it, ANDed; `IO::driverPropertyVisible()` evaluates them) and the

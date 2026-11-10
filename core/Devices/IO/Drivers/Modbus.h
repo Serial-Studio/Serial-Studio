@@ -143,7 +143,6 @@ public:
   Modbus& operator=(const Modbus&) = delete;
 
   void close() override;
-  void setPersistent(const bool persistent) noexcept override;
 
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isConnecting() const noexcept override;
@@ -210,6 +209,9 @@ private slots:
   void onStateChanged(QModbusDevice::State state);
   void onErrorOccurred(QModbusDevice::Error error);
   void onProbeFinished(bool ok, const QString& reason);
+
+protected:
+  void onPersistenceChanged() noexcept override;
 
 private:
   void doClose();

@@ -58,6 +58,17 @@
   return settings;
 }
 
+/**
+ * @brief Applies a project's saved settings to a Setup-pane driver with its saved-default writes
+ *        held, so a project never overwrites what the Setup pane remembers.
+ */
+static void applyProjectSettings(IO::HAL_Driver& driver, const QJsonObject& settings)
+{
+  driver.setPersistenceHeld(true);
+  driver.applyConnectionSettings(settings);
+  driver.setPersistenceHeld(false);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & wiring
 //--------------------------------------------------------------------------------------------------
@@ -135,7 +146,7 @@ IO::HAL_Driver* IO::UiDriverSync::driverForEditing(int deviceId)
 
   if (!srcPtr->connectionSettings.isEmpty()) {
     m_syncingFromProject = true;
-    uiDrv->applyConnectionSettings(srcPtr->connectionSettings);
+    applyProjectSettings(*uiDrv, srcPtr->connectionSettings);
     m_syncingFromProject = false;
   }
 
@@ -176,7 +187,7 @@ bool IO::UiDriverSync::syncFromSource0(SerialStudio::BusType current, const BusT
 
   HAL_Driver* uiDriver = m_uiDrivers.forBusType(newType);
   if (uiDriver && !src.connectionSettings.isEmpty())
-    uiDriver->applyConnectionSettings(src.connectionSettings);
+    applyProjectSettings(*uiDriver, src.connectionSettings);
 
   m_syncingFromProject = false;
   return true;

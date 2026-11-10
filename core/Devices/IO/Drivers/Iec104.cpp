@@ -228,7 +228,7 @@ void IO::Drivers::Iec104::setSessionPeer(Iec104* peer)
  */
 const IO::Drivers::Iec104* IO::Drivers::Iec104::sessionPeer() const
 {
-  return persistent() ? m_sessionPeer.data() : nullptr;
+  return ownsSavedDefaults() ? m_sessionPeer.data() : nullptr;
 }
 
 /**

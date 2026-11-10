@@ -146,13 +146,12 @@ IO::Drivers::Modbus::~Modbus()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Forwards the persistence switch to the register groups, which write their own array: a
- *        project's groups must not become the Setup pane's.
+ * @brief Forwards the persistence switch and hold to the register groups, which write their own
+ *        array: a project's groups must not become the Setup pane's.
  */
-void IO::Drivers::Modbus::setPersistent(const bool persistent) noexcept
+void IO::Drivers::Modbus::onPersistenceChanged() noexcept
 {
-  HAL_Driver::setPersistent(persistent);
-  m_registerGroups.setPersistent(persistent);
+  m_registerGroups.setPersistent(persistent());
 }
 
 /**
