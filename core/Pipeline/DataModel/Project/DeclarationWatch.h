@@ -123,7 +123,6 @@ private:
 private:
   int m_mode;
   bool m_connected;
-  bool m_binarySession;
   bool m_requestOnConnect;
   DeclarationStatus m_status;
   QString m_reason;

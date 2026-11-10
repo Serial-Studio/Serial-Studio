@@ -90,7 +90,6 @@ static constexpr QLatin1StringView kRequestSetting("QuickPlot/RequestDeclaration
 DataModel::DeclarationWatch::DeclarationWatch(ProjectModel& model, Core::Bus::MessageBus& bus)
   : m_mode(-1)
   , m_connected(false)
-  , m_binarySession(false)
   , m_requestOnConnect(false)
   , m_status(DeclarationStatus::None)
   , m_model(model)
@@ -123,8 +122,7 @@ void DataModel::DeclarationWatch::setupExternalConnections()
     },
     Qt::QueuedConnection);
   m_framingState = m_bus.subscribe<Core::Bus::DeclaredFraming>(
-    this, [this](const std::shared_ptr<const Core::Bus::DeclaredFraming>& framing) {
-      m_binarySession = framing->active;
+    this, [this](const std::shared_ptr<const Core::Bus::DeclaredFraming>&) {
       m_carry.clear();
       m_lastLine.clear();
       m_lastForward = {};
@@ -260,16 +258,15 @@ void DataModel::DeclarationWatch::onLinkState(const Core::Bus::ConnectionStateCh
 
 /**
  * @brief Reads the primary device's bytes for declaration lines in Project File mode (spec 0111
- *        R3), and in a Quick Plot binary session, where the reader frames on the binary delimiters
- *        and only this tap can still see a re-declaration (R14). The loaded project is never
- *        touched from here.
+ *        R3) and in Quick Plot, where the line lane misses a declaration glued to a binary frame's
+ *        tail and a binary session frames on its delimiters (R14). The builder drops a repeat, so
+ *        a line both paths see rebuilds once. The loaded project is never touched from here.
  */
 void DataModel::DeclarationWatch::onDeviceBytes(const int deviceId, const IO::CapturedDataPtr& data)
 {
   SS_ASSERT(deviceId >= 0, return);
-  const bool binary = m_binarySession && m_mode == SerialStudio::QuickPlot;
-  if (deviceId != 0 || !data || Core::Runtime::sealed()
-      || (m_mode != SerialStudio::ProjectFile && !binary))
+  const bool watched = m_mode == SerialStudio::ProjectFile || m_mode == SerialStudio::QuickPlot;
+  if (deviceId != 0 || !data || Core::Runtime::sealed() || !watched)
     return;
 
   m_chunkTime = data->timestamp;

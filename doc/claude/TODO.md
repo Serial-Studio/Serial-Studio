@@ -46,8 +46,6 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
   session (seen 2026-11-06). The driver setters persist whoever calls them, and
   `applyConnectionSettings` on a `DriverFactory` instance goes through those setters. Map which
   drivers do this before choosing a fix.
-- [ ] `test_declared_binary` fails on Windows in CI ("the declared dashboard never filled", while
-  the app log shows the declaration arriving) and passes on macOS.
 - [ ] Spec 0099 deferrals: span-lane writeback (T3, benchmark-gated) and ZMODEM backpressure and
   ZEOF timing (T15, needs a cross-layer HAL drain API). Briefs in its `findings.md`.
 - [ ] Close-out that needs no build: spec 0103 T39 to T42 (hotpath re-read, C++ review, docs

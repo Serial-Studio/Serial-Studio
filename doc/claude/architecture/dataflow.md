@@ -183,7 +183,10 @@ it parses as a value.
   Quick Plot with the link up and re-announces the frame config, so the reader is recreated on the
   usual path. Frames then go to `QuickPlotBuilder::applyPacked`, and a re-declaration that the
   binary reader cannot frame is posted by the watch through `FrameBuilder::submitDeclarationLine`
-  (fire-and-forget, never a blocking hop).
+  (fire-and-forget, never a blocking hop). The watch scans text Quick Plot sessions too: a binary
+  device declaring before the app knows it is binary glues the line to the tail of its last frame
+  (packed values hold `0x0A` bytes), which the line lane's first-byte test misses. Both paths may
+  offer the same line; `DeclarationState` drops the repeat, so it rebuilds once.
 - **Project File mode.** `DataModel::DeclarationWatch` (a `ProjectModel` sub-object, a raw-byte
   tap, GUI thread, chunk rate) compares the prefix in place before copying a byte, so `#` frames
   cost one search each. It parses through its own `DeclarationState` (once per content, the same
