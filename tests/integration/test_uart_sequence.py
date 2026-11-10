@@ -13,6 +13,7 @@ Copyright (C) 2020-2026 Alex Spataru
 SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
+import json
 import os
 import shutil
 import subprocess
@@ -363,22 +364,27 @@ def test_sequence_round_trips_through_a_project(api_client, clean_state, temp_di
         assert [s.get("kind") for s in steps] == ["discard", "send", "expect"]
 
         api_client.command("io.uart.setSequence", {"sequence": PROBE_SEQUENCE})
-        api_client.load_project_from_json(
-            {
-                "title": "Pre-0103",
-                "sources": [
-                    {
-                        "sourceId": 0,
-                        "title": "Adapter",
-                        "busType": 0,
-                        "frameEnd": "\n",
-                        "frameDetection": 0,
-                        "connection": {"baudRate": 115200, "dtr": True},
-                    }
-                ],
-                "groups": [],
-            }
+        legacy = Path(temp_dir) / "pre-0103.ssproj"
+        legacy.write_text(
+            json.dumps(
+                {
+                    "title": "Pre-0103",
+                    "sources": [
+                        {
+                            "sourceId": 0,
+                            "title": "Adapter",
+                            "busType": 0,
+                            "frameEnd": "\n",
+                            "frameDetection": 0,
+                            "connection": {"baudRate": 115200, "dtr": True},
+                        }
+                    ],
+                    "groups": [],
+                }
+            ),
+            encoding="utf-8",
         )
+        api_client.load_project(str(legacy))
         time.sleep(0.5)
         assert api_client.command("io.uart.getSequence")["stepCount"] == 0
     finally:
