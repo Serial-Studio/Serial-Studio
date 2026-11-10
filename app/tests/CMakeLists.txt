@@ -414,6 +414,17 @@ ss_add_unit_test(tst_quickplot_format_state
 )
 
 #
+# A declared binary Quick Plot session follows the reader that frames it (spec 0111 R14): no
+# packed decode before the reader switches, and a reader back on lines behind a missed reconnect
+# drops the stale declaration. Header-only decisions; QuickPlotBuilder has no harness.
+#
+ss_add_unit_test(tst_quickplot_reader_framing
+  SOURCES tst_quickplot_reader_framing.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # Quick Plot to project round trip (spec 0106 AC5): the saved project parses a line to the values
 # the live lane showed.
 #

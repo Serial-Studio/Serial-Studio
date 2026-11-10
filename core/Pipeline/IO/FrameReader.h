@@ -79,6 +79,11 @@ public:
 
   [[nodiscard]] inline quint64 overflowBytes() const noexcept { return m_totalOverflowBytes; }
 
+  [[nodiscard]] inline SerialStudio::OperationMode operationMode() const noexcept
+  {
+    return m_operationMode;
+  }
+
 public slots:
   void processData(const IO::CapturedDataPtr& data);
 

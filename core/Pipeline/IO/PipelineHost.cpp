@@ -500,10 +500,10 @@ void IO::PipelineHost::moveProcessingObjectsTo(QThread* target)
 }
 
 /**
- * @brief Drains a reader's SPSC queue on the processing thread and routes each frame into
- *        FrameBuilder by the mirrored operation mode, then to the one raw-frame observer when a
- *        root bound one (pointer hoisted out of the loop: one test and one indirect call per
- *        frame). Paused sessions still drain so the queue never backs up into the reader's pool.
+ * @brief Drains a reader's SPSC queue on the processing thread into FrameBuilder by the mirrored
+ *        mode, then to the raw-frame observer (pointer hoisted: one test per frame); paused
+ *        sessions still drain. Quick Plot first learns, per batch, whether this reader uses a
+ *        declared binary framing, since the builder's own flag can run ahead of the reader.
  */
 void IO::PipelineHost::routeFrames(int deviceId, FrameReader* reader)
 {
@@ -515,6 +515,9 @@ void IO::PipelineHost::routeFrames(int deviceId, FrameReader* reader)
   const bool paused       = m_paused.load(std::memory_order_relaxed);
   const auto mode         = operationMode();
   IRawFrameTap* const tap = m_rawFrameTap.load(std::memory_order_relaxed);
+
+  if (mode == SerialStudio::QuickPlot)
+    frameBuilder.noteQuickPlotReaderFraming(reader->operationMode() == SerialStudio::ProjectFile);
 
   auto& queue = reader->queue();
   IO::CapturedDataPtr frame;

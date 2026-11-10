@@ -70,7 +70,10 @@ static constexpr double kNoSample = std::numeric_limits<double>::quiet_NaN();
  *        read the same value the parse lanes do instead of a second copy that could drift.
  */
 DataModel::QuickPlotBuilder::QuickPlotBuilder(const SerialStudio::OperationMode& operationMode)
-  : m_operationMode(operationMode), m_hasHeader(false), m_framingActive(false)
+  : m_operationMode(operationMode)
+  , m_hasHeader(false)
+  , m_framingActive(false)
+  , m_readerDeclared(false)
 {
   m_packed.fill(0.0);
   m_fieldOfChannel.fill(-1);
@@ -129,6 +132,30 @@ void DataModel::QuickPlotBuilder::forgetDeclaration()
   m_declaration.reset();
   if (m_framingActive)
     publishFraming(false);
+}
+
+/**
+ * @brief Records how source 0's reader framed the batch about to be parsed (spec 0111 R14), once
+ *        per batch. A reader back on line framing while a binary declaration still holds means a
+ *        reconnect the builder missed: the declaration is forgotten, so the device's next one is
+ *        taken as new and switches the framing again instead of every line being dropped.
+ */
+void DataModel::QuickPlotBuilder::noteReaderFraming(const bool declaredFraming)
+{
+  if (m_operationMode != SerialStudio::QuickPlot) [[unlikely]]
+    return;
+
+  const bool lost  = declaredFramingLost(m_readerDeclared, declaredFraming, m_framingActive);
+  m_readerDeclared = declaredFraming;
+  SS_ASSERT(!lost || !m_readerDeclared, return);
+  SS_ASSERT(!lost || m_framingActive, return);
+  if (!lost) [[likely]]
+    return;
+
+  qInfo().noquote() << "[QuickPlot]"
+                    << tr("The link was re-made; waiting for the device's "
+                          "declaration again");
+  reset();
 }
 
 /**

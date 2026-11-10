@@ -140,6 +140,11 @@ public:
 
   [[nodiscard]] bool quickPlotDeclared() const noexcept { return m_quickPlot.declared(); }
 
+  void noteQuickPlotReaderFraming(bool declaredFraming)
+  {
+    m_quickPlot.noteReaderFraming(declaredFraming);
+  }
+
   using ParseLoad      = DataModel::ParseBudget::Load;
   using ShortFrameStat = DataModel::ShortFrameWatch::Stat;
 

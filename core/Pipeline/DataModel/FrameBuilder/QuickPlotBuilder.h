@@ -31,6 +31,7 @@
 #include "Core/DataModel/Frame.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/FrameBuilder/QuickPlotFormatState.h"
+#include "DataModel/FrameBuilder/QuickPlotReaderFraming.h"
 #include "DataModel/Project/DeviceDeclaration.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryPackedStruct.h"
 
@@ -60,7 +61,10 @@ public:
 
   [[nodiscard]] bool declared() const noexcept { return m_state.declared(); }
 
-  [[nodiscard]] bool binary() const noexcept { return m_framingActive; }
+  [[nodiscard]] bool binary() const noexcept
+  {
+    return packedLaneOpen(m_framingActive, m_readerDeclared);
+  }
 
   [[nodiscard]] qsizetype tokenSpans(const QByteArrayView*& spans) noexcept;
   [[nodiscard]] QuickPlotLineOutcome observeReplayRow(QByteArrayView row);
@@ -69,6 +73,7 @@ public:
                                            DeclarationState::TimePoint timestamp);
   [[nodiscard]] bool applyPacked(const QByteArray& frame);
 
+  void noteReaderFraming(bool declaredFraming);
   void setHeaders(const QStringList& headers);
   void buildAudio(const QStringList& channels);
   void pinPositional(int count);
@@ -89,6 +94,7 @@ private:
   const SerialStudio::OperationMode& m_operationMode;
   bool m_hasHeader;
   bool m_framingActive;
+  bool m_readerDeclared;
   PackedLayout m_layout;
   std::array<double, kMaxPackedFields> m_packed;
   QStringList m_channelNames;
