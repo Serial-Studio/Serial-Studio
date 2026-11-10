@@ -143,7 +143,13 @@ updated: 2026-11-06
   target on the steady tier (2026-11-10). The emergency stop is deliberately not boosted:
   it is not a lamp, its latch is shown by depth, and a glowing pressed head would read as
   the opposite of stopped. Not yet seen in the app.
-- [ ] **T25** Toggle styles (Lever switch, Rotary selector) and the knob's hardware look.
+- [x] **T25** Hardware looks for the toggle and the knob (2026-11-10): `HardwareLever.qml`, a bat
+  handle thrown up for on and down for off with the on and off legends, and `HardwareKnob.qml`,
+  a pointer knob over 270 degrees of detent marks (drag, wheel, arrows; Shift for ten). By the
+  maintainer's call they follow the T11f rule: a Standard toggle (with room) and knob draw this
+  way under every theme unless it sets `"output": "plain"`. The two-position rotary is the
+  existing Selector Switch conversion, not a new style. Automation roles `switch` and `slider`.
+  The help page sentence waits on the maintainer's open edits to `Output-Controls.md`.
 - [x] **T26** Selector, built as a knob style instead of a new control type (maintainer asked
   for selector knobs with two, three or n labelled positions, 2026-11-06): `Selector` style,
   `positionLabels` (`"outputLabels"`), one detent per Step from Min to Max, the position's

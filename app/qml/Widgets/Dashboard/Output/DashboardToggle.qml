@@ -22,6 +22,19 @@ Item {
   property string idPrefix: ""
 
   readonly property string title: root.widget ? (root.widget.title || "") : ""
+  readonly property bool lever: Cpp_ThemeManager.widgetLooks["output"] !== "plain"
+                                && root.height >= 96
+
+  //
+  // Asks the model for the opposite of what the control shows; feedback, not the press, moves it
+  //
+  function flip() {
+    if (!root.model)
+      return
+
+    Cpp_UI_Alarms.playEvent("toggle")
+    root.model.checked = !root.desiredChecked
+  }
   readonly property bool unknown: root.model
                                   ? (root.model.stateBound && !root.model.stateKnown)
                                   : false
@@ -50,30 +63,55 @@ Item {
       visible: !(root.widget && root.widget.hideTitle === true)
     }
 
-    Item { Layout.fillHeight: true }
+    Item {
+      visible: !root.lever
+      Layout.fillHeight: true
+    }
+
+    //
+    // Lever switch: the hardware look of a toggle with room for it, unless the theme asks for
+    // plain; the switch otherwise
+    //
+    Loader {
+      active: root.lever
+      visible: root.lever
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+
+      sourceComponent: HardwareLever {
+        dimmed: root.unknown
+        on: root.desiredChecked
+        onLabel: root.widget ? (root.widget.onLabel || "") : ""
+        offLabel: root.widget ? (root.widget.offLabel || "") : ""
+        objectName: root.idPrefix.length > 0 ? root.idPrefix + ".toggle" : ""
+
+        readonly property bool checked: root.desiredChecked
+
+        onToggled: root.flip()
+      }
+    }
 
     Switch {
       id: control
 
+      visible: !root.lever
       checked: root.desiredChecked
       Layout.alignment: Qt.AlignHCenter
       opacity: root.unknown ? 0.45 : 1.0
 
-      objectName: root.idPrefix.length > 0 ? root.idPrefix + ".toggle" : ""
+      objectName: !root.lever && root.idPrefix.length > 0 ? root.idPrefix + ".toggle" : ""
 
       palette.highlight: root.color
 
       onToggled: {
-        if (!root.model)
-          return
-
-        Cpp_UI_Alarms.playEvent("toggle")
-
-        root.model.checked = !root.desiredChecked
+        root.flip()
         control.checked = Qt.binding(function() { return root.desiredChecked })
       }
     }
 
-    Item { Layout.fillHeight: true }
+    Item {
+      visible: !root.lever
+      Layout.fillHeight: true
+    }
   }
 }

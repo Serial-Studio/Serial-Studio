@@ -81,6 +81,8 @@ static constexpr RoleEntry kQtRoles[] = {
 static constexpr RoleEntry kComponentRoles[] = {
   {QLatin1StringView("BigButton"),             QLatin1StringView("button")},
   {QLatin1StringView("HardwareEmergencyStop"), QLatin1StringView("button")},
+  {QLatin1StringView("HardwareKnob"),          QLatin1StringView("slider")},
+  {QLatin1StringView("HardwareLever"),         QLatin1StringView("switch")},
   {QLatin1StringView("HardwarePushButton"),    QLatin1StringView("button")},
   {QLatin1StringView("HardwareSelector"),      QLatin1StringView("slider")},
   {QLatin1StringView("MenuButton"),            QLatin1StringView("button")},

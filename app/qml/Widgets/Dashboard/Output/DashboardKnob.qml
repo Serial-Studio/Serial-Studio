@@ -19,6 +19,8 @@ OutputValueControl {
   // Selector style (spec 0113): a labelled rotary switch in place of the dial
   //
   readonly property bool selector: root.widget ? root.widget.style === 3 : false
+  readonly property bool hardware: !root.selector
+                                   && Cpp_ThemeManager.widgetLooks["output"] !== "plain"
   readonly property var positionLabels: {
     const text = root.widget && root.widget.labels ? root.widget.labels : ""
     if (text.length === 0)
@@ -68,10 +70,34 @@ OutputValueControl {
       }
     }
 
+    //
+    // Pointer knob: the hardware look of a standard knob unless the theme asks for plain
+    //
+    Loader {
+      active: root.hardware
+      Layout.fillWidth: true
+      visible: root.hardware
+      Layout.fillHeight: true
+
+      sourceComponent: HardwareKnob {
+        id: knobPart
+
+        to: root.to
+        from: root.from
+        step: root.step
+        dimmed: root.unknown
+        value: root.desiredValue
+        objectName: root.idPrefix.length > 0 ? root.idPrefix + ".knob" : ""
+
+        onMoved: (value) => root.commitMove(value)
+        onPressedChanged: root.trackPress(knobPart)
+      }
+    }
+
     Dial {
       id: control
 
-      visible: !root.selector
+      visible: !root.selector && !root.hardware
 
       to: root.to
       from: root.from
@@ -84,7 +110,7 @@ OutputValueControl {
       Layout.alignment: Qt.AlignHCenter
       opacity: root.unknown ? 0.45 : 1.0
 
-      objectName: !root.selector && root.idPrefix.length > 0 ? root.idPrefix + ".knob" : ""
+      objectName: control.visible && root.idPrefix.length > 0 ? root.idPrefix + ".knob" : ""
 
       Keys.onPressed: (event) => root.handleKey(event)
 

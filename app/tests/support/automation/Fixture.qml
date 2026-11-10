@@ -96,6 +96,11 @@ Item {
       objectName: "fixture.mode.knob"
     }
 
+    HardwareLever {
+      on: true
+      objectName: "fixture.pump.toggle"
+    }
+
     Button {
       objectName: "fixture.disabled"
       text: "Off"

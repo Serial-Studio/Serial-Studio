@@ -570,6 +570,8 @@ if(BUILD_COMMERCIAL)
     qml/Widgets/Dashboard/Output/HardwarePushButton.qml
     qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml
     qml/Widgets/Dashboard/Output/HardwareSelector.qml
+    qml/Widgets/Dashboard/Output/HardwareLever.qml
+    qml/Widgets/Dashboard/Output/HardwareKnob.qml
     qml/Widgets/Dashboard/Output/DashboardSlider.qml
     qml/Widgets/Dashboard/Output/DashboardToggle.qml
     qml/Widgets/Dashboard/Output/DashboardTextField.qml

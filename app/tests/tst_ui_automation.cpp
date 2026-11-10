@@ -193,6 +193,12 @@ void TstUiAutomation::catalogRolesAndIds()
   QCOMPARE(selector->role, QStringLiteral("slider"));
   QCOMPARE(selector->text, QStringLiteral("2"));
 
+  const auto lever = ElementCatalog::byId(m_view, QStringLiteral("fixture.pump.toggle"));
+  QVERIFY(lever.has_value());
+  QCOMPARE(lever->role, QStringLiteral("switch"));
+  QVERIFY(lever->checked.has_value());
+  QVERIFY(*lever->checked);
+
   const auto check = ElementCatalog::byId(m_view, QStringLiteral("fixture.check"));
   QVERIFY(check.has_value());
   QCOMPARE(check->role, QStringLiteral("checkbox"));
