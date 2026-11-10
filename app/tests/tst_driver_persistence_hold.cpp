@@ -60,6 +60,7 @@ public:
   [[nodiscard]] int persistenceChanges() const noexcept { return m_persistenceChanges; }
 
 public slots:
+
   void setDriverProperty(const QString& key, const QVariant& value) override
   {
     persistSetting(m_settings, key, value);
