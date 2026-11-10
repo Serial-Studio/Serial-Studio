@@ -1,55 +1,39 @@
 # Plugin Development
 
-## Table of Contents
-
-- [Overview](#overview)
-- [How Plugins Work](#how-plugins-work)
-- [Getting Started](#getting-started)
-- [Plugin Structure](#plugin-structure)
-- [info.json Reference](#infojson-reference)
-- [Connecting to Serial Studio](#connecting-to-serial-studio)
-- [Platform-Specific Builds](#platform-specific-builds)
-- [State Persistence](#state-persistence)
-- [Lifecycle Events](#lifecycle-events)
-- [Extension Manager API](#extension-manager-api)
-- [Testing Your Plugin](#testing-your-plugin)
-- [Packaging and Distribution](#packaging-and-distribution)
-
 ## Overview
 
-Plugins are external programs that connect to Serial Studio's API to receive live data, compute statistics, display custom visualizations, or automate workflows. They run as separate processes alongside Serial Studio and communicate over the network.
+Your device prints readings, and you want every frame in a database, or an FFT window Serial Studio does not draw. A plugin is that script: a small program (Python is the easiest) that Serial Studio launches and that talks to it over localhost.
 
-Plugins can be written in any language (Python, C++, Go, Rust, Node.js, and so on) and are distributed through the [Extension Manager](Extensions.md).
+Plugins can be written in any language (Python, C++, Go, Rust, Node.js) and are installed and started from the [Extension Manager](Extensions.md), which you open with the **Extensions** toolbar button. This page is for writing one; to install one, see [Extensions](Extensions.md).
 
-### What plugins can do
-
-- **Custom visualizations**: 3D renders, maps, specialized charts.
-- **Data processing**: filtering, FFT analysis, anomaly detection.
-- Push incoming data to databases, cloud services, or other external systems.
-- Run automated test sequences: connect, configure, validate, and report.
-- Send commands back to the device based on incoming data (hardware control).
+Plugins and the default repository work in the free edition. Adding, listing or removing other repositories (Repository Settings and the `extensions.*Repository` commands) requires Serial Studio Pro, see [Pro vs Free](Pro-vs-Free.md).
 
 ## How Plugins Work
 
 ```mermaid
 flowchart LR
-    A[Serial Studio] -->|gRPC port 8888| B[Plugin process]
-    A -->|TCP/JSON port 7777| B
+    A[Serial Studio] -->|"commands and frames (JSON lines), port 7777"| B[Plugin process]
+    A -->|"optional frame streaming (needs grpc: true), port 8888"| B
 ```
 
-1. The user installs the plugin via the Extension Manager.
-2. The user clicks **Run** on the plugin card.
-3. Serial Studio ensures the API server is running, then launches the plugin process.
-4. The plugin connects to Serial Studio and starts sending commands or streaming data.
-5. The user clicks **Stop** (or Serial Studio exits) to terminate the plugin.
+1. You install the plugin from the Extension Manager.
+2. You open the plugin in the Extension Manager and click **Run**.
+3. If the API Server is off, Serial Studio asks "API Server Required". **Yes** turns it on and launches the plugin; **No** cancels the launch.
+4. The plugin connects to Serial Studio and starts sending commands or reading data.
+5. You click **Stop** (or quit Serial Studio) to end the plugin.
+
+Serial Studio also stops running plugins when the device disconnects and relaunches them when a device connects again, except plugins you stopped yourself or that exited on their own. Plugins do not run in a deployment package session, see [Operator Deployments](Operator-Deployments.md).
+
+The API Server is the local server Serial Studio exposes for scripts. It is off by default and listens on port 7777. The gRPC server (port 8888, a faster streaming protocol you only need at high frame rates) runs only while the API Server is on. If you start your script yourself, or test with `nc`, turn on **Preferences > General > API & Plugins > Enable API Server** first. The port is the **API Server Port** field below it.
 
 ## Getting Started
 
 ### Minimal Python Plugin (TCP/JSON)
 
-Create a folder with two files:
+Create a folder with two files.
 
-**info.json:**
+`info.json`:
+
 ```json
 {
   "id": "my-first-plugin",
@@ -65,39 +49,46 @@ Create a folder with two files:
 }
 ```
 
-**plugin.py:**
+`plugin.py`:
+
 ```python
-import socket
 import json
+import socket
 import time
 
-def send_command(sock, command, params=None):
+sock = socket.create_connection(("127.0.0.1", 7777))
+lines = sock.makefile("r")
+
+def send_command(command, params=None):
     msg = {"type": "command", "id": "1", "command": command}
     if params:
         msg["params"] = params
     sock.sendall((json.dumps(msg) + "\n").encode())
-    return json.loads(sock.recv(4096).decode())
-
-def main():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(("127.0.0.1", 7777))
-
     while True:
-        result = send_command(sock, "io.getStatus")
-        print(f"Connected: {result.get('result', {}).get('isConnected')}")
-        time.sleep(1)
+        msg = json.loads(lines.readline())
+        if msg.get("type") == "response" and msg.get("id") == "1":
+            return msg
 
-if __name__ == "__main__":
-    main()
+while True:
+    result = send_command("io.getStatus")
+    print(f"Connected: {result.get('result', {}).get('isConnected')}")
+    time.sleep(1)
 ```
 
-> While a device is streaming, the server also pushes frame batches (`{"frames": [...]}`), raw data, and lifecycle events on the same socket. A production plugin should read line by line and treat only lines with `"type": "response"` as command responses, matching them to requests by `id`. See [Server-Push Messages](API-Reference.md#server-push-messages).
+While a device is streaming, the server also pushes frame batches, raw data and lifecycle events on the same socket. Reading line by line and matching responses by `id`, as above, keeps them apart. See [Server-Push Messages](API-Reference.md#server-push-messages).
+
+To try it in two minutes, turn on the API Server (**Preferences > General > API & Plugins > Enable API Server**), save `plugin.py` and run `python3 plugin.py`. It prints `Connected: False` once a second until a device connects, then `True`. It is not much, but it is a plugin.
+
+To run it from the Extension Manager instead, the folder needs a `manifest.json` and a SHA-256 digest for `plugin.py`, and installing a local folder needs Serial Studio Pro. The `info.json` above lists `plugin.py` without a digest, so add one first (see [File Digests](#file-digests) and [Testing Your Plugin](#testing-your-plugin)). Started from the Extension Manager, a terminal window opens and the plugin runs only while a device is connected, so it prints `Connected: True`.
 
 ### Minimal Python Plugin (gRPC)
 
-For real-time frame streaming, use gRPC:
+For sustained frame streaming, use gRPC. The TCP/JSON example is enough to start, so skip this until you need high frame rates.
 
-**info.json:**
+You need `pip install grpcio grpcio-tools` and the two generated stub files; the `protoc` command is in the [gRPC Server](gRPC-Server.md) guide.
+
+`info.json`:
+
 ```json
 {
   "id": "my-grpc-plugin",
@@ -118,26 +109,30 @@ For real-time frame streaming, use gRPC:
 }
 ```
 
-**plugin.py:**
+`plugin.py`:
+
 ```python
 import grpc
 import serialstudio_pb2 as pb
 import serialstudio_pb2_grpc as rpc
 
-def main():
-    channel = grpc.insecure_channel("localhost:8888")
-    stub = rpc.SerialStudioAPIStub(channel)
+channel = grpc.insecure_channel("localhost:8888")
+stub = rpc.SerialStudioAPIStub(channel)
 
-    print("Streaming frames...")
-    for batch in stub.StreamFrames(pb.StreamRequest()):
-        for frame in batch.frames:
-            print(frame.frame)
-
-if __name__ == "__main__":
-    main()
+print("Streaming frames...")
+for batch in stub.StreamFrames(pb.StreamRequest()):
+    for frame in batch.frames:
+        print(frame.frame)
 ```
 
-Generate `serialstudio_pb2.py` and `serialstudio_pb2_grpc.py` from the `.proto` file (see the [gRPC Server](gRPC-Server.md) guide).
+Any API command also runs over gRPC with `stub.ExecuteCommand(pb.CommandRequest(id="1", command="io.getStatus"))`.
+
+### Choosing a Transport
+
+| Transport | Port | Use it for | How to enable |
+|-----------|------|------------|---------------|
+| TCP/JSON | 7777 | Commands, lifecycle events and your first plugin. | API Server on. See the [API Reference](API-Reference.md). |
+| gRPC | 8888 | Sustained frame streaming. | API Server on and `"grpc": true` in `info.json`. See [gRPC Server](gRPC-Server.md). |
 
 ## Plugin Structure
 
@@ -156,48 +151,23 @@ plugin/my-plugin/
 
 ### Launcher Scripts
 
-Launcher scripts (`run.sh` / `run.cmd`) are useful for:
-- Auto-installing dependencies (e.g., `grpcio` via pip in a local venv).
-- Setting environment variables.
-- Running native binaries without specifying a runtime.
+A launcher script (`run.sh` or `run.cmd`) installs dependencies into a local venv, sets environment variables, or starts a native binary without a runtime. Set `"runtime": ""` in `info.json`. If you omit `runtime`, Serial Studio runs `run.sh` through `python3`.
 
-Example `run.sh`:
+`run.sh`:
+
 ```bash
 #!/bin/bash
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$SCRIPT_DIR"
+cd "$(dirname "$0")"
 
-# Create venv and install deps if needed
 if [ ! -d "venv" ]; then
-    echo "Setting up virtual environment..."
     python3 -m venv venv
-    echo "Installing required packages (this may take a moment)..."
     ./venv/bin/pip install -r requirements.txt
-    echo "Setup complete."
 fi
 
 ./venv/bin/python plugin.py
 ```
 
-Example `run.cmd`:
-```batch
-@echo off
-setlocal
-set "SCRIPT_DIR=%~dp0"
-cd /d "%SCRIPT_DIR%"
-
-if not exist "venv" (
-    echo Setting up virtual environment...
-    python -m venv venv
-    echo Installing required packages (this may take a moment)...
-    venv\Scripts\pip install -r requirements.txt
-    echo Setup complete.
-)
-
-venv\Scripts\python plugin.py
-```
-
-When using launcher scripts, set `"runtime": ""` in `info.json` (the script itself is the executable).
+`run.cmd` follows the same pattern with `python -m venv venv`, `venv\Scripts\pip` and `venv\Scripts\python`.
 
 ## info.json Reference
 
@@ -212,14 +182,22 @@ When using launcher scripts, set `"runtime": ""` in `info.json` (the script itse
 | `license` | No | License identifier (e.g., `"MIT"`, `"GPL-3.0"`). |
 | `category` | No | Category for filtering in the Extension Manager. |
 | `screenshot` | No | Relative path to a preview image. |
-| `files` | Yes | Array of relative file paths to download/install. Must include `info.json` itself. |
+| `files` | Yes | Array of relative file paths to install. Must include `info.json` itself. Every file except `info.json` also needs a SHA-256 digest, see [Packaging and Distribution](#packaging-and-distribution). |
 | `entry` | Yes | Script or binary entry point (e.g., `"plugin.py"`, `"run.sh"`). |
-| `runtime` | No (defaults to `python3` if omitted) | Interpreter command (e.g., `"python3"`). Empty string `""` for native binaries or launcher scripts. |
-| `terminal` | No | `true` to launch in a system terminal window. Default: `false`. |
-| `grpc` | No | `true` if the plugin uses gRPC (port 8888). Serial Studio ensures the gRPC server is running before launch. Default: `false`. |
+| `runtime` | No | The program that runs `entry` (e.g., `"python3"`). Default: `python3`. Use `""` for native binaries and launcher scripts. |
+| `terminal` | No | `true` to launch in a system terminal window, which shows the plugin's output and errors while you debug; the output then goes to that window instead of the plugin log. Default: `false`. On macOS the entry file is opened in Terminal and `runtime` is not applied, so give a launcher script with a shebang. On Linux Serial Studio tries `x-terminal-emulator`, `gnome-terminal`, `konsole`, `xfce4-terminal`, then `xterm`, and runs without a terminal if none is installed. |
+| `grpc` | No | `true` if the plugin uses gRPC (port 8888). A build without gRPC support refuses to launch the plugin. Default: `false`. |
 | `platforms` | No | Per-platform overrides (see [Platform-Specific Builds](#platform-specific-builds)). |
-| `dependencies` | No | Array of `{name, executables, url, pip}`. Serial Studio checks each `executables` entry on `PATH` before launch and shows a "Missing Dependency" dialog with a link to `url` if none are found. An entry with a `pip` key is skipped from that check and instead triggers the "installing packages" venv message on launch. |
+| `dependencies` | No | Array of `{name, executables, url, pip}`. Serial Studio checks `executables` on `PATH` before launch. |
 | `icon` | No | Relative path to an image, shown next to the plugin in the Extension Manager's installed-plugins list. |
+
+Before launch, Serial Studio looks for each `executables` entry on `PATH` and shows a "Missing Dependency" dialog with a link to `url` if none is found (**Yes** opens the page, and the launch is cancelled either way). An entry with a `pip` key skips that check; Serial Studio does not run `pip` itself, it only logs "[Setup] Installing required packages" when no `venv` folder exists, so install the packages from your launcher script:
+
+```json
+"dependencies": [
+  { "name": "Python", "executables": ["python3", "python"], "url": "https://www.python.org/downloads/" }
+]
+```
 
 ### Full Example
 
@@ -236,7 +214,6 @@ When using launcher scripts, set `"runtime": ""` in `info.json` (the script itse
   "screenshot": "screenshot.png",
   "entry": "plugin.py",
   "runtime": "python3",
-  "terminal": false,
   "grpc": true,
   "files": [
     "info.json",
@@ -255,58 +232,9 @@ When using launcher scripts, set `"runtime": ""` in `info.json` (the script itse
 }
 ```
 
-## Connecting to Serial Studio
-
-### Option 1: gRPC (Recommended for Real-Time Data)
-
-Use gRPC when your plugin needs to stream frames at high rates. Set `"grpc": true` in `info.json`.
-
-```python
-import grpc
-import serialstudio_pb2 as pb
-import serialstudio_pb2_grpc as rpc
-
-channel = grpc.insecure_channel("localhost:8888")
-stub = rpc.SerialStudioAPIStub(channel)
-
-# Execute any API command
-resp = stub.ExecuteCommand(pb.CommandRequest(
-    id="1", command="io.getStatus"))
-
-# Stream frames (each item is a FrameBatch)
-for batch in stub.StreamFrames(pb.StreamRequest()):
-    for frame in batch.frames:
-        process(frame.frame)
-```
-
-See the [gRPC Server](gRPC-Server.md) documentation for the full service definition and stub generation instructions.
-
-### Option 2: TCP/JSON (Simpler Setup)
-
-Use TCP/JSON when gRPC tooling is not available or for simple command-and-response patterns.
-
-```python
-import socket
-import json
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect(("127.0.0.1", 7777))
-
-msg = json.dumps({
-    "type": "command",
-    "id": "1",
-    "command": "io.getStatus"
-}) + "\n"
-
-sock.sendall(msg.encode())
-response = json.loads(sock.recv(4096).decode())
-```
-
-See the [API Reference](API-Reference.md) for the complete command list and protocol specification.
-
 ## Platform-Specific Builds
 
-Plugins can provide different entry points for each operating system and architecture. Use the `platforms` field in `info.json`:
+Plugins can provide different entry points for each operating system and architecture with the `platforms` field in `info.json`:
 
 ```json
 "platforms": {
@@ -317,7 +245,7 @@ Plugins can provide different entry points for each operating system and archite
 }
 ```
 
-Platform keys use the format `os/arch` or `os/*` (for universal builds):
+Platform keys use the format `os/arch` or `os/*` (for universal builds). `darwin` is macOS.
 
 | Key | Matches |
 |-----|---------|
@@ -339,69 +267,47 @@ Resolution order: exact `os/arch` key first, then `os/*`, then `*`.
 
 Plugin state (window positions, settings, configurations) is saved in the project file alongside widget layout data. Different projects can have different plugin configurations.
 
-### When to Save State
+Serial Studio never calls `extensions.saveState` on its own. Call it from your plugin after any change worth restoring, not only on the `disconnected` event: Serial Studio stops running plugins when the device disconnects, so a save on that event can race the shutdown. Call `extensions.loadState` when the plugin starts and when a device connects, since the project may have changed. Both commands are Confirm-tier in the API safety table, so an AI-driven plugin can meet a confirmation prompt.
 
-Serial Studio never calls `extensions.saveState` on its own — call it from your plugin:
-
-- When the device disconnects.
-- Before the plugin exits.
-- After any change worth restoring later.
-
-### When to Restore State
-
-Call `extensions.loadState` from your plugin:
-
-- When the plugin starts (to read state from the currently open project).
-- When a new device connects (the project may have changed).
-
-### Saving State via API
-
-Plugins save and restore their state using extension API commands:
+`send_command` is the helper from [Getting Started](#minimal-python-plugin-tcpjson):
 
 ```python
-# Save state
-send_command(sock, "extensions.saveState", {
+send_command("extensions.saveState", {
     "pluginId": "my-plugin",
     "state": {"windowX": 100, "windowY": 200, "zoom": 1.5}
 })
 
-# Load state
-result = send_command(sock, "extensions.loadState", {
-    "pluginId": "my-plugin"
-})
+result = send_command("extensions.loadState", {"pluginId": "my-plugin"})
 state = result.get("result", {}).get("state", {})
 ```
 
 ### Auto-Relaunch
 
-Plugins that were running when Serial Studio closed are remembered and automatically relaunched the next time a device connects (when the dashboard becomes available).
+Plugins that were running when the device disconnected are relaunched at the next connection, except the ones you stopped yourself. A plugin that exits on its own while a device is connected is not relaunched either.
 
 ## Lifecycle Events
 
-The API server broadcasts events to all connected TCP/JSON clients as standalone JSON lines. Plugins should listen for these to coordinate with Serial Studio. gRPC clients do not receive lifecycle events; they can poll `io.getStatus` or watch stream activity instead.
+The API Server broadcasts events to all connected TCP/JSON clients as standalone JSON lines. gRPC clients do not receive them; they can poll `io.getStatus` or watch stream activity instead.
 
 | Event | When | Typical Plugin Action |
 |-------|------|----------------------|
-| `{"event": "connected"}` | Device connected | Start processing, restore state |
-| `{"event": "disconnected"}` | Device disconnected | Save state, pause processing |
+| `{"event": "connected"}` | The I/O connection comes up | Start processing, restore state |
+| `{"event": "disconnected"}` | The I/O connection goes down | Pause processing |
+
+On disconnect Serial Studio also terminates the plugin, so treat `disconnected` as a short warning, not a pause hook. Read the events from the socket's line reader (`lines = sock.makefile("r")`, as in [Minimal Python Plugin](#minimal-python-plugin-tcpjson)):
 
 ```python
-# TCP/JSON: listen for events on the socket
-import json
-
-while True:
-    data = sock.recv(4096).decode()
-    for line in data.strip().split("\n"):
-        msg = json.loads(line)
-        if msg.get("event") == "connected":
-            on_device_connected()
-        elif msg.get("event") == "disconnected":
-            on_device_disconnected()
+for line in lines:
+    msg = json.loads(line)
+    if msg.get("event") == "connected":
+        on_device_connected()
+    elif msg.get("event") == "disconnected":
+        on_device_disconnected()
 ```
 
 ## Extension Manager API
 
-Plugins can also interact with the Extension Manager programmatically:
+Plugins can also drive the Extension Manager with these API commands:
 
 | Command | Description |
 |---------|-------------|
@@ -413,27 +319,31 @@ Plugins can also interact with the Extension Manager programmatically:
 | `extensions.saveState` | Save plugin state to the project (`pluginId`, `state`). |
 | `extensions.loadState` | Load plugin state from the project (`pluginId`). |
 | `extensions.listRepositories` | List repository URLs (Pro only). |
-| `extensions.addRepository` | Add a repository URL (Pro only). |
-| `extensions.removeRepository` | Remove a repository by index (Pro only). |
+| `extensions.addRepository` | Add a repository (`url`; Pro only). |
+| `extensions.removeRepository` | Remove a repository (`index`; Pro only). |
 
 ## Testing Your Plugin
 
 ### Manual Testing
 
-1. Create a folder with your `info.json` and plugin files.
-2. Point the Extension Manager to a local repository (Pro) or install manually by copying files to `~/Documents/Serial Studio/Extensions/plugin/your-plugin/`.
+In the free edition, turn on the API Server and run `python3 plugin.py` yourself while you develop. The steps below install the plugin through the Extension Manager and need Serial Studio Pro.
+
+1. Create a folder with your `info.json` and plugin files, and a `manifest.json` beside it (see [Packaging and Distribution](#packaging-and-distribution)).
+2. Add the folder as a repository with **Browse** in Repository Settings, then click **Install** on the plugin.
 3. Click **Run** in the Extension Manager detail view.
-4. Check the log panel for output and errors.
+4. Read the plugin's output and errors in the log on the Extension Manager detail view, or set `"terminal": true` to read them in the terminal window that opens.
+
+Copying files into the Extensions folder by hand does not work: Run refuses a plugin Serial Studio has not installed.
 
 ### Testing the API Connection
 
-Before building a full plugin, test your API connection independently:
+Before building a full plugin, test the connection on its own. `nc` (netcat) is included with macOS and Linux; on Windows, run the [minimal Python plugin](#minimal-python-plugin-tcpjson) with `python plugin.py` instead.
 
 ```bash
-# Test TCP/JSON
+# TCP/JSON
 echo '{"type":"command","id":"1","command":"io.getStatus"}' | nc localhost 7777
 
-# Test gRPC
+# gRPC (grpcurl is a command-line gRPC client)
 grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/ListCommands
 ```
 
@@ -441,10 +351,10 @@ grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/ListCommands
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| Connection refused | API server not enabled | Enable in Preferences → General → API & Plugins → Enable API Server (Port 7777) |
+| Connection refused | Script started outside Serial Studio and API Server off | Turn on Preferences > General > API & Plugins > Enable API Server. The port is the API Server Port field below it (default 7777). |
 | `grpcio` import error | Package not installed | `pip install grpcio grpcio-tools` |
-| Plugin exits immediately | Unhandled exception | Set `"terminal": true` to see errors |
-| No frames streaming | Device not connected | Connect a device first |
+| Plugin exits immediately | Unhandled exception, which stays invisible until you look at the output | Read the log on the Extension Manager detail view, or set `"terminal": true` to watch it in a terminal window. |
+| No frames streaming | Device not connected, API Server off, or a gRPC plugin without `"grpc": true` | Connect a device. For a gRPC plugin, confirm the API Server is on and `"grpc": true` is in `info.json`. |
 
 ## Packaging and Distribution
 
@@ -474,22 +384,33 @@ my-extensions-repo/
 }
 ```
 
+### File Digests
+
+Serial Studio refuses to install a file it cannot verify, local folders included. Every file in `files` except `info.json` needs a 64-character hex SHA-256 digest (uppercase is normalised to lowercase). Give it inline:
+
+```json
+"files": [
+  "info.json",
+  { "path": "plugin.py", "sha256": "<64 lowercase hex characters>", "size": 1234 }
+]
+```
+
+or keep `files` a plain list and add a `sha256` table beside it:
+
+```json
+"sha256": { "plugin.py": { "sha256": "<64 lowercase hex characters>", "size": 1234 } }
+```
+
+If any file other than `info.json` has a missing or malformed digest, Serial Studio refuses the whole extension, and the Problem Center shows an "Extension ... cannot be verified" warning.
+
 ### Hosting Options
 
-Adding any repository beyond the bundled default requires Serial Studio Pro on the
-installing user's side — Repository Settings and the `extensions.addRepository` command
-are Pro-only (see [Extension Manager API](#extension-manager-api)).
+Repository Settings and `extensions.addRepository` require Serial Studio Pro on the installing user's side.
 
-- **GitHub**: Push to a repository and share the raw manifest URL:
-  ```
-  https://raw.githubusercontent.com/your-org/extensions/main/manifest.json
-  ```
+- **GitHub**: Push to a repository and share the raw manifest URL, for example `https://raw.githubusercontent.com/your-org/extensions/main/manifest.json`.
 - **Local folder**: Use **Browse** in Repository Settings to point to a local folder during development.
-- **Any web server**: Host files on HTTP(S). Relative paths in `files` resolve against the `info.json` URL.
+- **Any web server over https://**: Relative paths in `files` resolve against the `info.json` URL. Plain `http://` is refused with "Repositories must be a local folder or an https:// URL."
 
 ### Installation Path
 
-Installed plugins are stored at:
-```
-~/Documents/Serial Studio/Extensions/plugin/your-plugin/
-```
+Installed plugins live in `Extensions/plugin/your-plugin/` inside your Serial Studio workspace folder, which defaults to `Documents/Serial Studio` (Windows: `Documents\Serial Studio`).

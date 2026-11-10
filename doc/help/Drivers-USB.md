@@ -1,142 +1,142 @@
 # Raw USB Driver (Pro)
 
-The Raw USB driver talks to USB devices directly through **libusb**, bypassing the operating system's class drivers. It is the right driver when a device exposes vendor-specific bulk, control, or isochronous endpoints rather than presenting itself as a serial port (CDC), an HID device, or a mass-storage volume.
+If your board prints with `Serial.println` over a USB cable, you do not need this page. Arduino and ESP32 boards appear as a serial port, so use the [UART driver](Drivers-UART.md). Gamepads, joysticks and HID firmware belong to the [HID driver](Drivers-HID.md).
 
-If the device shows up as a virtual COM port, use the [UART driver](Drivers-UART.md). For gamepads, joysticks, or HID firmware, use the [HID driver](Drivers-HID.md). This page covers everything else: logic analysers, oscilloscopes, custom data-acquisition boards, vendor-specific scientific instruments, and any device whose datasheet says "uses bulk endpoints".
+Raw USB is for the rest: a logic analyzer, an oscilloscope or a data-acquisition board whose datasheet says "uses bulk endpoint 0x81" and that never shows up as a COM port. Serial Studio opens such a device through **libusb** and reads the endpoint you pick.
 
-## USB basics
+Raw USB is a Pro feature (see [Pro vs Free](Pro-vs-Free.md)). The first time you use a Pro feature, Serial Studio offers the Pro trial with a Yes/No prompt; registering the trial needs an internet connection.
 
-USB is layered. From the bottom up:
+## Raw USB setup (Pro)
 
-- **Physical layer.** Differential pair (D+/D-) plus power and ground. Speeds: 1.5 Mbps (Low Speed), 12 Mbps (Full Speed), 480 Mbps (High Speed), 5 Gbps (USB 3.0 SuperSpeed), and faster.
-- **Packet layer.** A host-driven token/data/handshake protocol. Devices never initiate transfers; the host always polls.
-- **Transfer layer.** Four transfer types (control, bulk, interrupt, isochronous) sit on top of packets.
-- **Class layer.** Standard classes (HID, CDC, Mass Storage, Audio, Video) define the device category.
+Raw USB needs Pro. On first use Serial Studio offers the Pro trial (Yes/No, needs internet); answering No leaves the feature locked, and after the trial ends it offers activation or purchase instead.
 
-Almost every consumer USB device implements one of the standard classes. The OS bundles a generic driver for each class, so plugging in a USB-CDC microcontroller exposes a COM port without any extra install.
+In the **Setup Panel**, select **USB Device** from the Connection dropdown. The default path takes four steps:
 
-Vendor-specific USB devices skip the standard classes. They expose endpoints with custom semantics that the OS does not know how to interpret. libusb is a userspace library that lets an application open such a device and talk to its endpoints directly.
+1. Pick your device from the **USB Device** dropdown.
+2. Leave **Transfer Mode** on **Bulk/Interrupt Stream**.
+3. Check the **IN Endpoint**. Serial Studio selects the first matching one, such as `EP 0x81 – Bulk IN (IF0, max 64 B)`, where `IF0` is interface 0. Pick another if the datasheet says so.
+4. Click **Connect**.
 
-### Endpoints and transfer types
+Raw bytes arrive from the endpoint. A [frame parser](Frame-Parser.md) or Quick Plot turns them into dashboard values, the same as on any other driver.
 
-Every USB device has at least one **endpoint** (endpoint 0, the control endpoint). Most devices have several. Endpoints are unidirectional buffers identified by a number and a direction (IN = device to host, OUT = host to device).
+| Setting | Shown in | Values | Default |
+|---------|----------|--------|---------|
+| **USB Device** | all modes | `VID:PID – Manufacturer Product`; the list updates on libusb hotplug events, with a 2-second rescan where hotplug is unavailable | **Select Device** |
+| **Transfer Mode** | all modes | **Bulk/Interrupt Stream**, **Advanced (Bulk + Control)**, **Isochronous** | **Bulk/Interrupt Stream** |
+| **IN Endpoint** | all modes | the device's IN endpoints that fit the Transfer Mode | first match |
+| **OUT Endpoint** | all modes | the device's OUT endpoints that fit the Transfer Mode | **None (Read-only)** |
+| **Max Packet Size** | Isochronous | 1 to 49152 bytes | 1024, then pre-filled from the endpoint |
 
-Each endpoint is configured for one of four **transfer types**:
+The endpoint dropdowns and **Max Packet Size** lock while connected. Endpoint labels use `Bulk`, `Int` or `Iso` for the type, and add `ALT2` (for example `IF1 ALT2`) for a non-zero alternate setting.
 
-```mermaid
-flowchart TB
-    USB[USB transfer types]
-    USB --> CTRL[Control<br/>EP0 always; bidirectional<br/>config, descriptors, setup]
-    USB --> BULK[Bulk<br/>large data, no timing guarantee<br/>guaranteed delivery]
-    USB --> INT[Interrupt<br/>small periodic data<br/>guaranteed latency]
-    USB --> ISO[Isochronous<br/>continuous streaming<br/>no retransmission, no checksum]
-```
+The endpoint lists follow the Transfer Mode. **Isochronous** lists only isochronous endpoints; the other two modes list only bulk and interrupt endpoints. Changing the mode clears the selection and picks the first match. A device with no endpoint of the right type shows **No Usable IN Endpoints**, and **Connect** tells you which mode to switch to. Writes through the OUT endpoint time out after 1 second.
 
-- **Control transfers (Endpoint 0)** carry configuration data: reading device descriptors, selecting interfaces, sending vendor commands. Always bidirectional through the same endpoint pair.
-- **Bulk transfers** carry large amounts of data with error detection (CRC) and guaranteed delivery but no bandwidth guarantee. Used for printers, mass storage, and most raw data-acquisition devices. The host fits bulk transfers around higher-priority traffic.
-- **Interrupt transfers** carry small amounts of data with a guaranteed maximum latency (the polling interval set in the endpoint descriptor). Used for HID devices and other small periodic data. Despite the name there are no real hardware interrupts; the host polls.
-- **Isochronous transfers** carry time-sensitive streaming data (audio, video) with guaranteed bandwidth but no retransmission. A corrupted packet is lost. Used for USB audio interfaces and webcams.
+### Transfer modes
 
-For Serial Studio's USB driver, the relevant types are **bulk** and **interrupt** (both handled by Bulk/Interrupt Stream mode, the default, for streaming or small periodic data), **isochronous** (for high-rate continuous streams where dropped frames are acceptable), and **control** (vendor-specific commands, available in Advanced mode).
+| Mode | Transfer types | Use it for |
+|------|----------------|------------|
+| **Bulk/Interrupt Stream** | Bulk and interrupt IN/OUT, picked by the selected endpoint's type | Most devices: streaming data or small periodic reports |
+| **Advanced (Bulk + Control)** | Bulk, plus vendor control transfers | Devices that need a vendor command to start streaming |
+| **Isochronous** | Asynchronous isochronous IN | Fixed-rate streams where a few dropped packets are acceptable |
 
-### Descriptors
+In the USB setup pane the mode is labeled **Advanced (Bulk + Control)**; the driver's generic property list labels it **Advanced Control**.
 
-A USB device describes itself through a tree of **descriptors**:
+Choosing **Advanced (Bulk + Control)** opens a Yes/No confirmation (default No), because a vendor control write can do anything the firmware allows, including bricking the device. The dialog appears once and Serial Studio remembers a Yes. Until you accept it in the setup pane, a project load or `io.usb.setTransferMode` with mode 1 is refused with an "Advanced USB mode refused" warning. The API call still returns success when refused, so read `transferMode` back.
 
-```mermaid
-flowchart TD
-    Device[Device Descriptor<br/>VID, PID, USB version]
-    Device --> Cfg[Configuration Descriptor<br/>power requirements]
-    Cfg --> If1[Interface Descriptor<br/>logical function]
-    If1 --> EP1[Endpoint Descriptor<br/>EP1 IN, bulk, 64 bytes]
-    If1 --> EP2[Endpoint Descriptor<br/>EP2 OUT, bulk, 64 bytes]
-    Cfg --> If2[Interface Descriptor<br/>another function]
-    If2 --> EP3[Endpoint Descriptor<br/>EP3 IN, interrupt, 8 bytes]
-```
+In Isochronous mode, **Max Packet Size** is pre-filled from the selected endpoint, including the high-bandwidth multiplier (up to 3 x 1024 B on high speed). Change it only when the datasheet says otherwise.
 
-The host queries the device for its descriptor tree on enumeration, decides what to do with it, and binds drivers accordingly. A vendor-specific bulk device usually has one configuration, one interface, and a couple of endpoints (one IN for reading, one OUT for writing).
+### Control transfers
 
-### VID and PID
+With **Advanced (Bulk + Control)** selected and the device connected, a **Control Transfer** composer appears in the USB setup pane. A logic analyzer that stays silent until it gets a vendor command is waiting to be asked, and this is where you ask.
 
-Every USB device has a **Vendor ID (VID)** and **Product ID (PID)**, both 16-bit. VIDs are assigned by the USB-IF; PIDs are chosen by the vendor. Together they uniquely identify a device model. Serial Studio lists USB devices as `VID:PID`, followed by the manufacturer and product strings when the device reports them (for example `1234:5678 – Acme Logic Analyzer`).
+| Field | Format |
+|-------|--------|
+| **Request Type** (`bmRequestType`) | Hex. Bit 7 sets the direction: `0x80` and above is IN, below is OUT |
+| **Request** (`bRequest`), **wValue**, **wIndex** | Hex |
+| **Data** | OUT: hex bytes, such as `EF BE 00 00` |
+| **Read Length** | IN: bytes to read |
 
-## How Serial Studio uses it
+The data length is 0 to 4096 bytes, and one control transfer runs at a time. A vendor "start streaming" write could be Request Type `40`, Request `01`, wValue `0001`, wIndex `0000` and no data. Click **Send Control Transfer**; the result appears in the composer.
 
-The USB driver wraps libusb. The setup flow is:
+## Permissions and OS specifics
 
-1. Pick a device from the **USB Device** dropdown. The list updates on libusb hotplug events, with a 2-second rescan fallback on platforms without hotplug support.
-2. Pick a **Transfer Mode**:
-   - **Bulk/Interrupt Stream** (default): synchronous bulk or interrupt IN/OUT, depending on the selected endpoint's type.
-   - **Advanced (Bulk + Control)**: bulk transfers plus vendor-specific control transfers. A confirmation dialog appears before enabling this, because vendor-specific control writes can do anything the device firmware allows, up to and including bricking the device.
-   - **Isochronous**: asynchronous isochronous transfers for fixed-rate streaming.
-3. Pick the **IN Endpoint** and, optionally, the **OUT Endpoint**. Both dropdowns populate as soon as a device is selected, read from the device's cached configuration descriptor and labeled like `EP 0x81 – Bulk IN (IF0, max 64 B)`. The first endpoint matching the transfer mode is selected automatically; **OUT Endpoint** defaults to **None (Read-only)** when no matching OUT endpoint exists. Both dropdowns lock once connected.
-4. In Isochronous mode, a **Max Packet Size** field (1 to 49152 bytes, default 1024) also appears once a device is selected. Serial Studio pre-fills it with the endpoint's reported maximum packet size; override it only when the device datasheet says otherwise. It locks once connected.
-5. Click **Connect**.
+USB access is permission-controlled differently on each OS.
 
-### Threading
+- **Linux.** By default only `root` can open arbitrary USB devices. Find your device's IDs with `lsusb` (the `ID` field) or in the **USB Device** dropdown. Create `/etc/udev/rules.d/99-myusbdevice.rules` containing the rule below, with your own VID and PID. `MODE="0666"` lets every local user open the device.
 
-The USB driver runs two dedicated threads:
-
-- **Event thread.** Pumps libusb's event loop. Required by libusb's async API and hotplug callbacks.
-- **Read thread.** Issues synchronous bulk or interrupt reads (64 KB buffer, 100 ms timeout), depending on the active IN endpoint's type, in Bulk/Interrupt Stream and Advanced modes. In Isochronous mode, data arrives instead through a pool of eight async transfers (eight packets each) whose completion callbacks run on the event thread.
-
-Each completed transfer carries a timestamp captured at completion time and is queued to the main thread for FrameReader processing. See [Threading and Timing Guarantees](Threading-and-Timing.md).
-
-### Permissions and OS specifics
-
-USB device access is permission-controlled differently on each OS:
-
-- **Linux.** By default only `root` can open arbitrary USB devices. Add a `udev` rule granting the user access to a specific VID:PID:
   ```
-  /etc/udev/rules.d/99-myusbdevice.rules:
   SUBSYSTEM=="usb", ATTR{idVendor}=="1234", ATTR{idProduct}=="5678", MODE="0666"
   ```
-  Then run `sudo udevadm control --reload-rules && sudo udevadm trigger`. Serial Studio enables libusb's auto-detach on Linux, so a kernel class driver bound to the interface (for example `cdc_acm`) is detached automatically when the interface is claimed and re-attached on release.
-- **Windows.** A WinUSB driver must be installed for the device. The standard Windows class drivers (HID, CDC, and so on) hold the device open and prevent libusb from claiming it. Use **Zadig** to replace the driver with WinUSB for the target VID:PID.
-- **macOS.** Devices that are not already claimed by an OS class driver can be opened directly. When macOS has bound a kernel driver, opening or claiming the interface fails; Serial Studio does not attempt to detach system drivers.
+
+  Then reload the rules with `sudo udevadm control --reload-rules && sudo udevadm trigger`, and unplug and replug the device.
+
+  Kernel drivers: Serial Studio enables libusb's auto-detach on Linux, so a kernel class driver bound to the interface (for example `cdc_acm`) is detached when the interface is claimed and re-attached on release.
+- **Windows.** The standard class drivers (HID, CDC and so on) hold the device open and stop libusb from claiming it, so the device needs a WinUSB driver. In [Zadig](https://zadig.akeo.ie), choose the device, select **WinUSB** and click **Replace Driver**. The device then stops appearing as a normal COM port or HID device until you restore the original driver.
+- **macOS.** A device that no OS class driver has claimed opens directly. When macOS has bound a kernel driver, opening or claiming the interface fails, and Serial Studio does not detach system drivers.
 
 For step-by-step setup, see the [Protocol Setup Guides, Raw USB section](Protocol-Setup-Guides.md).
 
+## Common pitfalls
+
+- **Device not listed.** If `lsusb` does not show it either, the cable, hub or power is at fault. `lsusb -v -d VID:PID` prints the descriptors.
+- **Device is listed but will not open.** Another driver or application has claimed it, or you lack permission. Follow [Permissions and OS specifics](#permissions-and-os-specifics) for your OS; on Linux, `dmesg | grep usb` shows kernel hints.
+- **No data on the IN endpoint.** Pick the endpoint number the vendor documentation names. Some devices send nothing until they receive a vendor control write; use the [control-transfer composer](#control-transfers).
+- **Bulk reads time out.** A timeout is not an error: the read loop retries every 100 ms. A connection that stays open with nothing arriving means the device is not sending on the selected IN endpoint. Any other read error (unplug, stall, overflow) closes the connection and shows "The USB device was disconnected or encountered a fatal read error."
+- **Isochronous mode drops samples.** **Max Packet Size** is pre-filled from the endpoint, so dropped samples with the default usually mean a manual override, or a host that cannot grant the bandwidth because other isochronous devices share the hub.
+
+## Reference
+
+### Threading
+
+The driver runs two dedicated threads:
+
+- **Event thread.** Pumps libusb's event loop, which libusb's async API and hotplug callbacks require.
+- **Read thread.** Issues synchronous bulk or interrupt reads (64 KB buffer, 100 ms timeout) in Bulk/Interrupt Stream and Advanced (Bulk + Control) modes. In Isochronous mode, data arrives through a pool of eight async transfers (eight packets each) whose completion callbacks run on the event thread.
+
+Bulk and interrupt blocks are stamped the moment the transfer returns and published from the read thread. Isochronous blocks are stamped in the completion callback and published after a hop to the main thread. Either way the frame pipeline picks them up from there. See [Threading and Timing Guarantees](Threading-and-Timing.md).
+
 ### Remote API commands
 
-The TCP API and the in-app AI assistant configure this driver through the `io.usb.*` scope:
+With the API Server enabled (off by default, port 7777), the in-app AI assistant and external clients configure this driver through the `io.usb.*` scope:
 
 | Command | Parameters | Notes |
 |---------|------------|-------|
 | `io.usb.listDevices` | none | Returns `devices` array and `selectedIndex` (index 0 is the "Select Device" placeholder) |
-| `io.usb.setDeviceIndex` | `deviceIndex` (integer) | Selects a device by list index |
-| `io.usb.setTransferMode` | `mode` (0 = Bulk/Interrupt Stream, 1 = Advanced, 2 = Isochronous) | |
-| `io.usb.setInEndpointIndex` | `endpointIndex` (integer) | Endpoint lists populate once a device is selected (via `setDeviceIndex` or the UI); an IN endpoint must be selected before connecting |
-| `io.usb.setOutEndpointIndex` | `endpointIndex` (integer) | Index 0 is "None (Read-only)" |
+| `io.usb.setDeviceIndex` | `deviceIndex` (0 to the device count; 0 = **Select Device**) | Out-of-range values return an `InvalidParam` error |
+| `io.usb.setTransferMode` | `mode` (0 = Bulk/Interrupt Stream, 1 = Advanced (Bulk + Control), 2 = Isochronous) | Mode 1 is refused until the warning was accepted once in the setup pane (see [Transfer modes](#transfer-modes)); verify with `io.usb.getConfig` |
+| `io.usb.setInEndpointIndex` | `endpointIndex` (0 = **Select IN Endpoint** placeholder, 1.. = endpoints) | Endpoint lists populate once a device is selected; index 0 cannot connect; out-of-range returns `InvalidParam` |
+| `io.usb.setOutEndpointIndex` | `endpointIndex` (0 = **None (Read-only)**, 1.. = endpoints) | Out-of-range returns `InvalidParam` |
 | `io.usb.setIsoPacketSize` | `size` (1 to 49152 bytes) | |
 | `io.usb.getConfig` | none | Returns mode, indices, packet size, and both endpoint lists |
 
 Transport details are in the [API Reference](API-Reference.md); command safety tiers are in [AI Assistant](AI-Assistant.md#the-safety-tiers).
 
-## Common pitfalls
+## USB background
 
-- **Device not listed.** On Linux, the udev rule is missing or has not taken effect. `lsusb` shows the device; `lsusb -v -d VID:PID` shows its descriptor. If `lsusb` works but Serial Studio does not see the device, it is a permissions problem.
-- **Device is listed but will not open.** Another driver or application has already claimed it. On Windows, switch to WinUSB through Zadig. On Linux, kernel class drivers are detached automatically when the interface is claimed; if open still fails, check `dmesg | grep usb` for hints and close other applications using the device.
-- **No data on the IN endpoint.** Confirm the endpoint number. Vendor documentation always specifies which endpoint streams data; pick the matching one in the dropdown. Also confirm the device is streaming; some devices need a vendor-specific control write to start.
-- **Bulk reads time out.** Timeouts are not errors: the read loop retries every 100 ms and forwards whatever the device delivers. A connection that stays open with nothing arriving means the device is not sending on the selected IN endpoint.
-- **Isochronous mode drops samples.** Some hardware/OS combinations cap isochronous bandwidth. Match Max Packet Size to the endpoint's reported maximum; typical values are 192 B for full-speed audio and 1024 B for high-speed devices.
-- **Advanced (Bulk + Control) mode warning.** Take it seriously. Vendor-specific control transfers can issue any command the firmware understands, including writing to flash, changing calibration, and arbitrary memory writes. Only enable this mode with a full understanding of what is being sent.
-- **Permission denied on Linux, even with udev.** The udev rule did not reload, or the device was not unplugged and replugged after the rule was added. Trigger a re-enumeration with `sudo udevadm trigger`.
+The host always asks; a USB device never speaks first. Each device has **endpoints**: unidirectional buffers identified by a number and a direction (IN = device to host, OUT = host to device). Endpoint 0 is the control endpoint, and every device has it. Serial Studio reads the rest from the device's descriptors, so you only pick from the list.
+
+Each endpoint has one of four **transfer types**:
+
+- **Control** carries configuration and vendor commands over endpoint 0.
+- **Bulk** carries large data with error checking and guaranteed delivery, but no bandwidth guarantee. Most raw data-acquisition devices use it.
+- **Interrupt** carries small periodic data with a guaranteed maximum latency. There are no hardware interrupts; the host polls.
+- **Isochronous** carries time-sensitive streams with guaranteed bandwidth and no retransmission. A corrupted packet is lost.
+
+A device is identified by a 16-bit **Vendor ID (VID)** and **Product ID (PID)**, listed together as `VID:PID`, for example `1234:5678 – Acme Logic Analyzer`. The USB-IF assigns VIDs; the vendor chooses PIDs.
+
+Standard-class devices (CDC, HID, mass storage) get a generic OS driver, which is why a USB-CDC microcontroller shows up as a COM port with no install. Vendor-specific devices skip the classes, and libusb lets an application talk to their endpoints directly.
 
 ## Further reading
 
-- [Beyond Logic: USB primer](https://www.beyondlogic.org/usbnutshell/usb1.shtml): introduction to USB.
+- [Beyond Logic: USB in a NutShell](https://www.beyondlogic.org/usbnutshell/usb1.shtml)
 - [USB Endpoint Types (Beyond Logic Chapter 4)](https://www.beyondlogic.org/usbnutshell/usb4.shtml)
-- [USB Descriptors (Beyond Logic Chapter 5)](https://www.beyondlogic.org/usbnutshell/usb5.shtml)
 - [libusb-1.0 API Reference](https://libusb.sourceforge.io/api-1.0/)
-- [Asynchronous Device I/O (libusb docs)](https://libusb.sourceforge.io/api-1.0/group__libusb__asyncio.html)
 
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step Raw USB setup.
-- [Devices](Devices.md): driver capability summary across all transports.
-- [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
-- [Use Cases](Use-Cases.md): logic analyzers, scientific instruments, and bulk-endpoint devices.
 - [Troubleshooting](Troubleshooting.md): WinUSB, udev, and permission diagnostics.
 - [Drivers: UART](Drivers-UART.md): for USB-CDC virtual serial ports.
 - [Drivers: HID](Drivers-HID.md): for HID-class devices.
+- [Devices](Devices.md): driver capability summary across all transports.
+- [Use Cases](Use-Cases.md): logic analyzers, scientific instruments, and bulk-endpoint devices.

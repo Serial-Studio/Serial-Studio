@@ -1,66 +1,47 @@
 # Earn a Pro License
 
-If Serial Studio is useful to you but buying a Pro license isn't an option, you can earn one by making meaningful contributions. It keeps the tool improving while giving you full access in return.
+The free edition already plots `Serial.println` values over USB serial. Serial Studio Pro adds MQTT, Modbus, CAN Bus and the 3D plot (see [Pro vs Free](Pro-vs-Free.md)). If you need those and can't buy a license, you can earn one: translate a page, write a tutorial or get a fix merged, and the maintainer issues a Serial Studio Pro license key for a fixed period. One developer maintains Serial Studio, so contributions pay for a license.
 
-## Ways to contribute
-
-### Spread the word
-
-- Write a post or tutorial about Serial Studio on a developer forum (Reddit, CSDN, Hackaday, and so on).
-- Create a demo video on YouTube, Bilibili, or similar.
-- Share on social media or community channels and send proof of reach (engagement metrics, screenshots).
-
-### Extend hardware support
-
-- Send binary logs or protocol data for unsupported devices.
-- Donate development hardware (boards, analyzers, adapters).
-
-### Improve the tool
-
-- Translate the UI or documentation.
-- Write or improve documentation, help pages, or code comments.
-- Submit pull requests for bug fixes, new features, or platform support.
+To try Pro first, use any Pro feature, for example MQTT, and answer **Yes** to the prompt "Start your free 14-day Serial Studio Pro trial?". The trial is offered, never started automatically, and registering it needs an internet connection. After it expires, the prompt offers activation instead.
 
 ## What you get
 
-Depending on your contribution, you'll get a Pro license key:
+A contribution earns a time-limited Pro license key, not a perpetual one. The maintainer picks the duration within the range in the table below, based on the size, quality and reach of the work. Contributions must be your own work and checkable by the maintainer: send links, files, screenshots or a pull request. Durations are not guaranteed; the maintainer confirms yours in the Discussion reply.
 
-| Contribution type              | License duration  |
-|--------------------------------|-------------------|
-| Forum post, tutorial, or video | 6 months          |
-| Hardware donation              | 12 months         |
-| Protocol log or sample data    | 3-6 months        |
-| Translation or documentation   | 6-12 months       |
-| Code contribution (merged PR)  | 6-12 months       |
+| Contribution type              | Examples                                                                   | Typical duration |
+|--------------------------------|----------------------------------------------------------------------------|------------------|
+| Forum post, tutorial, or video | Reddit, CSDN, Hackaday, YouTube, Bilibili                                  | 6 months         |
+| Social media or community post | A post with proof of reach (engagement metrics, screenshots)               | Set by the maintainer |
+| Hardware donation              | Boards, analyzers, adapters                                                | 12 months        |
+| Protocol log or sample data    | A capture of the bytes an unsupported device sends, so Serial Studio can learn to parse it | 3-6 months |
+| Translation or documentation   | Translating the UI or help pages, writing or improving docs                | 6-12 months      |
+| Code contribution (merged PR)  | Bug fixes, new features, platform support                                  | 6-12 months      |
 
-Contributions have to be original, useful, and verifiable.
+Serial Studio Pro activates an earned key like a purchased one: click **About**, then **Manage License**, paste the key and click **Activate**. Activation needs an internet connection. See [Upgrading from Free to Pro](Pro-vs-Free.md#upgrading-from-free-to-pro).
 
 ## How to submit
 
-1. Open a GitHub Discussion with the `value-for-license` tag.
-   - Title: `Request: Pro License via [Your Contribution Type]`.
-   - Include a description of what you did (links, files, screenshots).
-   - Give the email address where the license key should go.
-2. Wait for review. The maintainer usually responds within a few days.
-3. If approved, your license key is issued directly.
+1. Open a [GitHub Discussion](https://github.com/Serial-Studio/Serial-Studio/discussions) with the `value-for-license` tag. If you can't apply the tag, the maintainer adds it.
+   - Title: `Request: Pro License via [Contribution Type]`, using a type from the table in [What you get](#what-you-get). For example: `Request: Pro License via Translation (French)`.
+   - Describe what you did (links, files, screenshots).
+   - Discussions are public, so don't post your email address there. Say you'll share it when asked.
+2. The maintainer replies in the Discussion, usually within a few days, with no guaranteed schedule.
+3. An approved request gets a license key by email.
 
 ## Getting started with code contributions
 
+Code contributions are mostly C++, Qt and QML; translations and documentation need none of these.
+
 1. Fork the repository on GitHub.
-2. Read the [project guidelines and code style docs](https://github.com/Serial-Studio/Serial-Studio/blob/master/CONTRIBUTING.md).
+2. Read [CONTRIBUTING.md](https://github.com/Serial-Studio/Serial-Studio/blob/master/CONTRIBUTING.md), which covers the contribution rules and code style.
 3. Pick an open issue or propose a new feature.
-4. Submit your pull request. A signed [Contributor License Agreement](License-Agreement.md#contributor-license-agreement-cla) is required before it can be merged.
-5. Once it's merged, request your Pro license via GitHub Discussions.
-
-## Why this program exists
-
-Serial Studio is built and maintained by a single developer. Contributions of any kind (visibility, hardware, translations, or code) directly support the project's long-term sustainability. If you can't pay, contribute. Help spread the word.
-
-If you already have an audience and would rather monetize referrals, see [Become an Affiliate](Become-an-Affiliate.md).
+4. Submit your pull request. Contributions are accepted under the [Contributor License Agreement](License-Agreement.md#contributor-license-agreement-cla), described in CONTRIBUTING.md.
+5. Once it's merged, request your license as described in [How to submit](#how-to-submit).
 
 ## See also
 
+- [Pro vs Free](Pro-vs-Free.md): what Pro unlocks.
 - [License Agreement](License-Agreement.md): dual-license details.
 - [Support Serial Studio](Support-Serial-Studio.md): other ways to help.
-- [Become an Affiliate](Become-an-Affiliate.md): earn commission by referring customers.
+- [Become an Affiliate](Become-an-Affiliate.md): earn commission by referring customers, if you have an audience.
 - [Buy Serial Studio Pro](https://store.serial-studio.com/): purchase a Pro license.

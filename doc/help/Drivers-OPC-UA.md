@@ -1,73 +1,103 @@
 # OPC UA Driver (Pro)
 
-OPC UA (IEC 62541) is the tag-oriented interface modern automation equipment exposes over Ethernet. PLCs, SCADA servers and gateways publish a browsable **address space** of named, typed variables; a client subscribes to the ones it cares about and the server pushes changes. Serial Studio Pro implements an OPC UA **client**: it discovers a server's endpoints, browses its tags, builds a project from the selection and streams live values into the dashboard.
+A PLC on the bench at 192.168.1.10 publishes `Plant.Line1.Filler.Level_pct`, and you want it on a plot. OPC UA is how PLCs, SCADA servers and gateways publish named, typed values over Ethernet, and this driver is the Serial Studio client for it. If your device prints text over a serial port (an Arduino with `Serial.println`), you want the UART driver instead.
 
-Because OPC UA is the common denominator across vendors, one driver reaches Rockwell controllers through a FactoryTalk Linx Gateway, any device behind KEPServerEX or Ignition, Siemens S7-1200/1500 and WinCC, Beckhoff TwinCAT, CODESYS runtimes, B&R, WAGO and Schneider PLCs. Vendor names appear here only to state compatibility; the driver speaks the standard, not a vendor dialect.
+The driver connects to an OPC UA server, so you need one: a PLC, a gateway such as KEPServerEX or Ignition, or the [bundled simulator](#try-it-with-the-simulator). You do not write a parser or script: Serial Studio generates the project for you.
+
+OPC UA is a Pro feature. A Free install is offered the 14-day Pro trial the first time you use a Pro feature (a Yes/No prompt; registering the trial needs an internet connection, and after the trial ends the prompt offers activation or purchase instead). See [Pro vs Free](Pro-vs-Free.md).
+
+## Try it with the simulator
+
+The `OPC UA PLC Simulator` is a Python 3 server that models a bottling line. Its script, `opcua_plc_simulator.py`, lives in the Serial Studio GitHub repository under `examples/OPC UA PLC Simulator/`. Download that folder, or clone the repository. The **Examples** toolbar button fetches example projects, not this script.
+
+1. Install the server library and start the simulator: `pip install asyncua`, then `python "examples/OPC UA PLC Simulator/opcua_plc_simulator.py"`.
+2. In the **Device Setup** panel, set the **Connection** selector to **OPC UA**. On a Free install this shows the Pro trial prompt (Yes/No). Keep the endpoint `opc.tcp://127.0.0.1:4840` and press **Discover**.
+3. Press **Browse Tags...**. In the dialog that opens, tick the `Plant` folder and press **OK**. Back in the panel, press **Generate Project**.
+4. Press **Connect** in the toolbar. The generated dashboard has one group per folder the ticked tags live in. `FaultySensor` is a tag the simulator makes fail on purpose: it holds its last good value while the simulator reports the fault.
+
+The address space mixes string and numeric node ids, engineering units and ranges, a six-element float array, string status tags and a struct-shaped Variable with child Variables.
+
+| Simulator flag | Effect |
+|----------------|--------|
+| `--user NAME --password PW` | Require username/password login. |
+| `--no-subscriptions` | Refuse subscriptions, which forces the polling fallback. |
+| `--drop-after N` | Stop publishing after N seconds without closing the socket (the watchdog case). |
+| `--secure-only` | Advertise only a secured endpoint. |
+
+The simulator README lists the rest.
 
 ## OPC UA overview
 
-An OPC UA server is a tree. Under the **Objects** folder, vendors arrange folders (a plant, a line, a machine) and inside them **variable nodes**: the tags. Every node has a **node id** (`ns=2;s=Plant.Line1.Filler.Level_pct` or `ns=3;i=1017`), a display name, a data type and an access level. The client never deals with registers or byte offsets: it asks for values by node id and receives typed values with a **status code** (Good, or a Bad reason) and a **source timestamp** from the device's own clock.
+An OPC UA server is a tree, a file explorer for variables. Under the **Objects** folder, vendors arrange folders (a plant, a line, a machine) and inside them **variable nodes**: the tags. Every node has a **node id** (`ns=2;s=Plant.Line1.Filler.Level_pct` or `ns=3;i=1017`), a display name, a data type and an access level. The client asks for values by node id and receives typed values with a **status code** (Good, or a Bad reason) and a **source timestamp** from the device's own clock.
 
-Two ways of getting values exist:
-
-- **Subscription.** The client creates a subscription with a publishing interval and adds monitored items. The server samples each item and publishes every change. This is the efficient path.
-- **Read.** The client asks for the current value of a list of nodes in one request. Simple, but the client has to poll.
-
-```mermaid
-sequenceDiagram
-    participant C as Client (Serial Studio)
-    participant S as Server (PLC, gateway)
-
-    C->>S: GetEndpoints
-    S-->>C: endpoint list (policy, mode, URL)
-    C->>S: CreateSession + ActivateSession (anonymous or username)
-    C->>S: Browse(Objects) ... Browse(Plant/Line1)
-    S-->>C: child nodes with names and types
-    C->>S: CreateSubscription(100 ms) + CreateMonitoredItems(tags)
-    loop every publishing interval
-        S-->>C: changed values + status + source timestamp
-    end
-```
+The efficient way to get values is a **subscription**: the client tells the server which tags it wants and the server pushes every change. The alternative is a timed **read** of all tags, which Serial Studio uses as a fallback.
 
 ### Endpoints and security
 
-A server advertises one **endpoint** per security configuration. Each endpoint pairs a **security policy** (`None`, `Basic256Sha256`, ...) with a **message security mode** (None, Sign, Sign & Encrypt). A client picks one endpoint and opens a secure channel with it.
+A server advertises one **endpoint** per security configuration. Each endpoint pairs a **security policy** (`None`, `Basic256Sha256`, ...) with a **message security mode** (None, Sign, Sign and Encrypt). A client picks one endpoint and opens a secure channel with it.
 
-Serial Studio bundles its own OPC UA stack with encryption built in, so every endpoint a server advertises is reachable. Six security policies are supported: `None`, `Basic128Rsa15`, `Basic256`, `Basic256Sha256`, `Aes128_Sha256_RsaOaep` and `Aes256_Sha256_RsaPss`. Each secure policy can be used in **Sign** (messages are authenticated) or **Sign & Encrypt** (authenticated and confidential). Nothing is installed on the machine and nothing is taken from the system: the stack ships inside the application, so the same build behaves the same way on every computer.
+On a local test server leave the policy at `None`. On a real plant network use `Basic256Sha256` or newer.
 
-`Basic128Rsa15` and `Basic256` are **deprecated** by the OPC Foundation, which no longer considers SHA-1 and RSA-1.5 safe. They are offered because field controllers still ship them, they are labelled as deprecated everywhere they appear, and they are never chosen automatically.
+Serial Studio bundles its own OPC UA stack, so it needs no system crypto library. Six security policies are supported: `None`, `Basic128Rsa15`, `Basic256`, `Basic256Sha256`, `Aes128_Sha256_RsaOaep` and `Aes256_Sha256_RsaPss`. Each secure policy can be used in **Sign** (messages are authenticated) or **Sign and Encrypt** (authenticated and confidential). `Basic128Rsa15` and `Basic256` are deprecated by the OPC Foundation (SHA-1, RSA-1.5); they are labelled as deprecated wherever they appear and never chosen automatically.
 
-Login is **Anonymous**, **Username / Password**, or an **X.509 certificate**. A password is protected by the channel only when the mode is Sign & Encrypt; the Setup panel warns when a password would travel in the clear, and stops warning once the channel encrypts it.
+Login is **Anonymous**, **Username / Password**, or an **X.509 certificate** (a digital identity file issued to you). A password is protected only under Sign and Encrypt: the Setup panel warns when it would travel unencrypted (Policy `None` or Mode Sign) and clears the warning under Sign and Encrypt.
 
-## How Serial Studio uses it
+Secure policies need a one-time certificate trust step: see [Secure connections](#secure-connections).
 
-The driver drives the bundled OPC UA client on the main thread. One source is one session with one server; the session subscribes to every selected tag.
+## Setup panel settings
 
-### Configuration model
+The OPC UA driver (Serial Studio Pro) is configured in the **Device Setup** panel: set the **Connection** selector to **OPC UA**. One source is one session with one server; the session subscribes to every selected tag.
 
-1. **Endpoint.** The server URL, `opc.tcp://host:port/path` (default `opc.tcp://127.0.0.1:4840`). Press **Discover** to fetch the server's endpoint list; the most secure endpoint whose user tokens match the selected authentication is picked automatically (never a deprecated policy on its own), and an explicit choice survives the next discovery. Connecting without a selected endpoint runs the same discovery first. Serial Studio always dials the **host and port you typed**, keeping the rest of the discovered description: servers routinely advertise their own hostname (`opc.tcp://PLC-01:4840`), which rarely resolves from an engineering laptop.
-2. **Poll Interval (ms).** The interval requested for the subscription and for the read timer, and the frame rate of the source. Default 100 ms, clamped to 10-60000 ms. Servers revise it upward when it is below their minimum (PLC-embedded servers commonly floor it at 50-100 ms); the status line under the pane reports the rate in force, not the one requested.
-3. **Security.** The discovered endpoint rows, shown as `policy / mode / url`. A row is selectable when it advertises a user identity token the selected authentication can present.
-4. **Policy and Mode.** What to ask for when you dial without picking a row, and what the automatic pick is measured against. Choosing anything other than `None` reveals the **Mode** selector (Sign, or Sign & Encrypt).
-5. **Authentication.** **Anonymous** (default), **Username / Password**, or **X.509 Certificate**. The password is stored in the same per-machine credential vault the MQTT driver uses, obfuscated in the machine's settings and keyed by host and port; it is never written to a project file. For certificate login, pick the certificate and its private key: only their **paths** are saved, never the key itself.
-6. **Tags.** The **Browse Tags...** dialog opens a browse-only session and fetches exactly one level per expansion: one Browse plus one batched Read for the whole level. Nothing below a node is read until you expand it, so a gateway with a hundred thousand nodes stays responsive. Variables expand too, because PLC structs and UDTs expose their members, and their `EngineeringUnits`/`EURange` properties, as child Variables. Ticking a folder marks it: every readable supported variable under it is selected, including ones fetched later when you expand it. **Select All Readable** ticks everything fetched so far. **OK** commits the selection; **Cancel** and the window's close button discard it. Tags in branches you never expanded keep their place. Up to 2048 channels can be selected; the dialog warns above 512 because a very wide frame slows the dashboard. An edit made while a session is connected is applied when the link closes.
-7. **Generate Project.** Builds a project from the selection ([Generated project](#generated-project)).
+| Setting | Default | What it does |
+|---------|---------|--------------|
+| Endpoint | `opc.tcp://127.0.0.1:4840` | The server address, `opc.tcp://host:port/path`. The **Discover** button next to it fetches the server's endpoint list. |
+| Poll Interval (ms) | 100 | The OPC UA publishing interval requested from the server, also the read timer and the frame rate of the source. Clamped to 10-60000 ms. |
+| Security | - | Shown only after Discover returns endpoints. One row per endpoint, as `policy / mode / url`. A row is disabled when the server offers no user identity token the selected Authentication can present. |
+| Policy | `None` | The policy you prefer. With no row selected, an endpoint matching this Policy and Mode wins; otherwise the most secure non-deprecated endpoint is picked. |
+| Mode | `None` (becomes Sign and Encrypt when you pick a Policy) | **Sign** or **Sign and Encrypt**. Hidden while Policy is `None`. |
+| Authentication | Anonymous | **Anonymous**, **Username / Password** or **X.509 Certificate**. |
+
+The API command `setPublishingInterval` and the CLI flag `--opcua-interval` set the same value as Poll Interval.
+
+**Endpoint.** Press **Discover** to fetch the server's endpoint list. The most secure endpoint whose user tokens match the selected authentication is picked automatically (never a deprecated policy on its own), and an explicit choice survives the next discovery. Connecting without a selected endpoint runs the same discovery first. Serial Studio always dials the **host and port you typed**, keeping the rest of the discovered description: servers routinely advertise their own hostname (`opc.tcp://PLC-01:4840`), which may be a name your laptop's DNS does not know.
+
+**Poll Interval.** Servers revise the interval upward when it is below their minimum (PLC-embedded servers commonly floor it at 50-100 ms). The status line under the pane reports the rate in force, not the one requested.
+
+**Authentication.** The password is stored in the same per-machine credential vault the MQTT driver uses, obfuscated in the machine's settings and keyed by host and port; it is never written to a project file. For certificate login, pick the certificate and its private key: only their **paths** are saved, never the key itself.
+
+### Selecting tags
+
+**Browse Tags...** opens a browse-only session and fetches exactly one level per expansion: one Browse plus one batched Read for the whole level. Nothing below a node is read until you expand it, so a gateway with a hundred thousand nodes stays responsive. Variables expand too, because PLC structs (UDTs) expose their members, and their `EngineeringUnits` and `EURange` (the min/max range the PLC declares) properties, as child Variables.
+
+Ticking a folder marks it: every readable supported variable under it is selected, including ones fetched later when you expand it. **Select All Readable** ticks everything fetched so far. **OK** commits the selection; **Cancel** and the window's close button discard it. Tags in branches you never expanded keep their place. An edit made while a session is connected is applied when the link closes.
+
+Up to 2048 channels can be selected; the dialog warns above 512 because a very wide frame slows the dashboard. A frame is capped at 64 KiB, so many String channels can reach the limit before 2048.
 
 Supported tag types: Boolean, SByte, Byte, Int16, UInt16, Int32, UInt32, Int64, UInt64, Float, Double, String, and one-dimensional arrays of those. The common namespace-0 subtypes resolve too (`Duration`, `UtcTime`, `Enumeration`, `IntegerId`, `DateTime`, `Guid`, `ByteString`, `LocalizedText`); when a vendor declares a type the table does not know, the value's own type decides, and anything printable becomes a string channel. Strings are capped at 256 bytes of UTF-8, truncated on a character boundary. Variables of any other type show in the browser but cannot be ticked.
 
+Press **Generate Project** to build a project from the selection ([Generated project](#generated-project)).
+
 ### Subscription and polling
 
-On connect the driver asks the server for one monitored item per tag and reports progress as **Subscribing, n of N tags**. If the server refuses every item (no subscription support, or its quota is exhausted) the driver switches to timed reads of all tags and the status reads **Polling (server refused subscriptions)**. A refusal of individual tags (item caps on an S7-1200, per-user access, a node id gone stale after a PLC download) is logged with the node id, and those tags move to the read lane while the rest stay subscribed: the status then reads **Subscribed N tags, polling M refused**.
+On connect the driver asks the server for one monitored item (a server-side watch on one tag) per tag and reports progress as **Subscribing, n of N tags**. The status line then settles on one of three texts:
 
-Reads are batched and chunked to the server's `MaxNodesPerRead`, and exactly one read is outstanding at a time; a tick arriving while the previous read is still open is skipped and counted rather than queued behind a slow PLC.
+| Status | Meaning |
+|--------|---------|
+| `Subscribed, N tags, X Hz` | Every tag is subscribed. X is the rate in force. |
+| `Subscribed N tags, polling M refused, X Hz` | The server refused M individual tags (an item cap, per-user access, a node id gone stale after a PLC download). Each is logged with its node id and moves to timed reads; the rest stay subscribed. |
+| `Polling (server refused subscriptions), N tags, X Hz` | The server refused every item (no subscription support, or its quota is exhausted), so the driver reads all tags on a timer. |
 
-A subscription can also go silent without any error, when a server reloads its project or drops the subscription while leaving the session up. A watchdog notices that nothing has arrived for several publishing periods and falls back to polling instead of freezing the dashboard.
+Timed reads are batched to the server's `MaxNodesPerRead`, one read at a time. A tick that arrives while the previous read is still open is skipped and counted.
 
-Each publishing tick, the driver collects every tag whose value changed since the previous tick and publishes them as one binary frame. Tags that did not change are not resent; the frame parser latches their last value. Value quality follows the OPC UA severity bits: Good and Uncertain values (a gateway serving its last usable value, a device in warm-up) are published, Bad values are dropped. A tag whose newest value is Bad keeps its last good value on the dashboard, increments the bad-status counter and appears in the API status `badTags` list. An array tag fans out into one channel per element.
+A subscription can go silent without any error when a server reloads its project but leaves the session up. After silence longer than six revised publishing intervals (3 s at minimum), the driver falls back to polling instead of freezing the dashboard.
+
+Each publishing tick, the driver publishes the tags whose value changed since the previous tick as one frame, and the generated frame parser keeps the last value of the rest. An array tag fans out into one channel per element.
+
+Value quality follows the OPC UA severity bits: Good and Uncertain values (a gateway serving its last usable value, a device in warm-up) are published, Bad values are dropped. A tag whose newest value is Bad keeps its last good value on the dashboard, increments the bad-status counter and appears in the API status `badTags` list.
 
 ### Timestamps
 
-Every frame is stamped with the earliest source timestamp it carries, mapped onto Serial Studio's monotonic clock. The server-to-local offset is sampled at connect, so a PLC without NTP is followed rather than rejected; only a stamp more than 5 s away from that offset, or a missing one, falls back to the receipt time and counts as unstamped. A frame stamp never goes backwards. Recordings and CSV exports therefore follow the device clock while a skewed server cannot rewind the dashboard.
+Values keep the PLC's own timestamp, so recordings and CSV exports follow the device clock, even a PLC without NTP. A stamp more than 5 s away from the offset sampled at connect, or a missing one, falls back to the receipt time and counts as unstamped. A frame stamp never goes backwards.
 
 ### Generated project
 
@@ -86,6 +116,8 @@ Connecting is asynchronous. The driver reports exactly one outcome per attempt: 
 
 ## Command line
 
+The command-line flags need Serial Studio Pro, like the Setup panel. A minimal run:
+
 ```bash
 SerialStudio --opcua opc.tcp://192.168.1.10:4840/ \
   --opcua-tag "ns=2;s=Plant.Line1.Filler.Level_pct:f64:Level" \
@@ -93,37 +125,45 @@ SerialStudio --opcua opc.tcp://192.168.1.10:4840/ \
   --opcua-interval 100
 ```
 
-`--opcua-tag` takes `nodeId[:type[:name]][:n=N][:unit=U]` and repeats; the type code defaults to `f64`, `n` gives an array length and `unit` a dataset unit. The node id may itself contain colons: the suffixes are parsed from the right. `--opcua-user` and `--opcua-pass` select username/password login. Without `--project`, Serial Studio generates a project from the tag list so the frames decode.
+| Flag | Effect |
+|------|--------|
+| `--opcua URL` | The endpoint to connect to. |
+| `--opcua-tag SPEC` | One tag; repeat for more. |
+| `--opcua-interval MS` | Publishing interval, 10-60000 ms. An invalid value is rejected with a warning. |
+| `--opcua-user NAME`, `--opcua-pass PW` | Username/password login. Without `--opcua-user` the login is Anonymous; certificate login is Setup panel and API only. |
+| `--project FILE` | Use this project. Without it, Serial Studio generates a project from the tag list so the frames decode. |
+
+`--opcua-tag` takes `nodeId[:type[:name]][:n=N][:unit=U]`. The node id may itself contain colons: the suffixes are parsed from the right. `n` gives an array length and `unit` a dataset unit. The type code is one of `bool`, `i8`, `u8`, `i16`, `u16`, `i32`, `u32`, `i64`, `u64`, `f32`, `f64` (the default) or `str`.
 
 ## API
 
-The Socket API exposes the driver under `io.opcua.*`: `getConfig`, `setEndpointUrl`, `discoverEndpoints` and `listEndpoints`, `setEndpointIndex`, `setAuthMode`, `setUsername`, `setPassword`, `setPublishingInterval`, `startBrowse`, `browse`, `stopBrowse`, `listTags`, `setTags`, `addTag`, `removeTag`, `clearTags`, `generateProject` and `getStatus`. Discovery and browsing are asynchronous: the command starts the request and the matching list command is polled for the result. `getStatus` returns the session state and the pulled counters: values received, bad-status count and the node ids currently bad, unstamped values, frames published, link drops, refused tags, skipped polls and the revised publishing interval. Each command, with its parameters, is listed under [OPC UA Driver Commands](API-Reference.md#opc-ua-driver-commands---pro-29).
+The Socket API exposes the driver under `io.opcua.*`.
 
-## Simulator
+- **Connection:** `getConfig`, `setEndpointUrl`, `discoverEndpoints`, `listEndpoints`, `setEndpointIndex`, `setPublishingInterval`, `getStatus`.
+- **Security and login:** `setSecurityPolicy`, `setSecurityMode`, `setAuthMode`, `setIdentityType` (an alias of `setAuthMode`), `setUsername`, `setPassword`, `setUserCertificate`.
+- **Client certificate:** `getCertificate`, `regenerateCertificate`, `exportCertificate`.
+- **Trust:** `listTrusted`, `trustServer`, `revokeTrust`.
+- **Tags:** `startBrowse`, `browse`, `stopBrowse`, `listTags`, `setTags`, `addTag`, `removeTag`, `clearTags`, `generateProject`.
 
-The `OPC UA PLC Simulator` example ships a Python server (`pip install asyncua`) modelling a bottling line: typed tags, a six-element float array, string status tags and a sensor that reports a Bad status for five seconds out of every ten. Flags reproduce the situations this page describes: `--user/--password` for authentication, `--no-subscriptions` to force the polling fallback, `--drop-after N` to stop publishing without closing the socket (the watchdog case), `--secure-only` to advertise only a secured endpoint. The address space mixes string and numeric node ids, engineering units and ranges, a struct-shaped Variable with child Variables, and a sensor cycling Good, Bad and Uncertain. The driver's integration tests run against it.
-
-1. Start the simulator: `python "examples/OPC UA PLC Simulator/opcua_plc_simulator.py"`.
-2. Select the **OPC UA** device, keep `opc.tcp://127.0.0.1:4840`, press **Discover**.
-3. **Browse Tags...**, tick the `Plant` folder, press **OK**, then **Generate Project**.
-4. Connect. `FaultySensor` holds its last good value while the simulator reports the fault.
+Discovery and browsing are asynchronous: the command starts the request and the matching list command is polled for the result. `getStatus` returns the session state and the pulled counters: values received, bad-status count and the node ids currently bad, unstamped values, frames published, link drops, refused tags, skipped polls and the revised publishing interval. Each command, with its parameters, is listed under [OPC UA Driver Commands](API-Reference.md#opc-ua-driver-commands---pro-29).
 
 ## Secure connections
 
+In the OPC UA driver (Serial Studio Pro), a secure policy needs the server to be trusted once, and the server to trust Serial Studio once.
+
 ### Connecting for the first time
 
-1. Choose a **Policy** other than `None` and leave **Mode** on Sign & Encrypt.
-2. Press **Connect**. The first attempt is refused: Serial Studio has never seen this server's certificate.
-3. The trust prompt shows the certificate's subject, issuer, validity window and **SHA-256 fingerprint**. Compare the fingerprint with the one the server operator gave you, then press **Trust This Server**.
-4. Press **Connect** again. Accepting a certificate records the decision without reconnecting, so **Connect** still reports one outcome per press.
+1. Choose a **Policy** other than `None` and leave **Mode** on Sign and Encrypt (picking a policy sets it).
+2. Press **Connect** in the toolbar. The first attempt stops and a trust prompt appears, because Serial Studio has never seen this server's certificate. The prompt shows the certificate's subject, issuer, validity window and **SHA-256 fingerprint**. Compare the fingerprint with the one the server operator gave you, then press **Trust This Server**.
+3. Press **Connect** again. Accepting a certificate records the decision but does not reconnect for you.
 
 The decision is stored per installation, keyed by fingerprint. A server that is re-keyed presents a different fingerprint and asks again, which is the point: a silent inheritance would defeat the check.
 
 ### Letting the server trust you
 
-A secure channel is mutual. On the first secure connection Serial Studio generates its own client certificate and keeps it, so a server operator has to trust this installation once rather than on every launch. Under **Identity** in the Setup panel:
+A secure channel is mutual. On the first secure connection Serial Studio generates its own client certificate and keeps it, so a server operator has to trust this installation once rather than on every launch. With a Policy other than `None`, an **Identity** row appears in the OPC UA section of the Device Setup panel:
 
-- **Export...** writes the certificate where the server expects trusted clients (`pki/trusted/certs` on many servers). The private key is never exported.
+- **Export…** is enabled once the first secure connection has generated the certificate. It writes the certificate where the server expects trusted clients (`pki/trusted/certs` on many servers). The private key is never exported.
 - **Replace** generates a new certificate and key. Every server that trusted the old one has to trust the new one, so use it only when the key may have been exposed.
 
 ### Why a secure connection was refused
@@ -139,19 +179,20 @@ The four causes are reported separately, because they have four different fixes:
 
 ## Common pitfalls
 
-- **Endpoint list is empty or greyed out.** None of the server's endpoints advertises a user identity token the selected authentication can present (a server offering Anonymous only rejects a username session). Switch the authentication mode, or enable a matching endpoint on the server.
-- **"Access denied".** Anonymous login is disabled on the server, or the username/password is wrong. Switch the authentication mode and check the account; some servers also require the user to be granted read access to the browsed folders.
-- **Discovery works, connect times out.** Serial Studio dials the host you typed, so an unresolvable advertised hostname is not the cause; check the firewall on port 4840 and whether the server binds an interface your machine can reach.
-- **Everything polls instead of subscribing.** The server hit its subscription limit. A previous session that was not closed cleanly holds its subscriptions until the server times it out; wait for that, or raise the limit on the server.
-- **A tag is visible but cannot be ticked.** Its data type is not supported (a structure as a whole, a multi-dimensional array), or the account has no read access. A struct is not a dead end: expand it and tick its members.
-- **Values update slower than the interval.** The server revised the publishing interval upward; the status line shows the rate in force. Ask the server for a faster minimum, or accept its floor.
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Discover fails or hangs | Wrong URL or port, or the server is not running. | Check the URL the server prints on start, and test the port from this machine. |
+| The **Security** rows are greyed out | None of the server's endpoints advertises a user identity token the selected Authentication can present (a server offering Anonymous only rejects a username session). | Switch the authentication mode, or enable a matching endpoint on the server. |
+| "Access denied" | Anonymous login is disabled on the server, or the username/password is wrong. | Switch the authentication mode and check the account. If browsing fails after login, grant the account read access to the folders. |
+| Discovery works, connect times out | A firewall blocks the port, or the server binds an interface this machine cannot reach. Serial Studio dials the host you typed, so the hostname the server advertises does not matter. | Check the firewall for the port in the Endpoint field (4840 by default) and the server's bind address. Connect fails after 15 s at the latest. |
+| Everything polls instead of subscribing | The server hit its subscription limit. A previous session that was not closed cleanly holds its subscriptions until the server times it out. | Wait for the timeout, or raise the limit on the server. |
+| A tag is visible but cannot be ticked | Its data type is not supported (a structure as a whole, a multi-dimensional array), or the account has no read access. | Expand a struct and tick its members. |
+| Values update slower than the interval | The server revised the publishing interval upward; asking politely does not change its floor. | Read the rate in the status line, then ask the server for a faster minimum or accept its floor. |
 
 ## Further reading
 
 - [OPC UA (Wikipedia)](https://en.wikipedia.org/wiki/OPC_Unified_Architecture)
 - [OPC Foundation: Unified Architecture](https://opcfoundation.org/about/opc-technologies/opc-ua/)
-- [OPC UA Online Reference](https://reference.opcfoundation.org/)
-- [open62541 project](https://www.open62541.org/)
 
 ## See also
 

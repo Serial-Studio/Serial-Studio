@@ -2,44 +2,46 @@
 
 ## Overview
 
-Understanding how data moves through Serial Studio helps you configure it and debug issues. This page follows a single byte from your device to a rendered widget on screen.
+Your board prints `23.5,1013` followed by a newline. Serial Studio reads those bytes, finds the end of the line, splits it into two values and draws them. A frame is one complete message from your device, usually one line. If the dashboard stays empty, the bytes died at one of six stages, and the [troubleshooting table](#troubleshooting-data-flow) at the end maps symptoms to them.
 
 ## The pipeline
 
-The diagram below shows the full data flow from hardware to dashboard widgets, along with the optional export path for CSV, MDF4, and the API.
+The diagram below shows the data flow from hardware to dashboard widgets, with the optional export path. Transforms and Variables run inside the frame builder (Stage 4).
 
 ```mermaid
 flowchart TD
-    A["Device"] -->|bytes| B["Driver"]
-    B --> C["Input Buffer"]
-    C --> D["Frame Reader"]
-    D --> E["Frame Builder"]
-    E --> T["Transforms &<br/>Variables"]
-    T --> F["Dashboard"]
-    T -->|export| G["CSV · MDF4 · API · Historian"]
+    A["1 Device"] -->|bytes| B["1 Driver"]
+    B --> C["2 Input Buffer"]
+    C --> D["3 Frame Reader"]
+    D --> E["4 Frame Builder"]
+    E --> T["4 Transforms &<br/>Variables"]
+    T --> F["5 Dashboard"]
+    T -->|export| G["6 CSV · MDF4 · Historian · InfluxDB"]
 ```
 
 ## Stage 1: device and driver
 
-Your device sends raw bytes over one of ten supported transports: UART, TCP/UDP, Bluetooth LE, audio input, Modbus RTU/TCP, CAN Bus, MQTT, USB, HID, or Process I/O. UART, TCP/UDP, and Bluetooth LE ship in the free edition. Audio input, Modbus, CAN Bus, MQTT, USB, HID, and Process I/O require [Serial Studio Pro](Pro-vs-Free.md).
+For an Arduino or ESP32 you pick UART (the serial port) in the Setup panel and set the baud rate to match `Serial.begin()`. UART, TCP, UDP, WebSocket, HTTP and Bluetooth LE are free. Audio input, Modbus RTU/TCP, CAN Bus, MQTT, USB, HID, Process I/O and the industrial clients (OPC UA, Siemens S7, EtherNet/IP, IEC 60870-5-104) need [Serial Studio Pro](Pro-vs-Free.md). See [Devices](Devices.md) for the full list.
 
-The selected driver receives bytes from the operating system and hands them off to the rest of the pipeline. No parsing happens here. The driver's only job is raw byte transport. Each driver handles its own protocol: serial framing, TCP streams, BLE characteristic notifications, audio sample buffers, and so on.
+The selected driver receives bytes from the operating system and hands them to the input buffer. It does no parsing; its only job is raw byte transport.
 
 ## Stage 2: input buffer
 
-A 1 MB input buffer sits between the driver and the frame reader. It absorbs bursts of incoming data so momentary spikes in data rate don't cause dropped bytes. If data arrives faster than Serial Studio can consume it for a while, an overflow counter increments so you can spot the condition.
+Each source has a 1 MB input buffer between its driver and the frame reader. It absorbs short bursts from a device that talks faster than the computer listens. If the buffer fills, Serial Studio discards the overflowing bytes, counts them and writes a warning to its log (at most once every 5 seconds), so the lost data shows up as missing frames. In Project File mode with No Delimiters, chunks bypass this buffer.
 
 ## Stage 3: frame reader
 
-The frame reader scans the input buffer for frame boundaries and extracts complete frames. Five detection modes are available:
+The frame reader scans the input buffer for frame boundaries and extracts complete frames. Quick Plot needs no setup and expects one newline-terminated line per frame. In Project File mode you choose the detection mode and delimiters in the [Project Editor](Project-Editor.md). Five detection modes are available:
 
-- **End Delimiter Only.** Find the end marker and extract everything before it.
-- **Start + End Delimiter.** Find the start marker, then the end marker, and extract what's between them.
-- **Start Delimiter Only.** Frame boundaries fall between consecutive start markers.
-- **No Delimiters.** Pass all data through. Use this with a frame parser script (Lua or JavaScript) for length-prefixed or self-delimiting protocols.
-- **Fixed Length.** Cut the stream into frames of exactly N bytes. An optional Header Rule picks the byte that starts a frame, so the reader re-aligns after garbage or a lost byte, and an optional Body Rule drops a frame whose other bytes break the rule.
+| Mode | Finds frames by |
+|------|-----------------|
+| End Delimiter Only | The end marker; everything before it is the frame. |
+| Start + End Delimiter | A start marker, then an end marker; the frame is what sits between them. |
+| Start Delimiter Only | Consecutive start markers; a frame runs from one to the next. |
+| No Delimiters | Nothing. All data passes through, for a frame parser script that handles length-prefixed or self-delimiting protocols. |
+| Fixed Length | Counting N bytes. Optional Header and Body rules re-align the reader after a lost byte; see the [Project Editor](Project-Editor.md). |
 
-After extraction, the frame reader can optionally validate a checksum. Nine algorithms are registered: `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, and `Adler-32`. Valid frames move to the next stage.
+The frame reader can also validate a checksum, chosen per source in the Project Editor. The default is none. Algorithms: `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, and `Adler-32`. Frames that pass move to the frame builder; frames that fail are dropped.
 
 ## Stage 4: frame builder
 
@@ -47,65 +49,67 @@ The frame builder turns each complete frame into a structured record of groups a
 
 ### Quick Plot mode
 
-1. Split the line under the detected format (comma, semicolon, tab, space, name:value or JSON).
-2. If the first row is all non-numeric, treat it as column headers.
-3. Auto-generate a Data Grid group and a Multi-Plot group.
-4. Assign values to auto-created datasets.
+Set **Operation Mode** to "Quick Plot (Auto-Detected Format)" in the **Device Setup** panel. No project file is needed. Start here with an Arduino printing comma-separated values: select this mode, connect, and the values appear as plots. The frame builder does this:
 
-No project file needed. This mode targets rapid prototyping with line-formatted serial output.
+1. Split the line under the detected format (comma, semicolon, tab, space, name:value or JSON).
+2. If the first row is all text and has the same number of fields as the data rows, use it as column titles.
+3. Auto-generate a table of values (Data Grid group) and a plot of every channel (Multi-Plot group).
+4. Assign values to auto-created datasets.
 
 ### Project File mode
 
+Set **Operation Mode** to "Parse via Project File" in the **Device Setup** panel. A parser that splits a comma-separated line is one line of JavaScript, which you enter in the source's frame parser in the [Project Editor](Project-Editor.md):
+
+```javascript
+function parse(frame) { return frame.split(","); }
+```
+
+The frame builder then does this:
+
 1. Apply the configured decoder (Plain Text (UTF-8), Hexadecimal, Base64, or Binary (Direct)) to turn raw bytes into a parse-ready form.
-2. Call the `parse(frame)` function in your chosen scripting engine (Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) or JavaScript).
+2. Call the `parse(frame)` function in the source's scripting engine (Lua or JavaScript; see [Frame Parser Scripting](Frame-Parser.md)). The Built-In parser templates skip the script.
 3. The function returns a list of values (or a 2D list for multi-frame output).
 4. Map returned values to datasets by their Frame Index.
-5. For each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. The walk is single-pass, in group then dataset order: a transform can read any dataset's raw value, but reading the final value of a dataset that comes later in the order returns the previous frame's result. Transforms can also read project constants and publish computed variables in the project's [Variables tables](Variables.md); computed variables persist across frames. See [Dataset Value Transforms](Dataset-Transforms.md).
+5. Pro: for each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. Free users skip this step. See [Dataset Value Transforms](Dataset-Transforms.md) for ordering rules and [Variables](Variables.md) for shared constants.
 6. Build the final frame with the populated dataset values. Computed datasets (datasets with no Frame Index) are filled entirely by their transform at this point.
 
-Frames aren't handed to the dashboard and export path one at a time. The frame builder stages
-each frame's values into a shared block and flushes that block to the dashboard and to every
-export sink when the display refreshes or when the block fills up, whichever comes first. No
-frame's data is skipped by this batching; it only changes how delivery is grouped.
+Frames reach the dashboard and the exports in small batches, flushed on every display tick or at 64 frames (4096 samples for continuous streams), whichever comes first. No frame is skipped; the batching only changes how delivery is grouped.
 
 ### Multi-source projects (Pro)
 
-In multi-device projects, each device (source) is parsed independently, with its own frame reader and its own isolated script engine. Source frames are published to the dashboard independently, so one noisy source can't block or corrupt another.
+Serial Studio Pro supports multi-device projects: each device (source) is parsed independently, with its own frame reader and its own isolated script engine. Source frames are published to the dashboard independently. See [Threading and Timing Guarantees](Threading-and-Timing.md).
 
 ## Stage 5: dashboard
 
 The dashboard updates all active widgets with the new values as they arrive. Time-series widgets (plots, FFT, GPS trajectory) append new samples to a fixed-size history and drop the oldest samples once the history is full.
 
-Widget rendering is capped at a configurable refresh rate. The default is 60 Hz, and you can change it in **Settings → UI Refresh Rate** (or with the `dashboard.setFps` API command) to any value between 1 and 240 Hz. Higher rates give smoother animation but cost more CPU and GPU. Lower rates are useful on laptops, older machines, or when you want to free resources for recording. Note that incoming data is not sampled or discarded at this rate. Every frame is still processed and exported. Only the visual refresh of the widgets is capped.
+Widgets redraw at most 60 times per second by default. Open **Preferences → Plotting** and set **UI Refresh Rate (Hz)** (1 to 240), or call `dashboard.setFps` through the API Server. Raise it for smoother motion, lower it to cut CPU and GPU load. Every incoming frame is still processed and exported; only the redraw is capped.
 
 ## Stage 6: export (optional parallel path)
 
-When CSV export, MDF4 export, the Historian, or the API server is active, every frame is also handed to the export workers. Each export target writes data in the background, so disk I/O and network traffic never block the dashboard or slow down the pipeline.
+When CSV export, MDF4 export, the Historian or InfluxDB export is on, every frame is also handed to an export worker. Each worker writes in the background, so disk and network I/O never block the dashboard.
 
-- **CSV** writes one file per session under `Documents/Serial Studio/CSV/`. See [CSV Export & Playback](CSV-Export-Playback.md).
-- **MDF4 (Pro)** writes a binary measurement file suitable for automotive and high-rate workflows.
-- **Historian (Pro)** appends every frame, raw byte, and table snapshot to a per-project SQLite file that you can browse, tag, and replay later. See [Historian](Historian.md).
-- **API** on port 7777 serializes frames to JSON and broadcasts them to legacy-protocol clients. An MCP (JSON-RPC 2.0) session receives replies only and reads frames on request. See the [API Reference](API-Reference.md).
+| Target | Edition | Output |
+|--------|---------|--------|
+| CSV | Free and Pro | One file per session at `Documents/Serial Studio/CSV/<project title>/<yyyy-MM-dd_HH-mm-ss>.csv` (folder `Untitled` when the project has no title). Switch it on with **CSV Spreadsheet** under **Data Export** in the Setup panel. See [CSV Export & Playback](CSV-Export-Playback.md). |
+| MDF4 | Pro | A binary measurement file suited to automotive and high-rate workflows. See [MDF4](MDF4.md). |
+| Historian | Pro | Every frame, raw byte and table snapshot in a per-project SQLite file that you can browse, tag and replay. See [Historian](Historian.md). |
+| InfluxDB 2.x | Pro | Live samples written to a bucket. See [InfluxDB](InfluxDB.md). |
+
+The API Server is a separate path. It is off by default; enable it with **Enable API Server** in Preferences. It then serializes each frame to JSON on TCP port 7777 for connected clients. The gRPC server on port 8888 runs only while the API Server is enabled. See the [API Reference](API-Reference.md).
 
 ## Troubleshooting data flow
 
-**No data in the console.** Check driver configuration: correct port, baud rate, IP address, or BLE characteristic.
-
-**Data in the console but no dashboard.** Check the operation mode. Make sure frame delimiters match what your device sends. In Project File mode, make sure the frame parser returns valid arrays or tables.
-
-**Garbled data.** Wrong baud rate, wrong decoder, or mismatched delimiters. Compare the raw console output against your expected format.
-
-**Partial frames.** Delimiter mismatch. Your device may be sending `\r\n` while you configured only `\n`, or vice versa. Look at the raw hex in the console.
-
-**Dashboard not updating.** Check that dataset Frame Index values in the project file match the positions in your parsed data array. Index 1 maps to the first element returned by `parse()`. If a frame returns fewer elements than a dataset's index needs, that dataset silently keeps its last value instead of clearing: a widget that's frozen (not blank) usually means the parser is returning a shorter array than expected on some frames.
-
-**High CPU with no dashboard.** The frame reader may be matching too many false frames. Tighten your delimiters or add checksum validation.
-
-**Choppy dashboard animation.** Raise the UI refresh rate in **Settings → UI Refresh Rate**. 60 Hz is a good baseline. 120 Hz or higher gives smoother motion at the cost of more CPU.
-
-**High CPU from the dashboard itself.** Lower the UI refresh rate. Dropping from 60 Hz to 30 Hz roughly halves the cost of widget redraws without losing any incoming data.
-
-**Export files empty.** Export workers only write while a device is connected. Check that export was started before you disconnected.
+| Symptom | Likely cause and fix |
+|---------|----------------------|
+| No data in the console | Check the driver settings in the Setup panel: port, baud rate, IP address or BLE characteristic. |
+| Garbled data | Wrong baud rate, wrong decoder (set in the Project Editor) or mismatched delimiters. Open the Console and compare the raw output with the format you expect. |
+| Partial frames | Delimiter mismatch. If your device sends `\r\n` while only `\n` is configured, or the reverse, the frames come out cut or padded. Compare the raw console output with the configured delimiters. |
+| Data in the console, dashboard empty or not updating | Check **Operation Mode** in the Device Setup panel and that the delimiters match what your device sends. In Project File mode, check that each dataset's Frame Index matches a position in the array `parse()` returns (index 1 is the first element) and that the parser returns a valid array. |
+| A widget is frozen, not blank | A dataset keeps its last value when a frame returns fewer elements than its index needs. The parser is returning a shorter array on some frames. |
+| High CPU with no dashboard | Short or noisy delimiters (for example a single `\n`) can match inside payload bytes and produce many tiny frames. Use a longer start/end marker or enable a checksum. |
+| Choppy animation or high CPU from the dashboard | Set **UI Refresh Rate (Hz)** under **Preferences → Plotting**: raise it for smoother motion, lower it to cut redraw work. No incoming data is lost either way. |
+| Export files empty | Export writes only while a device is connected, and the file is created on the first frame. Connect, then turn the export on, or turn it on before you connect. |
 
 ## See also
 
@@ -114,10 +118,6 @@ When CSV export, MDF4 export, the Historian, or the API server is active, every 
 - [Project Editor](Project-Editor.md): configure frame parsing and dashboard layout.
 - [Frame Parser Scripting](Frame-Parser.md): full Lua and JavaScript parser reference.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset calibration, filtering, and unit conversion.
-- [Variables](Variables.md): shared constants and computed variables used by transforms.
-- [Historian](Historian.md): record, tag, and replay sessions through the same pipeline.
-- [Widget Reference](Widget-Reference.md): all 15+ widget types and their data requirements.
-- [Communication Protocols](Communication-Protocols.md): protocol comparison and setup.
 - [Troubleshooting](Troubleshooting.md): fixes for common problems.
 - [Threading and Timing Guarantees](Threading-and-Timing.md): which thread each stage runs on and what timing guarantees hold.
 - [The Acquisition Pipeline](Data-Hotpath.md): the technical deep dive into this pipeline, for advanced users and plugin authors.

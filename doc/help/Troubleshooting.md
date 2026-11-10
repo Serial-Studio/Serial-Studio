@@ -1,80 +1,68 @@
 # Troubleshooting
 
-Quick solutions to common Serial Studio issues. If you can't find your problem here, check the [Getting More Help](#getting-more-help) section at the bottom.
+The Console shows text and the dashboard stays empty, or the numbers are wrong. Start with the [Problem Center](Problem-Center.md): press **Ctrl+K**, then type `Problem Center`. It lists the project mistakes, link conditions, and script errors Serial Studio detected, each with a remedy. **Connection Diagnostics** (also in **Ctrl+K**) checks port permissions, Bluetooth state, and host reachability for you.
 
-Before working through the sections below, open the [Problem Center](Problem-Center.md) (**Ctrl+K**, then `Problem Center`). It names the project mistakes, link conditions, and script errors it detects, each with a remedy, and **Connection Diagnostics** checks port permissions, Bluetooth state, and host reachability for you.
+## Arduino prints values but the dashboard is empty
 
-## Table of Contents
+Take the smallest case: a sketch that ends each reading with a newline.
 
-- [Installation Issues](#installation-issues)
-- [Connection Issues](#connection-issues)
-- [Dashboard & Visualization Issues](#dashboard--visualization-issues)
-- [Frame Parsing Issues](#frame-parsing-issues)
-- [CSV Player Issues](#csv-player-issues)
-- [Pro Feature Issues](#pro-feature-issues)
-- [Performance Issues](#performance-issues)
-- [Getting More Help](#getting-more-help)
+```cpp
+void setup() { Serial.begin(115200); }
+void loop() { Serial.println("1.5,2.5,3.5"); delay(100); }
+```
+
+Work down this list and stop at the first step that fails.
+
+1. In the **Setup Panel**, select **UART/COM** as the connection, pick the board under **Serial Port** (**COM Port** on Windows), and set **Baud Rate** to the number in `Serial.begin()`. The default is 9600.
+2. Set **Operation Mode** to **Quick Plot (Auto-Detected Format)**. The sketch's comma-separated line then plots with no project.
+3. Click **Connect** and look at the Console. If the text appears there but the dashboard stays empty, the link works and the problem is framing or parsing: continue with [Frames not being detected](#frames-not-being-detected) and [Data shows as "0" or "NaN"](#data-shows-as-0-or-nan).
+4. If the Console stays empty, the bytes never arrive: continue with [Connected but no data appearing](#connected-but-no-data-appearing).
+
+A line ending in `\n` is a frame, and the comma-separated values in it are the dataset values. The [Getting Started](Getting-Started.md) guide shows this end to end in Quick Plot mode, and [Data Flow](Data-Flow.md) defines frames, decoders, and parsers.
 
 ## Installation Issues
 
 ### Windows: "Missing VCRUNTIME140.dll" or similar error
 
-**Problem:** Application won't launch, showing error about missing Visual C++ runtime DLLs.
-
-**Solution:**
-1. Download and install the **Microsoft Visual C++ Redistributable**
-2. Get it from: [Microsoft's official download page](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
-3. Install both x64 and x86 versions if unsure
-4. Restart Serial Studio
+Windows reports that the Visual C++ runtime is missing. Install the **Microsoft Visual C++ Redistributable** from [Microsoft's download page](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) and start Serial Studio again.
 
 ### macOS: "App is damaged and can't be opened" or "Unidentified developer"
 
-**Problem:** macOS prevents Serial Studio from opening due to security settings.
+macOS blocks the app because of its quarantine flag. For the "damaged" error, clear the flag in Terminal and open the app again. Substitute the bundle name shown in /Applications (for example `Serial-Studio-GPL3.app` for the GPL build).
 
-**Solution:**
-1. **For "damaged" error:**
-   ```bash
-   xattr -cr "/Applications/Serial-Studio-Pro.app"
-   ```
-   Run this in Terminal, then try opening again. Substitute the exact bundle name shown in
-   /Applications (for example "Serial-Studio-GPL3.app" for the GPL build).
+```bash
+xattr -cr "/Applications/Serial-Studio-Pro.app"
+```
 
-2. **For "unidentified developer":**
-   - Go to **System Settings > Privacy & Security**
-   - Click "Open Anyway" button next to Serial Studio message
-   - Or right-click Serial Studio and select "Open"
+For "unidentified developer", open **System Settings > Privacy & Security** and click **Open Anyway** next to the Serial Studio message, or right-click the app and select **Open**.
 
 ### Linux: AppImage won't run ("Permission denied")
 
-**Problem:** Downloaded AppImage file won't execute.
+The downloaded file is not marked executable. Mark it and run it:
 
-**Solution:**
-1. Make the AppImage executable:
-   ```bash
-   chmod +x Serial-Studio-*.AppImage
-   ```
-
-2. Run it:
-   ```bash
-   ./Serial-Studio-*.AppImage
-   ```
+```bash
+chmod +x Serial-Studio-*.AppImage
+./Serial-Studio-*.AppImage
+```
 
 ### Linux: AppImage error "fuse: failed to exec fusermount"
 
-**Problem:** The AppImage mounts itself through FUSE and the host has no working FUSE setup.
+The AppImage mounts itself through FUSE and the host has no working FUSE setup. Extract it and run the contents directly:
 
-**Solution:**
-Extract the AppImage and run the contents directly:
 ```bash
-./Serial-Studio-Pro-*.AppImage --appimage-extract
+./Serial-Studio-*.AppImage --appimage-extract
 ./squashfs-root/AppRun
 ```
 
 ### Linux: Serial port permission denied
 
-**Problem:** Serial Studio can't access serial ports (permission denied error).
+Opening the port fails with "permission denied". Your user must belong to the group that owns serial devices: `dialout` on most distributions, `uucp` on Arch-based systems.
 
-**Solution:** your user needs membership in the group that owns serial devices (`dialout` on most distributions, `uucp` on Arch-based systems). [Serial port permissions](Linux-Installation.md#serial-port-permissions) has the command. Log out and back in afterwards.
+```bash
+sudo usermod -a -G dialout $USER
+```
+
+Log out and back in, then run `groups` to confirm. [Serial port permissions](Linux-Installation.md#serial-port-permissions) has the details.
 
 ## Connection Issues
 
@@ -84,219 +72,66 @@ Run **Connection Diagnostics** first (**Ctrl+K**, then `Connection Diagnostics`)
 
 #### Port not visible in dropdown
 
-**Possible causes:**
-- Device not connected
-- Driver not installed (Windows)
-- Permission issues (Linux/macOS)
-- Port already in use
+In the **Setup Panel**, select **UART/COM** as the connection first; the port list belongs to that driver. If the board is still missing, the operating system does not see it either:
 
-**Solutions:**
+- **Windows:** open Device Manager (Win+X, then Device Manager) and look under "Ports (COM & LPT)". A yellow warning icon means the driver is missing. Common ones: [CH340/CH341](https://www.wch-ic.com/downloads/CH341SER_EXE.html), [FTDI](https://ftdichip.com/drivers/vcp-drivers/), and [CP210x](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers).
+- **Linux:** run `ls /dev/tty* | grep -E 'ttyUSB|ttyACM'`. If the port is listed but cannot be opened, see [Serial port permission denied](#linux-serial-port-permission-denied).
+- **macOS:** run `ls /dev/tty.*` and look for `usbmodem` or `usbserial`.
 
-1. **Verify device is connected:**
-   - Check USB cable is plugged in
-   - Try a different USB port
-   - Check device has power (LED indicators)
-
-2. **Check device is recognized by OS:**
-
-   **Windows:**
-   - Open Device Manager (Win+X → Device Manager)
-   - Look under "Ports (COM & LPT)"
-   - If you see a yellow warning icon, driver is missing
-
-   **Linux:**
-   ```bash
-   ls /dev/tty* | grep -E 'ttyUSB|ttyACM'
-   ```
-
-   **macOS:**
-   ```bash
-   ls /dev/tty.*
-   ```
-
-3. **Install driver if needed** (Windows):
-   - **CH340/CH341**: [CH340 driver](http://www.wch-ic.com/downloads/CH341SER_EXE.html)
-   - **FTDI**: [FTDI driver](https://ftdichip.com/drivers/vcp-drivers/)
-   - **CP210x**: [Silicon Labs driver](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
-
-4. **Fix permissions** (Linux): See [Linux serial port permission](#linux-serial-port-permission-denied) above
-
-5. **Close other applications** using the port:
-   - Arduino IDE
-   - PuTTY / Screen / Minicom
-   - Other Serial Studio instances
+Also try another cable and another USB port. A charge-only cable powers the board and shows nothing else.
 
 #### "Failed to open port" error
 
-**Possible causes:**
-- Port already in use by another application
-- Incorrect permissions
-- Device disconnected after selection
-
-**Solutions:**
-
-1. **Close competing applications:**
-   - Arduino IDE Serial Monitor
-   - PuTTY, Screen, Minicom, Tera Term
-   - Other terminal programs
-
-2. **Try reconnecting the device:**
-   - Unplug USB cable
-   - Wait 5 seconds
-   - Plug back in
-   - Refresh port list in Serial Studio
-
-3. **Check permissions** (Linux): See permission fix above
-
-4. **Try different USB port**
-
-5. **Restart Serial Studio**
+Another program holds the port until you close it. Close the Arduino IDE Serial Monitor, PuTTY, Screen, Minicom, Tera Term, and any second Serial Studio instance. If nothing else is running, unplug the device, wait a few seconds, plug it back in, and reselect the port. On Linux, check [the permission fix](#linux-serial-port-permission-denied).
 
 #### Connected but no data appearing
 
-**Possible causes:**
-- Baud rate mismatch
-- Device not transmitting
-- Wrong COM port selected
-- DTR/RTS signal issues
+Check these in order:
 
-**Solutions:**
-
-1. **Verify baud rate matches device:**
-   - Common rates: 9600, 115200
-   - Check your device's code or documentation
-   - Try common baud rates: 9600, 19200, 38400, 57600, 115200
-
-2. **Verify device is transmitting:**
-   - Use Arduino IDE Serial Monitor or another terminal to confirm data output
-   - Check device code has `Serial.println()` or equivalent
-   - Verify device is powered and running (LED blink, etc.)
-
-3. **Double-check selected COM port:**
-   - Disconnect device and see which port disappears
-   - Reconnect and select that port
-
-4. **Try toggling the DTR signal:**
-   - Setup Panel → turn off **Send DTR Signal**
-   - Some devices reset when DTR is asserted
-
-5. **Check frame delimiters:**
-   - Verify delimiters match what device sends
-   - Try "No Delimiters" mode temporarily
+1. **Baud Rate** matches the device. The default is 9600; a sketch with `Serial.begin(115200)` needs 115200. If you do not know the rate, try 9600, 19200, 38400, 57600, and 115200.
+2. The selected port is the right one. Unplug the device and see which entry disappears.
+3. The device is transmitting. Open the same port in another terminal, or check the sketch calls `Serial.println()`.
+4. In the UART setup, **Send DTR Signal** is on by default. Clear it if opening the port resets your board; many Arduino boards reset when DTR changes. If a native-USB board stays silent, leave it on.
+5. The Console shows text but the dashboard stays empty: the frame delimiters do not match. See [Frames not being detected](#frames-not-being-detected).
 
 #### Garbled or unreadable console output
 
-Data arrives, but the console shows nonsense instead of readable text. Two different causes look similar but need different fixes:
+Data arrives, but the Console shows nonsense instead of readable text. Random accented characters, or a scatter of `?` and diamond symbols, mean the UART clock and the device disagree on bit timing: match **Baud Rate** to the device.
 
-- **Baud rate mismatch**: random accented characters, or a scatter of `U+FFFD` replacement marks (`�`) mixed with otherwise readable text. Every byte is misread because the UART clock and the device disagree on bit timing. Fix by matching the baud rate exactly to what the device sends.
-- **Wrong text encoding**: the same characters are wrong in the same places every time (for example, a degree symbol always renders as two garbage bytes). The bytes themselves are correct, but the console is decoding them as the wrong charset. Fix from the console's encoding/format setting, not the baud rate.
-
-If toggling the baud rate through the common values doesn't help, suspect encoding instead.
+If the text is readable except for the same few characters, wrong in the same places every time (a degree symbol that always shows as two odd characters), the bytes arrive intact and the device sends non-ASCII characters. Changing the baud rate does not help. Run **Hex Display** from **Ctrl+K** to see the raw bytes.
 
 ### Network Socket (TCP/UDP)
 
+See [Network Sockets](Drivers-Network.md) for every field.
+
 #### Cannot connect to TCP socket
 
-**Possible causes:**
-- Wrong IP address or port
-- Device not listening
-- Firewall blocking connection
-- Network connectivity issues
-
-**Solutions:**
-
-1. **Verify IP address and port:**
-   - Double-check device's IP address (try `ping <ip-address>`)
-   - Verify port number matches device configuration
-   - Common mistake: Mixing up TCP and UDP
-
-2. **Verify device is listening:**
-   - Use telnet to test:
-     ```bash
-     telnet <ip-address> <port>
-     ```
-   - If "Connection refused", device isn't listening
-   - If it hangs, firewall might be blocking
-
-3. **Check firewall:**
-   - Windows: Windows Defender Firewall → Allow an app
-   - macOS: System Settings → Privacy & Security → Firewall
-   - Linux: `sudo ufw allow <port>`
-
-4. **Verify network connectivity:**
-   - Make sure computer and device are on same network
-   - Try `ping <device-ip>`
+1. Confirm **Remote Address** and **Remote Port** match the device, and that **Socket Type** is TCP, not UDP. `ping <ip-address>` checks the address.
+2. Test the listener from a terminal: `telnet <ip-address> <port>`. "Connection refused" means the device is not listening; a hang usually means a firewall is dropping the connection.
+3. Allow Serial Studio through the firewall: Windows Defender Firewall (Allow an app), macOS System Settings > Privacy & Security > Firewall, or `sudo ufw allow <port>` on Linux.
+4. Check that the computer and the device are on the same network.
 
 #### UDP not receiving data
 
-**Possible causes:**
-- Device sending to wrong IP/port
-- Firewall blocking UDP
-- Network issues
+**Local Port** is the usual cause: it defaults to `0`, and then the OS picks a random port and nothing reaches Serial Studio. Set it to the port the device sends to.
 
-**Solutions:**
+If that is already right:
 
-1. **Verify device is sending to correct IP:**
-   - Check device configuration
-   - Computer's IP address might have changed (DHCP)
-   - Find your IP:
-     - Windows: `ipconfig`
-     - Linux/macOS: `ifconfig` or `ip addr`
-
-2. **Check firewall allows UDP:**
-   - UDP is more likely to be blocked than TCP
-   - Allow Serial Studio in firewall
-
-3. **Try listening on all interfaces:**
-   - Use 0.0.0.0 as listening address (if available)
-
-4. **Use network sniffer to verify packets:**
-   - Wireshark can show if UDP packets are arriving
+- Check the device sends to this computer's current IP. DHCP may have changed it (`ipconfig` on Windows, `ip addr` on Linux and macOS).
+- Allow Serial Studio through the firewall; UDP is blocked more often than TCP.
+- Run Wireshark to see whether the datagrams arrive at all.
 
 ### Bluetooth LE
 
+See [Bluetooth LE](Drivers-Bluetooth-LE.md) for every field. Bluetooth LE is available in both editions.
+
 #### BLE device not found during scan
 
-**Possible causes:**
-- Device not advertising
-- Device already connected to another app
-- Bluetooth disabled
-- Out of range
-
-**Solutions:**
-
-1. **Verify Bluetooth is enabled:**
-   - Check OS Bluetooth settings
-   - Ensure Bluetooth adapter is present
-
-2. **Ensure device is advertising:**
-   - Reset/power cycle BLE device
-   - Check device isn't already connected (phone app, etc.)
-   - Many BLE devices stop advertising once connected
-
-3. **Check range:**
-   - Move device closer to computer (within 1-2 meters for testing)
-
-4. **Restart Bluetooth:**
-   - Turn Bluetooth off and on
-   - Or restart computer
+Many BLE peripherals stop advertising once a phone or another app connects to them. Disconnect the device elsewhere, power-cycle it, and keep it within a metre or two of the computer. Then check that the computer's Bluetooth is on, and run **Connection Diagnostics** (**Ctrl+K**), which reports a switched-off or unpermitted adapter.
 
 #### Connected to BLE but no data
 
-**Possible causes:**
-- Wrong BLE service/characteristic
-- Device not sending notifications
-- Need to enable notifications
-
-**Solutions:**
-
-1. **Verify correct service and characteristic:**
-   - Check device documentation for UUIDs
-   - Use BLE scanner app to verify service/characteristic
-
-2. **Ensure notifications are enabled:**
-   - Serial Studio should automatically enable notifications
-   - Try disconnecting and reconnecting
+Select the **Service**, then the **Characteristic** that carries the telemetry, the one with the Notify property. Serial Studio enables notifications on a characteristic when you select it (it writes the CCCD descriptor), so there is nothing to switch on by hand. A characteristic that is Indicate-only, or has no CCCD, delivers nothing. Serial Studio does not show characteristic properties, so check them in the firmware.
 
 ## Dashboard & Visualization Issues
 
@@ -304,74 +139,18 @@ The [Problem Center](Problem-Center.md) lists the project mistakes behind most e
 
 ### Data shows as "0" or "NaN"
 
-**Possible causes:**
-- Dataset index mismatch
-- Parser function error
-- Data format incorrect
+A dataset shows 0 or NaN when its frame index points past the parser's output or at the wrong value. The first value your parser returns feeds the dataset with frame index 1, the second feeds index 2, and so on. [Parser returns the wrong number of values](#parser-returns-the-wrong-number-of-values) shows how to find the mismatch.
 
-**Solutions:**
-
-1. **Check dataset indices:**
-   - Dataset index 1 = array position 0
-   - Dataset index 2 = array position 1, etc.
-   - Make sure indices match your parser's return array
-
-2. **Check console for JavaScript errors:**
-   - Look for red error messages
-   - Fix any syntax errors in parser function
-
-3. **Add debugging to parser:**
-   ```javascript
-   function parse(frame) {
-       console.log("Input frame:", frame);
-       let result = frame.split(',');
-       console.log("Parsed result:", result);
-       return result;
-   }
-   ```
-
-4. **Verify frame format:**
-   - Use console output to see raw frames
-   - Ensure format matches expectations
+If the indices are right, the parser itself is failing: errors appear in the Console, and [Parser function not working](#parser-function-not-working) shows how to log what it receives. Also check that the raw frames in the Console match the format the parser expects.
 
 ### Widgets not displaying or showing errors
 
-**Possible causes:**
-- Wrong widget type for data
-- Missing required datasets
-- Project file corruption
-
-**Solutions:**
-
-1. **Verify widget requirements:**
-   - Accelerometer widget needs exactly 3 datasets (X, Y, Z)
-   - GPS widget needs latitude and longitude datasets
-   - See [Widget Reference](Widget-Reference.md) for requirements
-
-2. **Check widget type matches data:**
-   - Don't use gauge for text data
-   - Don't use bar for unbounded values
-
-3. **Try recreating widget:**
-   - Delete widget from project
-   - Add it again with fresh configuration
+- **Wrong data for the widget:** the Accelerometer widget needs exactly 3 datasets (X, Y, Z) and the GPS widget needs latitude and longitude. A gauge cannot show text and a bar is a poor fit for unbounded values. [Widget Reference](Widget-Reference.md) lists the requirements per widget.
+- **Broken widget:** delete the widget from the project and add it again with a fresh configuration.
 
 ### Dashboard layout broken after update
 
-**Possible causes:**
-- Project file format changes between versions
-- Widget API changes
-
-**Solutions:**
-
-1. **Check release notes** for breaking changes
-
-2. **Recreate project file:**
-   - Export CSV of working session
-   - Create new project from scratch
-   - Test with CSV Player
-
-3. **Report issue** if project file should be compatible
+Loading a project saved by an older Serial Studio version resets a customized workspace layout to the automatic one, on purpose: an empty custom layout is worse than an automatic one. Rearrange the workspaces and save the project. If datasets or widgets are missing rather than moved, report it as a bug.
 
 ## Frame Parsing Issues
 
@@ -379,29 +158,12 @@ While connected, the [Problem Center](Problem-Center.md) tells the two failure s
 
 ### Frames not being detected
 
-**Problem:** Console shows no frames being received, or frames not split correctly.
+The Console shows bytes arriving, but the dashboard receives no frames. The delimiters in the project do not match what the device sends.
 
-**Debugging steps:**
-
-1. **Verify delimiters match exactly:**
-   - Check delimiters are case-sensitive
-   - No extra spaces
-   - Use hex view in console to see hidden characters
-
-2. **Check raw console output:**
-   - Look at actual bytes being received
-   - Verify delimiters are present in stream
-
-3. **Try "No Delimiters" mode:**
-   - Use custom parser to extract frames
-   - Useful for binary protocols
-
-4. **Check for line ending issues:**
-   - Different systems use different line endings:
-     - `\n` (LF) - Linux/macOS
-     - `\r\n` (CRLF) - Windows
-     - `\r` (CR) - Old Mac
-   - Try different delimiter combinations
+1. Open the Console and look at the bytes. Delimiters are case-sensitive and a stray space counts; the Console's **Hex Display** command (**Ctrl+K**) shows hidden characters.
+2. A plain `Serial.println` ends each line with `\r\n`, and the project's default end delimiter `\n` covers it. A device that ends lines with a bare `\r` needs its end delimiter changed in the Project Editor.
+3. Frame delimiters, decoder and parser are set per source in the Project Editor (click **Project Editor** in the Setup Panel): the **Frame Detection Method**, **Frame Start Delimiter** and **Frame End Delimiter** fields. **Test With Sample Data** lets you paste a frame and adjust detection until it splits correctly.
+4. For binary protocols, **No Delimiters** treats each captured chunk as one frame, which suits length-prefixed protocols; the parser must find the boundaries inside it.
 
 ### Parser returns the wrong number of values
 
@@ -418,74 +180,42 @@ While connected, the [Problem Center](Problem-Center.md) tells the two failure s
 
 ### Parser function not working
 
-**Problem:** JavaScript parser returns errors or wrong data.
+The Console shows `SyntaxError`, `TypeError`, or Lua errors, or the parser returns the wrong data. Edit the parser in the Project Editor (click **Project Editor** in the Setup Panel), on the device's frame parser page, and read its output in the Console.
 
-**Debugging steps:**
+1. **Log what the parser receives.** `console.log()` works in JavaScript and Lua; the output appears in the Console.
 
-1. **Check console for errors:**
-   - Look for "SyntaxError", "TypeError", etc.
-   - Fix JavaScript syntax errors
-
-2. **Add logging:**
    ```javascript
    function parse(frame) {
-       console.log("=== PARSER START ===");
-       console.log("Type:", typeof frame);
-       console.log("Content:", frame);
-       console.log("Length:", frame.length);
-
-       // Your parsing logic
+       console.log("Type:", typeof frame, "Length:", frame.length, "Content:", frame);
        let result = frame.split(',');
-
        console.log("Result:", result);
-       console.log("=== PARSER END ===");
        return result;
    }
    ```
 
-3. **Verify return value is array:**
-   ```javascript
-   // CORRECT
-   return [1, 2, 3];
-
-   // WRONG
-   return "1,2,3";  // Must be array!
-   ```
-
-4. **Test with simpler parser first:**
-   ```javascript
-   function parse(frame) {
-       return frame.split(',');
-   }
-   ```
-
-5. **Check decoder method:**
-   - Plain Text: `frame` is string
-   - Hexadecimal: `frame` is hex string
-   - Base64: `frame` is base64 string
-   - Binary (Direct): `frame` is byte array
+2. **Return an array** (a table in Lua), not a string: `return [1, 2, 3];` works, `return "1,2,3";` does not.
+3. **Match the decoder.** The source's **Decoder** (Project Editor, source settings; default Plain Text) sets the type of `frame`. Plain Text, Hexadecimal and Base64 give a string; Binary (Direct) gives a byte array, 0-indexed in JavaScript and 1-indexed in Lua. The table is in [Frame Parser Scripting](Frame-Parser.md). A string function on a byte array produces the error in [Parse error: "string expected, got table"](#parse-error-string-expected-got-table--framesplit-is-not-a-function).
 
 ### Parse error: "string expected, got table" / "frame.split is not a function"
 
-**Problem:** The console repeats one of these on every frame:
+The Console repeats one of these on every frame:
 
 - Lua: `bad argument #1 to 'byte' (string expected, got table)`
 - Lua: `attempt to index a table value (local 'frame')`
 - JavaScript: `TypeError: frame.split is not a function` (or `frame.match`, `frame.charCodeAt`)
 
-**Cause:** The source uses the **Binary (Direct)** decoder, which hands `parse()` the frame
-as raw byte values (a 1-indexed table in Lua, an array in JavaScript), but the parser code
-was written for a string input.
+The source uses the **Binary (Direct)** decoder, which hands `parse()` the frame as raw byte values (a 1-indexed table in Lua, an array in JavaScript), but the parser code was written for a string input.
 
-**Solutions:**
-
-1. **Index the bytes directly** instead of using string functions:
+1. Index the bytes directly instead of using string functions:
 
    ```lua
    -- Lua: frame[1] is the first byte (1-indexed)
    function parse(frame)
      if #frame < 4 then return {} end
-     return { bit.bor(bit.lshift(frame[1], 8), frame[2]), bit.bor(bit.lshift(frame[3], 8), frame[4]) }
+     return {
+       bit.bor(bit.lshift(frame[1], 8), frame[2]),
+       bit.bor(bit.lshift(frame[3], 8), frame[4])
+     }
    end
    ```
 
@@ -497,8 +227,7 @@ was written for a string input.
    }
    ```
 
-2. **Need multi-byte or float fields?** LuaJIT has no `string.pack`/`string.unpack`. Decode
-   directly from the byte table with the `bit` library and arithmetic:
+2. For multi-byte fields, decode from the byte table with the `bit` library and arithmetic, because LuaJIT has no `string.pack` or `string.unpack`:
 
    ```lua
    function parse(frame)
@@ -508,9 +237,7 @@ was written for a string input.
    end
    ```
 
-3. **Or switch the decoder** to Plain Text/Hexadecimal in the Project Editor if the device
-   sends text — the decoder and the parser must agree on the frame type. See the decoder
-   table in [Frame Parser Scripting](Frame-Parser.md).
+3. Or switch the decoder to Plain Text or Hexadecimal in the Project Editor if the device sends text. The decoder and the parser must agree on the frame type; the decoder table is in [Frame Parser Scripting](Frame-Parser.md).
 
 ### Dataset transform not working
 
@@ -524,11 +251,9 @@ was written for a string input.
 
 3. **Test with the built-in Test area.** Enter a raw value in the Input field and click Test. If you see an error, fix the function before applying.
 
-4. **Handle non-numeric datasets.** The transform receives the raw value as a number when it
-   parses as numeric, otherwise as a string. A non-numeric value like "N/A" is passed to
-   `transform()` as a string, not skipped, so make sure your function handles the string case.
+4. **Handle non-numeric datasets.** The transform receives the raw value as a number when it parses as numeric, otherwise as a string. A non-numeric value like "N/A" is passed to `transform()` as a string, not skipped, so make sure your function handles the string case.
 
-5. **Check the console for errors.** Compilation errors are logged at connect time. Look for `[FrameBuilder] Transform compile error` messages.
+5. **Check the Problem Center.** A transform that produces errors raises a `script.transform` warning there ([Problem Center](Problem-Center.md)). The compiler's own message goes to the application log, so it is visible in a terminal only if you launch Serial Studio from one.
 
 6. **Save and reload the project.** If the transform was applied during a live session, saving makes sure it persists. After reload, transforms are recompiled automatically.
 
@@ -536,271 +261,104 @@ See [Dataset Value Transforms](Dataset-Transforms.md) for the complete reference
 
 ### Parsing slow/laggy
 
-**Possible causes:**
-- Complex parser function
-- Very high data rate
-- Large frames
+A parser that overruns its time budget is switched off by the watchdog (a `script.parser` finding in the Problem Center). To keep it fast, use `split(",")` instead of a regular expression, return a flat array, and avoid per-frame object creation. To measure it, time the call:
 
-**Solutions:**
+```javascript
+function parse(frame) {
+    let start = Date.now();
+    let result = frame.split(',');
+    let elapsed = Date.now() - start;
+    if (elapsed > 1)
+        console.log("Parse took", elapsed, "ms");
+    return result;
+}
+```
 
-1. **Optimize parser:**
-   - Avoid unnecessary operations
-   - Use string.split() instead of regex where possible
-   - Don't create objects, return simple arrays
-
-2. **Reduce data rate:**
-   - Slow down device transmission
-   - Increase frame interval
-
-3. **Profile parser performance:**
-   ```javascript
-   function parse(frame) {
-       let start = Date.now();
-
-       // Your parsing logic
-       let result = frame.split(',');
-
-       let elapsed = Date.now() - start;
-       if (elapsed > 1) {
-           console.log("Parse took", elapsed, "ms");
-       }
-       return result;
-   }
-   ```
+For a Lua parser, the Fast mode described in [Frame Parser Scripting](Frame-Parser.md) runs much faster but disables the watchdog.
 
 ## CSV Player Issues
 
 ### Cannot open CSV file
 
-**Possible causes:**
-- File format incorrect
-- File corrupted
-- Wrong encoding
-
-**Solutions:**
-
-1. **Verify CSV format:**
-   - First row should be headers
-   - Comma-separated values
-   - Timestamps in first column
-
-2. **Check file encoding:**
-   - Should be UTF-8
-   - Try opening in text editor to verify
-
-3. **Try export from Serial Studio:**
-   - Record a short session
-   - Export to CSV
-   - Compare format with your file
+Serial Studio's own exports always open, so record a short session and compare your file with it. The player expects a header row and a first column that holds elapsed time or a timestamp it can recognise: `Elapsed (s)` in Serial Studio's exports, a column with the unit in the name such as `time(ms)`, or date/time strings. Exports are UTF-8 with a byte-order mark. A multi-source file also needs the project that produced it loaded first. [CSV Export & Playback](CSV-Export-Playback.md#opening-a-csv-file) has the accepted formats.
 
 ### Playback is choppy
 
-**Possible causes:**
-- Very large file
-- High data rate
-- System performance
-
-**Solutions:**
-
-The CSV Player replays at the original capture speed; there is no playback-speed control.
-
-1. **Close other applications:**
-   - Free up system resources
-
-2. **For very large or high-rate files:**
-   - Split the file into smaller segments
-   - Export only the columns you need
+The CSV Player replays at the original capture speed; there is no playback-speed control. For very large or high-rate files, split the file into smaller segments or keep only the columns you need.
 
 ## Pro Feature Issues
 
 ### MQTT connection fails
 
-**See:** [MQTT Subscriber](Drivers-MQTT.md) and [MQTT Publisher](MQTT-Publisher.md). Run **Test Connection** on the Publisher form to probe broker reachability without disturbing live publishing.
+MQTT is a Pro feature. See [MQTT Subscriber](Drivers-MQTT.md) and [MQTT Publisher](MQTT-Publisher.md). Run **Test Connection** on the Publisher form to probe broker reachability without disturbing live publishing.
 
-Common issues:
-- Broker address/port incorrect
-- Authentication credentials wrong
-- Firewall blocking connection
-- TLS/SSL certificate issues
-- Client-ID collision between two instances or two sources
+Two instances or sources sharing one client ID kick each other off. If the IDs are distinct, check the broker address and port, the credentials, and the TLS certificates.
 
 ### Modbus connection fails
 
-**See:** [Protocol-Specific Setup Guides - Modbus](Protocol-Setup-Guides.md)
+Modbus is a Pro feature. Check, in order:
 
-Common issues:
-- Wrong slave ID
-- Incorrect function code
-- Baud rate mismatch (RTU)
-- IP/port wrong (TCP)
+- **Slave Address** matches the device (1-247, default 1).
+- **Register Type**, **Start Address**, and **Register Count** match the device manual.
+- RTU: baud rate, parity, and RS-485 wiring polarity. TCP: IP address and port.
+
+See [Modbus RTU Setup](Protocol-Setup-Guides.md#modbus-rtu-setup-pro) and [Modbus TCP Setup](Protocol-Setup-Guides.md#modbus-tcp-setup-pro).
 
 ### CAN Bus issues
 
-**See:** [Protocol-Specific Setup Guides - CAN Bus](Protocol-Setup-Guides.md)
+CAN Bus is a Pro feature. Check the bitrate against the bus, termination resistors at both ends, that the adapter is recognized, and that the DBC file loads without format errors. See [CAN Bus Setup](Protocol-Setup-Guides.md#can-bus-setup-pro).
 
-Common issues:
-- Bitrate mismatch
-- Missing termination resistors
-- Adapter not recognized
-- DBC file format errors
+### A Pro feature shows a trial or activation prompt
 
-### Pro features show as locked
+This applies to Serial Studio Pro in the official binary. The first time you use a Pro feature, Serial Studio asks **Start your free 14-day Serial Studio Pro trial?** with **Yes** and **No**. Registering the trial needs an internet connection. Answer **No** and the feature stays unavailable until you use it again and say Yes.
 
-**Problem:** Using a Pro feature shows a trial or activation prompt instead of opening it.
+**Trial ended:** the prompt offers **Activate License** or **Get Serial Studio Pro** instead. The trial is not offered a second time on the same machine; the free features keep working.
 
-**Possible causes:**
-- No trial has been started on this machine
-- The project contains a dataset transform or a Variables table, which need Pro to connect; the prompt lists how many. Right-click the dataset and choose **Remove Transform**, or delete the table, to run the project for free
-- Trial expired
-- License key not activated
-- Using GPL build instead of official binary
+**Transforms and Variables:** a project containing a dataset transform or a Variables table needs Pro to connect, and the prompt lists how many. Right-click the dataset and choose **Remove Transform**, or delete the table, to run the project for free.
 
-**Solutions:**
+**Check status:** click **About** in the toolbar, then **Manage License**, to open the Licensing dialog. While a trial runs, the Console welcome text shows the days remaining. After it ends, it shows `Pro trial expired. Free features remain fully functional.`
 
-1. **Start the trial:**
-   - If the prompt asks **Start your free 14-day Serial Studio Pro trial?**, answer **Yes**
-   - Internet connection required to register the trial; the feature opens once registration completes
+**Activate a key:** paste it in the Licensing dialog and click **Activate**. Activation needs an internet connection.
 
-2. **Check license status:**
-   - Click **About** in the toolbar, then **Manage License**, to open the Licensing dialog
-   - While a trial runs, the console welcome text shows the days remaining; after it ends, it shows `Pro trial expired. Free features remain fully functional.`
+**Trial rules:** one 14-day trial per version and per machine; reinstalling does not reset it, and a new Serial Studio release starts a fresh one ([Pro vs Free](Pro-vs-Free.md)).
 
-3. **Activate license key:**
-   - In the Licensing dialog, paste your license key and click **Activate**
-   - Internet connection required for activation
-
-4. **Download official binary:**
-   - If you compiled from source with GPL-only modules, download the official binary from [serial-studio.com](https://serial-studio.com)
-   - The official binary includes Pro features (locked behind license)
-
-5. **Check trial status:**
-   - Trial is 14 days, one trial per version per hardware
-   - A new Serial Studio release starts a fresh trial
-   - Based on hardware ID (can't reset by reinstalling)
+**Compiled from source:** a build with only the GPL modules has no Pro features and cannot activate. Install the official binary from [serial-studio.com](https://serial-studio.com).
 
 ## Performance Issues
 
 ### High CPU usage
 
-**Possible causes:**
-- High data rate
-- Complex parser function
-- Too many widgets
-- Large plot history
-
-**Solutions:**
-
-1. **Reduce data rate:**
-   - Slow down device transmission
-   - Increase frame interval on device
-
-2. **Optimize parser:**
-   - Avoid complex calculations
-   - Use efficient string operations
-
-3. **Reduce widgets:**
-   - Use fewer plots
-   - Reduce plot history length
-
-4. **Close unused applications**
+The usual causes are a high data rate, a heavy parser, many widgets, and 3D widgets on a slow CPU. Use fewer plots, replace 3D widgets where a flat one does the job, and keep the parser to simple operations such as `split(",")`. A lower point count on the plots also helps; it is a setting on the Settings dialog's plotting page.
 
 ### Memory usage growing over time
 
-**Possible causes:**
-- Memory leak in parser (global variables)
-- Very long session with plot history
-- Large CSV logging
+A parser that keeps a global array grows without bound unless it caps it:
 
-**Solutions:**
+```javascript
+let history = [];
+function parse(frame) {
+    history.push(frame);
+    if (history.length > 1000)
+        history.shift();
+    return frame.split(',');
+}
+```
 
-1. **Check global variables in parser:**
-   ```javascript
-   // CAREFUL: This array grows forever
-   let history = [];
-   function parse(frame) {
-       history.push(frame);  // Memory leak!
-       return frame.split(',');
-   }
-
-   // BETTER: Limit size
-   let history = [];
-   function parse(frame) {
-       history.push(frame);
-       if (history.length > 1000) {
-           history.shift();  // Remove old entries
-       }
-       return frame.split(',');
-   }
-   ```
-
-2. **Restart Serial Studio periodically** for very long sessions
-
-3. **Reduce plot history:**
-   - Shorter time windows
-   - Lower sample rate
+Without the `shift()` cap, `history` grows forever. Long sessions with a long plot history also hold more points.
 
 ### Slow frame rate / laggy dashboard
 
-**Possible causes:**
-- System performance
-- Too many widgets
-- High data rate
-- Many 3D widgets on a slow CPU
+3D Plot is the only widget that renders a real 3D scene; swap it for a Plot or a Gauge where a full 3D view is not needed.
 
-**Solutions:**
-
-1. **Reduce widget count:**
-   - Serial Studio aims for 60 FPS
-   - More widgets = more rendering
-
-2. **Use fewer 3D widgets:**
-   - Accelerometer, Gyroscope, and 3D Plot are among the more CPU-intensive widgets
-   - 3D Plot is the only one rendering an actual 3D scene; swap it for Plot or a Gauge where a
-     full 3D view isn't needed
-
-3. **Reduce data rate:**
-   - Dashboard widgets redraw on a fixed timer (60 Hz by default, adjustable in Settings), but
-     a very high data rate still adds CPU load parsing and updating datasets between redraws
-
-4. **Update graphics drivers**
-
-5. **Close background applications**
+The dashboard redraws at 60 Hz by default. **UI Refresh Rate (Hz)** on the Settings dialog's plotting page accepts 1 to 240. A very high data rate still adds CPU load parsing and updating datasets between redraws.
 
 ## Getting More Help
 
-If you can't find a solution here, try these resources:
-
-### 1. DeepWiki
-AI-powered Q&A for Serial Studio:
-- [DeepWiki for Serial Studio](https://deepwiki.com/Serial-Studio/Serial-Studio)
-- Ask natural language questions
-- Get instant AI-generated answers based on documentation
-
-### 2. Search GitHub Issues
-Someone may have already solved your problem:
-- [Serial Studio Issues](https://github.com/Serial-Studio/Serial-Studio/issues)
-- Use search bar to find similar issues
-- Check both open and closed issues
-
-### 3. GitHub Discussions
-Ask the community:
-- [Serial Studio Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions)
-- Post questions, share solutions
-- Get help from other users
-
-### 4. Report a Bug
-Think you found a bug? Report it:
-- [Create new issue](https://github.com/Serial-Studio/Serial-Studio/issues/new)
-- See [Reporting Bugs Effectively](#reporting-bugs-effectively) below
-
-### 5. Contact Support
-For Pro license holders:
-- Email: alex@serial-studio.com
-- Include license key and detailed problem description
+Ask questions on [GitHub Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions). For a bug, search the [issues](https://github.com/Serial-Studio/Serial-Studio/issues) first, closed ones included, then [open a new one](https://github.com/Serial-Studio/Serial-Studio/issues/new) with the details listed under [Reporting Bugs Effectively](#reporting-bugs-effectively). [DeepWiki](https://deepwiki.com/Serial-Studio/Serial-Studio) answers questions from the repository, though its answers may differ from this manual. Pro license holders can email alex@serial-studio.com with their order email.
 
 ## Reporting Bugs Effectively
 
-When reporting an issue, please include:
+Include these in an issue:
 
 **System Information:**
 - [ ] Serial Studio version and build. The toolbar's **About** button shows `Version 4.0.3 (abcdef1)`; click that line to copy the full build identity, commit included. A build compiled locally reads `local build` instead of a commit.
@@ -821,7 +379,7 @@ When reporting an issue, please include:
 
 **Example Good Bug Report:**
 
-```
+```text
 ## Problem
 Dashboard widgets show "NaN" instead of values
 
@@ -837,24 +395,22 @@ Dashboard widgets show "NaN" instead of values
 4. Open dashboard
 
 ## Expected
-Gauges should show temperature values (20-30°C)
+Gauges should show temperature values (20-30 C)
 
 ## Actual
 All gauges show "NaN"
 
 ## Additional Info
-- Console shows: "TypeError: Cannot read property 'split' of undefined"
+- Console shows the parser error text
 - Attached: project.json, sample_data.csv
 - Screenshot: screenshot.png
 ```
 
 ## See Also
 
-- [Getting Started](Getting-Started.md) - First-time setup guide
-- [Devices](Devices.md) - Connection configuration
-- [Data Flow](Data-Flow.md) - Understanding how parsing works
-- [Frame Parser Reference](Frame-Parser.md) - Built-In, Lua and JavaScript parser reference
-- [Widget Reference](Widget-Reference.md) - Widget requirements and usage
-- [FAQ](FAQ.md) - Frequently asked questions
-
-**Still stuck?** Ask for help on [GitHub Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions). The community is there to help.
+- [Getting Started](Getting-Started.md): first-time setup guide
+- [Devices](Devices.md): connection configuration
+- [Data Flow](Data-Flow.md): how parsing works
+- [Frame Parser Reference](Frame-Parser.md): Built-In, Lua and JavaScript parser reference
+- [Widget Reference](Widget-Reference.md): widget requirements and usage
+- [FAQ](FAQ.md): frequently asked questions

@@ -1,35 +1,31 @@
 # Become an Affiliate
 
-If you write tutorials, make videos, blog, or run a social account, you can earn money by helping more people find Serial Studio. The affiliate program is for content creators, educators, publishers, and community builders who want to recommend the app and earn a commission on successful referrals.
+You publish a video on logging Arduino sensor data into Serial Studio and put a link in the description. A viewer clicks it and buys a license in the Serial Studio store. The sale is credited to you, and you earn a commission.
 
-## How the program works
-
-Affiliate partnerships let you monetize content. You refer customers, and we pay a commission when those referrals turn into sales.
-
-## Earning commissions
-
-Share your affiliate link on your site, blog, YouTube channel, newsletter, forum posts, or social media accounts. Lemon Squeezy tracks clicks and completed transactions, so commissions are attributed to your account automatically.
-
-## Commission rate
-
-You can earn up to **$159.80** in commission for each referral that turns into a sale. There's no cap on total earnings.
-
-## Payout minimum
-
-Affiliate payouts require a minimum balance of **$10.00**. This keeps fraud and administrative overhead down.
-
-## Payout schedule
-
-Payouts run on **NET30** terms to account for refunds and chargebacks. For example, commissions generated in January are paid on **March 15**.
+The store runs on Lemon Squeezy, which also tracks the clicks and sales and pays the commissions. What a Pro license unlocks is described in [Pro vs Free](Pro-vs-Free.md).
 
 ## Signing up
 
-The Serial Studio affiliate program is hosted by Lemon Squeezy's affiliate hub. Create a Lemon Squeezy account, apply to the program, and start sharing your affiliate link once approved.
+1. Open <https://store.serial-studio.com/affiliates>.
+2. Create a Lemon Squeezy account, or sign in to the one you have.
+3. Apply to the program.
+4. Once approved, take your affiliate link from your Lemon Squeezy affiliate dashboard.
+5. Share it on your site, blog, YouTube channel, newsletter, forum posts, or social media.
 
-Become an affiliate: <https://store.serial-studio.com/affiliates>
+## Commissions and payouts
+
+| Item | Value |
+|------|-------|
+| Commission | Up to **$159.80** per referral that turns into a sale |
+| Earnings cap | None |
+| Minimum payout balance | **$10.00** |
+| Payment terms | **NET30**, to account for refunds and chargebacks |
+| Example schedule | Commissions generated in January are paid on **March 15** |
+
+These terms are set in the Lemon Squeezy affiliate program, not in the app, and can change. The current terms are on <https://store.serial-studio.com/affiliates>.
 
 ## See also
 
 - [Support Serial Studio](Support-Serial-Studio.md): other ways to support the project.
 - [Earn a Pro License](Earn-Pro-License.md): contribute and receive a Pro license.
-- [Buy Serial Studio Pro](https://store.serial-studio.com/): purchase a Pro license directly.
+- [Pro vs Free](Pro-vs-Free.md): what a Pro license unlocks, so you know what you are recommending.

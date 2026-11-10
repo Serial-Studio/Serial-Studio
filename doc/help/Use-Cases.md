@@ -1,687 +1,194 @@
 # Serial Studio use cases
 
-Real-world applications of Serial Studio across industries, education, and hobbyist projects.
-
-## Table of Contents
-
-- [Robotics and Automation](#robotics-and-automation)
-- [Education and Research](#education-and-research)
-- [IoT and Smart Devices](#iot-and-smart-devices)
-- [Environmental Monitoring](#environmental-monitoring)
-- [Aerospace and Drones](#aerospace-and-drones)
-- [Automotive and Racing](#automotive-and-racing)
-- [Amateur Radio and RF](#amateur-radio-and-rf)
-- [Medical and Health Devices](#medical-and-health-devices)
-- [Industrial and Manufacturing](#industrial-and-manufacturing)
-- [Home Automation](#home-automation)
-- [Custom Visualizations (Canvas Widget)](#custom-visualizations-canvas-widget)
-
-## Robotics and Automation
-
-### Mobile Robot Telemetry
-**Problem:** Need real-time monitoring of robot position, battery level, motor currents, and sensor data during autonomous navigation tests.
-
-**Solution:** Serial Studio receives data via Bluetooth LE from the robot's ESP32 controller, displaying:
-- GPS position on map widget
-- Battery voltage as gauge
-- Motor currents as multi-line plot
-- IMU (accelerometer/gyroscope) data on 3-axis widgets
-- Encoder counts and velocity graphs
-
-**Hardware:** ESP32 + MPU6050 + GPS module + motor drivers
-**Data Rate:** 20 Hz update rate via BLE GATT characteristic
-**Pro Feature Used:** MQTT for remote monitoring when robot is out of BLE range
-
-### Robot Arm Calibration
-**Problem:** During development of a 6-DOF robot arm, need to visualize joint angles, end-effector position, and torque feedback in real-time.
-
-**Solution:** Serial Studio Quick Plot mode connected via USB serial to display:
-- 6 separate plots for each joint angle (degrees)
-- XY plot showing end-effector trajectory
-- Torque limits as bar charts with threshold indicators
-
-**Hardware:** Arduino Mega + servo controllers
-**Data Format:** Comma-separated values at 50 Hz
-**Note:** No custom software needed. Connect, set the baud rate, and visualize.
-
-### Competition Robotics (FIRST, VEX)
-**Problem:** Teams need to debug sensor fusion algorithms, PID controllers, and autonomous routines during practice sessions.
-
-**Solution:** Serial Studio dashboard shows:
-- Drivetrain velocity and position
-- Vision system target detection confidence
-- PID error terms (proportional, integral, derivative)
-- Battery voltage and current draw
-- Match timer synchronized with telemetry
-
-**Hardware:** RoboRIO / Jetson Nano / Raspberry Pi
-**Data Protocol:** JSON over TCP socket for structured telemetry
-**Educational Value:** Students learn data-driven debugging and performance tuning
-
-### HID Gamepad Telemetry for Robotics
-**Problem:** A robotics team uses USB gamepads to control their robot and wants to log joystick inputs alongside the robot's sensor feedback.
-
-**Solution:** Serial Studio's HID driver reads gamepad axis and button data via hidapi:
-- Joystick X/Y axes displayed as plots
-- Button states shown as lights in an LED Panel
-- Robot IMU and motor feedback received over BLE in the same multi-device project
-- All data logged to CSV for post-match analysis
-
-**Hardware:** USB gamepad + ESP32 robot controller
-**Pro Feature Used:** HID driver, multi-device projects
-
-## Education and Research
-
-### University Physics Lab: Pendulum Experiment
-**Problem:** Undergraduate physics lab needs affordable data acquisition for analyzing simple harmonic motion.
-
-**Solution:** Serial Studio records accelerometer data from Arduino + MPU6050 attached to pendulum:
-- Real-time acceleration plots (X, Y, Z axes)
-- FFT Plot shows frequency spectrum to identify resonance
-- CSV export for offline analysis in Python/MATLAB
-- Multiple lab stations use the same JSON project file
-
-**Hardware Cost:** ~$15 per station (Arduino Nano + MPU6050)
-**Replaces:** Expensive commercial DAQ systems ($500-2000 per station)
-**Student Outcome:** Hands-on experience with sensors, data analysis, and experimental validation
-
-### Graduate Research: Environmental Sensor Network
-**Problem:** Ecology researchers deploy 20 temperature/humidity sensors across a forest and need centralized monitoring.
-
-**Solution:** Each sensor node publishes data to MQTT broker:
-- Serial Studio Pro subscribes to `sensors/+/data` topic
-- Dashboard shows all 20 sensor readings in a grid view
-- GPS widgets display sensor locations on map
-- CSV export for seasonal trend analysis
-
-**Hardware:** ESP32 + BME280 sensors + solar panels
-**Data Protocol:** MQTT over WiFi/4G
-**Research Impact:** Continuous 6-month data collection with minimal human intervention
-
-### High School STEM Class: Weather Station Project
-**Problem:** Students build Arduino-based weather stations and need to present data visually.
-
-**Solution:** Serial Studio Quick Plot mode:
-- Students write Arduino code sending temp, humidity, pressure
-- Visualization without writing additional software
-- Each group customizes dashboard with Project Editor
-- Final presentation uses exported CSV charts
-
-**Hardware:** Arduino Uno + DHT22 + BMP180
-**Class Size:** 30 students (15 groups)
-**Learning Goals:** Sensors, serial communication, data presentation
-
-### Process I/O: Simulation Dashboard
-**Problem:** A research team runs physics simulations that output CSV data to stdout. They want to visualize simulation results in real-time without writing custom GUI code.
-
-**Solution:** Serial Studio's Process driver launches the simulation executable and streams its stdout into the dashboard:
-- Simulation outputs comma-separated values (position, velocity, energy)
-- Real-time plots show simulation trajectories
-- Named pipe mode reads data from a FIFO; use Launch mode if you need to write back to
-  the process (e.g. parameter sweeps)
-- Data exported to CSV for comparison with experimental results
-
-**Hardware:** Any computer (no external devices needed)
-**Pro Feature Used:** Process I/O driver
-
-## IoT and Smart Devices
-
-### Smart Home Energy Monitor
-**Problem:** Track real-time power consumption of appliances to optimize electricity usage.
-
-**Solution:** ESP32 + current sensors publish data via MQTT:
-- Serial Studio Pro dashboard shows:
-  - Current draw per appliance (line plots)
-  - Total power consumption (kWh counter)
-  - Cost estimation based on tariff rate
-  - Alerts when consumption exceeds threshold
-
-**Hardware:** ESP32 + ACS712 current sensors
-**Data Protocol:** MQTT (local broker on Raspberry Pi)
-**Cost Savings:** Identified "vampire" devices consuming 15% of monthly bill
-
-### Greenhouse Automation
-**Problem:** Monitor soil moisture, temperature, light levels, and control irrigation system.
-
-**Solution:** Arduino Mega with sensor array sends data via USB:
-- Serial Studio displays:
-  - Soil moisture levels (8 sensors as bar charts)
-  - Temperature/humidity trends (24-hour plot)
-  - Light intensity (PAR sensor)
-  - Water pump status (binary indicator)
-
-**Hardware:** Arduino Mega + capacitive soil sensors + DHT22 + PAR sensor
-**Data Format:** JSON frames with custom frame parser for binary sensor data
-**Automation:** Thresholds trigger relay control for irrigation
-
-### Smart Beehive Monitoring
-**Problem:** Beekeepers want to monitor hive temperature and weight without disturbing bees.
-
-**Solution:** Low-power sensor node with Serial Studio:
-- Weight sensor (HX711) tracks honey production
-- Temperature sensors (DS18B20) detect swarming behavior
-- Data transmitted via LoRa to gateway with BLE bridge
-- Serial Studio receives data via BLE and logs to CSV
-
-**Hardware:** Arduino Pro Mini + HX711 + DS18B20 + LoRa module
-**Power:** Solar + LiPo battery (3-month autonomy)
-**Range:** 2 km rural area
-
-## Environmental Monitoring
-
-### Air Quality Station
-**Problem:** Citizen science project to map urban air pollution.
-
-**Solution:** Multiple sensor nodes with GPS:
-- PM2.5/PM10 particulate sensors
-- CO2, VOC, ozone sensors
-- GPS location stamped with each reading
-- Serial Studio shows sensor position on map with color-coded air quality
-
-**Hardware:** ESP32 + PMS5003 + MQ-135 + GPS module
-**Deployment:** 10 units across city, data aggregated via MQTT
-**Pro Feature Used:** MQTT
-**Public Impact:** Open data published to local community
-
-### Water Quality Monitoring
-**Problem:** River monitoring for pH, turbidity, dissolved oxygen, and temperature.
-
-**Solution:** Waterproof sensor probe with RS485 interface:
-- Serial Studio connected via USB-RS485 adapter
-- Dashboard shows sensor readings + historical trends
-- Alerts for out-of-range values (e.g., pH <6 or >8)
-- CSV export for environmental compliance reporting
-
-**Hardware:** RS485 sensors + waterproof housing + solar panel
-**Data Rate:** 1 sample/minute for long-term stability
-**Compliance:** Data used for EPA reporting
-
-### Weather Balloon Telemetry
-**Problem:** High-altitude balloon launches need real-time tracking and sensor monitoring.
-
-**Solution:** GPS + atmospheric sensors transmit via 433 MHz radio:
-- Ground station receives data via serial radio module
-- Serial Studio displays:
-  - Altitude, ascent rate, GPS position on map
-  - Temperature, pressure, humidity plots
-  - Predicted landing zone based on trajectory
-
-**Hardware:** Arduino + BMP280 + GPS + 433 MHz LoRa
-**Max Altitude:** 35 km (stratosphere)
-**Recovery:** GPS data logged to CSV for retrieval team
-
-## Aerospace and Drones
-
-### Quadcopter Flight Data Logger
-**Problem:** FPV drone pilots want to analyze flight performance and tune PID controllers.
-
-**Solution:** Flight controller exposes telemetry via MAVLink protocol:
-- Serial Studio parses custom MAVLink frames using JavaScript decoder
-- Dashboard shows:
-  - Altitude and GPS position
-  - Battery voltage and current
-  - Motor throttle levels (4 channels)
-  - Attitude (roll, pitch, yaw) on gyroscope widget
-
-**Hardware:** Pixhawk / Betaflight FC + GPS + current sensor
-**Data Protocol:** MAVLink via UART or BLE telemetry module
-**Post-Flight Analysis:** CSV export analyzed for crash investigations
-
-### Model Rocket Avionics
-**Problem:** Hobbyist rocket builders need altitude, acceleration, and apogee detection.
-
-**Solution:** Onboard Arduino logs to SD card + transmits real-time via 433 MHz:
-- Acceleration during boost phase (10+ G forces)
-- Altitude via barometer (BMP280)
-- Apogee detection triggers parachute deployment
-- Ground station with Serial Studio displays telemetry live
-
-**Hardware:** Arduino Pro Mini + BMP280 + MPU6050 + 433 MHz TX
-**Recording Rate:** 100 Hz during boost, 10 Hz during descent
-**Safety:** Real-time monitoring ensures recovery system fires
-
-### Fixed-Wing UAV Endurance Test
-**Problem:** Long-range UAV needs battery monitoring, airspeed, and GPS tracking during 2-hour flights.
-
-**Solution:** Telemetry via 900 MHz radio link:
-- Serial Studio receives data at 1 Hz
-- Dashboard tracks:
-  - Remaining flight time based on battery voltage
-  - GPS breadcrumb trail on map
-  - Airspeed and altitude profile
-
-**Hardware:** Pixhawk + airspeed sensor + GPS + 900 MHz telemetry
-**Range:** 10 km line-of-sight
-**Endurance:** 2-hour flight validated with data logs
-
-### Multi-Device Drone Telemetry
-**Problem:** A drone swarm or dual-drone system needs to monitor multiple aircraft at the same time, each sending telemetry over different links, and the operator needs to send steering commands and toggle cameras from the same dashboard.
-
-**Solution:** Serial Studio's multi-device project mode connects to each drone's data link independently:
-- Drone A over UART (900 MHz radio modem)
-- Drone B over UDP (Wi-Fi telemetry)
-- Each drone's GPS, attitude, and battery displayed side-by-side on the same dashboard
-- CSV/MDF4 export captures all drones' data in a single time-synchronized file
-
-[Output controls](Output-Controls.md) add interactive command panels per drone:
-- **Throttle slider** (0-100%) with transmit function: `"THR " + value + "\r\n"`
-- **Yaw knob** (-180° to +180°) for heading adjustment
-- **Camera toggle** (ON/OFF) to start/stop recording on each aircraft
-- **RTH button** (Return to Home) for emergency recall
-- Each drone's controls live in a separate Output Panel group assigned to that drone's device (Input Device), so a single dashboard commands both aircraft independently
-
-**Hardware:** Two flight controllers + radio modems/Wi-Fi modules
-**Pro Feature Used:** Multi-device projects, output controls, MDF4 export
-
-## Automotive and Racing
-
-### CAN Bus Data Logger with DBC Decoding
-**Problem:** Automotive engineer developing ECU software needs to monitor and decode CAN messages in real-time.
-
-**Solution:** Serial Studio Pro with CAN Bus interface and DBC file:
-- Import DBC file to automatically decode CAN messages
-- Display decoded signals as named parameters (e.g., "Engine_RPM", "Vehicle_Speed")
-- Monitor multiple CAN IDs simultaneously
-- Export data to MDF4 format for analysis in CANalyzer/CANape
-- Support for CAN 2.0A/2.0B and CAN FD
-
-**Hardware:** PEAK PCAN-USB, Vector VN1630, SocketCAN interface, or virtual CAN for testing
-**Data Protocol:** CAN Bus with DBC file for signal database
-**Note:** CAN Bus monitoring without dedicated Vector/PEAK software
-**Example:** Monitor engine ECU during test drive, recording 50+ signals at 100 Hz
-
-### MDF4 File Analysis
-**Problem:** Test engineer has recorded MDF4 files from vehicle testing and needs to visualize the data for analysis.
-
-**Solution:** Serial Studio Pro opens MDF4/MF4 files:
-- Load MDF4 files created by Vector CANalyzer, ETAS INCA, or other tools
-- Automatically parse CAN Bus, LIN, FlexRay, and analog channels
-- Playback recorded data with timeline controls
-- Compare multiple test runs side-by-side
-- Export specific channels to CSV for further analysis
-
-**Hardware:** None required (file playback only)
-**Supported Formats:** MDF4 (ASAM standard), MF4
-**Note:** An alternative to Vector/ETAS tools for post-processing
-**Example:** Analyze brake test data recorded from CAN Bus, comparing pedal force vs. deceleration
-
-### Dynamometer (Dyno) Testing
-**Problem:** Performance shop needs real-time engine metrics during dyno runs.
-
-**Solution:** OBD-II adapter sends CAN bus data via Bluetooth:
-- Serial Studio displays:
-  - RPM, throttle position, MAF sensor
-  - Engine temperature, oil pressure
-  - Horsepower and torque curves (XY plot)
-
-**Hardware:** OBD-II Bluetooth adapter (ELM327 compatible)
-**Data Protocol:** AT commands parsed via custom JavaScript decoder
-**Use Case:** Tuning turbocharged engines for maximum power
-
-### Race Car Telemetry
-**Problem:** Amateur racing team needs dashboard for pit crew to monitor driver and car status.
-
-**Solution:** CAN bus logger transmits via WiFi to pit lane:
-- Serial Studio receives data via TCP socket
-- Multi-panel dashboard shows:
-  - Lap times and sector splits
-  - Tire temperatures (4 corners)
-  - Brake pressure and bias
-  - Suspension travel (damper position)
-
-**Hardware:** Raspberry Pi + CAN hat + WiFi hotspot
-**Data Rate:** 50 Hz for critical sensors
-**Competitive Advantage:** Data-driven setup changes between sessions
-
-### Electric Vehicle Battery Monitor
-**Problem:** DIY EV builder needs to monitor 96-cell lithium battery pack.
-
-**Solution:** Battery management system (BMS) outputs cell voltages via UART:
-- Serial Studio displays:
-  - All 96 cell voltages as bar chart
-  - Pack voltage, current, state-of-charge
-  - Temperature of each module (12 sensors)
-  - Alerts for imbalanced cells
-
-**Hardware:** Custom BMS + isolated UART interface
-**Safety Critical:** Real-time monitoring prevents over-discharge/overcharge
-**Range:** Track remaining range based on consumption rate
-
-## Amateur Radio and RF
-
-### Software Defined Radio (SDR) Spectrum Monitor
-**Problem:** Ham radio operator wants to visualize RF spectrum and signal strength.
-
-**Solution:** SDR dongle + GNU Radio outputs I/Q data via UDP:
-- Serial Studio receives UDP packets
-- FFT Plot displays frequency spectrum
-- Signal strength plotted over time
-- Waterfall widget (Pro) for time-frequency band monitoring
-
-**Hardware:** RTL-SDR + Raspberry Pi + upconverter
-**Frequency Range:** 24 MHz - 1.7 GHz
-**Application:** Monitoring local repeaters, satellite passes, ISM bands
-
-### Antenna Analyzer
-**Problem:** Homebrew antenna designs need SWR, impedance, and resonance testing.
-
-**Solution:** NanoVNA antenna analyzer exports data via USB serial:
-- Serial Studio plots:
-  - SWR across frequency sweep (2-30 MHz)
-  - Smith chart (Canvas widget, Pro)
-  - Return loss (S11 parameter)
-
-**Hardware:** NanoVNA or custom RF bridge + AD8302
-**Tuning Process:** Adjust antenna length while watching real-time SWR plot
-**Result:** Optimized antenna with <1.5:1 SWR across ham bands
-
-### APRS (Automatic Packet Reporting System) Tracker
-**Problem:** Mobile ham station needs to visualize APRS packets on map.
-
-**Solution:** TNC (Terminal Node Controller) decodes APRS packets:
-- Serial Studio receives decoded packets via serial
-- GPS widget displays station positions
-- Message log shows received text
-- CSV export for contest logging
-
-**Hardware:** Mobilinkd TNC + handheld radio + smartphone
-**Coverage:** Local APRS digipeaters (10-50 km)
-**Use Case:** Public service events, emergency communications
-
-## Medical and Health Devices
-
-### Heart Rate Monitor (ECG)
-**Problem:** Biomedical engineering students build ECG device for capstone project.
-
-**Solution:** AD8232 ECG sensor with Arduino:
-- Serial Studio displays real-time ECG waveform
-- FFT Plot shows heart rate frequency
-- R-peak detection algorithm exports to CSV for HRV analysis
-
-**Hardware:** AD8232 + Arduino Nano + electrodes
-**Safety:** Isolated power supply (battery only, no AC connection)
-**Educational Value:** Students learn signal processing and medical device design
-
-### Pulse Oximeter Data Logger
-**Problem:** Wearable device developer prototypes SpO2 sensor.
-
-**Solution:** MAX30102 sensor with ESP32:
-- Serial Studio displays:
-  - Red and IR LED intensity (raw photodiode signals)
-  - Calculated SpO2 percentage
-  - Heart rate (BPM)
-- CSV export for algorithm validation against commercial device
-
-**Hardware:** MAX30102 + ESP32 + 3D printed finger clip
-**Accuracy:** ±2% SpO2 compared to medical-grade oximeter
-**Application:** Sleep apnea monitoring, fitness tracking
-
-### Gait Analysis System
-**Problem:** Physical therapy clinic needs affordable gait analysis tool.
-
-**Solution:** Pressure-sensitive insoles with force sensors:
-- Arduino in shoe wirelessly transmits via BLE
-- Serial Studio displays:
-  - Force distribution across foot (4 sensors per insole)
-  - Step cadence and stride length
-  - Left/right balance comparison
-
-**Hardware:** FSR sensors + Arduino Nano 33 BLE + battery
-**Clinical Use:** Rehab progress tracking, prosthetic fitting
-**Cost:** <$100 per system vs. $10,000+ commercial platforms
-
-## Industrial and Manufacturing
-
-### Modbus PLC Monitoring
-**Problem:** Factory floor has multiple PLCs controlling various processes, and engineers need to monitor register values in real-time.
-
-**Solution:** Serial Studio Pro connects via Modbus TCP or Modbus RTU:
-- Monitor holding registers, input registers, coils, and discrete inputs
-- Display process variables (temperature, pressure, flow rate) as gauges and plots
-- Track production counters and alarm states
-- Log data to CSV for compliance reporting
-- Support for multiple Modbus slave devices
-
-**Hardware:** Industrial PLC (Siemens, Allen-Bradley, Schneider Electric, etc.) + Ethernet/RS485 connection
-**Data Protocol:** Modbus TCP (Ethernet) or Modbus RTU (RS485 serial)
-**Note:** Standard Modbus support without custom programming
-**Example:** Monitor a water treatment plant with 5 PLCs controlling pumps, valves, and sensors
-
-### OPC UA Tag Monitoring (PLC / SCADA)
-**Problem:** A line is controlled by PLCs and gateways that already publish an OPC UA address space, and engineers need a live dashboard of selected tags without writing an OPC UA client or buying a SCADA seat.
-
-**Solution:** Serial Studio Pro connects as an OPC UA client:
-- Discover the server's endpoints from `opc.tcp://host:port`, then browse the address space one level at a time
-- Tick the tags to monitor (whole folders included, up to 2048 channels) and generate the project from the selection
-- Subscribe to the ticked tags, with automatic fallback to timed reads when a server refuses subscriptions
-- Engineering units and `EURange` come straight from the server, so gauges and plots arrive pre-scaled
-- Frames are stamped with the server's own source timestamps, so recordings follow the device clock
-
-**Hardware:** Any OPC UA server: Siemens S7-1200/1500, Beckhoff TwinCAT, CODESYS runtimes, WAGO, B&R, Schneider, or a gateway such as KEPServerEX, Ignition, or FactoryTalk Linx
-**Data Protocol:** OPC UA (IEC 62541) over `opc.tcp`, six security policies from `None` to `Aes256_Sha256_RsaPss`, anonymous or username/password login
-**Note:** No tag-list export or vendor document needed. The browser is the importer
-**Example:** Watch a bottling line's filler level, capper torque, and pasteuriser zone temperatures on one dashboard, logged to CSV for batch records
-
-### CNC Machine Monitor
-**Problem:** Machine shop wants to track spindle load, feed rate, and tool wear.
-
-**Solution:** Industrial PLC outputs data via Modbus RTU (Pro) or plain serial with a custom frame parser:
-- Serial Studio displays:
-  - Spindle RPM and load current
-  - Axis positions (X, Y, Z)
-  - Tool change counter
-  - Coolant temperature
-
-**Hardware:** PLC + RS485 to USB adapter
-**Predictive Maintenance:** Detect bearing wear from increased spindle current
-**Downtime Reduction:** Real-time monitoring prevents crashes
-
-### Conveyor Belt Speed Monitor
-**Problem:** Packaging line needs to maintain constant belt speed for quality control.
-
-**Solution:** Encoder wheel on conveyor with Arduino:
-- Serial Studio displays:
-  - Belt speed (m/s) as line plot
-  - Total product count (encoder pulses)
-  - Speed deviation alerts
-
-**Hardware:** Rotary encoder + Arduino + proximity sensor
-**Quality Impact:** Reduced rejected products due to speed variations
-**Integration:** Data logged to CSV for ISO compliance
-
-### Temperature Profiling for Reflow Oven
-**Problem:** Electronics assembly requires precise solder reflow temperature curve.
-
-**Solution:** Thermocouple (K-type) with MAX6675 and Arduino:
-- Serial Studio plots oven temperature vs. time
-- Target profile overlaid on plot for comparison
-- Alerts if temperature rate-of-rise exceeds spec
-- CSV export for process validation
-
-**Hardware:** K-type thermocouple + MAX6675 + Arduino
-**Precision:** ±2°C accuracy across 0-250°C range
-**Compliance:** IPC-A-610 solder joint quality standards
-
-### USB Instrument Data Acquisition
-**Problem:** A test bench has USB instruments (oscilloscopes, multimeters) that expose bulk endpoints but no serial port. Need to log measurements alongside serial sensor data.
-
-**Solution:** Serial Studio's Raw USB driver connects directly via libusb bulk transfers:
-- Read measurement data from USB instrument bulk endpoints
-- Combine with serial sensor data in a multi-device project
-- Real-time gauge and plot visualization
-- Automated export to MDF4 for post-analysis in ETAS INCA or Vector CANape
-
-**Hardware:** USB test instruments + serial sensors
-**Pro Feature Used:** Raw USB driver, multi-device projects, MDF4 export
-
-## Home Automation
-
-### Solar Panel Performance Monitor
-**Problem:** Home solar installation lacks monitoring for power generation.
-
-**Solution:** Current/voltage sensors on solar array:
-- Serial Studio displays:
-  - Solar panel voltage and current
-  - Power generation (watts) and daily energy (kWh)
-  - Battery state-of-charge (if off-grid)
-  - Historical data for ROI calculation
-
-**Hardware:** ESP32 + INA219 current sensors + voltage divider
-**Data Logging:** CSV export analyzed monthly for performance trends
-**ROI Tracking:** Payback period calculated from energy data
-
-### Aquarium Monitor
-**Problem:** Aquarium hobbyist needs to maintain stable pH, temperature, and salinity.
-
-**Solution:** Sensor array with Arduino:
-- Serial Studio displays:
-  - pH level (7.0-8.5 range for marine tank)
-  - Temperature (°C and °F)
-  - Salinity (specific gravity)
-  - Alerts for out-of-range conditions
-
-**Hardware:** Arduino + pH probe + DS18B20 + conductivity sensor
-**Automation:** Relay control for heater and dosing pumps
-**Fish Health:** Stable parameters reduce stress and disease
-
-### HVAC Efficiency Monitor
-**Problem:** Homeowner wants to optimize heating/cooling system for lower bills.
-
-**Solution:** Temperature sensors in supply/return ducts:
-- Serial Studio displays:
-  - Supply air temperature
-  - Return air temperature
-  - Temperature differential (efficiency indicator)
-  - Outdoor temperature for comparison
-
-**Hardware:** ESP32 + DS18B20 sensors + WiFi
-**Data Analysis:** CSV export identifies inefficient operation times
-**Energy Savings:** 15% reduction after optimizing thermostat schedule
-
-## Custom Visualizations (Canvas Widget)
-
-The Canvas widget exposes a JavaScript `paint(ctx, w, h)` callback against a
-Canvas2D-style context backed by QPainter. An optional `onFrame()` runs once per
-dashboard tick before `paint()` for time-domain bookkeeping (ring buffers, peak
-hold decay, integrators). A 250 ms watchdog terminates the script if a single
-call does not return.
-
-Canvas is a Pro feature.
-
-### Phosphor-style Oscilloscope
-**Problem:** The built-in line plot does not match the appearance of a CRT
-scope: no persistence trace, no afterglow, no XY mode for Lissajous patterns.
-
-**Solution:** The bundled `Oscilloscope` template renders one or more channels
-on a phosphor-green CRT background:
-- Per-channel traces drawn with a glow underlay and a crisp foreground line
-- 10 x 8 graticule with a heavier centre cross
-- Switch to the `XY scope (Lissajous)` template for Lissajous patterns from two
-  synchronous channels
-
-**Hardware:** Any UART/USB device pushing one or more analog channels.
-**Pro Feature Used:** Canvas widget, `oscilloscope.js` / `xy_scope.js` templates
-
-### Artificial Horizon for Drones / Model Aircraft
-**Problem:** A 3D attitude widget is more than required for a pilot view; the
-intended display is a flat attitude indicator with pitch ladder, roll bank, and
-a fixed aircraft symbol.
-
-**Solution:** The bundled `Artificial horizon` template binds two datasets
-(pitch and roll, in degrees):
-- Sky and ground regions rotate with roll and translate with pitch
-- Pitch ladder ticks every 10°, with numeric labels every 30°
-- Fixed accent-colored aircraft symbol over the rotating background
-
-**Hardware:** Pixhawk / Betaflight flight controller streaming MAVLink, or any
-source providing pitch and roll.
-**Pro Feature Used:** Canvas widget, `horizon.js` template
-
-### Lab Equipment Mimic
-**Problem:** A test bench dashboard needs to reproduce the appearance of the
-analog meter on the instrument it replaces, so operators do not need to relearn
-the panel layout.
-
-**Solution:** Start from the `Dial gauge` template and modify the colour zones,
-tick layout, and label fonts to match the original instrument:
-- Adjust the green / amber / red zone thresholds to match the instrument
-- Replace the dial face colours and tick marks
-- Add a smoothing filter in `onFrame()` so the needle sweeps across samples
-  rather than snapping to each new value
-
-**Hardware:** Any sensor exposing a single bounded value (load cell,
-thermocouple, RPM encoder).
-**Pro Feature Used:** Canvas widget, `dial_gauge.js` template
-
-### Audio VU Meter and Multi-Channel Bargraphs
-**Problem:** An audio engineer requires VU-style meters with peak hold across
-two or more channels alongside other telemetry.
-
-**Solution:** The bundled `Audio VU meter` and `Bars with peak hold` templates
-render segmented LED-style bars with peak markers:
-- Saturated colours for active segments, pastel colours for inactive segments,
-  so the full range is always visible
-- Peak markers held for a configurable interval, then decayed at a fixed rate
-- Pairs with the Audio driver to read live microphone or line input
-
-**Hardware:** Any audio input device (USB microphone, audio interface, sound
-card input).
-**Pro Feature Used:** Canvas widget, Audio driver, `audio_meter.js` /
-`bar_peak_hold.js` templates
-
-### Order-Tracking and Polar Diagnostics
-**Problem:** Rotating-machinery diagnostics require a polar plot of magnitude
-versus angle that the built-in widgets do not provide.
-
-**Solution:** The bundled `Polar plot` template draws pairs of datasets as
-(angle, magnitude) rays on a polar grid:
-- Concentric range rings and 30° bearing spokes
-- One coloured ray per dataset pair, with a halo marker at the tip
-- Combine with the Waterfall widget for Campbell-mode spectral analysis on
-  the same dashboard
-
-**Hardware:** Accelerometer plus tachometer on the rotating shaft.
-**Pro Feature Used:** Canvas widget, Waterfall widget, `polar_plot.js`
-template
-
-## Getting Started with Your Use Case
-
-### Step 1: Identify Your Devices
-- What sensors/devices do you have?
-- What communication protocol (UART, BLE, MQTT, TCP/UDP)?
-- What data rate (1 Hz? 100 Hz? 1 kHz)?
-
-### Step 2: Choose Your Hardware
-- **Low cost:** Arduino Uno/Nano ($5-20)
-- **WiFi/BLE:** ESP32 ($5-15)
-- **High performance:** Raspberry Pi ($35-75)
-- **Industrial:** PLC with serial/Modbus output
-
-### Step 3: Select Serial Studio Mode
-- **Quick Plot:** For simple lines of values
-- **Project File:** For custom dashboards with multiple widgets
-- **Console Only:** Raw terminal view for protocol bring-up and debugging
-
-See [Operation Modes](Operation-Modes.md) for how the three modes compare.
-
-### Step 4: Prototype and Test
-- Start with Quick Plot mode to verify data flow
-- Export CSV for initial analysis
-- Create custom project file with Project Editor
-- Iterate on dashboard layout
-
-### Step 5: Deploy and Monitor
-- Use CSV export for long-term data logging
-- Enable MQTT (Pro) for remote monitoring
-- Share project files with team members
-- Document your setup for reproducibility
-
-## Community Contributions
-
-Have you used Serial Studio in a unique way? We'd like to hear about it.
-
-- **Submit your use case:** Open a GitHub issue with the "Use Case" label
-- **Share on social media:** Tag @serialstudio.app on Instagram
-- **Contribute examples:** Add your project to the `/examples` folder via pull request
-
-**Need help with your project?** Check the [FAQ](FAQ.md) and [Troubleshooting](Troubleshooting.md) pages, or reach out to the community on [GitHub Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions).
+Your Arduino sketch prints one line per second:
+
+```cpp
+Serial.begin(9600);
+// ...
+Serial.print(temp);
+Serial.print(",");
+Serial.print(hum);
+Serial.print(",");
+Serial.println(pressure);
+delay(1000);
+```
+
+The serial port carries `21.5,48.2,1012.3`, then `21.6,48.1,1012.3`, and so on. In Serial Studio, set **Operation Mode** to "Quick Plot (Auto-Detected Format)" in the **Device Setup** panel, pick the serial port and the baud rate from `Serial.begin()` (9600 here), and click **Connect**. Each value gets its own plot, a Multi-Plot overlays them, and a Data Grid shows the latest numbers. No project file, no script. The same dropdown has Console Only and **Parse via Project File**, which is where the Project Editor and your own dashboard layout live. The exact steps are in [Operation Modes](Operation-Modes.md).
+
+The setups below start from that same line and show what changes when the link, the data or the dashboard gets bigger. Each one names its edition. They are sketches of working configurations, not validated or certified designs, and Serial Studio is not a medical device.
+
+## Editions
+
+UART, TCP/UDP, Bluetooth LE, the three operation modes, the Project Editor, frame parsers and CSV export are free. MQTT, Modbus, CAN Bus, OPC UA, Audio, Raw USB, HID, Process I/O, multi-device projects, output controls, MDF4, dataset transforms, computed datasets, Variables and the 3D Plot, Waterfall, Image View and Canvas widgets need Pro; WebSocket, HTTP and the API Server are free. The complete list is in [Pro vs Free](Pro-vs-Free.md). The official binary offers a 14-day trial the first time you use a Pro feature, through a Yes/No prompt; registering the trial needs an internet connection. After it expires, the same prompt offers activation or purchase.
+
+## Over serial (UART)
+
+### Joint angles from a robot arm
+
+A 6-DOF arm on an Arduino Mega prints `10.5,42.0,-3.2,88.1,0.0,12.7` (six joint angles) at 50 Hz. In Quick Plot, that is six plots, a Multi-Plot and a Data Grid with nothing to configure. To add an XY plot of the end-effector or bars with threshold colors, use **Save as Project** on the dashboard and add the widgets in the [Project Editor](Project-Editor.md); bar colors come from alarm bands on the dataset.
+
+Edition: Free (UART, Quick Plot, Parse via Project File).
+
+### Classroom weather station
+
+Fifteen groups build an Arduino Uno with a DHT22 and a BMP180 and print temperature, humidity and pressure as comma-separated values. Everyone starts in Quick Plot. A group that wants gauges and labels switches to "Parse via Project File" and builds a project in the Project Editor; one project file serves every lab station. CSV export gives the data to Python or a spreadsheet for the write-up.
+
+Edition: Free.
+
+### Greenhouse with a binary sensor frame
+
+An Arduino Mega packs eight soil-moisture readings, temperature, humidity and a light level into a binary frame. A [frame parser](Frame-Parser.md) in JavaScript converts the bytes to values, and the dashboard shows the moisture as a Bar widget and the climate as plots. Switching the irrigation relay from the dashboard needs [output controls](Output-Controls.md) (Pro) with a transmit function; without them, the firmware decides when the relay switches. The relay does not care who asked.
+
+Edition: Free for the dashboard (UART, frame parser); Pro for output controls.
+
+### Radio telemetry from a rocket, balloon or UAV
+
+A 433 MHz or 900 MHz radio module on the ground station shows up as a serial port. The airborne side sends altitude, acceleration, battery voltage and GPS coordinates as lines of text. Serial Studio plots them, draws the GPS Map track, and logs everything to CSV for the recovery team. Values such as a predicted landing point or remaining flight time come from the firmware, or from a [computed dataset](Derived-Values.md#computed-dataset) (Pro) that combines other datasets.
+
+Edition: Free; Pro for computed datasets.
+
+## Over Bluetooth LE
+
+### Mobile robot with an ESP32
+
+An ESP32 notifies one BLE characteristic with a line such as `lat,lon,battery,ax,ay,az` at 20 Hz. Serial Studio connects as the BLE central, subscribes to that characteristic, and shows the position on a GPS Map, the battery as a Gauge and the IMU on the Accelerometer and Gyroscope widgets. See [Bluetooth LE](Drivers-Bluetooth-LE.md) for the firmware side. When the robot leaves BLE range, an ESP32 publishing the same values to an MQTT broker lets a Pro dashboard keep watching.
+
+Edition: Free over BLE; Pro for the MQTT fallback.
+
+### Gait insoles
+
+An Arduino Nano 33 BLE in each shoe sends four force-sensor readings per insole. The dashboard overlays left and right on Multi-Plots and exports CSV for later analysis. Stride metrics are calculated by the firmware or after export.
+
+Edition: Free (Bluetooth LE).
+
+## Over TCP and UDP
+
+### Race car and competition robot
+
+A Raspberry Pi with a CAN hat reads the car's bus and forwards a text line per sample, over a Wi-Fi hotspot, to the pit-lane laptop. A competition robot's RoboRIO or Jetson sends JSON the same way. In the **Device Setup** panel, choose the Network driver; Serial Studio listens on a TCP or UDP socket; a frame parser maps each JSON field to a dataset, and the dashboard shows tire temperatures, brake pressure, PID terms or battery current beside each other.
+
+Edition: Free (TCP or UDP, frame parser). The Pi does the CAN decoding; to decode CAN in Serial Studio itself, see [ECU signals from a DBC file](#ecu-signals-from-a-dbc-file).
+
+### Software-defined radio spectrum
+
+GNU Radio computes magnitudes from an RTL-SDR dongle and sends them as UDP packets. The FFT Plot shows the spectrum; the Waterfall widget (Pro) adds the time axis for repeaters and satellite passes.
+
+Edition: Free (UDP) for the FFT Plot; Pro for Waterfall.
+
+## MQTT
+
+### Twenty sensors in a forest
+
+Each ESP32 with a BME280 publishes a reading to an MQTT broker over Wi-Fi or 4G. In the **Device Setup** panel, choose the MQTT driver; Serial Studio subscribes with a topic filter such as `sensors/+/data` through the [MQTT subscriber](Drivers-MQTT.md). The bytes do not say which node sent them, so each node includes its own id in the payload. A frame parser reads the id and fills that node's dataset group; with 20 nodes the project holds 20 groups. GPS Map widgets mark the node positions, and CSV export feeds the seasonal analysis.
+
+The same pattern covers a home energy monitor: an ESP32 with current sensors publishes to a Mosquitto broker on a Raspberry Pi, and a power figure (volts times amps) is a computed dataset. An accumulated kWh needs a Variables table that remembers the running total between frames, or the firmware can send it.
+
+Edition: Pro (MQTT, computed datasets, Variables).
+
+## Industrial buses
+
+### Modbus PLC monitoring
+
+A line has several PLCs, and engineers need register values on one screen. Serial Studio polls as a Modbus master over Modbus TCP or Modbus RTU. In **Configure Register Groups…** you add one group per block of Holding Registers, Input Registers, Coils or Discrete Inputs, and each group can name its own slave address. Each poll produces a binary frame; set the source decoder to **Binary (Direct)** and use a frame parser to turn register bytes into datasets. See [Modbus](Drivers-Modbus.md). A water-quality probe with an RS485 output works the same way when it speaks Modbus RTU through a USB-RS485 adapter; if it prints text, use the UART driver instead.
+
+Edition: Pro (Modbus).
+
+### OPC UA tag browser
+
+PLCs and gateways that already publish an OPC UA address space need no tag-list export. You enter `opc.tcp://host:port`, browse the address space and tick the tags to monitor, whole folders included, up to 2048 channels. Serial Studio generates the project from the selection and subscribes to the tags. Login is anonymous or username/password. See [OPC UA](Drivers-OPC-UA.md) for security policies and timestamps.
+
+Edition: Pro (OPC UA).
+
+## CAN and MDF4
+
+### ECU signals from a DBC file
+
+An ECU engineer imports a DBC file and the dashboard shows decoded signals by name, such as `Engine_RPM` and `Vehicle_Speed`, for every message ID at once. The adapter can be PEAK PCAN, SocketCAN on Linux, a Qt-supported Vector interface, or `virtualcan` for testing; CAN FD is available when the adapter supports it. Export the session to MDF4 for CANalyzer or CANape. See [CAN Bus](Drivers-CAN-Bus.md).
+
+Edition: Pro (CAN Bus, DBC import, MDF4 export).
+
+### Bluetooth OBD-II (ELM327) adapter
+
+This is a different path from CAN Bus: pair it in the operating system so it appears as a COM port, connect with the free UART driver, and decode its AT-command replies in a frame parser.
+
+Edition: Free (UART, frame parser).
+
+### Replaying an MDF4 file
+
+The **Open MDF4** toolbar button replays a `.mf4` file through the same pipeline as a live connection, at the original timing, with Play/Pause, frame stepping and a seek slider. A file recorded by Serial Studio replays with no setup. A file from another tool maps each channel group's data channels onto the loaded project's datasets in file order, so load a project whose datasets match the file's channel order. Playback shows one file at a time, and CSV and MDF4 export are off while a player is open. See [MDF4](MDF4.md).
+
+Edition: Pro (MDF4 playback).
+
+## Other Pro drivers and multi-device projects
+
+### Simulation dashboard from a child process
+
+A physics simulation prints `position,velocity,energy` to stdout. With the Process I/O driver in **Launch Process** mode, Serial Studio starts the program, you answer Yes to the launch-consent prompt, and the values plot live. **Named Pipe** mode reads from a FIFO instead; use Launch mode when the dashboard must write back to the process, for a parameter sweep. See [Process I/O](Drivers-Process-IO.md).
+
+Edition: Pro (Process I/O).
+
+### Gamepad plus robot feedback
+
+The HID driver reads a USB gamepad's axes and buttons through hidapi. In a multi-device project, a second source receives the robot's IMU and motor values over BLE. Joystick axes become plots, buttons light up in an LED Panel, and one CSV export holds both sources for post-match review; its rows are sparse, with empty cells where a source had no sample.
+
+Edition: Pro (HID, multi-device projects).
+
+### Two drones on one dashboard
+
+Drone A sends over a 900 MHz radio modem on UART, drone B over UDP on Wi-Fi. A multi-device project gives each its own source, parser and groups, so GPS, attitude and battery sit side by side. MDF4 export writes one file; each project group becomes a channel group named `SourceName / GroupName`. [Output controls](Output-Controls.md) in an Output Panel group per drone send commands: a slider whose transmit function builds `"THR " + value + "\r\n"`, a knob for yaw and a toggle for the camera. The throttle range, yaw range and command strings are example settings. A return-home command belongs on an Emergency Stop button style, which latches.
+
+Edition: Pro (multi-device projects, output controls, MDF4 export).
+
+### USB instruments beside serial sensors
+
+Bench instruments that expose bulk USB endpoints but no serial port connect through the Raw USB driver (libusb). In a multi-device project they sit next to a serial-sensor source, and MDF4 export keeps both in one file.
+
+Edition: Pro (Raw USB, multi-device projects, MDF4 export).
+
+## More setups at a glance
+
+| Setup | Link | What the dashboard shows | Edition |
+|-------|------|--------------------------|---------|
+| Pendulum lab with Arduino Nano and MPU6050 | UART | X/Y/Z acceleration plots, FFT Plot for the resonance peak | Free |
+| Smart beehive: HX711 scale and DS18B20 on a LoRa node | LoRa gateway to serial | Weight and temperature trends | Free |
+| Air-quality nodes: PMS5003 and GPS on an ESP32 | MQTT | Readings on a GPS Map | Pro (MQTT) |
+| CNC spindle load and axis positions | Modbus RTU, or serial with a frame parser | Spindle RPM, load, X/Y/Z positions | Pro for Modbus; Free over serial |
+| Single-sensor UART setups: conveyor encoder, MAX6675 reflow oven | UART | Belt speed and pulse count, or temperature against time with CSV for the process record | Free |
+| EV battery pack: BMS cell voltages | UART | 96 cell voltages in a Bar widget, pack current and temperatures | Free |
+| Antenna analyzer: NanoVNA | USB serial | SWR sweep plot; a Smith chart is a Canvas script you write, no template ships | Free; Pro for Canvas |
+| APRS tracker: TNC with decoded packets | UART | Station positions on a GPS Map, text in the console | Free |
+| Biosignals: AD8232 ECG, MAX30102 oximeter | UART or BLE | Waveform and FFT Plot; SpO2 and BPM computed by the firmware | Free |
+| Solar array: INA219 on an ESP32 | UART or MQTT | Voltage, current, watts | Free; Pro for MQTT |
+| Aquarium: pH, temperature and conductivity | UART | Gauges with alarm bands for out-of-range values | Free |
+| HVAC ducts: DS18B20 on supply and return | Wi-Fi (TCP) | Supply, return and outdoor temperatures; the differential is a computed dataset | Free; Pro for computed datasets |
+| Dyno: ELM327 OBD-II adapter | COM port via UART | RPM, throttle and coolant plots; an XY power curve needs both axes as datasets in the stream | Free |
+
+## Custom visualizations (Canvas)
+
+Canvas lets you draw a widget with a short JavaScript script, or start from a bundled template. In the [Project Editor](Project-Editor.md), click **Canvas** in the toolbar to add a Canvas group, add datasets, click **Edit Code**, then click **Template** in the code editor to pick one. The script defines `paint(ctx, w, h)` and, optionally, `onFrame()` once per dashboard tick; a 250 ms watchdog stops a call that does not return. Every Canvas entry below is Pro. See [Canvas Widget](Canvas-Widget.md) for the full list of templates.
+
+### Phosphor-style oscilloscope
+
+The built-in line plot has no persistence trace, no afterglow and no XY mode. The `Oscilloscope` template draws channels on a phosphor-green CRT background with a 10 x 8 graticule, a glow under each trace and a crisp line on top. The `XY scope (Lissajous)` template plots two synchronous channels against each other.
+
+### Artificial horizon
+
+A flat attitude indicator is simpler than the 3D Gyroscope widget. The `Artificial horizon` template binds two datasets, pitch and roll in degrees. Sky and ground rotate with roll and slide with pitch, a pitch ladder marks every 10°, and a fixed aircraft symbol stays in front. The source can be any stream that provides pitch and roll in degrees.
+
+### Lab-equipment mimic
+
+When the dashboard replaces an analog meter, operators should not relearn the panel. Start from the `Dial gauge` template, set the green, amber and red zone thresholds, and replace the face colors and tick marks. A smoothing filter in `onFrame()` makes the needle sweep instead of snapping to each new value.
+
+### Audio VU meter and bargraphs
+
+The `Audio VU meter` and `Bars with peak hold` templates draw segmented LED-style bars with peak markers: saturated segments are active, pastel segments are inactive, and a peak marker holds for a set interval before it decays. Pair them with the [Audio driver](Drivers-Audio.md) (Pro) to read a microphone or line input.
+
+### Polar diagnostics for rotating machinery
+
+The `Polar plot` template draws (angle, magnitude) pairs as rays on a polar grid with range rings and 30° spokes. Put it next to a Waterfall widget (Pro) for order-tracking spectra on the same dashboard.
+
+## Starting your own
+
+Print one line of numbers, run Quick Plot, and check that the values arrive. Then save the stream as a project, and add widgets, a frame parser or a different driver as the data needs them. The toolbar's **Examples** button downloads example projects from GitHub the first time you open it, so it needs an internet connection.
+
+To add a use case to this page, open a GitHub issue or send a pull request. For help with a setup, see the [FAQ](FAQ.md), [Troubleshooting](Troubleshooting.md) or [GitHub Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions).

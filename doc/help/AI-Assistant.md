@@ -1,74 +1,88 @@
 # AI Assistant (Pro)
 
-A chat-based assistant that lives inside Serial Studio and edits the project for you. Open it from the main toolbar (the **Assistant** button next to *Extensions*) or from the **Project Editor** toolbar, describe what you want to build, and the assistant configures sources, groups, datasets, frame parsers, transforms, output widgets, canvas widgets, and workspaces by calling the same in-process API your scripts and the MCP server already use.
+Your Arduino prints `23.5,1013` and you want a plot without learning the Project Editor first. Open the Assistant and type:
 
-It is **bring-your-own-key**. You pick a provider (Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, or a local model server) and paste an API key once. The key is stored obfuscated in this machine's settings and never leaves your computer except to talk to the provider you selected. The local-server option lets you run everything offline against Ollama, llama.cpp, LM Studio, or vLLM.
+> Add a UART source at 115200 baud and plot two comma-separated values.
 
-> **Pro feature.** The Assistant button is only present in Pro builds; GPL builds hide it entirely. Operator deployments (`--runtime`) also hide it. The Assistant is a build-time author tool, not something you ship to operators.
+The Assistant answers with a card that shows the command it wants to run (`project.source.add` and its arguments) and two buttons, **Approve** and **Deny**. Click **Approve** and the source appears in the Project Editor. Reading the project is automatic; anything that changes it waits for you. You still pick the serial port and connect from the toolbar, and then the plot fills.
+
+The Assistant is a chat panel built into Serial Studio. It sets up sources, plots and widgets, and writes the small scripts that split each incoming line into values, by calling the same commands the API exposes. It is bring-your-own-key: you need an API key from a provider (paid or free tier, billed by the provider), or a model server on your own machine.
+
+> **Pro feature.** The Assistant ships in the official (commercial) build. GPL builds do not include it, and operator deployments (`--runtime`) hide it. On a machine with no license, the first use of a Pro feature shows a Yes/No prompt that offers the 14-day trial (it needs an internet connection to register); once the trial has expired, the prompt offers activation or purchase instead. See [Pro vs Free Features](Pro-vs-Free.md).
+
+## First run
+
+1. Open the Assistant: click the **AI Assistant** item on the Dashboard taskbar, or use the AI command in the **Project Editor** toolbar.
+2. Pick a provider in the top bar. If you have no preference, pick Anthropic. The key comes from your own account at the provider and is billed by them, not by Serial Studio; [Getting a key](#getting-a-key) has the signup link. The **Local model** option needs no key.
+3. Click **Open API Key Setup** on the empty-conversation card, paste the key and save. The [Getting a key](#getting-a-key) section has the details.
+4. Type a request and press **Enter**.
+5. Click **Approve** on each card.
 
 ## What it can do
 
-The assistant talks to Serial Studio through the same command surface as the MCP/JSON-RPC API (see the [API Reference](API-Reference.md) for the full list). The short version: anything you can do in the Project Editor, the assistant can do for you, with two important caveats:
+Most of what the Project Editor does, the Assistant can do for you, with two exceptions:
 
-- **It does not connect, disconnect, or change driver settings by default.** Anything that pokes the running connection (open/close port, change baud rate, change Modbus slave, write bytes to the device), and clicking or typing into the window itself (`ui.automation.click`, `ui.automation.key`), is blocked from the AI surface unless you opt in by ticking **Allow device control** in the top bar. With that toggle on, those commands become Always-confirm (you approve each call, even when Auto-approve edits is on); with it off they are refused outright so a wrong answer cannot knock you offline.
-- **It can read documentation.** When you ask about a feature it doesn't already know, it pulls the relevant page from `doc/help/` directly off the Serial Studio repo so its answer matches the version you are running.
+- **It does not touch the running connection.** Opening or closing a port, changing driver settings, writing bytes to the device, and clicking or typing into the window itself (`ui.automation.click`, `ui.automation.key`) are refused unless you tick **Allow device control** in the top bar settings menu. The [safety tiers](#the-safety-tiers) section has the rules.
+- **It cannot start the trial or change your license.** The `licensing.*` mutations and the process launchers `system.exec` and `system.kill` are blocked outright.
 
-Typical things people ask it to do:
+When you ask about a feature it does not already know, it reads the matching manual page (see [Documentation lookup](#documentation-lookup)).
+
+Typical requests:
 
 - "List the sources in this project."
-- "Add a UART source for an Arduino at 115 200 baud, frame end on `\n`."
-- "Write a CSV frame parser for me with three floats and a status byte."
+- "Add a UART source for an Arduino at 115200 baud, frame end on `\n`."
+- "Write a CSV frame parser (the small script that splits each line your device sends into values) with three floats and a status byte."
 - "Suggest dashboard widgets for this data."
 - "Build me a workspace called *Engine* with the RPM gauge, oil-pressure plot, and the alarm panel."
 - "Add a moving-average transform to dataset *Speed*."
 - "Open the canvas widget docs and walk me through writing one for a compass."
 
-The four chips on the empty-conversation card are starter prompts (one per category, reshuffled each time the card appears). Click one to send it straight to the assistant.
+The four chips on the empty-conversation card are starter prompts, reshuffled each time the card appears. Click one to send it.
 
 ## Picking a provider
 
-Eight providers are wired in. They all do roughly the same job; the trade-offs are price, speed, how generous the free tier is, and whether the data ever leaves your machine.
+Eight providers are wired in. Pick one in the combo box in the top bar; each provider keeps its own model selection.
 
-| Provider | Default model | What it costs | What it does well |
-|---|---|---|---|
-| **Anthropic** (Claude) | Haiku 4.5 | ~$1 / $5 per million tokens (in/out) | Default. Streaming, tool use, prompt caching, extended thinking on Sonnet/Opus. Sonnet 4.6, Sonnet 5, Opus 4.7, Opus 4.8, and Fable 5 are also selectable for harder tasks. |
-| **OpenAI** | GPT-5 mini | Pay-per-token; mini tier is cheap | Default. Streaming, parallel tool calls, native function-calling. GPT-5.2 and GPT-5.2 Chat are the strongest options for hard tasks. GPT-4.1, GPT-4.1 mini, GPT-4o, and GPT-4o mini remain available. Reasoning-capable models run at `reasoning_effort: none` -- right for fast, interactive tool-calling. |
-| **Google Gemini** | 2.5 Flash | Generous free tier (rate-limited via AI Studio) | 2.5 Flash and 2.0 Flash run on the free tier. 2.5 Pro is paid. |
-| **DeepSeek** | deepseek-chat (V3) | Often the cheapest cloud option for tool use | OpenAI-compatible API. `deepseek-reasoner` (R1) is also selectable. |
-| **Groq** | llama-3.3-70b-versatile | Free tier with daily limits; very low paid pricing | OpenAI-compatible API on Groq's LPU hardware (extremely fast token output). `llama-3.1-8b-instant` for cheapest/fastest, plus the OpenAI gpt-oss-120b / 20b open-weights builds. |
-| **Mistral** | mistral-large-latest | Pay-per-token; small / Ministral / Nemo tiers are cheap | OpenAI-compatible API. Selectable: `mistral-medium-latest`, `mistral-small-latest`, `ministral-8b-latest`, `ministral-3b-latest`, `codestral-latest` (code-tuned), `pixtral-large-latest` (vision), `open-mistral-nemo`. |
-| **OpenRouter** | anthropic/claude-haiku-4.5 | Aggregator pricing per upstream model; some `:free` routes | OpenAI-compatible aggregator. Single key fans out to Anthropic, OpenAI, Google, Meta Llama, DeepSeek, Mistral, Qwen routes. Useful when you want to try several backends without juggling keys. |
-| **Local model** | (whatever your server has loaded) | Free | OpenAI-compatible local endpoint. Works with Ollama (default `http://localhost:11434/v1`), llama.cpp's `llama-server`, LM Studio, or vLLM. The model list is queried live from `/v1/models`. Nothing leaves your machine. |
+| Provider | Default model | Notes |
+|---|---|---|
+| **Anthropic** (Claude) | Haiku 4.5 | Sonnet 4.6, Sonnet 5, Opus 4.7, Opus 4.8 and Fable 5 are also selectable. Extended thinking on Sonnet/Opus. |
+| **OpenAI** | GPT-5 mini | GPT-5.2 and GPT-5.2 Chat, GPT-4.1, GPT-4.1 mini, GPT-4o and GPT-4o mini are also selectable. Reasoning-capable models run at `reasoning_effort: none`. |
+| **Google Gemini** | 2.5 Flash (Free) | Selectable: 2.5 Flash (Free), 2.5 Pro, 2.0 Flash (Free). The Free models run on the AI Studio free tier; 2.5 Pro is paid. |
+| **DeepSeek** | deepseek-chat (V3) | `deepseek-reasoner` (R1) is also selectable. |
+| **Groq** | llama-3.3-70b-versatile | Free tier with daily limits. |
+| **Mistral** | mistral-large-latest | The model picker lists the other Mistral models. |
+| **OpenRouter** | anthropic/claude-haiku-4.5 | One key reaches Anthropic, OpenAI, Google, Meta, DeepSeek, Mistral and Qwen routes; some routes are `:free`. |
+| **Local model** | (whatever your server has loaded) | OpenAI-compatible local endpoint. Nothing leaves your machine. |
 
-You switch providers from the combo box in the top bar. Each provider keeps its own model selection. Serial Studio remembers which model you picked per provider, so flipping back and forth doesn't reset anything.
-
-> **Anthropic and OpenAI have the most complete integrations today.** Anthropic surfaces cache read/write counts and adaptive extended thinking back to the UI; the OpenAI path uses server-side prompt caching (silent), parallel tool calls, and the GPT-5 / o-series developer-role conventions, with `reasoning_effort: none` so tool-calling stays responsive. Gemini also streams its thinking (extended thinking on 2.5 models) but has no cache reporting. DeepSeek, Groq, Mistral, OpenRouter, and Local all work for streaming chat and tool calls (Groq, Mistral, OpenRouter and DeepSeek run on the same OpenAI-compatible code path) but have neither cache reporting nor thinking integration.
+Every provider streams its reply and can call tools. Anthropic and Gemini 2.5 also show the model's thinking.
 
 ### Local models
 
-The Local provider doesn't take an API key; it takes a base URL. Default is Ollama on `http://localhost:11434/v1`. To point at a different server, open **Manage API keys…**, edit the URL field on the Local card, and click **Apply**. Common alternatives:
+The Pro Assistant's Local provider needs a base URL, not an API key. Default is Ollama on `http://localhost:11434/v1`. To point at a different server, open **Manage API keys…**, edit the URL field on the Local card, and click **Apply**. The card also has a **Context window** field (tokens the model accepts; the dialog accepts 1024 to 1048576). Set it to what your model advertises, because a value larger than the server loaded can push the system prompt out of every request. Common alternatives:
 
 - LM Studio: `http://localhost:1234/v1`
 - llama.cpp `llama-server`: `http://localhost:8080/v1`
 - vLLM: `http://localhost:8000/v1`
 
-Whatever models are installed on the server show up in the model picker. Click the refresh icon next to the URL field to re-query the list after pulling a new model. Tool use works on any model that supports the OpenAI function-calling shape (most modern Llama, Qwen, DeepSeek, and Mistral fine-tunes do), but small models will struggle with multi-step tool chains.
+Whatever models are installed on the server show up in the model picker. Click the refresh icon next to the URL field to re-query the list after pulling a new model. Tool use works on any model that supports the OpenAI function-calling shape. Small models lose the thread on long tool chains.
 
 ### Getting a key
 
-The empty-conversation card has a **Get a key from <provider>** link that opens the right signup page. Once you have the key, click **Open API Key Setup** (or the wrench icon in the top bar), paste the key, and save. The key is checked, shown in the dialog only as a **Key set** / **No key** status pill, and persisted in your local app settings, obfuscated with a machine-derived key.
+The empty-conversation card has a **Get a key from <provider>** link that opens the provider's signup page. Sign up, copy the key, then open the API keys dialog and paste it. The dialog opens from **Open API Key Setup** on the empty-conversation card, or from **Manage API keys…** in the wrench-icon settings menu in the top bar; both reach the same dialog. The dialog shows only a **Key set** / **No key** status pill, never the key itself. [Privacy and what gets sent](#privacy-and-what-gets-sent) says how the key is stored.
 
-You can change provider, change model, or revoke a key at any time from the same dialog. Revoking a key clears it from disk; revoking the active provider's key drops you back to the welcome screen until you paste a new one.
+From the same dialog you can change provider or model, or revoke a key. Revoking the active provider's key drops you back to the welcome screen until you paste a new one.
 
 ## How a turn works
 
+The Assistant changes your project by running commands. Reading is automatic; anything that changes the project shows a card with **Approve** and **Deny** buttons.
 ```mermaid
 flowchart TD
     A["You type a message"] --> B["Assistant streams its reply<br/>(text + tool calls)"]
     B --> C{"Tool call?"}
     C -- "Read-only<br/>(safe)" --> D["Auto-executed,<br/>result fed back to model"]
     C -- "Mutating<br/>(confirm)" --> E["Card shows in chat<br/>with Approve / Deny buttons"]
-    C -- "Device / secrets<br/>(blocked)" --> F["Refused.<br/>Model is told and continues."]
+    C -- "Always confirm<br/>(destructive)" --> E
+    C -- "Device-gated<br/>or blocked" --> F["Refused unless<br/>device control is on.<br/>Model is told and continues."]
     E -- "Approve" --> D
     E -- "Deny" --> G["Reported back to model;<br/>turn continues"]
     D --> B
@@ -76,106 +90,95 @@ flowchart TD
     B --> H["Final answer in chat"]
 ```
 
-Each tool call shows up in the chat as a small expandable card with the command name, the arguments, and (after it runs) the result. You can click the card to inspect what was sent and what came back. This is useful when you want to learn the underlying API, or when something goes sideways.
+Each tool call shows up in the chat as a small expandable card with the command name, the arguments, and (after it runs) the result. You can click the card to inspect what was sent and what came back.
+
+A turn runs at most 25 tool calls. The 26th is shown as a **Blocked** card, no further tools run, and the Assistant is made to summarize; send a follow-up message to continue.
 
 ### The safety tiers
 
-Every command is tagged at startup. There are five tiers:
+Reading is automatic and changes ask you. A few things (device connection, licensing, launching programs) stay off-limits unless stated below. Every command carries one of five tiers in `app/rcc/ai/command_safety.json`:
 
 | Tier | Behavior | Examples |
 |---|---|---|
-| **Safe** | Auto-runs. No prompt. Read-only inspection. | `project.group.list`, `dashboard.getStatus`, `io.uart.listPorts`, `ui.automation.listWindows`, `ui.automation.listElements`, every `get*` and `*.list` |
-| **Confirm** | Card with **Approve** / **Deny** buttons. Anything that mutates the project counts. | `project.group.add`, `project.dataset.update`, `project.workspace.add`, `project.template.apply`, `ui.automation.screenshot` (a capture of the window, approved per call) |
-| **Always confirm** | Like Confirm, but still asks **even when Auto-approve edits is on**. Destructive or sensitive families: delete / clear / new / open-replace / install / uninstall, plus MQTT credential + TLS config and control-loop installs. | `project.new`, `project.group.delete`, `project.workspace.clearAll`, `fs.delete`, `sessions.delete`, `controlScript.setCode`, `project.mqtt.publisher.setConfig` |
-| **Device-gated** | Blocked by default; becomes **Always confirm** only when **Allow device control** is ticked. Driver settings, connection state, and anything that writes bytes to the device. | `io.connect`, `io.disconnect`, `io.setPaused`, `io.writeData`, `console.send`, every driver `set*`, and the interface-driving `ui.automation.click` / `ui.automation.key`, which act on the window as you would |
-| **Blocked** | Refused outright; never unblockable from the UI. The model is told it isn't available. | `licensing.activate`, `licensing.deactivate`, `licensing.setLicense`, and the other `licensing.*` mutations |
+| **Safe** | Auto-runs. No prompt. Read-only inspection. | `project.group.list`, `dashboard.getStatus`, `io.uart.listPorts`, every `get*` and `*.list`; `fs.write` and `fs.append` too, limited to the `AI/` folder of your workspace |
+| **Confirm** | Card with **Approve** / **Deny** buttons. Anything that mutates the project counts. Skipped when **Auto-approve edits** is on (see the toggle table below). | `project.group.add`, `project.dataset.update`, `project.workspace.add`, `project.template.apply` |
+| **Always confirm** | Like Confirm, but still asks **even when Auto-approve edits is on**. Destructive or sensitive families: delete / clear / new / open-replace / install / uninstall, plus MQTT credential + TLS config and control-loop installs. | `project.new`, `project.group.delete`, `fs.delete`, `sessions.delete`, `controlScript.setCode`, `project.mqtt.publisher.setConfig` |
+| **Device-gated** | Blocked by default; becomes **Always confirm** only when **Allow device control** is ticked. Driver settings, connection state, and anything that writes bytes to the device. | `io.connect`, `io.disconnect`, `io.setPaused`, `io.writeData`, `console.send`, every driver `set*`, and `ui.automation.click` / `ui.automation.key`, which act on the window as you would |
+| **Blocked** | Refused outright; no toggle unblocks it. The model is told it isn't available. To run a process, the Assistant writes a control script (`controlScript.setCode`, Always confirm) that you read first. | `licensing.activate`, `licensing.enableTrial`, `licensing.setLicense` and the other `licensing.*` mutations, plus `system.exec` and `system.kill` |
 
 Destructive actions the assistant takes are backed by automatic snapshots; see [Backups & Recovery](Backup-Recovery.md) to restore one, or ask the assistant to undo the change directly.
 
 You can approve a single call (**Approve**) or, when the assistant queues several mutations in a row, approve the whole batch at once (**Approve all**). Denial is logged and the assistant is told. It will usually offer an alternative or back off, not retry blindly.
 
-The full safety map ships in `app/rcc/ai/command_safety.json`. New commands default to **Confirm** until they're explicitly tagged, so adding an API method doesn't quietly grant the AI new powers. Two toggles in the top bar's settings menu tune this: **Auto-approve edits** runs **Confirm**-tier project edits without asking (Always-confirm, device-gated, and Blocked are unaffected), and **Allow device control** unblocks the device-gated commands above behind a one-time warning (each call still asks for approval).
+New commands default to **Confirm** until they're explicitly tagged, so adding an API method doesn't quietly grant the Assistant new powers. Two toggles in the wrench-icon settings menu in the top bar tune the tiers:
+
+| Toggle | Effect |
+|---|---|
+| **Auto-approve edits** | Runs **Confirm**-tier project edits without asking. Always-confirm, device-gated and Blocked commands are unaffected. |
+| **Allow device control** | Unblocks the device-gated commands behind a one-time warning. Each call still asks for approval, even with Auto-approve edits on. |
 
 ## The composer
 
-The bar at the bottom is the input. It has three controls:
+The bar at the bottom is the input. Type a prompt and press **Enter** to send. The round button on the far right is **Send**; while the model is generating it becomes **Cancel**, which stops the stream. Whatever it already said stays in the chat, and a thin animated stripe under the message list shows it is still working.
 
-- **Text field**. Type your prompt, press **Enter** to send.
-- **Trash icon**. Wipes the conversation. Cached prompt context is kept on the provider side (cheaper for follow-ups), but the history shown in the panel is cleared.
-- **Send / Cancel**. Round button on the far right. While the model is generating, the icon flips to **Cancel** and clicking it stops the stream. Anything already produced stays in the chat.
+The trash icon (tooltip **Clear conversation**) saves the current chat and starts a new empty one. The old chat stays in the chat sidebar; delete it there to remove its file.
 
-While the assistant is working you'll see a thin animated stripe under the message list; it disappears once the reply finishes.
+## Chats and memory
+
+The chat sidebar lists your chats. Use it to start a new chat, switch between chats, rename one (**Rename...**), continue one in a new chat (**Continue in new chat**), or **Delete** one.
+
+The **Assistant memory** item in the top bar settings menu is on by default. The Assistant can propose a short fact to remember, and a chip asks you before it is stored. **Manage memory…** in the same menu opens the **Assistant Memory** dialog, where you can add and delete facts. Remembered facts are sent to your provider with the turn.
 
 ## Privacy and what gets sent
 
-Read this before pasting anything sensitive. Every message you send goes to the provider you chose. Specifically:
+Every message you send goes to the provider you chose, so read this before pasting anything sensitive.
 
-- **Sent on every turn**: your message, the conversation history so far, the tool catalog, and a snapshot of the live project state (sources, groups, datasets, frame parser code, transforms, and so on; the same JSON your `.ssproj` would contain). Frame parser scripts and transform scripts are part of that snapshot.
+- **Sent on every turn**: your message, the conversation history so far, the tool catalog, your remembered facts when memory is on, and a snapshot of the live project state (sources, groups, datasets, frame parser code, transforms, and so on; the same JSON your `.ssproj` would contain). Frame parser scripts and transform scripts are part of that snapshot. Secrets are redacted from the snapshot and from tool payloads before they enter the model context.
 - **Not sent**: live telemetry data, your raw serial bytes, your dashboard frames, your CSV/MDF4 logs, your Historian database, the API key for any *other* provider.
 - **Sent when a tool reads it**: the contents of any file the assistant opens, including files you drag into the chat and the application source it reads under `source/`.
-- **Stored where**: the API key is stored obfuscated in this machine's settings, scrambled with a key derived from the machine fingerprint. That keeps it out of the settings file as plain text and makes it useless on another machine; it is not encryption, so it does not protect the key from someone who already has your user account. Conversation history is written to local JSON files (one per chat, plus an index) in the app's data directory, and survives closing the dialog and restarting the app. Clicking the trash deletes that chat's JSON file.
+- **Stored: API key.** Obfuscated in this machine's settings, scrambled with a key derived from the machine fingerprint. That keeps it out of the settings file as plain text and makes it useless on another machine; it is not encryption, so it does not protect the key from someone who already has your user account.
+- **Stored: conversation history.** Local JSON files (one per chat, plus an index) in the app's data directory; they survive restarting the app. Deleting a chat from the chat sidebar deletes its file.
 
 If your project file contains commercial firmware code or proprietary protocol notes inside frame parsers or transforms, that text will travel to the provider with each turn. Treat the provider's data-handling policy as the relevant constraint, not Serial Studio's.
 
 ## Documentation lookup
 
-The assistant can pull `doc/help/*.md` pages directly off the Serial Studio GitHub repo when it needs them. You'll see this as a tool call named `meta.fetchHelp` with a path like `Painter-Widget` or `JavaScript-API`. It is read-only and Safe. It pulls the requested page directly; if a guessed page name 404s, it then fetches `help.json` (the page index) to self-correct and retry. Pages are fetched at the commit this build was made from, so an older release gets the manual that shipped with it rather than the development branch; a build compiled locally, which carries no commit, falls back to `master`.
+When you ask about a feature, the Assistant reads the matching manual page with `meta.fetchHelp` (read-only, Safe). Pages come off the Serial Studio GitHub repo at the commit your build was made from, so this needs an internet connection; a build compiled locally, which carries no commit, falls back to `master`. If a guessed page name 404s, it fetches `help.json` (the page index) and retries.
 
-For scripting, there's a parallel surface called `meta.fetchScriptingDocs` that returns the API reference for one of nine kinds: `frame_parser_js`, `frame_parser_lua`, `transform_js`, `transform_lua`, `output_widget_js`, `painter_js`, `control_script_js`, plus `sdk_js` and `sdk_lua`, which return the generated SerialStudio SDK source itself. The assistant is wired to call this **before** writing or modifying any script. That's why frame parsers it generates use real APIs and not made-up function names.
+Before it writes or changes a script, it calls `meta.fetchScriptingDocs`, which returns the API reference for one of nine kinds: seven script kinds (`frame_parser_js`, `frame_parser_lua`, `transform_js`, `transform_lua`, `output_widget_js`, `painter_js`, `control_script_js`) plus `sdk_js` and `sdk_lua`, which return the generated SerialStudio SDK source itself. That is why the frame parsers it writes use real APIs and not made-up function names.
 
-There's also `meta.searchDocs` (a small built-in BM25 index over the bundled help and scripting docs, used to find the right page when a path isn't obvious) and `meta.loadSkill` (loads one of a handful of focused skill briefs: `painter`, `frame_parsers`, `transforms`, `output_widgets`, `workspace_design`, `dashboard_layout`, `mqtt`, `can_modbus`, `filesystem`, `debugging`, `project_basics`, `tool_discovery`, `api_semantics`, `behavioral`, `control_script`) when the assistant needs deeper guidance for a specific task.
+`meta.searchDocs` searches the bundled help and scripting docs. `meta.loadSkill` loads one of eighteen focused skill briefs, for example `frame_parsers`, `transforms`, `mqtt`, `can_modbus` or `alarms`.
 
 ## Reading the application source
 
-Serial Studio Pro ships its own source code inside the executable, and the assistant can read it.
-Ask why a driver reconnects, what a console message means, or which field a project key maps to, and
-the answer comes from the code of the build you are running instead of from the model's memory of an
-older release.
-
-The bundle is addressed through a virtual `source/` prefix: `fs.read` with a path like
-`source/core/Devices/IO/Drivers/CANBus.cpp`, and `fs.search` scoped with `path: "source/core"`. It
-carries the hand-written C++, QML, Lua, JavaScript, CMake and Markdown of the tree, plus this
-manual and the bundled example projects; third-party libraries, unit tests and CI files stay out.
-Two rules keep it out of the way:
-
-- **Read-only.** Any write, append or delete under `source/` is refused. The assistant's write root
-  is still only the `AI/` folder of your workspace.
-- **Off the default search.** A `fs.search` without a `path` never walks the source, so searching
-  your own logs or CSV files does not come back full of C++ hits. The source is reached only by a
-  search scoped to `source/`.
-
-Nothing is unpacked to disk and nothing is downloaded. A build compiled without the bundle answers
-`source_unavailable` and the assistant falls back to the documentation tools.
-
-What it reads, it sends: a file the assistant opens becomes part of the conversation that travels to
-your provider, exactly like the rest of a tool result.
+The Pro AI Assistant can read Serial Studio's own source code, which the Pro build ships inside the executable. Ask why a driver reconnects or which field a project key maps to, and the answer comes from the code of the build you are running. The bundle sits under a virtual, read-only `source/` prefix (`fs.read` with `source/core/Devices/IO/Drivers/CANBus.cpp`, `fs.search` with `path: "source/core"`); a `fs.search` without a `path` never walks it. Nothing is unpacked or downloaded, and a build compiled without the bundle answers `source_unavailable`. A file the Assistant opens becomes part of the conversation that travels to your provider.
 
 ## Project templates
 
-When you're starting from a blank project, you can ask the assistant to "use a template" and it will call `project.template.list` (Safe) followed by `project.template.apply` (Confirm) with one of the bundled starters: blank, IMU over UART, GPS over UART (NMEA), multi-channel UART scope, MQTT subscriber, or telemetry over UDP. Templates load instantly into an empty project and give you a working scaffold to edit from.
+In the Pro AI Assistant, ask it to "use a template" and it calls `project.template.list` (Safe) and then `project.template.apply` (Confirm). **Apply replaces the open project** and discards unsaved state; pass `dryRun:true` to preview what would be discarded.
+
+| Template id | What you get |
+|---|---|
+| `blank` | One default UART source, nothing else. |
+| `imu_uart` | 9-DOF IMU over UART (accelerometer, gyroscope, magnetometer), comma-separated parser. |
+| `gps_uart_nmea` | GPS over UART, NMEA 0183 (`$GPGGA`), with a map widget. |
+| `scope_multichannel_uart` | 8 numeric channels over UART, each a plot. |
+| `telemetry_udp` | CSV parser with 5 channels. It does not configure the UDP listener; set that up yourself. |
+| `mqtt_subscriber` (Pro) | MQTT subscriber skeleton with one placeholder group. Configure the broker afterwards. |
 
 ## Frequently asked
 
 **Does the assistant work offline?**
-Yes, with the **Local model** provider. Point it at Ollama, llama.cpp, LM Studio, or vLLM running on your machine and the Assistant works fully offline. The cloud providers (Anthropic, OpenAI, Gemini, DeepSeek, Groq, Mistral, OpenRouter) need a network connection. The rest of Serial Studio works offline regardless.
-
-**Can I use a self-hosted model (Ollama, LM Studio, llama.cpp, vLLM)?**
-Eight providers are wired in: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, and a Local provider that talks to any OpenAI-compatible server (Ollama, llama.cpp, LM Studio, vLLM). The Local provider's base URL is user-configurable, so any other compatible endpoint works without a code change.
-
-**Can I see what the assistant is about to do before it does it?**
-Yes. That's exactly what the **Confirm** tier is for. The card shows the command name and the full arguments object before you approve.
-
-**Can the assistant connect or disconnect my device?**
-Not unless you let it. Connection-state changes (`io.connect`, `io.disconnect`, `io.setPaused`) and every `set*` on every driver are device-gated: blocked by default, and the assistant can only read your device list and current configuration. Tick **Allow device control** in the top bar and those commands become available as Always-confirm actions (you approve each call, even when Auto-approve edits is on).
+Yes, with the **Local model** provider (Ollama, llama.cpp, LM Studio or vLLM; the base URL is configurable, so any OpenAI-compatible server works). Documentation fetched with `meta.fetchHelp` needs the internet; the rest works offline. The cloud providers need a network connection.
 
 **Can it write data to my device?**
-Direct MCP write commands are device-gated: `console.send` (text/serial writes) and `io.writeData` (raw binary writes), alongside every driver `set*` and every connection-state command, are blocked until you tick **Allow device control** (then they ask for approval per call). A second group is blocked outright with no UI override: `licensing.*` mutations. MQTT broker credentials get a different guard: `project.mqtt.publisher.setConfig` and `project.mqtt.subscriber.setConfig` are Always-confirm, and the matching `getConfig` commands never return the stored password. The assistant can, however, propose **frame parser / transform / canvas code that calls `deviceWrite()` or `actionFire()`** (scripting APIs that push bytes back to the device or trigger an existing project Action whenever the script decides to). Pushing the script is a **Confirm** tier action, so you see the exact code before it lands. Once approved and connected, the script will fire on incoming frames — review the logic carefully before approving anything that writes on every frame. For one-shot user-triggered commands, prefer an [Output Control](Output-Controls.md).
+Not directly. `console.send` and `io.writeData` are device-gated (blocked until you tick **Allow device control**, then approved per call). The Assistant can write a frame parser, transform or canvas script that calls `deviceWrite()` or `actionFire()`; you read the code before approving it, and once connected it runs on incoming frames, so check the logic before approving anything that writes on every frame. For one-off commands, use an [Output Control](Output-Controls.md). MQTT broker credentials are Always confirm, and `getConfig` never returns the stored password.
 
 **Why does my project state show up in the prompt?**
-So the assistant can answer "what sources are configured?", "which datasets feed this group?", or "is the frame parser doing what I think it is?" without first running ten read-only tool calls. The state snapshot lives outside the cached prefix so it can change between turns without invalidating the cache.
+The Serial Studio AI Assistant sends a snapshot of the open project so it can answer "what sources are configured?", "which datasets feed this group?", or "is the frame parser doing what I think it is?" without first running ten read-only tool calls.
 
 **The assistant suggested an API call that doesn't exist.**
-Tell it; it will usually call `meta.listCommands` or `meta.describeCommand` to recover. If you keep hitting hallucinated commands on a given provider, switch to a stronger model (Sonnet 4.6, Sonnet 5, Opus 4.7, Opus 4.8, or Fable 5 on Anthropic, GPT-5.2 on OpenAI, 2.5 Pro on Gemini).
+Tell it. It recovers with `meta.listCommands` or `meta.describeCommand`. A larger model from the same provider invents fewer commands.
 
 **Where do I report a bug or a wrong answer?**
 File an issue on the Serial Studio GitHub repo. Include the prompt, the reply, and ideally the project file (or a stripped-down repro). Provider name and model help too.
@@ -185,8 +188,4 @@ File an issue on the Serial Studio GitHub repo. Include the prompt, the reply, a
 - [API Reference](API-Reference.md): the command surface the assistant calls into.
 - [Project Editor](Project-Editor.md): the editor the assistant edits on your behalf.
 - [Backups & Recovery](Backup-Recovery.md): the rolling snapshots behind every restore and undo.
-- [Frame Parser Scripting](Frame-Parser.md): JavaScript and Lua frame parser API.
-- [Dataset Value Transforms](Dataset-Transforms.md): per-dataset transform scripts.
-- [Canvas Widget](Canvas-Widget.md): the canvas widget API the assistant references when asked to write one.
-- [Output Controls](Output-Controls.md): output widget framework, including transmit-function generation.
-- [Pro vs Free Features](Pro-vs-Free.md): what's included with a Pro license.
+- [Pro vs Free Features](Pro-vs-Free.md): the edition table.

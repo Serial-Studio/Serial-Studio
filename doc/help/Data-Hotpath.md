@@ -1,323 +1,213 @@
 # The acquisition pipeline
 
-A technical reference for how a single byte travels from a connected device to a rendered widget,
-and how the frame parser and dataset transforms plug into that pipeline. If you're looking for
-the high-level user view, start with [Data Flow](Data-Flow.md). For threading-specific guarantees
-(what is and isn't guaranteed, why FrameReader and FrameBuilder run on a dedicated pipeline
-thread instead of the GUI thread), see
-[Threading and Timing Guarantees](Threading-and-Timing.md). This page is for advanced users,
-plugin authors, and anyone debugging throughput, latency, or timing problems.
+Your board prints `23.5,41` and a newline. A moment later a number moves on a plot. In between,
+Serial Studio splits the incoming bytes into frames, runs your parser and transforms, and hands
+the values to the dashboard and to any export that is switched on. The chain that does this runs
+once per received frame and is built to keep up with more than 256 kHz of frames.
+[Benchmark](Benchmark.md) (About > Benchmark) measures the figure on your machine.
 
-The acquisition pipeline is the chain of components that runs once per received frame at full
-data rate.
-Serial Studio targets sustained data rates above 256 kHz, so every stage on this path avoids
-allocations, copies, and cross-thread context switches.
+A parser for that line is two lines long:
+
+```javascript
+function parse(frame) {
+  return frame.split(",");
+}
+```
+
+Most projects never need to look at this page. If you use **Quick Plot (Auto-Detected Format)** in
+the **Device Setup** panel, you write no parser at all: a built-in line tokenizer splits on
+commas, spaces or tabs. See [Operation Modes](Operation-Modes.md).
+
+A chunk is the bytes one read from the device returns, which can hold half a frame or many. A
+frame is one complete message. The driver talks to the transport (UART, TCP/UDP, BLE and so on),
+and a sink is any export or server that consumes frames besides the dashboard.
+
+## Troubleshooting
+
+| Symptom | What to do |
+|---|---|
+| `[FrameReader] Frame queue full -- frame dropped (total N)` in the log | A downstream stage is too slow. `N` is the running count of dropped frames. Run About > Benchmark to see which stage is slowest ([Benchmark](Benchmark.md)). Heavy string work or large loops in a parser or transform (a small per-dataset script, see [Dataset Value Transforms](Dataset-Transforms.md)) are the usual cause. |
+| Several frames share one timestamp in a plot, CSV or the Historian | They arrived in one chunk, so they share its arrival time. Order is kept; the spacing between them is not measured. Only drivers that know their cadence, such as Audio, space frames. See [Timestamp ownership](#timestamp-ownership). |
+| Parser appears to skip frames | Under **Operation Mode** in **Device Setup**, **Console Only (No Parsing)** skips the parser by design. Choose **Parse via Project File** or **Quick Plot (Auto-Detected Format)**, then check the delimiters in the Project Editor. In multi-source projects each source has its own parser engine; an error in one source does not affect the others. |
+| Transform changes don't take effect | Transforms recompile when the project is applied to the pipeline: on project load, after a project edit, and when the Lua mode or the transform library changes. If a change still has no effect, reload the project. |
+| High CPU but the dashboard is smooth | The bottleneck is upstream of the dashboard. Run About > Benchmark to find the slow stage. The UI refresh rate cap does not reduce parser load. |
 
 ## Stages
 
 ```mermaid
 flowchart TD
-    A["Driver<br/>(driver thread or GUI thread)"] -->|CapturedDataPtr<br/>queued, chunk rate| B["FrameReader<br/>(pipeline thread)"]
-    B -->|enqueue| Q["Lock-free queue<br/>65536 slots"]
-    Q -->|dequeue, direct call| R["PipelineHost::routeFrames<br/>(pipeline thread)"]
-    R --> E["FrameBuilder<br/>decode / parse / transforms<br/>(pipeline thread)"]
-    E -->|stage rows into pooled DataBlock| S["DataBlock<br/>flush on display tick or sample cap"]
-    S -->|SPSC ring, drained on<br/>Dashboard::onDisplayTick| F["Dashboard (GUI thread)"]
-    S -->|clone_block_trimmed,<br/>if any sink active| G["CSV / MDF4 / API / gRPC / Sessions / MQTT"]
+    A["Driver<br/>(driver thread or GUI thread)"] -->|one chunk per read| B["Frame reader<br/>finds frame boundaries"]
+    B --> Q["Frame queue<br/>65536 slots"]
+    Q --> E["Frame builder<br/>decode, parse, transforms"]
+    E --> S["Data block<br/>flushed on display tick or sample cap"]
+    S --> F["Dashboard (GUI thread)"]
+    S -->|if any sink is active| G["Exports and servers"]
 ```
 
-The driver-to-`FrameReader` hop is a genuine cross-thread `QueuedConnection`, but it fires once
-per received chunk, not once per frame — a chunk can carry many frames, so the cost is amortized
-across all of them. Every hop after that lives entirely on the pipeline thread and is either a
-direct in-thread call or a `Qt::DirectConnection` signal: a queued connection between two objects
-already on the same thread is avoided there, because at 10+ kHz it would fill Qt's event queue
-faster than the consumer can drain it, and `FrameReader`'s bounded queue would start dropping
-frames.
-
-MDF4 export, the Historian, and the MQTT bridge are Pro-only; a free build compiles
-those sinks out and skips them in fan-out.
+Everything from the frame reader to the data block runs on one pipeline thread. Only two hops cross
+threads: the chunk from the driver, once per read rather than once per frame, and the display tick
+out to the dashboard. See [Threading and Timing Guarantees](Threading-and-Timing.md).
 
 ### Stage 1: driver
 
-Drivers wrap one transport each (UART, TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB, HID,
-Process I/O). They publish data through `HAL_Driver::publishReceivedData(...)`, which carries
-a shared `IO::CapturedData` payload:
-
-- `data` (`QByteArray`; Qt's copy-on-write means consumers get an atomic refcount bump, not
-  a deep copy)
-- `timestamp` (steady-clock time of acquisition)
-- `frameStep` (cadence in nanoseconds, when the driver knows it)
-- `logicalFramesHint` (how many logical frames are encoded in the chunk, when known)
-
-Drivers that already know their cadence fill `frameStep` so downstream stages can fan out
-timestamps without re-measuring. The audio driver, for example, backdates the chunk start by
-`step * (totalFrames - 1)` so each parsed sample lines up with the moment it was captured,
-not the moment Qt happened to deliver it.
-
-If a driver posts to the main thread (via `QMetaObject::invokeMethod` or a queued connection),
-it must capture `SteadyClock::now()` *before* queueing and pass that into
-`publishReceivedData`. A default-constructed timestamp would otherwise be filled in on the
-receiving thread and report fictional timing.
+Each driver wraps one transport. Every chunk it publishes carries its bytes, its arrival time and,
+when the driver knows them, the frame spacing and the frame count.
 
 ### Stage 2: frame reader
 
-`IO::FrameReader` runs on the pipeline thread and owns a single producer / single consumer
-`CircularBuffer`. It scans the buffer for frame boundaries (start delimiter, end delimiter,
-both, or none) and pulls out one logical frame at a time.
+`IO::FrameReader` runs on the pipeline thread. It scans for frame boundaries (start delimiter, end delimiter, both, or none) and pulls out one frame at a time.
 
-- Single-delimiter modes use the KMP fast path.
-- Multi-delimiter modes use `CircularBuffer::findFirstOfPatterns()`, a single-pass scan with
-  a stack-allocated `PatInfo` array of up to eight patterns; it never touches the heap.
-- Optional checksum validation (`XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`,
-  `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32`) runs immediately after extraction.
+- Single-delimiter modes use a fast single-pattern search.
+- Multi-delimiter modes use a single-pass scan of up to eight patterns that never touches the
+  heap.
+- Optional checksum validation runs right after extraction. The algorithms are `XOR-8`,
+  `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, `CRC-32` and
+  `Adler-32`. See [Project Editor](Project-Editor.md).
 
-Each completed frame is enqueued into a lock-free
-`moodycamel::ReaderWriterQueue<CapturedDataPtr>` with 65536 slots. When that queue is full,
-frames are dropped and a log line is emitted. That message is the canonical signal that a
-downstream stage is too slow.
-
-The frame reader is configuration-immutable. To change delimiters, decoder, or checksum mode,
-the live FrameReader is destroyed and a new one is created via
-`ConnectionManager::resetFrameReader()` or `DeviceManager::reconfigure()`. There are no
-mutexes anywhere on this path.
+Each completed frame goes into a lock-free queue with 65536 slots. When the queue is full, the
+frame is dropped and the log gets `[FrameReader] Frame queue full -- frame dropped (total N)`,
+where `N` is the cumulative drop count. A full queue means a stage downstream is not keeping up.
+Changing the delimiters, decoder or checksum creates a new reader.
 
 ### Stage 3: pipeline routing
 
-`IO::PipelineHost::routeFrames` drains a `FrameReader`'s queue on the pipeline thread and routes
-each dequeued frame directly into `FrameBuilder::hotpathRxFrame` or, for multi-source projects,
-`hotpathRxSourceFrame(sourceId, data)`, as a plain same-thread call.
+`IO::PipelineHost::routeFrames` drains the reader's queue on the pipeline thread and hands each
+frame to the frame builder, or, for multi-source projects, to the builder for that source.
 
 ### Stage 4: frame builder, parser, and transforms
 
-`FrameBuilder` is where the project's parsing rules turn raw bytes into a populated `Frame`
-object. That `Frame` is a reused per-source staging buffer, not the object published downstream
-— once it's populated, `FrameBuilder` copies its values into the current `DataBlock` (see
-[Stage 5](#stage-5-fan-out) below). It runs three things in order:
+`FrameBuilder` turns raw bytes into a populated `Frame` using the project's parsing rules. That
+`Frame` is a reused per-source staging buffer; once it is populated, `FrameBuilder` copies its
+values into the current `DataBlock` (see [Stage 5](#stage-5-fan-out)). It runs three things in
+order:
 
 1. The selected **decoder** (Plain Text (UTF8), Hexadecimal, Base64, or Binary (Direct))
    converts the raw bytes into the form `parse()` expects.
 2. The **frame parser** (`parse(frame)` in Lua or JavaScript) returns an array of values. See
-   [Frame Parser Scripting](Frame-Parser.md) for the full API.
-3. Per-dataset **transforms** (`transform(value)`) are called in group then dataset order. A
-   transform can read raw values from any dataset and final values from datasets earlier in
-   the order, plus shared variables from [Variables](Variables.md). See
+   [Frame Parser Scripting](Frame-Parser.md).
+3. Per-dataset **transforms** (`transform(value)`) run in group, then dataset, order. See
    [Dataset Value Transforms](Dataset-Transforms.md).
 
-In Quick Plot mode, steps 1 and 2 are replaced by a built-in line tokenizer that detects the
-separator and named fields once per connection. In Console-Only mode, the FrameBuilder stage is a no-op: bytes go
-straight to the terminal via `DeviceManager::rawDataReceived`.
+A transform:
 
-When a single captured chunk expands into N logical frames, FrameBuilder timestamps them at
-`data->timestamp + step * i`. That only spreads the N frames across real time when the driver
-filled in a real `frameStep`. `frameStep` defaults to 1 ns, and most transports (UART, network,
-BLE, CAN, Modbus, MQTT) never override it, so on those a coalesced read still timestamps all of
-its extracted frames within nanoseconds of the arrival instant — there's no measured cadence to
-interpolate from. The spread is opt-in, per driver: Audio is the example that fills in a real
-`frameStep` (computed from the device sample rate) precisely so a multi-sample buffer's frames
-land at their true capture times instead of all landing on the buffer's arrival time.
+- reads raw values from any dataset, final values from datasets earlier in the order, and shared
+  variables from [Variables](Variables.md). A later dataset's final value is the previous frame's.
+- can return a string for label-style datasets.
+- falls back to the raw value on `NaN`, `Infinity` or an error, silently.
 
-The parser and transforms are the only points in the pipeline where user code runs. Both run
-under a runtime watchdog and are wrapped so that a thrown error, infinite loop, or non-finite
-return value falls back to the safe path: the raw value, or an empty frame. Errors do not
-interrupt the data stream. Transform watchdogs use a 100 ms budget; for JavaScript transforms
-the budget is armed once per frame in `applyDatasetValues` and covers all of that frame's
-transforms collectively, not per dataset call.
+In Quick Plot mode, steps 1 and 2 are replaced by the built-in line tokenizer, which detects the
+separator and field names once per connection. In **Console Only (No Parsing)** mode this stage does nothing: bytes go straight to the terminal.
 
-Transforms that don't declare an `info` parameter (`function transform(value)`) pay no extra
-cost for it: the engine inspects each transform's parameter count at compile time and skips
-building the info table or object when it isn't used.
+When one chunk holds several frames, they are timestamped as described in
+[Timestamp ownership](#timestamp-ownership).
+
+The parser and transforms are the only places where your code runs. A thrown error or a
+non-finite return falls back to the raw value (transform) or an empty frame (parser), and the data
+stream keeps going. A JavaScript transform that runs too long for one frame is stopped by a
+watchdog and the raw values are used. The parser runs once per frame, and transforms run once per
+frame for each dataset that defines one, so heavy work in a transform at 10 kHz across 50 datasets
+adds up quickly. Transforms that don't declare an `info` parameter (`function transform(value)`)
+pay no cost for it.
+
+Computed variables hold their last written value indefinitely, so other transforms can read them
+in the same frame or any later one. For state private to one dataset, transform-local upvalues
+(top-level `local` in Lua, top-level `var` or `let` in JavaScript) are the lightest option.
 
 #### Parser engine details
 
 - One engine instance per source, never shared across sources.
-- Lua uses an embedded LuaJIT 2.1 interpreter (Lua 5.1 syntax with compatibility shims) with
-  `base`, `table`, `string`, `math`, `utf8`, and `coroutine` loaded. JavaScript uses Qt's
-  `QJSEngine` with the Console and GC extensions only.
-- Each parser is compiled once when the project loads or the connection opens, then called
-  many times. Compilation cost is paid up front, not per frame.
+- Lua runs on embedded LuaJIT 2.1 (Lua 5.1 syntax) with `base` (which includes the coroutine
+  functions), `table`, `string`, `math` and `bit` loaded. There is no `utf8` module.
+- JavaScript runs on Qt's `QJSEngine` with the Console and Garbage Collection extensions.
+- Each parser compiles once, then is called many times.
 
-#### Transform isolation
-
-- In Lua, top-level `local` declarations become upvalues of the `transform` closure, so each
-  dataset has its own state on the shared Lua state.
-- In JavaScript, the user's code is wrapped in an IIFE at compile time so top-level `var`
-  declarations are private to that dataset's closure on the shared `QJSEngine`.
-
-Two datasets that copy the same EMA template will not clobber each other's state in either
-language.
+Two datasets that copy the same template keep separate state in both languages.
 
 ### Stage 5: fan-out
 
-FrameBuilder doesn't publish per frame. `stageFrameValues` appends each parsed frame's values as
-one row into the current per-source `DataBlock` — a pooled, pre-sized slot, no allocation — and
-`publishBlock` flushes that block when it reaches its sample cap (`kFrameBlockSampleCap`, 64;
-dense/stream sources use the larger `kStreamBlockSampleCap`, 4096) or when the display tick has
-moved since the block last flushed, whichever comes first:
+`FrameBuilder` doesn't publish per frame. It appends each parsed frame's values as one row into
+the current per-source `DataBlock`, a pooled, pre-sized slot. The block flushes when it reaches
+its sample cap (64 for frame sources, 4096 for dense stream sources) or when the display tick
+has moved since the last flush, whichever comes first:
 
-- the dashboard drains the pooled block straight from an SPSC ring on `Dashboard::onDisplayTick`
-  — no copy;
-- the asynchronous sinks below share a single detached, trimmed copy of the same block
-  (`clone_block_trimmed`), made once per flush and only when at least one sink is active (cached
-  in `m_anyAsyncSink`):
-  - the CSV and MDF4 (Pro) export workers,
-  - the Historian (Pro),
-  - the API server (port 7777, MCP and legacy JSON-RPC),
-  - the gRPC server (when built with `ENABLE_GRPC`),
-  - the MQTT bridge (Pro).
+- The dashboard drains the pooled block from an SPSC ring on `Dashboard::onDisplayTick`, with no
+  copy.
+- The asynchronous sinks share one detached, trimmed copy of the same block, made once per flush
+  and only when at least one sink is active:
+  - CSV export (free; **CSV Spreadsheet** under **Data Export** in **Device Setup**; unavailable in **Console Only (No Parsing)** mode).
+  - MDF4 export (Pro; **MDF4 Recording** under **Data Export**).
+  - The Historian (Pro; **Historian Database** under **Data Export**).
+  - The MQTT publisher (Pro; **Enable Publishing** in the Project Editor's **MQTT Publisher** node,
+    see [MQTT Publisher](MQTT-Publisher.md)).
+  - The API Server (off by default; port 7777; see [API Reference](API-Reference.md)).
+  - The gRPC server (port 8888; runs only while the API Server is enabled and only in builds with
+    gRPC).
 
-The pipeline thread is the single producer for every one of those consumers. The dashboard never
-copies the block; the trimmed copy exists so a slow export backlog can't pin the pool slot the
-dashboard is reading. Export workers run on dedicated threads and consume from lock-free queues,
-so writing to disk or the network never blocks the dashboard.
+The pipeline thread is the single producer for every consumer. The trimmed copy exists so a slow
+export backlog can't pin the pool slot the dashboard is reading. Export workers run on dedicated
+threads and consume from lock-free queues, so writing to disk or the network never blocks the
+dashboard or the pipeline.
 
 ## Timestamp ownership
 
-The driver owns time. Every component downstream of the driver propagates the timestamp
-attached to the captured chunk; nothing in the pipeline calls `steady_clock::now()` to stamp a
-frame after the fact.
+Each chunk is stamped with the time it arrived, at the driver. Nothing downstream calls
+`steady_clock::now()` to stamp a frame after the fact.
 
-- `IO::CapturedData` carries the chunk timestamp.
-- `FrameReader::frameTimestamp(endOffsetExclusive)` walks pending chunks to assign each
-  extracted logical frame the correct moment, advancing the per-chunk clock by `frameStep`.
-- `FrameBuilder` interpolates timestamps when one chunk expands into multiple frames, but only
-  to the resolution of the driver's `frameStep` — see the note in [Stage
-  4](#stage-4-frame-builder-parser-and-transforms) above.
-- Export workers derive strictly-increasing offsets via
-  `FrameConsumerWorkerBase::monotonicFrameNs(frame->timestamp, baseline)`. That helper is a
-  safety net against same-nanosecond collisions on coarse clocks (Windows `steady_clock` has
-  about 15 ms resolution); it is not the source of truth.
+When one read returns several frames, as UART does at high rates, they all get nearly the same
+timestamp. `frameStep` defaults to 1 ns and is clamped to at least 1 ns. Only drivers that know
+their cadence set a real value. Audio does: it spaces the frames of a buffer by the sample rate
+and backdates the chunk start so each sample lines up with when it was captured. On UART,
+network, BLE, CAN, Modbus and MQTT, all frames from one chunk land within nanoseconds of the
+arrival instant.
 
-If timing looks wrong on a chart or in an export, work from left to right: driver stamp,
-`CapturedData` propagation, FrameReader split, FrameBuilder fan-out, and only then the
-export or report. Patching a downstream stage to "fix" timing usually masks an earlier bug.
+If timestamps look wrong in a chart or an export, check how the driver stamps the chunk first. The
+parser and transforms never change time.
 
 ## Performance characteristics
 
-The acquisition pipeline is designed around three rules:
+Steady-state frames allocate nothing, and the dashboard reads the pooled block without copying it.
 
-1. **No allocations after init.** `FrameBuilder` reuses one `Frame` per source as a staging
-   buffer, and draws each `DataBlock` from a fixed-size slot pool (`claimBlockSlot`) as an
-   aliasing shared_ptr that shares the slot's control block (no deleter, no per-block control
-   block), with columns pre-sized once at bind; a slot is recycled once its use_count drops
-   back to 1, detected by a probe at the next `claimBlockSlot`.
-   Parser engines are compiled once, `CircularBuffer` and lock-free queues are pre-sized,
-   and per-source transform engines are looked up once per source switch (not per dataset).
-2. **No copy on the dashboard path.** The dashboard draws the pooled `DataBlock` directly. The
-   only block copy is the single trimmed one made for the asynchronous export sinks
-   (`clone_block_trimmed`), and only when one is active (gated on `m_anyAsyncSink`), so a slow
-   sink can't pin the slot pool.
-3. **No queued connections between pipeline-thread objects.** Direct connections turn signal
-   emissions into ordinary function calls; the only queued hops on the frame path are the
-   chunk-rate crossing in from the driver and the display-tick-rate crossing out to the GUI.
+The cost per frame is dominated by your code: the parser call, plus one transform call per
+dataset that defines one. The dashboard widget update path is rate-capped by the UI refresh rate
+(**Preferences > Plotting > UI Refresh Rate (Hz)**, default 60, range 1 to 240). Every frame is
+still parsed and exported; only the visual refresh is throttled.
 
-The cost per frame is dominated by:
-
-- The parser call (`parse`), which the user controls.
-- The transform calls, one per dataset that defines a transform, again user-controlled.
-- The dashboard widget update path, which is rate-capped by the UI refresh rate (default
-  60 Hz, configurable from 1 Hz to 240 Hz). Every frame is still parsed and exported; only
-  the visual refresh is throttled.
-
-To measure this pipeline end-to-end on your own hardware, the [Benchmark Dialog](Benchmark.md)
-(About > Benchmark) drives the real `FrameReader` -> `FrameBuilder` -> consumer chain and
-reports sustained frames/second per stage and per parser language, gated against the targets
-above. The same engine runs headless for CI; see
+The [Benchmark](Benchmark.md) (About > Benchmark) drives the real `FrameReader`,
+`FrameBuilder` and consumer chain and reports sustained frames per second per stage and per
+parser language. The same engine runs headless for CI; see
 [Command-Line Interface](Command-Line-Interface.md#acquisition-pipeline-benchmark).
 
 ### SIMD instruction set
 
 The vector kernels that scan the byte stream for frame delimiters, reduce plot minima and
 maxima, and compute FFT magnitudes and waterfall rows are written once per instruction set and
-picked at startup. On x86-64 the candidates are Scalar, SSE4 and AVX2; on ARM64 they are Scalar
-and NEON. Serial Studio detects what the processor supports and runs the widest one.
+picked at startup. They are available in every build. On x86-64 the candidates are Scalar, SSE4
+and AVX2; on ARM64 they are Scalar and NEON. Serial Studio detects what the processor supports
+and runs the widest one.
 
 **Preferences > Startup > System > SIMD Instruction Set** overrides that choice. The list holds
-`Auto`, labelled with the level it currently resolves to, plus every level this machine supports;
-selecting one applies it immediately and persists it, and no restart is needed because every level
-produces bit-identical numbers. A level the machine cannot run is never offered, and a preference
-carried over from another machine falls back to `Auto` without rewriting the setting.
+`Auto`, labelled with the level it currently resolves to, plus every level this machine supports.
+Selecting one applies it immediately and persists it, with no restart. A level the machine cannot
+run is never offered, and a preference carried over from another machine falls back to `Auto`
+without rewriting the setting.
 
-`--simd <level>` pins the level for one run without touching the saved preference, which is the way
-to compare lanes or to rule the kernels out while diagnosing a numeric difference. See
+`--simd <level>` pins the level for one run without touching the saved preference, which is the
+way to compare lanes or to rule the kernels out while diagnosing a numeric difference. See
 [Command-Line Interface](Command-Line-Interface.md#general).
-
-## Where the parser and transforms fit
-
-The parser and transforms are the user-visible parts of the pipeline. Everything else is
-fixed; the parser and transforms are where you add custom protocol logic and signal
-conditioning without rebuilding the application.
-
-```mermaid
-flowchart LR
-    R["Raw bytes<br/>from FrameReader"] --> D["Decoder"]
-    D --> P["parse(frame)<br/>Lua or JavaScript"]
-    P --> V["Raw values array"]
-    V --> T1["Dataset 1<br/>transform(value)"]
-    V --> T2["Dataset 2<br/>transform(value)"]
-    V --> T3["Dataset N<br/>transform(value)"]
-    T1 --> F["Final frame<br/>(shared with all consumers)"]
-    T2 --> F
-    T3 --> F
-```
-
-A few things to keep in mind:
-
-- The parser runs once per frame; transforms run once per frame *per dataset that defines
-  one*. Heavy work in a transform that runs at 10 kHz across 50 datasets adds up quickly.
-- Transforms can read raw values from any dataset and final values from datasets that come
-  earlier in group / dataset order; reading a later dataset's final value returns the
-  previous frame's result. They can also publish to computed variables in the
-  project's [Variables tables](Variables.md), which other transforms can then read, in the
-  same frame or in any later frame, since computed variables persist.
-- Computed variables hold their last written value indefinitely. For per-dataset state
-  isolated from other datasets, transform-local upvalues (top-level `local` in Lua,
-  top-level `var`/`let` in JavaScript) are still the lightest option.
-- A transform can return a string for label-style datasets. Non-finite numbers (`NaN`,
-  `Infinity`) and errors fall back to the raw value silently.
-
-For the full parser and transform API, see [Frame Parser Scripting](Frame-Parser.md) and
-[Dataset Value Transforms](Dataset-Transforms.md).
-
-## Debugging the pipeline
-
-| Symptom | Where to look |
-|---|---|
-| `[FrameReader] Frame queue full -- frame dropped` in the log | A downstream consumer is too slow. Check parser and transform CPU cost first; a transform that does HTTP calls or string-heavy work will saturate the path. |
-| Timestamps drift or cluster | Driver stamping. Check that the driver fills `frameStep` and that any cross-thread post captures `SteadyClock::now()` before queueing. |
-| Same-instant timestamps in CSV or the Historian | Coarse clock granularity (often Windows). The export-side monotonic helper preserves order, but per-frame resolution is hardware-bound. |
-| Parser appears to skip frames | Check the operation mode (Console-Only skips the parser by design) and the delimiter configuration. In multi-source projects, each source has its own parser engine; an error in one source does not affect the others. |
-| Transform changes don't take effect | Transforms are compiled once when the project loads or the connection opens. Re-open the connection or reload the project. |
-| High CPU but the dashboard is smooth | The bottleneck is upstream of the dashboard. Profile the parser and transforms; the dashboard refresh rate cap doesn't affect parser load. |
-
-## Threading invariants
-
-Treat these as load-bearing:
-
-- `FrameReader` and `FrameBuilder` run on `IO::PipelineHost`'s dedicated pipeline thread, never
-  the GUI thread. `FrameReader`'s configuration is immutable; recreate the reader to change
-  delimiters, decoder, or checksum.
-- `CircularBuffer` is single-producer / single-consumer. Never make it MPMC.
-- `Dashboard` is GUI-thread only. It drains the same pooled `DataBlock`s that export workers get
-  a trimmed copy of, from an SPSC ring on `Dashboard::onDisplayTick`, and reads dataset values
-  from the block directly.
-- Export workers (CSV, MDF4 (Pro), Historian (Pro), API, gRPC, MQTT (Pro)) consume from
-  lock-free queues on worker threads. They never block the pipeline thread or the GUI thread.
-
-If you're writing a plugin or a new driver, follow the existing drivers (see `BluetoothLE.h`
-and `BluetoothLE.cpp` as the canonical reference) and keep these invariants intact.
 
 ## See also
 
-- [Data Flow](Data-Flow.md): the user-facing version of this pipeline, with troubleshooting tips.
+- [Data Flow](Data-Flow.md): a plainer overview of the same pipeline.
+- [Threading and Timing Guarantees](Threading-and-Timing.md): why the pipeline runs on its own
+  thread.
 - [Frame Parser Scripting](Frame-Parser.md): full Lua and JavaScript `parse()` reference.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset calibration, filtering, and
   unit conversion.
 - [Variables](Variables.md): shared constants and computed variables used by transforms.
-- [Operation Modes](Operation-Modes.md): how Project File, Quick Plot, and Console-Only modes
+- [Operation Modes](Operation-Modes.md): how Project File, Quick Plot, and Console Only modes
   shape the pipeline.
-- [Benchmark Dialog](Benchmark.md): the interactive tool that drives this exact pipeline and
-  reports its sustained throughput against the 256 kHz gates.
+- [Benchmark](Benchmark.md): the interactive tool that drives this pipeline and reports
+  its sustained throughput against the 256 kHz gates.
 - [Communication Protocols](Communication-Protocols.md): protocol comparison and per-driver
   setup.
-- [API Reference](API-Reference.md): how the API server consumes the same shared frame
-  object.
+- [API Reference](API-Reference.md): how the API server consumes the same shared frame object.

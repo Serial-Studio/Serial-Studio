@@ -1,32 +1,37 @@
 # Process I/O Driver (Pro)
 
-Process I/O is a Serial Studio Pro feature that lets Serial Studio ingest data from any external program. It has two modes:
+You have a Python script, a command-line tool or another program that prints your readings, and no built-in driver fits it. Process I/O runs that program and reads what it prints, as if the bytes had arrived from a serial port. If your Arduino or ESP32 sits on a USB serial port, use the [UART driver](Drivers-UART.md) instead.
 
-- **Launch mode.** Serial Studio spawns a child process and reads its standard output. The child can be a shell script, a Python program, `socat`, `nc`, or anything else that writes bytes to stdout.
-- **Named pipe mode.** Serial Studio reads from a named pipe (a FIFO on Linux/macOS, a Windows named pipe on Windows), creating it when it does not already exist. The producer is whatever process opens the same pipe for writing.
+Process I/O is a Pro feature. Without an active license or trial the driver is unavailable. The first time you use a Pro feature, Serial Studio asks Yes or No whether to start a trial; registering the trial needs an internet connection. See [Pro vs Free](Pro-vs-Free.md).
 
-This is the catch-all transport. When no built-in driver fits a device but a script can emit bytes for it, the Process I/O driver bridges the gap.
+In the Setup pane, choose the Process I/O driver, then set **Mode**:
 
-## Process I/O basics
+- **Launch Process** (Launch mode). Serial Studio starts a program and reads what it prints to standard output (stdout), the same stream `Serial.println` feeds on an Arduino. A shell script or a Python program works.
+- **Named Pipe** (Named pipe mode). A named pipe is a file-like channel that one program writes into and another reads from. Serial Studio reads from it and creates it when it does not exist. The producer is whatever process opens the same path for writing.
 
-### Standard streams
+## Example: piping a Python data generator
 
-Every process on a Unix-like system, and on Windows, has three standard streams attached to it at startup:
+Save this as `sine.py`. It prints two CSV values about 100 times a second:
 
-- **stdin** (file descriptor 0). Input.
-- **stdout** (file descriptor 1). Normal output.
-- **stderr** (file descriptor 2). Error output.
+```python
+import time, math
+t = 0
+while True:
+    t += 0.01
+    print(f"{math.sin(t):.3f},{math.cos(t):.3f}", flush=True)
+    time.sleep(0.01)
+```
 
-By default these are connected to the terminal: keyboard for stdin, terminal display for stdout and stderr. They can be redirected to files, devices, or other processes. Pipes redirect the stdout of one process to the stdin of another.
+1. In the Setup pane, choose the **Process I/O** driver and set **Mode** to **Launch Process**.
+2. Set **Executable** to `python3` (use `python` or `py` on Windows if `python3` is not on PATH) and **Arguments** to the full path of `sine.py`.
+3. Set **Operation Mode** to Quick Plot, which plots comma-separated values with no project file (see [Operation Modes](Operation-Modes.md)).
+4. Click Connect. Serial Studio asks **Allow this project to launch programs?**; answer Yes (see [launch consent](#launch-consent)).
 
-When Serial Studio launches a child process in Launch mode, it captures the child's stdout and treats every byte the child writes as if it had arrived from a serial port. The child is a black box that produces bytes.
+Two lines, a sine and a cosine, start plotting. If the plot stays flat, the script is still holding its output back; the `flush=True` is what prevents that (see [Common pitfalls](#common-pitfalls)). For step-by-step setup, see the [Protocol Setup Guides, Process I/O section](Protocol-Setup-Guides.md).
 
-### Pipes
+## How Process I/O works
 
-A **pipe** is an in-memory unidirectional byte channel between two processes. Two flavors:
-
-- **Anonymous pipe.** Created at process-spawn time, accessible only to parent and child through inherited file descriptors. The shell `|` operator creates anonymous pipes.
-- **Named pipe (FIFO).** Has a path in the filesystem. Any process with the right permissions can open it for reading or writing. On Unix it is created with `mkfifo /tmp/mypipe`. Windows has its own named-pipe API with paths like `\\.\pipe\mypipe`.
+Serial Studio treats whatever the program writes to stdout as incoming bytes. Data you send from the console goes to the program's standard input (stdin). In Launch mode, stderr is shown in the console only and is never parsed as frames, so a program that logs diagnostics to stderr does not corrupt your data.
 
 ```mermaid
 flowchart LR
@@ -41,43 +46,26 @@ flowchart LR
     end
 ```
 
-Use Launch mode when Serial Studio is the parent and a fresh process should start with each connection. Use Named pipe mode when the producer is already running, when multiple producers may write to the same pipe, or when the same data feed needs to be readable by multiple consumers.
-
-### What can you pipe in?
-
-Practically anything that produces bytes:
-
-- A Python script reading a custom binary protocol over UDP and translating to CSV.
-- `socat` bridging a non-standard transport into stdout.
-- `nc` reading from a network socket.
-- A shell pipeline doing format conversion (`somecmd | sed | awk`).
-- An MQTT client subscribing to a topic and writing the payloads to stdout.
-- A gRPC client converting protobuf messages to JSON lines.
-- A simulation script generating synthetic telemetry for development.
-
-Process I/O is the right driver when the device's transport is exotic but the data itself is text or binary that Serial Studio's frame parser can handle.
-
-## How Serial Studio uses it
-
-In Launch mode the child runs under `QProcess` on the main thread, with event-driven reads, so nothing blocks. In Named pipe mode a dedicated thread runs a polled read loop (4 KB reads), so a quiet pipe does not stall the UI. Either way, each chunk of bytes is timestamped at read time before it reaches the FrameReader. See [Threading and Timing Guarantees](Threading-and-Timing.md).
+Use Launch mode when a fresh process should start with each connection. Use Named pipe mode when the producer is already running. Serial Studio timestamps each chunk when it reads it, so a slow producer does not distort the time axis; see [Threading and Timing Guarantees](Threading-and-Timing.md).
 
 ### Launch mode configuration
 
+In the Setup pane, with the Process I/O driver selected, set **Mode** to **Launch Process**.
+
 | Setting | Controls |
 |---------|----------|
-| **Mode** | Launch Process |
 | **Executable** | Path to the program to run, or a bare name resolved against PATH plus common install directories that GUI apps often miss (Homebrew, `/usr/local/bin`, `~/.local/bin`, snap and Flatpak exports on Linux; `WindowsApps` and Scoop shims on Windows) |
 | **Arguments** | Command-line arguments (whitespace-separated; wrap an argument that contains spaces in double quotes) |
 | **Working Dir** | The directory the child should be spawned in (cwd); optional |
 
-On connect, Serial Studio spawns the child process and reads its output until the child exits or the user disconnects. The child runs with merged output channels, so anything the child writes to stderr is captured alongside stdout and treated as incoming data. The extra search directories are also appended to the child's PATH, so a script that spawns `python3` or similar finds it even when Serial Studio was launched from a desktop shortcut. Data sent from the console is written to the child's stdin.
+The extra search directories are also appended to the child's PATH, so a script that spawns `python3` or similar finds it even when Serial Studio was launched from a desktop shortcut.
 
 ### Launch consent
 
-Launch mode runs a program with your account's privileges, so it asks before it starts one. The first time a project starts its Process I/O program, Serial Studio asks **Allow this project to launch programs?** and names the program. This is the same per-project consent a Control Loop's `system.exec` needs. It applies whatever chose the program or triggered the start: the Connect button, an API connect, a reconnect, a project load, or a program set through the API.
+Process I/O Launch mode runs a program with your account's privileges, so it asks before it starts one. The first time a project starts its program, Serial Studio asks **Allow this project to launch programs?** and names the program. Click Yes; the answer is remembered for that project file, so later connects of that project do not ask again. The prompt appears whatever triggered the start: the Connect button, an API connect, a reconnect, a project load, or a program set through the API. A Control Loop's `system.exec` needs the same per-project consent.
 
-- **Yes** starts the program, and the connect that was refused while the prompt was open is retried once. Later connects of that project do not ask again; the answer is remembered per project file.
-- **No** blocks the start. It holds until the project is reopened or Serial Studio restarts.
+- **Yes** starts the Process I/O program, and the connect that was refused while the prompt was open is retried once.
+- **No** blocks the Process I/O launch until you reopen the project or restart Serial Studio.
 - After a remote API client changes the project's scripts or program, or loads a project, the project's remembered answer is cleared once per session, so the next start asks again. Once you answer yes again, later remote changes in the same session leave it granted.
 - In a headless run, a project named on the command line (`--headless`) may launch its programs for that run without a prompt. Any other headless start is denied unless `SERIAL_STUDIO_API_AUTO_CONSENT=1` is set.
 
@@ -85,46 +73,27 @@ Named pipe mode starts no program and never asks.
 
 ### Named pipe mode configuration
 
+In the Setup pane, with the Process I/O driver selected, set **Mode** to **Named Pipe**.
+
 | Setting | Controls |
 |---------|----------|
-| **Mode** | Named Pipe |
 | **Pipe Path** | Filesystem path (Linux/macOS) or pipe name (Windows) |
 
 Named pipe mode is read-only; the write path (console send) only exists in Launch mode.
 
-For Linux/macOS, if the path does not already exist Serial Studio creates the FIFO for you (with `0600` permissions) when you connect. If the path exists but is not a FIFO, the connection fails with a Pipe Error. You can also create the FIFO yourself beforehand:
+For Linux/macOS, if the path does not already exist Serial Studio creates the FIFO for you (with `0600` permissions) when you connect. If the path exists but is not a FIFO, the connection fails with a **Pipe Error** dialog. You can also create the FIFO yourself beforehand:
 
 ```sh
 mkfifo /tmp/serialstudio_in
 ```
 
-For Windows, name the pipe with the standard prefix: `\\.\pipe\serialstudio_in`. On Windows Serial Studio acts as the pipe server and always creates the named pipe (byte mode, inbound only), then waits for a writer to connect.
+For Windows, name the pipe with the standard prefix: `\\.\pipe\serialstudio_in`. A Unix-style path makes pipe creation fail with a **Pipe Error** dialog. On Windows the pipe accepts one writer, and on Linux/macOS several writers can share one FIFO, but only Serial Studio should read it because a second reader steals bytes. On Windows Serial Studio acts as the pipe server and always creates the named pipe (byte mode, inbound only), then waits for a writer to connect. The connection stays in the connecting state until a writer opens the pipe. On Linux/macOS it reports connected as soon as the FIFO is open for reading.
 
-The **Pick Running Process…** button lists running processes and pre-fills **Pipe Path** with a name derived from the chosen process (`/tmp/ss-<name>.fifo` or `\\.\pipe\ss-<name>`). The producer still has to open and write that path itself.
-
-### Example: piping a Python data generator
-
-A simple Python sender that publishes CSV-shaped frames at 100 Hz:
-
-```python
-import time, math, sys
-t = 0
-while True:
-    t += 0.01
-    v1 = math.sin(t)
-    v2 = math.cos(t)
-    print(f"{v1:.3f},{v2:.3f}")
-    sys.stdout.flush()
-    time.sleep(0.01)
-```
-
-In Launch mode, set Executable to `python3` (the bare name resolves against PATH) and Arguments to the script path. Connect, switch to Quick Plot mode, and the two sine/cosine signals will plot.
-
-For step-by-step setup, see the [Protocol Setup Guides, Process I/O section](Protocol-Setup-Guides.md).
+In Named Pipe mode, **Pick Running Process…** lists running processes and fills **Pipe Path** with `/tmp/ss-<name>.fifo` (Windows: `\\.\pipe\ss-<name>`), where `<name>` is the process name lowercased with characters other than letters, digits, `_` and `-` replaced by `_`. The producer still has to open that path itself.
 
 ### Remote API commands
 
-The TCP API and the in-app AI assistant configure this driver through the `io.process.*` scope:
+With the API Server enabled (off by default, TCP port 7777), the TCP API and the in-app AI assistant configure this driver through the `io.process.*` scope. Paths are checked against the API path policy described in the [API Reference](API-Reference.md).
 
 | Command | Parameters | Notes |
 |---------|------------|-------|
@@ -136,37 +105,28 @@ The TCP API and the in-app AI assistant configure this driver through the `io.pr
 | `io.process.listRunning` | none | Refreshes and returns running processes as `name [pid]` |
 | `io.process.getConfig` | none | Returns mode, executable, arguments, workingDir, pipePath |
 
-These commands only set the program. Starting it asks the [launch consent](#launch-consent), whoever set the program, so a remote client that points a source at a program still cannot run it without your answer.
+These commands configure the driver; none of them starts a program. Starting it asks the [launch consent](#launch-consent), whoever set the program, so a remote client that points a source at a program still cannot run it without your answer.
 
 Transport details are in the [API Reference](API-Reference.md); command safety tiers are in [AI Assistant](AI-Assistant.md#the-safety-tiers).
 
 ## Common pitfalls
 
-- **No data appears.** The child is usually buffering its own output. Standard-library functions block-buffer stdout (typically 4 KB or more) when it is not attached to a terminal. Force a flush after each line: in Python use `print(..., flush=True)` or `sys.stdout.flush()`; in C use `fflush(stdout)`; for programs you cannot modify, `stdbuf -oL my_program` (Linux coreutils) forces line-buffered output.
+- **Nothing plots and the child is running.** The child is buffering its own output. Most runtimes (C stdio, Python `print`) block-buffer stdout when it is a pipe instead of a terminal, so nothing arrives until the buffer fills. Force a flush after each line: in Python use `print(..., flush=True)`; in C use `fflush(stdout)`; for programs you cannot modify, `stdbuf -oL my_program` (Linux coreutils) forces line-buffered output.
 - **"Waiting for permission to launch" or "was denied for this project".** The [launch consent](#launch-consent) prompt is open, or it was answered no. Answer the prompt (a yes retries the connect), or reopen the project to be asked again after a no.
+- **"Failed to start process" or `Executable "X" not found in PATH.`** The name did not resolve. Give the full path to the executable.
 - **Child process exits immediately.** Serial Studio drains any remaining output, shows a dialog titled `Process "<name>" stopped`, with the exit code, and disconnects. Run the child from a normal terminal first to confirm it starts.
-- **Path issues.** Spaces and Unicode in executable paths or arguments can be misparsed. The arguments field is split with `QProcess::splitCommand`, which groups double-quoted substrings into one argument; single quotes are not special. Wrap an argument that contains spaces in double quotes.
-- **Working directory matters.** Some programs read configuration files relative to their working directory. Set the Working Directory field accordingly.
+- **Arguments with spaces.** The Arguments field splits on whitespace: wrap an argument that contains spaces in double quotes; single quotes are not special. Some programs read files relative to their working directory, so set **Working Dir** when yours does.
 - **Permission denied on the pipe.** On Linux/macOS, the FIFO inherits filesystem permissions. `chmod 666 /tmp/mypipe` opens it to all users; tighter permissions require both reader and writer to share a user or group.
-- **Data stops after the writer exits.** Closing the write end of the pipe ends the read loop, and the session does not resume when a new writer opens the pipe. Disconnect and reconnect to wait for the next writer.
-- **Pipe buffer fills up.** Linux pipes have a small buffer (typically 64 KB). If the writer outruns Serial Studio, the writer blocks until the reader catches up. This is normal flow control. For real-time critical paths, send bytes through a TCP socket instead (see [Drivers: Network](Drivers-Network.md)).
-- **Windows-specific pipe path syntax.** On Windows, the pipe must be named `\\.\pipe\<name>`. A Unix-style path causes pipe creation to fail, and Serial Studio reports a "Pipe Error" dialog.
-- **Process I/O is convenient but not free.** At very high data rates (hundreds of kHz), the cost of stdout buffering, the OS pipe, and the cross-thread queue becomes noticeable. Direct drivers are always cheaper. Process I/O is the right tool at moderate rates and for prototype or integration work.
+- **Data stops after the writer exits.** When the writer closes the pipe, Serial Studio disconnects and shows a **Pipe Closed** dialog. Click Connect again to wait for the next writer. See [Named pipe mode configuration](#named-pipe-mode-configuration) for the writer rules.
+- **Pipe buffer fills up.** Linux pipes buffer 64 KB by default, and a writer that outruns Serial Studio blocks until the reader catches up. If the producer must never block, use a TCP socket (see [Drivers: Network](Drivers-Network.md)).
 
 ## Further reading
 
 - [subprocess (Python Standard Library)](https://docs.python.org/3/library/subprocess.html)
-- [Inter-process Communication: Pipes (OCaml UNIX)](https://ocaml.github.io/ocamlunix/pipes.html)
-- [Inter Process Communication, Named Pipes (TutorialsPoint)](https://www.tutorialspoint.com/inter_process_communication/inter_process_communication_named_pipes.htm)
-- [Inter-process Communication CS 217 (Princeton, PDF)](https://www.cs.princeton.edu/courses/archive/spr04/cos217/lectures/Communication.pdf)
-- [Python and Pipes (Lyceum Allotments)](https://lyceum-allotments.github.io/2017/03/python-and-pipes-part-5-subprocesses-and-pipes/)
 
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step Process I/O setup, with both Launch and Named pipe examples.
-- [Devices](Devices.md): driver capability summary across all transports.
-- [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Operation Modes](Operation-Modes.md): Quick Plot is the easiest way to visualize ad-hoc CSV from a script.
-- [Use Cases](Use-Cases.md): bridging exotic transports through helper processes.
-- [Drivers: Network](Drivers-Network.md): for higher-rate streaming when a pipe isn't enough.
 - [Frame Parser Scripting](Frame-Parser.md): for parsing whatever your producer emits.
+- [Drivers: Network](Drivers-Network.md): for higher-rate streaming when a pipe isn't enough.

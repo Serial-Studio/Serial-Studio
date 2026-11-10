@@ -1,16 +1,16 @@
 # About Serial Studio
 
-Background, philosophy, and history of the project. Useful if you want to know who wrote it, why it exists, and how it ended up the shape it is now.
+If your Arduino or ESP32 prints lines like `21.5,48,1013` with `Serial.println`, Serial Studio plots them in Quick Plot mode with no setup. To plot your first line, open [Getting Started](Getting-Started.md); [Pro vs Free](Pro-vs-Free.md) lists what each edition includes. The rest of this page is project history and an overview of the 4.x feature set.
 
 ## Author
 
-Serial Studio is built by **Alex Spataru** (`alex@serial-studio.com`). The project started as a one-person tool for satellite and rover ground-station work, and is still primarily developed by Alex, with contributions from the open-source community on [GitHub](https://github.com/Serial-Studio/Serial-Studio). Anyone can read the source, file issues, and submit patches under GPL-3.0. The optional Pro edition funds full-time development.
+Serial Studio is built by **Alex Spataru**. The project started as a one-person tool for satellite and rover ground-station work, and is still primarily developed by Alex, with contributions from the open-source community on [GitHub](https://github.com/Serial-Studio/Serial-Studio). Anyone can read the source, file issues, and submit patches under GPL-3.0. The optional Pro edition funds development.
 
 ## The problem that started it
 
 Before Serial Studio, Alex worked on a [CanSat competition](https://cansatcompetition.com/) and later on the [NASA Human Exploration Rover Challenge](https://www.nasa.gov/learning-resources/nasa-human-exploration-rover-challenge/) during college. The CanSat work came with its own ground-station software, custom-written for that competition's telemetry format. Every protocol tweak meant another late night in the dashboard code instead of on the hardware. The pattern repeated across teams and semesters: a microcontroller printed sensor values over a serial cable, and somebody had to build a custom GUI around them.
 
-The first attempt at a generic answer was a personal project called **SigLAB**. It worked. The data model was already protocol-agnostic, and the dashboard was already data-driven. The reason it was eventually renamed wasn't technical. Alex wanted the project to live under its own organization rather than buried in a personal list of side projects, with room for outside contributors and a clean GitHub identity.
+The first attempt at a generic answer was a personal project called **SigLAB**. It worked. The data model was already protocol-agnostic, and the dashboard was already data-driven. It was later renamed and moved to its own GitHub organization, with room for outside contributors.
 
 On October 18, 2020 the SigLAB codebase was imported into a new repository under [github.com/Serial-Studio](https://github.com/Serial-Studio). The literal first commit message in this repo is *"Initial commit from SigLAB codebase"*, and the project took on its current name.
 
@@ -20,11 +20,11 @@ The launch blog post, [*Introducing Serial Studio*](https://www.aspatru.com/blog
 
 ## Philosophy
 
-Three ideas have stayed constant since 2020.
+Three ideas have stayed constant since 2020:
 
-1. **One tool, many devices.** You should not have to write a new dashboard every time you swap microcontrollers. Describe the data once in a project file, and Serial Studio takes care of the visualization.
-2. **The microcontroller stays simple.** The original blog post offered two modes. *Auto* had the device send a self-describing JSON frame. *Manual* had the device send bare CSV with the dashboard layout living on the PC, so embedded code stayed small. Modern Serial Studio kept the *Manual* idea and grew it. Today's project files configure frame parsing entirely on the PC, so firmware can keep printing comma-separated numbers.
-3. **GPL core, optional Pro.** The base build (Serial/UART, TCP/UDP, Bluetooth LE, 17 widgets, Quick Plot, Project Editor, CSV export, Lua/JavaScript frame parsers) is GPL-3.0 and free forever. The Pro edition adds drivers and features that fund development without ever locking up what was already free. See [Pro vs Free](Pro-vs-Free.md) for the exact split.
+1. **One tool, many devices.** You should not have to write a new dashboard every time you swap microcontrollers. Describe the data once in a project file (a `.ssproj` you build in the Project Editor), and each comma-separated value becomes a dataset: one named number that gets a plot, gauge or bar.
+2. **The microcontroller stays simple.** The original blog post offered two modes: the device sent a self-describing JSON frame, or bare CSV with the dashboard layout living on the PC. Serial Studio kept the second idea (there is no Auto/Manual switch today). Project files configure frame parsing entirely on the PC. A frame parser is a small script that turns one line from your device into numbers, so firmware can keep printing comma-separated values.
+3. **GPL core, optional Pro.** The source is GPL-3.0. A GPL build compiled from source contains the free feature set: Serial/UART, TCP, UDP, WebSocket, HTTP, Bluetooth LE, the standard widgets (see [Widget Reference](Widget-Reference.md)), Quick Plot, the full Project Editor, CSV export, the API Server, and Lua/JavaScript frame parsers. The official binary adds the Pro features, which unlock with a license or the trial. Without a license it runs the free features with no time limit for personal, educational, and open-source use; commercial use needs Pro. The first time you use a Pro feature, Serial Studio asks whether to start a 14-day trial (Yes/No; it needs an internet connection to register). After the trial ends, the prompt offers activation or purchase. See [Pro vs Free](Pro-vs-Free.md).
 
 ## How the project evolved
 
@@ -32,94 +32,94 @@ Serial Studio grew driver-by-driver as users brought new hardware to it. Most ad
 
 ### Connectivity, in the order it landed
 
-- **Serial/UART (October 2020).** The original and still the most common transport. Inherited from SigLAB.
-- **Network sockets (early 2021).** TCP first, then UDP, with UDP multicast added in October 2021. Useful for running Serial Studio on a different machine from the device, or behind a network gateway. This was the moment "Serial Studio" stopped being literally about serial.
-- **MQTT (February–March 2021).** Both publisher and subscriber. The trigger was IoT users who wanted to bridge a fleet of devices through a broker rather than running a dedicated TCP listener per node.
-- **Bluetooth Low Energy (February 2022).** GATT services and characteristics, with shared discovery state across instances so the device list survives QML rebuilds. Brought in for wireless sensors and prototyping boards (ESP32, nRF52) without a USB cable attached.
-- **Audio input (July 2025).** Microphones, line-in, and any OS-level audio device, used as a high-rate analog input. The audio driver added the FFT pipeline that the rest of the dashboard now reuses, and pushed the codebase to handle 48 kHz+ sample rates without dropping frames.
-- **Modbus and CAN Bus (December 2025).** The first explicitly *industrial* drivers. Modbus TCP and RTU, with a register-map importer that turns vendor CSV/XML/JSON into a working project. CAN Bus uses Qt's SocketCAN/PCAN/Vector backends and includes a DBC importer so automotive `.dbc` files decode signals automatically.
-- **Raw USB via libusb (February 2026).** For devices that expose vendor-specific USB endpoints instead of a CDC serial profile. Common on logic analyzers, custom data acquisition boards, and some scientific instruments.
-- **HID and Process I/O (March 2026).** HID via hidapi for game controllers, custom HID firmware, and medical devices. Process I/O for piping data in from any external program: `socat`, `nc`, a Python script, anything that writes to stdout. Both shipped together as the "experimental" tier of drivers.
+The Edition column marks each driver Free or Pro. The table is partial; [Communication Protocols](Communication-Protocols.md) covers the rest, including free WebSocket and HTTP and Pro OPC UA.
+
+| Driver | Landed | Edition | What prompted it |
+|--------|--------|---------|------------------|
+| Serial/UART | October 2020 | Free | The original transport, inherited from SigLAB. |
+| TCP and UDP | early 2021 (UDP multicast October 2021) | Free | Running Serial Studio on a different machine from the device. This is when "Serial Studio" stopped being literally about serial. |
+| MQTT | February-March 2021 | Pro | IoT users who wanted to bridge a fleet of devices through a broker. Publisher and subscriber. |
+| Bluetooth Low Energy | February 2022 | Free | Wireless sensors and boards (ESP32, nRF52) without a USB cable. GATT services and characteristics. |
+| Audio input | July 2025 | Pro | Microphones and line-in as a high-rate analog input. It added the FFT pipeline the rest of the dashboard reuses. |
+| Modbus and CAN Bus | December 2025 | Pro | The first industrial drivers. Modbus TCP and RTU with a register-map importer; CAN Bus with a DBC importer. |
+| Raw USB (libusb) | February 2026 | Pro | Devices with vendor-specific USB endpoints instead of a CDC serial profile, such as logic analyzers and custom acquisition boards. |
+| HID and Process I/O | March 2026 | Pro | HID for game controllers and custom HID firmware; Process I/O for piping in output from `socat`, `nc`, or a Python script. |
 
 ### Visualization and analysis
 
-The widget set started with line plots, gauges, bar charts, and a GPS map in late 2020, and slowly grew into the current set of 23 widgets. The bigger inflection points were:
+The widget set started with line plots, gauges, bar charts, and a GPS map in late 2020, and slowly grew into the current widget set. The bigger inflection points were:
 
-- **XY plot** (November 2024) for arbitrary x/y mappings instead of time-on-x.
-- **3D plot** (May 2025). A hand-rolled CPU 2.5D painter, intentionally not Qt3D, so it works without a discrete GPU and still draws thousands of points smoothly.
-- **Image View** (live camera feed) and **Canvas widget** (a scriptable Canvas2D-style canvas driven by a JavaScript `paint(ctx, w, h)` callback, May 2026) for visualizations that don't fit any of the standard widgets.
-- **FFT Plot** and **Waterfall / spectrogram** (April 2026). They share the same per-dataset FFT settings, and the waterfall can also run in *Campbell mode*, where rows are placed by another dataset's value (e.g. RPM) for order-tracking analysis.
+- **XY plot** (November 2024, free) for arbitrary x/y mappings instead of time-on-x.
+- **3D plot** (May 2025, Pro). It renders on the CPU, not Qt3D, so it needs no discrete GPU.
+- **Image View** (Pro): live camera feed.
+- **Canvas widget** (Pro, May 2026): a scriptable Canvas2D-style canvas driven by a JavaScript `paint(ctx, w, h)` callback, for visualizations that don't fit any standard widget.
+- **FFT Plot** (free) and **Waterfall / spectrogram** (Pro), April 2026. They share the same per-dataset FFT settings.
 
 ### The 1.0 to 2.0 rewrite
 
 Serial Studio 1.x was a working dashboard, but the architecture had clear ceilings. Frame parsing was hard-coded around the JSON and CSV split from the original blog post, so any new frame layout meant patching C++ and shipping a new release. The UI was assembled out of the original SigLAB widgets and didn't scale cleanly as new visualizations were added.
 
-The 2.0 release was effectively a new application sharing a name with the old one. The whole UI was rebuilt from scratch on Qt Quick. Plotting moved to **Qwt**, which gave Serial Studio its first real headroom for fast time-series rendering. The biggest change was the addition of the **JavaScript frame parser**. Every project now carried a small `parse(frame)` function running inside a `QJSEngine`, so any framing convention (delimited, fixed-length, key/value, custom binary) could be handled without recompiling. That single decision is what turned Serial Studio from a CSV/JSON viewer into a general-purpose telemetry tool.
+The 2.0 release was effectively a new application sharing a name with the old one. The whole UI was rebuilt from scratch on Qt Quick. The biggest change was the **JavaScript frame parser**: every project carried a small `parse(frame)` function, so any framing convention (delimited, fixed-length, key/value, custom binary) could be handled without recompiling. It turned Serial Studio from a CSV/JSON viewer into a general-purpose telemetry tool.
 
 ### The 2.0 to 3.0 rewrite
 
-Where 2.0 was a UI and parser rewrite, 3.0 was a data-path rewrite. The IO layer dropped its singletons. `FrameBuilder` and `FrameReader` were redesigned around a lock-free single-producer/single-consumer pipeline. The dashboard moved to a zero-allocation acquisition pipeline that targets 256 kHz+ frame rates.
+Version 3.0 rebuilt the data path for speed. The frame pipeline was redesigned so the dashboard handles 256 kHz+ frame rates, and the CI benchmark gates on that figure. The visible feature set barely changed.
 
-Qwt was retired and replaced by **QtGraphs** plus a set of custom Qt Quick widgets. That removed a heavy third-party dependency, unified styling across the app, and let widgets share a single render loop with the rest of the QML scene. The visible feature set didn't change much across that boundary. The invisible one (throughput, memory behavior, threading, dependency footprint) changed completely.
-
-The 3.x line that followed (v3.0.0 in October 2024 through v3.2.7 in March 2026) was additive rather than another rewrite. The data-path work paid off as headroom, and the project spent that headroom on breadth. Most of the connectivity and visualization growth listed above landed here: Audio input and the FFT pipeline, the 3D and XY plots, and the first explicitly industrial drivers (Modbus and CAN Bus). Two changes from this period are worth calling out on their own. The dashboard became a small windowing environment: a taskbar and window manager arrived in mid-2025, so dashboard widgets could float, snap, and tile like application windows instead of living in one fixed grid (the "mini OS" feel the dashboard still has). And the first automation surface appeared: the MCP/TCP API (July 2025) opened the project and live data to external programs, the groundwork the next era built on.
+The 3.x line that followed (v3.0.0 in October 2024 through v3.2.7 in March 2026) was additive: the connectivity and visualization growth in the sections above landed here. A taskbar and window manager arrived in mid-2025, so dashboard widgets float, snap, and tile like application windows, and the API Server (MCP over TCP, July 2025) opened the project and live data to external programs.
 
 ### The 3.0 to 4.0 rewrite
 
-Where the 2.0 → 3.0 work was a data-path rewrite under a roughly fixed feature set, the 3.0 → 4.0 work (4.0 is the current HEAD) is a rewrite of *scope*. The aim shifted from "show telemetry well" to "run a workstation someone can be handed for a shift," and that pulled in the pieces an industrial deployment expects:
+Version 4.0 (the current release line) widened the scope from showing telemetry to running a station that an operator can use for a shift. It added:
 
-- A **shared data bus** (Variables) and **per-dataset transforms**, so calibration and derived values live in the project instead of in firmware. A **Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) engine** landed alongside JavaScript for both frame parsing and transforms.
-- A **Historian** with replay and PDF reports, so a run can be recorded, queried, and re-examined later.
-- **Output (control) widgets** and a **Control Loop / scripting SDK**, so Serial Studio can drive a device, not just read it.
-- **Operator deployments** and a **Project Lock**, so an engineer can hand a fixed dashboard to an operator without exposing the editor.
-- A **bidirectional AI integration**, where the same command surface is reachable by external agents (MCP/gRPC) and by an in-app assistant.
+- A shared data bus (Variables) and per-dataset transforms, so calibration and derived values live in the project instead of in firmware, plus a Lua engine (LuaJIT 2.1, 5.1 syntax) next to JavaScript for frame parsing and transforms.
+- A Historian with replay and PDF reports.
+- Output (control) widgets and a Control Loop scripting SDK, so Serial Studio can drive a device as well as read it.
+- Operator deployments and a Project Lock, so an engineer can hand a fixed dashboard to an operator without exposing the editor.
+- AI integration: external agents reach the same commands over MCP and gRPC, and an in-app assistant uses them too.
 
-None of this is a clean break the way the earlier rewrites were. The data path from 3.0 is unchanged and 3.x projects load as-is; what grew is the surface area around it. The sections below describe each piece.
+3.x projects load as-is.
 
 ## Where the project is now
 
-The features below are the 4.0 surface in detail. Together they are what turned Serial Studio from a viewer into a small industrial platform.
+### Variables: a shared data bus (Pro)
 
-### Variables: a shared data bus
+Datasets are no longer islands. Every project carries an auto-generated **system table** with `raw:<id>` and `final:<id>` variables for every dataset, plus user-defined tables of `Constant` (project-time) and `Computed` (per-frame) variables. Frame parsers, value transforms, and output widgets all read and write the same variables, so a sensor calibration is written once. See [Variables](Variables.md).
 
-Datasets are no longer islands. Every project carries an auto-generated **system table** with `raw:<id>` and `final:<id>` variables for every dataset, plus user-defined tables of `Constant` (project-time) and `Computed` (per-frame) variables. Frame parsers, value transforms, and output widgets all read and write the same variables, which means a sensor calibration written once is reusable everywhere. See [Variables](Variables.md).
+### Per-dataset value transforms (Pro)
 
-### Per-dataset value transforms
-
-Each dataset can carry a small Lua or JavaScript snippet, `function transform(value) → number`, that runs every frame. Transforms compile once when the project loads and call into a shared engine per source, so an EMA, a unit conversion, or a calibration curve costs roughly a function call per frame. Transforms can derive **computed datasets** (no frame index, computed entirely from other variables), which is how things like running averages, rate-of-change, and derived KPIs become first-class datasets. See [Dataset Value Transforms](Dataset-Transforms.md).
+Each dataset can carry a small Lua or JavaScript snippet that defines a `transform(value)` function returning a number. It runs every frame. Transforms compile once when the project loads. They can also derive computed datasets (no frame index, computed entirely from other variables), which is how running averages, rate-of-change, and derived KPIs become datasets of their own. See [Dataset Value Transforms](Dataset-Transforms.md).
 
 ### Output (control) widgets (Pro)
 
-Buttons, toggles, sliders, knobs, text fields, and a freeform Output Panel send data *back* to the device. Each one runs a JavaScript template (GCode, SCPI, Modbus, NMEA, CAN, SLCAN, GRBL, custom binary packets) to convert UI state into bytes. There's a Transmit Test Dialog so you can preview the wire output before firing the real command. Output controls require a Pro license. See [Output Controls](Output-Controls.md).
+Buttons, toggles, sliders, knobs, text fields, and a freeform Output Panel send data *back* to the device. Each one runs a JavaScript template to convert UI state into bytes, whether the device speaks GCode, Modbus, CAN, or a custom binary format. A Transmit Test Dialog previews the wire output before you send the real command. See [Output Controls](Output-Controls.md).
 
-### Control Loop and the scripting SDK
+### Control Loop and the scripting SDK (free)
 
-Output widgets cover button-press commands; the Control Loop covers automation. A project carries one `setup()` / `loop()` script, the same mental model as an Arduino sketch, that Serial Studio runs on a worker thread over the life of a connection. Through the I/O scripting SDK (`io.*`: device writes, `deviceWriteAndWait` handshakes, latest-frame capture, `dashboardTick`) the loop can send wake-up sequences, poll registers on a timer, keep a link alive, or step a state machine, without touching firmware. The loop runs off the acquisition pipeline and is bounded by a watchdog, so a slow script can't stall parsing or the UI. See [Control Loop](Control-Loop.md).
+The Control Loop is a `setup()` / `loop()` script, the same model as an Arduino sketch, that Serial Studio runs on a worker thread while a device is connected. Find it in the Project Editor under **Project Scripts > Control Loop**; a project carries one. Through the `io.*` scripting SDK the loop can send wake-up sequences, poll registers on a timer, or step a state machine, without touching firmware. A watchdog bounds each call, so a slow script can't stall parsing or the UI. The loop needs no license; some calls inside it (notifications, Variables tables) are Pro. See [Control Loop](Control-Loop.md).
 
 ### Historian (Pro)
 
-Serial Studio Pro can record sessions into a SQLite `.db` file. Parsed frames, raw bytes, table snapshots, and project metadata all live in one file. The Historian browses, tags, and exports sessions. The SQLite Player replays a stored session through the live FrameBuilder pipeline so dashboards and reports work identically on recorded data. Session Reports turn the same database into a styled PDF with cover, test info, summary, and per-parameter chart sections. See [Historian](Historian.md) and [Session Reports](Session-Reports.md).
+Serial Studio Pro can record sessions into a SQLite `.db` file. Parsed frames, raw bytes, table snapshots, and project metadata all live in one file. The Historian browses, tags, and exports sessions. The SQLite Player replays a stored session through the same path as live data so dashboards and reports work identically on recorded data. Session Reports turn the same database into a styled PDF with cover, test info, summary, and per-parameter chart sections. See [Historian](Historian.md) and [Session Reports](Session-Reports.md).
 
-### File transmission
+### File transmission (Pro)
 
-XMODEM, YMODEM, and ZMODEM are built in for firmware uploads, log retrieval, and any device that talks one of the classic file-transfer protocols. ZMODEM includes ZRPOS-based crash recovery. Ships in commercial builds only; GPL builds compiled from source do not include it. See [File Transmission](File-Transmission.md).
+XMODEM, YMODEM, and ZMODEM are built in for firmware uploads and log retrieval. ZMODEM resumes after an interrupted transfer. This is a Pro feature; builds compiled from source with GPL modules only do not include it. See [File Transmission](File-Transmission.md).
 
-### Operator deployments and Project Lock
+### Operator deployments (Pro)
 
-Two features aimed at the engineer-hands-off-to-operator workflow. A **deployment** is a saved native launcher (`.lnk` / `.app` / `.desktop`) that opens a specific project with a fixed set of runtime flags (toolbar hidden, optional auto-connect and fullscreen), so an operator gets a single-icon entry point instead of hunting for the right `.ssproj`. Generating a deployment requires a Pro license, and the target machine also needs a Pro build to launch it — a GPL build refuses the runtime flags a deployment writes and fails to launch instead. A **Project Lock** puts a password gate (salted PBKDF2-SHA256, stored in the project file) in front of the Project Editor, so an operator can run the dashboard but can't rewire parsers or move widgets mid-shift; Project Lock is available in all builds, not license-gated. Neither pretends to be a security boundary; both are about operator/engineer separation. See [Operator Deployments](Operator-Deployments.md) and [Project Lock](Project-Lock.md).
+A deployment is a saved native launcher (`.lnk` / `.app` / `.desktop`) that opens a specific project with a fixed set of runtime flags (toolbar hidden, optional auto-connect and fullscreen). The operator gets a single icon instead of hunting for the right `.ssproj`. Generating a deployment requires a Pro license, and the target machine also needs a Pro build: a GPL build refuses the runtime flags and fails to launch. See [Operator Deployments](Operator-Deployments.md).
+
+### Project Lock (all builds)
+
+A Project Lock puts a password gate (salted PBKDF2-SHA256, stored in the project file) in front of the Project Editor, so an operator can run the dashboard but can't rewire parsers or move widgets mid-shift. It is not license-gated. Project Lock and deployments are not security boundaries; they separate operator from engineer. See [Project Lock](Project-Lock.md).
 
 ### AI integration
 
-Two complementary surfaces:
+- **API Server, MCP over TCP (GPL build and Pro).** The API Server is off by default. Enable it under **Preferences > General > API & Plugins** and it listens on TCP port 7777. It is a JSON-RPC API with a large command set (the GPL build has a subset), wrapped in the Model Context Protocol so any MCP host (Claude Desktop, custom agents, automation scripts) can read live values, edit projects, and manage sessions. The gRPC server (port 8888) starts only while the API Server is enabled. See [API Reference](API-Reference.md) and [gRPC Server](gRPC-Server.md).
+- **In-app AI Assistant (Pro).** A bring-your-own-key chat panel that edits the project for you. Multiple providers are wired in: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, OpenRouter, and Mistral, plus any OpenAI-compatible local server (Ollama, llama.cpp, LM Studio, vLLM) for fully offline use. See [AI Assistant](AI-Assistant.md).
 
-- **MCP / TCP API on port 7777.** A JSON-RPC API with 360+ commands, wrapped in the Model Context Protocol so any MCP host (Claude Desktop, custom agents, automation scripts) can read live values, edit projects, control workspaces, manage sessions, and so on. A gRPC server exposes the same surface. See [API Reference](API-Reference.md) and [gRPC Server](gRPC-Server.md).
-- **In-app AI Assistant (Pro).** A bring-your-own-key chat panel that edits the project for you. Multiple providers are wired in: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, OpenRouter, and Mistral, plus any OpenAI-compatible local server (Ollama, llama.cpp, LM Studio, vLLM) for fully offline use. Mutating actions show an Approve/Deny card before they touch the project. See [AI Assistant](AI-Assistant.md).
-
-The Assistant uses the same command surface as the MCP API, so anything the API can do, the Assistant can do, and vice versa. The Assistant runs read-only commands automatically and asks for approval on anything that mutates the project. Connection control (connect/disconnect, `io.*` device settings) stays blocked unless the **Allow device control** toggle is on, and even then every such call requires an explicit confirmation, so a wrong answer cannot knock you offline mid-shift.
+The in-app AI Assistant (Pro) calls the same commands as the API Server. It runs read-only commands without asking. By default anything that changes the project shows an Approve/Deny card; the **Auto-approve edits** toggle in the Assistant panel's top bar settings menu lets reversible edits run without asking (off by default). Connection control (connect/disconnect, `io.*` device settings) stays blocked until you tick **Allow device control** in the same menu, and even then every such call asks for confirmation, so a wrong answer cannot knock you offline mid-shift.
 
 ## Where to learn more
 
-- **Source code and releases.** [github.com/Serial-Studio/Serial-Studio](https://github.com/Serial-Studio/Serial-Studio).
-- **Discussions and bug reports.** [GitHub Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions) and [Issues](https://github.com/Serial-Studio/Serial-Studio/issues).
-- **The original blog post.** [Introducing Serial Studio](https://www.aspatru.com/blog/introducing-serial-studio), December 29, 2020. Outdated in detail, but the motivation still applies.
-- **Author's site.** [aspatru.com](https://www.aspatru.com/).
+Source and releases are on [GitHub](https://github.com/Serial-Studio/Serial-Studio), questions go in [Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions), bugs in [Issues](https://github.com/Serial-Studio/Serial-Studio/issues), and [Getting Started](Getting-Started.md) walks you through a first project.

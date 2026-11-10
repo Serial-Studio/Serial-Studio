@@ -1,72 +1,54 @@
 # gRPC server
 
-## Table of contents
+## What gRPC does in Serial Studio
 
-- [Overview](#overview)
-- [Turning gRPC on](#turning-grpc-on)
-- [Service definition](#service-definition)
-- [Quick start (Python)](#quick-start-python)
-- [Quick start (grpcurl)](#quick-start-grpcurl)
-- [Generating client stubs](#generating-client-stubs)
-- [Frame streaming](#frame-streaming)
-- [External connections](#external-connections)
-- [Comparison with the TCP/JSON API](#comparison-with-the-tcpjson-api)
+The gRPC server is in the free edition and needs no license.
 
-## Overview
+Your Arduino prints values and Serial Studio plots them. gRPC is for the next step: a program of your own, in Python, Go, C++ or any other language, that reads those frames (one line of values from your device, parsed into fields) or controls Serial Studio. You do not need it to build a dashboard.
 
-Serial Studio exposes its entire API over gRPC on port 8888. The gRPC server starts automatically when the API server is enabled. Official Serial Studio downloads always include gRPC support; a binary built from source with the default CMake configuration (`ENABLE_GRPC=OFF`) omits the gRPC controls from Preferences and never opens port 8888. It provides:
-
-- **High-performance frame streaming.** Binary protobuf encoding is smaller and faster than JSON for the same frame.
-- **Typed service definition.** A full `.proto` file for code generation in any language.
-- **Server-streaming RPCs.** Real-time frame and raw data push, no polling.
-- **Cross-language support.** Python, C++, Go, Java, Rust, Node.js, C#, and more.
-
-The gRPC server shares the same command set as the [TCP/JSON API](API-Reference.md). Any command available on port 7777 can run over gRPC on port 8888.
+Serial Studio exposes its whole command set over gRPC, a binary protocol, on port 8888. A command is a named action such as `io.getStatus`, which reports whether a device is connected. Any command available on the [TCP/JSON API](API-Reference.md) (port 7777) also runs over gRPC.
 
 ## Turning gRPC on
 
-The gRPC server starts automatically whenever the API server is enabled:
+Port 8888 stays closed until the API Server is on, and the API Server is off by default. Until then a client gets "connection refused".
 
-1. Open **Preferences** (wrench icon or **Ctrl/Cmd+,**).
+1. Click **Preferences** in the toolbar.
 2. On the **General** tab, scroll to the **API & Plugins** section.
-3. Turn on **"Enable API Server (Port 7777)"**.
-4. Click **OK**.
+3. Turn on **Enable API Server**.
 
-Both the TCP/JSON server (port 7777) and the gRPC server (port 8888) start together.
+The toggle takes effect immediately. The TCP/JSON server opens on the port set in **API Server Port** (1024-65535, default 7777), and the gRPC server opens on port 8888 with it. The gRPC port is fixed and does not follow **API Server Port**. Turning the toggle off closes both. If another program already holds port 8888, Serial Studio shows an "Unable to start gRPC server" dialog ("Failed to bind to ...") and the gRPC server stays off.
 
-## Service definition
+> **Built from source?** gRPC is compiled in only with `-DENABLE_GRPC=ON`, and the CMake default is `OFF`. Without it, port 8888 never opens and the **Export Protobuf File** row is missing from **API & Plugins**. "Connection refused" on 8888 means the API Server toggle is off or the build lacks gRPC.
 
-The gRPC API is defined in [`doc/grpc/serialstudio.proto`](https://github.com/Serial-Studio/Serial-Studio/blob/master/doc/grpc/serialstudio.proto) in the Serial Studio repository (package `serialstudio`). Generate client stubs from that file:
+## Quick start (grpcurl)
 
-```protobuf
-service SerialStudioAPI {
-  rpc ExecuteCommand(CommandRequest) returns (CommandResponse);
-  rpc ExecuteBatch(BatchRequest) returns (BatchResponse);
-  rpc StreamFrames(StreamRequest) returns (stream FrameBatch);
-  rpc StreamRawData(StreamRequest) returns (stream RawBatch);
-  rpc WriteRawData(RawDataRequest) returns (CommandResponse);
-  rpc ListCommands(google.protobuf.Empty) returns (CommandList);
-}
+[grpcurl](https://github.com/fullstorydev/grpcurl) is a command-line gRPC client. Download [`serialstudio.proto`](https://github.com/Serial-Studio/Serial-Studio/blob/master/doc/grpc/serialstudio.proto) into the current folder first: the server does not offer reflection, so grpcurl needs the file to know the service.
+
+```bash
+# List available commands
+grpcurl -plaintext -import-path . -proto serialstudio.proto \
+  -d '{}' localhost:8888 serialstudio.SerialStudioAPI/ListCommands
+
+# Execute a command
+grpcurl -plaintext -import-path . -proto serialstudio.proto \
+  -d '{"command":"io.getStatus","id":"1"}' \
+  localhost:8888 serialstudio.SerialStudioAPI/ExecuteCommand
+
+# Stream frames (Ctrl+C to stop)
+grpcurl -plaintext -import-path . -proto serialstudio.proto \
+  -d '{}' localhost:8888 serialstudio.SerialStudioAPI/StreamFrames
 ```
 
-| RPC               | Description |
-|-------------------|-------------|
-| `ExecuteCommand`  | Execute a single API command and get the result. |
-| `ExecuteBatch`    | Execute multiple commands in one request. |
-| `StreamFrames`    | Server-streaming RPC that pushes parsed frames in real time. |
-| `StreamRawData`   | Server-streaming RPC that pushes raw bytes from the device. |
-| `WriteRawData`    | Send raw bytes to the connected device. |
-| `ListCommands`    | List all available API commands. |
+`ListCommands` returns every command name you can pass to `ExecuteCommand`. The [API Reference](API-Reference.md) describes each one. `io.getStatus` reports whether a device is connected. `StreamFrames` prints nothing until a device sends data.
 
 ## Quick start (Python)
 
-Install the gRPC Python packages:
+Connect a device, or start a project that produces frames, before running the streaming loop (see [Getting Started](Getting-Started.md)). Download `serialstudio.proto` as in the grpcurl quick start, then install the packages and generate the stubs:
 
 ```bash
 pip install grpcio grpcio-tools
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. serialstudio.proto
 ```
-
-Connect and execute commands:
 
 ```python
 import grpc
@@ -76,69 +58,41 @@ import serialstudio_pb2_grpc as rpc
 channel = grpc.insecure_channel('localhost:8888')
 stub = rpc.SerialStudioAPIStub(channel)
 
-# Execute a command
-resp = stub.ExecuteCommand(pb.CommandRequest(
-    id="1", command="io.getStatus"))
+resp = stub.ExecuteCommand(pb.CommandRequest(id="1", command="io.getStatus"))
 print(resp.result)
 
-# Stream frames in real-time (each message is a FrameBatch)
+# Each message is a FrameBatch
 for batch in stub.StreamFrames(pb.StreamRequest()):
     for frame in batch.frames:
-        print(frame.frame)  # protobuf Struct, convertible to dict
+        print(frame.timestamp_ms, frame.frame)
 ```
 
-## Quick start (grpcurl)
+## Service definition
 
-[grpcurl](https://github.com/fullstorydev/grpcurl) is a command-line tool for interacting with gRPC servers:
+The service is `SerialStudioAPI` in package `serialstudio`, defined in [`doc/grpc/serialstudio.proto`](https://github.com/Serial-Studio/Serial-Studio/blob/master/doc/grpc/serialstudio.proto).
 
-```bash
-# List available commands
-grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/ListCommands
+| RPC               | Description |
+|-------------------|-------------|
+| `ExecuteCommand`  | Execute a single API command and get the result. |
+| `ExecuteBatch`    | Execute multiple commands in one request. |
+| `StreamFrames`    | Server-streaming RPC that pushes parsed frames in real time. |
+| `StreamRawData`   | Server-streaming RPC that pushes raw bytes from the device. Each message is a `RawBatch` whose `packets` hold `data` (bytes) and `timestamp_ms` (steady clock, as for `FrameData`). |
+| `WriteRawData`    | Send raw bytes to the connected device. |
+| `ListCommands`    | List all available API commands. |
 
-# Execute a command
-grpcurl -plaintext -d '{"command":"io.getStatus","id":"1"}' \
-  localhost:8888 serialstudio.SerialStudioAPI/ExecuteCommand
+**Limits**
 
-# Stream frames (Ctrl+C to stop)
-grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/StreamFrames
-```
-
-> **About the "Export Protobuf File" button.** The **Export…** button under
-> **Preferences → General → API & Plugins → Export Protobuf File** writes an auto-generated
-> *typed* schema (package `serialstudio.typed`, service `SerialStudioTypedAPI`) with one
-> request message and one RPC per registered command. Use it as machine-readable
-> documentation of every command's parameters. The running server implements only the
-> dynamic `SerialStudioAPI` service shown above, so generate client stubs from the repo's
-> `doc/grpc/serialstudio.proto`, not from the exported typed file.
-
-### The typed schema in the repository
-
-The same typed schema is checked in at
-[`doc/grpc/serialstudio-typed.proto`](https://github.com/Serial-Studio/Serial-Studio/blob/master/doc/grpc/serialstudio-typed.proto),
-so you can read it, diff it between releases, and run `protoc` over it without launching
-Serial Studio:
-
-```bash
-protoc -I. --python_out=. serialstudio-typed.proto
-```
-
-Field numbers in that file are stable. They come from a checked-in ledger
-(`app/rcc/api/proto-fields.json`) rather than from the order a command's parameters happen
-to sort in, so adding a parameter appends a new number and a removed parameter's number is
-retired with a `reserved` statement instead of being handed to something else. A number
-that once meant `title` keeps meaning `title`.
-
-Both files are generated. Do not edit them by hand; the commit pipeline regenerates them and
-CI fails on a hand-edited copy.
+| Limit | Value |
+|-------|-------|
+| Frames per `FrameBatch` | 4096 |
+| Payload of one `WriteRawData` | 1 MiB |
+| Server-side queue for frames and for raw data | 4096 entries each; when a queue is full, new entries are dropped |
 
 ## Generating client stubs
 
-Download `doc/grpc/serialstudio.proto` from the Serial Studio repository, then generate stubs for your language:
+Download `doc/grpc/serialstudio.proto` from the Serial Studio repository, then generate stubs for your language. The Python command is in the [Python quick start](#quick-start-python):
 
 ```bash
-# Python
-python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. serialstudio.proto
-
 # C++
 protoc -I. --cpp_out=. --grpc_out=. --plugin=protoc-gen-grpc=grpc_cpp_plugin serialstudio.proto
 
@@ -154,18 +108,19 @@ protoc -I. --csharp_out=. --grpc_out=. --plugin=protoc-gen-grpc=grpc_csharp_plug
 
 ## Frame streaming
 
-The `StreamFrames` RPC is the primary way plugins and external tools receive real-time data. The TCP/JSON server also pushes frames (as JSON lines broadcast to every connected client), but gRPC delivers them as compact binary messages on an explicit per-client stream, which holds up better at high frame rates.
+`StreamFrames` in the gRPC server (free edition) gives each client its own stream. The TCP/JSON server instead broadcasts JSON lines to every connected client. The server queues frames only while at least one client is streaming, so a client that connects late misses earlier frames, and frames sent while your stream is down are not replayed.
 
 ```python
-# Stream frames with automatic reconnection
 import time
+import grpc
+import serialstudio_pb2 as pb
 
 def stream_with_retry(stub):
     while True:
         try:
             for batch in stub.StreamFrames(pb.StreamRequest()):
                 for frame in batch.frames:
-                    process_frame(frame)
+                    print(frame.timestamp_ms, frame.frame)
         except grpc.RpcError as e:
             if e.code() == grpc.StatusCode.UNAVAILABLE:
                 time.sleep(1)
@@ -173,45 +128,56 @@ def stream_with_retry(stub):
             raise
 ```
 
-Each stream message is a `FrameBatch` whose `frames` field holds one or more `FrameData` entries. Each `FrameData` contains:
+Each stream message is a `FrameBatch` whose `frames` field holds one or more `FrameData` entries:
 
-- **frame.** The parsed frame as a protobuf `Struct` (equivalent to a JSON object).
-- **timestamp_ms.** The frame's timestamp in milliseconds.
+| Field          | Type            | Meaning |
+|----------------|-----------------|---------|
+| `frame`        | protobuf `Struct` | The parsed frame, equivalent to a JSON object. |
+| `timestamp_ms` | integer         | The frame's timestamp in milliseconds on a steady clock. It is not wall-clock time; use it for intervals, not dates. |
 
 ## External connections
 
-The gRPC server follows the same **Allow External API Connections** setting as the TCP server:
+The gRPC server (free edition) has no external-access setting of its own. It follows **Allow External API Connections** in **Preferences → General → API & Plugins**:
 
-| Setting             | TCP/JSON (7777)     | gRPC (8888)         |
-|---------------------|---------------------|---------------------|
-| Disabled (default)  | `127.0.0.1:7777`    | `127.0.0.1:8888`    |
-| Enabled             | `0.0.0.0:7777`      | `0.0.0.0:8888`      |
+| Allow External API Connections | TCP/JSON (7777)  | gRPC (8888)      |
+|--------------------------------|------------------|------------------|
+| Off (default)                  | `127.0.0.1:7777` | `127.0.0.1:8888` |
+| On                             | `0.0.0.0:7777`   | `0.0.0.0:8888`   |
 
-Enable external connections under **Preferences → General → API & Plugins → Allow External API Connections**.
+Turning the switch on asks "Allow External API Connections?" with Yes and No, defaulting to No. Changing it restarts the gRPC listener, which ends any open streams.
 
-> **Security note.** Enabling external connections exposes the API to your network. Non-loopback clients must then authenticate: send the access token (shown in the **API Access Token** field next to the external-connections switch) in the `x-serial-studio-token` request metadata. Loopback clients (`127.0.0.1` / `::1`) are exempt. The token is the only barrier, so keep it secret and disable external access when it is not needed.
+> **Security note.** External connections expose the API to your network, and the channel is plaintext: there is no TLS, so the token crosses the network in the clear. Keep external access off when you do not need it, and use a trusted network or tunnel when you do.
+>
+> Non-loopback clients must send the access token in the `x-serial-studio-token` request metadata; copy it from the **API Access Token** field. Loopback clients (`127.0.0.1` / `::1`) are exempt. A missing or wrong token gets gRPC status `UNAUTHENTICATED` ("Authentication required").
+
+The **API Access Token** field is read-only and active only while **Allow External API Connections** is on. The refresh button next to it generates a new token.
+
+```bash
+grpcurl -plaintext -H "x-serial-studio-token: <token>" -import-path . -proto serialstudio.proto \
+  -d '{}' <host>:8888 serialstudio.SerialStudioAPI/ListCommands
+```
+
+```python
+resp = stub.ListCommands(empty, metadata=(("x-serial-studio-token", token),))
+```
+
+Here `empty` is a `google.protobuf.empty_pb2.Empty()`.
+
+## Typed schema export
+
+**Preferences → General → API & Plugins → Export Protobuf File → Export…** writes an auto-generated typed schema (package `serialstudio.typed`, service `SerialStudioTypedAPI`) with one request message and one RPC per registered command. Use it as machine-readable documentation of every command's parameters. The running server implements only the `SerialStudioAPI` service, so generate client stubs from `serialstudio.proto`, not from the typed file.
+
+The same schema is checked in as [`doc/grpc/serialstudio-typed.proto`](https://github.com/Serial-Studio/Serial-Studio/blob/master/doc/grpc/serialstudio-typed.proto). Field numbers are stable across releases, and a retired number is marked `reserved`.
 
 ## Comparison with the TCP/JSON API
 
 | Feature            | TCP/JSON (port 7777)        | gRPC (port 8888)               |
 |--------------------|-----------------------------|--------------------------------|
 | Encoding           | JSON text                   | Protobuf binary                |
-| Frame streaming    | JSON lines pushed to all clients | Server-push (`StreamFrames`) |
-| Message size       | Larger (JSON overhead)      | Smaller (binary encoding)      |
 | Code generation    | Manual parsing              | Auto-generated stubs           |
-| Browser support    | TCP clients only (no browser access without a bridge) | grpc-web (needs a proxy) |
-| Ease of use        | `nc`, `curl`, any TCP client| Needs gRPC tooling             |
+| Browser support    | No                          | Needs a grpc-web proxy         |
+| Tooling            | `nc`, `curl`, any TCP client | gRPC tooling                  |
 
-**When to use gRPC:**
+Pick gRPC when you want generated, typed client code. Pick port 7777 for `nc`, `curl` or quick scripts, and for AI assistants through MCP (see the [API Reference](API-Reference.md)).
 
-- Plugins that process real-time frame data at high rates.
-- Applications where serialization overhead matters.
-- Projects that benefit from strongly typed generated clients.
-
-**When to use TCP/JSON:**
-
-- Quick scripting and debugging (`nc`, `curl`).
-- Environments without gRPC tooling.
-- MCP (Model Context Protocol) integration with AI assistants.
-
-See the [API Reference](API-Reference.md) for the full command list. It's shared by both protocols.
+See the [API Reference](API-Reference.md) for the full command list.

@@ -1,19 +1,112 @@
 # CSV export and playback
 
-Serial Studio can export incoming telemetry to CSV during a live session and replay saved CSV files through the same data pipeline. This page covers both workflows and the file format. For high-rate binary logging with per-channel sample rates and channel metadata, see [MDF4 Export & Playback](MDF4.md). Serial Studio Pro supports both formats and you can run them side by side.
+Your board prints values with `Serial.println` and you want them in a spreadsheet, or you logged a bench test last week and want it back on the dashboard. Serial Studio writes incoming frames to CSV and replays CSV files through the same pipeline as a live device. CSV export and playback are in both the free edition and Pro. For high-rate binary logging with per-channel sample rates and metadata, see [MDF4 Export & Playback](MDF4.md) (Pro).
 
-## Export and playback pipeline
+## Quickstart
 
-The diagrams below show how CSV export runs on a background thread during live data, and how CSV playback feeds recorded data back through the same pipeline.
+1. Pick Quick Plot as the operation mode ([Operation Modes](Operation-Modes.md)).
+2. In the Setup panel, under **Data Export**, turn on **CSV Spreadsheet**.
+3. Connect, and let a few lines arrive.
+4. Open the folder shown in [File location](#file-location). To replay the file, follow [Opening a CSV file](#opening-a-csv-file).
 
-```mermaid
-flowchart LR
-    A["Device"] --> B["Frame Builder"]
-    B --> C["Dashboard"]
-    B --> D["CSV File"]
+## CSV export
+
+### Turning export on
+
+A frame is one line your board prints, for example `21.4,48`. CSV export is a switch in the Setup panel of the main window. Under **Data Export**, turn on **CSV Spreadsheet**, before or during a live connection. Serial Studio then writes every incoming frame to a CSV file on a background thread. The setting is remembered across launches.
+
+The writer queues up to 8192 frames and flushes at 1024 rows or every second, so the display thread never blocks on disk.
+
+The switch is greyed out in Console Only mode, which has no frame structure to export, and switching to Console Only turns export off. Pick Quick Plot or Project File first ([Operation Modes](Operation-Modes.md)).
+
+In Quick Plot mode each channel is exported twice, because it feeds both the data grid and the plot. Three channels give six value columns.
+
+### File location
+
+Exported files land under your workspace folder (Documents/Serial Studio by default; configurable in Settings):
+
+```text
+<Workspace>/CSV/<Project Name>/<YYYY-MM-DD_HH-MM-SS>.csv
 ```
 
-> Export runs in the background, writes in batches, and never blocks the dashboard.
+A session started at 3:30:05 PM on March 17, 2026 for a project named "Weather Station" writes:
+
+```text
+Documents/Serial Studio/CSV/Weather Station/2026-03-17_15-30-05.csv
+```
+
+A project with no title exports to a folder named `Untitled`.
+
+### File format
+
+A two-channel project produces a file like this:
+
+```text
+Elapsed (s),Weather Station/Temp/Celsius,Weather Station/Temp/Humidity
+0.000000000,21.4,48
+0.016384512,21.5,48
+```
+
+The header row is `Elapsed (s)` followed by `GroupName/DatasetName` for each dataset, in dataset order. `Elapsed (s)` is seconds since the session started, with nanosecond precision. A `SourceName/` prefix is added whenever the owning source has a non-empty title, including in a single-source project. In the sample, `Weather Station` is the source title, `Temp` the group and `Celsius` the dataset.
+
+The file opens with a UTF-8 byte-order mark. Most tools handle it; pandas needs `encoding="utf-8-sig"` or the first header cell keeps a BOM character. Any cell starting with `=`, `+`, `-`, `@`, a tab or a carriage return gets an apostrophe prefix (unless it is purely numeric), so spreadsheets do not evaluate it as a formula.
+
+For a single-source project, each row is one complete frame. If your project has several devices, rows are sparse: one row per distinct sample instant, with a source's columns left empty where that source produced no sample. Rows are merged inside a 250 ms reorder window, so a file you tail during recording lags the live data by up to 250 ms; closing the file flushes the rest.
+
+### Row interval
+
+**Row Interval (ms)** is in [Preferences](Preferences.md) (the **Preferences** button on the main toolbar), **Export** tab, under CSV Export. The field accepts any integer of 0 or more, with presets 0, 10, 100 and 1000. The value is remembered across launches.
+
+- `0` (default): one row per received frame.
+- `N` above 0: one row every N milliseconds, each a snapshot of the latest value of every dataset. It applies live, so a change takes effect on the next snapshot.
+
+A 10 ms interval on a sensor that updates once a second writes 100 near-identical rows for every distinct value.
+
+### File lifecycle
+
+- Export opens the file on the first frame received after export is turned on.
+- Disconnecting, turning export off, or pausing the dashboard closes the file.
+- Reconnecting, resuming or re-enabling export opens a new file with a new timestamp.
+
+Names have one-second resolution. If the name exists, Serial Studio appends `_2`, `_3` and so on, up to 64 tries, and never overwrites a file.
+
+## CSV playback
+
+### Opening a CSV file
+
+1. Only a multi-source file needs its project loaded first (see [Multi-source CSV files](#multi-source-csv-files)). For a single-device file, skip to step 2.
+2. Click **Open CSV** in the toolbar, or press Ctrl+O (Cmd+O on macOS). Both are disabled while a CSV file is already open or a device is connected. Dropping a file on the window works too.
+3. Pick a `*.csv` file.
+
+The CSV Player dialog opens and the dashboard shows the first row. Press Space to play.
+
+Opening a file while a device is connected shows **Device Connection Active**; disconnect first. A file with no data row is rejected with **Insufficient Data in CSV File**. Playback indexes up to 2,000,000,000 rows, then shows **CSV Row Limit Reached**.
+
+### Timestamp handling
+
+Files exported by Serial Studio need no prompt. For any other CSV, Serial Studio reads the first column to work out the timestamp format, and a file from a spreadsheet or another tool usually lands in one of the prompt cases.
+
+| First column | What happens |
+|--------------|--------------|
+| Numeric, unit in the header | A bracketed unit (`time(ms)`, `t [us]`) or a `_unit` suffix (`time_ms`) sets the scale: seconds, `ms`, `us` or `ns`, by name or common abbreviation. Serial Studio's own `Elapsed (s)` is this case. |
+| Numeric, no recognizable unit | A **Timestamp Units** prompt offers Seconds (s), Milliseconds (ms) and Microseconds (us); seconds is preselected. It offers no nanoseconds, so put `ns` in the header instead. |
+| Date/time strings, such as `2026/03/17 15:30:05` | Parsed into absolute timestamps, then converted to elapsed offsets. |
+| Anything else | A **CSV Date/Time Selection** prompt offers **Select a date/time column** or **Set interval manually** (a fixed gap of 1 to 1,000,000 ms between rows, 1000 preselected), for tools that record no timestamps. The date/time option opens a **Select Date/Time Column** picker, and the chosen column is parsed as in the date/time row. |
+
+### Player controls
+
+| Control          | Action                           | Shortcut       |
+|------------------|----------------------------------|----------------|
+| Play / Pause     | Start or pause playback          | Space, media Play/Pause |
+| Previous frame   | Step back one frame              | Left or Down Arrow, media Previous |
+| Next frame       | Step forward one frame           | Right or Up Arrow, media Next |
+| Progress slider  | Seek to any position in the file | Drag or click  |
+
+The current timestamp shows next to the slider as `HH:MM:SS.mmm`.
+
+### How playback works
+
+The CSV Player feeds each row through the same Frame Builder and Dashboard path as a live connection, so widgets, plots and gauges render as they would with a device.
 
 ```mermaid
 flowchart LR
@@ -22,122 +115,29 @@ flowchart LR
     C --> D["Dashboard"]
 ```
 
-## CSV export
-
-### Turning export on
-
-CSV export is toggled in the Setup panel of the main window, under **Data Export**. Turn on the **CSV Spreadsheet** switch before or during a live connection. Once it's on, Serial Studio writes every incoming frame to a CSV file on a background thread, so dashboard performance isn't affected. The switch is disabled in Console Only mode (no project/frame structure to export); switch to Quick Plot or Project File mode first.
-
-**Quick Plot doubles every channel.** Quick Plot builds both a Data Grid group and a Multi-Plot group from the same channels, and both groups are exported, so a three-channel Quick Plot session produces six value columns in the CSV, not three — one pair of duplicate columns per channel.
-
-### File location
-
-Exported CSV files land under your workspace folder (Documents/Serial Studio by default; configurable in Settings) in a structured hierarchy:
-
-```
-<Workspace>/CSV/<Project Name>/<YYYY-MM-DD_HH-MM-SS>.csv
-```
-
-For example, a session started at 3:30:05 PM on March 17, 2026, for a project named "Weather Station" would produce:
-
-```
-Documents/Serial Studio/CSV/Weather Station/2026-03-17_15-30-05.csv
-```
-
-### Automation
-
-Export and playback can be driven without the GUI. The [API](API-Reference.md) exposes `csvExport.getStatus`, `csvExport.setEnabled`, and `csvExport.close` for export, plus the `csvPlayer.*` family (`open`, `setPaused`, `setProgress`, `getStatus`, and frame stepping via `csvPlayer.step`) for playback. The `--csv-export` flag in the [Command-Line Interface](Command-Line-Interface.md) turns export on at startup (commercial builds only).
-
-### File format
-
-The CSV file contains a header row followed by one row per received frame.
-
-**Header row:**
-
-```
-Elapsed (s),GroupName/DatasetName,GroupName/DatasetName,...
-```
-
-The first column, labeled `Elapsed (s)`, is elapsed time in seconds since the session started, with nanosecond precision (for example `0.000000000`, `0.016384512`). The remaining columns correspond to each dataset defined in the project, ordered by unique ID. Header labels are formed as `GroupName/DatasetName`, prefixed with `SourceName/` whenever the owning source has a non-empty title — including a single-source project, if its source is titled — so you can trace each column back to the project structure.
-
-The file opens with a UTF-8 byte-order mark. Most tools handle this transparently; pandas needs `encoding="utf-8-sig"` to read the file without leaving a `﻿` in the first header cell. Any cell whose text starts with `=`, `+`, `-`, `@`, a tab, or a carriage return is prefixed with an apostrophe before being written (unless the cell is purely numeric), which stops spreadsheet software from evaluating it as a formula.
-
-**Data rows.** For a single-source project, each row is one complete frame. For a multi-source project, rows are sparse: one row per distinct sample instant, with a source's columns left empty on any row where that source didn't produce a sample at that instant. Cells hold the numeric or string values of each dataset at that point in time.
-
-### Row interval
-
-CSV export writes rows in one of two modes, set by **Row Interval (ms)** in the Preferences dialog's **Export** tab: `0` (the default) writes one row per received frame, on the raw data timing. A nonzero value N instead writes one row every N milliseconds, each row a snapshot of the latest value of every dataset at that instant; the interval applies live, so changing it mid-export takes effect on the next snapshot.
-
-### File lifecycle
-
-- Export opens the file on the first frame received after export is turned on.
-- Disconnecting the device, turning export off, or pausing the connection (the dashboard Pause control) all close the file, the same as each other.
-- Reconnecting, resuming, or re-enabling export during the same session opens a new file with a new timestamp.
-
-### Background writing
-
-CSV export runs in the background and flushes to disk in batches. So even on slow storage (spinning disks, network shares, SD cards), CSV export never stalls the dashboard, drops frames, or pauses the pipeline.
-
-## CSV playback
-
-### Opening a CSV file
-
-To replay a recorded CSV file:
-
-1. Click **Open CSV** in the toolbar (or use Ctrl+O / Cmd+O).
-2. Pick the CSV file in the file dialog.
-3. The CSV Player dialog appears.
-
-### Timestamp handling
-
-When a CSV file opens, Serial Studio looks at the first column to figure out the timestamp format:
-
-- **Numeric, with a recognized unit in the header:** a bracketed unit (`time(ms)`, `t [us]`) or a `_unit` suffix (`time_ms`) on the header cell selects the scale — seconds, milliseconds (`ms`), microseconds (`us`), or nanoseconds (`ns`), by name or common abbreviation. This is the format Serial Studio's own export produces (`Elapsed (s)`).
-- **Numeric, with no recognizable unit in the header:** Serial Studio shows a **Timestamp Units** prompt asking whether the column is Seconds, Milliseconds, or Microseconds; seconds is preselected.
-- **Date/time strings** (for example `2026/03/17 15:30:05`): parsed into absolute timestamps and converted to elapsed offsets.
-- **Unrecognizable format:** Serial Studio prompts you to either pick an existing column to use as the timestamp, or set a fixed interval between rows (in milliseconds) — useful for CSV files from tools that don't record timestamps at all.
-
-### Player controls
-
-The CSV Player has these controls:
-
-| Control          | Action                           | Shortcut       |
-|------------------|----------------------------------|----------------|
-| Play / Pause     | Start or pause playback          | Space          |
-| Previous frame   | Step back one frame              | Left Arrow     |
-| Next frame       | Step forward one frame           | Right Arrow    |
-| Progress slider  | Seek to any position in the file | Drag or click  |
-
-The current timestamp shows next to the slider as `HH:MM:SS.mmm`.
-
-### How playback works
-
-During playback, the CSV Player feeds each row through the same data pipeline as a live connection: Frame Builder, then Dashboard. That means all widgets, plots, and gauges render exactly as they would with a live device. Original per-frame timing carries through, so playback speed matches the original recording rate.
+Playback runs in real time, using the gaps between timestamps. There is no speed multiplier; drag the progress slider to skip ahead.
 
 ### Multi-source CSV files
 
-For projects with multiple devices, the CSV Player maps columns back to their respective source IDs. The header carries labels only, not machine-readable IDs: the mapping is positional, built from the currently loaded project's export schema in unique-ID order, and matched against the file's data columns in that same order. This means the project loaded during playback must be the same one that produced the file (or one with an identical dataset/unique-ID layout) — the player has no way to recover source or dataset identity from header text alone. Reconstructed per-source frames go back into the pipeline at the right routing.
-
-### Speed control
-
-Playback runs at real-time speed by default. Timestamp differences between consecutive rows schedule frame delivery, so the original data rate is preserved.
+Load the project that produced the file before opening a multi-source CSV. The header carries labels, not machine-readable IDs, so the player maps columns positionally: it builds the export schema of the loaded project in unique-ID order and matches it against the file's data columns in that order. A project with an identical dataset and unique-ID layout works as well. Reconstructed per-source frames go back into the pipeline at the right routing.
 
 ## Analyzing exported data
 
 CSV opens in every common analysis tool:
 
 - Excel / LibreOffice Calc: open directly.
-- Python: `import pandas; df = pandas.read_csv('file.csv')`.
-- MATLAB: `data = readtable('file.csv');`.
-- R: `data <- read.csv('file.csv')`.
+- Python: `df = pandas.read_csv('file.csv', encoding='utf-8-sig')`.
+- MATLAB (`readtable`) and R (`read.csv`): check the first header cell for a BOM character.
 
-For per-channel sample rates, channel-level units and metadata, or smaller files at high data rates, use MDF4 instead — see [MDF4 Export & Playback](MDF4.md).
+## Automation
+
+The [API](API-Reference.md) exposes `csvExport.getStatus`, `csvExport.setEnabled`, `csvExport.setInterval` and `csvExport.close` for export, and the `csvPlayer.*` family (`open`, `setPaused`, `setProgress`, `getStatus`, and `csvPlayer.step` for frame stepping) for playback. The API Server is off by default and listens on port 7777 once enabled.
+
+The `--csv-export` flag in the [Command-Line Interface](Command-Line-Interface.md) turns export on at startup. The flag exists only in Pro builds; the Setup switch works in the free edition.
 
 ## See also
 
 - [MDF4 Export & Playback](MDF4.md): binary logging with per-channel sample rates and channel metadata (Pro).
 - [Historian](Historian.md): SQLite-backed project archive with built-in replay (Pro).
-- [Getting Started](Getting-Started.md): initial setup and first connection.
 - [Operation Modes](Operation-Modes.md): Quick Plot vs Project File mode.
-- [Project Editor](Project-Editor.md): define datasets and dashboard layout.
-- [Data Flow](Data-Flow.md): how data moves through the pipeline.
+- [API Reference](API-Reference.md): the `csvExport.*` and `csvPlayer.*` commands.

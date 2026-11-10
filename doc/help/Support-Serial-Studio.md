@@ -1,64 +1,42 @@
 # Support Serial Studio
 
-Serial Studio is used by developers, engineers, educators, and makers around the world. It is maintained by a single developer, with no corporate funding or venture capital behind it.
-
-Support of any kind funds development, testing on real hardware, documentation, and releases.
+Serial Studio is maintained by one person, with no company or venture capital behind it. If it saved you a weekend of writing your own serial plotter, these are the ways to give something back.
 
 ## Ways to help
 
 ### Buy a Pro license
 
-The most direct way to support the project. A Pro license unlocks MQTT, Modbus, CAN Bus, MDF4 export, the 3D Plot widget, and other features (the full list is in [Pro vs Free](Pro-vs-Free.md)), and it funds ongoing development. If you use Serial Studio at work, your purchasing or IT department can handle the transaction.
+An Arduino or ESP32 printing values over USB with `Serial.println` works in the free features: connection, plots, dashboard, CSV export. The official Serial Studio download runs without a license, and those features have no time limit for personal, educational, and open-source use.
 
-Store: <https://store.serial-studio.com/>
+Commercial use of the official download needs a Pro license. A build compiled from source under the GPLv3 has no such restriction, but contains only the free features. Pro features are built into the official download and include other protocols such as MQTT, Modbus and CAN Bus, MDF4 export, and the 3D Plot widget (the full list is in [Pro vs Free](Pro-vs-Free.md)).
+
+To try Pro first, use any Pro feature. Serial Studio asks "Start your free 14-day Serial Studio Pro trial?" (Yes or No) and needs an internet connection to register it. After the trial ends, the same prompt offers activation or purchase.
+
+Buy a license in the store at <https://store.serial-studio.com/>. To activate a key in the official download, open the **About** dialog, click **Manage License**, paste the key into **License Key** and click **Activate**. On a machine with no internet, click **Activate Offline…** instead; see [Offline Activation](Offline-Activation.md). **Manage License** is hidden in a GPL source build and in runtime mode. If you use Serial Studio at work, your purchasing or IT department can handle the order.
 
 ### Become an affiliate
 
-If you create content for embedded developers, makers, educators, or hardware teams, you can support the project by referring customers and earning a commission on successful sales. It's a practical option for bloggers, YouTubers, newsletter authors, and community managers who already recommend tools to their audience.
+If you write or make videos about embedded tools, you can earn a commission on each Serial Studio sale you refer. Sales run through Lemon Squeezy, which tracks affiliate referrals. Commission rates and the application steps are in [Become an Affiliate](Become-an-Affiliate.md). Apply at <https://store.serial-studio.com/affiliates>.
 
-Affiliate applications are handled through Lemon Squeezy: <https://store.serial-studio.com/affiliates>
+### Donate
 
-### Star the repository
-
-Help others find the project by starring it on GitHub. It costs nothing and bumps visibility in search results and trending lists.
-
-Repo: <https://github.com/Serial-Studio/Serial-Studio>
-
-### Sponsor development
-
-Support development through GitHub Sponsors or PayPal donations.
-
-GitHub Sponsors: <https://github.com/sponsors/alex-spataru>
-
-PayPal: <https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE>
-
-### Report issues
-
-Improve quality by reporting bugs and suggesting improvements on GitHub Issues. Include steps to reproduce, expected behavior, and platform details.
-
-Issues: <https://github.com/Serial-Studio/Serial-Studio/issues>
+Serial Studio accepts one-time PayPal donations: <https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE>. Without an active Pro license, **About**, then **Donate** opens a dialog with a **Donate** button (the PayPal link) and a **Get Serial Studio Pro** button (the store). The About button is hidden once Pro is active.
 
 ### Contribute code
 
-Pull requests for bug fixes, features, translations, or documentation are all welcome. Meaningful contributions can also qualify for a free Pro license (see [Earn a Pro License](Earn-Pro-License.md)).
+Serial Studio accepts pull requests on GitHub (a pull request is a proposed change to the source code) for bug fixes, features, translations, and documentation. Merged contributions can earn a time-limited Pro key. [Earn a Pro License](Earn-Pro-License.md) lists what counts and how long each key lasts.
 
-### Share your projects
+### Report issues
 
-Share what you've built with Serial Studio. Real-world use cases help other users and grow the community.
+Open an issue at <https://github.com/Serial-Studio/Serial-Studio/issues>. Include the Serial Studio version (shown in the About dialog), your operating system, the driver you use, the steps to reproduce, what you expected, and what happened. Attach the project file if it applies.
 
-Discussions: <https://github.com/Serial-Studio/Serial-Studio/discussions>
+### Free ways to help
 
-### Write about it
-
-Blog posts, tutorials, YouTube videos, and conference talks help reach new users who could use the tool.
-
-## Why it matters
-
-Serial Studio is built during unpaid hours and includes no tracking or telemetry. Whether you're a student or a company, your support helps keep the project maintained.
+- Click **Star** at the top of the [GitHub repository](https://github.com/Serial-Studio/Serial-Studio). Stars help other people find the project.
+- Show what you built in [GitHub Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions). A photo of the breadboard next to the dashboard is welcome.
+- Write a blog post, tutorial, or video and post the link in Discussions.
 
 ## See also
 
-- [License agreement](License-Agreement.md): dual-license details.
-- [Earn a Pro license](Earn-Pro-License.md): contribute for free access.
-- [Become an affiliate](Become-an-Affiliate.md): earn commission by referring customers.
-- [Buy Serial Studio Pro](https://store.serial-studio.com/): purchase a Pro license.
+- [License Agreement](License-Agreement.md): the license terms.
+- [Pro vs Free](Pro-vs-Free.md): what each edition includes, the trial, and activation.

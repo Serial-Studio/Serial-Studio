@@ -1,8 +1,128 @@
 # UART / Serial Driver
 
-The UART driver handles plain serial communication: USB-to-serial adapters, RS-232 ports, RS-485 buses, and Bluetooth Classic devices that the OS exposes as virtual COM ports. It is included in the free build and is the most common transport for microcontroller telemetry.
+Your board prints `Serial.println("23.5,1013");` at 115200 baud. To plot it in Quick Plot mode:
 
-If you have never used a serial port before, read the next section first. If you only need the configuration reference, skip to **How Serial Studio uses it**.
+1. In the **Setup Panel**, select **UART/COM** from the Connection dropdown.
+2. Pick the board under **Serial Port** (**COM Port** on Windows).
+3. Set **Baud Rate** to the number in your `Serial.begin()` call. The default is 9600, so a 115200 sketch shows garbage until you change it.
+4. Click **Connect**.
+
+Two comma-separated values per line give two plots. [Protocol Setup Guides](Protocol-Setup-Guides.md) has the full walkthrough.
+
+The UART driver covers USB-to-serial adapters, RS-232, RS-485 and Bluetooth Classic devices that the OS exposes as virtual COM ports. It is in the free edition, Connection Sequence included.
+
+## UART driver settings
+
+With **UART/COM** selected as the connection in the Setup Panel, these fields appear. They map one-to-one onto UART parameters, and the driver wraps Qt's `QSerialPort`:
+
+| Setting | Controls | Default |
+|---------|----------|---------|
+| **Serial Port** (**COM Port** on Windows) | Which OS-level serial device to open (COM3, `/dev/ttyACM0`, etc.) | none selected |
+| **Baud Rate** | Bits per second; presets 110, 150, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 256000, 460800, 576000 and 921600. The field accepts any positive rate typed in, so type a higher one if the device needs it | 9600 |
+| **Data Bits** | 5 / 6 / 7 / 8 | 8 |
+| **Parity** | None / Even / Odd / Space / Mark | None |
+| **Stop Bits** | 1 / 1.5 / 2 | 1 |
+| **Flow Control** | None / RTS/CTS / XON/XOFF; see [Flow control](#flow-control). Leave it on None unless the device needs otherwise | None |
+| **Auto Reconnect** | After the port drops with a fatal error (unplug, resource loss), rescans once per second and reopens the same port name when it reappears. A manual Disconnect cancels the retry. Shown as Auto-Reconnect in the Project Editor | off |
+| **Send DTR Signal** | Asserts the DTR line on connect. Leave it on unless your Arduino resets when you connect; see [Common pitfalls](#common-pitfalls) | on |
+| **Hold RTS** | Asserts the RTS line on connect and holds it for the whole connection. Leave it off unless the device datasheet asks for RTS. Not applicable under RTS/CTS flow control, where the port driver owns RTS | off |
+| **Connection Sequence** | Steps run on every open before any byte reaches the dashboard; see [Connection Sequence](#connection-sequence) | no steps |
+
+On Linux and macOS the **Serial Port** field is editable: type a device path missing from the list (for example `/dev/ttyAMA0`) and press Enter to register it. On macOS each adapter is listed once, as its `cu.*` device; the `tty.*` duplicates are hidden.
+
+If your Arduino or ESP32 already streams on connect, you need nothing past this table and the pitfalls below. Skip the API and Connection Sequence sections.
+
+## Common pitfalls
+
+- **The Arduino resets every time you connect.** Uno, Nano and other boards wire the USB-serial chip's DTR line to the reset pin through a capacitor, so asserting DTR on open reboots the sketch. Clear **Send DTR Signal** in the Setup Panel before connecting.
+- **Garbled output.** Usually a baud-rate mismatch. Compare the sketch's `Serial.begin()` value with **Baud Rate**, then **Data Bits**, **Parity** and **Stop Bits** with the device's 8N1 setting. A 115200 stream read at 9600 looks like a cat walked across the keyboard.
+- **The port opens but nothing comes through.** TX and RX may be swapped. Some adapters label pins from the host's point of view, some from the device's. The fix is usually to swap them physically.
+- **Long cable runs drop bytes.** Past a few meters of TTL or about 15 m of RS-232, use an RS-485 transceiver at each end (up to 1200 m; see [RS-232 vs RS-485 vs TTL](#rs-232-vs-rs-485-vs-ttl)).
+- **The device disappears mid-session on Linux.** `udev` may have renamed it; `/dev/ttyUSB0` can become `/dev/ttyUSB1` after a hot-unplug. A `udev` rule pinning the device by VID/PID to a stable symlink fixes it permanently.
+- **The connection fails with "Connection Sequence failed at step ...".** See [When a step fails](#when-a-step-fails).
+
+## Controlling UART from the API
+
+For scripting and automation only; the Setup Panel needs none of this. The UART settings are scriptable through the `io.uart.*` commands of the [JSON-RPC API](API-Reference.md). The API Server must be enabled; it is off by default and listens on port 7777.
+
+| Command | Arguments | Effect |
+|---------|-----------|--------|
+| `setDevice` | `device` (path) | Selects the port by device path |
+| `setPortIndex` | `portIndex` (zero-based) | Selects the port by list position |
+| `setBaudRate` | `baudRate` (bits per second) | Sets the saved **Baud Rate** |
+| `setParity` | `parityIndex`: 0 None, 1 Even, 2 Odd, 3 Space, 4 Mark | Sets **Parity** |
+| `setDataBits` | `dataBitsIndex`: 0 = 5, 1 = 6, 2 = 7, 3 = 8 | Sets **Data Bits** |
+| `setStopBits` | `stopBitsIndex`: 0 = 1, 1 = 1.5, 2 = 2 | Sets **Stop Bits** |
+| `setFlowControl` | `flowControlIndex`: 0 None, 1 RTS/CTS, 2 XON/XOFF | Sets **Flow Control** |
+| `setDtrEnabled`, `setRtsEnabled`, `setAutoReconnect` | `dtrEnabled`, `rtsEnabled`, `autoReconnect` | Set **Send DTR Signal**, **Hold RTS** and **Auto Reconnect** |
+| `setSequence` | sequence | Replaces the Connection Sequence |
+| `listPorts`, `listBaudRates`, `getConfig`, `getSequence` | none | Read-only queries |
+| `sendBreak` | `durationMs`, 1 to 10000 | Sends a BREAK on the open port |
+| `setLiveBaudRate` | `baudRate` | Changes only the running rate; the saved **Baud Rate** stays, and the next connection opens at it again |
+| `getLineStates` | none | Returns `cts`, `dsr`, `dcd`, `ri`, `rts` and `dtr` |
+| `runSequence` | none | Re-runs the Connection Sequence; see [Running it again](#running-it-again) |
+
+The last four act on a connected port. Each takes an optional `sourceId` naming the Device in a multi-source project; without it they act on source 0. When the in-app AI issues a command that changes the port or a line, it sits behind the **Allow device control** toggle.
+
+## Connection Sequence
+
+Most Arduino and ESP32 boards stream as soon as the port opens and need no Connection Sequence. Use it only for devices that must be brought up first, such as a bus adapter that resets on a BREAK (the line held low longer than one byte time) or a GPS module that a configuration message switches to a faster baud. The **Connection Sequence** of a UART source performs that bring-up from Serial Studio itself, with no script and no vendor program. It is part of the free edition.
+
+The sequence is an ordered list of steps. Edit it with the **Connection Sequence…** button in the Setup Panel, or with the **Connection Sequence** row of a UART source in the Project Editor; both open the same editor. A project saves the sequence with its source, and the Setup Panel's sequence persists with the other serial settings. A project saved without one connects as it always did.
+
+The sequence runs every time the port opens: from the Connect button, from `io.connect`, from the command line, and on an automatic reconnect. While it runs the Device is connecting, not connected. The dashboard receives no frames, **Auto-Execute on Connect** actions have not fired, the [Control Loop](Control-Loop.md) has not started, and writes from the API or the console are refused. The Device reports connected once the last step succeeds.
+
+A sequence holds at most 128 steps.
+
+| Step | Parameters | What it does |
+|------|------------|--------------|
+| **Send BREAK** | Duration, 1 to 10000 ms | Holds the line in BREAK, then releases it. Bytes the device sends meanwhile are discarded, and the input buffer is cleared on release. |
+| **Wait** | Duration, 0 to 600000 ms | Pauses. |
+| **Set Control Line** | DTR or RTS, high or low | Drives a modem line. RTS is refused under RTS/CTS flow control. |
+| **Send Data** | Data, Hex, line ending, checksum | Writes the data (text with `\r`/`\n` escapes, or hex bytes), then the line ending, then the checksum over both, in the order an action uses. |
+| **Expect Reply** | Patterns, timeout (1 to 600000 ms), Continue If No Reply | Waits until the bytes received match one of the patterns. |
+| **Clear Received Data** | none | Drops whatever the port has received so far. |
+| **Set Baud Rate** | Rate, 1 to 15000000 | Changes the running rate. The saved **Baud Rate** is untouched, so every reconnection starts from it again. |
+| **Set Flow Control** | None, RTS/CTS or XON/XOFF | Changes the running flow-control mode. |
+
+An **Expect Reply** pattern is a list of hex bytes. `??` matches any byte and a single `?` matches one hex digit, so `5?` accepts `50` to `5F`. Separate several acceptable replies with `|`: `55 | 5D ??` succeeds on either. The step looks at everything received since the previous matched reply (up to 4 KiB) and consumes through the match. A step with **Continue If No Reply** checked that times out leaves a console note and the sequence carries on.
+
+The **Time Limit** (10000 ms by default, between 1 and 600000 ms) bounds the whole sequence. The editor refuses a limit smaller than the BREAK and Wait steps add up to.
+
+### Example: a bus adapter that resets on BREAK
+
+Goal: bring an adapter up at 115200 baud with RTS/CTS flow control. The adapter powers up at 9600 baud, resets on a BREAK of at least 10 ms and answers with `55` or `5D` followed by a version byte. Two `15` bytes switch it to 115200 baud, and it streams only with RTS/CTS flow control on. With the Setup Panel at 9600 baud:
+
+1. **Send BREAK**, 55 ms.
+2. **Expect Reply** `55 | 5D ??` within 100 ms.
+3. **Send Data** `15 15`, **Hex** checked.
+4. **Wait** 20 ms.
+5. **Set Baud Rate** 115200.
+6. **Set Flow Control** RTS/CTS.
+
+### When a step fails
+
+A UART Connection Sequence step that fails ends the sequence and the connection attempt: an **Expect Reply** that times out, a write the port refuses, the port disappearing, or the time limit running out. The console and the log name the step by position and kind and quote what the device sent, cut to the first 32 bytes and ended with `...` when longer:
+
+```
+Connection Sequence failed at step 2 (Expect Reply): no reply matched within 100 ms; received: 5A 00
+```
+
+There is no modal dialog. `received: nothing` points at power or wiring; bytes that match no pattern point at the wrong opening baud rate. With **Auto Reconnect** on, a port that disappears mid-sequence is retried like any dropped port; a device that answers wrongly is not.
+
+### Connection Sequence in the console
+
+The UART Connection Sequence (Setup Panel, **Connection Sequence…**) writes one line per step to the console, each prefixed `[Connection Sequence]`, and a final line reports the outcome. The bytes the device sends during the sequence appear as received data. None of them reach the frame parser, the dashboard or a recording.
+
+### Running it again
+
+To re-run the UART Connection Sequence on a connected port, call `io.uart.runSequence`. It serves a device that was power-cycled while the port stayed open. The Device stays connected, frames pause until the run ends, and the outcome is written to the console; a failure also raises a notification. A Control Loop can issue the same command, along with `io.uart.sendBreak`.
+
+### Connection Sequence limits
+
+- The sequence opens at one baud rate. A device that powers up at a different rate in some units needs a second project, or a Control Loop that changes the saved rate and reconnects.
+- Some USB serial adapters emit a fixed-length BREAK whatever duration is requested. The step reports success when the port accepts the request; it cannot measure what the adapter put on the wire.
+- The steps have no branching or loops. Logic belongs in a [Control Loop](Control-Loop.md).
 
 ## UART basics
 
@@ -12,51 +132,41 @@ A UART is a peripheral, not a protocol. The protocol it implements is usually ca
 
 ### The frame
 
-Every byte sent over a UART line is wrapped in a small fixed-shape frame: an idle high level, a single low start bit, the data bits (typically 8, least-significant first), an optional parity bit, and one or more high stop bits before the line returns to idle.
+Every byte sent over a UART line is wrapped in a small fixed-shape frame. The line idles high. A low start bit tells the receiver to start clocking. The data bits follow, typically 8, least-significant first, then an optional parity bit and one or more high stop bits before the line returns to idle.
 
-As an example, the byte `0x4B` (`0100 1011`) sent as 8N1 (8 data bits, no parity, 1 stop bit) looks like this on the wire: idle high, a low start bit, the eight data bits least-significant first, and a high stop bit. Bit times are equal; the receiver clocks at a multiple of the baud rate and samples each bit near the middle.
+The most common configuration is **8N1**: 8 data bits, **N**o parity, **1** stop bit. The byte `0x4B` (`0100 1011`) sent as 8N1 looks like this, with the data bits least-significant first:
 
-- **Idle** is logic high. The line sits high while nothing is being sent.
-- **Start bit** drops the line low for one bit-time. This is the receiver's cue to start clocking in bits.
-- **Data bits** follow, least-significant first. Eight is by far the most common width; 5, 6, 7, and 9 also exist.
-- **Parity bit**, if enabled, makes the total number of `1` bits either always even or always odd. It catches single-bit errors.
-- **Stop bit(s)** return the line high for at least one bit-time (sometimes 1.5 or 2) before the next start bit.
+```text
+idle 1 | start 0 | data 1 1 0 1 0 0 1 0 | stop 1
+```
 
-The most common configuration is **8N1**: 8 data bits, **N**o parity, **1** stop bit. With the start and stop bits, that is ten line bits per byte, a raw efficiency of 80%.
+In 8N1 that is ten line bits per byte, a raw efficiency of 80%. The receiver samples each bit near the middle of its bit time.
 
 ### Baud rate
 
 **Baud rate** is the number of symbols per second on the line. For UART that is identical to bits per second: at 9600 baud, each bit lasts `1 / 9600 ≈ 104.2 µs`.
 
-Common baud rates are 9600, 19200, 38400, 57600, 115200, 230400, 460800, and 921600. Modern USB-serial chips and microcontrollers usually support 1 Mbps and higher.
+The presets are listed under [UART driver settings](#uart-driver-settings).
 
-Both ends must agree. UARTs tolerate small clock mismatches between transmitter and receiver (roughly ±2% over a single frame), but if the configured baud rates differ (for example 115200 vs 9600) the result is garbage or no data at all.
+Both ends must agree. UARTs tolerate a few percent of clock mismatch between transmitter and receiver, but if the configured baud rates differ (for example 115200 vs 9600) the result is garbage or no data at all.
 
 ### Parity
 
-A parity bit makes the total number of `1`s in the frame either always even or always odd. It detects single-bit errors but cannot detect two-bit errors and cannot correct anything. Most modern designs leave parity off because USB and short cables rarely flip bits, and any error detection that matters is handled at a higher layer (a CRC in the application protocol).
-
-Parity options exposed by Serial Studio:
-
-- **None**: no parity bit. The default for almost every modern device.
-- **Even**: total number of `1`s is always even.
-- **Odd**: total number of `1`s is always odd.
-- **Space**: parity bit is always `0`. Rare.
-- **Mark**: parity bit is always `1`. Used for inter-byte signalling on a few legacy buses.
+A parity bit makes the total number of `1`s in the frame either always even or always odd. It detects single-bit errors but cannot detect two-bit errors and cannot correct anything. Leave it on **None** unless the device says otherwise: USB and short cables rarely flip bits, and a CRC in the application protocol covers the rest. **Even** and **Odd** set the count. **Space** and **Mark** force the parity bit to `0` and `1`, and survive on a few legacy buses.
 
 ### Stop bits
 
-The stop bit holds the line high for one or two bit-times after the last data bit. Two stop bits were used at very low baud rates (300 baud and below) to give a slow receiver more time to process each byte. At 9600 baud and above, choose **1 stop bit** unless the device explicitly requires something else.
+The stop bit holds the line high for one or two bit-times after the last data bit. Choose **1 stop bit** unless the device explicitly requires something else.
 
 ### Flow control
 
-Flow control lets the receiver tell the sender to pause when its buffer is full. UART supports two kinds:
+Flow control lets the receiver tell the sender to pause when its buffer is full. UART has two schemes, plus the option of none:
 
 - **Hardware flow control (RTS/CTS)** uses two extra wires. The receiver raises CTS (Clear To Send) when it can accept data and lowers it when it cannot. The sender checks CTS before each byte. Reliable, but the cable must include those lines.
 - **Software flow control (XON/XOFF)** sends special characters in the data stream (`0x11` = XON, `0x13` = XOFF) to signal go/stop. This reserves those byte values, so it cannot be used with arbitrary binary data.
-- **None**: no flow control. The right choice when both sides are fast enough to never pause, or when the protocol layered on top provides its own back-pressure.
+- **None** is the right choice when both sides are fast enough to never pause, or when the protocol layered on top provides its own back-pressure.
 
-For typical Arduino, ESP32, and STM32 telemetry, choose **None**. Hardware flow control matters mainly with industrial equipment or sustained high-rate streams where the host cannot keep up at the application layer.
+For typical Arduino, ESP32, and STM32 telemetry, choose **None**. Hardware flow control matters with industrial equipment or sustained high-rate streams where the host cannot keep up at the application layer.
 
 ### RS-232 vs RS-485 vs TTL
 
@@ -68,115 +178,10 @@ UART is the protocol; the physical layer is separate. Serial Studio works with a
 
 A USB-to-serial adapter converts USB to TTL or RS-232 levels. To Serial Studio, all of them appear as a COM port on Windows or as `/dev/ttyUSB0` / `/dev/cu.usbserial-XXXX` on Linux and macOS.
 
-## How Serial Studio uses it
-
-The UART driver wraps Qt's `QSerialPort`. Settings exposed in the Setup Panel map one-to-one onto UART parameters:
-
-| Setting | Controls | Default |
-|---------|----------|---------|
-| **Serial Port** (**COM Port** on Windows) | Which OS-level serial device to open (COM3, `/dev/ttyACM0`, etc.) | none selected |
-| **Baud Rate** | Bits per second; presets from 110 to 921600, and the field accepts any positive rate typed in | 9600 |
-| **Data Bits** | 5 / 6 / 7 / 8 | 8 |
-| **Parity** | None / Even / Odd / Space / Mark | None |
-| **Stop Bits** | 1 / 1.5 / 2 | 1 |
-| **Flow Control** | None / RTS/CTS / XON/XOFF | None |
-| **Auto Reconnect** | Rescans ports once per second and reconnects when the last-used device re-enumerates | off |
-| **Send DTR Signal** | Asserts the DTR line on connect (some boards reset on DTR toggle, e.g. Arduino) | on |
-| **Hold RTS** | Asserts the RTS line on connect and holds it for the whole connection. Not applicable under RTS/CTS flow control, where the port driver owns RTS | off |
-| **Connection Sequence** | Steps run on every open before any byte reaches the dashboard; see [Connection Sequence](#connection-sequence) | no steps |
-
-On Linux and macOS the **Serial Port** field is editable: type a device path missing from the list (for example `/dev/ttyAMA0`) and press Enter to register it. On macOS each adapter is listed once, as its `cu.*` device; the `tty.*` duplicates are hidden.
-
-`QSerialPort` uses Qt's event loop for non-blocking reads; incoming bytes are handed off to the acquisition pipeline thread, where the FrameReader assembles them into frames. See [Threading and Timing Guarantees](Threading-and-Timing.md) for the rationale.
-
-The same settings are scriptable through the `io.uart.*` commands of the [JSON-RPC API](API-Reference.md): `setDevice` (by path), `setPortIndex`, `setBaudRate`, `setParity`, `setDataBits`, `setStopBits`, `setFlowControl`, `setDtrEnabled`, `setRtsEnabled`, `setAutoReconnect`, and `setSequence`, plus the read-only `listPorts`, `listBaudRates`, `getConfig`, and `getSequence`. `setBaudRate` takes the rate itself (`baudRate`, bits per second); the other line settings take a zero-based index into the option list in the same order as the Setup Panel (`parityIndex` 2 = Odd, `stopBitsIndex` 1 = 1.5, `flowControlIndex` 1 = RTS/CTS).
-
-Four more commands act on a connected port instead of the settings: `sendBreak` (`durationMs`, 1 to 10000), `setLiveBaudRate` (`baudRate`), `getLineStates` (returns `cts`, `dsr`, `dcd`, `ri`, `rts` and `dtr`), and `runSequence`. Each takes an optional `sourceId` naming the Device in a multi-source project; without it they act on source 0. `setLiveBaudRate` changes only the running rate: the saved **Baud Rate** stays as it was, and the next connection opens at it again. When the in-app AI issues a command that changes the port or a line, it sits behind the **Allow device control** toggle.
-
-For step-by-step setup, see the [Protocol Setup Guides, Serial/UART section](Protocol-Setup-Guides.md).
-
-## Connection Sequence
-
-Some devices must be brought up before they stream data. A bus adapter resets on a BREAK and answers with an identification byte, a GPS module is switched to a binary protocol and a faster baud by a configuration message, a modem wants an attention exchange. The **Connection Sequence** of a UART source performs that bring-up from Serial Studio itself, with no script and no vendor program.
-
-The sequence is an ordered list of steps. Edit it with the **Connection Sequence…** button in the Setup Panel, or with the **Connection Sequence** row of a UART source in the Project Editor; both open the same editor. A project saves the sequence with its source, and the Setup Panel's sequence persists with the other serial settings. A project saved without one connects as it always did.
-
-The sequence runs every time the port opens: from the Connect button, from `io.connect`, from the command line, and on an automatic reconnect. While it runs the Device is connecting, not connected. The dashboard receives no frames, **Auto-Execute on Connect** actions have not fired, the [Control Loop](Control-Loop.md) has not started, and writes from the API or the console are refused. The Device reports connected once the last step succeeds.
-
-| Step | Parameters | What it does |
-|------|------------|--------------|
-| **Send BREAK** | Duration, 1 to 10000 ms | Holds the line in BREAK, then releases it. Bytes the device sends meanwhile are discarded, and the input buffer is cleared on release. |
-| **Wait** | Duration, 0 to 600000 ms | Pauses. |
-| **Set Control Line** | DTR or RTS, high or low | Drives a modem line. RTS is refused under RTS/CTS flow control. |
-| **Send Data** | Data, Hex, line ending, checksum | Writes the data (text with `\r`/`\n` escapes, or hex bytes), then the line ending, then the checksum over both, in the order an action uses. |
-| **Expect Reply** | Patterns, timeout, Continue If No Reply | Waits until the bytes received match one of the patterns. |
-| **Clear Received Data** | none | Drops whatever the port has received so far. |
-| **Set Baud Rate** | Rate | Changes the running rate. The saved **Baud Rate** is untouched, so every reconnection starts from it again. |
-| **Set Flow Control** | None, RTS/CTS or XON/XOFF | Changes the running flow-control mode. |
-
-An **Expect Reply** pattern is a list of hex bytes. `??` matches any byte and a single `?` matches one hex digit, so `5?` accepts `50` to `5F`. Separate several acceptable replies with `|`: `55 | 5D ??` succeeds on either. The step looks at everything received since the previous matched reply (up to 4 KiB) and consumes through the match. A step with **Continue If No Reply** checked that times out leaves a console note and the sequence carries on.
-
-The **Time Limit** (10000 ms by default, at most 600000 ms) bounds the whole sequence. The editor refuses a limit smaller than the BREAK and Wait steps add up to.
-
-### Example: a bus adapter that resets on BREAK
-
-The adapter powers up at 9600 baud, resets on a BREAK of at least 10 ms and answers with `55` or `5D` followed by a version byte. Two `15` bytes switch it to 115200 baud, and it streams only with RTS/CTS flow control on. With the Setup Panel at 9600 baud:
-
-1. **Send BREAK**, 55 ms.
-2. **Expect Reply** `55 | 5D ??` within 100 ms.
-3. **Send Data** `15 15`, **Hex** checked.
-4. **Wait** 20 ms.
-5. **Set Baud Rate** 115200.
-6. **Set Flow Control** RTS/CTS.
-
-### When a step fails
-
-A step that fails ends the sequence and the connection attempt: an **Expect Reply** that times out, a write the port refuses, the port disappearing, or the time limit running out. The console and the log name the step by position and kind and quote what the device sent:
-
-```
-Connection Sequence failed at step 2 (Expect Reply): no reply matched within 100 ms; received: 5A 00
-```
-
-There is no modal dialog. With **Auto Reconnect** on, a port that disappears mid-sequence is retried like any dropped port; a device that answers wrongly is not.
-
-### In the console
-
-Each step adds a line prefixed `[Connection Sequence]` that names it, and a final line reports the outcome. The bytes the device sends during the sequence appear as received data, and the bytes the sequence sends appear like console echo when **Echo** is on. None of them reach the frame parser, the dashboard or a recording.
-
-### Running it again
-
-`io.uart.runSequence` re-runs the sequence on a connected port, for a device that was power-cycled while the port stayed open. The Device stays connected, frames pause until the run ends, and the outcome is written to the console; a failure also raises a notification. A Control Loop can issue the same command, along with `io.uart.sendBreak`.
-
-### Limits
-
-- The sequence opens at one baud rate. A device that powers up at a different rate in some units needs a second project, or a Control Loop that changes the saved rate and reconnects.
-- Some USB serial adapters emit a fixed-length BREAK whatever duration is requested. The step reports success when the port accepts the request; it cannot measure what the adapter put on the wire.
-- The steps have no branching or loops. Logic belongs in a [Control Loop](Control-Loop.md).
-
-## Common pitfalls
-
-- **The connection fails with "Connection Sequence failed at step ...".** The device did not answer as the sequence expects. Read the quoted reply in the console. `received: nothing` points at power or wiring; bytes that match no pattern point at the wrong opening baud rate.
-- **The Arduino resets every time you connect.** The DTR line is toggling. Boards with a USB-CDC bootloader (Uno, Nano, ESP8266 with the auto-reset circuit) treat a DTR pulse as "reset and enter bootloader". Disable **Send DTR Signal** in the Setup Panel, or use a CH340/FTDI-style adapter that lets you control DTR independently.
-- **Garbled output that looks almost right.** Baud-rate mismatch. If roughly half the bytes look correct and the rest are random, the rate is off by a factor of two (115200 configured, 57600 on the wire, or vice versa).
-- **The port opens but nothing comes through.** TX and RX may be swapped. Some adapters label pins from the host's point of view, some from the device's. The fix is usually to swap them physically.
-- **Long cable runs drop bytes.** TTL and RS-232 do not tolerate distance. Use RS-485 transceivers on both ends to reach 100 m or more reliably.
-- **The device disappears mid-session on Linux.** `udev` may have renamed it; `/dev/ttyUSB0` can become `/dev/ttyUSB1` after a hot-unplug. A `udev` rule pinning the device by VID/PID to a stable symlink fixes it permanently.
-
-## Further reading
-
-- [Universal asynchronous receiver-transmitter (Wikipedia)](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter)
-- [UART: A Hardware Communication Protocol (Analog Devices)](https://www.analog.com/en/resources/analog-dialogue/articles/uart-a-hardware-communication-protocol.html)
-- [Basics of UART Communication (Circuit Basics)](https://www.circuitbasics.com/basics-uart-communication/)
-- [RS-485 (Wikipedia)](https://en.wikipedia.org/wiki/RS-485)
-- [The main differences between RS-232, RS-422 and RS-485 (IPC2U)](https://ipc2u.com/articles/knowledge-base/the-main-differences-between-rs-232-rs-422-and-rs-485/)
-
 ## See also
 
-- [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step UART setup in the Setup Panel.
-- [Devices](Devices.md): driver capability summary across all transports.
-- [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
-- [Operation Modes](Operation-Modes.md): Quick Plot vs Project File vs Console-only.
-- [Use Cases](Use-Cases.md): real-world examples built around UART-connected microcontrollers.
+- [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step UART setup in the Setup Panel; the next step after this page.
+- [Operation Modes](Operation-Modes.md): Quick Plot for plotting comma-separated values, or a project file to define your own frame format.
 - [Troubleshooting](Troubleshooting.md): diagnostic steps for connection problems.
-- [FAQ](FAQ.md): common questions about supported boards and adapters.
+- [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Drivers: Network](Drivers-Network.md): TCP and UDP, the next step up when serial isn't enough.
