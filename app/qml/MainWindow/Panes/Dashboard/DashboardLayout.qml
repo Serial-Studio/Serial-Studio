@@ -337,7 +337,6 @@ Widgets.Pane {
         Label {
           text: mainWindow.title
           anchors.centerIn: parent
-          anchors.verticalCenterOffset: -4
           color: Cpp_ThemeManager.colors["text"]
           font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
         }
