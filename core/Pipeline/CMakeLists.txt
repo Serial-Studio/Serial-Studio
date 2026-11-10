@@ -300,6 +300,7 @@ qt_add_library(
   DataModel/FrameBuilder/LatestFrameTap.h
   DataModel/FrameBuilder/QuickPlotBuilder.h
   DataModel/FrameBuilder/QuickPlotFormatState.h
+  DataModel/FrameBuilder/QuickPlotReaderFraming.h
   DataModel/FrameBuilder/TableSnapshotChannel.h
   DataModel/FrameBuilder/TableScriptBridge.h
   DataModel/FrameBuilder/TransformCompiler.h
