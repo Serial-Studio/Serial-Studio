@@ -23,7 +23,7 @@ Item {
 
   readonly property string title: root.widget ? (root.widget.title || "") : ""
   readonly property bool lever: Cpp_ThemeManager.widgetLooks["output"] !== "plain"
-                                && root.height >= 96
+                                && root.height >= 90
 
   //
   // Asks the model for the opposite of what the control shows; feedback, not the press, moves it

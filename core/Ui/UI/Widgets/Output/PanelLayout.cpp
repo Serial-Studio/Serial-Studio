@@ -23,13 +23,13 @@ using OWT = DataModel::OutputWidgetType;
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Whether a control should absorb a column's spare height. A button grows into the room it
- *        is given and still reads as a button; a slider, a switch and a text field do not, and a
- *        stretched cell just parks their content against the top edge with dead space below.
+ * @brief Whether a control should absorb a column's spare height. A button, a knob and a toggle
+ *        (a lever switch in the hardware look, spec 0113) grow into the room they are given; a
+ *        slider and a text field do not, and a stretched cell parks them against the top edge.
  */
 bool PanelLayout::fillsHeight(OWT type)
 {
-  return type == OWT::Button || type == OWT::Knob;
+  return type == OWT::Button || type == OWT::Knob || type == OWT::Toggle;
 }
 
 /**
@@ -48,7 +48,8 @@ PanelLayout::SizeClass PanelLayout::classify(OWT type)
 /**
  * @brief Returns the minimum size (width, height) a widget needs, including the button size class:
  *        an extra-large button that keeps a normal-sized cell is clipped by the packer. A button
- *        drawn as panel hardware (spec 0113) is round, so its cell is as tall as the part.
+ *        drawn as panel hardware (spec 0113) is round, and a toggle a lever, so each cell is as
+ *        tall as the part.
  */
 QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
 {
@@ -66,7 +67,7 @@ QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
   const qreal labelH  = std::ceil(fontH * 0.75) + 1 + 2;
   const qreal btnH    = qMax(fontH * scale + 8 * scale, 28.0 * scale);
   const qreal inputH  = qMax(monoH + 10, 28.0);
-  const qreal switchH = 24.0;
+  const qreal leverH  = 64.0;
   const qreal sliderH = 24.0;
   const qreal rangeH  = std::ceil(fontH * 0.7);
   const qreal valueH  = std::ceil(monoH);
@@ -85,7 +86,7 @@ QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
     case OWT::Slider:
       return {charW * 20 + 2 * m, 2 * m + labelH + s + sliderH + s + rangeH + s + valueH};
     case OWT::Toggle:
-      return {charW * 12 + 2 * m, 2 * m + labelH + s + switchH};
+      return {charW * 12 + 2 * m, 2 * m + labelH + s + leverH};
     case OWT::TextField:
       return {charW * 24 + 2 * m, 2 * m + labelH + s + qMax(inputH, btnH)};
     case OWT::Knob:
