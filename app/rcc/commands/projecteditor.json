@@ -264,7 +264,7 @@
     { "id": "editor.editValueLabels", "title": "Edit Value Labels", "icon": "editor/dataset-values",
       "tooltip": "Show words instead of numbers for this dataset's values",
       "kind": "action", "category": "project", "contexts": ["editor"] },
-    { "id": "editor.editFrequencyMarkers", "title": "Edit Frequency Markers", "icon": "editor/fft",
+    { "id": "editor.editFrequencyMarkers", "title": "Edit Frequency Markers", "icon": "editor/frequency-markers",
       "tooltip": "Mark named frequencies on this dataset's FFT plot and waterfall",
       "kind": "action", "category": "project", "contexts": ["editor"] },
     { "id": "editor.menu.editPainterCode", "title": "Edit Canvas Code", "icon": "editor/edit-code",

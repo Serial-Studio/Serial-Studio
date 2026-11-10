@@ -319,7 +319,7 @@ Widgets.Pane {
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_JSON_ProjectEditor.frequencyMarkersApplicable
               onClicked: Cpp_JSON_ProjectEditor.openFrequencyMarkersEditorForSelection()
-              icon.source: Cpp_Misc_IconRegistry.icon("editor", "fft", 24)
+              icon.source: Cpp_Misc_IconRegistry.icon("editor", "frequency-markers", 24)
               ToolTip.text: qsTr("Mark named frequencies or ranges on the FFT plot and waterfall, "
                                  + "with optional warning and alarm levels.")
             }

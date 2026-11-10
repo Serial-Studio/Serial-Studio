@@ -390,6 +390,7 @@ editor/24/add-output-toggle
 editor/24/add-painter
 editor/24/add-plot
 editor/24/add-plot3d
+editor/24/add-profile
 editor/24/add-register
 editor/24/add-table
 editor/24/add-waterfall
@@ -413,6 +414,7 @@ editor/24/edit-code
 editor/24/expand
 editor/24/export-table
 editor/24/fft
+editor/24/frequency-markers
 editor/24/group
 editor/24/help
 editor/24/import-table

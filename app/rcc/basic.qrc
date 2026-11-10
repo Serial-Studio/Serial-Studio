@@ -790,6 +790,8 @@
         <file>iconpacks/basic/editor/24/add-plot3d.png</file>
         <file>iconpacks/basic/editor/24/add-plot3d@2x.png</file>
         <file>iconpacks/basic/editor/24/add-plot@2x.png</file>
+        <file>iconpacks/basic/editor/24/add-profile.png</file>
+        <file>iconpacks/basic/editor/24/add-profile@2x.png</file>
         <file>iconpacks/basic/editor/24/add-register.png</file>
         <file>iconpacks/basic/editor/24/add-register@2x.png</file>
         <file>iconpacks/basic/editor/24/add-table.png</file>
@@ -836,6 +838,8 @@
         <file>iconpacks/basic/editor/24/export-table@2x.png</file>
         <file>iconpacks/basic/editor/24/fft.png</file>
         <file>iconpacks/basic/editor/24/fft@2x.png</file>
+        <file>iconpacks/basic/editor/24/frequency-markers.png</file>
+        <file>iconpacks/basic/editor/24/frequency-markers@2x.png</file>
         <file>iconpacks/basic/editor/24/group.png</file>
         <file>iconpacks/basic/editor/24/group@2x.png</file>
         <file>iconpacks/basic/editor/24/help.png</file>

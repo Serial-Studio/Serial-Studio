@@ -4950,6 +4950,16 @@
    "source": "drawn",
    "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
   },
+  "iconpacks/basic/editor/24/add-profile.png": {
+   "sha256": "2767ad9d736d4b7a469427c8d0c6bdf56c19b04f182f3c02fc085dc973bcb0e8",
+   "source": "drawn",
+   "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+  },
+  "iconpacks/basic/editor/24/add-profile@2x.png": {
+   "sha256": "3b9d0768267d4fc66bc3ede510aa84018cdc187ae6a68dc3cc850d5eeab752c3",
+   "source": "drawn",
+   "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+  },
   "iconpacks/basic/editor/24/add-register.png": {
    "sha256": "11efab93d69fecd6a824bacf555e6b4f598f27f913b38bd1b0493461ccda07b3",
    "source": "drawn",
@@ -5177,6 +5187,16 @@
   },
   "iconpacks/basic/editor/24/fft@2x.png": {
    "sha256": "b48cb45f554f5e2e8c86c8b3b7b1c0390cc78f4238096d98cf16b2ef8523a602",
+   "source": "drawn",
+   "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+  },
+  "iconpacks/basic/editor/24/frequency-markers.png": {
+   "sha256": "22a36276f9da6c1d671bee51adbea0cd0a733d1284c116b94f4c3a249675b414",
+   "source": "drawn",
+   "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
+  },
+  "iconpacks/basic/editor/24/frequency-markers@2x.png": {
+   "sha256": "cfec9cb5e99911363298d96e107ade0c969fa7d1673e5df66269d01a5b15471b",
    "source": "drawn",
    "license": "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
   },
@@ -8950,6 +8970,11 @@
    "source": "tabler",
    "license": "MIT"
   },
+  "iconpacks/fine-line/editor/48/add-profile.svg": {
+   "sha256": "7fc7a11b4280b0f697dc5bb184dc39df16912610c1954763387e219230b6bcf3",
+   "source": "tabler",
+   "license": "MIT"
+  },
   "iconpacks/fine-line/editor/48/add-register.svg": {
    "sha256": "d24c2e55b400a007c4e297c85091634c62dcf82ac6b983a4e33b491a200e8980",
    "source": "tabler",
@@ -9107,6 +9132,11 @@
   },
   "iconpacks/fine-line/editor/48/frame-start.svg": {
    "sha256": "9f1829c70bbeb858fa25d3330006ba0cbe28789007331627a91467c47b3044ba",
+   "source": "tabler",
+   "license": "MIT"
+  },
+  "iconpacks/fine-line/editor/48/frequency-markers.svg": {
+   "sha256": "288dc9b6a1b378c62d2ba08f67f42ed9ead8f0b0d18e0543ff7b3fb6a1b06ea3",
    "source": "tabler",
    "license": "MIT"
   },
@@ -10642,6 +10672,7 @@
   "iconpacks/basic/editor/24/add-painter",
   "iconpacks/basic/editor/24/add-plot",
   "iconpacks/basic/editor/24/add-plot3d",
+  "iconpacks/basic/editor/24/add-profile",
   "iconpacks/basic/editor/24/add-register",
   "iconpacks/basic/editor/24/add-table",
   "iconpacks/basic/editor/24/add-waterfall",
@@ -10665,6 +10696,7 @@
   "iconpacks/basic/editor/24/expand",
   "iconpacks/basic/editor/24/export-table",
   "iconpacks/basic/editor/24/fft",
+  "iconpacks/basic/editor/24/frequency-markers",
   "iconpacks/basic/editor/24/group",
   "iconpacks/basic/editor/24/help",
   "iconpacks/basic/editor/24/import-table",

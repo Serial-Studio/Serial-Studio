@@ -14,9 +14,9 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 
 <!-- claim-verify off -->
 
-- [ ] `editor/frequency-markers`: the dataset toolbar's Frequency Markers button uses `editor/fft`.
-- [ ] `editor/add-profile`: the Workspaces toolbar's Add Profile button borrows `editor/add-group`
-  since it moved beside Add Workspace on 2026-11-07.
+- [ ] House art in the private `Icons` repository for `editor/add-profile` (24 px; `id-card`
+  plus the add badge) and `editor/frequency-markers` (24 px; an Icons8 pick). Until then the
+  Office set falls back to Basic's drawings for these two.
 
 <!-- claim-verify on -->
 

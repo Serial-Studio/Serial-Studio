@@ -171,7 +171,7 @@ Widgets.Pane {
             ToolTip.text: qsTr("Add a workspace profile")
             enabled: Cpp_JSON_ProjectModel.customizeWorkspaces
             onClicked: Cpp_JSON_ProjectModel.promptAddWorkspaceProfile()
-            icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-group", 24)
+            icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-profile", 24)
           }
 
           Item { Layout.fillWidth: true }
