@@ -29,7 +29,7 @@ Item {
   readonly property real cx: width / 2
   readonly property real cy: height / 2
   readonly property real legendGap: Math.max(onLegend.height, offLegend.height) + 4
-  readonly property real nut: Math.min(width * 0.5, (height - root.legendGap * 2) * 0.42)
+  readonly property real nut: Math.min(width * 0.5, (height - root.legendGap * 2) * 0.55)
 
   activeFocusOnTab: true
   opacity: root.dimmed ? 0.45 : 1.0

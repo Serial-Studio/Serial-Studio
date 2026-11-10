@@ -67,7 +67,7 @@ QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
   const qreal labelH  = std::ceil(fontH * 0.75) + 1 + 2;
   const qreal btnH    = qMax(fontH * scale + 8 * scale, 28.0 * scale);
   const qreal inputH  = qMax(monoH + 10, 28.0);
-  const qreal leverH  = 64.0;
+  const qreal leverH  = 84.0;
   const qreal sliderH = 24.0;
   const qreal rangeH  = std::ceil(fontH * 0.7);
   const qreal valueH  = std::ceil(monoH);
