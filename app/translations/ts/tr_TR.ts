@@ -4,7 +4,7 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="381"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="391"/>
         <source>Mixed</source>
         <translation>Karışık</translation>
     </message>
@@ -6728,12 +6728,12 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="102"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="184"/>
         <source>Enter command…</source>
         <translation>Komut girin…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="152"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="284"/>
         <source>Send</source>
         <translation>Gönder</translation>
     </message>
@@ -9270,7 +9270,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Bu veri kümesinin bağımsız pano kutucuğunu gizle; painter widget değerlerini okumaya devam edebilir</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
         <source>Automatic</source>
         <translation>Otomatik</translation>
@@ -10080,7 +10080,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Görüntüleme etiketi</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="235"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="301"/>
         <source>Button Icon</source>
         <translation>Düğme Simgesi</translation>
     </message>
@@ -10101,132 +10101,188 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Transmit() bir string değeri döndürdüğünde kullanılan karakter kodlaması</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="63"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="64"/>
         <source>Decimals</source>
         <translation>Ondalık</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="64"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="65"/>
         <source>Decimals shown for the value, -1 to pick from Step</source>
         <translation>Değer için gösterilen ondalık, Adım'dan seçmek için -1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="90"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="91"/>
         <source>Value Range</source>
         <translation>Değer Aralığı</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="102"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="103"/>
         <source>Text</source>
         <translation>Metin</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="103"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="104"/>
         <source>Number</source>
         <translation>Sayı</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="107"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="108"/>
         <source>Input</source>
         <translation>Giriş:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="109"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="110"/>
         <source>Text sends what is typed. Number reads it as a number and refuses a value outside Min to Max before the transmit function runs.</source>
         <translation>Metin yazılanı gönderir. Sayı bunu bir sayı olarak okur ve iletim işlevi çalışmadan önce Min ile Max arasında bir değeri reddeder.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="124"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="125"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="129"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="130"/>
         <source>Max</source>
         <translation>Maks</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="134"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="135"/>
         <source>Step</source>
         <translation>Adım</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="141"/>
         <source>Units</source>
         <translation>Birimler</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="147"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
         <source>Quantize to Step</source>
         <translation>Adıma Nicelleştir</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="149"/>
         <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
         <translation>Min'den sayılan en yakın Adım'a yazılan bir değeri yasla, aralık kontrolünden önce</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="190"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="242"/>
         <source>Standard</source>
         <translation>Standart</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="191"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="193"/>
         <source>Rotary Selector</source>
         <translation>Döner Seçici</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="195"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
         <source>Knob Style</source>
         <translation>Düğme Stili</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="199"/>
         <source>A rotary selector has one labelled position per Step from Min to Max</source>
         <translation>Döner seçici, Min ile Max arasındaki her Adım için bir etiketli konuma sahiptir</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="208"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="211"/>
         <source>Position Labels</source>
         <translation>Konum Etiketleri</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="209"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="212"/>
         <source>Comma-separated, one per position (Off, Low, High)</source>
         <translation>Virgülle ayrılmış, konum başına bir tane (Kapalı, Düşük, Yüksek)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="218"/>
+        <source>Spring Return</source>
+        <translation>Yay Dönüşü</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="219"/>
+        <source>When let go, return to the Initial Value position and send it once</source>
+        <translation>Bırakıldığında İlk Değer konumuna dön ve bir kez gönder</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
+        <source>Readout Display</source>
+        <translation>Okuma Göstergesi</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="244"/>
+        <source>Keypad Entry</source>
+        <translation>Tuş Takımı Girişi</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <source>Command Line</source>
+        <translation>Komut Satırı</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="246"/>
+        <source>Compact</source>
+        <translation>Kompakt</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="251"/>
+        <source>Text Field Style</source>
+        <translation>Metin Alanı Stili</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="254"/>
+        <source>How the field looks. Command Line needs a Text field and draws as Standard here</source>
+        <translation>Alanın görünüşü. Komut Satırı bir Metin Alanı gerektirir ve burada Standart olarak çizilir</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="257"/>
+        <source>How the field looks. Readout Display and Keypad Entry need a Number field and draw as Standard here</source>
+        <translation>Alanın görünüşü. Okuma Göstergesi ve Tuş Takımı Girişi bir Sayı Alanı gerektirir ve burada Standart olarak çizilir</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="270"/>
+        <source>Text Field Size</source>
+        <translation>Metin Alanı Boyutu</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="272"/>
+        <source>Scales the field, its text and its send button</source>
+        <translation>Alanı, metnini ve gönder düğmesini ölçeklendirir</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="290"/>
         <source>Placeholder Text</source>
         <translation>Yer Tutucu Metin</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="225"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="291"/>
         <source>Shown while the field is empty</source>
         <translation>Alan boşken gösterilir</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="229"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="295"/>
         <source>Button Text</source>
         <translation>Düğme Metni</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="296"/>
         <source>Send</source>
         <translation>Gönder</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="311"/>
         <source>Button Color</source>
         <translation>Düğme Rengi</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="261"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="327"/>
         <source>Show Title</source>
         <translation>Başlığı Göster</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="262"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="328"/>
         <source>Draw the control's title and frame; turn off for a control that stands alone</source>
         <translation>Denetimin başlığını ve çerçevesini çiz; tek başına duran bir denetim için kapatın</translation>
     </message>
@@ -12726,7 +12782,7 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation>Veri Kümesini Düzenle</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1480"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1483"/>
         <source>Edit Output Widget</source>
         <translation>Çıkış Widget'ını Düzenle</translation>
     </message>
@@ -13876,23 +13932,23 @@ Geçerli biçim: 01 A2 FF 3C</translation>
 <context>
     <name>EditorMultiSelect</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="215"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="336"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="217"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="346"/>
         <source>(multiple)</source>
         <translation>(çoklu)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="229"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="350"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="360"/>
         <source>Mixed</source>
         <translation>Karışık</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="444"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="445"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="507"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="508"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="564"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="454"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="455"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="517"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="518"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="574"/>
         <source>Edit Selection</source>
         <translation>Seçimi Düzenle</translation>
     </message>
@@ -16397,6 +16453,19 @@ Yoklamak için yukarıdan kontrolcü etiketleri ekleyin.</translation>
         <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="308"/>
         <source>NOT SENT</source>
         <translation>GÖNDERİLMEDİ</translation>
+    </message>
+</context>
+<context>
+    <name>HardwareLever</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareLever.qml" line="45"/>
+        <source>ON</source>
+        <translation>AÇIK</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareLever.qml" line="55"/>
+        <source>OFF</source>
+        <translation>KAPALI</translation>
     </message>
 </context>
 <context>
@@ -34229,17 +34298,17 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>Otomatik</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1065"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1065"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1240"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1267"/>
         <source>No options match your search.</source>
         <translation>Aramanızla eşleşen seçenek yok.</translation>
     </message>
@@ -34326,7 +34395,7 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Başlangıç Menüsü</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="232"/>
         <source>Menu</source>
         <translation>Menü</translation>
     </message>
@@ -34335,42 +34404,42 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Ara…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="599"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="601"/>
         <source>Notifications</source>
         <translation>Bildirimler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="594"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="602"/>
         <source>Clock</source>
         <translation>Saat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="603"/>
         <source>Stopwatch</source>
         <translation>Kronometre</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="597"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="605"/>
         <source>AI Assistant</source>
         <translation>Yapay Zeka Asistanı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="606"/>
         <source>Resume</source>
         <translation>Devam Et</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="606"/>
         <source>Pause</source>
         <translation>Duraklat</translation>
     </message>
@@ -34383,7 +34452,7 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Kullanılabilir Çalışma Alanı Yok</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="264"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="272"/>
         <source>Search… (%1)</source>
         <translation>Ara… (%1)</translation>
     </message>
@@ -34392,72 +34461,72 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Veriler, betiklerin işleyebileceğinden daha hızlı geliyor; bazı çerçeveler atlanıyor. Ayrıntılar için sorun merkezine bakın.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="957"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="965"/>
         <source>Data is arriving faster than the scripts can process it, so some frames are being skipped. See the Problem Center for details.</source>
         <translation>Veriler, betiklerin işleyebileceğinden daha hızlı geliyor; bazı çerçeveler atlanıyor. Ayrıntılar için Sorun Merkezine bakın.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="981"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
         <source>Unfreeze Dashboard</source>
         <translation>Gösterge Panelini Dondur</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="982"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="990"/>
         <source>Freeze Dashboard</source>
         <translation>Gösterge Panelini Dondur</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1026"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1034"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: %1 adresine bağlandı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1027"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1035"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Bağlı değil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1061"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Yayıncı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1063"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
         <source>Status:</source>
         <translation>Durum:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1079"/>
         <source>Connected</source>
         <translation>Bağlı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1072"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
         <source>Disconnected</source>
         <translation>Bağlantı Kesildi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1079"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1087"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1092"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1100"/>
         <source>Mode:</source>
         <translation>Mod:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1105"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1113"/>
         <source>Messages sent:</source>
         <translation>Gönderilen mesajlar:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1121"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1129"/>
         <source>Open MQTT Settings</source>
         <translation>MQTT Ayarlarını Aç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="596"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="604"/>
         <source>File Transmission</source>
         <translation>Dosya İletimi</translation>
     </message>
@@ -34466,7 +34535,7 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Widget'ları ara…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1185"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1193"/>
         <source>Remove from Workspace</source>
         <translation>Çalışma Alanından Kaldır</translation>
     </message>
@@ -34691,6 +34760,19 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="260"/>
         <source>Clear console output</source>
         <translation>Konsol çıktısını temizle</translation>
+    </message>
+</context>
+<context>
+    <name>TextFieldKeypad</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/TextFieldKeypad.qml" line="98"/>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/TextFieldKeypad.qml" line="108"/>
+        <source>Enter</source>
+        <translation>Girin</translation>
     </message>
 </context>
 <context>
@@ -35178,28 +35260,28 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Lisansı yönet ve Serial Studio Pro'yu etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
         <source>Remote Dashboard</source>
         <translation>Uzak Gösterge Paneli</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="268"/>
         <source>Manage the remote dashboard connection</source>
         <translation>Uzak gösterge paneli bağlantısını yönet</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="314"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı Kes</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect</source>
         <translation>Bağlan</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connecting…</source>
         <translation>Bağlanılıyor…</translation>
     </message>
@@ -36948,27 +37030,27 @@ Deneme sona erdiğinde lisans satın almam veya GPLv3 sürümünü derlemem gere
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="422"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="423"/>
         <source>Refused: %1</source>
         <translation>Reddedildi: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="584"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="594"/>
         <source>Enter a number from %1 to %2%3</source>
         <translation>%1 ile %2 arasında bir sayı girin%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="585"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="595"/>
         <source>Allowed range: %1 to %2%3</source>
         <translation>İzin verilen aralık: %1 ile %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="662"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="672"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>İletim betiği %1 ms sonra zaman aşımına uğradı</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="678"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="688"/>
         <source>Payload exceeds maximum size</source>
         <translation>Yük maksimum boyutu aşıyor</translation>
     </message>

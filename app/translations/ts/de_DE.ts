@@ -4,7 +4,7 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="381"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="391"/>
         <source>Mixed</source>
         <translation>Gemischt</translation>
     </message>
@@ -6728,12 +6728,12 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="102"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="184"/>
         <source>Enter command…</source>
         <translation>Befehl eingeben…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="152"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="284"/>
         <source>Send</source>
         <translation>Senden</translation>
     </message>
@@ -9270,7 +9270,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Eigenständige Dashboard-Kachel dieses Datensatzes unterdrücken; das Painter-Widget kann seine Werte weiterhin lesen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
         <source>Automatic</source>
         <translation>Automatisch</translation>
@@ -10080,7 +10080,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Beschriftung anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="235"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="301"/>
         <source>Button Icon</source>
         <translation>Schaltflächensymbol</translation>
     </message>
@@ -10101,132 +10101,188 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Zeichenkodierung, die verwendet wird, wenn transmit() einen String-Wert zurückgibt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="63"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="64"/>
         <source>Decimals</source>
         <translation>Dezimalstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="64"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="65"/>
         <source>Decimals shown for the value, -1 to pick from Step</source>
         <translation>Dezimalstellen, die für den Wert angezeigt werden, -1 zum Auswählen aus Schritt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="90"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="91"/>
         <source>Value Range</source>
         <translation>Wertebereich</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="102"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="103"/>
         <source>Text</source>
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="103"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="104"/>
         <source>Number</source>
         <translation>Zahl</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="107"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="108"/>
         <source>Input</source>
         <translation>Eingabe:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="109"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="110"/>
         <source>Text sends what is typed. Number reads it as a number and refuses a value outside Min to Max before the transmit function runs.</source>
         <translation>Text sendet das Eingegebene. Zahl liest es als Zahl und lehnt einen Wert außerhalb von Min bis Max ab, bevor die Übertragungsfunktion ausgeführt wird.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="124"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="125"/>
         <source>Min</source>
         <translation>Min.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="129"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="130"/>
         <source>Max</source>
         <translation>Max.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="134"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="135"/>
         <source>Step</source>
         <translation>Schritt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="141"/>
         <source>Units</source>
         <translation>Einheiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="147"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
         <source>Quantize to Step</source>
         <translation>Auf Schritt quantisieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="149"/>
         <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
         <translation>Einen eingegebenen Wert auf den nächsten Schritt ausgehend von Min ausrichten, bevor die Bereichsprüfung erfolgt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="190"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="242"/>
         <source>Standard</source>
         <translation>Standard</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="191"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="193"/>
         <source>Rotary Selector</source>
         <translation>Drehschalter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="195"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
         <source>Knob Style</source>
         <translation>Drehregler-stil</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="199"/>
         <source>A rotary selector has one labelled position per Step from Min to Max</source>
         <translation>Ein Drehschalter hat eine beschriftete Position pro Schritt von Min bis Max</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="208"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="211"/>
         <source>Position Labels</source>
         <translation>Positionsbeschriftungen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="209"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="212"/>
         <source>Comma-separated, one per position (Off, Low, High)</source>
         <translation>Kommagetrennt, eine pro Position (Aus, Niedrig, Hoch)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="218"/>
+        <source>Spring Return</source>
+        <translation>Federrückkehr</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="219"/>
+        <source>When let go, return to the Initial Value position and send it once</source>
+        <translation>Beim Loslassen zur Ausgangsposition zurückkehren und einmal senden</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
+        <source>Readout Display</source>
+        <translation>Anzeigefeld</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="244"/>
+        <source>Keypad Entry</source>
+        <translation>Tastatureingabe</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <source>Command Line</source>
+        <translation>Befehlszeile</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="246"/>
+        <source>Compact</source>
+        <translation>Kompakt</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="251"/>
+        <source>Text Field Style</source>
+        <translation>Textfeld-stil</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="254"/>
+        <source>How the field looks. Command Line needs a Text field and draws as Standard here</source>
+        <translation>Wie das Feld aussieht. Befehlszeile benötigt ein Textfeld und wird hier als Standard angezeigt</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="257"/>
+        <source>How the field looks. Readout Display and Keypad Entry need a Number field and draw as Standard here</source>
+        <translation>Wie das Feld aussieht. Anzeigefeld und Tastatureingabe benötigen ein Zahlenfeld und werden hier als Standard angezeigt</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="270"/>
+        <source>Text Field Size</source>
+        <translation>Textfeldgröße</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="272"/>
+        <source>Scales the field, its text and its send button</source>
+        <translation>Skaliert das Feld, seinen Text und seine Sendeschaltfläche</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="290"/>
         <source>Placeholder Text</source>
         <translation>Platzhaltertext</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="225"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="291"/>
         <source>Shown while the field is empty</source>
         <translation>Wird angezeigt, während das Feld leer ist</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="229"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="295"/>
         <source>Button Text</source>
         <translation>Schaltflächentext</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="296"/>
         <source>Send</source>
         <translation>Senden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="311"/>
         <source>Button Color</source>
         <translation>Schaltflächenfarbe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="261"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="327"/>
         <source>Show Title</source>
         <translation>Titel Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="262"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="328"/>
         <source>Draw the control's title and frame; turn off for a control that stands alone</source>
         <translation>Titel und Rahmen des Steuerelements zeichnen; für ein eigenständiges Steuerelement ausschalten</translation>
     </message>
@@ -12726,7 +12782,7 @@ Gültiges Format: 01 A2 FF 3C</translation>
         <translation>Datensatz Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1480"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1483"/>
         <source>Edit Output Widget</source>
         <translation>Ausgabe-widget Bearbeiten</translation>
     </message>
@@ -13876,23 +13932,23 @@ Gültiges Format: 01 A2 FF 3C</translation>
 <context>
     <name>EditorMultiSelect</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="215"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="336"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="217"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="346"/>
         <source>(multiple)</source>
         <translation>(mehrere)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="229"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="350"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="360"/>
         <source>Mixed</source>
         <translation>Gemischt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="444"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="445"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="507"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="508"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="564"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="454"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="455"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="517"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="518"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="574"/>
         <source>Edit Selection</source>
         <translation>Auswahl Bearbeiten</translation>
     </message>
@@ -16398,6 +16454,19 @@ Fügen Sie oben Controller-Tags hinzu, um sie abzufragen.</translation>
         <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="308"/>
         <source>NOT SENT</source>
         <translation>NICHT GESENDET</translation>
+    </message>
+</context>
+<context>
+    <name>HardwareLever</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareLever.qml" line="45"/>
+        <source>ON</source>
+        <translation>EIN</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareLever.qml" line="55"/>
+        <source>OFF</source>
+        <translation>AUS</translation>
     </message>
 </context>
 <context>
@@ -34233,17 +34302,17 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1065"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1065"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1240"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1267"/>
         <source>No options match your search.</source>
         <translation>Keine Optionen entsprechen Ihrer Suche.</translation>
     </message>
@@ -34330,7 +34399,7 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Startmenü</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="232"/>
         <source>Menu</source>
         <translation>Menü</translation>
     </message>
@@ -34339,42 +34408,42 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Suchen…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="599"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Console</source>
         <translation>Konsole</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="601"/>
         <source>Notifications</source>
         <translation>Benachrichtigungen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="594"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="602"/>
         <source>Clock</source>
         <translation>Uhr</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="603"/>
         <source>Stopwatch</source>
         <translation>Stoppuhr</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="597"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="605"/>
         <source>AI Assistant</source>
         <translation>Ki-assistent</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="606"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="606"/>
         <source>Pause</source>
         <translation>Pausieren</translation>
     </message>
@@ -34387,7 +34456,7 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Keine Arbeitsbereiche Verfügbar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="264"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="272"/>
         <source>Search… (%1)</source>
         <translation>Suchen… (%1)</translation>
     </message>
@@ -34396,67 +34465,67 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Daten kommen schneller an, als Skripte sie verarbeiten können; einige Frames werden ausgedünnt. Details finden Sie in der Problemzentrale.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="957"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="965"/>
         <source>Data is arriving faster than the scripts can process it, so some frames are being skipped. See the Problem Center for details.</source>
         <translation>Daten kommen schneller an, als die Skripte sie verarbeiten können, daher werden einige Frames übersprungen. Details finden Sie im Problemzentrum.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="981"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
         <source>Unfreeze Dashboard</source>
         <translation>Dashboard Entsperren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="982"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="990"/>
         <source>Freeze Dashboard</source>
         <translation>Dashboard Sperren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1026"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1034"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Verbunden mit %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1027"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1035"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Nicht verbunden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1061"/>
         <source>MQTT Publisher</source>
         <translation>MQTT-publisher</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1063"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
         <source>Status:</source>
         <translation>Status:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1079"/>
         <source>Connected</source>
         <translation>Verbunden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1072"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
         <source>Disconnected</source>
         <translation>Getrennt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1079"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1087"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1092"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1100"/>
         <source>Mode:</source>
         <translation>Modus:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1105"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1113"/>
         <source>Messages sent:</source>
         <translation>Gesendete Nachrichten:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1121"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1129"/>
         <source>Open MQTT Settings</source>
         <translation>MQTT-einstellungen Öffnen</translation>
     </message>
@@ -34489,7 +34558,7 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Problemcenter Öffnen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="596"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="604"/>
         <source>File Transmission</source>
         <translation>Dateiübertragung</translation>
     </message>
@@ -34498,7 +34567,7 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Widgets suchen…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1185"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1193"/>
         <source>Remove from Workspace</source>
         <translation>Aus Arbeitsbereich entfernen</translation>
     </message>
@@ -34723,6 +34792,19 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="260"/>
         <source>Clear console output</source>
         <translation>Konsolenausgabe leeren</translation>
+    </message>
+</context>
+<context>
+    <name>TextFieldKeypad</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/TextFieldKeypad.qml" line="98"/>
+        <source>Cancel</source>
+        <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/TextFieldKeypad.qml" line="108"/>
+        <source>Enter</source>
+        <translation>Eingeben</translation>
     </message>
 </context>
 <context>
@@ -35210,28 +35292,28 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Lizenz verwalten und Serial Studio Pro aktivieren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
         <source>Remote Dashboard</source>
         <translation>Remote-dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="268"/>
         <source>Manage the remote dashboard connection</source>
         <translation>Remote-Dashboard-Verbindung verwalten</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="314"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>Disconnect</source>
         <translation>Trennen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connecting…</source>
         <translation>Verbinde…</translation>
     </message>
@@ -36980,27 +37062,27 @@ Es ist klar, dass nach Ablauf eine Lizenz erworben oder die GPLv3-Version erstel
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="422"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="423"/>
         <source>Refused: %1</source>
         <translation>Abgelehnt: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="584"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="594"/>
         <source>Enter a number from %1 to %2%3</source>
         <translation>Geben Sie eine Zahl von %1 bis %2%3 ein</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="585"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="595"/>
         <source>Allowed range: %1 to %2%3</source>
         <translation>Zulässiger Bereich: %1 bis %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="662"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="672"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>Übertragungsskript nach %1 ms abgelaufen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="678"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="688"/>
         <source>Payload exceeds maximum size</source>
         <translation>Nutzdaten überschreiten maximale Größe</translation>
     </message>

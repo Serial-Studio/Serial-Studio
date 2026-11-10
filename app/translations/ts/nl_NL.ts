@@ -4,7 +4,7 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="381"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="391"/>
         <source>Mixed</source>
         <translation>Gemengd</translation>
     </message>
@@ -6728,12 +6728,12 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="102"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="184"/>
         <source>Enter command…</source>
         <translation>Voer commando in…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="152"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="284"/>
         <source>Send</source>
         <translation>Verzenden</translation>
     </message>
@@ -9270,7 +9270,7 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Onderdruk de standalone dashboardtegel van deze dataset; de painter widget kan de waarden nog steeds uitlezen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
         <source>Automatic</source>
         <translation>Automatisch</translation>
@@ -10080,7 +10080,7 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Weergavelabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="235"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="301"/>
         <source>Button Icon</source>
         <translation>Knoppictogram</translation>
     </message>
@@ -10101,132 +10101,188 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Tekencodering gebruikt wanneer transmit() een tekenreekswaarde retourneert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="63"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="64"/>
         <source>Decimals</source>
         <translation>Decimalen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="64"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="65"/>
         <source>Decimals shown for the value, -1 to pick from Step</source>
         <translation>Decimalen weergegeven voor de waarde, -1 om van Stap te kiezen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="90"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="91"/>
         <source>Value Range</source>
         <translation>Waardebereik</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="102"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="103"/>
         <source>Text</source>
         <translation>Tekst</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="103"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="104"/>
         <source>Number</source>
         <translation>Getal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="107"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="108"/>
         <source>Input</source>
         <translation>Invoer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="109"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="110"/>
         <source>Text sends what is typed. Number reads it as a number and refuses a value outside Min to Max before the transmit function runs.</source>
         <translation>Tekst stuurt wat wordt getypt. Getal leest het als een getal en weigert een waarde buiten Min tot Max voordat de verzenden-functie wordt uitgevoerd.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="124"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="125"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="129"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="130"/>
         <source>Max</source>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="134"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="135"/>
         <source>Step</source>
         <translation>Stap</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="141"/>
         <source>Units</source>
         <translation>Eenheden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="147"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
         <source>Quantize to Step</source>
         <translation>Kwantiseren naar Stap</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="149"/>
         <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
         <translation>Snap een getypte waarde naar de dichtstbijzijnde Stap geteld vanaf Min voordat de bereikcontrole plaatsvindt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="190"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="242"/>
         <source>Standard</source>
         <translation>Standaard</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="191"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="193"/>
         <source>Rotary Selector</source>
         <translation>Rotatieschakelaar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="195"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
         <source>Knob Style</source>
         <translation>Draaiknopstijl</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="199"/>
         <source>A rotary selector has one labelled position per Step from Min to Max</source>
         <translation>Een rotatieschakelaar heeft één gelabelde positie per Stap van Min naar Max</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="208"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="211"/>
         <source>Position Labels</source>
         <translation>Positielabels</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="209"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="212"/>
         <source>Comma-separated, one per position (Off, Low, High)</source>
         <translation>Kommagescheiden, één per positie (Uit, Laag, Hoog)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="218"/>
+        <source>Spring Return</source>
+        <translation>Veerterugkeer</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="219"/>
+        <source>When let go, return to the Initial Value position and send it once</source>
+        <translation>Wanneer losgelaten, terugkeren naar de beginwaarde en deze eenmaal verzenden</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
+        <source>Readout Display</source>
+        <translation>Afleesweergeving</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="244"/>
+        <source>Keypad Entry</source>
+        <translation>Toetsenbordinvoer</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <source>Command Line</source>
+        <translation>Opdrachtregel</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="246"/>
+        <source>Compact</source>
+        <translation>Compact</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="251"/>
+        <source>Text Field Style</source>
+        <translation>Tekstveldstijl</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="254"/>
+        <source>How the field looks. Command Line needs a Text field and draws as Standard here</source>
+        <translation>Hoe het veld eruitziet. Opdrachtregel vereist een tekstveld en wordt hier als standaard weergegeven</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="257"/>
+        <source>How the field looks. Readout Display and Keypad Entry need a Number field and draw as Standard here</source>
+        <translation>Hoe het veld eruitziet. Afleesweergeving en toetsenbordinvoer vereisen een nummerveld en worden hier als standaard weergegeven</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="270"/>
+        <source>Text Field Size</source>
+        <translation>Tekstveldgrootte</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="272"/>
+        <source>Scales the field, its text and its send button</source>
+        <translation>Schaalt het veld, de tekst en de verzendknop</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="290"/>
         <source>Placeholder Text</source>
         <translation>Tijdelijke Aanduiding</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="225"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="291"/>
         <source>Shown while the field is empty</source>
         <translation>Weergegeven terwijl het veld leeg is</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="229"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="295"/>
         <source>Button Text</source>
         <translation>Knoptekst</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="296"/>
         <source>Send</source>
         <translation>Verzenden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="311"/>
         <source>Button Color</source>
         <translation>Knopkleur</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="261"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="327"/>
         <source>Show Title</source>
         <translation>Titel Tonen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="262"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="328"/>
         <source>Draw the control's title and frame; turn off for a control that stands alone</source>
         <translation>Teken de titel en rand van het besturingselement; uitschakelen voor een besturingselement dat op zichzelf staat</translation>
     </message>
@@ -12726,7 +12782,7 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation>Dataset Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1480"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1483"/>
         <source>Edit Output Widget</source>
         <translation>Uitvoerwidget Bewerken</translation>
     </message>
@@ -13876,23 +13932,23 @@ Geldig formaat: 01 A2 FF 3C</translation>
 <context>
     <name>EditorMultiSelect</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="215"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="336"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="217"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="346"/>
         <source>(multiple)</source>
         <translation>(meerdere)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="229"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="350"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="360"/>
         <source>Mixed</source>
         <translation>Gemengd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="444"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="445"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="507"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="508"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="564"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="454"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="455"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="517"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="518"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="574"/>
         <source>Edit Selection</source>
         <translation>Selectie Bewerken</translation>
     </message>
@@ -16398,6 +16454,19 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
         <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="308"/>
         <source>NOT SENT</source>
         <translation>NIET VERZONDEN</translation>
+    </message>
+</context>
+<context>
+    <name>HardwareLever</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareLever.qml" line="45"/>
+        <source>ON</source>
+        <translation>AAN</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareLever.qml" line="55"/>
+        <source>OFF</source>
+        <translation>UIT</translation>
     </message>
 </context>
 <context>
@@ -34233,17 +34302,17 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1065"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1065"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1240"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1267"/>
         <source>No options match your search.</source>
         <translation>Geen opties komen overeen met uw zoekopdracht.</translation>
     </message>
@@ -34330,7 +34399,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation type="vanished">Startmenu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="232"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
@@ -34339,42 +34408,42 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation type="vanished">Zoeken…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="599"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="601"/>
         <source>Notifications</source>
         <translation>Meldingen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="594"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="602"/>
         <source>Clock</source>
         <translation>Klok</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="603"/>
         <source>Stopwatch</source>
         <translation>Stopwatch</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="597"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="605"/>
         <source>AI Assistant</source>
         <translation>Ai-assistent</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="606"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="606"/>
         <source>Pause</source>
         <translation>Pauzeren</translation>
     </message>
@@ -34387,7 +34456,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation type="vanished">Geen Werkruimten Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="264"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="272"/>
         <source>Search… (%1)</source>
         <translation>Zoeken… (%1)</translation>
     </message>
@@ -34396,72 +34465,72 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation type="vanished">Data arriveert sneller dan scripts kunnen verwerken; sommige frames worden uitgedund. Zie het probleemcentrum voor details.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="957"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="965"/>
         <source>Data is arriving faster than the scripts can process it, so some frames are being skipped. See the Problem Center for details.</source>
         <translation>Data arriveert sneller dan scripts kunnen verwerken; sommige frames worden overgeslagen. Zie het Probleemcentrum voor details.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="981"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
         <source>Unfreeze Dashboard</source>
         <translation>Dashboard Ontgrendelen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="982"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="990"/>
         <source>Freeze Dashboard</source>
         <translation>Dashboard Vergrendelen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1026"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1034"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Verbonden met %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1027"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1035"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Niet verbonden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1061"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1063"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
         <source>Status:</source>
         <translation>Status:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1079"/>
         <source>Connected</source>
         <translation>Verbonden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1072"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
         <source>Disconnected</source>
         <translation>Niet Verbonden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1079"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1087"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1092"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1100"/>
         <source>Mode:</source>
         <translation>Modus:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1105"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1113"/>
         <source>Messages sent:</source>
         <translation>Verzonden berichten:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1121"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1129"/>
         <source>Open MQTT Settings</source>
         <translation>MQTT-instellingen Openen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="596"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="604"/>
         <source>File Transmission</source>
         <translation>Bestandsoverdracht</translation>
     </message>
@@ -34470,7 +34539,7 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation type="vanished">Widgets zoeken…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1185"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1193"/>
         <source>Remove from Workspace</source>
         <translation>Verwijderen uit Werkruimte</translation>
     </message>
@@ -34695,6 +34764,19 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="260"/>
         <source>Clear console output</source>
         <translation>Console-uitvoer wissen</translation>
+    </message>
+</context>
+<context>
+    <name>TextFieldKeypad</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/TextFieldKeypad.qml" line="98"/>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/TextFieldKeypad.qml" line="108"/>
+        <source>Enter</source>
+        <translation>Voer In</translation>
     </message>
 </context>
 <context>
@@ -35182,28 +35264,28 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation type="vanished">Beheer licentie en activeer Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
         <source>Remote Dashboard</source>
         <translation>Dashboard op Afstand</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="268"/>
         <source>Manage the remote dashboard connection</source>
         <translation>Beheer de verbinding met het dashboard op afstand</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="314"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>Disconnect</source>
         <translation>Verbinding Verbreken</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connecting…</source>
         <translation>Verbinden…</translation>
     </message>
@@ -36952,27 +37034,27 @@ Ik begrijp dat ik bij het einde een licentie moet kopen of de GPLv3-versie moet 
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="422"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="423"/>
         <source>Refused: %1</source>
         <translation>Geweigerd: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="584"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="594"/>
         <source>Enter a number from %1 to %2%3</source>
         <translation>Voer een getal in van %1 tot %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="585"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="595"/>
         <source>Allowed range: %1 to %2%3</source>
         <translation>Toegestaan bereik: %1 tot %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="662"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="672"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>Verzendscript time-out na %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="678"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="688"/>
         <source>Payload exceeds maximum size</source>
         <translation>Payload overschrijdt maximale grootte</translation>
     </message>

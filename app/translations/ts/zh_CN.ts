@@ -4,7 +4,7 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="381"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="391"/>
         <source>Mixed</source>
         <translation>混合</translation>
     </message>
@@ -6728,12 +6728,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="102"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="184"/>
         <source>Enter command…</source>
         <translation>输入命令…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="152"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="284"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
@@ -9270,7 +9270,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">隐藏此数据集的独立仪表板磁贴;绘图控件仍可读取其值</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
         <source>Automatic</source>
         <translation>自动</translation>
@@ -10080,7 +10080,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">显示标签</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="235"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="301"/>
         <source>Button Icon</source>
         <translation>按钮图标</translation>
     </message>
@@ -10101,132 +10101,188 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">transmit() 返回字符串值时使用的字符编码</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="63"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="64"/>
         <source>Decimals</source>
         <translation>小数位数</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="64"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="65"/>
         <source>Decimals shown for the value, -1 to pick from Step</source>
         <translation>值显示的小数位数，-1 表示从步长中选择</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="90"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="91"/>
         <source>Value Range</source>
         <translation>数值范围</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="102"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="103"/>
         <source>Text</source>
         <translation>文本</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="103"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="104"/>
         <source>Number</source>
         <translation>数字</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="107"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="108"/>
         <source>Input</source>
         <translation>输入:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="109"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="110"/>
         <source>Text sends what is typed. Number reads it as a number and refuses a value outside Min to Max before the transmit function runs.</source>
         <translation>文本发送键入的内容。数字将其作为数字读取，在传输函数运行前拒绝超出最小值到最大值范围的值。</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="124"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="125"/>
         <source>Min</source>
         <translation>最小值</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="129"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="130"/>
         <source>Max</source>
         <translation>最大值</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="134"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="135"/>
         <source>Step</source>
         <translation>步长</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="141"/>
         <source>Units</source>
         <translation>单位</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="147"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
         <source>Quantize to Step</source>
         <translation>量化到步长</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="148"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="149"/>
         <source>Snap a typed value to the nearest Step counted from Min before the range check</source>
         <translation>将键入的值对齐到从最小值开始计数的最近步长，然后进行范围检查</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="190"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="242"/>
         <source>Standard</source>
         <translation>标准</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="191"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="193"/>
         <source>Rotary Selector</source>
         <translation>旋转选择器</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="195"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
         <source>Knob Style</source>
         <translation>旋钮样式</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="199"/>
         <source>A rotary selector has one labelled position per Step from Min to Max</source>
         <translation>旋转选择器在从最小值到最大值的每个步长处有一个标记位置</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="208"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="211"/>
         <source>Position Labels</source>
         <translation>位置标签</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="209"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="212"/>
         <source>Comma-separated, one per position (Off, Low, High)</source>
         <translation>逗号分隔，每个位置一个（关闭、低、高）</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="218"/>
+        <source>Spring Return</source>
+        <translation>弹簧复位</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="219"/>
+        <source>When let go, return to the Initial Value position and send it once</source>
+        <translation>松开时返回初始值位置并发送一次</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="243"/>
+        <source>Readout Display</source>
+        <translation>读数显示</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="244"/>
+        <source>Keypad Entry</source>
+        <translation>键盘输入</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <source>Command Line</source>
+        <translation>命令行</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="246"/>
+        <source>Compact</source>
+        <translation>紧凑</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="251"/>
+        <source>Text Field Style</source>
+        <translation>文本字段样式</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="254"/>
+        <source>How the field looks. Command Line needs a Text field and draws as Standard here</source>
+        <translation>字段外观。命令行需要文本字段，此处显示为标准样式</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="257"/>
+        <source>How the field looks. Readout Display and Keypad Entry need a Number field and draw as Standard here</source>
+        <translation>字段外观。读数显示和键盘输入需要数字字段，此处显示为标准样式</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="270"/>
+        <source>Text Field Size</source>
+        <translation>文本字段大小</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="272"/>
+        <source>Scales the field, its text and its send button</source>
+        <translation>缩放字段、其文本及其发送按钮</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="290"/>
         <source>Placeholder Text</source>
         <translation>占位符文本</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="225"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="291"/>
         <source>Shown while the field is empty</source>
         <translation>在字段为空时显示</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="229"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="295"/>
         <source>Button Text</source>
         <translation>按钮文本</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="296"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="245"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="311"/>
         <source>Button Color</source>
         <translation>按钮颜色</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="261"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="327"/>
         <source>Show Title</source>
         <translation>显示标题</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="262"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="328"/>
         <source>Draw the control's title and frame; turn off for a control that stands alone</source>
         <translation>绘制控件的标题和边框；对于独立的控件，请关闭此选项</translation>
     </message>
@@ -12726,7 +12782,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>编辑数据集</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1480"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1483"/>
         <source>Edit Output Widget</source>
         <translation>编辑输出组件</translation>
     </message>
@@ -13876,23 +13932,23 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>EditorMultiSelect</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="215"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="336"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="217"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="346"/>
         <source>(multiple)</source>
         <translation>(多个)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="229"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="350"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="360"/>
         <source>Mixed</source>
         <translation>混合</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="444"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="445"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="507"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="508"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="564"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="454"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="455"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="517"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="518"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="574"/>
         <source>Edit Selection</source>
         <translation>编辑选择</translation>
     </message>
@@ -16397,6 +16453,19 @@ Add controller tags above to poll them.</source>
         <location filename="../../qml/Widgets/Dashboard/Output/HardwareEmergencyStop.qml" line="308"/>
         <source>NOT SENT</source>
         <translation>未发送</translation>
+    </message>
+</context>
+<context>
+    <name>HardwareLever</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareLever.qml" line="45"/>
+        <source>ON</source>
+        <translation>开</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/HardwareLever.qml" line="55"/>
+        <source>OFF</source>
+        <translation>关</translation>
     </message>
 </context>
 <context>
@@ -34229,17 +34298,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1065"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1065"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1240"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1267"/>
         <source>No options match your search.</source>
         <translation>没有选项匹配您的搜索。</translation>
     </message>
@@ -34326,7 +34395,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">开始菜单</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="232"/>
         <source>Menu</source>
         <translation>菜单</translation>
     </message>
@@ -34335,42 +34404,42 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">搜索…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="599"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="601"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="594"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="602"/>
         <source>Clock</source>
         <translation>时钟</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="603"/>
         <source>Stopwatch</source>
         <translation>秒表</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="597"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="605"/>
         <source>AI Assistant</source>
         <translation>AI 助手</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="606"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="606"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
@@ -34383,7 +34452,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">无可用工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="264"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="272"/>
         <source>Search… (%1)</source>
         <translation>搜索… (%1)</translation>
     </message>
@@ -34392,72 +34461,72 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">数据到达速度超过脚本处理能力;部分帧正在被精简。请查看问题中心以获取详情。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="957"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="965"/>
         <source>Data is arriving faster than the scripts can process it, so some frames are being skipped. See the Problem Center for details.</source>
         <translation>数据到达速度超过脚本处理能力;部分帧正在被跳过。请查看问题中心以获取详情。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="981"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="989"/>
         <source>Unfreeze Dashboard</source>
         <translation>解冻仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="982"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="990"/>
         <source>Freeze Dashboard</source>
         <translation>冻结仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1026"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1034"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT：已连接到 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1027"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1035"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT：未连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1061"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 发布者</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1063"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
         <source>Status:</source>
         <translation>状态:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1079"/>
         <source>Connected</source>
         <translation>已连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1072"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
         <source>Disconnected</source>
         <translation>已断开</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1079"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1087"/>
         <source>Broker:</source>
         <translation>代理:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1092"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1100"/>
         <source>Mode:</source>
         <translation>模式:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1105"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1113"/>
         <source>Messages sent:</source>
         <translation>已发送消息:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1121"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1129"/>
         <source>Open MQTT Settings</source>
         <translation>打开 MQTT 设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="596"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="604"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
@@ -34466,7 +34535,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">搜索控件…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1185"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1193"/>
         <source>Remove from Workspace</source>
         <translation>从工作区移除</translation>
     </message>
@@ -34691,6 +34760,19 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="260"/>
         <source>Clear console output</source>
         <translation>清空控制台输出</translation>
+    </message>
+</context>
+<context>
+    <name>TextFieldKeypad</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/TextFieldKeypad.qml" line="98"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/TextFieldKeypad.qml" line="108"/>
+        <source>Enter</source>
+        <translation>输入</translation>
     </message>
 </context>
 <context>
@@ -35178,28 +35260,28 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">管理许可证并激活 Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="264"/>
         <source>Remote Dashboard</source>
         <translation>远程仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="268"/>
         <source>Manage the remote dashboard connection</source>
         <translation>管理远程仪表板连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="314"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Connecting…</source>
         <translation>正在连接…</translation>
     </message>
@@ -36948,27 +37030,27 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="422"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="423"/>
         <source>Refused: %1</source>
         <translation>已拒绝：%1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="584"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="594"/>
         <source>Enter a number from %1 to %2%3</source>
         <translation>输入 %1 到 %2%3 之间的数字</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="585"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="595"/>
         <source>Allowed range: %1 to %2%3</source>
         <translation>允许范围：%1 到 %2%3</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="662"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="672"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>传输脚本在 %1 毫秒后超时</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="678"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="688"/>
         <source>Payload exceeds maximum size</source>
         <translation>有效载荷超出最大大小</translation>
     </message>
