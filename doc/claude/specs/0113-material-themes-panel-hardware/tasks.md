@@ -99,9 +99,10 @@ updated: 2026-11-06
   lamp lenses; a two-position selector toggles on any click.
 - [ ] **T11c** What that rework could not reach from the colour table: the command palette
   header paints with the main toolbar keys; gauge face, bezel and plot grid all derive from
-  `widget_base` and
-  `widget_border`; a dark taskbar menu needs the `text` sites in the layout picker and the
-  annunciator moved to `start_menu_text`; the alarm flash fill hardcodes white.
+  `widget_base` and `widget_border`. Done 2026-11-10: the layout picker and the annunciator
+  popup draw their text in `start_menu_text`, and text on an alarm flash takes
+  `AlarmFlash.ink` (dark on a light fill such as caution yellow, else white) instead of a
+  hardcoded white.
 
 ### Stage B — LED panel lamps
 

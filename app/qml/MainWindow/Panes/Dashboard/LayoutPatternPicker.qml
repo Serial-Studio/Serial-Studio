@@ -109,7 +109,7 @@ Popup {
       opacity: 0.6
       text: qsTr("Layout")
       Layout.fillWidth: true
-      color: Cpp_ThemeManager.colors["text"]
+      color: Cpp_ThemeManager.colors["start_menu_text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.9, true)
     }
 
@@ -139,7 +139,7 @@ Popup {
           color: _tile.current
                  ? Qt.alpha(Cpp_ThemeManager.colors["highlight"], 0.12)
                  : (_tileArea.containsMouse
-                    ? Qt.alpha(Cpp_ThemeManager.colors["text"], 0.06)
+                    ? Qt.alpha(Cpp_ThemeManager.colors["start_menu_text"], 0.06)
                     : "transparent")
           border.color: _tile.current
                         ? Cpp_ThemeManager.colors["highlight"]
@@ -229,7 +229,7 @@ Popup {
               horizontalAlignment: Text.AlignHCenter
               font: Cpp_Misc_CommonFonts.customUiFont(0.9, _tile.current)
               color: _tile.current ? Cpp_ThemeManager.colors["highlight"]
-                                   : Cpp_ThemeManager.colors["text"]
+                                   : Cpp_ThemeManager.colors["start_menu_text"]
             }
           }
 
@@ -258,7 +258,7 @@ Popup {
       Label {
         opacity: 0.6
         text: qsTr("Split")
-        color: Cpp_ThemeManager.colors["text"]
+        color: Cpp_ThemeManager.colors["start_menu_text"]
         font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
       }
 
@@ -302,7 +302,7 @@ Popup {
       color: !root.tiling
              ? Qt.alpha(Cpp_ThemeManager.colors["highlight"], 0.12)
              : (_manualArea.containsMouse
-                ? Qt.alpha(Cpp_ThemeManager.colors["text"], 0.06)
+                ? Qt.alpha(Cpp_ThemeManager.colors["start_menu_text"], 0.06)
                 : "transparent")
 
       Behavior on color { ColorAnimation { duration: 90 } }
@@ -320,7 +320,7 @@ Popup {
           Layout.alignment: Qt.AlignVCenter
           source: "qrc:/icons/buttons/manual-placement.svg"
           color: !root.tiling ? Cpp_ThemeManager.colors["highlight"]
-                              : Cpp_ThemeManager.colors["text"]
+                              : Cpp_ThemeManager.colors["start_menu_text"]
         }
 
         Label {
@@ -329,7 +329,7 @@ Popup {
           Layout.alignment: Qt.AlignVCenter
           font: Cpp_Misc_CommonFonts.customUiFont(0.9, !root.tiling)
           color: !root.tiling ? Cpp_ThemeManager.colors["highlight"]
-                              : Cpp_ThemeManager.colors["text"]
+                              : Cpp_ThemeManager.colors["start_menu_text"]
         }
 
         IconImage {

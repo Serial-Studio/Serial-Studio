@@ -216,7 +216,7 @@ Item {
           text: qsTr("Alarms")
           Layout.fillWidth: true
           font: Cpp_Misc_CommonFonts.boldUiFont
-          color: Cpp_ThemeManager.colors["text"]
+          color: Cpp_ThemeManager.colors["start_menu_text"]
         }
 
         PanelButton {
@@ -401,7 +401,7 @@ Item {
                   font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
                   color: rowArea.containsMouse && row.navigable
                          ? Cpp_ThemeManager.colors["highlighted_text"]
-                         : Cpp_ThemeManager.colors["text"]
+                         : Cpp_ThemeManager.colors["start_menu_text"]
                   text: {
                     const state = row.modelData.state === "alert" ? qsTr("Unacknowledged")
                                 : row.modelData.state === "acknowledged" ? qsTr("Acknowledged")

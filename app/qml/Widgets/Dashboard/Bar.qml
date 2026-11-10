@@ -613,7 +613,7 @@ Item {
                   font.pixelSize: digitalFontSize * 1.05
                   font.family: Cpp_Misc_CommonFonts.widgetFontFamily
                   color: valueFlash.filled
-                         ? "#ffffff"
+                         ? valueFlash.ink
                          : (model.alarmTriggered
                             ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                             : Cpp_ThemeManager.colors["console_text"])
@@ -720,7 +720,7 @@ Item {
             font.bold: true
             font.pixelSize: digitalPage.bigValueFontPx
             color: digitalFlash.filled
-                   ? "#ffffff"
+                   ? digitalFlash.ink
                    : (root.model.alarmTriggered
                       ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                       : root.color)
@@ -736,7 +736,7 @@ Item {
             text: root.displayTitle
             visible: root.displayTitle.length > 0 && !root.titleFrozenOut
             color: digitalFlash.filled
-                   ? "#ffffff"
+                   ? digitalFlash.ink
                    : (root.model.alarmTriggered
                       ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                       : root.color)

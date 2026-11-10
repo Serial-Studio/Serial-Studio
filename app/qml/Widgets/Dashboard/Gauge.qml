@@ -678,7 +678,7 @@ InstrumentBase {
                   font.pixelSize: fontSize * 1.05 * faceLabels.valueScale
                   font.family: Cpp_Misc_CommonFonts.widgetFontFamily
                   color: valueFlash.filled
-                         ? "#ffffff"
+                         ? valueFlash.ink
                          : (model.alarmTriggered
                             ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                             : Cpp_ThemeManager.colors["console_text"])
@@ -954,7 +954,7 @@ InstrumentBase {
             font.bold: true
             font.pixelSize: digitalPage.bigValueFontPx
             color: digitalFlash.filled
-                   ? "#ffffff"
+                   ? digitalFlash.ink
                    : (root.model.alarmTriggered
                       ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                       : root.color)
@@ -974,7 +974,7 @@ InstrumentBase {
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             font.pixelSize: bigValueText.font.pixelSize * 0.30
             color: digitalFlash.filled
-                   ? "#ffffff"
+                   ? digitalFlash.ink
                    : (root.model.alarmTriggered
                       ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                       : root.color)

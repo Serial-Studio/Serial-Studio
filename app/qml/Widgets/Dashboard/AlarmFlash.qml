@@ -23,6 +23,15 @@ SequentialAnimation {
 
   readonly property bool blinking: severity === 3 && hasData
   readonly property bool filled: triggered && (flashOn || !blinking)
+  readonly property color fill: Cpp_ThemeManager.alarmColorForSeverity(root.severity)
+
+  //
+  // Text drawn on the flash fill: dark on a light fill such as a caution yellow, else white
+  //
+  readonly property color ink: {
+    const light = 0.2126 * root.fill.r + 0.7152 * root.fill.g + 0.0722 * root.fill.b
+    return light > 0.55 ? "#1a1a1a" : "#ffffff"
+  }
 
   running: root.blinking
   loops: Animation.Infinite
