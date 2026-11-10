@@ -57,9 +57,8 @@ Decisions:
 
 With a current build:
 
-- [ ] Spec 0113 T22: `project.outputWidget.update` and `.get` handle `style`, but their C++
-  descriptions never name it, so a dump cannot carry it. Add it, build, then `--dump-api-schema`
-  and `scripts/generate-sdk.py`.
+- [ ] Spec 0113 T22: the `project.outputWidget.update` and `.get` descriptions now name `style`
+  and `labels`; build, then `--dump-api-schema` and `scripts/generate-sdk.py`.
 - [ ] With the app up, recapture what spec 0114 moved:
   `SS_CAPTURE_BASELINES=1 pytest tests/integration/test_property_registry.py`, then
   `tests/fixtures/mirror/generate_fixtures.py`.

@@ -125,8 +125,9 @@ updated: 2026-11-06
   latch exercised through a stub model.
 - [x] **T21** Help: `Output-Controls.md` (styles, R27), `Extensions.md` (theme sections),
   `app/rcc/ai/skills/output_widgets.md`. Verify: `documentation-verify`, `term-verify`.
-- [ ] **T22** Regenerate `app/rcc/api/api-schema.json` with `--dump-api-schema` after adding
-  `style` to the two commands' descriptions, then `scripts/generate-sdk.py`. Needs a build.
+- [ ] **T22** Regenerate `app/rcc/api/api-schema.json` with `--dump-api-schema`, then
+  `scripts/generate-sdk.py`. Needs a build. The two commands' descriptions name `style` and
+  `labels` since 2026-11-10.
 - [ ] **T23** Units for AC12 (latch, guard, unpaced press) and a `style` case in
   `tst_frame_serialization`.
 - [ ] **T24** Lit illuminated button and emergency stop are not `HdrBoost` targets yet.
