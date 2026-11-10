@@ -81,5 +81,3 @@ Outside this repository:
 - [ ] Spec 0112 T18: the macOS and Linux runs and the recorded portal result.
 - [ ] `updates.json`: move `windows-msix` to 4.2.1 once the Store certifies it (pending since
   2026-10-28).
-- [ ] Translation update for spec 0115's "Icon Pack" and "Follow theme" (T22), and the three
-  dataset-dialog commands of spec 0117.

@@ -143,7 +143,7 @@ updated: 2026-11-06
   beyond the knob's numeric feedback (R23), unit tests (AC10, AC11), help page text.
 - [ ] **T27** The hardware looks are plain `Item`s: confirm the automation catalogue reports
   them as buttons, or pin a role for them (`tst_ui_automation`).
-- [ ] **T28** Translations for the new strings (maintainer's `lupdate` pass).
+- [x] **T28** Translations for the new strings (maintainer's `lupdate` pass, 2026-11-10).
 - [x] **T29** (2026-11-07) **Millennium Dark**: a fifth bundled theme, black anodized plates on a
   darker frame with the same materials, looks and green indicators; its own editor scheme;
   `ThemeCatalog::builtInCount()` widens the legacy stored-index migration so a pre-0113 "System"
