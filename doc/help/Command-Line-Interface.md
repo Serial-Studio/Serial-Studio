@@ -10,8 +10,8 @@ serial-studio -p MyProject.ssproj --uart /dev/ttyUSB0
 serial-studio --headless --api-server -p plant.ssproj --exit-after 60
 ```
 
-The first plots whatever `Serial.println` prints. The second opens a project and connects its
-data source to a serial port, replacing the port the project names. The third runs with no window,
+The first plots whatever `Serial.println` prints. The second opens a project and points its
+device at a serial port, replacing the port the project names. The third runs with no window,
 with the [API Server](API-Reference.md) on (it lets other programs read and control the running
 app over TCP), and quits after a minute. Pass `--help` to print the options your build accepts.
 
@@ -60,7 +60,7 @@ Without `--api-external` it accepts connections from this machine only.
 
 ## Devices
 
-These options choose the data source at launch and connect to it right away, so they pair with
+These options choose the device at launch and connect to it right away, so they pair with
 `-p` or `-q`. Pick one bus per run, across all the bus sections on this page. Commercial builds add
 [Modbus](#modbus-pro), [CAN Bus](#can-bus-pro), [OPC UA](#opc-ua-pro), [Siemens S7](#siemens-s7-pro),
 [EtherNet/IP](#ethernetip-pro) and [IEC 60870-5-104](#iec-60870-5-104-pro).

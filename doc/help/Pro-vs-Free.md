@@ -122,7 +122,7 @@ Binary (Direct) decoding is free in both editions. Set the source's **Data Conve
 
 ### MQTT Integration
 
-MQTT (Pro) connects to any MQTT broker, including the ones behind AWS IoT Core and Azure IoT Hub, as a subscriber (a data source) and as a publisher (an export sink).
+MQTT (Pro) connects to any MQTT broker, including the ones behind AWS IoT Core and Azure IoT Hub, as a subscriber (a device you connect to) and as a publisher (an export sink).
 
 See [MQTT Topics & Semantics](MQTT-Topics.md) | [MQTT Subscriber](Drivers-MQTT.md) | [MQTT Publisher](MQTT-Publisher.md) | [Protocol Setup Guide](Protocol-Setup-Guides.md#mqtt-setup-pro)
 
@@ -154,7 +154,7 @@ See [S7 Driver](Drivers-S7.md) | [EtherNet/IP Driver](Drivers-EtherNet-IP.md) | 
 
 ### Audio Input
 
-Audio Input (Pro) captures a microphone or line-in as a live data source and shows its FFT spectrum. The usable bandwidth is half the sample rate you choose.
+Audio Input (Pro) captures a microphone or line-in live and shows its FFT spectrum. The usable bandwidth is half the sample rate you choose.
 
 See [Audio Driver](Drivers-Audio.md) | [Protocol Setup Guide](Protocol-Setup-Guides.md#audio-input-setup-pro)
 

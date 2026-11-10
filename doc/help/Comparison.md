@@ -62,7 +62,7 @@ Serial Studio is a standalone app with no Python install and no plotting code to
 
 Grafana serves web dashboards over a time-series database such as InfluxDB or Prometheus, usually fed by a collector like Telegraf. It is the right tool for servers and infrastructure, shared team dashboards and historical analysis over weeks or months.
 
-Serial Studio reads a serial port or BLE device directly. There is no database, collector or web server to set up: you install one app and connect. Grafana needs a data source and something to put serial data into it. To use both, Serial Studio Pro exports to InfluxDB 2.x, which Grafana can read as a data source; see [InfluxDB](InfluxDB.md).
+Serial Studio reads a serial port or BLE device directly. There is no database, collector or web server to set up: you install one app and connect. Grafana needs a database to read from and something to put serial data into it. To use both, Serial Studio Pro exports to InfluxDB 2.x, which Grafana can query directly; see [InfluxDB](InfluxDB.md).
 
 ## Serial Studio vs terminal emulators
 

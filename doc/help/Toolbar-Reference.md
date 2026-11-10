@@ -253,7 +253,7 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 | **Plot** | <img src="cmd:editor.addPlot" alt="Add Plot" width="16" height="16"> | A time-series [plot](Plots.md). |
 | **FFT Plot** | <img src="cmd:editor.addFFT" alt="Add FFT Plot" width="16" height="16"> | An FFT spectrum. |
 | **Gauge** | <img src="cmd:editor.addGauge" alt="Add Gauge" width="16" height="16"> | A gauge. |
-| **Bar** | <img src="cmd:editor.addBar" alt="Add Level Indicator" width="16" height="16"> | A bar (the Level Indicator). |
+| **Bar** | <img src="cmd:editor.addBar" alt="Add Bar" width="16" height="16"> | A bar. |
 | **Compass** | <img src="cmd:editor.addCompass" alt="Add Compass" width="16" height="16"> | A compass. |
 
 ### Add groups

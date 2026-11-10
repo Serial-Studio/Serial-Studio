@@ -2,7 +2,7 @@
 
 You built a dashboard for a machine on the shop floor, and you would rather the person running it did not rewire the frame parser. Project Lock puts a password in front of the Project Editor. The dashboard keeps running.
 
-Project Lock is available in the free and Pro editions. It covers the Project Editor only; the [Historian](Historian.md) session database has its own, separate password.
+Project Lock is available in the free and Pro editions. It covers the Project Editor only; the [Historian](Historian.md) database has its own, separate password.
 
 ## Lock a project
 

@@ -110,5 +110,5 @@ MDF4 playback (Pro) needs no setup for files recorded by Serial Studio: the `Tim
 
 - [CSV Export & Playback](CSV-Export-Playback.md): text-based logging and replay.
 - [Historian](Historian.md): SQLite-backed project archive with built-in replay.
-- [Drivers: CAN Bus](Drivers-CAN-Bus.md): CAN as a data source.
+- [Drivers: CAN Bus](Drivers-CAN-Bus.md): connecting to a live CAN bus.
 - [Pro vs Free Features](Pro-vs-Free.md): MDF4 export and playback are Pro features.

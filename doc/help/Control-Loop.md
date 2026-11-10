@@ -15,7 +15,7 @@ The Control Loop is a script of up to three functions that Serial Studio calls o
 
 The Control Loop is free; nothing in it checks a license. Three things a script can call need Pro: the `notify*()` functions, Variables tables, and `ensureDashboard()` creating a waterfall, 3D plot or image widget (see [Pro vs Free Features](Pro-vs-Free.md)).
 
-Older versions and the API call it the Control Script (`controlScript.*` commands).
+It was previously called the Control Script, and the API keeps that name (`controlScript.*` commands).
 
 It automates a device you have **already set up and connected**. It is not where you create or connect a device: choose the Connection, the device, and its settings in the Device Setup pane first.
 
@@ -66,7 +66,7 @@ function loop() {
 
 Define `setup()`, `loop()`, or both. A device that streams on its own after a one-time handshake needs only `setup()`; a device that must be polled needs `loop()`. `onConnect()` is optional and cannot stand alone: a script with neither `setup()` nor `loop()` fails with "Script must define setup() and/or loop()." The script is restarted on each new connection, so `setup()` runs again every time you reconnect.
 
-Each call to `setup()` and `loop()` must return within 2000 ms, and `onConnect()` has its own 2000 ms limit. An overrun stops the script and shows "Control script loop() exceeded 2000 ms budget; stopped." in the editor's status bar (for `setup()` the message reads "Control script setup() exceeded 2000 ms budget."). A stopped script does not restart until the next connection. `delay()` does not count against the limit.
+Each call to `setup()` and `loop()` must return within 2000 ms, and `onConnect()` has its own 2000 ms limit. An overrun stops the script and shows `Control script loop() exceeded 2000 ms budget; stopped.` in the editor's status bar (for `setup()` the message reads `Control script setup() exceeded 2000 ms budget.`). A stopped script does not restart until the next connection. `delay()` does not count against the limit.
 
 Top-level variables declared in the file persist across `loop()` iterations, so the script can keep counters, buffers, or a small state machine between ticks:
 
@@ -367,7 +367,7 @@ The script is saved inside the project file, so it travels with the project. Edi
 
 Every connection starts a fresh script engine: all top-level variables reset, exactly like an Arduino reset. Do not design around state surviving a connect/disconnect cycle. The latest-frame store also clears on each connection edge, so `io.getLatestFrame()` reports no data until the first frame of the current connection arrives; a watchdog built on `ageMs` can never trip from a previous connection's frame.
 
-Tools and scripts can manage the control loop through the API: `controlScript.get`/`controlScript.getCode` read the source, `controlScript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlScript.set`/`controlScript.setCode` install it, and `controlScript.getStatus` reports whether it is running. Each one is listed under [Control Script Commands](API-Reference.md#control-script-commands-6) in the API Reference.
+Tools and scripts can manage the control loop through the API: `controlScript.get`/`controlScript.getCode` read the source, `controlScript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlScript.set`/`controlScript.setCode` install it, and `controlScript.getStatus` reports whether it is running. Each one is listed in the [API Reference](API-Reference.md#control-script-commands-6).
 
 ## Related
 
