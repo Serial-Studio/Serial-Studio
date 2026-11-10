@@ -56,7 +56,10 @@ updated: 2026-11-06
   nowhere; plots need a second text colour first. The terminal is black glass by colour table.
 - [ ] **T10** `toolbar` and `taskbar` surfaces are colour-table gradients, not `MaterialSurface`
   sites; the open-tab indicator bar and its glow are not drawn.
-- [ ] **T11** `app/tests` unit for AC2 and AC3 (catalog plus section check).
+- [x] **T11** `app/tests` unit for AC2 and AC3: `tst_theme_sections` over
+  `Misc::unknownThemeNames` (extracted from `ThemeManager`, which now also warns on an unknown
+  material parameter, so a path-like key is named and ignored). AC4's list membership is not
+  unit-tested: the bundled list lives in Qt resources the unit target does not embed.
 - [x] **T11b** Colour table reworked after the maintainer's first run (2026-11-06) against the
   three bundled and eleven published themes: pane captions dark at the top, steel table and
   frozen headers, a lighter secondary toolbar, steel buttons, deeper alarm and series inks.

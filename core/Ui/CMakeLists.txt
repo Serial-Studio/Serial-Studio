@@ -44,6 +44,7 @@ qt_add_library(
 
   Misc/ThemeManager.cpp
   Misc/ThemeCatalog.cpp
+  Misc/ThemeSectionCheck.cpp
   Misc/CommonFonts.cpp
   Misc/ContextRegistry.cpp
   Misc/Utilities.cpp
@@ -170,6 +171,7 @@ qt_add_library(
   Misc/ContextRegistry.h
   Misc/ThemeManager.h
   Misc/ThemeCatalog.h
+  Misc/ThemeSectionCheck.h
   Misc/ProblemCenter.h
   Misc/ConnectionDiagnostics.h
   Misc/Diagnostics/DiagnosticsShared.h

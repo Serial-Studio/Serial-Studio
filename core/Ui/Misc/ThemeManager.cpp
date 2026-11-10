@@ -34,6 +34,7 @@
 #include "Core/Translator.h"
 #include "Core/WorkspaceManager.h"
 #include "Misc/ExtensionManager.h"
+#include "Misc/ThemeSectionCheck.h"
 
 //--------------------------------------------------------------------------------------------------
 // Utility functions
@@ -99,57 +100,6 @@ static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& col
   }
 
   return result;
-}
-
-/**
- * @brief Warns once per name a material theme uses and this build does not know (spec 0113 R3):
- *        a top-level section, a recipe, a surface pointing at a material the theme never
- *        defines, a widget look. The theme still applies; every consumer ignores what it cannot
- *        resolve and draws what a colour-only theme draws.
- */
-static void warnUnknownThemeNames(const QString& theme,
-                                  const QJsonObject& data,
-                                  const QVariantMap& materials,
-                                  const QVariantMap& surfaces,
-                                  const QVariantMap& looks)
-{
-  static const QStringList kSections = {QStringLiteral("title"),
-                                        QStringLiteral("parameters"),
-                                        QStringLiteral("translations"),
-                                        QStringLiteral("colors"),
-                                        QStringLiteral("fonts"),
-                                        QStringLiteral("materials"),
-                                        QStringLiteral("surfaces"),
-                                        QStringLiteral("styles"),
-                                        QStringLiteral("widgets")};
-  static const QStringList kRecipes  = {QStringLiteral("flat"),
-                                        QStringLiteral("gradient"),
-                                        QStringLiteral("brushed-metal"),
-                                        QStringLiteral("glass")};
-  static const QStringList kLooks    = {
-    QStringLiteral("lamp"), QStringLiteral("hardware"), QStringLiteral("plain")};
-
-  const auto sections = data.keys();
-  for (const auto& section : sections)
-    if (!kSections.contains(section))
-      qWarning() << "[Theme]" << theme << "has an unknown section" << section << "; ignored";
-
-  for (auto it = materials.cbegin(); it != materials.cend(); ++it) {
-    const auto recipe = it.value().toMap().value(QStringLiteral("recipe")).toString();
-    if (!kRecipes.contains(recipe))
-      qWarning() << "[Theme]" << theme << "material" << it.key() << "names an unknown recipe"
-                 << recipe << "; ignored";
-  }
-
-  for (auto it = surfaces.cbegin(); it != surfaces.cend(); ++it)
-    if (!materials.contains(it.value().toString()))
-      qWarning() << "[Theme]" << theme << "surface" << it.key() << "names an unknown material"
-                 << it.value().toString() << "; ignored";
-
-  for (auto it = looks.cbegin(); it != looks.cend(); ++it)
-    if (!kLooks.contains(it.value().toString()))
-      qWarning() << "[Theme]" << theme << "widget look" << it.key()
-                 << "is unknown:" << it.value().toString() << "; ignored";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -411,7 +361,9 @@ void Misc::ThemeManager::applyThemeSections(const QJsonObject& data)
   m_styles      = data.value(QStringLiteral("styles")).toObject().toVariantMap();
   m_widgetLooks = data.value(QStringLiteral("widgets")).toObject().toVariantMap();
 
-  warnUnknownThemeNames(m_themeName, data, m_materials, m_surfaces, m_widgetLooks);
+  const auto unknown = unknownThemeNames(data);
+  for (const auto& message : unknown)
+    qWarning().noquote() << "[Theme]" << m_themeName << message << "; ignored";
 }
 
 /**

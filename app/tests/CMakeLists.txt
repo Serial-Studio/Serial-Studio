@@ -2212,6 +2212,19 @@ ss_add_unit_test(tst_theme_catalog
 )
 
 #
+# Spec 0113 R2/R3/R5: every bundled theme checks clean, a colour-only theme is silent, each
+# unknown name yields one message, and a path-like material key is an unknown parameter.
+#
+ss_add_unit_test(tst_theme_sections
+  SOURCES tst_theme_sections.cpp
+          ${SS_CORE_SRC}/Ui/Misc/ThemeSectionCheck.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+target_compile_definitions(tst_theme_sections PRIVATE
+  SS_THEME_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../rcc/themes")
+
+#
 # Spec 0115: the icon registry's pack side (catalog, per-icon fallback, fixed categories, the
 # mono tint URL) over a temporary tree; the registry is already in SerialStudio::Core.
 #
