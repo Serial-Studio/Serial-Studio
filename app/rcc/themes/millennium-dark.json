@@ -238,16 +238,8 @@
     "widget-header": "header"
   },
   "styles": {
-    "button": {
-      "radius": 3
-    },
     "tab": {
       "indicator": "#35AE55"
-    },
-    "input": {
-      "radius": 3,
-      "border": 1,
-      "focus": "#35AE55"
     },
     "instrument": {
       "face": "#1C2024",

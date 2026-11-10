@@ -50,10 +50,11 @@ updated: 2026-11-06
 - [x] **T6** `MaterialSurface.qml`; `widget` surface in `WidgetDelegate.qml`, `dashboard`
   surface in `DashboardCanvas.qml`. Verify: lint; rendered in the harness.
 - [x] **T7** Lettering on the dashboard widget caption (`MiniWindow.qml`).
-- [ ] **T8** Style rules (R8) have no consumer yet: `styles` is read and published, and no
-  control applies a radius, border, face or indicator colour from it.
-- [ ] **T9** `display` surface (black glass behind plots): declared in the theme, consumed
-  nowhere; plots need a second text colour first. The terminal is black glass by colour table.
+- [x] **T8** Style rules (R8), closed as amended 2026-11-10: `tab` (T10), `instrument` (T11e)
+  and `caption` (T11i) have consumers; the `button` and `input` rules are dropped from the
+  bundled themes because Fusion controls cannot take them at run time.
+- [ ] **T9** `display` surface (black glass behind plots): deferred by the maintainer on
+  2026-11-10 (spec amendment); tracked in `doc/claude/TODO.md`.
 - [x] **T10** (2026-11-10) The toolbar and the taskbar are `MaterialSurface` sites over their
   colour-table gradients (Millennium's `strip` repeats those colours, so it looks the same; a
   theme can now give the strip another recipe). The open tab: `Widgets/PanelTab.qml`, a

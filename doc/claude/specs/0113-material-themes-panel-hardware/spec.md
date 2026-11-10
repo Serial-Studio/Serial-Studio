@@ -382,6 +382,17 @@ the plan.
 - The colour table was reworked against the bundled and the published themes; the values in
   R12 are the materials' anchors, and the theme file is the record of the rest.
 
+### Amended 2026-11-10, by the maintainer during the visual pass
+
+- **R8 narrowed.** Style rules reach the controls that draw their own chrome: the open tab's
+  indicator (`tab`), the instruments (`instrument`) and the window captions (`caption`). A
+  radius, border width or focus colour for the stock buttons and input fields is dropped: the
+  Fusion controls cannot take one at run time without replacing every control's background,
+  which the plan rejected for R2, and Fusion already draws the focus frame in `highlight`.
+  The `button` and `input` rules are removed from the bundled themes.
+- **The `display` surface (black glass behind plots) is deferred.** Plots stay on the plate
+  this release; the surface stays declared and the terminal keeps its glass colours.
+
 ## Open Questions
 
 - None blocking. Two recommendations stand unless the maintainer says otherwise: the emergency
