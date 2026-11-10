@@ -64,7 +64,7 @@ public:
   void onOutputWidgetItemChanged(QStandardItem* item);
   void commitFrequencyMarkers(int groupId, int datasetId, const QVariantList& markers);
   void commitValueLabels(int uniqueId, const QVariantList& rows, const QString& defaultText);
-  [[nodiscard]] QVariantList valueLabelRows() const;
+  [[nodiscard]] QVariantList valueLabelRows(const DataModel::Dataset& dataset) const;
   void syncDatasetTreeIcon(const DataModel::Dataset& dataset);
   void syncDatasetTreeVirtualFlag(const DataModel::Dataset& dataset);
   void applyOutputWidgetField(QStandardItem* item, DataModel::OutputWidget& widget);

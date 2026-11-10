@@ -107,6 +107,9 @@ QtObject {
     "editor.menu.editFrameParser": root.cmdEditFrameParser,
     "editor.menu.editTransform": root.cmdEditTransform,
     "editor.menu.removeTransform": root.cmdRemoveTransform,
+    "editor.editAlarmBands": root.cmdEditAlarmBands,
+    "editor.editValueLabels": root.cmdEditValueLabels,
+    "editor.editFrequencyMarkers": root.cmdEditFrequencyMarkers,
     "editor.menu.editPainterCode": root.cmdEditPainterCode,
     "editor.menu.editControlLoop": root.cmdEditControlLoop,
     "editor.menu.configureMqtt": root.cmdConfigureMqtt,
@@ -808,6 +811,37 @@ QtObject {
                                          root.targetParentId, root.targetId)
     function run() {
       Cpp_JSON_ProjectModel.clearDatasetTransform(root.targetParentId, root.targetId)
+    }
+  }
+
+  //
+  // Dataset dialogs open for the right-clicked dataset, never the selection (spec 0117).
+  //
+  function datasetDialogApplies(dialog) {
+    return root.targetKind === ProjectEditor.KindDataset
+        && Cpp_JSON_ProjectEditor.datasetDialogApplicable(dialog,
+                                                          root.targetParentId,
+                                                          root.targetId)
+  }
+
+  readonly property QtObject cmdEditAlarmBands: QtObject {
+    readonly property bool visible: root.datasetDialogApplies(ProjectEditor.AlarmBandsDialog)
+    function run() {
+      Cpp_JSON_ProjectEditor.openAlarmBandsEditorFor(root.targetParentId, root.targetId)
+    }
+  }
+
+  readonly property QtObject cmdEditValueLabels: QtObject {
+    readonly property bool visible: root.datasetDialogApplies(ProjectEditor.ValueLabelsDialog)
+    function run() {
+      Cpp_JSON_ProjectEditor.openValueLabelsEditorFor(root.targetParentId, root.targetId)
+    }
+  }
+
+  readonly property QtObject cmdEditFrequencyMarkers: QtObject {
+    readonly property bool visible: root.datasetDialogApplies(ProjectEditor.FrequencyMarkersDialog)
+    function run() {
+      Cpp_JSON_ProjectEditor.openFrequencyMarkersEditorFor(root.targetParentId, root.targetId)
     }
   }
 

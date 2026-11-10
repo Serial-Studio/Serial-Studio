@@ -1,7 +1,7 @@
 ---
 spec: 0117-dataset-dialog-commands
 title: Palette and context-menu commands for the dataset dialogs
-status: draft        # draft -> approved -> in-progress -> done | shelved
+status: in-progress  # approved 2026-11-09 with OQ1 and OQ2 resolved
 created: 2026-11-09
 author: Alex Spataru
 ---
@@ -38,8 +38,8 @@ right-clicked, so a menu entry that opened the selection's dialog would edit the
 ## Non-Goals
 
 - No new editor and no change to what the three editors do or store.
-- No bulk editing of Value Labels or Frequency Markers across a multi-selection. Alarm Bands
-  keeps the multi-selection editor it already has (see Open Questions).
+- No bulk editing from the menu. Alarm Bands keeps the multi-selection editor it already has,
+  reached from the multi-selection view's button; the menu entry edits one dataset.
 - The dataset toolbar is unchanged: same buttons, same disabled state, same tooltips.
 - No keyboard shortcuts and no "Remove …" entries for the three.
 - No API or control-script change: the API already reads and writes bands, labels and
@@ -75,7 +75,7 @@ right-clicked, so a menu entry that opened the selection's dialog would edit the
 
 ## Acceptance Criteria
 
-- [ ] **AC1 (R1, R8)** — The command registry check passes with the three new commands: every
+- [x] **AC1 (R1, R8)** — The command registry check passes with the three new commands: every
   menu entry resolves to a command with a binding and an icon. The translation-strings
   generator lists the three titles and tooltips.
 - [ ] **AC2 (R1, R2, R6)** — Maintainer observation in the tree: with dataset A open, right-click
@@ -95,7 +95,7 @@ right-clicked, so a menu entry that opened the selection's dialog would edit the
   is listed.
 - [ ] **AC6 (R7)** — Maintainer observation: with the Project Editor locked, no entry opens an
   editor that can change the dataset, matching the toolbar.
-- [ ] **AC7 (R8)** — The documentation, terminology and claim checks pass. The Project Editor
+- [x] **AC7 (R8)** — The documentation, terminology and claim checks pass. The Project Editor
   manual page names the new menu and palette entries.
 
 ## Constraints & Invariants
@@ -127,12 +127,9 @@ right-clicked, so a menu entry that opened the selection's dialog would edit the
 
 ## Open Questions
 
-- **OQ1 — Alarm Bands inside a multi-selection.** When the right-clicked dataset is part of a
-  multi-selection, should Edit Alarm Bands open the multi-selection editor (bands for every
-  applicable selected dataset, as the multi-selection view's button does), or only the
-  right-clicked dataset's? Recommendation: the right-clicked dataset only, like Edit Transform
-  Code. Bulk editing stays one click away in the multi-selection view, and a menu entry then
-  means the same thing on every host.
-- **OQ2 — Titles.** "Edit Alarm Bands", "Edit Value Labels" and "Edit Frequency Markers" match
-  Edit Transform Code. The toolbar says "Labels" and "Freq. Markers" for width; the menu and
-  palette have room for the full names. Recommendation: the full names above.
+Resolved by the maintainer on 2026-11-09:
+
+- **OQ1 — Alarm Bands inside a multi-selection:** the menu entry edits the right-clicked dataset
+  only, like Edit Transform Code. Bulk editing stays in the multi-selection view.
+- **OQ2 — Titles:** the full names, "Edit Alarm Bands", "Edit Value Labels" and "Edit Frequency
+  Markers", with no ellipsis, matching Edit Transform Code.

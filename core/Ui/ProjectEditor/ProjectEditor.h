@@ -134,6 +134,9 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(bool alarmBandsApplicable
              READ alarmBandsApplicable
              NOTIFY editableOptionsChanged)
+  Q_PROPERTY(bool frequencyMarkersApplicable
+             READ frequencyMarkersApplicable
+             NOTIFY editableOptionsChanged)
   Q_PROPERTY(bool selectedGroupEnabled
              READ selectedGroupEnabled
              NOTIFY editableOptionsChanged)
@@ -372,6 +375,13 @@ public:
 #endif
   Q_ENUM(ItemKind)
 
+  enum DatasetDialog {
+    AlarmBandsDialog,
+    FrequencyMarkersDialog,
+    ValueLabelsDialog,
+  };
+  Q_ENUM(DatasetDialog)
+
   [[nodiscard]] CurrentView currentView() const;
   [[nodiscard]] bool canGoBack() const noexcept;
   [[nodiscard]] bool canGoForward() const noexcept;
@@ -392,6 +402,11 @@ public:
   [[nodiscard]] bool datasetWidgetEditable(const DataModel::Dataset& dataset) const;
   [[nodiscard]] bool alarmBandsApplicable() const;
   [[nodiscard]] bool datasetAlarmBandsApplicable(const DataModel::Dataset& dataset) const;
+  [[nodiscard]] bool frequencyMarkersApplicable() const;
+  [[nodiscard]] bool datasetFrequencyMarkersApplicable(const DataModel::Dataset& dataset) const;
+  [[nodiscard]] Q_INVOKABLE bool datasetDialogApplicable(int dialog,
+                                                         int groupId,
+                                                         int datasetId) const;
   [[nodiscard]] QVector<DataModel::Dataset> alarmBandSelection() const;
   [[nodiscard]] bool selectedGroupEnabled() const;
 
@@ -515,13 +530,17 @@ public slots:
   void commitChannelSounds(const QVariantList& rows);
   void setProjectSoundSequence(const QString& letter);
   void openFrequencyMarkersEditorForSelection();
+  void openAlarmBandsEditorFor(int groupId, int datasetId);
+  void openFrequencyMarkersEditorFor(int groupId, int datasetId);
+  void openValueLabelsEditorFor(int groupId, int datasetId);
   void commitFrequencyMarkers(int groupId, int datasetId, const QVariantList& markers);
   void changeDatasetOptionForSelection(int option, bool checked);
 
   void openValueLabelsEditorForSelection()
   {
-    Q_EMIT openValueLabelsEditor(
-      m_selectedDataset.uniqueId, m_commit.valueLabelRows(), m_selectedDataset.labelsDefault);
+    Q_EMIT openValueLabelsEditor(m_selectedDataset.uniqueId,
+                                 m_commit.valueLabelRows(m_selectedDataset),
+                                 m_selectedDataset.labelsDefault);
   }
 
   void commitValueLabels(int uniqueId, const QVariantList& rows, const QString& defaultText)

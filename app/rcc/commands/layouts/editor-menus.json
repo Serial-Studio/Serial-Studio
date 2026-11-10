@@ -158,6 +158,9 @@
     { "name": "dataset", "items": [
         {"type": "command", "id": "editor.menu.editTransform"},
         {"type": "command", "id": "editor.menu.removeTransform"},
+        {"type": "command", "id": "editor.editAlarmBands"},
+        {"type": "command", "id": "editor.editValueLabels"},
+        {"type": "command", "id": "editor.editFrequencyMarkers"},
         {"type": "submenu", "title": "Visualizations", "icon": "editor/widget",
          "include": "dataset-visuals"},
         {"type": "separator"},

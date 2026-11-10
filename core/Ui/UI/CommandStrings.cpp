@@ -25,7 +25,7 @@
 #include <QtTranslation>
 
 // clang-format off
-[[maybe_unused]] static constexpr std::array<const char*, 349> kCommandStrings = {{
+[[maybe_unused]] static constexpr std::array<const char*, 355> kCommandStrings = {{
   QT_TRANSLATE_NOOP("Commands", "3D Plot"),
   QT_TRANSLATE_NOOP("Commands", "AI Assistant"),
   QT_TRANSLATE_NOOP("Commands", "AI Wiki & Chat"),
@@ -182,10 +182,13 @@
   QT_TRANSLATE_NOOP("Commands", "Duplicate"),
   QT_TRANSLATE_NOOP("Commands", "Duplicate this item"),
   QT_TRANSLATE_NOOP("Commands", "Echo transmitted data in the console"),
+  QT_TRANSLATE_NOOP("Commands", "Edit Alarm Bands"),
   QT_TRANSLATE_NOOP("Commands", "Edit Canvas Code"),
   QT_TRANSLATE_NOOP("Commands", "Edit Control Loop"),
   QT_TRANSLATE_NOOP("Commands", "Edit Frame Parser"),
+  QT_TRANSLATE_NOOP("Commands", "Edit Frequency Markers"),
   QT_TRANSLATE_NOOP("Commands", "Edit Transform Code"),
+  QT_TRANSLATE_NOOP("Commands", "Edit Value Labels"),
   QT_TRANSLATE_NOOP("Commands", "Edit Workspace Widgets"),
   QT_TRANSLATE_NOOP("Commands", "Edit workspaces manually instead of using the automatic layout"),
   QT_TRANSLATE_NOOP("Commands", "EtherNet/IP"),
@@ -235,6 +238,7 @@
   QT_TRANSLATE_NOOP("Commands", "Macros"),
   QT_TRANSLATE_NOOP("Commands", "Make every hidden group visible again"),
   QT_TRANSLATE_NOOP("Commands", "Manage your Serial Studio Pro license"),
+  QT_TRANSLATE_NOOP("Commands", "Mark named frequencies on this dataset's FFT plot and waterfall"),
   QT_TRANSLATE_NOOP("Commands", "Meter"),
   QT_TRANSLATE_NOOP("Commands", "Minimize Window"),
   QT_TRANSLATE_NOOP("Commands", "Modbus"),
@@ -334,6 +338,7 @@
   QT_TRANSLATE_NOOP("Commands", "Select raw USB communication (Pro)"),
   QT_TRANSLATE_NOOP("Commands", "Set a password and lock the Project Editor"),
   QT_TRANSLATE_NOOP("Commands", "Set a password to prevent session deletions"),
+  QT_TRANSLATE_NOOP("Commands", "Set the value ranges that color this dataset's widget and raise alarms"),
   QT_TRANSLATE_NOOP("Commands", "Show"),
   QT_TRANSLATE_NOOP("Commands", "Show All Hidden Groups"),
   QT_TRANSLATE_NOOP("Commands", "Show application info and license details"),
@@ -345,6 +350,7 @@
   QT_TRANSLATE_NOOP("Commands", "Show this dataset as an FFT plot"),
   QT_TRANSLATE_NOOP("Commands", "Show this dataset as an analog meter"),
   QT_TRANSLATE_NOOP("Commands", "Show timestamps in the console"),
+  QT_TRANSLATE_NOOP("Commands", "Show words instead of numbers for this dataset's values"),
   QT_TRANSLATE_NOOP("Commands", "Siemens S7"),
   QT_TRANSLATE_NOOP("Commands", "Silence Alarms"),
   QT_TRANSLATE_NOOP("Commands", "Silence every alarm and event sound"),

@@ -1004,9 +1004,8 @@ void EditorForms::buildDatasetModel(const DataModel::Dataset& dataset)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Emits openAlarmBandsEditor for the currently-selected dataset. LED Panel members
- *        often leave the widget range unset, so the scale falls back to the plot range and
- *        then to 0-100; a member with no bands is pre-filled from its ledHigh threshold.
+ * @brief Emits openAlarmBandsEditor for the current selection: the multi-selection editor when
+ *        several datasets are selected, otherwise the selected dataset's.
  */
 void EditorForms::openAlarmBandsEditorForSelection()
 {
@@ -1016,11 +1015,21 @@ void EditorForms::openAlarmBandsEditorForSelection()
     return;
   }
 
-  double range_min = qMin(m_editor.m_selectedDataset.wgtMin, m_editor.m_selectedDataset.wgtMax);
-  double range_max = qMax(m_editor.m_selectedDataset.wgtMin, m_editor.m_selectedDataset.wgtMax);
+  openAlarmBandsEditorFor(m_editor.m_selectedDataset);
+}
+
+/**
+ * @brief Emits openAlarmBandsEditor for @p dataset. LED Panel members often leave the widget
+ *        range unset, so the scale falls back to the plot range and then to 0-100; a member
+ *        with no bands is pre-filled from its ledHigh threshold.
+ */
+void EditorForms::openAlarmBandsEditorFor(const DataModel::Dataset& dataset)
+{
+  double range_min = qMin(dataset.wgtMin, dataset.wgtMax);
+  double range_max = qMax(dataset.wgtMin, dataset.wgtMax);
   if (range_max <= range_min) {
-    range_min = qMin(m_editor.m_selectedDataset.pltMin, m_editor.m_selectedDataset.pltMax);
-    range_max = qMax(m_editor.m_selectedDataset.pltMin, m_editor.m_selectedDataset.pltMax);
+    range_min = qMin(dataset.pltMin, dataset.pltMax);
+    range_max = qMax(dataset.pltMin, dataset.pltMax);
   }
 
   if (range_max <= range_min) {
@@ -1028,12 +1037,11 @@ void EditorForms::openAlarmBandsEditorForSelection()
     range_max = 100;
   }
 
-  const bool ledMember =
-    DataModel::PropertyHooks::ledEnabled(m_editor.m_selectedDataset, m_editor.m_projectModelRef);
-  QVariantList bands = bandsToVariantList(m_editor.m_selectedDataset.alarmBands);
-  if (bands.isEmpty() && ledMember && m_editor.m_selectedDataset.ledHigh < range_max) {
+  const bool ledMember = DataModel::PropertyHooks::ledEnabled(dataset, m_editor.m_projectModelRef);
+  QVariantList bands   = bandsToVariantList(dataset.alarmBands);
+  if (bands.isEmpty() && ledMember && dataset.ledHigh < range_max) {
     QVariantMap entry;
-    entry.insert(QStringLiteral("min"), qMax(range_min, m_editor.m_selectedDataset.ledHigh));
+    entry.insert(QStringLiteral("min"), qMax(range_min, dataset.ledHigh));
     entry.insert(QStringLiteral("max"), range_max);
     entry.insert(QStringLiteral("severity"), 1);
     entry.insert(QStringLiteral("color"), QString());
@@ -1042,12 +1050,9 @@ void EditorForms::openAlarmBandsEditorForSelection()
     bands.append(entry);
   }
 
-  m_editor.m_alarmBandsDialogUniqueId = m_editor.m_selectedDataset.uniqueId;
-  Q_EMIT m_editor.openAlarmBandsEditor(m_editor.m_selectedDataset.groupId,
-                                       m_editor.m_selectedDataset.datasetId,
-                                       range_min,
-                                       range_max,
-                                       bands);
+  m_editor.m_alarmBandsDialogUniqueId = dataset.uniqueId;
+  Q_EMIT m_editor.openAlarmBandsEditor(
+    dataset.groupId, dataset.datasetId, range_min, range_max, bands);
 }
 
 /**
@@ -1096,16 +1101,24 @@ void EditorForms::openAlarmBandsEditorForMultiSelection()
 }
 
 /**
- * @brief Emits openFrequencyMarkersEditor for the currently-selected dataset; the editable
- *        frequency range is 0 to Nyquist from the dataset's configured FFT sampling rate.
+ * @brief Emits openFrequencyMarkersEditor for the currently-selected dataset.
  */
 void EditorForms::openFrequencyMarkersEditorForSelection()
 {
-  const double nyquist = qMax(1, m_editor.m_selectedDataset.fftSamplingRate) * 0.5;
+  openFrequencyMarkersEditorFor(m_editor.m_selectedDataset);
+}
+
+/**
+ * @brief Emits openFrequencyMarkersEditor for @p dataset; the editable frequency range is 0 to
+ *        Nyquist from the dataset's configured FFT sampling rate.
+ */
+void EditorForms::openFrequencyMarkersEditorFor(const DataModel::Dataset& dataset)
+{
+  const double nyquist = qMax(1, dataset.fftSamplingRate) * 0.5;
 
   QVariantList markers;
-  markers.reserve(static_cast<int>(m_editor.m_selectedDataset.fftMarkers.size()));
-  for (const auto& m : m_editor.m_selectedDataset.fftMarkers) {
+  markers.reserve(static_cast<int>(dataset.fftMarkers.size()));
+  for (const auto& m : dataset.fftMarkers) {
     QVariantMap entry;
     entry.insert(QStringLiteral("freq"), m.frequency);
     entry.insert(QStringLiteral("endFreq"), m.endFrequency);
@@ -1118,9 +1131,29 @@ void EditorForms::openFrequencyMarkersEditorForSelection()
     markers.append(entry);
   }
 
-  m_editor.m_freqMarkersDialogUniqueId = m_editor.m_selectedDataset.uniqueId;
-  Q_EMIT m_editor.openFrequencyMarkersEditor(
-    m_editor.m_selectedDataset.groupId, m_editor.m_selectedDataset.datasetId, nyquist, markers);
+  m_editor.m_freqMarkersDialogUniqueId = dataset.uniqueId;
+  Q_EMIT m_editor.openFrequencyMarkersEditor(dataset.groupId, dataset.datasetId, nyquist, markers);
+}
+
+/**
+ * @brief Copies the dataset at (@p groupId, @p datasetId) into @p out: the selected dataset's
+ *        in-editor copy when the ids name it, the copy its dialogs commit from, else the project's.
+ *        False and @p out untouched when the ids no longer name a dataset.
+ */
+bool EditorForms::datasetFor(int groupId, int datasetId, DataModel::Dataset& out) const
+{
+  const auto& groups = m_model.groups();
+  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
+    return false;
+
+  const auto& datasets = groups[groupId].datasets;
+  if (datasetId < 0 || static_cast<size_t>(datasetId) >= datasets.size())
+    return false;
+
+  const auto& selected  = m_editor.m_selectedDataset;
+  const bool isSelected = selected.groupId == groupId && selected.datasetId == datasetId;
+  out                   = isSelected ? selected : datasets[datasetId];
+  return true;
 }
 
 //--------------------------------------------------------------------------------------------------

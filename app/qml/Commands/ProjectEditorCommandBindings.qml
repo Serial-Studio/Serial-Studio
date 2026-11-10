@@ -77,6 +77,9 @@ QtObject {
     "editor.navigateForward": root.cmdEditorNavigateForward,
     "editor.expandTree": root.cmdEditorExpandTree,
     "editor.collapseTree": root.cmdEditorCollapseTree,
+    "editor.editAlarmBands": root.cmdEditorEditAlarmBands,
+    "editor.editValueLabels": root.cmdEditorEditValueLabels,
+    "editor.editFrequencyMarkers": root.cmdEditorEditFrequencyMarkers,
     "app.ai": root.cmdAppAi,
     "app.helpCenter": root.cmdAppHelpCenter,
     "app.problems": root.cmdAppProblems,
@@ -307,6 +310,29 @@ QtObject {
 
   readonly property QtObject cmdEditorCollapseTree: QtObject {
     function run() { Cpp_JSON_ProjectEditor.collapseTreeToOverview() }
+  }
+
+  //
+  // Dataset dialogs for the dataset the editor shows (spec 0117); listed only while one applies.
+  //
+  readonly property bool datasetShown:
+    Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DatasetView
+    && Cpp_JSON_ProjectEditor.selectedDatasetEnabled
+
+  readonly property QtObject cmdEditorEditAlarmBands: QtObject {
+    readonly property bool visible: root.datasetShown && Cpp_JSON_ProjectEditor.alarmBandsApplicable
+    function run() { Cpp_JSON_ProjectEditor.openAlarmBandsEditorForSelection() }
+  }
+
+  readonly property QtObject cmdEditorEditValueLabels: QtObject {
+    readonly property bool visible: root.datasetShown
+    function run() { Cpp_JSON_ProjectEditor.openValueLabelsEditorForSelection() }
+  }
+
+  readonly property QtObject cmdEditorEditFrequencyMarkers: QtObject {
+    readonly property bool visible: root.datasetShown
+                                    && Cpp_JSON_ProjectEditor.frequencyMarkersApplicable
+    function run() { Cpp_JSON_ProjectEditor.openFrequencyMarkersEditorForSelection() }
   }
 
   readonly property QtObject cmdPaletteOpen: QtObject {

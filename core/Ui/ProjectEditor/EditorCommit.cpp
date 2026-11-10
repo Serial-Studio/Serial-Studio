@@ -1099,11 +1099,11 @@ void EditorCommit::commitFrequencyMarkers(int groupId, int datasetId, const QVar
 }
 
 /**
- * @brief The selected dataset's value labels as ValueLabelsEditor rows (spec 0108).
+ * @brief @p dataset's value labels as ValueLabelsEditor rows (spec 0108).
  */
-QVariantList EditorCommit::valueLabelRows() const
+QVariantList EditorCommit::valueLabelRows(const DataModel::Dataset& dataset) const
 {
-  const auto& labels = m_editor.m_selectedDataset.labels;
+  const auto& labels = dataset.labels;
 
   QVariantList rows;
   rows.reserve(static_cast<qsizetype>(labels.size()));

@@ -329,6 +329,50 @@ bool DataModel::ProjectEditor::datasetAlarmBandsApplicable(const DataModel::Data
 }
 
 /**
+ * @brief Whether the dataset view's Frequency Markers editor applies to the selected dataset.
+ */
+bool DataModel::ProjectEditor::frequencyMarkersApplicable() const
+{
+  return m_currentView == DatasetView && datasetFrequencyMarkersApplicable(m_selectedDataset);
+}
+
+/**
+ * @brief Returns true when @p dataset can carry frequency markers: its group leaves the widget
+ *        choice free and it draws an FFT plot or a waterfall, where the markers show.
+ */
+bool DataModel::ProjectEditor::datasetFrequencyMarkersApplicable(
+  const DataModel::Dataset& dataset) const
+{
+  return datasetWidgetEditable(dataset) && (dataset.fft || dataset.waterfall);
+}
+
+/**
+ * @brief The one availability rule for a dataset dialog opened from a menu or the palette (spec
+ *        0117): the dataset and its group are enabled, then the dialog's own rule applies.
+ */
+bool DataModel::ProjectEditor::datasetDialogApplicable(int dialog, int groupId, int datasetId) const
+{
+  DataModel::Dataset dataset;
+  if (!m_forms.datasetFor(groupId, datasetId, dataset))
+    return false;
+
+  const auto& group = m_projectModelRef.groups()[static_cast<size_t>(groupId)];
+  if (!group.enabled || !group.datasets[static_cast<size_t>(datasetId)].enabled)
+    return false;
+
+  switch (static_cast<DatasetDialog>(dialog)) {
+    case AlarmBandsDialog:
+      return datasetAlarmBandsApplicable(dataset);
+    case FrequencyMarkersDialog:
+      return datasetFrequencyMarkersApplicable(dataset);
+    case ValueLabelsDialog:
+      return true;
+  }
+
+  return false;
+}
+
+/**
  * @brief Returns the members of the current multi-selection whose alarm bands are applicable,
  *        read live from the project model; the band dialog opens over and writes to these only.
  */
@@ -1028,6 +1072,42 @@ void DataModel::ProjectEditor::openAlarmBandsEditorForSelection()
 void DataModel::ProjectEditor::openFrequencyMarkersEditorForSelection()
 {
   m_forms.openFrequencyMarkersEditorForSelection();
+}
+
+/**
+ * @brief Opens the Alarm Bands editor for the dataset a menu was opened on, whichever dataset
+ *        the editor shows (spec 0117).
+ */
+void DataModel::ProjectEditor::openAlarmBandsEditorFor(int groupId, int datasetId)
+{
+  DataModel::Dataset dataset;
+  if (m_forms.datasetFor(groupId, datasetId, dataset))
+    m_forms.openAlarmBandsEditorFor(dataset);
+}
+
+/**
+ * @brief Opens the Frequency Markers editor for the dataset a menu was opened on (spec 0117).
+ */
+void DataModel::ProjectEditor::openFrequencyMarkersEditorFor(int groupId, int datasetId)
+{
+  DataModel::Dataset dataset;
+  if (m_forms.datasetFor(groupId, datasetId, dataset))
+    m_forms.openFrequencyMarkersEditorFor(dataset);
+}
+
+/**
+ * @brief Opens the Value Labels editor for the dataset a menu was opened on (spec 0117). Its
+ *        commit falls back to the selection when no uniqueId was captured, so one is required.
+ */
+void DataModel::ProjectEditor::openValueLabelsEditorFor(int groupId, int datasetId)
+{
+  DataModel::Dataset dataset;
+  if (!m_forms.datasetFor(groupId, datasetId, dataset))
+    return;
+
+  SS_ASSERT(dataset.uniqueId >= 0, return);
+  Q_EMIT openValueLabelsEditor(
+    dataset.uniqueId, m_commit.valueLabelRows(dataset), dataset.labelsDefault);
 }
 
 /**

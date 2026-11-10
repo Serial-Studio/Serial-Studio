@@ -90,33 +90,6 @@ Widgets.Pane {
       bottomMargin: -10
     }
 
-    //
-    // Lazy-loaded alarm-band editor dialog. In multi-select the edited bands are applied to every
-    // selected dataset. Activated via Cpp_JSON_ProjectEditor signal.
-    //
-    Loader {
-      id: alarmBandsDialog
-
-      active: false
-      asynchronous: false
-      source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml"
-
-      onLoaded: alarmBandsDialog.item.closing.connect(() => alarmBandsDialog.active = false)
-
-      function show(gId, dId, rMin, rMax, bands) {
-        alarmBandsDialog.active = true
-        if (alarmBandsDialog.item)
-          alarmBandsDialog.item.showDialog(gId, dId, rMin, rMax, bands)
-      }
-    }
-
-    Connections {
-      target: Cpp_JSON_ProjectEditor
-      function onOpenAlarmBandsEditor(groupId, datasetId, rangeMin, rangeMax, bands) {
-        alarmBandsDialog.show(groupId, datasetId, rangeMin, rangeMax, bands)
-      }
-    }
-
     ColumnLayout {
       spacing: 0
       anchors.fill: parent

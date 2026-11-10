@@ -53,6 +53,12 @@ Widgets.SmartWindow {
       && Cpp_AppState.operationMode === SerialStudio.ProjectFile
 
   //
+  // Project a dataset dialog was opened in: its dataset is found by position, so another project
+  // must close it
+  //
+  property string datasetDialogsProject: ""
+
+  //
   // Ask user to save changes when closing the dialog
   //
   onClosing: (close) => close.accepted = Cpp_JSON_ProjectModel.askSave()
@@ -71,6 +77,7 @@ Widgets.SmartWindow {
       Cpp_NativeWindow.removeWindow(root)
       actionIconPicker.close()
       onlineIconPicker.close()
+      root.closeDatasetDialogs()
     }
   }
 
@@ -151,6 +158,105 @@ Widgets.SmartWindow {
       else
         activate()
     }
+  }
+
+  //
+  // Dataset dialogs, hosted here so a menu can open them from any view (spec 0117)
+  //
+  Loader {
+    id: alarmBandsDialog
+
+    active: false
+    asynchronous: false
+    source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml"
+
+    onLoaded: alarmBandsDialog.item.closing.connect(() => alarmBandsDialog.active = false)
+
+    function show(gId, dId, rMin, rMax, bands) {
+      root.datasetDialogsProject = Cpp_JSON_ProjectModel.jsonFilePath
+      alarmBandsDialog.active = true
+      if (alarmBandsDialog.item)
+        alarmBandsDialog.item.showDialog(gId, dId, rMin, rMax, bands)
+    }
+  }
+
+  Connections {
+    target: Cpp_JSON_ProjectEditor
+    function onOpenAlarmBandsEditor(groupId, datasetId, rangeMin, rangeMax, bands) {
+      alarmBandsDialog.show(groupId, datasetId, rangeMin, rangeMax, bands)
+    }
+  }
+
+  //
+  // Lazy-loaded frequency-marker editor dialog. Activated via Cpp_JSON_ProjectEditor signal.
+  //
+  Loader {
+    id: frequencyMarkersDialog
+
+    active: false
+    asynchronous: false
+    source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml"
+
+    onLoaded: frequencyMarkersDialog.item.closing.connect(
+                () => frequencyMarkersDialog.active = false)
+
+    function show(gId, dId, nyquist, markers) {
+      root.datasetDialogsProject = Cpp_JSON_ProjectModel.jsonFilePath
+      frequencyMarkersDialog.active = true
+      if (frequencyMarkersDialog.item)
+        frequencyMarkersDialog.item.showDialog(gId, dId, nyquist, markers)
+    }
+  }
+
+  Connections {
+    target: Cpp_JSON_ProjectEditor
+    function onOpenFrequencyMarkersEditor(groupId, datasetId, nyquist, markers) {
+      frequencyMarkersDialog.show(groupId, datasetId, nyquist, markers)
+    }
+  }
+
+  //
+  // Lazy-loaded value labels editor dialog. Activated via Cpp_JSON_ProjectEditor signal.
+  //
+  Loader {
+    id: valueLabelsDialog
+
+    active: false
+    asynchronous: false
+    source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml"
+
+    onLoaded: valueLabelsDialog.item.closing.connect(() => valueLabelsDialog.active = false)
+
+    function show(uniqueId, rows, defaultText) {
+      root.datasetDialogsProject = Cpp_JSON_ProjectModel.jsonFilePath
+      valueLabelsDialog.active = true
+      if (valueLabelsDialog.item)
+        valueLabelsDialog.item.showDialog(uniqueId, rows, defaultText)
+    }
+  }
+
+  Connections {
+    target: Cpp_JSON_ProjectEditor
+    function onOpenValueLabelsEditor(uniqueId, rows, defaultText) {
+      valueLabelsDialog.show(uniqueId, rows, defaultText)
+    }
+  }
+
+  //
+  // A save re-announces the same path; only a different project closes the dataset dialogs
+  //
+  Connections {
+    target: Cpp_JSON_ProjectModel
+    function onJsonFileChanged() {
+      if (Cpp_JSON_ProjectModel.jsonFilePath !== root.datasetDialogsProject)
+        root.closeDatasetDialogs()
+    }
+  }
+
+  function closeDatasetDialogs() {
+    alarmBandsDialog.active = false
+    frequencyMarkersDialog.active = false
+    valueLabelsDialog.active = false
   }
 
   //

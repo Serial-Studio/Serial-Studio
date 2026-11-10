@@ -23,14 +23,6 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 
 <!-- claim-verify on -->
 
-## Commands to add
-
-- [ ] Palette and right-click commands for the dataset dialogs: Alarm Bands, Value Labels and
-  Frequency Markers. Today they are toolbar buttons only. `ProjectEditor` has only
-  `openAlarmBandsEditorForSelection()`-style openers, so a context-menu command needs a
-  per-target opener like `openTransformEditorFor(groupId, datasetId)`. They add titles to
-  translate, so land them before a translation update.
-
 ## Code follow-ups
 
 - [ ] Spec 0111 runtime checks (need a running app):
@@ -94,7 +86,8 @@ Observations by hand:
   notification and the `sources` list of `io.getStatus`.
 - [ ] Screenshots: spec 0113 AC1 and the spec 0114 CAN Bus example before and after (AC4).
 - [ ] Walks and rigs: spec 0097 T22 (audio rig and AC10 side by side), the observations in specs
-  0108 (T26), 0109 (AC4), 0110 (AC5, on a board) and 0115 (T22).
+  0108 (T26), 0109 (AC4), 0110 (AC5, on a board) and 0115 (T22), and spec 0117 AC2 to AC6 (the
+  dataset dialogs from the tree, the flow diagram and the palette).
 - [ ] Spec 0111 T60, steps 5 and 6: measure `MPU6050.ino` and the declared sketch on an Uno (AC6),
   and send a declaration line to the first 0106 release (AC8). CI compiles only `Minimal`, so the
   two declared example sketches have never been compiled.
@@ -107,5 +100,5 @@ Outside this repository:
 - [ ] Spec 0112 T18: the macOS and Linux runs and the recorded portal result.
 - [ ] `updates.json`: move `windows-msix` to 4.2.1 once the Store certifies it (pending since
   2026-10-28).
-- [ ] Translation update for spec 0115's "Icon Pack" and "Follow theme" (T22). Land the
-  dataset-dialog commands first.
+- [ ] Translation update for spec 0115's "Icon Pack" and "Follow theme" (T22), and the three
+  dataset-dialog commands of spec 0117.

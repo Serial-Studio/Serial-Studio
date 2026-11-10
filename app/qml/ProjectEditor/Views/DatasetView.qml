@@ -73,85 +73,6 @@ Widgets.Pane {
       bottomMargin: -10
     }
 
-    //
-    // Lazy-loaded alarm-band editor dialog. Activated via Cpp_JSON_ProjectEditor signal.
-    //
-    Loader {
-      id: alarmBandsDialog
-
-      active: false
-      asynchronous: false
-      source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml"
-
-      onLoaded: alarmBandsDialog.item.closing.connect(() => alarmBandsDialog.active = false)
-
-      function show(gId, dId, rMin, rMax, bands) {
-        alarmBandsDialog.active = true
-        if (alarmBandsDialog.item)
-          alarmBandsDialog.item.showDialog(gId, dId, rMin, rMax, bands)
-      }
-    }
-
-    Connections {
-      target: Cpp_JSON_ProjectEditor
-      function onOpenAlarmBandsEditor(groupId, datasetId, rangeMin, rangeMax, bands) {
-        alarmBandsDialog.show(groupId, datasetId, rangeMin, rangeMax, bands)
-      }
-    }
-
-    //
-    // Lazy-loaded frequency-marker editor dialog. Activated via Cpp_JSON_ProjectEditor signal.
-    //
-    Loader {
-      id: frequencyMarkersDialog
-
-      active: false
-      asynchronous: false
-      source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml"
-
-      onLoaded: frequencyMarkersDialog.item.closing.connect(
-                  () => frequencyMarkersDialog.active = false)
-
-      function show(gId, dId, nyquist, markers) {
-        frequencyMarkersDialog.active = true
-        if (frequencyMarkersDialog.item)
-          frequencyMarkersDialog.item.showDialog(gId, dId, nyquist, markers)
-      }
-    }
-
-    Connections {
-      target: Cpp_JSON_ProjectEditor
-      function onOpenFrequencyMarkersEditor(groupId, datasetId, nyquist, markers) {
-        frequencyMarkersDialog.show(groupId, datasetId, nyquist, markers)
-      }
-    }
-
-    //
-    // Lazy-loaded value labels editor dialog. Activated via Cpp_JSON_ProjectEditor signal.
-    //
-    Loader {
-      id: valueLabelsDialog
-
-      active: false
-      asynchronous: false
-      source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/ValueLabelsEditor.qml"
-
-      onLoaded: valueLabelsDialog.item.closing.connect(() => valueLabelsDialog.active = false)
-
-      function show(uniqueId, rows, defaultText) {
-        valueLabelsDialog.active = true
-        if (valueLabelsDialog.item)
-          valueLabelsDialog.item.showDialog(uniqueId, rows, defaultText)
-      }
-    }
-
-    Connections {
-      target: Cpp_JSON_ProjectEditor
-      function onOpenValueLabelsEditor(uniqueId, rows, defaultText) {
-        valueLabelsDialog.show(uniqueId, rows, defaultText)
-      }
-    }
-
     ColumnLayout {
       spacing: 0
       anchors.fill: parent
@@ -396,9 +317,7 @@ Widgets.Pane {
               toolbarButton: false
               text: qsTr("Freq. Markers")
               Layout.alignment: Qt.AlignVCenter
-              enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-                       && (Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetFFT
-                           || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetWaterfall)
+              enabled: Cpp_JSON_ProjectEditor.frequencyMarkersApplicable
               onClicked: Cpp_JSON_ProjectEditor.openFrequencyMarkersEditorForSelection()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "fft", 24)
               ToolTip.text: qsTr("Mark named frequencies or ranges on the FFT plot and waterfall, "

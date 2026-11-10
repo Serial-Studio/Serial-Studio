@@ -55,6 +55,8 @@ public:
   void openAlarmBandsEditorForSelection();
   void openTransformEditorFor(int groupId, int datasetId);
   void openFrequencyMarkersEditorForSelection();
+  void openAlarmBandsEditorFor(const DataModel::Dataset& dataset);
+  void openFrequencyMarkersEditorFor(const DataModel::Dataset& dataset);
   void buildGroupModel(const DataModel::Group& group);
   void buildSourceModel(const DataModel::Source& source);
   void buildActionModel(const DataModel::Action& action);
@@ -64,6 +66,8 @@ public:
   void buildOutputWidgetCommonRows(const DataModel::OutputWidget& widget);
   void buildOutputWidgetLabelRows(const DataModel::OutputWidget& widget);
   void buildOutputWidgetTransmitRow(const DataModel::OutputWidget& widget);
+
+  [[nodiscard]] bool datasetFor(int groupId, int datasetId, DataModel::Dataset& out) const;
 
 private:
   void openAlarmBandsEditorForMultiSelection();
