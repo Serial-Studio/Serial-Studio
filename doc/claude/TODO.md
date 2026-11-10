@@ -9,41 +9,14 @@ only the maintainer can run. One checkbox per item.
 
 ## Icons to draw
 
-Icon ids are `category/name` under `app/rcc/icons/<category>/<size>/<name>.svg`. The command
-palette shows icons at 32 px and its search rows at 18 px, so draw 16, 24 and 32 unless a line
-says otherwise. Normalize new SVGs to the house form: `width`, `height` and `viewBox` equal to
-the tier size, with the artwork in a scale group.
+Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack>/` (spec 0115):
+`fine-line` holds one 48 px vector per id, `basic` its own sizes.
 
 <!-- claim-verify off -->
 
-### Borrowed icons
-
-- [ ] `editor/frequency-markers` (24, 32): the dataset toolbar's Frequency Markers button uses
-  `editor/fft`.
-- [ ] `editor/dataset-values` at 16 px: still the old artwork; 24, 32 and 48 were redrawn on
-  2026-11-04.
-- [ ] `editor/add-profile` (24): the Workspaces toolbar's Add Profile button borrows
-  `editor/add-group` since it moved beside Add Workspace on 2026-11-07.
-
-### Missing 32 px tier (blurry in the palette)
-
-Left after the 2026-11-07 Office sweep (spec 0115 T13), where Icons8 Office has no faithful
-drawing at 40 px:
-
-- [ ] `editor/customize`, `editor/move-down`, `editor/move-folder`, `editor/top-level-folder`
-- [ ] `editor/left`, `editor/right` (the chevrons; also serve `editor.navigateBack/Forward`)
-- [ ] `editor/widget` and `editor/workspace` at 32: the Office candidates (a JSON file, a flow
-  diagram) changed the metaphor and were not kept
-
-### Gaps in a size ladder
-
-Left after the sweep (`scripts/icon-report.py`, tier holes):
-
-- [ ] Missing 24: `commands/add-workspace`, `commands/clear`, `commands/return`, `database/*`
-  (eight ids drawn at 16 and 32), `editor/hide`, `editor/open`, `editor/rename`, `editor/show`,
-  `editor/widget`, `editor/workspace`
-- [ ] Missing 32: `licensing/license` (the Office 40 px candidate is a rosette, not a certificate)
-- [ ] `licensing/plan` at 24 and `database/restore` at 16 have no Office drawing
+- [ ] `editor/frequency-markers`: the dataset toolbar's Frequency Markers button uses `editor/fft`.
+- [ ] `editor/add-profile`: the Workspaces toolbar's Add Profile button borrows `editor/add-group`
+  since it moved beside Add Workspace on 2026-11-07.
 
 <!-- claim-verify on -->
 
@@ -57,8 +30,6 @@ Left after the sweep (`scripts/icon-report.py`, tier holes):
 
 ## Code follow-ups
 
-- [ ] Output widget outcomes are string slugs (`"acknowledged"`, `"refused"` in
-  `core/Ui/UI/Widgets/Output/Base.cpp`). Expose them as a QML enum.
 - [ ] Spec 0111 runtime checks (need a running app):
   - while the reader switches to binary framing, a line fragment of exactly the packed length
     can decode once as wrong values;
@@ -89,6 +60,8 @@ Left after the sweep (`scripts/icon-report.py`, tier holes):
   `Trial::enabledChanged`) before calling it redundant; licensing is a protected surface.
 - [ ] A ctest for a live re-sync of a multi-source session: no combined frame published as source
   0's layout, every connect-time template re-announced, one retry per (source, generation).
+  Neither `FrameBuilder` nor `Dashboard` has a unit harness, so this first needs a seam (the
+  retry decision as its own sub-object, the template choice as a pure function).
 
 ## Maintainer steps
 
