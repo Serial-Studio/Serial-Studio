@@ -26,9 +26,13 @@ SequentialAnimation {
   readonly property color fill: Cpp_ThemeManager.alarmColorForSeverity(root.severity)
 
   //
-  // Text drawn on the flash fill: whichever of near-black and white contrasts more (WCAG)
+  // Text drawn on the flash fill: white on a Critical red, since the dark themes' brighter reds
+  // sit at the same WCAG luminance as a light theme's amber; else the higher-contrast ink (WCAG)
   //
   readonly property color ink: {
+    if (root.severity === 3)
+      return "#ffffff"
+
     const lin = (c) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
     const lum = 0.2126 * lin(root.fill.r) + 0.7152 * lin(root.fill.g) + 0.0722 * lin(root.fill.b)
     return lum > 0.2 ? "#1a1a1a" : "#ffffff"
