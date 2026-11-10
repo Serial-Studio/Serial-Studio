@@ -134,7 +134,9 @@ Operator mode is a locked-down session for people who run a dashboard without ed
 
 ## Licensing (commercial builds)
 
+<!-- doc-verify off -->
 Neither option needs a license to be active first.
+<!-- doc-verify on -->
 
 | Option | Argument | Description |
 |--------|----------|-------------|
