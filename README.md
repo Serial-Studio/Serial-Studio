@@ -5,39 +5,82 @@
 [![Buy Pro](https://img.shields.io/badge/Buy%20Pro-Lemon%20Squeezy-blue?logo=lemonsqueezy)](https://store.serial-studio.com/checkout/buy/e33e6d04-639f-46b7-bd68-b46d341c5b16)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4b6f3ce14a684704980fea31d8c1632e)](https://app.codacy.com/gh/Serial-Studio/Serial-Studio/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-**Serial Studio** turns data from your hardware into a live dashboard.
+**Serial Studio** turns the numbers your hardware prints into a live dashboard.
 
-Connect an Arduino, ESP32, STM32, Raspberry Pi, Teensy, or anything else that speaks serial, Bluetooth, a network protocol, or an industrial bus. Describe the data format once in a project file. Serial Studio draws the plots, gauges, maps, and 3D views around it. Send commands back with buttons, sliders, and knobs. Record a session, replay it, export it as a PDF.
-
-It replaces the stack of separate tools this work usually requires: a serial monitor and serial plotter for Arduino and ESP32 development, a real-time telemetry dashboard, a data logger that records to CSV or SQLite, and a PLC, Modbus, CAN bus, OPC UA, or MQTT monitor for industrial and IoT systems.
-
-Runs on Windows, macOS, Linux, and Raspberry Pi.
+You already call `Serial.println` on an Arduino, ESP32, STM32, Teensy, or Raspberry Pi. Serial Studio reads those lines over serial and draws plots, gauges, maps, and 3D views. It also reads Bluetooth LE, network protocols, and industrial buses (Modbus, CAN bus, OPC UA, MQTT), and logs to CSV or SQLite. It runs on Windows, macOS, Linux, and Raspberry Pi.
 
 ![Software usage](doc/screenshot.png)
 
-[Use cases](./doc/help/Use-Cases.md) shows how people apply it across 18 fields, from rocketry and drones to industrial automation. [Comparison](./doc/help/Comparison.md) sets it against the Arduino IDE Serial Plotter, Processing, MATLAB, LabVIEW, and Grafana.
+## Quick start
+
+Upload this sketch to an Arduino Uno-class board. Sensors on A0 and A1 are best, but open wires work too: floating pins give moving noise, enough to see a plot. On an ESP32, replace `A0` and `A1` with ADC pins such as `34` and `35`.
+
+```cpp
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int sensorA = analogRead(A0);
+  int sensorB = analogRead(A1);
+  Serial.print(sensorA);
+  Serial.print(",");
+  Serial.println(sensorB);
+  delay(100);
+}
+```
+
+Then:
+
+1. [Download](#download) and start Serial Studio.
+2. In the Device Setup panel, set **Operation Mode** to **Quick Plot (Auto-Detected Format)**.
+3. Choose your serial port, set the baud rate to `9600` (the value in `Serial.begin`), and click **Connect**.
+
+Two traces appear in the dashboard, one per column. Touch a sensor and watch a trace move. Garbled text in the console almost always means the baud rate does not match the sketch; nothing is broken. If your port is not listed, unplug and replug the board and close the Arduino IDE Serial Monitor, which holds the port open. Named values work too: `temp:21.5,hum:40` plots two traces called `temp` and `hum`.
+
+That is the whole setup. No project file needed.
+
+To keep what you see, click **Menu** in the dashboard taskbar and choose **Save as Project**. The Project Editor opens, where you rename channels, set units, and pick widgets. The [getting started guide](./doc/help/Getting-Started.md) walks through each step, including problems; [`/examples`](./examples) has Arduino sketches, ESP32 code, and Python scripts.
+
+### Operation modes
+
+The Device Setup panel offers three modes, all free ([Operation Modes](./doc/help/Operation-Modes.md) has the details).
+
+| Mode (Device Setup) | Use it when |
+|---------------------|-------------|
+| **Quick Plot (Auto-Detected Format)** | Your device prints one line of values per sample (comma, semicolon, tab, or space separated, or `name:value` pairs). |
+| **Parse via Project File** | You want a custom dashboard: you describe groups, datasets, and widgets in the Project Editor. Recommended for anything beyond a quick look. |
+| **Console Only (No Parsing)** | You want a plain terminal with no dashboard. |
+
+### Free or Pro?
+
+- The official binary runs without a license. Free features have no time limit. The first time you use a Pro feature, Serial Studio offers a 14-day Pro trial (no account or payment; registering it needs an internet connection). When the trial ends, Pro features lock and the free features keep working.
+- A GPL build compiled from source has the free features only.
+- Commercial use of the official binary requires a Pro license.
+
+The full feature matrix is in [Pro vs Free](./doc/help/Pro-vs-Free.md); the [editions table](#picking-the-right-version) compares the three ways to run Serial Studio.
 
 ## What you can do with it
 
-**Connect to a device.** Serial/UART, Bluetooth LE, and network sockets (TCP, UDP, WebSocket, HTTP) in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, audio input, raw USB (libusb), HID (hidapi), and Process I/O are Pro. Multiple devices in one project is also Pro.
+Pro features are tagged (Pro); everything else is in the GPL build.
 
-**Read PLCs without a gateway (Pro).** OPC UA covers modern controllers: browse the address space, tick the tags you want, and the project generates itself. Three direct drivers cover the rest of the plant floor, no KEPServer-class gateway in between. S7comm polls absolute addresses (`DB5.DBD20:REAL`, `MW10`) on Siemens S7-300, S7-400, S7-1200, and S7-1500 controllers. EtherNet/IP polls symbolic tag names on Allen-Bradley ControlLogix, CompactLogix, MicroLogix, Micro800, SLC 500, and PLC-5, plus Omron NJ/NX. IEC 60870-5-104 interrogates RTUs and substation gateways and streams their spontaneous reports, generating the project from the station's own database. All three are read-only clients: connecting Serial Studio to a running machine cannot change its state. On the MQTT side, Sparkplug B works in both directions — subscribe as a host application and generate a project from the birth certificates, or publish your dashboard as an edge node.
+**Connect to a device.** Serial/UART, Bluetooth LE, and network sockets (TCP, UDP, WebSocket, HTTP) are free. MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, audio input, raw USB, HID, and Process I/O are Pro, as is running several devices in one project. Pro also turns Modbus register-map and CAN DBC files into projects.
 
-**Visualize data.** 17 widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, web view, bar panel, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, Compass, and Meter each render as a two-page swipe view (page 0 is the analog face, page 1 is a large digital readout), so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, Waterfall (spectrogram), Image View (live camera), the Canvas widget, and output widgets (buttons, sliders, knobs, an Output Panel, and a Notification Log). Canvas is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
+**Read PLCs without a gateway (Pro).** OPC UA browses a controller's address space, and you tick the tags you want. S7comm, EtherNet/IP, and IEC 60870-5-104 read Siemens, Allen-Bradley, Omron, and substation equipment directly. These three drivers are read-only, so connecting cannot change a running machine. Addressing examples and controller lists are on the [S7](./doc/help/Drivers-S7.md), [EtherNet/IP](./doc/help/Drivers-EtherNet-IP.md), and [IEC 60870-5-104](./doc/help/Drivers-IEC-104.md) pages.
 
-**Build dashboards.** The Project Editor defines groups, datasets, and widgets through forms. Or skip the project file: print numbers from your device, one line per sample, and Quick Plot draws them. Custom workspaces (Pro) split big projects into tabs with a searchable taskbar.
+**Visualize data.** Line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, a terminal, and multi-channel plots are free. Pro adds 3D Plot, Waterfall (spectrogram), Image View (live camera), and the Canvas widget, a JavaScript `paint(ctx, w, h)` callback with 18 starting templates.
 
-**Parse and transform data.** Frame parsers come in three flavors: Built-In templates (compiled C++ parsers you configure through a form, no code, the default for new projects), JavaScript, and Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims). 28 script templates cover MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and others. Per-dataset transforms (EMA, scaling, calibration, unit conversion) run every frame as short JS or Lua snippets. Variables act as a shared bus so transforms can derive computed datasets from each other. Transforms and Variables are Pro.
+**Build dashboards.** The Project Editor defines groups, datasets, and widgets through forms. Custom workspaces (Pro) split big projects into tabs with a searchable taskbar.
 
-**Send commands back (Pro).** Buttons, toggles, sliders, knobs, text fields, and freeform output panels run JS templates that emit GCode, SCPI, Modbus, NMEA, CAN, or whatever your device speaks. Actions run on demand or on a timer.
+**Parse and transform data.** A frame parser is a small function that turns one frame (usually one line of text) into numbers. Frame parsers are Built-In templates (no code, the default for new projects), JavaScript, or Lua. Script templates cover MAVLink, NMEA, UBX, MessagePack, COBS, SLIP, JSON, and others. Per-dataset transforms and Variables (Pro) filter, scale, and derive values every frame. Serial Studio parses 256,000 frames per second, enforced as a CI benchmark gate ([Benchmark](./doc/help/Benchmark.md)).
 
-**Record and replay.** CSV export in the GPL build. MDF4 import/export, session recording (frames and raw bytes) into SQLite, PDF session reports, and XMODEM/YMODEM/ZMODEM file transfer are Pro. If the data belongs in your existing time-series stack instead of a local file, a live sink streams every frame into InfluxDB 2.x as line protocol (Pro).
+**Send commands back (Pro).** A slider can send `G1 X10` over serial. Buttons, sliders, knobs, toggles, and text fields run JavaScript templates that emit GCode, SCPI, Modbus, NMEA, or CAN, on demand or on a timer.
 
-**Automate it.** A TCP API on port 7777 with 360+ commands. A gRPC server on port 8888 mirrors the same command set with protobuf and live frame streaming. An MCP server wraps the same surface for Claude Desktop or any other MCP host.
+**Record and replay.** CSV export is free. MDF4, session recording into SQLite, PDF session reports, file transfer (XMODEM, YMODEM, ZMODEM), and a live InfluxDB 2.x sink are Pro.
 
-**AI Assistant for project editing (Pro).** A bring-your-own-key chat panel that edits the project. Eight providers: Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, and local OpenAI-compatible endpoints (Ollama, llama.cpp, LM Studio, vLLM) for offline use. Mutating actions show an Approve/Deny card first. See the [AI Assistant docs](./doc/help/AI-Assistant.md).
+**Automate it.** The API Server is off until you turn on **Enable API Server** on the General page of Preferences, so a fresh install exposes nothing. It then listens on TCP port 7777 and exposes hundreds of commands over TCP ([API reference](./doc/help/API-Reference.md)). In official binaries the same switch also starts a gRPC server on port 8888, with the same commands and live frame streaming; a source build includes it only with `-DENABLE_GRPC=ON` ([gRPC server](./doc/help/gRPC-Server.md)). An MCP server lets Claude Desktop or any MCP host call the same surface.
 
-**Vendor-document importers (Pro).** Feed the Modbus register-map importer a vendor CSV/XML/JSON and get a project. DBC import decodes CAN signals from the standard automotive files, extended multiplexing included, and the CAN driver reassembles multi-packet J1939 and ISO-TP transfers so long PGNs decode the same way 8-byte frames do. For OPC UA servers there is nothing to import: browse the server's address space, tick the tags you want, and Serial Studio generates the project from them.
+**Let an AI edit the project (Pro).** The AI Assistant is a bring-your-own-key chat panel that edits the project, with local models supported for offline use. Mutating actions show an Approve/Deny card first. See the [AI Assistant docs](./doc/help/AI-Assistant.md).
 
 ## Download
 
@@ -48,21 +91,21 @@ Serial Studio is available as source code and as official precompiled binaries f
 
 ### Windows
 
-Requires the [Microsoft Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). On first launch Windows may warn about an unknown developer. Click _"More Info"_, then _"Run Anyway"_ to continue.
+Download the file ending in `-Windows.msi` (installer) or `-Windows-Portable.zip` (no installation). Requires the [Microsoft Visual C++ Redistributable (x64)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). On first launch Windows may warn about an unknown developer. Click _"More Info"_, then _"Run Anyway"_ to continue.
 
 ### macOS
 
-Distributed as a universal DMG. Open the DMG and drag **Serial Studio** into **Applications**. You can also install it via Homebrew:
+Download the file ending in `-macOS.dmg`, a universal build for Apple silicon and Intel. Open the DMG and drag **Serial Studio** into **Applications**. The first time, right-click the app and choose Open. You can also install it via Homebrew:
 
 ```bash
 brew install --cask serial-studio
 ```
 
-The Homebrew cask is community-maintained. It's available, but not officially tested by me.
+The Homebrew cask is community-maintained and not tested by the project.
 
 ### Linux
 
-The recommended way to install on Linux is via the official [AppImage](https://appimage.org/). Download it from the [latest release](https://github.com/Serial-Studio/Serial-Studio/releases/latest), then make it executable and run it (replace `<version>` with the version you downloaded):
+The recommended way to install on Linux is via the official [AppImage](https://appimage.org/). Download it from the [latest release](https://github.com/Serial-Studio/Serial-Studio/releases/latest), then make it executable and run it. Replace `<version>` with the version you downloaded; the ARM64 file ends in `Linux-arm64.AppImage`. The name says Pro because the one official binary contains the Pro features; it runs without a license (see [Free or Pro?](#free-or-pro)).
 
 ```bash
 chmod +x Serial-Studio-Pro-<version>-Linux-x64.AppImage
@@ -71,143 +114,32 @@ chmod +x Serial-Studio-Pro-<version>-Linux-x64.AppImage
 
 For better desktop integration (menu entries, icons, updates), use [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher).
 
+All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc. The host's glibc version does not matter (see [Linux Installation](./doc/help/Linux-Installation.md)).
+
 #### Flatpak (Flathub)
 
-Serial Studio is on [Flathub](https://flathub.org/apps/com.serial_studio.Serial-Studio). That version gets regular updates and tends to work better on ARM64. On some desktop environments, mostly Wayland, you may see small visual glitches like missing window shadows.
+Serial Studio is on [Flathub](https://flathub.org/apps/com.serial_studio.Serial-Studio).
 
 #### Raspberry Pi / ARM64
 
-An ARM64 AppImage is available for Raspberry Pi and similar boards. It runs well on Raspberry Pi 4/5 and on integrated graphics. Requirements:
-
-- A 64-bit Linux distro (Raspberry Pi OS 64-bit, Ubuntu, Debian, etc.)
-
-All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc, so they run on any distribution from the Debian 10 / RHEL 8 generation onward (releases up to 4.0.3 required a newer host glibc); no minimum glibc version is required on the host.
-
-## Features
-
-### How it works
-
-- **Project file mode (recommended):** Define your data format and dashboard in the Project Editor, using structured forms for groups, datasets, and widgets.
-- **Quick plot mode:** Print one line of values per sample from Arduino and get an instant plot.
-- **Console only mode:** Use Serial Studio as a plain terminal without any dashboard.
-
-### At a glance
-
-- **Protocols:** Serial/UART, Bluetooth LE, and network sockets (TCP, UDP, WebSocket, HTTP) in the GPL build. MQTT, Modbus TCP/RTU, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, Audio, raw USB (libusb), HID (hidapi), and Process I/O are Pro.
-- **PLC drivers (Pro):** S7comm for Siemens S7-300/400/1200/1500, EtherNet/IP for Allen-Bradley and Omron NJ/NX, IEC 60870-5-104 for RTUs and substation gateways. Read-only clients, no OPC UA gateway required.
-- **Sparkplug B (Pro):** subscribe to a broker as a host application and generate the project from birth certificates, or publish the dashboard as an edge node.
-- **Visualization:** 23 widgets, including line plots, gauges, bar charts, meters, GPS maps, FFT, waterfall (spectrogram), accelerometer, gyroscope, compass, data grids, 3D views, live camera feed, plus Clock and Stopwatch utility widgets (some Pro). Bar, Gauge, Compass, and Meter each include a swipeable digital readout page alongside the analog face.
-- **Canvas widget (Pro):** scriptable Canvas2D-style canvas driven by a JS `paint(ctx, w, h)` callback. Watchdog-protected QJSEngine, persistent script state across frames, 18 templates (oscilloscope, polar plot, artificial horizon, audio VU meter, dial gauge, heatmap, LED matrix, sparklines, vector field, XY scope, and more).
-- **Output widgets:** buttons, toggles, sliders, knobs, text fields, and freeform panels, with JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
-- **Custom parsing:** Built-In template, JavaScript, or Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) frame parsers, plus 28 script templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and more).
-- **Per-dataset transforms:** short JS or Lua snippets to filter, scale, calibrate, or derive values every frame (Pro).
-- **Variables:** shared bus for system datasets, user-defined constants and computed variables, and computed datasets built entirely from transforms (Pro).
-- **Custom workspaces:** split large projects into focused dashboard tabs, with a taskbar search (Pro).
-- **CSV export:** every frame, ready for Excel, Python, MATLAB, or R.
-- **MDF4:** read and write MDF4/MF4 for CAN Bus, LIN, FlexRay, and analog (Pro).
-- **Historian:** record frames and raw bytes into SQLite, then browse, tag, export, and replay them (Pro).
-- **Session reports:** export a session as a styled HTML or PDF with interactive Chart.js plots (Pro).
-- **File transfer:** XMODEM, YMODEM, and ZMODEM with CRC and crash recovery (Pro).
-- **Modbus register maps:** import CSV, XML, or JSON straight from vendor docs (Pro).
-- **OPC UA tag browser:** browse a server's address space, tick tags, and generate the project (Pro).
-- **CAN DBC import:** decoded signals for automotive and industrial work, extended multiplexing included (Pro).
-- **CAN transport protocols:** J1939 TP (BAM and RTS/CTS) and ISO-TP reassembly, so multi-packet PGNs and diagnostic payloads decode like single frames (Pro).
-- **CAN adapters:** Qt's plugin interfaces plus direct backends for candleLight (gs_usb), SLCAN/LAWICEL, and Seeed/Waveshare USB-CAN analyzers (Pro).
-- **InfluxDB sink:** stream live frames into InfluxDB 2.x as line protocol (Pro).
-- **Image view:** live JPEG or PNG camera streams alongside telemetry on the same connection (Pro).
-- **Multi-device:** several devices in one project, each with its own protocol (Pro).
-- **TCP API on port 7777:** 360+ commands for programmatic control (see the [API client example](./examples/API%20Test)).
-- **gRPC server on port 8888:** the same command set over protobuf, with frame and raw-data streaming (see the [gRPC reference](./doc/help/gRPC-Server.md)).
-- **AI Assistant (Pro):** in-app chat panel that edits the project (sources, datasets, parsers, transforms, output widgets, workspaces) by calling the project-editing API. Bring-your-own-key for Anthropic, OpenAI, Gemini, DeepSeek, Groq, Mistral, OpenRouter, or a local OpenAI-compatible server (Ollama, llama.cpp, LM Studio, vLLM); the local option runs fully offline. Mutating commands require explicit approval; connection control and device writes are blocked by default and only run as Always-confirm actions after the Allow device control toggle is enabled. Hidden in operator deployments.
-- **MCP integration:** external AI clients (Claude Desktop, custom MCP hosts) can call the full TCP API, including connection control and device writes, over the Model Context Protocol (see [MCP Client](./examples/MCP%20Client)).
-- **Throughput:** the parse pipeline sustains 256,000 frames per second, enforced as a CI benchmark gate on every pull request (see [Benchmark](./doc/help/Benchmark.md)).
-- **Cross-platform:** 60 FPS on Windows 10/11, macOS 14+ (Intel and Apple Silicon), Linux x64, and Raspberry Pi ARM64.
-- **Dual licensed:** open source GPL-3.0 core with proprietary Pro features (see [LICENSE.md](LICENSE.md)).
-
-## Quick start
-
-A first connection takes about five minutes.
-
-### 1. Download and install
-
-- Grab the latest release for your platform (see [Download](#download)).
-- **Windows:** run the installer. Allow "Unknown developer" if prompted.
-- **macOS:** drag to Applications, then right-click and choose Open the first time.
-- **Linux:** `chmod +x` the AppImage and run it.
-
-### 2. Connect your device
-
-- Launch Serial Studio.
-- Pick your serial port and baud rate (9600 and 115200 are common).
-- Click **Connect**.
-
-### 3. Visualize
-
-- **Quick plot mode:** send one line of values per sample (comma, semicolon, tab or space separated, or name:value pairs) and watch them plot live.
-- **Project mode:** build a custom dashboard in the Project Editor, complete with gauges, maps, and more.
-- **Examples:** browse [`/examples`](./examples) for Arduino sketches, ESP32 code, and Python scripts.
-
-### Arduino example
-
-```cpp
-void setup() {
-  Serial.begin(9600);
-}
-
-void loop() {
-  int temperature = analogRead(A0);
-  int humidity = analogRead(A1);
-  Serial.print(temperature);
-  Serial.print(",");
-  Serial.println(humidity);
-  delay(100);
-}
-```
-
-Upload, connect Serial Studio, enable Quick Plot, and you're done.
-
-First time using it? Start with the [getting started guide](./doc/help/Getting-Started.md). The [help center](https://serial-studio.com/help) covers troubleshooting and common questions.
+An ARM64 AppImage is available for Raspberry Pi and similar boards. It needs a 64-bit Linux distro (Raspberry Pi OS 64-bit, Ubuntu, Debian, and so on).
 
 ## Documentation
 
-### Official docs
-
-- [Help center](https://serial-studio.com/help): FAQs, use cases, comparisons, troubleshooting.
+- [Help center](https://serial-studio.com/help): FAQs, use cases, comparisons, troubleshooting. The Markdown source is in [doc/help](./doc/help).
 - [Getting started](./doc/help/Getting-Started.md): first connection, the three operation modes, and common problems.
-- [Use cases](./doc/help/Use-Cases.md): 18 fields where Serial Studio is used, with the hardware and data rates involved.
-- [Comparison](./doc/help/Comparison.md): how it differs from the Arduino Serial Plotter, Processing, MATLAB, LabVIEW, and Grafana.
+- [Use cases](./doc/help/Use-Cases.md): worked scenarios across ten fields, from rocketry and drones to industrial automation, with the hardware and data rates involved.
+- [Comparison](./doc/help/Comparison.md): how it differs from the Arduino IDE Serial Plotter, Processing, MATLAB, LabVIEW, and Grafana.
 - [Pro vs Free](./doc/help/Pro-vs-Free.md): the full feature matrix for both editions.
-- [Local help docs](./doc/help): Markdown source for the in-app help center.
+- Automation: the [API reference](./doc/help/API-Reference.md) (with an [API client example](./examples/API%20Test)), the [gRPC server](./doc/help/gRPC-Server.md), and an [MCP client](./examples/MCP%20Client).
 - [AI agent guide](AGENTS.md): for ChatGPT, Claude, and other assistants.
-- [API reference](./doc/help/API-Reference.md): full TCP API and automation docs.
-- [gRPC server](./doc/help/gRPC-Server.md): protobuf API and streaming reference.
-- [Examples](./examples): Arduino, ESP32, Python code with sample projects.
-
-### Key topics
-
-- **Installation** for Windows, macOS, Linux, and Raspberry Pi.
-- **Quick start:** connect an Arduino or ESP32 and visualize data in five minutes.
-- **Dashboard creation:** build layouts in the Project Editor and split them into workspaces.
-- **Protocol support:** Serial/UART, Bluetooth LE, MQTT (with Sparkplug B), Modbus TCP/RTU, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, TCP/UDP/WebSocket/HTTP, Audio, raw USB, HID, Process I/O.
-- **Frame parsing:** handle binary protocols, checksums, and custom formats with Built-In templates, JavaScript, or Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims).
-- **Per-dataset transforms:** EMA filters, scaling, calibration, and computed datasets via Variables.
-- **Output widgets:** send commands back with buttons, sliders, knobs, toggles, and output panels (Pro).
-- **Canvas widget:** write your own dashboard widget in JavaScript when the built-ins don't fit (Pro).
-- **File transfer:** XMODEM, YMODEM, and ZMODEM over the active connection (Pro).
-- **CSV export and playback:** log sensor data and replay it.
-- **MDF4 playback and export:** CAN Bus, LIN, FlexRay, and analog (Pro).
-- **Historian:** record, tag, export, and replay full sessions from SQLite (Pro).
-- **Session reports:** export HTML or PDF reports with interactive Chart.js plots (Pro).
-- **TCP API:** 360+ commands for programmatic control (see [API Client](./examples/API%20Test)).
 
 ## Building Serial Studio
 
 ### Requirements
 
-Minimum:
-
-- **Qt 6.9 or later** (6.11.2 recommended). Required modules: QtCore, QtGui, QtWidgets, QtQml, QtQuick, QtQuickControls2, QtGraphs, QtSvg, QtSql, QtSerialPort, QtBluetooth, QtCore5Compat, and Qt LinguistTools at build time.
-- **C++20 compiler:** GCC 10+ (Linux), Clang 12+ (macOS), or MSVC 2019+ (Windows).
+- **Qt 6.11.2**, the version CI builds. Older Qt versions are not tested. Required modules: QtCore, QtGui, QtWidgets, QtQml, QtQuick, QtQuickControls2, QtGraphs, QtSvg, QtSql, QtSerialPort, QtBluetooth, QtCore5Compat, and Qt LinguistTools at build time.
+- **A C++20 compiler:** GCC, Clang, or MSVC.
 - **CMake 3.20 or later.**
 - Platform toolchain (see [Platform specifics](#platform-specifics)).
 
@@ -228,7 +160,7 @@ brew install qt@6
 
 ##### Windows
 
-Visual Studio 2019 or later with the C++ workload, and Qt from the official installer.
+Visual Studio with the C++ workload, and Qt from the official installer.
 
 ### Build instructions
 
@@ -243,23 +175,19 @@ On Windows the default generator is Visual Studio, which is multi-config: it ign
 
 You can also open `CMakeLists.txt` in Qt Creator or any CMake-aware IDE without extra setup.
 
-The default build is the GPLv3 edition. It includes the core: UART, network (TCP/UDP/WebSocket/HTTP), and BLE drivers, the Project Editor, Quick Plot and Console modes, the standard widgets (line plot, gauge, bar, GPS, FFT, accelerometer, gyroscope, compass, data grid, LED panel, terminal, multi-plot), Built-In, JavaScript, and Lua frame parsers, CSV export, and the local TCP/MCP API.
-
-Pro-only modules are not built into the GPL edition: MQTT (Sparkplug B included), Modbus, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, the InfluxDB sink, Audio, USB, HID, Process I/O, multi-source projects, the 3D Plot, Waterfall, Image View, and Canvas widgets, the output widgets, MDF4 import/export, the Historian, session reports, XMODEM/YMODEM/ZMODEM file transfer, the Modbus register-map and CAN DBC importers, and the AI Assistant. Some of those depend on proprietary Qt modules (Modbus, CAN Bus, MQTT, OPC UA); others are commercial-licensed code in this repository. Per-dataset transforms, Variables, and custom workspaces are Pro features too: the GPL edition cannot create or edit them, and a project that contains a transform or a Variables table needs Pro to connect (removing them is free). The notification log is also Pro. See [Pro vs Free Features](./doc/help/Pro-vs-Free.md) for the full matrix.
+The default build is the GPLv3 edition: the free features only, with no Pro modules compiled in. Some Pro modules depend on proprietary Qt modules (Modbus, CAN Bus, MQTT, OPC UA); others are commercial-licensed code in this repository. The GPL edition cannot create or edit per-dataset transforms, Variables, or custom workspaces, and a project that contains a transform or a Variables table needs Pro to connect (removing them is free). See [Pro vs Free Features](./doc/help/Pro-vs-Free.md) for the full list.
 
 If you are a Pro user or have a commercial license, [contact the maintainer](mailto:alex@serial-studio.com) for build instructions and activation details.
 
 ## Support the project
 
-Serial Studio is developed and maintained by [Alex Spataru](https://github.com/alex-spataru). It is open source and community-driven, with commercial options for users who need advanced features or a business-friendly license.
+Serial Studio is developed and maintained by [Alex Spataru](https://github.com/alex-spataru).
 
 If Serial Studio is useful to you, here are a few ways to support it:
 
 - [Donate via PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE): keeps the project active.
-- [Buy a commercial license](https://serial-studio.com): unlocks Pro features and priority support. GPL builds compiled from source are governed by the GPLv3 alone, with no additional restrictions.
-- [Become an affiliate](https://store.serial-studio.com/affiliates): a good fit for content creators who want to earn a commission by referring new customers.
-
-Commercial licenses directly fund development, bug fixes, and new features.
+- [Buy a commercial license](https://serial-studio.com): unlocks Pro features and priority support.
+- [Become an affiliate](https://store.serial-studio.com/affiliates): earn a commission by referring new customers.
 
 ## Licensing
 
@@ -269,11 +197,11 @@ Serial Studio uses a dual-license model that separates open source usage from co
 - [LICENSES/GPL-3.0-or-later.txt](LICENSES/GPL-3.0-or-later.txt): full GNU GPLv3 text for open source source code.
 - [LICENSES/LicenseRef-SerialStudio-Commercial.txt](LICENSES/LicenseRef-SerialStudio-Commercial.txt): full terms for proprietary features and official binaries.
 
-Source files are individually marked with SPDX headers, either `GPL-3.0-or-later`, `LicenseRef-SerialStudio-Commercial`, or both. This lets developers build and distribute GPL-compliant versions while keeping commercial features protected.
+Source files are individually marked with SPDX headers, either `GPL-3.0-or-later`, `LicenseRef-SerialStudio-Commercial`, or both. The edition comparison is under [Picking the right version](#picking-the-right-version).
 
 ## Picking the right version
 
-The official binary runs without a license. Its free features work with no time limit for personal, educational, and open-source use, and the first Pro feature you use offers a 14-day Pro trial; when the trial ends, Pro features lock and the free features keep working. Commercial use of the official binary requires a Pro license. The table below shows licensing, feature access, and obligations for each edition.
+The table compares the three ways to run Serial Studio.
 
 | Feature / use case     | GPL build *(compiled from source)*   | Official binary *(no license)*        | Official binary *(Pro license)*             |
 |------------------------|--------------------------------------|---------------------------------------|---------------------------------------------|
@@ -285,34 +213,12 @@ The official binary runs without a license. Its free features work with no time 
 | **Precompiled binary** | ❌ Must build from source            | ✅ Provided                           | ✅ Provided                                  |
 | **Qt licensing**       | Requires GPL-compatible Qt           | Qt licensing covered by vendor        | Qt licensing covered by vendor              |
 | **Activation system**  | ❌ Not applicable                    | None; the trial registers the machine | ✅ Requires a valid license key              |
-| **Business use**       | ✅ Permitted (no Pro features)       | ❌ Requires a Pro license             | ✅ Fully allowed                             |
 | **Best for**           | OSS devs, students, contributors     | Hobbyists, personal evaluation        | Businesses, teams, commercial products      |
 
 The GPL build carries the full GPLv3 grant: use for any purpose, commercial use included, with no restrictions beyond the GPL's own terms. It excludes the Pro modules. Pro features and official binaries are proprietary: the official binaries are governed by the [EULA](EULA.md), and using Pro features beyond the 14-day trial requires a commercial license. A file's SPDX header states its license; files marked commercial-only carry no GPL rights.
 
 ## Contributing
 
-Contributions are welcome: bug fixes, new features, or doc improvements. [CONTRIBUTING.md](CONTRIBUTING.md) has the full guide.
+Contributions are welcome: bug fixes, new features, or doc improvements. [CONTRIBUTING.md](CONTRIBUTING.md) covers code style and pull request steps. Check existing [issues](https://github.com/Serial-Studio/Serial-Studio/issues) and [pull requests](https://github.com/Serial-Studio/Serial-Studio/pulls) first. Contributions to both GPL-licensed code and the commercial (Pro) modules are welcome; Pro contributions are accepted under the Contributor License Agreement in CONTRIBUTING.md.
 
-Before contributing:
-
-- Check existing [issues](https://github.com/Serial-Studio/Serial-Studio/issues) and [pull requests](https://github.com/Serial-Studio/Serial-Studio/pulls).
-- Review [CLAUDE.md](CLAUDE.md) for code style.
-- Contributions to both GPL-licensed code and the commercial (Pro) modules are welcome. Pro contributions are accepted under the Contributor License Agreement in [CONTRIBUTING.md](CONTRIBUTING.md).
-
-Code style:
-
-- Follow the project's clang-format config (LLVM base style).
-- Use meaningful names.
-- Avoid inline end-of-line comments (see [doc/claude/code-style.md](./doc/claude/code-style.md)).
-- Add Doxygen comments for new public APIs.
-
-Submitting changes:
-
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/amazing-feature`).
-3. Commit with descriptive messages.
-4. Push to your fork and open a pull request.
-5. Make sure CI passes.
-
-For larger changes, open an issue first so we can talk about the approach.
+For larger changes, open an issue first to agree on the approach with the maintainer.

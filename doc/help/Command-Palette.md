@@ -1,67 +1,67 @@
 # Command palette
 
-The command palette is a single search box that reaches every workspace, widget, tool, and command in Serial Studio without hunting through menus and toolbars. Press **Ctrl+K** anywhere in the main window or the Project Editor to open it, start typing, and press Enter on the result you want.
+You have a device connected, the dashboard is showing, and you want a CSV log of it. Press **Ctrl+K** (**Cmd+K** on macOS), type `csv`, and press Enter on **CSV File**. Logging starts. No menu was opened. **CSV File** is a toggle, so pressing Enter on it again stops the log.
 
-The palette is available in every edition; nothing on it is Pro-gated, though individual entries that open Pro tools are hidden in the free build just as they are everywhere else.
+The command palette is one search box over your dashboard layouts (workspaces), the widgets on them, and every menu action in Serial Studio. It is in the free and Pro editions. Commands for Sessions, File Transmission, the AI Assistant and Notifications appear only in the Pro edition.
 
 ## Opening and closing
 
-| Action | Keys |
-|--------|------|
-| Open (toggle) | **Ctrl+K** |
-| Close | **Esc**, **Ctrl+W** (**Cmd+W** on macOS), or click outside the dialog |
+Press **Ctrl+K** (**Cmd+K** on macOS) to open the palette, and again to close it. **Esc**, **Ctrl+W** (**Cmd+W**) and a click outside the dialog close it too. The keys work in the main window, the Project Editor, and pop-out dashboard windows. In the Project Editor, **Ctrl+K** does nothing while the project is locked.
 
-**Ctrl+K** is a toggle: press it again while the palette is open to dismiss it. The taskbar's workspace switcher button opens the same palette on the dashboard.
-
-The palette centers over the current window as a floating dialog. While it is open it holds the keyboard, so the dashboard behind it does not steal focus; the scene behind stays inert until you close the palette.
+Two buttons open it as well: the workspace button in the dashboard taskbar, and the **Command Palette** button on the main toolbar. The palette is modal: the window behind it ignores input until you close it.
 
 ## What the palette lists
 
-The palette shows different things depending on where you open it:
-
-- **On the dashboard** it lists your [workspaces](Toolbar-Reference.md#a-note-on-workspaces) and workspace folders, every open widget, and the dashboard commands (Start menu tools, export toggles, pause, reset, and so on).
-- **Before the dashboard opens** (Console view, or with no data yet) it lists the application commands: file actions, operation-mode switches, connection, preferences, and help.
+- **On the dashboard** it lists your [workspaces](Toolbar-Reference.md#a-note-on-workspaces) and the dashboard commands, such as **Pause** and the export toggles. A workspace is a saved layout of dashboard widgets. Typing also searches workspace folders, dataset groups, and open widgets.
+- **In Console view, or while the dashboard is not showing,** it lists only the application commands: file actions, operation-mode switches, connection, preferences, and help. There are no workspace, group, or widget entries. Commands that need the dashboard, such as the View entries, are listed dimmed.
 - **In the [Project Editor](Project-Editor.md)** it lists the project commands: new, open, save, and the add-item actions from the editor toolbar.
+
+In runtime mode (an operator deployment) the authoring commands, such as the Project Editor and Open Project, are hidden.
 
 ## Browsing versus searching
 
-The palette has two modes, and it switches between them automatically based on whether the search box is empty.
+The palette switches mode on its own, depending on whether the search box is empty.
 
 ### Browse (empty search box)
 
-With no text typed, the palette shows a grid of large cells. On the dashboard the first row is **Workspaces**, ending in an **Add Workspace** cell; below it, tools and commands are grouped into labeled sections. A cell marked **Folder** drills into a workspace folder, and a breadcrumb bar appears at the top so you can step back out. The **Back** button and the breadcrumb crumbs both navigate up the folder tree.
+An empty box shows a grid of large cells. On the dashboard the first row is **Workspaces**, ending in an **Add Workspace** cell; commands follow in labeled sections, one per category. A cell marked **Folder** opens that workspace folder. Use **Back** or the breadcrumb bar at the top to go up a level. Inside a folder the grid shows only that folder's workspaces and an **Add Workspace** cell, which creates the workspace in that folder; the command sections appear only at the top level.
 
 ### Search (any text typed)
 
-Start typing and the grid collapses into a dense list of result rows, grouped into sections. Each row shows the item's icon, its name, a dimmed path or category subtitle, and its keyboard shortcut where one exists. On the dashboard, a search spans these sections, each hidden when it has no matches:
+The grid becomes a dense list of results. Each row shows the item's icon, its name, a dimmed path or category, and its keyboard shortcut where one exists. Typing `csv` shows a row named **CSV File** under **Data Export**, with its shortcut at the right.
+
+Search ignores case. Each space-separated word must appear somewhere in the item's name, in any order, so `export csv` and `csv export` find the same entries. Words match as substrings. The characters `-`, `_`, `.` and `/` count as spaces, and a word also matches the name with its spaces removed, so `csvfile` finds **CSV File**. Workspaces, folders and commands match on their own name only, not the dimmed category or path. Groups and widgets also match on the name of the group they belong to, so typing a group's name lists its widgets.
+
+The same search reaches widgets: type part of a widget's name and Enter jumps to it. Typing `pause` finds **Pause**; while the dashboard is paused the same entry reads **Resume**.
+
+On the dashboard, results fall into these sections, each hidden when empty:
 
 | Section | Contains |
 |---------|----------|
 | **Folders** | Workspace folders whose name matches. |
 | **Workspaces** | Workspaces whose name matches. |
-| **Groups** | Dataset groups whose name matches. |
+| **Groups** | Dataset groups of the loaded project whose name matches. |
 | **Widgets** | Open widgets whose name matches. |
-| **Tools** | Commands and tools, grouped into the categories listed next. |
+| **File**, **Operation Mode**, **Connection**, **View**, **Data Export**, **Console**, **Project**, **License**, **Tools**, **Help** | Matching commands, one section per category, in that order. |
 
-Command and tool results are grouped into fixed categories, shown in this order: **File**, **Operation Mode**, **Connection**, **View**, **Data Export**, **Console**, **Project**, **License**, **Tools**, **Help**.
+**Groups** and **Widgets** together show at most 30 results; add a word to narrow the query if the entry you want is missing.
 
-## Keyboard navigation
+## Keyboard and Enter
 
-The search box keeps focus the whole time, so you never have to reach for the mouse:
+The search box keeps focus the whole time, so your hands never leave the keyboard. In search results, **Up** and **Down** (or **Left** and **Right**) move one result. In the browse grid, **Up** and **Down** move a row of cells, and **Left** and **Right** move one cell. Movement stops at the first and last entry instead of wrapping, and the first arrow press highlights the first entry.
 
-| Key | Browse mode | Search mode |
-|-----|-------------|-------------|
-| **Up / Down** | Move the highlight one row of cells | Move one result up or down |
-| **Left / Right** | Move the highlight one cell | Move one result up or down |
-| **Enter** | Open the highlighted cell (or the first cell) | Open the highlighted result (or the first result) |
-| **Esc** | Close the palette | Close the palette |
+**Enter** acts on the highlighted entry, or on the first one if nothing is highlighted:
 
-Opening a workspace switches to it; opening a widget reveals it inside its workspace, or opens it in a single-widget window if it has none; opening a command runs it and closes the palette.
+- A workspace: the palette switches to it and closes.
+- A widget: the palette shows it in the workspace that contains it. If no workspace contains it, the widget opens in its own window. The palette closes.
+- A command: the palette runs it and closes. Dimmed commands are unavailable right now and ignore **Enter**.
+- A **Folder** cell drills into the folder, and **Add Workspace** prompts for a new workspace. The palette stays open for both.
+
+**Esc** always closes the palette; it never steps up a folder level.
 
 ## See also
 
-- [Toolbar & Button Reference](Toolbar-Reference.md): every button the palette's commands mirror, and the workspace switcher that also opens it.
-- [Macros](Macros.md): the command terminal and script editor in the palette's **Tools** category, reachable only from here.
-- [Problem Center](Problem-Center.md): the diagnostics window behind the **Problem Center** and **Connection Diagnostics** entries, also palette-only.
-- [Getting Started](Getting-Started.md): the main-window layout and a first connection walkthrough.
-- [Operation Modes](Operation-Modes.md): how the Console and Dashboard views are chosen.
+- [Toolbar & Button Reference](Toolbar-Reference.md): the buttons these commands mirror.
+- [Macros](Macros.md): the command terminal and script editor.
+- [Problem Center](Problem-Center.md): the window behind the **Problem Center** and **Connection Diagnostics** entries.
+- [Project Editor](Project-Editor.md): where the project commands live.

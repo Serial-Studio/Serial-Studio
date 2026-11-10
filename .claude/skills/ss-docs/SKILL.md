@@ -33,9 +33,17 @@ edit:
    gate, and behavior claim is verified with `Grep`/`Read` against `core/` / `app/src` /
    `app/qml` before it is written — never copied from another doc or from memory. Procedure
    and verdict format: [references/ground-truth-factcheck.md](references/ground-truth-factcheck.md).
-2. **Manual voice, not blog voice.** Declarative present tense, no tutorial "we/let's", no
-   marketing adjectives, no meta-references ("in this guide"). `scripts/documentation-verify.py`
-   is the phrase-level contract — run it, don't re-derive it.
+2. **Manual accuracy, blog warmth.** Declarative present tense, "you" for the reader, the
+   product by name (never "we/let's"), no marketing adjectives, no meta-references ("in this
+   guide"). Borrow the serial-studio.com blog's warmth: open on the reader's situation or a
+   concrete example, show a tiny working example before the explanation, let a short plain
+   sentence land after a long one, and allow dry, understated humor built on concrete images
+   (a green light shining over a dead link), never jokes in headings or exclamation marks.
+   Write for two readers: a newcomer who knows `Serial.println` and little else, and an expert
+   scanning for a default. A third reader is an AI answering questions from one retrieved
+   chunk, so each section names its feature, edition and UI path itself rather than leaning
+   on "above". `scripts/documentation-verify.py` is the phrase-level contract — run it, don't
+   re-derive it.
 3. **Linter-clean is necessary, not sufficient.** After the linter passes, run the structural
    pass in [references/second-order-tells.md](references/second-order-tells.md) — the tells
    that survive a vocabulary fix.

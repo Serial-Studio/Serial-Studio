@@ -1,8 +1,13 @@
 # Toolbar & button reference
 
-This page is the complete map of Serial Studio's buttons: the main toolbar at the top of the window, the dashboard Start menu and taskbar, the Setup panel, the Project Editor toolbar, and the small toolbar that sits on top of each dashboard widget. Hover any button in the application to see the same tooltip text quoted here.
+Your board prints `23.5,48.1` once a second and you want to see it. In the Setup panel on the right, pick **UART** in the **Connection** selector, choose the port and the baud rate from your sketch's `Serial.begin()`, select **Quick Plot (Auto-Detected Format)**, then click **Connect** in the top toolbar. A plot appears as soon as the first line parses. If **Connect** is greyed out, the port or baud rate is not set yet. For the long version, see [Getting Started](Getting-Started.md).
 
-Buttons marked **(Pro)** require a Serial Studio Pro license (or an active trial). In an official binary with neither, they stay visible: using one offers the 14-day trial, or the activation prompt once the trial has expired. GPL builds hide them.
+Quick Plot is free and needs no project. Hover any button to see its tooltip. On macOS, Ctrl in the shortcuts below is Cmd.
+
+Buttons marked **(Pro)** need a Serial Studio Pro license or an active trial.
+
+- **Official binary, no license:** Pro buttons stay visible, and using one offers the 14-day trial (or the activation prompt once the trial has expired).
+- **GPL build:** Pro buttons are hidden.
 
 ## The main window at a glance
 
@@ -11,23 +16,23 @@ When Serial Studio is running, the window is built from a few fixed surfaces:
 | Surface | Where | Covered in |
 |---------|-------|------------|
 | **Main toolbar** | Across the top | [Main toolbar](#main-toolbar) |
-| **Setup panel** | Right side, collapsible | [Setup panel](#setup-panel) |
+| **Setup panel** | Right side | [Setup panel](#setup-panel) |
 | **Console / Dashboard** | Center | [Console toolbar](#console-toolbar), [Widget toolbars](#dashboard-widget-toolbars) |
 | **Taskbar** | Bottom of the dashboard | [Dashboard taskbar](#dashboard-taskbar) |
 | **Start menu** | Opens from the taskbar | [Dashboard Start menu](#dashboard-start-menu) |
 
-The center view starts on the **Console** and switches to the **Dashboard** automatically once the first valid frame is parsed. There is no manual Console/Dashboard toggle button; the view follows the data. See [Operation Modes](Operation-Modes.md) for how that transition is decided.
+The center view starts on the **Console** and switches to the **Dashboard** automatically once the first valid frame (one complete message from your device) is parsed. See [Operation Modes](Operation-Modes.md) for how that transition is decided.
 
 ## Main toolbar
 
-The toolbar runs along the top of the window, left to right, grouped into sections that collapse into overflow menus when the window is narrow. The exact set of buttons depends on the build (Pro vs free). In [operator runtime mode](Operator-Deployments.md), the entire main toolbar is hidden, not just the buttons tagged "Authoring mode only" below.
+The toolbar runs along the top of the window, left to right, in the sections below. In an [operator app](Operator-Deployments.md) (a locked-down runtime that only shows the dashboard) the whole toolbar is hidden.
 
 ### Project section
 
 | Button | Icon | What it does | Notes |
 |--------|------|--------------|-------|
-| **Project Editor** | <img src="cmd:app.projectEditor" alt="Project Editor" width="16" height="16"> | Opens the [Project Editor](Project-Editor.md) to create or modify your JSON layout. | Authoring mode only. |
-| **Open Project** | <img src="cmd:project.open" alt="Open Project" width="16" height="16"> | Opens an existing `.ssproj` / `.json` project and switches to Project File mode. | Authoring mode only. |
+| **Project Editor** | <img src="cmd:app.projectEditor" alt="Project Editor" width="16" height="16"> | Opens the [Project Editor](Project-Editor.md) to create or modify your JSON layout. | |
+| **Open Project** | <img src="cmd:project.open" alt="Open Project" width="16" height="16"> | Opens an existing `.ssproj` / `.json` project and switches to Project File mode (frames are parsed by your own `.ssproj` project). | |
 | **Open CSV** | <img src="cmd:csv.open" alt="Open CSV" width="16" height="16"> | Plays a recorded CSV file back as if it were live sensor data. | Disabled while a device is connected or while the CSV player is already open. See [CSV Export & Playback](CSV-Export-Playback.md). |
 | **Open MDF4** **(Pro)** | <img src="cmd:mdf4.open" alt="Open MDF4" width="16" height="16"> | Plays an MDF4 file back as if it were live data. | Disabled while a device is connected or while the MDF4 player is already open. See [MDF4](MDF4.md). |
 
@@ -35,61 +40,79 @@ The toolbar runs along the top of the window, left to right, grouped into sectio
 
 | Button | Icon | What it does | Notes |
 |--------|------|--------------|-------|
-| **Assistant** **(Pro)** | <img src="cmd:app.ai" alt="AI Assistant" width="16" height="16"> | Opens the [AI Assistant](AI-Assistant.md) to build and edit a project by chatting. | In the free build this button is **Extensions** instead, opening the [extension manager](Extensions.md). |
+| **Assistant** **(Pro)** | <img src="cmd:app.ai" alt="AI Assistant" width="16" height="16"> | Opens the [AI Assistant](AI-Assistant.md) to build and edit a project by chatting. | |
 | **Deploy** **(Pro)** | <img src="cmd:app.deploy" alt="Deploy Operator App" width="16" height="16"> | Opens the shortcut generator to build a standalone [operator app](Operator-Deployments.md) for the current project. | |
 | **Historian** **(Pro)** | <img src="cmd:app.sessions" alt="Historian" width="16" height="16"> | Opens the [Historian](Historian.md) to browse, replay, and export recorded sessions. | |
-| **Extensions** **(Pro)** | <img src="cmd:app.extensions" alt="Extensions" width="16" height="16"> | Browse and install [extensions](Extensions.md). | In the free build, the section's first button is Extensions; in Pro it lives here alongside the AI tools. |
+| **Extensions** | <img src="cmd:app.extensions" alt="Extensions" width="16" height="16"> | Browse and install [extensions](Extensions.md). | In every build. |
 
-### Preferences and driver selection
+In a GPL build this section holds only **Extensions**, in the first slot. Everywhere else it holds Assistant, Deploy, Historian and Extensions.
+
+### Preferences and tools
 
 | Button | Icon | What it does | Notes |
 |--------|------|--------------|-------|
-| **Preferences** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Opens the [Preferences](Preferences.md) dialog. | Authoring mode only. |
-| **UART** | <img src="cmd:driver.uart" alt="UART" width="16" height="16"> | Selects the Serial port (UART) [driver](Drivers-UART.md). | |
-| **Audio** **(Pro)** | <img src="cmd:driver.audio" alt="Audio" width="16" height="16"> | Selects the [audio input](Drivers-Audio.md) driver. | |
-| **USB** **(Pro)** | <img src="cmd:driver.usb" alt="USB" width="16" height="16"> | Selects the [raw USB](Drivers-USB.md) driver. | |
-| **Network** | <img src="cmd:driver.network" alt="Network" width="16" height="16"> | Selects the TCP / UDP [network](Drivers-Network.md) driver. | |
-| **Modbus** **(Pro)** | <img src="cmd:driver.modbus" alt="Modbus" width="16" height="16"> | Selects the [Modbus](Drivers-Modbus.md) driver. | |
-| **HID** **(Pro)** | <img src="cmd:driver.hid" alt="HID" width="16" height="16"> | Selects the [HID](Drivers-HID.md) driver. | |
-| **Bluetooth** | <img src="cmd:driver.bluetooth" alt="Bluetooth" width="16" height="16"> | Selects the [Bluetooth LE](Drivers-Bluetooth-LE.md) driver. | |
-| **CAN Bus** **(Pro)** | <img src="cmd:driver.canbus" alt="CAN Bus" width="16" height="16"> | Selects the [CAN Bus](Drivers-CAN-Bus.md) driver. | |
-| **Process** **(Pro)** | <img src="cmd:driver.process" alt="Process" width="16" height="16"> | Selects the [Process I/O](Drivers-Process-IO.md) driver. | |
+| **Preferences** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Opens the [Preferences](Preferences.md) dialog. | |
+| **Macros** | <img src="cmd:app.macros" alt="Macros" width="16" height="16"> | Runs API commands and script macros interactively. See [Macros](Macros.md). | |
+| **Remote Dashboard** | <img src="cmd:app.remoteAttach" alt="Remote Dashboard" width="16" height="16"> | Watches another Serial Studio instance's dashboard over the network. | While a remote dashboard is attached, it replaces Connect at the right edge. |
+| **Problem Center** | <img src="cmd:app.problems" alt="Problem Center" width="16" height="16"> | Reviews project, link, and script diagnostics. See [Problem Center](Problem-Center.md). | |
 
-The driver buttons are a single-choice group: the active driver's label is shown in bold. They are disabled while a connection is live, while a file player is open, and for multi-source projects (where the source list is fixed by the project). See [Devices](Devices.md).
+### Driver selection
+
+The main toolbar has no driver buttons. Choose the driver with the **Connection** selector at the top of the [Setup panel](#connection). Each driver is also a toggle command in the [Command Palette](Command-Palette.md) (press **Ctrl+K**).
+
+| Driver | Needs Pro | Page |
+|--------|-----------|------|
+| UART (serial port) | No | [UART](Drivers-UART.md) |
+| Network (TCP / UDP) | No | [Network](Drivers-Network.md) |
+| Bluetooth LE | No | [Bluetooth LE](Drivers-Bluetooth-LE.md) |
+| Audio input | Yes | [Audio](Drivers-Audio.md) |
+| Raw USB | Yes | [USB](Drivers-USB.md) |
+| Modbus | Yes | [Modbus](Drivers-Modbus.md) |
+| HID | Yes | [HID](Drivers-HID.md) |
+| CAN Bus | Yes | [CAN Bus](Drivers-CAN-Bus.md) |
+| Process I/O | Yes | [Process I/O](Drivers-Process-IO.md) |
+| OPC UA | Yes | [OPC UA](Drivers-OPC-UA.md) |
+| Siemens S7 | Yes | [S7](Drivers-S7.md) |
+| EtherNet/IP | Yes | [EtherNet/IP](Drivers-EtherNet-IP.md) |
+| IEC 60870-5-104 | Yes | [IEC 104](Drivers-IEC-104.md) |
+
+The driver choice is locked while a connection is live, while a file player is open, and for projects with more than one device (the project fixes the source list). See [Devices](Devices.md).
 
 ### Help and about
 
 | Button | Icon | What it does | Notes |
 |--------|------|--------------|-------|
-| **About** | <img src="cmd:app.about" alt="About" width="16" height="16"> | Shows application info and license details. | Authoring mode only. |
-| **Examples** | <img src="cmd:app.examples" alt="Examples" width="16" height="16"> | Browses example projects, downloaded from GitHub on first open (internet required). | Authoring mode only. |
-| **Help Center** | <img src="cmd:app.helpCenter" alt="Help Center" width="16" height="16"> | Opens this documentation, the FAQ, and the wiki. | Available to operators too. |
-| **AI Wiki & Chat** | <img src="cmd:app.deepwiki" alt="AI Wiki & Chat" width="16" height="16"> | Opens the DeepWiki documentation site in your browser, where you can ask questions about Serial Studio. | Authoring mode only. |
+| **About** | <img src="cmd:app.about" alt="About" width="16" height="16"> | Shows application info and license details. | |
+| **Examples** | <img src="cmd:app.examples" alt="Examples" width="16" height="16"> | Browses example projects, downloaded from GitHub on first open (internet required). | |
+| **Help Center** | <img src="cmd:app.helpCenter" alt="Help Center" width="16" height="16"> | Opens this documentation, the FAQ, and the wiki. | Also in the Start menu. |
+| **Command Palette** | <img src="cmd:palette.open" alt="Command Palette" width="16" height="16"> | Opens the [Command Palette](Command-Palette.md). | **Ctrl+K**. |
 
 ### Connection (right-pinned)
 
 | Button | Icon | What it does | Notes |
 |--------|------|--------------|-------|
-| **Connect / Disconnect** | <img src="cmd:io.toggleConnection:checked" alt="Connect" width="16" height="16"> <img src="cmd:io.disconnect" alt="Disconnect" width="16" height="16"> | Opens or closes the connection to the configured device. This is a toggle: when connected the icon and label change to **Disconnect**. | Disabled until the connection is fully configured, and while a CSV / MDF4 / session player is open. |
+| **Connect / Disconnect** | <img src="cmd:io.toggleConnection:checked" alt="Connect" width="16" height="16"> <img src="cmd:io.disconnect" alt="Disconnect" width="16" height="16"> | Opens or closes the connection to the configured device. This is a toggle: the first icon is Connect, and once connected the icon and label change to **Disconnect**. | Disabled until the connection is fully configured, and while a CSV / MDF4 / session player is open. |
 
 ## Setup panel
 
-The Setup panel docks on the right edge of the window and is where you choose how data is parsed and which I/O driver to use. Drag its left edge to resize it and give the Dashboard more space.
+The Setup panel docks on the right edge of the window. It is where you choose how data is parsed, which driver to use, and what gets recorded. Drag its left edge to resize it and give the Dashboard more space.
 
 ### Operation Mode
 
-The Operation Mode group has three options that pick the [operation mode](Operation-Modes.md):
+The Operation Mode group picks the [operation mode](Operation-Modes.md):
 
 | Option | What it does |
 |--------|--------------|
-| **Console Only** | Raw bytes go straight to the terminal. No widgets, no parsing. |
-| **Quick Plot** | Auto-builds a dashboard from lines of numbers in a detected format. |
-| **Project File** | Uses a `.ssproj` project to parse frames and build a custom dashboard. Disabled while connected or while a file player is open. |
+| **Console Only (No Parsing)** | Raw bytes go straight to the terminal. No widgets, no parsing. |
+| **Quick Plot (Auto-Detected Format)** | Plots every line the device sends, with no setup. Comma-, tab- or space-separated values, name and value pairs, units and one-line JSON are detected automatically. |
+| **Parse via Project File** | Uses a `.ssproj` project to parse frames and build a custom dashboard. **Select Project File** picks the file. Disabled while connected or while a file player is open. |
 
 ### Connection
 
-- **Connection** selector: chooses the active driver (the same set as the toolbar driver buttons). Each choice swaps in a driver-specific settings panel below it (port and baud rate for UART, host and port for Network, and so on). See [Communication Protocols](Communication-Protocols.md) and the per-driver pages under [Drivers](Drivers-UART.md).
+- **Connection** selector: chooses the active driver, one entry per driver in the [driver table](#driver-selection). Each choice swaps in a driver-specific settings panel below it (port and baud rate for UART, host and port for Network, and so on). See [Communication Protocols](Communication-Protocols.md) and the per-driver pages under [Drivers](Drivers-UART.md).
 - An **API Server** status indicator appears in the panel header when the [TCP API](API-Reference.md) is enabled, showing whether clients are connected.
+
+For a project with two or more devices, the panel replaces the single-driver controls with an **Open Project Editor** button, because the project defines the source list. See [Devices](Devices.md).
 
 ### Data export
 
@@ -100,30 +123,69 @@ Switches that arm recording for the session. Each writes to a separate file or s
 | **CSV Spreadsheet** | A `.csv` of every parsed frame. | [CSV Export & Playback](CSV-Export-Playback.md) |
 | **Historian Database** **(Pro)** | A SQLite session in the database. | [Historian](Historian.md) |
 | **MDF4 Recording** **(Pro)** | An ASAM MDF4 measurement file. | [MDF4](MDF4.md) |
-| **Console Log** **(Pro)** | A transcript of the raw console stream. | |
+| **Console Log** **(Pro)** | A transcript of the raw console stream. | [Console Log file location](#console-log-file-location) |
 
-For a project with two or more devices, the panel replaces the single-driver controls with an **Open Project Editor** button, because the source list is defined in the project. See [Devices](Devices.md).
+The Start menu's Export submenu mirrors these switches. It calls the Console Log switch **Console Transcript**; they are the same recorder.
 
-**Console Log file location.** Each transcript is written under the workspace's `Console/<subfolder>/` directory, where `<subfolder>` is the project title (ProjectFile mode), `Quick Plot`, or `Console` (Console Only mode). The file is named `yyyy_MMM_dd HH_mm_ss.txt`, with `_deviceN` appended for a multi-device Console Only session. ANSI escape sequences are stripped before writing, and the file is UTF-8 with a byte-order mark.
+### Console Log file location
+
+Console Log is a Pro feature. Each transcript is written under the workspace's `Console/<subfolder>/` directory, where `<subfolder>` is the project title (Project File mode), `Quick Plot`, or `Console` (Console Only mode). The file is named `yyyy_MMM_dd HH_mm_ss.txt`, with `_deviceN` appended for a multi-device Console Only session. ANSI escape sequences are stripped before writing, and the file is UTF-8 with a byte-order mark.
+
+## Console toolbar
+
+The console toolbar is free, except that **Attach** opens file transmission (Pro). The [console](Operation-Modes.md#console-only-mode) is the first screen you see. It has a ribbon toolbar above the output and a send row below it.
+
+### Ribbon
+
+| Control | Group | What it does |
+|---------|-------|--------------|
+| **Clear** | Utilities | Wipes the console output. |
+| **Find** | Utilities | Opens the in-console search bar (match case, previous and next match, close). |
+| **Collapse** | Utilities | Collapses repeated lines into a single entry. |
+| **Annotations** | Utilities | Opens the byte-annotation panel: label incoming bytes with a decoder and inspect them. |
+| **Pause / Resume** | Utilities | Freezes the console display. Data keeps logging in the background. |
+| **Text** / **Hex** | Format | Switches the display mode. |
+| **Settings** | (none) | Opens the popup described below. |
+
+The **Settings** popup holds the **Show Timestamp**, **Echo**, **Emulate VT-100** and **ANSI Colors** checkboxes (ANSI Colors is enabled only while VT-100 emulation is on), a **Scrollback Lines** field (default 1000, range 100 to 100000) and a **Cyclic Send Interval (ms)** field.
+
+With **Emulate VT-100** on, keystrokes typed into the console view are translated to VT-100 escape sequences (the terminal protocol used by shells and menu-driven firmware) and sent to the connected device, turning the console into an interactive terminal.
+
+### Send row
+
+| Control | What it does |
+|---------|--------------|
+| **Attach** | Sends a file with [file transmission](File-Transmission.md). |
+| Input box and **Send** | Sends the text on Enter or on the Send button. |
+| **HEX** toggle | Sends the input as hexadecimal. |
+| Line-ending dropdown | **No Line Ending** (default), **New Line**, **Carriage Return**, or **CR + NL**. |
+| Checksum dropdown | **No Checksum** (default) or one of the available checksum methods. |
+| Command library | History, pinned commands and actions. |
+| Cyclic send | Repeats the current command every Cyclic Send Interval milliseconds. |
+
+On a multi-device project a device selector picks the target. Right-click the terminal for **Copy**, **Select all**, and **Clear**.
 
 ## Dashboard Start menu
 
-The Start menu opens from the leftmost taskbar button. It is the dashboard's main menu: workspaces, actions, plugins, tools, and the session controls.
+Click the leftmost **Menu** button on the dashboard taskbar to open the Start menu. It is the dashboard's main menu: workspaces, actions, plugins, tools, and the session controls.
 
 | Entry | Icon | What it does | Notes |
 |-------|------|--------------|-------|
-| **Workspaces** | <img src="icon:commands/workspaces" alt="workspaces" width="16" height="16"> | Picks the active [workspace](#a-note-on-workspaces), creates a new one, shows hidden ones, or edits and deletes user workspaces. | Submenu. |
+| **Workspaces** | <img src="icon:commands/workspaces" alt="workspaces" width="16" height="16"> | Picks the active [workspace](#a-note-on-workspaces), shows hidden ones, or edits and deletes user workspaces. **New Workspace…** at the bottom creates one (custom workspaces are Pro). | Submenu. **New Workspace…** is hidden in an operator app. |
 | **Actions** | <img src="icon:commands/actions" alt="actions" width="16" height="16"> | Lists the project's [actions](Actions.md); picking one runs it. | Hidden when the project defines no actions. |
 | **Plugins** | <img src="cmd:app.extensions" alt="Extensions" width="16" height="16"> | Lists installed [plugins](Plugin-Development.md), plus **Manage Plugins…**. | Hidden when no plugins are installed. |
-| **Auto Layout** | <img src="cmd:dashboard.autoLayout" alt="Auto Layout" width="16" height="16"> | Toggles automatic tiling of dashboard windows. | Toggle. |
+| **Auto Layout** | <img src="cmd:dashboard.autoLayout" alt="Auto Layout" width="16" height="16"> | Toggles automatic tiling of dashboard windows. | Toggle. **Ctrl+Shift+L**. |
+| **Freeze Dashboard** | <img src="icon:commands/freeze" alt="freeze" width="16" height="16"> | Freezes or unfreezes the dashboard. Enabling needs Pro; unfreezing always works. | Toggle. **Ctrl+Shift+F**. |
+| **Save as Project** | <img src="icon:editor/save-as" alt="save as" width="16" height="16"> | Turns the running Quick Plot session into a project you can edit. | |
 | **Full Screen** | <img src="cmd:app.fullScreen" alt="Full Screen" width="16" height="16"> | Toggles the main window between full-screen and windowed. | Toggle. |
 | **Add External Window** | <img src="cmd:window.external" alt="Add External Window" width="16" height="16"> | Opens a second dashboard window (for a multi-monitor layout). | |
-| **Export** | <img src="icon:commands/export" alt="export" width="16" height="16"> | Submenu of recording toggles: CSV File, MDF4 File **(Pro)**, Console Transcript **(Pro)**, and Historian **(Pro)**. | Mirrors the Setup panel's export switches. |
-| **Tools** | <img src="cmd:dashboard.startMenu" alt="Start Menu" width="16" height="16"> | Submenu: Console, Notifications **(Pro)**, Clock, Stopwatch, Preferences, Sessions **(Pro)**, File Transmission **(Pro)**, AI Assistant **(Pro)**. | Toggles the utility widgets and opens the tool windows. |
+| **Export** | <img src="icon:commands/export" alt="export" width="16" height="16"> | Submenu of recording toggles: CSV File, MDF4 File **(Pro)**, Console Transcript **(Pro)**, and Historian **(Pro)**. | Mirrors the Setup panel's [export switches](#data-export). Console Transcript is the Setup panel's Console Log. |
+| **Tools** | <img src="cmd:dashboard.startMenu" alt="Tools" width="16" height="16"> | Submenu of utilities. Toggles (show or hide the utility widget): Console, Notifications **(Pro)**, Clock, Stopwatch. Opens a window: Preferences, Historian **(Pro)**, File Transmission **(Pro)**, AI Assistant **(Pro)**. | The taskbar's pinned **Settings** shortcut opens the same Preferences dialog. |
 | **Help Center** | <img src="cmd:app.helpCenter" alt="Help Center" width="16" height="16"> | Opens this documentation. | |
-| **Pause / Resume** | <img src="cmd:io.pause" alt="Pause" width="16" height="16"> <img src="cmd:io.pause:checked" alt="Pause" width="16" height="16"> | Pauses or resumes data reception for the whole session. Pausing also closes any open CSV or MDF4 export file; resuming starts a new one. | Toggle. |
+| **About** | <img src="cmd:app.about" alt="About" width="16" height="16"> | Shows application info and license details. | |
+| **Pause / Resume** | <img src="cmd:io.pause" alt="Pause" width="16" height="16"> <img src="cmd:io.pause:checked" alt="Resume" width="16" height="16"> | Pauses or resumes data reception for the whole session. Pausing also closes any open CSV or MDF4 export file; resuming starts a new one. | Toggle. |
 | **Reset** | <img src="cmd:dashboard.reset" alt="Reset" width="16" height="16"> | Clears the dashboard's plotted history and rotates every active recorder (CSV, MDF4, console, database) so the next frame starts a fresh file or session. | |
-| **Disconnect / Quit** | <img src="cmd:io.disconnect" alt="Disconnect" width="16" height="16"> <img src="cmd:app.quit" alt="Quit" width="16" height="16"> | Disconnects the device. In an operator deployment this entry is **Quit** and closes the app instead. | |
+| **Disconnect / Quit** | <img src="cmd:io.disconnect" alt="Disconnect" width="16" height="16"> <img src="cmd:app.quit" alt="Quit" width="16" height="16"> | Disconnects the device. In an operator app this entry shows the second icon, **Quit**, and closes the app instead. | |
 
 ## Dashboard taskbar
 
@@ -131,25 +193,27 @@ The taskbar runs along the bottom of the dashboard.
 
 | Control | Icon | What it does | Notes |
 |---------|------|--------------|-------|
-| **Menu** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/doc/brand/logo.svg" width="16" height="16"> | Opens the [Start menu](#dashboard-start-menu). | Always the leftmost button. |
-| **Search** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/search.svg" width="16" height="16"> | Filters open widgets and Start menu entries; results appear in a dropdown. | Shown when taskbar search is enabled in settings. |
-| **Pinned shortcuts** | varies | A configurable strip of quick-toggles: Settings, Console, Notifications, Clock, Stopwatch, File Transmission, AI Assistant, Pause / Resume. | The set and order are user-configurable; Pro-only tools are hidden in the free build. Stateful shortcuts light up when active. |
+| **Menu** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/doc/brand/logo.svg" alt="Serial Studio logo" width="16" height="16"> | Opens the [Start menu](#dashboard-start-menu). | Always the leftmost button. |
+| **Search** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/search.svg" alt="Search" width="16" height="16"> | Filters open widgets and Start menu entries; results appear in a dropdown. | Shown when **Preferences > Taskbar > Show Search Field** is on. |
+| **Pinned shortcuts** | varies | Quick-toggles for Settings, Console, Notifications, Clock, Stopwatch, Pause / Resume, File Transmission and AI Assistant. | Choose which ones in **Preferences > Taskbar > Pinned Buttons**; drag a pinned button on the taskbar to reorder it. Pro-only tools are hidden in the free build. |
 | **Window buttons** | per-widget | One button per open dashboard widget; click to show, focus, or restore that widget. The center strip scrolls with the **<** / **>** arrows when it overflows. | Mirrors the widgets currently on the canvas. |
-| **Workspace switcher** | (dropdown) | Selects the active [workspace](#a-note-on-workspaces); the current one is bold. | Press **Ctrl+K** to open the [Command Palette](Command-Palette.md) and jump to any workspace. |
-| **Layout** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/auto-layout.svg" width="16" height="16"> | Opens the layout gallery: pick a tiling pattern for the active workspace, set its split ratio, or switch to manual placement. | Lights up while a pattern is applied. The Start menu entry and the keyboard shortcut still toggle auto layout directly. |
-| **Edit workspace** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/workspace-settings.svg" width="16" height="16"> | Renames or edits the active workspace. | Enabled only for user-created workspaces. |
-| **New workspace** | <img src="cmd:editor.menu.addWorkspace" alt="Add Workspace" width="16" height="16"> | Creates a new workspace. | Hidden in operator runtime mode. |
-| **MQTT status** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/mqtt-on.svg" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/mqtt-off.svg" width="16" height="16"> | Shows the [MQTT publisher](MQTT-Publisher.md) connection state; click for a status popup with broker, mode, and message count. | Shown only when the MQTT publisher is enabled. |
+| **Workspace switcher** | active workspace name | Shows the active [workspace](#a-note-on-workspaces) in bold. Click it to open the Command Palette's workspace grid. | **Ctrl+K** opens the same palette. Switching works in every build; creating workspaces is Pro, Project File mode only. |
+| **Layout** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/auto-layout.svg" alt="Layout" width="16" height="16"> | Opens the layout gallery: pick a tiling pattern (Grid, Master + Stack, Master + Grid, Row, Column, Spiral), set the split ratio, or switch to **Manual placement**. | Lights up while a pattern is applied. Disabled while the dashboard is frozen. |
+| **Freeze** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/freeze.svg" alt="Freeze Dashboard" width="16" height="16"> | Freezes or unfreezes the dashboard (tooltip **Freeze Dashboard** / **Unfreeze Dashboard**). | Shown in Project File mode only. |
+| **Edit workspace** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/workspace-settings.svg" alt="Edit workspace" width="16" height="16"> | Edits the active workspace. | Enabled only for user-created workspaces. |
+| **MQTT status** **(Pro)** | <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/mqtt-on.svg" alt="MQTT connected" width="16" height="16"> <img src="https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/refs/heads/master/app/rcc/icons/buttons/mqtt-off.svg" alt="MQTT disconnected" width="16" height="16"> | Shows the [MQTT publisher](MQTT-Publisher.md) connection state; click for a status popup with broker, mode, and message count. | Shown only when the MQTT publisher is enabled. |
 
 ### A note on workspaces
 
-A **workspace** is a saved arrangement of dashboard windows. Each project includes a default workspace; you can add your own to keep different views of the same data (an overview screen, a diagnostics screen) and switch between them from the taskbar or the Start menu. User workspaces have IDs at or above 5000 and only those can be renamed or deleted. Switching a project to custom workspaces is a Pro feature.
+Custom workspaces (Pro, Project File mode): a **workspace** is a saved arrangement of dashboard windows. Each project includes a default workspace. Add your own to keep different views of the same data (an overview screen, a diagnostics screen) and switch between them from the Start menu or the taskbar's workspace switcher. Only user-created workspaces can be renamed or deleted.
 
-Once you have more than a few workspaces, **Ctrl+K** opens the [Command Palette](Command-Palette.md): a searchable grid of every workspace, laid out like virtual desktops, alongside the dashboard's tools and open widgets. Start typing to filter the list, use the arrow keys to move the highlight, press Enter to switch, or Escape to close without changing anything. However you switch, the rebuilt dashboard slides in vertically in the direction of travel, rising up from below when you move to a later workspace and dropping down from above when you move back, so it stays easy to keep your bearings.
+Free builds use the auto-generated workspaces.
+
+**Ctrl+K** opens the [Command Palette](Command-Palette.md), a searchable grid of every workspace alongside the dashboard's tools and open widgets. Type to filter, move with the arrow keys, press Enter to switch, or Escape to close.
 
 ## Project Editor toolbar
 
-The [Project Editor](Project-Editor.md) has its own toolbar for building the project tree: file actions on the left, then a series of "add" buttons grouped by what they create. The large buttons add the common item of each group; the small buttons next to them add the specific variants.
+The [Project Editor](Project-Editor.md) has its own toolbar for building the project tree: file actions on the left, then a series of "add" buttons grouped by what they create. The large button in a group adds its common item, and the small buttons next to it add the specific variants.
 
 ### File
 
@@ -175,11 +239,11 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 |--------|------|------|
 | **Output** | <img src="cmd:editor.addOutputPanel" alt="Add Output Panel" width="16" height="16"> | An [output control](Output-Controls.md) panel. |
 | **Action** | <img src="cmd:editor.addAction" alt="Add Action" width="16" height="16"> | An [action](Actions.md). |
-| **Slider** | <img src="cmd:editor.addOutputSlider" alt="Add Output Slider" width="16" height="16"> | An output slider. |
-| **Toggle** | <img src="cmd:editor.addOutputToggle" alt="Add Output Toggle" width="16" height="16"> | An output toggle. |
-| **Knob** | <img src="cmd:editor.addOutputKnob" alt="Add Output Knob" width="16" height="16"> | An output knob. |
-| **Text Field** | <img src="cmd:editor.addOutputTextField" alt="Add Output Text Field" width="16" height="16"> | An output text field. |
-| **Button** | <img src="cmd:editor.addOutputButton" alt="Add Output Button" width="16" height="16"> | An output button. |
+| **Slider** | <img src="cmd:editor.addOutputSlider" alt="Add Output Slider" width="16" height="16"> | A slider [output control](Output-Controls.md). |
+| **Toggle** | <img src="cmd:editor.addOutputToggle" alt="Add Output Toggle" width="16" height="16"> | A toggle output control. |
+| **Knob** | <img src="cmd:editor.addOutputKnob" alt="Add Output Knob" width="16" height="16"> | A knob output control. |
+| **Text Field** | <img src="cmd:editor.addOutputTextField" alt="Add Output Text Field" width="16" height="16"> | A text-field output control. |
+| **Button** | <img src="cmd:editor.addOutputButton" alt="Add Output Button" width="16" height="16"> | A button output control. |
 
 ### Add datasets
 
@@ -189,7 +253,7 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 | **Plot** | <img src="cmd:editor.addPlot" alt="Add Plot" width="16" height="16"> | A time-series [plot](Plots.md). |
 | **FFT Plot** | <img src="cmd:editor.addFFT" alt="Add FFT Plot" width="16" height="16"> | An FFT spectrum. |
 | **Gauge** | <img src="cmd:editor.addGauge" alt="Add Gauge" width="16" height="16"> | A gauge. |
-| **Bar** | <img src="cmd:editor.addBar" alt="Add Level Indicator" width="16" height="16"> | A bar. |
+| **Bar** | <img src="cmd:editor.addBar" alt="Add Level Indicator" width="16" height="16"> | A bar (the Level Indicator). |
 | **Compass** | <img src="cmd:editor.addCompass" alt="Add Compass" width="16" height="16"> | A compass. |
 
 ### Add groups
@@ -201,7 +265,7 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 | **Image** | <img src="icon:widgets/image" alt="image" width="16" height="16"> | An [Image View](Widget-Reference.md#image-view-pro) (Pro). |
 | **Web View** | <img src="cmd:editor.addWebView" alt="Add Web View" width="16" height="16"> | A web viewer. |
 | **Canvas** | <img src="cmd:editor.addPainter" alt="Add Canvas" width="16" height="16"> | A [Canvas](Canvas-Widget.md) widget (Pro). |
-| **Table** | <img src="cmd:editor.addDataGrid" alt="Add Data Table" width="16" height="16"> | A Data Grid. |
+| **Table** | <img src="cmd:editor.addDataGrid" alt="Add Data Table" width="16" height="16"> | A Data Grid widget. |
 | **Multi-Plot** | <img src="cmd:editor.addMultiPlot" alt="Add Multi-Plot" width="16" height="16"> | A [Multi-Plot](Plots.md). |
 | **3D Plot** | <img src="cmd:editor.addPlot3D" alt="Add 3D Plot" width="16" height="16"> | A 3D Plot (Pro). |
 | **Accelerometer** | <img src="cmd:editor.addAccelerometer" alt="Add Accelerometer" width="16" height="16"> | An accelerometer group. |
@@ -219,16 +283,18 @@ The full set of dataset and widget configuration fields is described in the [Wid
 
 ## Dashboard widget toolbars
 
-Most visualization widgets carry a small toolbar of icon buttons along their top edge. The toolbar only appears when the widget is large enough to fit it; shrink a widget and the toolbar hides to leave room for the data. All toggle settings are saved per-widget in the project file, so each tile remembers its own state.
+Most visualization widgets carry a small toolbar of icon buttons along their top edge. It appears only when the widget tile is large enough to fit it; shrink the tile and the toolbar hides to leave room for the data. Each tile saves its own toggle settings in the project file, so it remembers its state.
 
-A few conventions are shared across widgets:
+Shared by the plot-style widgets:
 
-- **Pause / Resume** stops the widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the device are unaffected. The icon swaps between a pause and a play glyph.
+- **Pause / Resume** stops the widget from ingesting new samples into its own buffer. Samples that arrive while paused are dropped, not shown after Resume. Other widgets and the device are unaffected. The icon swaps between a pause and a play glyph.
 - **Show Crosshair** overlays a tracking crosshair that follows the cursor.
-- **Reset View** returns pan and zoom to the default; it is disabled until you have zoomed or panned.
-- **Axis Range Settings** (gear icon) opens a dialog to pin fixed minimum and maximum axis values.
+- **Reset View** returns pan and zoom to the default. It is disabled until you have zoomed or panned.
+- **Axis Range Settings** (gear icon) opens the **Axis Range Configuration** dialog, where you pin a minimum and maximum for the X and Y axes. Its **Reset** button returns the axes to auto-scaling.
 
 ### Plot
+
+The Plot toolbar runs along the top edge of each Plot tile and is free, except the Sweep and Trigger buttons (Pro).
 
 | Button | Icon | What it does |
 |--------|------|--------------|
@@ -237,46 +303,23 @@ A few conventions are shared across widgets:
 | **Show X Axis Label** | <img src="icon:commands/x" alt="x" width="16" height="16"> | Shows or hides the X-axis label. |
 | **Show Y Axis Label** | <img src="icon:commands/y" alt="y" width="16" height="16"> | Shows or hides the Y-axis label. |
 | **Show Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Tracking crosshair that follows the cursor. |
-| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the device are unaffected. |
+| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget ingesting samples; see [Pause / Resume](#dashboard-widget-toolbars). |
 | **Sweep / Trigger Mode** **(Pro)** | <img src="icon:commands/sweep" alt="sweep" width="16" height="16"> | Turns oscilloscope-style [Sweep / Trigger mode](Plots.md#sweep--trigger-mode-pro) on or off. Time-axis plots only. |
 | **Trigger Settings** **(Pro)** | <img src="icon:commands/trigger" alt="trigger" width="16" height="16"> | Opens the **Trigger Settings** dialog (mode, level, slope, holdoff, timebase). Enabled only while Sweep is on. |
-| **Reset View** | <img src="icon:commands/return" alt="return" width="16" height="16"> | Returns pan and zoom to the default; disabled until you have zoomed or panned. |
-| **Axis Range Settings** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Pins fixed minimum and maximum axis values. |
+| **Reset View** | <img src="icon:commands/return" alt="return" width="16" height="16"> | Returns pan and zoom to the default. |
+| **Axis Range Settings** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Gear icon. Pins fixed minimum and maximum axis values. |
 
 ### Multi-Plot
 
-The Multi-Plot toolbar matches the Plot toolbar, minus **Show Area Under Plot** (which does not apply to overlaid curves). A per-curve legend with show / hide switches sits beside the chart.
-
-| Button | Icon | What it does |
-|--------|------|--------------|
-| **Interpolation** | <img src="icon:commands/interpolate-on" alt="interpolate on" width="16" height="16"> <img src="icon:commands/interpolate-off" alt="interpolate off" width="16" height="16"> | Cycles line smoothing: none (raw points), linear, stepped (ZOH), or stem. |
-| **Show X Axis Label** | <img src="icon:commands/x" alt="x" width="16" height="16"> | Shows or hides the X-axis label. |
-| **Show Y Axis Label** | <img src="icon:commands/y" alt="y" width="16" height="16"> | Shows or hides the Y-axis label. |
-| **Show Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Tracking crosshair that follows the cursor. |
-| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the device are unaffected. |
-| **Sweep / Trigger Mode** **(Pro)** | <img src="icon:commands/sweep" alt="sweep" width="16" height="16"> | Turns oscilloscope-style [Sweep / Trigger mode](Plots.md#sweep--trigger-mode-pro) on or off. The **Source** setting picks which curve the trigger watches. Time-axis plots only. |
-| **Trigger Settings** **(Pro)** | <img src="icon:commands/trigger" alt="trigger" width="16" height="16"> | Opens the **Trigger Settings** dialog (mode, source, level, slope, holdoff, timebase). Enabled only while Sweep is on. |
-| **Reset View** | <img src="icon:commands/return" alt="return" width="16" height="16"> | Returns pan and zoom to the default; disabled until you have zoomed or panned. |
-| **Axis Range Settings** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Pins fixed minimum and maximum axis values. |
-
-These buttons and Sweep / Trigger mode are documented in full on the [Plots](Plots.md) page.
+The Multi-Plot toolbar is free, except the Sweep and Trigger buttons (Pro). Buttons: Interpolation, Show X Axis Label, Show Y Axis Label, Show Crosshair, Pause / Resume, Sweep / Trigger Mode, Trigger Settings, Reset View, Axis Range Settings. They match [Plot](#plot), except there is no **Show Area Under Plot** (it does not apply to overlaid curves). In the Trigger Settings dialog, a **Source** option picks which curve the trigger watches. A per-curve legend with show / hide switches sits beside the chart. These buttons and Sweep / Trigger mode are documented in full on the [Plots](Plots.md) page.
 
 ### FFT Plot
 
-| Button | Icon | What it does |
-|--------|------|--------------|
-| **Interpolation** | <img src="icon:commands/interpolate-on" alt="interpolate on" width="16" height="16"> <img src="icon:commands/interpolate-off" alt="interpolate off" width="16" height="16"> | Cycles the spectrum line between raw points and interpolated curves. |
-| **Show Area Under Plot** | <img src="icon:commands/area" alt="area" width="16" height="16"> | Fills the area beneath the spectrum. Available only with line interpolation. |
-| **Show X Axis Label** | <img src="icon:commands/x" alt="x" width="16" height="16"> | Shows or hides the frequency-axis label. |
-| **Show Y Axis Label** | <img src="icon:commands/y" alt="y" width="16" height="16"> | Shows or hides the magnitude-axis label. |
-| **Show Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Tracking crosshair. |
-| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. |
-| **Reset View** | <img src="icon:commands/return" alt="return" width="16" height="16"> | Resets pan and zoom. |
-| **Axis Range Settings** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Fixed axis ranges. |
-
-See the [FFT Plot](Widget-Reference.md#fft-plot) entry for window size and sampling-rate configuration.
+The FFT Plot toolbar is free. Buttons: Interpolation, Show Area Under Plot, Show X Axis Label, Show Y Axis Label, Show Crosshair, Pause / Resume, Reset View, Axis Range Settings (the [Plot](#plot) set, minus Sweep / Trigger Mode and Trigger Settings). **Interpolation** switches the spectrum between raw points and interpolated curves, and the axis labels are the frequency (X) and magnitude (Y) labels. See the [FFT Plot](Widget-Reference.md#fft-plot) entry for window size and sampling-rate configuration.
 
 ### Waterfall (Pro)
+
+The Waterfall toolbar runs along the top edge of each Waterfall tile.
 
 | Control | Icon | What it does |
 |---------|------|--------------|
@@ -285,11 +328,13 @@ See the [FFT Plot](Widget-Reference.md#fft-plot) entry for window size and sampl
 | **Show Colorbar** | <img src="icon:commands/color" alt="color" width="16" height="16"> | Shows or hides the color scale. |
 | **Show Axes & Grid** | <img src="icon:commands/abscissa" alt="abscissa" width="16" height="16"> | Shows or hides the axes and grid. |
 | **Show Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Frequency / time readout under the cursor. |
-| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. |
+| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget ingesting samples; see [Pause / Resume](#dashboard-widget-toolbars). |
 
 See the [Waterfall](Widget-Reference.md#waterfall-pro) entry for details.
 
 ### GPS Map
+
+The GPS Map toolbar runs along the top edge of each map tile. It is free, except the extra base maps (Pro).
 
 | Button | Icon | What it does |
 |--------|------|--------------|
@@ -301,6 +346,8 @@ See the [Waterfall](Widget-Reference.md#waterfall-pro) entry for details.
 | **Base Map** | <img src="icon:commands/map" alt="map" width="16" height="16"> | A dropdown that selects the map style (street, satellite, terrain, and so on). The first style is free; the additional styles require Pro. |
 
 ### 3D Plot (Pro)
+
+The 3D Plot toolbar runs along the top edge of each 3D Plot tile.
 
 | Button | Icon | What it does |
 |--------|------|--------------|
@@ -316,11 +363,13 @@ See the [Waterfall](Widget-Reference.md#waterfall-pro) entry for details.
 
 ### Image View (Pro)
 
+Image View toolbar: along the top edge of each Image View tile.
+
 | Button | Icon | What it does |
 |--------|------|--------------|
 | **Export Images** | <img src="icon:commands/camcoder" alt="camcoder" width="16" height="16"> | Saves each incoming frame to disk. |
 | **Open Export Folder** | <img src="icon:commands/pictures-folder" alt="pictures folder" width="16" height="16"> | Reveals the export folder in the file manager. |
-| **Zoom In / Zoom Out** | <img src="icon:commands/zoom-in" alt="zoom in" width="16" height="16"> <img src="icon:commands/zoom-out" alt="zoom out" width="16" height="16"> | Magnifies the image (1x to 5x), with drag to pan. |
+| **Zoom In / Zoom Out** | <img src="icon:commands/zoom-in" alt="zoom in" width="16" height="16"> <img src="icon:commands/zoom-out" alt="zoom out" width="16" height="16"> | Magnifies the image (minimum 1x, maximum 5x), with drag to pan. |
 | **Show Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Cursor crosshair with pixel coordinates. |
 | **Filter** | <img src="icon:commands/color" alt="color" width="16" height="16"> | A dropdown of display filters (Normal, Grayscale, High Contrast, Vivid, Night Vision, Infrared, Deep Blue, Amber). |
 
@@ -340,39 +389,18 @@ See the [Waterfall](Widget-Reference.md#waterfall-pro) entry for details.
 
 These widgets have no toolbar; their interaction is direct:
 
-- **Bar, Gauge, Meter, Compass, Clock** are two-page swipe views. Swipe horizontally, or click the page-indicator dots at the bottom, to flip between the analog face and the large digital readout. The active page is saved per widget.
-- **Gyroscope** and **LED Panel** are display-only.
+- **Bar, Gauge, Meter, Compass, Clock** are two-page swipe views with no menu to hide a setting in. Swipe horizontally, or click the page-indicator dots at the bottom, to flip between the analog face and the large digital readout. The active page is saved per widget.
+- **Gyroscope** and **LED Panel** are display-only: nothing to click, they only report.
 - **Stopwatch** has its own **Start / Stop**, **Lap**, and **Reset** buttons and a lap table; see [Widget Reference](Widget-Reference.md#stopwatch).
 - **Output** controls (button, slider, toggle, knob, text field) are interactive inputs that send values to the device; see [Output Controls](Output-Controls.md).
 - **Canvas** (Pro) renders entirely from its user script and has no toolbar; see [Canvas Widget](Canvas-Widget.md).
 
-## Console toolbar
-
-The [console](Operation-Modes.md#console-only-mode) terminal has a ribbon toolbar above the output and a send row below it.
-
-**Ribbon toolbar**, left to right:
-
-- **Utilities** group: **Clear** (wipes the console output), **Find** (opens the in-console search bar), **Collapse** (collapses repeated lines into a single entry), **Annotations** (opens the byte-annotation panel), and **Pause / Resume** (freezes the console display; data keeps logging in the background).
-- **Format** group: **Text** and **Hex** buttons switch the display mode.
-- **Settings** button opens a popup with **Show Timestamp**, **Echo**, **Emulate VT-100**, and **ANSI Colors** checkboxes (ANSI Colors is enabled only while VT-100 emulation is on) and a **Scrollback Lines** field.
-
-With **Emulate VT-100** on, keystrokes typed into the console view are translated to VT-100 escape sequences and sent to the connected device, turning the console into an interactive terminal.
-
-**Send row:** an **Attach** button for [file transmission](File-Transmission.md), an input box that sends on Enter or the **Send** button, a **HEX** toggle to send hexadecimal, and dropdowns for line ending and checksum. On a multi-device project a device selector picks the target.
-
-Right-click the terminal for **Copy**, **Select all**, and **Clear**.
-
 ## Notification log
 
-The [notification](Notifications.md) log has a **Filter by channel** field, an unread-count badge, and a **Clear all notifications** button.
+Open the [notification](Notifications.md) log from **Start menu > Tools > Notifications** (Pro). It has a **Filter by channel** field, an unread-count badge, and a **Clear all notifications** button.
 
 ## See also
 
 - [Getting Started](Getting-Started.md): the main-window layout and a first connection walkthrough.
 - [Command Palette](Command-Palette.md): reach any of these buttons' commands, plus workspaces and widgets, from one Ctrl+K search box.
-- [Problem Center](Problem-Center.md) and [Macros](Macros.md): the two tool windows that have no button here and open only from the palette.
-- [Operation Modes](Operation-Modes.md): how the Console / Dashboard view and parsing are chosen.
 - [Widget Reference](Widget-Reference.md): every widget type and its configuration fields.
-- [Plots](Plots.md): the plot toolbar and Sweep / Trigger mode in detail.
-- [Project Editor](Project-Editor.md): building and configuring a project.
-- [Output Controls](Output-Controls.md): the interactive control widgets.
