@@ -182,6 +182,17 @@ void TstUiAutomation::catalogRolesAndIds()
   const QRectF local(0.0, 0.0, buttonItem->width(), buttonItem->height());
   QCOMPARE(button->rect, buttonItem->mapRectToScene(local));
 
+  const auto stop = ElementCatalog::byId(m_view, QStringLiteral("fixture.stop.button"));
+  QVERIFY(stop.has_value());
+  QCOMPARE(stop->role, QStringLiteral("button"));
+  QVERIFY(stop->checked.has_value());
+  QVERIFY(*stop->checked);
+
+  const auto selector = ElementCatalog::byId(m_view, QStringLiteral("fixture.mode.knob"));
+  QVERIFY(selector.has_value());
+  QCOMPARE(selector->role, QStringLiteral("slider"));
+  QCOMPARE(selector->text, QStringLiteral("2"));
+
   const auto check = ElementCatalog::byId(m_view, QStringLiteral("fixture.check"));
   QVERIFY(check.has_value());
   QCOMPARE(check->role, QStringLiteral("checkbox"));

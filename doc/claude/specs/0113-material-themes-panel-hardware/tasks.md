@@ -150,8 +150,10 @@ updated: 2026-11-06
   sends it once; the selector picks on press and the wheel is off. R23: a report selects a
   position by value or label, anything else is unknown (`Base::adjustVerdict`). AC10 and AC11 in
   `tst_output_hardware_decisions`; help and the AI skill updated. Not yet seen in the app.
-- [ ] **T27** The hardware looks are plain `Item`s: confirm the automation catalogue reports
-  them as buttons, or pin a role for them (`tst_ui_automation`).
+- [x] **T27** The hardware looks were plain `Item`s that the catalogue listed as `item`; their
+  roles are now pinned in `kComponentRoles` (push button and emergency stop `button`, selector
+  `slider`), with the latch read as `checked` and the position as the slider text. Fixture
+  stubs in `app/tests/support/automation` pin it (`tst_ui_automation`, 2026-11-10).
 - [x] **T28** Translations for the new strings (maintainer's `lupdate` pass, 2026-11-10).
 - [x] **T29** (2026-11-07) **Millennium Dark**: a fifth bundled theme, black anodized plates on a
   darker frame with the same materials, looks and green indicators; its own editor scheme;

@@ -79,14 +79,17 @@ static constexpr RoleEntry kQtRoles[] = {
 };
 
 static constexpr RoleEntry kComponentRoles[] = {
-  {QLatin1StringView("BigButton"),        QLatin1StringView("button")},
-  {QLatin1StringView("MenuButton"),       QLatin1StringView("button")},
-  {QLatin1StringView("SearchField"),      QLatin1StringView("editabletext")},
-  {QLatin1StringView("SegmentedControl"), QLatin1StringView("pagetab")},
-  {QLatin1StringView("TaskbarButton"),    QLatin1StringView("button")},
-  {QLatin1StringView("ToolbarButton"),    QLatin1StringView("button")},
-  {QLatin1StringView("WidgetDelegate"),   QLatin1StringView("tile")},
-  {QLatin1StringView("WidgetTitleBar"),   QLatin1StringView("tile")},
+  {QLatin1StringView("BigButton"),             QLatin1StringView("button")},
+  {QLatin1StringView("HardwareEmergencyStop"), QLatin1StringView("button")},
+  {QLatin1StringView("HardwarePushButton"),    QLatin1StringView("button")},
+  {QLatin1StringView("HardwareSelector"),      QLatin1StringView("slider")},
+  {QLatin1StringView("MenuButton"),            QLatin1StringView("button")},
+  {QLatin1StringView("SearchField"),           QLatin1StringView("editabletext")},
+  {QLatin1StringView("SegmentedControl"),      QLatin1StringView("pagetab")},
+  {QLatin1StringView("TaskbarButton"),         QLatin1StringView("button")},
+  {QLatin1StringView("ToolbarButton"),         QLatin1StringView("button")},
+  {QLatin1StringView("WidgetDelegate"),        QLatin1StringView("tile")},
+  {QLatin1StringView("WidgetTitleBar"),        QLatin1StringView("tile")},
 };
 // clang-format on
 

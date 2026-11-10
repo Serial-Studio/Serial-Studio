@@ -86,6 +86,16 @@ Item {
       text: "Tool"
     }
 
+    HardwareEmergencyStop {
+      latched: true
+      objectName: "fixture.stop.button"
+    }
+
+    HardwareSelector {
+      value: 2
+      objectName: "fixture.mode.knob"
+    }
+
     Button {
       objectName: "fixture.disabled"
       text: "Off"
