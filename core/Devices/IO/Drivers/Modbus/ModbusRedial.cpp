@@ -70,12 +70,10 @@ void IO::Drivers::ModbusRedial::reportDrop(Core::Bus::MessageBus* bus,
   qWarning().noquote()
     << QStringLiteral("[%1] \"%2\": %3").arg(tr("Modbus Connection Lost"), target, reason);
 
+  m_raisedTitle = tr("\"%1\" dropped").arg(target);
   if (bus)
-    bus->publish<Core::Bus::NotificationRaised>(Core::Bus::kSeverityWarning,
-                                                QStringLiteral("Modbus"),
-                                                QString(),
-                                                tr("\"%1\" dropped").arg(target),
-                                                reason);
+    bus->publish<Core::Bus::NotificationRaised>(
+      Core::Bus::kSeverityWarning, QStringLiteral("Modbus"), QString(), m_raisedTitle, reason);
 
   QMetaObject::invokeMethod(
     this,
@@ -85,6 +83,25 @@ void IO::Drivers::ModbusRedial::reportDrop(Core::Bus::MessageBus* bus,
         arm();
     },
     Qt::QueuedConnection);
+}
+
+/**
+ * @brief The link is back after a reported drop: posts the "Resolved: <title>" Info the alarm
+ *        annunciator pairs with the drop's point (same channel, same title), once per drop.
+ */
+void IO::Drivers::ModbusRedial::reportRecovered(Core::Bus::MessageBus* bus)
+{
+  if (m_raisedTitle.isEmpty())
+    return;
+
+  if (bus)
+    bus->publish<Core::Bus::NotificationRaised>(Core::Bus::kSeverityInfo,
+                                                QStringLiteral("Modbus"),
+                                                QString(),
+                                                QStringLiteral("Resolved: %1").arg(m_raisedTitle),
+                                                tr("The connection was restored"));
+
+  m_raisedTitle.clear();
 }
 
 /**

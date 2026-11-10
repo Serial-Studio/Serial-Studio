@@ -1145,6 +1145,7 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
   if (state == QModbusDevice::ConnectedState) {
     m_connecting = false;
     reportOpenFinished(true);
+    m_redial.reportRecovered(messageBus());
     if (m_pollTimer && !m_pollTimer->isActive())
       m_pollTimer->start(m_pollInterval);
   }
