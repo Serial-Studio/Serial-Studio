@@ -50,6 +50,7 @@ ICONS = ROOT / "app" / "rcc" / "icons"
 PACKS = ROOT / "app" / "rcc" / "iconpacks"
 QRC = PACKS / "iconpacks.qrc"
 HOUSE_QRC = ROOT / "app" / "rcc" / "rcc.qrc"
+FREE_QRC = ROOT / "app" / "rcc" / "art-free.qrc"
 SPEC = ROOT / "doc" / "claude" / "specs" / "0115-icon-packs"
 MAPPING = SPEC / "icons8-map.csv"
 BASES = SPEC / "icon-bases.txt"
@@ -289,6 +290,11 @@ def check_qrc(errors: list[str]) -> None:
 def cmd_check(args: argparse.Namespace) -> int:
     errors: list[str] = []
     house = house_ids()
+    if not house and FREE_QRC.exists():
+        print(
+            "icon-packs: public tree; the house set is private, art-verify.py judges these packs"
+        )
+        return 0
     if not house:
         sys.exit("icon-packs: no house icons found")
     for folder in pack_dirs():

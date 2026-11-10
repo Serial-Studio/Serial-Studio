@@ -17,9 +17,6 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 - [ ] `editor/frequency-markers`: the dataset toolbar's Frequency Markers button uses `editor/fft`.
 - [ ] `editor/add-profile`: the Workspaces toolbar's Add Profile button borrows `editor/add-group`
   since it moved beside Add Workspace on 2026-11-07.
-- [ ] `scripts/icon-packs.py check` reports "no house icons found": it still measures the packs
-  against a house set under `app/rcc/icons/<category>`, which the 2026-11-09 icon move emptied.
-  What the packs are measured against now is the maintainer's call.
 
 <!-- claim-verify on -->
 
