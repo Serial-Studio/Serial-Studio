@@ -41,7 +41,10 @@ HEAVY_BURST = 8
 # transform to fit under the 0.45 fair share on the slowest runner (4M iterations
 # measured ~100 ms/frame there, so the heavy source could never un-thin), while
 # engagement needs offered load decisively past the 0.90 threshold (5x on the dev
-# machine, far more on CI).
+# machine, far more on CI). That margin only exists if the sender holds its rate, so
+# _CounterStream paces on an absolute schedule: a relative 4 ms sleep overshoots by
+# tens of ms on a loaded runner and left the load hovering at the threshold (macOS CI
+# 2026-11-11: the governor engaged in 2 of 5 sessions and AC3 failed three attempts).
 HEAVY_TRANSFORM = (
     "function transform(value)\n"
     "  local s = 0\n"
@@ -51,6 +54,10 @@ HEAVY_TRANSFORM = (
     "  return value\n"
     "end\n"
 )
+
+# Most schedule debt the sender may catch up on: bounds the back-to-back burst released
+# after a blocked send, while still covering any sleep overshoot a runner produces.
+MAX_SEND_DEBT = 0.25
 
 LUA_CSV_PARSER = (
     "function parse(frame)\n"
@@ -129,7 +136,11 @@ BUDGET_PROJECT = {
 
 
 class _CounterStream:
-    """Streams monotonically-counting framed values until stopped."""
+    """Streams monotonically-counting framed values until stopped.
+
+    Pacing follows an absolute schedule (as DeviceSimulator.send_frames does), so the
+    mean offered rate holds when individual sleeps overshoot.
+    """
 
     def __init__(
         self,
@@ -145,11 +156,14 @@ class _CounterStream:
         self._interval = interval
         self._burst = burst
         self._counter = 0
+        self._started_at = 0.0
+        self._rebase = threading.Event()
         self._running = threading.Event()
         self._thread: threading.Thread | None = None
 
     def start(self) -> None:
         self._running.set()
+        self._started_at = time.monotonic()
         self._thread = threading.Thread(target=self._loop, daemon=True)
         self._thread.start()
 
@@ -162,8 +176,18 @@ class _CounterStream:
     def set_interval(self, interval: float, burst: int = 1) -> None:
         self._interval = interval
         self._burst = burst
+        self._rebase.set()
+
+    def sent(self) -> int:
+        return self._counter
+
+    def offered_rate(self) -> float:
+        """Mean frames per second sent since start()."""
+        elapsed = time.monotonic() - self._started_at
+        return self._counter / elapsed if elapsed > 0 else 0.0
 
     def _loop(self) -> None:
+        next_send = time.monotonic()
         while self._running.is_set():
             payload = b""
             for _ in range(self._burst):
@@ -173,7 +197,18 @@ class _CounterStream:
                 self._simulator.send_frame(payload)
             except Exception:
                 return
-            time.sleep(self._interval)
+
+            # A rate change starts a fresh schedule: debt from the old rate must not
+            # flood the recovery window.
+            now = time.monotonic()
+            if self._rebase.is_set():
+                self._rebase.clear()
+                next_send = now
+
+            next_send = max(next_send + self._interval, now - MAX_SEND_DEBT)
+            delay = next_send - now
+            if delay > 0:
+                time.sleep(delay)
 
 
 def _group_value(data: dict, group_title: str) -> float:
@@ -208,6 +243,21 @@ def _thinning_findings(api_client) -> list:
     result = api_client.command("problems.list", {"checkerId": "link.statistics"})
     findings = result.get("findings", [])
     return [f for f in findings if f.get("code") == "parse-thinning"]
+
+
+def _overload_report(api_client, heavy: "_CounterStream") -> str:
+    """Tells a too-light sender from a governor that missed real overload."""
+    try:
+        shown = _group_value(api_client.get_dashboard_data(), "Heavy Data")
+    except Exception as error:
+        shown = f"unavailable ({error})"
+
+    result = api_client.command("problems.list", {"checkerId": "link.statistics"})
+    codes = [f.get("code") for f in result.get("findings", [])]
+    return (
+        f"sender offered {heavy.offered_rate():.0f} frames/s ({heavy.sent()} sent), "
+        f"dashboard heavy counter at {shown}, link.statistics findings: {codes}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -311,7 +361,10 @@ class TestParseBudgetFairShare:
                 break
             time.sleep(0.5)
 
-        assert findings, "no parse-thinning finding while heavy source is over budget"
+        assert findings, (
+            "no parse-thinning finding while heavy source is over budget: "
+            + _overload_report(api, heavy)
+        )
         assert "Heavy" in findings[0].get("title", ""), findings[0]
 
         heavy.set_interval(0.25)
