@@ -152,7 +152,7 @@ std::vector<int> DataModel::legacyLedPositions(const Group& group, const QJsonAr
     if (dataset.hideOnDashboard)
       continue;
 
-    const auto raw = rawEntryFor(rawDatasets, dataset.datasetId, Keys::Title, dataset.title);
+    const auto raw     = rawEntryFor(rawDatasets, dataset.datasetId, Keys::Title, dataset.title);
     const int rawIndex = ss_jsr(raw, Keys::Index, 0).toInt();
     SS_ASSERT_LOG(rawIndex >= 0);
     if (rawIndex != dataset.index)
