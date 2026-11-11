@@ -115,7 +115,7 @@ class ProjectEditor : public QObject {
              NOTIFY selectedTextChanged)
   Q_PROPERTY(QString selectedIcon
              READ selectedIcon
-             NOTIFY currentViewChanged)
+             NOTIFY selectedTextChanged)
   Q_PROPERTY(quint16 datasetOptions
              READ datasetOptions
              NOTIFY datasetOptionsChanged)

@@ -441,6 +441,7 @@ void EditorSelection::onCurrentSelectionChanged(const QModelIndex& current,
     m_editor.m_forms.buildProjectModel();
   }
 
+  Q_EMIT m_editor.selectedTextChanged();
   Q_EMIT m_editor.editableOptionsChanged();
 }
 
