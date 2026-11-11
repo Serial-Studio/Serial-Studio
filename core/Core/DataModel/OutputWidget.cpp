@@ -324,7 +324,6 @@ DataModel::OutputWidgetStyle DataModel::effectiveTextFieldStyle(const OutputWidg
  */
 bool DataModel::outputSendsUnpaced(const OutputWidgetStyle style, const bool latched)
 {
-  SS_ASSERT_LOG(static_cast<int>(style) >= 0);
   SS_ASSERT_LOG(style <= OutputWidgetStyle::Compact);
   return style == OutputWidgetStyle::EmergencyStop && latched;
 }
