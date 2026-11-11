@@ -221,6 +221,7 @@ qt_add_library(
   UI/Dashboard/DashboardIngest.h
   UI/Dashboard/PlotControlBank.h
   UI/Dashboard/PlotMemoryLedger.h
+  UI/Dashboard/RebuildRetryLedger.h
   UI/Dashboard/ReplaySeekEngine.h
   UI/Dashboard/TimeRingSizing.h
   UI/Dashboard/DashboardViewState.h

@@ -141,6 +141,10 @@ _FLAKY_TESTS = {
     "test_long_running_session",
     "test_concurrent_connections_status",
     "test_js_transform_action_fire_invalid_id_returns_error",
+    # Parse-budget fair-share timing on the shared macOS runner: 6 of 22 master runs
+    # (2026-11-06..10) tripped one of these with no code change between neighbours.
+    "test_problem_center_reports_and_clears_thinning",
+    "test_recovery_within_one_second",
 }
 
 

@@ -62,6 +62,7 @@ extern "C" {
 #include "DataModel/FrameBuilder/LatestFrameTap.h"
 #include "DataModel/FrameBuilder/QuickPlotBuilder.h"
 #include "DataModel/FrameBuilder/ReplayIngest.h"
+#include "DataModel/FrameBuilder/SessionAnnouncer.h"
 #include "DataModel/FrameBuilder/ShortFrameWatch.h"
 #include "DataModel/FrameBuilder/TableScriptBridge.h"
 #include "DataModel/FrameBuilder/TableSnapshotChannel.h"
@@ -92,7 +93,8 @@ class ControlScript;
  */
 class FrameBuilder
   : public QObject
-  , public DataModel::BlockStagerHost {
+  , public DataModel::BlockStagerHost
+  , public DataModel::SessionAnnouncerHost {
   // clang-format off
   Q_OBJECT
   // clang-format on
@@ -247,7 +249,7 @@ public slots:
   void ingestStreamBlock(const DataModel::DataBlockPtr& block);
   void refreshStreamDrivenFrames();
   void refreshAsyncSinks();
-  void forgetPublishedStructures();
+  void forgetPublishedStructures() override;
   void republishSessionTemplates();
   void releaseReplayPoolStorage();
   void onPlayerOpenChanged();
@@ -370,6 +372,9 @@ private:
   DataModel::BlockStager m_stager;
   DataModel::BlockPublisher m_publisher;
 
+  // Binds m_frame and m_streamSourceIds above, so their addresses never move
+  DataModel::SessionAnnouncer m_announcer;
+
   /**
    * @brief ProjectModel state carried from the GUI thread to the builder thread, so the builder
    *        never has to reach back for it mid-sync.
@@ -403,6 +408,9 @@ private:
   void announceStructure(int sourceId, const DataModel::Frame& src) final;
   [[nodiscard]] quint64 stagingFlushEpoch() const final;
 
+  void announceSourceTemplate(const DataModel::Source& src) final;
+  void announceProjectFrame() final;
+
   void invalidateFramePool() noexcept;
   SS_COLD void notePoolExhausted();
   [[nodiscard]] size_t claimPoolSlot(int sourceId, bool hintedOnly = false) noexcept;
@@ -428,8 +436,6 @@ private:
   void publishReplayValues(int sourceId,
                            const DataModel::Frame& src,
                            const DataModel::TimestampedFrame::SteadyTimePoint& ts);
-  void publishSourceTemplateFrame(const DataModel::Source& src);
-  void publishSessionTemplates();
   [[nodiscard]] bool republishFrames(Lane lane);
   void wireDisplayTickHooks(Misc::TimerEvents& timers, IO::PipelineHost& pipeline);
   void wireAsyncSinkHooks();

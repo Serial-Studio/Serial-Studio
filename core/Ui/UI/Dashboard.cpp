@@ -1086,8 +1086,7 @@ void UI::Dashboard::resetData(const bool notify)
 
   if (notify) {
     m_datasetExtremes.clear();
-    m_retriedSources.clear();
-    m_quarantinedSources.clear();
+    m_rebuildLedger.clear();
 
     // code-verify off
     // Only a HARD reset (player open, disconnect) forgets the builder's published-structure
@@ -1299,19 +1298,16 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
     return;
 
   const quint64 generation = m_sourceStructureGen.value(frame.sourceId);
-  const auto qit           = m_quarantinedSources.constFind(frame.sourceId);
-  if (qit != m_quarantinedSources.cend() && qit.value() == generation)
+  const auto verdict       = m_rebuildLedger.onMismatch(frame.sourceId, generation);
+  if (verdict == RebuildVerdict::Drop)
     return;
 
-  const auto rit = m_retriedSources.constFind(frame.sourceId);
-  if (rit != m_retriedSources.cend() && rit.value() == generation) {
+  if (verdict == RebuildVerdict::Quarantine) {
     qWarning() << "[Dashboard] widget model build failed twice for source" << frame.sourceId
                << "-- dropping its blocks until the structure changes";
-    m_quarantinedSources.insert(frame.sourceId, generation);
     return;
   }
 
-  m_retriedSources.insert(frame.sourceId, generation);
   m_sourceRawFrames[frame.sourceId] = frame;
   reconfigureDashboard(combineSourceFrames(frame));
 }

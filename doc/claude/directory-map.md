@@ -139,7 +139,8 @@ core/
 │   │   │            IDashboardControl, IDashboardFrames the players and the API drive
 │   │   ├── FrameBuilder/  the facade's sub-objects: BlockStager (staging + the block pool),
 │   │   │            BlockPublisher (the sink fan-out), ReplayIngest, TransformCompiler,
-│   │   │            LatestFrameTap, QuickPlotBuilder, TableScriptBridge, TableSnapshotChannel
+│   │   │            LatestFrameTap, QuickPlotBuilder, TableScriptBridge, TableSnapshotChannel,
+│   │   │            SessionAnnouncer (which layouts a session announces, spec 0119)
 │   │   ├── Project/  ProjectModel's owned sub-objects (spec 0070): ProjectPersistence,
 │   │   │            ProjectPresentation, ProjectLoader, ProjectFolders, ProjectWorkspaces,
 │   │   │            ProjectTables, ProjectSources, ProjectEntities, ProjectOutputWidgets,
@@ -219,7 +220,8 @@ core/
     │   ├── WindowManager/  WindowLayoutStore (manual-layout persistence), SnapOverlay (gesture
     │   │            guides), WindowGeometry
     │   ├── Dashboard/  DashboardIngest (the block-ingest sub-object + every push table),
-    │   │            DashboardTools, PlotMemoryLedger (plot-history budget + report, spec 0097)
+    │   │            DashboardTools, PlotMemoryLedger (plot-history budget + report, spec 0097),
+    │   │            RebuildRetryLedger (per-source rebuild retry, spec 0119)
     │   ├── Alarms/    AlarmAnnunciator (root-owned facade, Cpp_UI_Alarms, alarms.* API) +
     │   │            AnnunciatorSequence (ISA-18.1 point table), SoundTheme, AppEventSounds
     │   │            (spec 0087)

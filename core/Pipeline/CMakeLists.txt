@@ -153,6 +153,7 @@ qt_add_library(
   DataModel/FrameBuilder/BuilderFlagAudit.cpp
   DataModel/FrameBuilder/BuilderSupport.cpp
   DataModel/FrameBuilder/BlockStager.cpp
+  DataModel/FrameBuilder/SessionAnnouncer.cpp
   DataModel/FrameBuilder/ExternalWiring.cpp
   DataModel/FrameBuilder/ReplayIngest.cpp
   DataModel/FrameBuilder/ShortFrameWatch.cpp
@@ -294,6 +295,7 @@ qt_add_library(
   DataModel/FrameBuilder/BuilderFlagAudit.h
   DataModel/FrameBuilder/BuilderSupport.h
   DataModel/FrameBuilder/BlockStager.h
+  DataModel/FrameBuilder/SessionAnnouncer.h
   DataModel/FrameBuilder/ExternalWiring.h
   DataModel/FrameBuilder/ReplayIngest.h
   DataModel/FrameBuilder/ShortFrameWatch.h

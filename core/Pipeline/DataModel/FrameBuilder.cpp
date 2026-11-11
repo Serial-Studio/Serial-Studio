@@ -106,6 +106,7 @@ DataModel::FrameBuilder::FrameBuilder(Core::Bus::MessageBus& bus)
   , m_maskSinks(false)
   , m_stager(*this, m_framePoolGeneration, m_maskSinks)
   , m_publisher(m_maskSinks, m_flagChecker)
+  , m_announcer(*this, m_frame, m_streamSourceIds)
   , m_deferredProjectSnapshot(std::nullopt)
   , m_wiring(*this, m_playerOpenMask)
 {
@@ -1018,9 +1019,10 @@ void DataModel::FrameBuilder::onOperationModeChanged()
 }
 
 /**
- * @brief Builds and publishes a per-source template frame for dashboard configuration.
+ * @brief SessionAnnouncerHost hook: builds and publishes a per-source template frame for dashboard
+ *        configuration.
  */
-void DataModel::FrameBuilder::publishSourceTemplateFrame(const DataModel::Source& src)
+void DataModel::FrameBuilder::announceSourceTemplate(const DataModel::Source& src)
 {
   DataModel::Frame srcFrame;
   srcFrame.sourceId                   = src.sourceId;
@@ -1051,45 +1053,21 @@ void DataModel::FrameBuilder::publishSourceTemplate(int sourceId)
   if (m_operationMode != SerialStudio::ProjectFile || m_frame.groups.empty())
     return;
 
-  for (const auto& src : m_frame.sources)
-    if (src.sourceId == sourceId) {
-      publishSourceTemplateFrame(src);
-      return;
-    }
+  m_announcer.announceSource(sourceId);
 }
 
 /**
- * @brief Publishes the session's template layouts as the connect edge does: one per source in a
- *        multi-source project, the whole frame for an image-only single source. Any other
- *        single-source layout goes out with its first block.
+ * @brief SessionAnnouncerHost hook: publishes the whole project frame as its source's layout.
  */
-void DataModel::FrameBuilder::publishSessionTemplates()
+void DataModel::FrameBuilder::announceProjectFrame()
 {
-  SS_ASSERT(m_operationMode == SerialStudio::ProjectFile, return);
-  SS_ASSERT_LOG(!m_frame.title.isEmpty());
-
-  const auto& sources = m_frame.sources;
-  if (sources.size() > 1) {
-    for (const auto& src : sources)
-      publishSourceTemplateFrame(src);
-
-    return;
-  }
-
-  const bool allImageGroups =
-    !m_frame.groups.empty()
-    && std::all_of(m_frame.groups.begin(), m_frame.groups.end(), [](const DataModel::Group& g) {
-         return g.widget == QLatin1String("image");
-       });
-
-  if (allImageGroups)
-    ensureStructurePublished(m_frame.sourceId, m_frame);
+  ensureStructurePublished(m_frame.sourceId, m_frame);
 }
 
 /**
  * @brief Announces every layout again after a live project re-sync, once the dashboard dropped its
- *        caches: forgets the marks, then sends the connect-time and stream templates, so no
- *        source's widgets vanish until its next frame. Marshals itself onto the builder thread.
+ *        caches, so no source's widgets vanish until its next frame. Marshals itself onto the
+ *        builder thread; what gets announced is the announcer's decision.
  */
 void DataModel::FrameBuilder::republishSessionTemplates()
 {
@@ -1098,16 +1076,7 @@ void DataModel::FrameBuilder::republishSessionTemplates()
     return;
   }
 
-  if (!m_lastConnectedState || m_operationMode != SerialStudio::ProjectFile)
-    return;
-
-  if (m_frame.groups.empty() || m_frame.title.isEmpty())
-    return;
-
-  m_publishedStructureGeneration.clear();
-  publishSessionTemplates();
-  for (const int sourceId : std::as_const(m_streamSourceIds))
-    publishSourceTemplate(sourceId);
+  m_announcer.announceResync(m_lastConnectedState, m_operationMode);
 }
 
 /**
@@ -1263,7 +1232,7 @@ bool DataModel::FrameBuilder::republishFrames(Lane lane)
     // frame is recomputed (virtual datasets read the store) but never published: publishing
     // would overwrite those widget copies and double-push its plot rings.
     // code-verify on
-    if (m_streamSourceIds.contains(frame.sourceId)) {
+    if (!m_announcer.publishesOwnFrame(frame.sourceId)) {
       (void)reprocessDatasetValues(frame);
       continue;
     }
@@ -1272,8 +1241,7 @@ bool DataModel::FrameBuilder::republishFrames(Lane lane)
     published  = republishOneFrame(frame, frame.sourceId, lane) || published;
   }
 
-  const bool single_source = m_frame.sources.size() <= 1;
-  if (!any_source && single_source && !m_frame.groups.empty() && !m_frame.title.isEmpty())
+  if (m_announcer.combinedFrameStandsIn(any_source))
     published = republishOneFrame(m_frame, combined_frame_key, lane) || published;
 
   return published;
@@ -1481,7 +1449,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
         Qt::QueuedConnection);
     }
 
-  publishSessionTemplates();
+  m_announcer.announceConnect();
 }
 
 //--------------------------------------------------------------------------------------------------

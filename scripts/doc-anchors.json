@@ -293,6 +293,17 @@
           "must_contain": "code-verify.py, claim-verify.py, sanitize-commit.py, documentation-verify.py, layer-verify.py, registry-verify.py"
         }
       ]
+    },
+    {
+      "name": "rebuild-ledger-hard-reset-only",
+      "source": "core/Ui/UI/Dashboard.cpp",
+      "source_pattern": "if \\(notify\\) \\{\\s*m_datasetExtremes\\.clear\\(\\);\\s*m_rebuildLedger\\.clear\\(\\);",
+      "docs": [
+        {
+          "path": "doc/claude/architecture/dashboard.md",
+          "must_contain": "Only a hard reset clears the ledger"
+        }
+      ]
     }
   ]
 }

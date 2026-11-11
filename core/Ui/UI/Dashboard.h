@@ -48,6 +48,7 @@
 #include "UI/Dashboard/DashboardWiring.h"
 #include "UI/Dashboard/PlotControlBank.h"
 #include "UI/Dashboard/PlotMemoryLedger.h"
+#include "UI/Dashboard/RebuildRetryLedger.h"
 #include "UI/Dashboard/ReplaySeekEngine.h"
 #include "UI/Dashboard/WidgetMapBuilder.h"
 #include "UI/WidgetRegistry.h"
@@ -608,8 +609,7 @@ private:
 
   // Subordinate to m_sourceRawFrames (validated by its contains(sid) check); never cleared alone.
   QHash<int, quint64> m_sourceStructureGen;
-  QHash<int, quint64> m_quarantinedSources;
-  QHash<int, quint64> m_retriedSources;
+  RebuildRetryLedger m_rebuildLedger;
 
   // Declared last: these bind the members above by reference, in declaration order
   PlotMemoryLedger m_plotMemory;

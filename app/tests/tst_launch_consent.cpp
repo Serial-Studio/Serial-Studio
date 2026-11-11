@@ -199,12 +199,14 @@ void TstLaunchConsent::operatorProjectStartsGranted()
 }
 
 /**
- * @brief The headless override grants for good: no rebind or remote change clears it.
+ * @brief The headless override grants for good: no rebind or remote change clears it. Fallbacks
+ *        are off because macOS otherwise lists the system-wide defaults in allKeys().
  */
 void TstLaunchConsent::autoConsentIsNeverCleared()
 {
   qputenv("SERIAL_STUDIO_API_AUTO_CONSENT", QByteArrayLiteral("1"));
   QSettings settings;
+  settings.setFallbacksEnabled(false);
   API::LaunchConsent consent(settings);
   qunsetenv("SERIAL_STUDIO_API_AUTO_CONSENT");
 

@@ -240,11 +240,13 @@ void TstConsentGate::yesPersistsUnderTheKey()
 }
 
 /**
- * @brief Without a key the "yes" holds for the session and nothing is written.
+ * @brief Without a key the "yes" holds for the session and nothing is written. Fallbacks are off
+ *        because macOS otherwise lists the system-wide defaults in allKeys().
  */
 void TstConsentGate::yesOnAnEmptyKeyIsSessionOnly()
 {
   QSettings settings;
+  settings.setFallbacksEnabled(false);
   API::ConsentGate gate(settings, QString(), QStringLiteral("Allow?"), QStringLiteral("Why."));
 
   m_prompter.answer = Core::Prompt::Yes;
@@ -400,10 +402,12 @@ void TstConsentGate::revokeForgetsAPersistedYes()
 
 /**
  * @brief Revoking a session-only "yes" forgets it without writing or removing any setting.
+ *        Fallbacks are off because macOS otherwise lists the system-wide defaults in allKeys().
  */
 void TstConsentGate::revokeOnAnEmptyKeyTouchesNoSetting()
 {
   QSettings settings;
+  settings.setFallbacksEnabled(false);
   const auto unrelated = freshKey();
   settings.setValue(unrelated, true);
   API::ConsentGate gate(settings, QString(), QStringLiteral("Allow?"), QStringLiteral("Why."));

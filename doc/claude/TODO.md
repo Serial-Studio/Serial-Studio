@@ -29,16 +29,12 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
   ZEOF timing (T15, needs a cross-layer HAL drain API). Briefs in its `findings.md`.
 - [ ] Spec 0104 consolidation quarter, T3 to T19 in its `tasks.md`. T10 reads on 2026-12-01 and
   T14 on 2027-01-01.
-- [ ] A ctest for a live re-sync of a multi-source session: no combined frame published as source
-  0's layout, every connect-time template re-announced, one retry per (source, generation).
-  Neither `FrameBuilder` nor `Dashboard` has a unit harness, so this first needs a seam (the
-  retry decision as its own sub-object, the template choice as a pure function).
 
 ## Maintainer steps
 
 CI answers every build, `ctest` and `--benchmark-hotpath` question, and runs the pytest suite
-without the GUI tests. Read `pytest-results-<os>` from the run, because the test job stays green
-on a failure. This section holds only what CI cannot do.
+without the GUI tests; a pytest or sanitizer failure reddens the run without holding the release.
+This section holds only what CI cannot do.
 
 Decisions:
 
@@ -49,6 +45,8 @@ Decisions:
 
 With a current build:
 
+- [ ] Spec 0119 AC4: revert each of the three decisions in the table in its `tasks.md`, rebuild only
+  `tst_resync_decisions`, and record the failure. AC5: `--benchmark-hotpath` before and after.
 - [ ] The tests marked `gui`, which CI deselects: specs 0109 (T19) and 0110 (T22).
 - [ ] `tests/integration/test_uart_sequence.py` with `socat` installed: CI has none, so four of
   its five tests have never run.

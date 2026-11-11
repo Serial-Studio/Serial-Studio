@@ -850,6 +850,19 @@ ss_add_unit_test(tst_republish_lanes
 )
 
 #
+# The live re-sync decisions (spec 0119): which layouts a session announces, when the combined
+# frame may stand in, and the rebuild retry per (source, generation). SessionAnnouncer reaches its
+# effects through a host and the ledger is header-only, so neither needs FrameBuilder's or
+# Dashboard's link set.
+#
+ss_add_unit_test(tst_resync_decisions
+  SOURCES tst_resync_decisions.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/SessionAnnouncer.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # The single-file sparse CSV body (spec 0055). SparseRowMerger.h was extracted from CSV::ExportWorker
 # precisely so this can be checked without QFile, the workspace manager or a session: the suite
 # supplies the two formatter stubs itself and links nothing but QtCore.

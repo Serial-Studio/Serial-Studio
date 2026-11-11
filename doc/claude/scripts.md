@@ -26,10 +26,7 @@ to run from any directory.
 | `generate-property-registry.py` | `app/rcc/properties/dataset.json` -> the four checked-in dataset-registry TUs (descriptor table, serialization, editor form, API appliers), the gRPC field ledger and the typed proto (specs 0036/0037). `--check` gates drift, `--check-snapshot` byte-compares the dataset slice of `api-schema.json`. |
 | `generate-material-tiles.py` | Generates the two repeating grain tiles (rows, streaks) behind the brushed-metal theme material (spec 0113). Run by hand. |
 | `csv2wav.py` | Rebuilds a WAV from a Serial Studio CSV export (`Elapsed (s)` plus per-sample columns); the audio round-trip test uses it, standalone otherwise. |
-| `icon-migrate.py` | Spec-0028 icon-tree migration: audit writes `icon-map.csv`, apply executes a signed-off manifest once. Historical; not part of the normal flow. |
-| `icon-retier.py` | Spec-0028 T20b display-size re-tier of single-tier icons from their pre-migration call-site sizes. Historical. |
 | `overlay-add-icon.py` | Stamps the `+` badge onto a base glyph to make an `add-*` editor icon at every tier, deterministically. |
-| `strip-inbody-comments.py` | Tree-sitter tool that removes comments inside C++ function bodies (`cxx-inbody-comment`); the safe bulk half of the cleanup. |
 | `tu-cutter.py` | Deterministic god-TU splitter: `inventory <file.cpp>` lists blocks, `cut <file.cpp> <manifest.json>` moves whole blocks verbatim into per-concern TUs and refuses unless they reconstruct the original. |
 | `install-qt.sh`, `install-qt.ps1` | Install Qt (`QT_VERSION`, `QT_ARCH`) via the Qt installer with `QT_USERNAME` / `QT_PASSWORD` from the environment; CI and fresh-machine setup. |
 | `code_verify_rules.py` | Module, not a CLI: the tree-sitter semantic rules `code-verify.py` imports (flag-only; skipped when tree-sitter is missing). |

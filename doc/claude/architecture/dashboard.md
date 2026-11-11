@@ -36,9 +36,12 @@ reconfigure and the per-frame walk is pointer-only.
 
 - **Value propagation** (`m_valuePushes`, built by `buildValuePushes` per source in row-major
   group/dataset order from `m_datasetReferences`): `applyBlockValues` walks it positionally
-  and validates each entry's `uniqueId` against the incoming dataset (mismatch or unmapped UID →
-  `handleMissingDataset`, the same reconfigure-and-retry-once semantics the old per-dataset
-  `QHash::find` provided).
+  and validates each entry's `uniqueId` against the incoming dataset. A mismatch or unmapped UID
+  reaches `handleMissingDataset`: one rebuild per (source, structure generation), then that pair
+  is quarantined, tracked by `UI::RebuildRetryLedger`.
+  Only a hard reset clears the ledger, never a rebuild, or another source's layout arriving would
+  re-arm a quarantined source. Enforced: ctest:tst_resync_decisions,
+  anchor:rebuild-ledger-hard-reset-only.
 - **String values are written only where observable.** Numeric datasets copy `Dataset::value`
   (a QString COW bump per target) only into `stringTargets`: DataGrid-group copies and the
   `m_lastFrame` copies (`dashboard.getData` serializes that frame, incl. `Keys::Value`).
