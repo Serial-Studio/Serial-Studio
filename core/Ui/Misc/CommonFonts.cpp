@@ -22,6 +22,7 @@
 #include "Misc/CommonFonts.h"
 
 #include <QApplication>
+#include <QDir>
 #include <QFontDatabase>
 
 #include "Core/SerialStudio.h"
@@ -49,6 +50,11 @@ Misc::CommonFonts::CommonFonts() : m_widgetFontIndex(0), m_widgetFontRevision(0)
 
   QFontDatabase::addApplicationFont(":/fonts/GeistMono-Bold.ttf");
   QFontDatabase::addApplicationFont(":/fonts/GeistMono-Medium.ttf");
+
+  const QDir fontDir(QStringLiteral(":/fonts"));
+  const auto faces = fontDir.entryList({QStringLiteral("Tiny5Mono*.ttf")}, QDir::Files);
+  for (const auto& face : faces)
+    QFontDatabase::addApplicationFont(fontDir.filePath(face));
 
   const auto id = QFontDatabase::addApplicationFont(":/fonts/GeistMono-Regular.ttf");
   if (id != -1) {

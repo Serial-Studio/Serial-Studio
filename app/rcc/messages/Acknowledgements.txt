@@ -738,6 +738,20 @@ reserved font name.
 
 Source: [https://github.com/vercel/geist-font](https://github.com/vercel/geist-font)
 
+## Tiny5 Mono Font
+
+Copyright 2026 The Tiny5 Mono Project Authors
+
+Serial Studio bundles the Tiny5 Mono typeface, licensed under the SIL Open
+Font License, Version 1.1. The full license text ships with the source tree
+in `LICENSES/OFL-1.1.txt` and is available at
+[https://openfontlicense.org](https://openfontlicense.org).
+
+The OFL permits use, study, modification and redistribution of the font,
+provided the font is not sold by itself.
+
+Source: [https://github.com/Gissio/font_Tiny5Mono](https://github.com/Gissio/font_Tiny5Mono)
+
 ## OpenSSL
 
 Serial Studio's Linux packages bundle the OpenSSL 3 libraries (`libssl` and

@@ -64,6 +64,26 @@
         <file>fonts/GeistMono-Bold.ttf</file>
         <file>fonts/GeistMono-Medium.ttf</file>
         <file>fonts/GeistMono-Regular.ttf</file>
+        <file>fonts/Tiny5Mono-Bold.ttf</file>
+        <file>fonts/Tiny5Mono-BoldItalic.ttf</file>
+        <file>fonts/Tiny5Mono-CRT.ttf</file>
+        <file>fonts/Tiny5Mono-CRTBold.ttf</file>
+        <file>fonts/Tiny5Mono-CRTBoldItalic.ttf</file>
+        <file>fonts/Tiny5Mono-CRTItalic.ttf</file>
+        <file>fonts/Tiny5Mono-Italic.ttf</file>
+        <file>fonts/Tiny5Mono-LCD.ttf</file>
+        <file>fonts/Tiny5Mono-LCDBold.ttf</file>
+        <file>fonts/Tiny5Mono-LCDBoldItalic.ttf</file>
+        <file>fonts/Tiny5Mono-LCDItalic.ttf</file>
+        <file>fonts/Tiny5Mono-Matrix.ttf</file>
+        <file>fonts/Tiny5Mono-MatrixBold.ttf</file>
+        <file>fonts/Tiny5Mono-MatrixBoldItalic.ttf</file>
+        <file>fonts/Tiny5Mono-MatrixItalic.ttf</file>
+        <file>fonts/Tiny5Mono-Regular.ttf</file>
+        <file>fonts/Tiny5MonoSC-Bold.ttf</file>
+        <file>fonts/Tiny5MonoSC-BoldItalic.ttf</file>
+        <file>fonts/Tiny5MonoSC-Italic.ttf</file>
+        <file>fonts/Tiny5MonoSC-Regular.ttf</file>
         <file>sounds/warning.wav</file>
         <file>sounds/caution.wav</file>
         <file>sounds/advisory.wav</file>
