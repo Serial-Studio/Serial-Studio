@@ -79,12 +79,14 @@ DataModel::LatestFrameTap::LatestFrameTap(const QObject& owner,
  * @brief GUI-side half of the latest-frame mirror: adopts the newest published copy and reports
  *        whether the caller still owes the builder a publish request. Gated on a GUI-thread reader
  *        having asked at least once, so a session without a polling script or API client never
- *        makes the builder pay for the copy.
+ *        makes the builder pay for the copy. The ungated parse-load ring drains ahead of that.
  */
 bool DataModel::LatestFrameTap::drainForGui()
 {
   SS_ASSERT(qApp != nullptr, return false);
   SS_ASSERT(QThread::currentThread() == qApp->thread(), return false);
+
+  adoptParseLoads();
 
   if (!m_guiUsers.load(std::memory_order_relaxed)) [[likely]]
     return false;
@@ -135,6 +137,17 @@ DataModel::LatestFrameInfo DataModel::LatestFrameTap::guiLatestFrame(int sourceI
  */
 std::vector<DataModel::LatestFrameTap::ParseLoad> DataModel::LatestFrameTap::guiParseLoads()
 {
+  adoptParseLoads();
+  return m_guiParseLoads ? *m_guiParseLoads : std::vector<ParseLoad>();
+}
+
+/**
+ * @brief Adopts the newest published parse-load sample. Runs on every display tick as well as on
+ *        a read: a full ring refuses the NEWEST sample, so a ring only drained by readers served
+ *        the first read after a quiet spell a sample from before the spell began.
+ */
+void DataModel::LatestFrameTap::adoptParseLoads()
+{
   ParseLoadsPtr sample;
   // code-verify off
   // Ring drain: bounded by the mirror ring capacity (4), provably finite per call.
@@ -142,9 +155,6 @@ std::vector<DataModel::LatestFrameTap::ParseLoad> DataModel::LatestFrameTap::gui
     if (sample)
       m_guiParseLoads = sample;
   // code-verify on
-
-  sample.reset();
-  return m_guiParseLoads ? *m_guiParseLoads : std::vector<ParseLoad>();
 }
 
 //--------------------------------------------------------------------------------------------------

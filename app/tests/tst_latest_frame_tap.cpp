@@ -61,6 +61,7 @@ private slots:
   void newestSourceIsServedByDefault();
   void unchangedSequenceDoesNotRepublish();
   void parseLoadsMirrorTheBudget();
+  void parseLoadsStayFreshWithoutReaders();
 };
 
 /**
@@ -197,6 +198,34 @@ void TstLatestFrameTap::parseLoadsMirrorTheBudget()
   QCOMPARE(static_cast<int>(loads.size()), 1);
   QCOMPARE(loads.front().sourceId, 5);
   QVERIFY(loads.front().decimateN >= 1);
+}
+
+/**
+ * @brief The builder publishes every second whether or not the Problem Center reads, so the
+ *        display-tick drain has to keep the ring empty: a ring left to fill refuses the newest
+ *        sample and the first read after a quiet spell reports the load from before it.
+ */
+void TstLatestFrameTap::parseLoadsStayFreshWithoutReaders()
+{
+  QObject owner;
+  CaptureState state;
+  DataModel::ParseBudget budget;
+  DataModel::LatestFrameTap tap(owner, state.frames, state.newestSourceId, state.sequence, budget);
+
+  for (int tick = 0; tick < 32; ++tick) {
+    tap.publishParseLoads();
+    QVERIFY(!tap.drainForGui());
+  }
+
+  const auto started = DataModel::ParseBudget::Clock::now();
+  (void)budget.account(5, started, started + std::chrono::milliseconds(1));
+
+  tap.publishParseLoads();
+  QVERIFY(!tap.drainForGui());
+
+  const auto loads = tap.guiParseLoads();
+  QCOMPARE(static_cast<int>(loads.size()), 1);
+  QCOMPARE(loads.front().sourceId, 5);
 }
 
 QTEST_GUILESS_MAIN(TstLatestFrameTap)

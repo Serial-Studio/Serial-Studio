@@ -94,6 +94,8 @@ private:
   static constexpr std::size_t kMirrorSlots    = 4;
   static constexpr std::size_t kParseLoadSlots = 4;
 
+  void adoptParseLoads();
+
   const QObject& m_owner;
   const QHash<int, LatestFrameInfo>& m_captures;
   const int& m_newestSourceId;
