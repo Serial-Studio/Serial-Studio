@@ -136,7 +136,8 @@ static QJsonObject rawEntryFor(const QJsonArray& array,
 /**
  * @brief Positions of @p group's datasets whose raw JSON carries the pre-0114 LED flag and is not
  *        hidden (a hidden flagged dataset showed no light). Entries are matched by title, the
- *        positional id being only the first guess, and a dataset match also needs the frame index.
+ *        positional id being only the first guess, and a dataset match also needs the frame index
+ *        (absent reads as 0, the loader's default, or an index-less flagged dataset loses its LED).
  */
 std::vector<int> DataModel::legacyLedPositions(const Group& group, const QJsonArray& rawGroups)
 {
@@ -152,8 +153,9 @@ std::vector<int> DataModel::legacyLedPositions(const Group& group, const QJsonAr
       continue;
 
     const auto raw = rawEntryFor(rawDatasets, dataset.datasetId, Keys::Title, dataset.title);
-    SS_ASSERT_LOG(raw.isEmpty() || ss_jsr(raw, Keys::Index, -1).toInt() >= 0);
-    if (ss_jsr(raw, Keys::Index, -1).toInt() != dataset.index)
+    const int rawIndex = ss_jsr(raw, Keys::Index, 0).toInt();
+    SS_ASSERT_LOG(rawIndex >= 0);
+    if (rawIndex != dataset.index)
       continue;
 
     if (ss_jsr(raw, Keys::LED, false).toBool())

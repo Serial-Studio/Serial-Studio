@@ -77,6 +77,7 @@ private slots:
   void emptyPositionsGiveNoDatasets();
   void legacyPositionsSkipHiddenAndUnflagged();
   void legacyPositionsSurviveARemap();
+  void legacyPositionsReadAnAbsentIndexAsZero();
   void legacyInsertKeepsOrderAndAllocatesIds();
   void legacyInsertRetargetsWorkspaceRefs();
 };
@@ -207,6 +208,22 @@ void TstLedPanelGroup::legacyPositionsSurviveARemap()
   QCOMPARE(legacyLedPositions(groups[0], rawGroups()), (std::vector<int>{0, 2}));
   groups[0].datasets[2].index = 99;
   QCOMPARE(legacyLedPositions(groups[0], rawGroups()), (std::vector<int>{0}));
+}
+
+void TstLedPanelGroup::legacyPositionsReadAnAbsentIndexAsZero()
+{
+  QJsonObject raw;
+  raw.insert(QStringLiteral("title"), QStringLiteral("Light 0"));
+  raw.insert(QStringLiteral("led"), true);
+
+  QJsonObject rawGroup;
+  rawGroup.insert(QStringLiteral("title"), QStringLiteral("BCM_LIGHTS"));
+  rawGroup.insert(QStringLiteral("datasets"), QJsonArray{raw});
+
+  auto group = loadedGroups()[0];
+  group.datasets.resize(1);
+  group.datasets[0].index = 0;
+  QCOMPARE(legacyLedPositions(group, QJsonArray{rawGroup}), (std::vector<int>{0}));
 }
 
 void TstLedPanelGroup::legacyInsertKeepsOrderAndAllocatesIds()
