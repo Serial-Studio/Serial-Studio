@@ -130,6 +130,19 @@ def _elapsed_column(rows):
     return values
 
 
+def _row_count_message(rows):
+    """Names the frame values missing from a capture, so a lost tail reads apart from a lost head."""
+    seen = set()
+    for row in rows:
+        try:
+            seen.add(int(float(row[-1])))
+        except (IndexError, ValueError):
+            continue
+
+    missing = sorted(set(range(1, FRAME_COUNT + 1)) - seen)
+    return f"expected {FRAME_COUNT} rows, got {len(rows)}; missing values {missing}"
+
+
 def _attach(api_client, port=9000):
     try:
         api_client.disconnect_device()
@@ -175,7 +188,7 @@ class TestRecordingTail:
         assert len(files) == 1, f"session produced {len(files)} files: {files}"
 
         _, rows = _read_csv(files[-1])
-        assert len(rows) == FRAME_COUNT, f"expected {FRAME_COUNT} rows, got {len(rows)}"
+        assert len(rows) == FRAME_COUNT, _row_count_message(rows)
 
     def test_pause_closes_over_the_samples_it_holds(
         self, api_client, clean_state, device_simulator
@@ -199,7 +212,7 @@ class TestRecordingTail:
         files = _csvs_since(started)
         assert files, "no CSV was written"
         _, rows = _read_csv(files[-1])
-        assert len(rows) == FRAME_COUNT, f"expected {FRAME_COUNT} rows, got {len(rows)}"
+        assert len(rows) == FRAME_COUNT, _row_count_message(rows)
 
         api_client.command("io.setPaused", {"paused": False})
         time.sleep(0.2)
