@@ -968,6 +968,7 @@ jobs:
           -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
           -DCMAKE_OSX_ARCHITECTURES="arm64" \
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
+          -DSS_INAPP_TESTS=ON \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
@@ -1661,6 +1662,7 @@ jobs:
           -DSS_UNITY_BUILD=ON `
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
           -DCMAKE_BUILD_TYPE=Release `
+          -DSS_INAPP_TESTS=ON `
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF
 
