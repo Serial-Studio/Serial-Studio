@@ -21,13 +21,6 @@
 
 #pragma once
 
-#include "CSV/Player.h"
-#include "MDF4/Player.h"
-
-#ifdef BUILD_COMMERCIAL
-#  include "Sessions/Player.h"
-#endif
-
 /**
  * @file PlayerState.h
  * @brief The "is any replay player open" predicates, owned by the layer that owns the players.
@@ -35,21 +28,7 @@
  */
 
 namespace SerialStudio {
-/**
- * @brief Checks if any playback player (CSV, MDF4 or Historian) is currently open.
- */
-[[nodiscard]] inline bool isAnyPlayerOpen()
-{
-  static auto& csvPlayer  = CSV::Player::instance();
-  static auto& mdf4Player = MDF4::Player::instance();
-
-#ifdef BUILD_COMMERCIAL
-  static auto& sqlPlayer = Sessions::Player::instance();
-  return csvPlayer.isOpen() || mdf4Player.isOpen() || sqlPlayer.isOpen();
-#else
-  return csvPlayer.isOpen() || mdf4Player.isOpen();
-#endif
-}
+[[nodiscard]] bool isAnyPlayerOpen();
 
 /**
  * @brief Returns true when a player that stores post-transform values is open; transforms must

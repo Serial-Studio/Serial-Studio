@@ -52,6 +52,7 @@ qt_add_library(
   CSV/Export.h
   CSV/Player.h
   Replay/PlayerState.h
+  Replay/PlayerState.cpp
   Replay/LinkGate.h
   Replay/LinkGate.cpp
   CSV/Player/FileIndexer.h

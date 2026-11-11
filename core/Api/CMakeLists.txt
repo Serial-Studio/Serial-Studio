@@ -108,6 +108,7 @@ qt_add_library(
   API/HandlerContext.cpp
   API/MCPProtocol.h
   API/SchemaBuilder.h
+  API/SchemaBuilder.cpp
   API/CommandRegistry.h
   API/CommandHandler.h
   API/MCPHandler.h

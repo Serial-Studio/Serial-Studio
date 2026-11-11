@@ -134,52 +134,7 @@ struct SchemaProp {
   return p;
 }
 
-/**
- * @brief Lower SchemaProp into the JSON object emitted under "properties".
- */
-[[nodiscard]] inline QJsonObject schemaPropToJson(const SchemaProp& p)
-{
-  QJsonObject prop;
-
-  if (p.type.contains(QLatin1Char('|'))) {
-    QJsonArray types;
-    for (const auto& part : p.type.split(QLatin1Char('|'), Qt::SkipEmptyParts))
-      types.append(part.trimmed());
-
-    prop.insert(QStringLiteral("type"), types);
-  } else {
-    prop.insert(QStringLiteral("type"), p.type);
-  }
-
-  prop.insert(QStringLiteral("description"), p.description);
-  if (p.binary)
-    prop.insert(QStringLiteral("binary"), true);
-
-  if (!p.enumValues.isEmpty())
-    prop.insert(QStringLiteral("enum"), p.enumValues);
-
-  if (!p.minimum.isUndefined() && !p.minimum.isNull())
-    prop.insert(QStringLiteral("minimum"), p.minimum);
-
-  if (!p.maximum.isUndefined() && !p.maximum.isNull())
-    prop.insert(QStringLiteral("maximum"), p.maximum);
-
-  if (!p.defaultValue.isUndefined() && !p.defaultValue.isNull())
-    prop.insert(QStringLiteral("default"), p.defaultValue);
-
-  if (p.type == QStringLiteral("array")) {
-    if (!p.itemsSchema.isEmpty()) {
-      prop.insert(QStringLiteral("items"), p.itemsSchema);
-    } else {
-      QJsonObject items;
-      items.insert(QStringLiteral("type"),
-                   p.itemsType.isEmpty() ? QStringLiteral("string") : p.itemsType);
-      prop.insert(QStringLiteral("items"), items);
-    }
-  }
-
-  return prop;
-}
+[[nodiscard]] QJsonObject schemaPropToJson(const SchemaProp& p);
 
 /**
  * @brief Build a JSON-Schema object from a flat list of properties.
