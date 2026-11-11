@@ -229,17 +229,17 @@ def test_the_test_job_consumes_build_artifacts_not_a_release(suite):
     assert not any("gh release download" in str(step.get("run", "")) for step in steps)
 
 
-def test_the_test_suite_reports_without_gating(suite):
+def test_the_test_suite_gates_the_run_but_not_the_release(ci, suite):
     """
-    Since 2e3a55533 the suite is continue-on-error by decision: it reports, it does not hold a
-    release. What makes that safe is visibility, so the failure has to surface as a workflow
-    annotation and the hang-capture steps have to keep reading the step outcome; a soft step
-    with neither is how master silently stayed green over failing tests before.
+    The suite was continue-on-error from 2e3a55533 (2026-09-05) to 2026-11-10, and a round-trip
+    baseline drift stayed green behind a warning for days. A failure now reddens its leg; the
+    release still ships because upload never waits on a test leg. Runner-timing flakes rerun
+    through conftest's _FLAKY_TESTS rather than softening the step.
     """
     steps = _steps(suite)
     run_tests = next((step for step in steps if step.get("id") == "run_tests"), None)
     assert run_tests is not None, "the run_tests step is gone"
-    assert run_tests.get("continue-on-error") is True
+    assert "continue-on-error" not in run_tests, "the pytest step is soft again"
 
     outcome_readers = [
         step
@@ -249,7 +249,38 @@ def test_the_test_suite_reports_without_gating(suite):
     assert (
         len(outcome_readers) >= 3
     ), "annotation plus the two hang-capture steps read the outcome"
-    assert any("::warning" in str(step.get("run", "")) for step in outcome_readers)
+
+    upload_needs = set(ci["upload"].get("needs", []))
+    assert not upload_needs & set(
+        TEST_CALLER_JOBS
+    ), "a red test leg would hold the release"
+
+
+@pytest.mark.parametrize("job", SANITIZER_JOBS)
+def test_a_sanitizer_finding_fails_its_job_but_not_the_release(ci, job):
+    """
+    Both legs were job-level continue-on-error until 2026-11-10, so TSan, the only proof of the
+    lock-free SPSC invariants, rendered green whatever it found. The run steps stay soft so one
+    finding cannot skip the others; the annotation step exits non-zero instead.
+    """
+    assert "continue-on-error" not in ci[job], f"{job} is soft at the job level again"
+    annotate = next(
+        (step for step in _steps(ci[job]) if "Annotate" in str(step.get("name", ""))),
+        None,
+    )
+    assert annotate is not None, f"{job} lost its annotation step"
+    annotate_run = str(annotate.get("run", ""))
+    assert "exit" in annotate_run, f"{job}: the annotation never fails the job"
+
+    soft_steps = [s for s in _steps(ci[job]) if s.get("continue-on-error")]
+    assert soft_steps, f"{job}: no soft run steps left, so this contract is stale"
+    for step in soft_steps:
+        assert (
+            f"steps.{step.get('id')}.outcome" in annotate_run
+        ), f"{job}: soft step {step.get('name')} can fail without failing the job"
+    assert job not in set(
+        ci["upload"].get("needs", [])
+    ), f"{job} would hold the release"
 
 
 def test_no_publication_escape_hatch_remains(ci):

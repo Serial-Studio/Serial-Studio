@@ -2320,10 +2320,9 @@ jobs:
 # cmake/Sanitizers.cmake names TSan the only tool that proves the lock-free SPSC hotpath
 # invariants, and until spec 0075 nothing ran it. These jobs are that proof plus the ASan/UBSan
 # leg, and they are where the fuzz corpora replay under instrumentation. They are deliberately
-# NOT in upload's needs, and both carry continue-on-error at the job level: a sanitizer finding
-# must neither hold the release hostage nor redden a run whose product is fine. GitHub renders
-# such a job green, so each leg ends with an annotation step that turns any failed step into a
-# warning on the run summary -- that annotation, not the job icon, is the signal to read.
+# NOT in upload's needs, so a finding never holds the release; it does redden the run. Each leg
+# ends with an annotation step that names every failed step and then fails the job. Until
+# 2026-11-10 both legs were continue-on-error, which rendered them green whatever TSan said.
 #
 # Both legs were disabled from 2026-09-04 to 2026-09-11. What the last enabled run reported, and
 # what fixed it: UBSan findings inside vendored code (open62541's comparator dispatch, LuaJIT's
@@ -2353,7 +2352,6 @@ jobs:
 #---------------------------------------------------------------------------------------------------
 
   sanitize:
-    continue-on-error: true
     runs-on: ubuntu-24.04
     name: '🧫 Sanitizers (ASan + UBSan, Pro)'
     permissions:
@@ -2469,9 +2467,9 @@ jobs:
       run: ./build/asan/app/${{env.UNIXNAME}} --headless --selftest-suite qml
 
     #
-    # The job stays green whatever happened above, so this is where a finding becomes visible:
-    # one warning per failed step on the run summary, and a build or configure failure (which
-    # skips the run steps) reports through the job status the same way
+    # The four run steps are soft so all of them run; this step is where their findings fail the
+    # job: one error per failed step on the run summary, then a non-zero exit. A build or
+    # configure failure (which skips the run steps) has already failed the job
     #
     - name: '⚠️ Annotate sanitizer findings'
       if: always()
@@ -2485,13 +2483,14 @@ jobs:
           name="${step%%:*}"
           outcome="${step##*:}"
           if [ "$outcome" = "failure" ]; then
-            echo "::warning title=ASan + UBSan (${name})::the step reported findings; see the job log"
+            echo "::error title=ASan + UBSan (${name})::the step reported findings; see the job log"
             failed=1
           fi
         done
         if [ "${{job.status}}" = "failure" ] && [ "$failed" = "0" ]; then
-          echo "::warning title=ASan + UBSan (build)::the tier did not build; see the job log"
+          echo "::error title=ASan + UBSan (build)::the tier did not build; see the job log"
         fi
+        exit "$failed"
 
 #---------------------------------------------------------------------------------------------------
 # ThreadSanitizer
@@ -2503,7 +2502,6 @@ jobs:
 #---------------------------------------------------------------------------------------------------
 
   sanitize-tsan:
-    continue-on-error: true
     runs-on: ubuntu-24.04
     name: '🧫 Sanitizers (TSan, Pro)'
     permissions:
@@ -2582,16 +2580,16 @@ jobs:
       run: ctest --test-dir build/tsan --output-on-failure
 
     #
-    # Same contract as the ASan leg: the job is green by construction, the annotation is the
-    # signal
+    # Same contract as the ASan leg: the annotation names the finding, then fails the job
     #
     - name: '⚠️ Annotate sanitizer findings'
       if: always()
       run: |
         if [ "${{steps.tsan_ctest.outcome}}" = "failure" ]; then
-          echo "::warning title=TSan (ctest)::the suites reported findings; see the job log"
+          echo "::error title=TSan (ctest)::the suites reported findings; see the job log"
+          exit 1
         elif [ "${{job.status}}" = "failure" ]; then
-          echo "::warning title=TSan (build)::the tier did not build; see the job log"
+          echo "::error title=TSan (build)::the tier did not build; see the job log"
         fi
 
 #---------------------------------------------------------------------------------------------------

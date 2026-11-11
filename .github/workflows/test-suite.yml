@@ -309,17 +309,17 @@ jobs:
         done
 
     #
-    # continue-on-error: the suite reports, it does not gate. Nothing waits on this leg, so a
-    # pytest failure must not redden the run; the step outcome still drives the hang capture
-    # below and the warning annotation that follows. timeout-method=signal (POSIX) fails only
-    # the hung test and keeps the suite and its junit XML alive, where the ini default (thread)
-    # kills the whole pytest process; Windows has no SIGALRM, so it stays on thread, and
-    # timeout-minutes is what bounds a fully wedged app now that a hang no longer fast-fails
-    # the run
+    # A failure reddens the run but holds nothing: upload does not wait on this leg, so the
+    # release still ships while the red check says what broke. It was soft from 2026-09-05 to
+    # 2026-11-10 and the round-trip baseline drift sat unseen behind a warning for days; the
+    # runner-timing flakes rerun through conftest's _FLAKY_TESTS instead. The step outcome
+    # drives the hang capture below. timeout-method=signal (POSIX) fails only the hung test and
+    # keeps the suite and its junit XML alive, where the ini default (thread) kills the whole
+    # pytest process; Windows has no SIGALRM, so it stays on thread, and timeout-minutes bounds
+    # a fully wedged app
     #
     - name: '🧪 Run tests'
       id: run_tests
-      continue-on-error: true
       timeout-minutes: 90
       env:
         PYTHONIOENCODING: utf-8
@@ -332,13 +332,12 @@ jobs:
           -q --tb=line --timeout=60 --junit-xml=test-results.xml
 
     #
-    # The job stays green on a pytest failure, so the failure has to be visible somewhere other
-    # than the step log: one annotation per leg, pointing at the junit XML in the artifact
+    # One annotation per leg on the run summary, pointing at the junit XML in the artifact
     #
     - name: '⚠️ Annotate pytest failures'
       if: always() && steps.run_tests.outcome == 'failure'
       run: |
-        echo "::warning title=pytest (${{ inputs.label }})::the suite reported failures; see test-results.xml in the pytest-results-${{ inputs.label }} artifact"
+        echo "::error title=pytest (${{ inputs.label }})::the suite reported failures; see test-results.xml in the pytest-results-${{ inputs.label }} artifact"
 
     #
     # Only on a test failure: distinguishes a hang from a crash, and for a hang takes the dump
@@ -416,10 +415,11 @@ jobs:
 
     #
     # The audio marker is excluded from the main run: loopback hardware is not guaranteed on a
-    # runner, so this leg reports and never blocks
+    # runner, so this leg reports and never blocks. !cancelled(): it still runs after a failed
+    # main run, whose failure would otherwise skip it
     #
     - name: '🎙 Run audio loopback tests (Linux, non-blocking)'
-      if: inputs.os == 'linux'
+      if: ${{ !cancelled() && inputs.os == 'linux' }}
       continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
