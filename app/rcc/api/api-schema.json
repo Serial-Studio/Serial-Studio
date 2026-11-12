@@ -5559,7 +5559,7 @@
         ]
     },
     {
-        "description": "Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, checkable, color, size, on/offLabel, min/max/step/initialValue, transmitFunction, and the state binding (stateSource with its stateDatasetId or stateTable/stateVariable, stateOnValue, stateConfirmMs) when one is set, and the reply binding (replyTokenDatasetId, replyCodeDatasetId, replyMessageDatasetId, with stateConfirmMs) when one is set. Also returns inputKind (0=text, 1=number; a text field only), decimals (-1 = automatic), units and quantize, the style (0=standard, 1=illuminated button, 2=emergency stop, 3=selector knob) and labels (the selector's comma-separated position labels): a slider, a knob and a number field refuse a value outside minValue to maxValue as out of range, so read these before driving a control. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.",
+        "description": "Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, checkable, color, size, on/offLabel, min/max/step/initialValue, transmitFunction, and the state binding (stateSource with its stateDatasetId or stateTable/stateVariable, stateOnValue, stateConfirmMs) when one is set, and the reply binding (replyTokenDatasetId, replyCodeDatasetId, replyMessageDatasetId, with stateConfirmMs) when one is set. Also returns inputKind (0=text, 1=number; a text field only), decimals (-1 = automatic), units and quantize, the style (0=standard, 1=illuminated button, 2=emergency stop, 3=selector knob, and for a text field 4=readout display, 5=keypad entry, 6=command line, 7=compact) and labels (the selector's comma-separated position labels, springReturn when it returns to initialValue on release): a slider, a knob and a number field refuse a value outside minValue to maxValue as out of range, so read these before driving a control. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.",
         "name": "project.outputWidget.get",
         "properties": {
             "groupId": {
@@ -5577,7 +5577,7 @@
         ]
     },
     {
-        "description": "Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, checkable, color, size, onLabel, offLabel, minValue, maxValue, stepSize, initialValue, stateSource, stateDatasetId, stateTable, stateVariable, stateOnValue, stateConfirmMs, inputKind, decimals, units, quantize, style, labels, replyTokenDatasetId, replyCodeDatasetId, replyMessageDatasetId). style is 0=standard, 1=illuminated and 2=emergency stop for a button (an emergency stop always latches), and 3=selector for a knob, with one detent per stepSize from minValue to maxValue named by labels (comma-separated, one per position); a style the control type does not take reverts to standard. A checkable button latches and transmits 1 (on) / 0 (off) like a toggle, instead of pulsing a single value on click; color is a hex fill override (empty = group accent) and size is 0=small, 1=normal, 2=large, 3=extra large. stateSource binds the displayed state to feedback (0=none, 1=dataset via stateDatasetId, 2=variable via stateTable/stateVariable); stateOnValue is the value that reads as on (empty = any non-zero) and stateConfirmMs how long a request stays outstanding. The reply ids are dataset uniqueIds (-1 = unbound): the device echoes the token transmit(value, token) was given in the token dataset and reports a result code (0 acknowledges, anything else refuses) with an optional message; token and code must both be set. inputKind is 0=text, 1=number for a text field; a number field, slider and knob enforce minValue to maxValue before transmit() runs and refuse a value outside it as out of range, so a transmitFunction needs no range clamp. decimals (-1 = automatic) and units are display only; quantize snaps a typed number field value to stepSize counted from minValue. The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat, each with an optional trailing unit 1..247 to write to another unit on the bus / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.",
+        "description": "Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, checkable, color, size, onLabel, offLabel, minValue, maxValue, stepSize, initialValue, stateSource, stateDatasetId, stateTable, stateVariable, stateOnValue, stateConfirmMs, inputKind, decimals, units, quantize, style, labels, springReturn, replyTokenDatasetId, replyCodeDatasetId, replyMessageDatasetId). style is 0=standard, 1=illuminated and 2=emergency stop for a button (an emergency stop always latches), and 3=selector for a knob, with one detent per stepSize from minValue to maxValue named by labels (comma-separated, one per position) and, with springReturn, going back to initialValue (sent once) when let go. A text field takes 4=readout display and 5=keypad entry (a number field), 6=command line (a text field) and 7=compact; a style its inputKind cannot take draws as standard but is kept. A style the control type does not take reverts to standard. A checkable button latches and transmits 1 (on) / 0 (off) like a toggle, instead of pulsing a single value on click; color is a hex fill override (empty = group accent) and size (a button or a text field) is 0=small, 1=normal, 2=large, 3=extra large. stateSource binds the displayed state to feedback (0=none, 1=dataset via stateDatasetId, 2=variable via stateTable/stateVariable); stateOnValue is the value that reads as on (empty = any non-zero) and stateConfirmMs how long a request stays outstanding. The reply ids are dataset uniqueIds (-1 = unbound): the device echoes the token transmit(value, token) was given in the token dataset and reports a result code (0 acknowledges, anything else refuses) with an optional message; token and code must both be set. inputKind is 0=text, 1=number for a text field; a number field, slider and knob enforce minValue to maxValue before transmit() runs and refuse a value outside it as out of range, so a transmitFunction needs no range clamp. decimals (-1 = automatic) and units are display only; quantize snaps a typed number field value to stepSize counted from minValue. The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat, each with an optional trailing unit 1..247 to write to another unit on the bus / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.",
         "name": "project.outputWidget.update",
         "properties": {
             "groupId": {
@@ -7025,6 +7025,72 @@
         "required": [
             "id",
             "state"
+        ]
+    },
+    {
+        "description": "Show a message box. With wait false (default) it returns at once; with wait true it blocks until the user clicks and returns {button}. Only a control script may wait: a frame parser or transform would stall acquisition.",
+        "name": "ui.window.showMessageBox",
+        "properties": {
+            "buttonLabels": {
+                "description": "Custom captions keyed by button name, e.g. {\"yes\": \"Start\"}",
+                "type": "object"
+            },
+            "buttons": {
+                "description": "Buttons to offer when wait is true (default [\"ok\"])",
+                "items": {
+                    "enum": [
+                        "ok",
+                        "cancel",
+                        "yes",
+                        "no",
+                        "retry",
+                        "abort",
+                        "ignore",
+                        "close",
+                        "save",
+                        "discard",
+                        "apply",
+                        "reset"
+                    ],
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "defaultButton": {
+                "description": "The button Enter presses (one of buttons)",
+                "type": "string"
+            },
+            "icon": {
+                "default": "info",
+                "description": "Icon: info (default), warning, critical, question, or none for the application logo",
+                "enum": [
+                    "info",
+                    "warning",
+                    "critical",
+                    "question",
+                    "none"
+                ],
+                "type": "string"
+            },
+            "informativeText": {
+                "description": "Detail under the headline, plain text (optional)",
+                "type": "string"
+            },
+            "text": {
+                "description": "Headline, plain text",
+                "type": "string"
+            },
+            "title": {
+                "description": "Window title",
+                "type": "string"
+            },
+            "wait": {
+                "description": "Block until a button is clicked and return it (control scripts only)",
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "text"
         ]
     }
 ]

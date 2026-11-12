@@ -3201,3 +3201,11 @@ ui.window.setWindowState = function(id, state) {
   p['state'] = state;
   return apiCall('ui.window.setWindowState', p);
 };
+
+// options.icon: "info" | "warning" | "critical" | "question" | "none"
+ui.window.showMessageBox = function(text, options) {
+  var p = {};
+  p['text'] = text;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('ui.window.showMessageBox', p);
+};

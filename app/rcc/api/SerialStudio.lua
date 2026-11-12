@@ -2878,3 +2878,11 @@ function ui.window.setWindowState(id, state)
   p['state'] = state
   return apiCall('ui.window.setWindowState', p)
 end
+
+-- options.icon: "info" | "warning" | "critical" | "question" | "none"
+function ui.window.showMessageBox(text, options)
+  local p = {}
+  p['text'] = text
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('ui.window.showMessageBox', p)
+end
