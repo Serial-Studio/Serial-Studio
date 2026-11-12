@@ -310,13 +310,14 @@ def write_fixed(
     """Writes the buttons, window controls, placeholder, images and action icons."""
     needed: list[str] = []
     for key, row in table["button"].items():
+        needed.append(f"icons/buttons/{key}")
         if row.source == "drawn":
             svg = (DRAWN / f"{row.ref}.svg").read_bytes()
-            writer.put(f"icons/buttons/{key}.svg", svg, "drawn", FIRST_PARTY, None)
+            writer.put(f"icons/buttons/{key}.svg", svg, "drawn", FIRST_PARTY)
             continue
 
         svg = sources.tabler_svg(row.ref, MONO_COLOR)
-        writer.put(f"icons/buttons/{key}.svg", svg, "tabler", "MIT", None)
+        writer.put(f"icons/buttons/{key}.svg", svg, "tabler", "MIT")
     for key, row in table["fixed"].items():
         svg = sources.tabler_svg(row.ref, MONO_COLOR)
         writer.put(f"icons/{key}.svg", svg, "tabler", "MIT")

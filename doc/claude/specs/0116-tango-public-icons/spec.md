@@ -77,7 +77,9 @@ in its style.
 9. **R9** — In public builds, the single-color widget toolbar icons are drawn from Tabler (MIT)
    and tinted to the theme, so they stay monochrome as spec 0115 requires.
 10. **R10** — The single-color glyphs used in buttons are replaced with Tabler equivalents in
-    every build. The two with no Icons8 signature (the MQTT glyphs) may stay.
+    every build. The two with no Icons8 signature (the MQTT glyphs) may stay. *Amended 2026-11-12
+    by the maintainer: public builds only. Official builds take the buttons from the private art
+    tree again, so the replay dialogs and every other button keep their original glyphs.*
 11. **R11** — In public builds, the icon pack setting offers no Icons8 pack, and a pack selection
     saved by an official build falls back to the free set without an error.
 12. **R12** — Icons without Tango art use a stand-in at cutover. A tracked list names every

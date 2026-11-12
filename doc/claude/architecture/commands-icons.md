@@ -9,7 +9,8 @@ QML surface rewrite.
 ## Icons
 
 **Tree:** `<category>/<tier>/<name>`. Tiers are `16 24 32 48` (design px). The public repo's
-`app/rcc/icons/` holds only `buttons`, `system` and `window` (listed in `rcc.qrc`); every other
+`app/rcc/icons/` holds only `buttons`, `system` and `window` (in `art-free.qrc`, but for the two MQTT
+glyphs in `rcc.qrc`, so official builds take all three from the private tree); every other
 category lives in `app/rcc/iconpacks/{basic,fine-line}/` (Basic = `@1x`/`@2x` PNG pairs in
 `basic.qrc`; `fine-line` = 48 px SVG in `art-free.qrc`) and in the private art checkout (see spec
 0116 below). Categories: `widgets window editor devices panes console database code licensing
@@ -72,10 +73,10 @@ to `app/rcc/iconpacks/basic/`, listed in `app/rcc/basic.qrc`, which every build 
 exactly one art tree is compiled. Official builds take the licensed Office set from the private
 `Serial-Studio/Icons` repository through `SS_ICON_ART_DIR` (a sibling `../Icons` checkout is picked
 up automatically), and `SS_REQUIRE_ICON_ART` makes a missing checkout a configure error. Without it,
-`app/rcc/art-free.qrc` supplies the Tabler window controls, hidden `fine-line` pack, images and the
-action icons. `IconRegistry::locateHouse` serves the house tree, then `fallbackPackId()`, so Basic is
-the default where Office is absent and fills any gap where it is present. `app/rcc/rcc.qrc` lists no
-art except the shared Tabler buttons. Licensed art never enters this repository: `art-verify.py`
+`app/rcc/art-free.qrc` supplies the Tabler buttons and window controls, hidden `fine-line` pack,
+images and the action icons. `IconRegistry::locateHouse` serves the house tree, then
+`fallbackPackId()`, so Basic is the default where Office is absent and fills any gap where it is
+present. `app/rcc/rcc.qrc` lists no art except the two first-party MQTT glyphs. Licensed art never enters this repository: `art-verify.py`
 fails on any art file the manifest does not list. Basic must stay original: a drawing is made from
 the idea it stands for, never from another theme's icon.
 

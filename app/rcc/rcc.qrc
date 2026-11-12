@@ -98,82 +98,8 @@
         <file>sounds/error.wav</file>
         <file>sounds/button.wav</file>
         <file>sounds/toggle.wav</file>
-        <file>icons/buttons/activate.svg</file>
-        <file>icons/buttons/alarm-acknowledge.svg</file>
-        <file>icons/buttons/alarm-annunciator.svg</file>
-        <file>icons/buttons/alarm-mute.svg</file>
-        <file>icons/buttons/alarm-silence.svg</file>
-        <file>icons/buttons/alarm-sound.svg</file>
-        <file>icons/buttons/alarm-test.svg</file>
-        <file>icons/buttons/add-workspace.svg</file>
-        <file>icons/buttons/apply.svg</file>
-        <file>icons/buttons/attach.svg</file>
-        <file>icons/buttons/auto-layout.svg</file>
-        <file>icons/buttons/backward.svg</file>
-        <file>icons/buttons/buy.svg</file>
-        <file>icons/buttons/cancel.svg</file>
-        <file>icons/buttons/center.svg</file>
-        <file>icons/buttons/clear.svg</file>
-        <file>icons/buttons/close.svg</file>
-        <file>icons/buttons/code.svg</file>
-        <file>icons/buttons/collapse-duplicates.svg</file>
-        <file>icons/buttons/color.svg</file>
-        <file>icons/buttons/connected.svg</file>
-        <file>icons/buttons/copy.svg</file>
-        <file>icons/buttons/deactivate.svg</file>
-        <file>icons/buttons/disconnected.svg</file>
-        <file>icons/buttons/download.svg</file>
-        <file>icons/buttons/dropdown.svg</file>
-        <file>icons/buttons/expand.svg</file>
-        <file>icons/buttons/export-csv.svg</file>
-        <file>icons/buttons/falling-edge.svg</file>
-        <file>icons/buttons/forward.svg</file>
-        <file>icons/buttons/freeze.svg</file>
-        <file>icons/buttons/help.svg</file>
-        <file>icons/buttons/html.svg</file>
-        <file>icons/buttons/info.svg</file>
-        <file>icons/buttons/invisible.svg</file>
-        <file>icons/buttons/lemonsqueezy.svg</file>
-        <file>icons/buttons/manual-placement.svg</file>
-        <file>icons/buttons/media-next.svg</file>
-        <file>icons/buttons/media-pause.svg</file>
-        <file>icons/buttons/media-play.svg</file>
-        <file>icons/buttons/media-prev.svg</file>
-        <file>icons/buttons/media-stop.svg</file>
-        <file>icons/buttons/menu.svg</file>
         <file>icons/buttons/mqtt-off.svg</file>
         <file>icons/buttons/mqtt-on.svg</file>
-        <file>icons/buttons/new.svg</file>
-        <file>icons/buttons/open.svg</file>
-        <file>icons/buttons/paypal.svg</file>
-        <file>icons/buttons/pdf.svg</file>
-        <file>icons/buttons/play.svg</file>
-        <file>icons/buttons/plus.svg</file>
-        <file>icons/buttons/print.svg</file>
-        <file>icons/buttons/problems.svg</file>
-        <file>icons/buttons/refresh.svg</file>
-        <file>icons/buttons/rename.svg</file>
-        <file>icons/buttons/report.svg</file>
-        <file>icons/buttons/rising-edge.svg</file>
-        <file>icons/buttons/save.svg</file>
-        <file>icons/buttons/search.svg</file>
-        <file>icons/buttons/select-all.svg</file>
-        <file>icons/buttons/send.svg</file>
-        <file>icons/buttons/sidebar.svg</file>
-        <file>icons/buttons/stopwatch-lap.svg</file>
-        <file>icons/buttons/stopwatch-reset.svg</file>
-        <file>icons/buttons/stopwatch-start.svg</file>
-        <file>icons/buttons/stopwatch-stop.svg</file>
-        <file>icons/buttons/switch.svg</file>
-        <file>icons/buttons/test.svg</file>
-        <file>icons/buttons/trash.svg</file>
-        <file>icons/buttons/unlock.svg</file>
-        <file>icons/buttons/utilities.svg</file>
-        <file>icons/buttons/visible.svg</file>
-        <file>icons/buttons/website.svg</file>
-        <file>icons/buttons/workspace-settings.svg</file>
-        <file>icons/buttons/workspaces.svg</file>
-        <file>icons/buttons/wrench.svg</file>
         <file>images/buy-qr.svg</file>
         <file>images/dialog-banner.svg</file>
         <file>images/materials/brushed-rows.png</file>
