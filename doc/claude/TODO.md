@@ -22,6 +22,11 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 
 ## Code follow-ups
 
+- [ ] MDF4 replay crashes on load for large multi-group recordings: `sizePayloadColumns` in
+  `core/Storage/MDF4/PlayerLoaderWorker.cpp` allocates a dense channels × rows grid before the
+  merge, so ~900 channels over ~1M rows (two 48 kHz stream sources) asks for ~7 GB and the failed
+  allocation ends the process. Needs per-group columns merged at read time, and a size guard that
+  refuses with an error instead of crashing.
 - [ ] Spec 0111 binary lane: it converts each value to text and back, and has no benchmark row.
 - [ ] Spec 0113 T9, deferred 2026-11-10: the `display` surface (black glass behind plots) needs a
   light plot ink (axes, labels, grid) for plot, FFT and multiplot under a glass surface.
