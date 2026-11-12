@@ -503,6 +503,7 @@ static constexpr QLatin1StringView kPlain[] = {
   QLatin1StringView("ui.window.setLayoutPattern"),
   QLatin1StringView("ui.window.setWidgetSetting"),
   QLatin1StringView("ui.window.setWindowState"),
+  QLatin1StringView("ui.window.showMessageBox"),
 };
 // clang-format on
 

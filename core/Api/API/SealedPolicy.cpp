@@ -242,6 +242,7 @@ static constexpr QLatin1StringView kAllowed[] = {
   QLatin1StringView("ui.window.setLayoutPattern"),
   QLatin1StringView("ui.window.setWidgetSetting"),
   QLatin1StringView("ui.window.setWindowState"),
+  QLatin1StringView("ui.window.showMessageBox"),
 };
 
 static constexpr QLatin1StringView kDenied[] = {
