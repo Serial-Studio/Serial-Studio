@@ -128,6 +128,8 @@ qt_add_library(
   Services.cpp
   Api/CommandProtocol.h
   Api/ICommandExecutor.h
+  Api/UserWaitScope.h
+  Api/UserWaitScope.cpp
   IO/IDeviceWriter.h
   IO/IPayloadInjector.h
   IO/FrameConfigBuilder.h

@@ -21,14 +21,67 @@
 
 #include "ApiHandlers/WindowHandler.h"
 
+#include <algorithm>
+#include <iterator>
+#include <QJsonArray>
+#include <QMessageBox>
+#include <QTextDocument>
+
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
 #include "API/SchemaBuilder.h"
+#include "Core/Api/UserWaitScope.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+#include "Misc/Utilities.h"
 #include "UI/Taskbar.h"
 #include "UI/UISessionRegistry.h"
 #include "UI/WindowManager.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief One message box icon the API accepts, by the name a caller passes.
+ */
+struct MessageBoxIcon {
+  QLatin1StringView name;
+  QMessageBox::Icon icon;
+};
+
+/**
+ * @brief One message box button the API accepts, by the name a caller passes and reads back.
+ */
+struct MessageBoxButton {
+  QLatin1StringView name;
+  QMessageBox::StandardButton button;
+};
+
+// clang-format off
+static constexpr MessageBoxIcon kMessageBoxIcons[] = {
+  {QLatin1StringView("info"),     QMessageBox::Information},
+  {QLatin1StringView("warning"),  QMessageBox::Warning    },
+  {QLatin1StringView("critical"), QMessageBox::Critical   },
+  {QLatin1StringView("question"), QMessageBox::Question   },
+  {QLatin1StringView("none"),     QMessageBox::NoIcon     },
+};
+
+static constexpr MessageBoxButton kMessageBoxButtons[] = {
+  {QLatin1StringView("ok"),      QMessageBox::Ok     },
+  {QLatin1StringView("cancel"),  QMessageBox::Cancel },
+  {QLatin1StringView("yes"),     QMessageBox::Yes    },
+  {QLatin1StringView("no"),      QMessageBox::No     },
+  {QLatin1StringView("retry"),   QMessageBox::Retry  },
+  {QLatin1StringView("abort"),   QMessageBox::Abort  },
+  {QLatin1StringView("ignore"),  QMessageBox::Ignore },
+  {QLatin1StringView("close"),   QMessageBox::Close  },
+  {QLatin1StringView("save"),    QMessageBox::Save   },
+  {QLatin1StringView("discard"), QMessageBox::Discard},
+  {QLatin1StringView("apply"),   QMessageBox::Apply  },
+  {QLatin1StringView("reset"),   QMessageBox::Reset  },
+};
+// clang-format on
 
 //--------------------------------------------------------------------------------------------------
 // Helpers
@@ -41,6 +94,85 @@ static API::CommandResponse noSession(const QString& id)
 {
   return API::CommandResponse::makeError(
     id, API::ErrorCode::ExecutionError, QStringLiteral("No dashboard session active"));
+}
+
+/**
+ * @brief The button named @p name, or NoButton when the API does not offer it.
+ */
+[[nodiscard]] static QMessageBox::StandardButton messageBoxButton(const QString& name)
+{
+  for (const auto& entry : kMessageBoxButtons)
+    if (name == entry.name)
+      return entry.button;
+
+  return QMessageBox::NoButton;
+}
+
+/**
+ * @brief The API name of the button the user clicked; "none" when the box closed without one.
+ */
+[[nodiscard]] static QString messageBoxButtonName(int clicked)
+{
+  for (const auto& entry : kMessageBoxButtons)
+    if (clicked == static_cast<int>(entry.button))
+      return QString(entry.name);
+
+  return QStringLiteral("none");
+}
+
+/**
+ * @brief The caller's options for a box that waits: the buttons, the default and the captions.
+ *        A label for a button not offered is an error, since the dialog would have no button to
+ *        put it on.
+ */
+struct MessageBoxChoice {
+  QMessageBox::StandardButtons buttons;
+  QMessageBox::StandardButton defaultButton;
+  ButtonTextMap labels;
+  QString error;
+};
+
+/**
+ * @brief Reads buttons, defaultButton and buttonLabels; on a bad value only error is set.
+ */
+[[nodiscard]] static MessageBoxChoice readMessageBoxChoice(const QJsonObject& params)
+{
+  MessageBoxChoice choice{QMessageBox::NoButton, QMessageBox::NoButton, {}, {}};
+  const auto names = params.value(QStringLiteral("buttons")).toArray();
+  for (const auto& name : names) {
+    const auto button = messageBoxButton(name.toString());
+    if (button == QMessageBox::NoButton) {
+      choice.error = QStringLiteral("Unknown button: %1").arg(name.toString());
+      return choice;
+    }
+
+    choice.buttons |= button;
+  }
+
+  if (choice.buttons == QMessageBox::NoButton)
+    choice.buttons = QMessageBox::Ok;
+
+  const auto defaultName = params.value(QStringLiteral("defaultButton")).toString();
+  if (!defaultName.isEmpty()) {
+    choice.defaultButton = messageBoxButton(defaultName);
+    if (!choice.buttons.testFlag(choice.defaultButton)) {
+      choice.error = QStringLiteral("defaultButton is not one of buttons: %1").arg(defaultName);
+      return choice;
+    }
+  }
+
+  const auto labels = params.value(QStringLiteral("buttonLabels")).toObject();
+  for (auto it = labels.constBegin(); it != labels.constEnd(); ++it) {
+    const auto button = messageBoxButton(it.key());
+    if (!choice.buttons.testFlag(button) || !it.value().isString()) {
+      choice.error = QStringLiteral("buttonLabels names a button not offered: %1").arg(it.key());
+      return choice;
+    }
+
+    choice.labels.insert(button, it.value().toString());
+  }
+
+  return choice;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -56,6 +188,7 @@ void API::Handlers::WindowHandler::registerCommands()
   registerStateCommands();
   registerLayoutCommands();
   registerWidgetSettingCommands();
+  registerMessageBoxCommands();
 }
 
 /**
@@ -211,6 +344,63 @@ void API::Handlers::WindowHandler::registerWidgetSettingCommands()
     QStringLiteral("Set a widget setting (params: widgetId string, key string, value any)"),
     swsSchema,
     &setWidgetSetting);
+}
+
+/**
+ * @brief Register the message box command: icon, text, and an optional wait for the user's
+ *        button, which only a control script may request.
+ */
+void API::Handlers::WindowHandler::registerMessageBoxCommands()
+{
+  QJsonArray iconNames;
+  for (const auto& icon : kMessageBoxIcons)
+    iconNames.append(QString(icon.name));
+
+  QJsonArray buttonNames;
+  for (const auto& button : kMessageBoxButtons)
+    buttonNames.append(QString(button.name));
+
+  SchemaProp icon;
+  icon.name        = QStringLiteral("icon");
+  icon.type        = QStringLiteral("string");
+  icon.description = QStringLiteral(
+    "Icon: info (default), warning, critical, question, or none for the application logo");
+  icon.enumValues   = iconNames;
+  icon.defaultValue = QStringLiteral("info");
+
+  const auto buttons = arrayProp(
+    QStringLiteral("buttons"),
+    QStringLiteral("Buttons to offer when wait is true (default [\"ok\"])"),
+    QJsonObject{
+      {QStringLiteral("type"), QStringLiteral("string")},
+      {QStringLiteral("enum"),              buttonNames}
+  });
+
+  API::handlerContext().registry.registerCommand(
+    QStringLiteral("ui.window.showMessageBox"),
+    QStringLiteral("Show a message box. With wait false (default) it returns at once; with wait "
+                   "true it blocks until the user clicks and returns {button}. Only a control "
+                   "script may wait: a frame parser or transform would stall acquisition."),
+    API::makeSchema(
+      {
+        {QStringLiteral("text"), QStringLiteral("string"), QStringLiteral("Headline, plain text")}
+  },
+      {{QStringLiteral("informativeText"),
+        QStringLiteral("string"),
+        QStringLiteral("Detail under the headline, plain text (optional)")},
+       {QStringLiteral("title"), QStringLiteral("string"), QStringLiteral("Window title")},
+       icon,
+       {QStringLiteral("wait"),
+        QStringLiteral("boolean"),
+        QStringLiteral("Block until a button is clicked and return it (control scripts only)")},
+       buttons,
+       {QStringLiteral("defaultButton"),
+        QStringLiteral("string"),
+        QStringLiteral("The button Enter presses (one of buttons)")},
+       {QStringLiteral("buttonLabels"),
+        QStringLiteral("object"),
+        QStringLiteral("Custom captions keyed by button name, e.g. {\"yes\": \"Start\"}")}}),
+    &showMessageBox);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -612,5 +802,71 @@ API::CommandResponse API::Handlers::WindowHandler::setWidgetSetting(const QStrin
   QJsonObject result;
   result[QStringLiteral("widgetId")] = widget_id;
   result[QStringLiteral("key")]      = key;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Message box
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Shows a message box through Misc::Utilities. The text is escaped, so a caller cannot dress
+ *        markup up as the application's own dialog. Without wait it is posted and returns at once;
+ *        with wait it runs modally and answers the clicked button, which only a control script
+ *        may ask for, and nothing dispatched inside that modal loop inherits the permission.
+ */
+API::CommandResponse API::Handlers::WindowHandler::showMessageBox(const QString& id,
+                                                                  const QJsonObject& params)
+{
+  const auto text = params.value(QStringLiteral("text")).toString();
+  if (text.trimmed().isEmpty())
+    return CommandResponse::makeError(id, ErrorCode::MissingParam, QStringLiteral("text is empty"));
+
+  const auto iconName = params.value(QStringLiteral("icon")).toString(QStringLiteral("info"));
+  const auto* iconIt  = std::find_if(std::begin(kMessageBoxIcons),
+                                     std::end(kMessageBoxIcons),
+                                     [&iconName](const auto& e) { return iconName == e.name; });
+  if (iconIt == std::end(kMessageBoxIcons))
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Unknown icon: %1").arg(iconName));
+
+  const auto headline = text.toHtmlEscaped().replace(QLatin1Char('\n'), QStringLiteral("<br>"));
+  const auto detail   = params.value(QStringLiteral("informativeText")).toString();
+  const auto info     = detail.isEmpty() ? QString() : Qt::convertFromPlainText(detail);
+  const auto title    = params.value(QStringLiteral("title")).toString();
+
+  QJsonObject result;
+  if (!params.value(QStringLiteral("wait")).toBool()) {
+    if (params.contains(QStringLiteral("buttons"))
+        || params.contains(QStringLiteral("defaultButton"))
+        || params.contains(QStringLiteral("buttonLabels")))
+      return CommandResponse::makeError(
+        id,
+        ErrorCode::InvalidParam,
+        QStringLiteral("buttons, defaultButton and buttonLabels need wait: true"));
+
+    Misc::Utilities::postMessageBox(headline, info, iconIt->icon, title);
+    result[QStringLiteral("waited")] = false;
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  if (!API::UserWaitScope::allowed())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("wait: true is only available to the control script's setup() and loop(); "
+                     "other callers would block while the dialog is open. Call again without "
+                     "wait."));
+
+  const auto choice = readMessageBoxChoice(params);
+  if (!choice.error.isEmpty())
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, choice.error);
+
+  const API::UserWaitScope noNestedWait(false);
+  const int clicked = Misc::Utilities::showMessageBox(
+    headline, info, iconIt->icon, title, choice.buttons, choice.defaultButton, choice.labels);
+
+  result[QStringLiteral("waited")] = true;
+  result[QStringLiteral("button")] = messageBoxButtonName(clicked);
   return CommandResponse::makeSuccess(id, result);
 }

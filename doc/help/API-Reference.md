@@ -521,7 +521,7 @@ those carry the 🔵 badge inside the section.
 
 When a command is invoked through the AI Assistant rather than a raw TCP/JSON client, it is additionally gated by a five-tier safety system (Safe, Confirm, Always confirm, Device-gated, Blocked); see [The safety tiers](AI-Assistant.md#the-safety-tiers). A batch (`project.batch`, `assistant.project.bulkApply`) takes the strictest tier among its operations: a blocked operation refuses the whole batch before anything runs, an always-confirm operation needs a click even with auto-approve on, a batch inside a batch is refused, and the approval card lists every operation.
 
-**GPL Build (280 commands):**
+**GPL Build (281 commands):**
 - API introspection: 1 command
 - I/O Manager: 8 commands
 - UART Driver: 19 commands
@@ -532,7 +532,7 @@ When a command is invoked through the AI Assistant rather than a raw TCP/JSON cl
 - Console: 16 commands
 - Console Export: 3 commands
 - Dashboard Configuration: 14 commands
-- Dashboard Window: 14 commands
+- Dashboard Window: 15 commands
 - UI Automation: 6 commands
 - Project Management: 75 commands
 - Workspace Management: 20 commands
@@ -4895,7 +4895,7 @@ Load a plugin's state from the project file.
 **Parameters:**
 - `pluginId` (string): Plugin identifier
 
-### Dashboard Window Commands (14)
+### Dashboard Window Commands (15)
 
 The window layer under the dashboard: which group is on screen, how its windows are arranged,
 and the per-widget settings that travel with the layout. Layout work belongs here; the
@@ -4985,6 +4985,44 @@ Set one widget setting.
 - `widgetId` (string): Widget identifier
 - `key` (string): Setting name
 - `value` (any): New value
+
+#### 🟢 `ui.window.showMessageBox`
+Show a message box with an icon. By default it returns at once. With `wait: true` it stays open
+until a button is clicked and returns that button, so a control script can ask the operator and
+act on the answer. Only the control script's `setup()` and `loop()` may wait: a frame parser or
+transform runs on the data path, and `onConnect()` runs while the connection opens, so blocking
+either on a dialog would stall it. Those callers and external clients get an error for
+`wait: true`. Text is shown as plain text; markup is displayed, not rendered.
+
+**Parameters:**
+- `text` (string): Headline
+- `informativeText` (string, optional): Detail under the headline
+- `title` (string, optional): Window title
+- `icon` (string, optional): `info` (default), `warning`, `critical`, `question`, or `none` for
+  the application logo
+- `wait` (bool, optional): Block until a button is clicked and return it. Control script only
+- `buttons` (array of string, optional, needs `wait`): Any of `ok`, `cancel`, `yes`, `no`,
+  `retry`, `abort`, `ignore`, `close`, `save`, `discard`, `apply`, `reset`. Default `["ok"]`
+- `defaultButton` (string, optional, needs `wait`): The button Enter presses; one of `buttons`
+- `buttonLabels` (object, optional, needs `wait`): Captions keyed by button name, for example
+  `{"yes": "Start engine"}`
+
+**Returns:** `waited` (bool) and, when it waited, `button`: the clicked button's name, or `none`
+when the box closed without one.
+
+```javascript
+const reply = apiCall("ui.window.showMessageBox", {
+  text: "Start the engine?",
+  informativeText: "Oil pressure is within limits.",
+  icon: "question",
+  wait: true,
+  buttons: ["yes", "no"],
+  defaultButton: "no",
+  buttonLabels: { yes: "Start" }
+});
+if (reply.ok && reply.result.button === "yes")
+  console.log("Operator confirmed the start");
+```
 
 ### UI Automation Commands (6)
 

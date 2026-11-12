@@ -311,7 +311,8 @@
     "ui.window.setLayout",
     "ui.window.setLayoutPattern",
     "ui.window.setWidgetSetting",
-    "ui.window.setWindowState"
+    "ui.window.setWindowState",
+    "ui.window.showMessageBox"
   ],
   "blocked": [
     "licensing.activate",

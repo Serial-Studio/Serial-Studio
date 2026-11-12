@@ -30,6 +30,7 @@
 
 #include "Core/Api/CommandProtocol.h"
 #include "Core/Api/ICommandExecutor.h"
+#include "Core/Api/UserWaitScope.h"
 #include "Core/IO/IDeviceWriter.h"
 #include "Core/SSAssert.h"
 #include "DataModel/Scripting/ChecksumApi.h"
@@ -60,10 +61,10 @@ static std::atomic<bool> s_shutdownRequested{false};
 DataModel::ControlApiMarshaller::ControlApiMarshaller(QObject* parent) : QObject(parent) {}
 
 /**
- * @brief Runs an apiCall on the GUI thread so handlers never touch GUI objects off-thread. Fails
- *        fast once shutdown is requested. The control script is a first-party privileged surface
- *        (dashboardTick()/tableSet()/device writes at loop rate), so it is deliberately NOT
- *        subject to the per-source apiCall allow-list or rate limiter for untrusted scripts.
+ * @brief Runs an apiCall on the GUI thread; fails fast once shutdown is requested. The control
+ *        script is a first-party privileged surface, so no untrusted-script allow-list or rate
+ *        limit applies, and it alone may wait on the user (a modal message box): its worker owns
+ *        no acquisition work, so parking it behind a dialog stalls nothing else.
  */
 QVariantMap DataModel::ControlApiMarshaller::dispatch(const QString& method,
                                                       const QVariantMap& params)
@@ -78,6 +79,7 @@ QVariantMap DataModel::ControlApiMarshaller::dispatch(const QString& method,
   request.command = method;
   request.params  = QJsonObject::fromVariantMap(params);
 
+  const API::UserWaitScope userWait(true);
   const auto response = DataModel::requireCommandExecutor().execute(request);
 
   QVariantMap out;
@@ -142,8 +144,9 @@ void DataModel::ControlApiBridge::setWatchdog(DataModel::JsWatchdog* watchdog)
 
 /**
  * @brief Implements apiCall(method, params) by blocking onto the GUI-thread marshaller. Fails
- *        fast during shutdown (the GUI loop stops dispatching) and re-arms the watchdog after
- *        the call so GUI-side time is not billed against the script budget.
+ *        fast during shutdown (the GUI loop stops dispatching). The watchdog is disarmed for the
+ *        call and re-armed after it, so GUI-side time (a message box waiting on the user) is not
+ *        billed, and no interrupt from a deadline that passed mid-wait survives the re-arm.
  */
 QVariantMap DataModel::ControlApiBridge::call(const QString& method, const QVariantMap& params)
 {
@@ -153,6 +156,9 @@ QVariantMap DataModel::ControlApiBridge::call(const QString& method, const QVari
 
   if (s_shutdownRequested.load(std::memory_order_acquire))
     return ScriptResult::makeError(QStringLiteral("apiCall: application is shutting down"));
+
+  if (m_watchdog)
+    m_watchdog->disarm();
 
   const bool ok = QMetaObject::invokeMethod(m_marshaller,
                                             "dispatch",

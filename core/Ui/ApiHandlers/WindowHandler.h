@@ -36,6 +36,7 @@ private:
   static void registerStateCommands();
   static void registerLayoutCommands();
   static void registerWidgetSettingCommands();
+  static void registerMessageBoxCommands();
 
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
   static CommandResponse getGroups(const QString& id, const QJsonObject& params);
@@ -51,6 +52,7 @@ private:
   static CommandResponse setLayoutPattern(const QString& id, const QJsonObject& params);
   static CommandResponse getWidgetSettings(const QString& id, const QJsonObject& params);
   static CommandResponse setWidgetSetting(const QString& id, const QJsonObject& params);
+  static CommandResponse showMessageBox(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace API::Handlers

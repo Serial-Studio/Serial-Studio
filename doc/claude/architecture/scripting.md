@@ -462,6 +462,15 @@ reports `published`. (Spec 0023 briefly deferred and coalesced this into the UI-
 that was reverted because it jagged per-frame curves. CSV interval-snapshot mode remains the
 export-rate bound.)
 
+**Waiting on the user (`ui.window.showMessageBox` with `wait: true`).** Only
+`ControlApiMarshaller::dispatch` opens `API::UserWaitScope(true)`, so only setup()/loop() may
+block on a modal dialog; a parser, transform, `onConnect()` or remote client is refused, because
+each sits on a path that must not stall. The handler reopens the scope as false around the modal
+loop, so a command dispatched inside that loop never inherits it. `ControlApiBridge::call`
+disarms the watchdog for every apiCall and re-arms after, or a deadline that passed mid-wait could
+interrupt the engine in the gap inside `arm()`. A new modal command must gate on the same scope.
+Enforced: pytest:test_message_box.py::test_static_only_the_control_script_grants_wait.
+
 ## Control Script — Per-Connection Lifecycle
 
 The control-script lifecycle is per-connection and force-restarted: `ControlScript`
