@@ -7058,7 +7058,7 @@ Serial Studio includes a built-in **MCP (Model Context Protocol) server** that e
 
 ### How It Works
 
-The MCP handler wraps the Serial Studio TCP API (port 7777) in an MCP-compliant interface. Any MCP-capable client can discover and call more than 440 API commands as tools. The same socket serves both protocols: a JSON-RPC 2.0 message is answered as MCP, a `{"command": ...}` envelope as the TCP API.
+The MCP handler wraps the Serial Studio TCP API (port 7777) in an MCP-compliant interface. Any MCP-capable client can discover and call more than 460 API commands as tools. The same socket serves both protocols: a JSON-RPC 2.0 message is answered as MCP, a `{"command": ...}` envelope as the TCP API.
 
 Each tool carries a `title` and the MCP annotations that follow the in-app assistant's safety tiers: `readOnlyHint` on reads and queries, `destructiveHint` on the delete, clear, open-replace, credential and device-control families, and neither on reversible project or application settings. The licensing mutations and the process launcher are not listed. A hint describes a tool; it never authorizes a call, because every call passes the same remote gate and consent prompts as the TCP API. The server answers protocol revisions 2024-11-05, 2025-03-26 and 2025-06-18, echoing the revision the client offers in `initialize` and answering 2025-06-18 to any other.
 
