@@ -381,6 +381,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/EntryListView.qml
   qml/ProjectEditor/Views/TableDelegate.qml
   qml/ProjectEditor/Views/EditorSearchBand.qml
+  qml/ProjectEditor/Views/FolderView.qml
   qml/ProjectEditor/Views/WorkspaceFolderView.qml
   qml/ProjectEditor/Views/GroupsView.qml
   qml/ProjectEditor/Views/GroupFolderView.qml
@@ -473,6 +474,7 @@ set(QML_SOURCES
   qml/Widgets/SpinBox.qml
   qml/Widgets/SubMenuCombo.qml
   qml/Widgets/TaskbarButton.qml
+  qml/Widgets/ThemedPage.qml
   qml/Widgets/Toggle.qml
   qml/Widgets/ToolbarButton.qml
   qml/Widgets/VisualRange.qml

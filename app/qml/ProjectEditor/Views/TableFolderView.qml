@@ -20,273 +20,44 @@
  */
 
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
 
-import SerialStudio
-
-import "../../Widgets" as Widgets
-
-Widgets.Pane {
+FolderView {
   id: root
 
-  implicitWidth: 0
-  implicitHeight: 0
-  icon: Cpp_Misc_IconRegistry.icon("widgets", "folder", 16)
+  addItemIcon: "add-table"
+  folderId: Cpp_JSON_ProjectEditor.selectedTableFolderId
+  folderName: Cpp_JSON_ProjectModel.tableFolderTitle(folderId)
 
-  readonly property bool rtl: Cpp_Misc_Translator.rtl
+  renameText: qsTr("Rename")
+  deleteText: qsTr("Delete")
+  titleColumn: qsTr("Title")
+  fallbackTitle: qsTr("Folder")
+  countColumn: qsTr("Variables")
+  renameToolTip: qsTr("Rename folder")
+  deleteToolTip: qsTr("Delete folder")
+  addFolderText: qsTr("Add Sub-folder")
+  addItemText: qsTr("Add Variables Table")
+  addFolderToolTip: qsTr("Add a sub-folder inside this folder")
+  addItemToolTip: qsTr("Add a Variables table inside this folder")
+  emptyText: qsTr("This folder is empty. Use the toolbar to add a table or sub-folder.")
 
-  property int folderId: Cpp_JSON_ProjectEditor.selectedTableFolderId
-  property string folderName: Cpp_JSON_ProjectModel.tableFolderTitle(folderId)
-  property var contents: []
-  readonly property var filteredContents: {
-    const q = searchBand.query.trim()
-    if (q.length === 0)
-      return contents
-
-    return contents.filter((r) => SerialStudioHelpers.searchMatches(q, String(r.title)))
-  }
-
-  title: folderName.length > 0 ? folderName : qsTr("Folder")
-
-  actionComponent: EditorNavActions {}
-
-  function refresh() {
+  onRefreshRequested: {
     folderName = Cpp_JSON_ProjectModel.tableFolderTitle(folderId)
     contents = Cpp_JSON_ProjectEditor.tableFolderContents(folderId)
   }
-
-  onFolderIdChanged: {
-    searchBand.query = ""
-    Qt.callLater(refresh)
+  onAddItemClicked: Cpp_JSON_ProjectModel.promptAddTableInFolder(folderId)
+  onAddFolderClicked: Cpp_JSON_ProjectModel.promptAddTableFolder(folderId)
+  onRenameClicked: Cpp_JSON_ProjectModel.promptRenameTableFolder(folderId)
+  onDeleteClicked: Cpp_JSON_ProjectModel.confirmDeleteTableFolder(folderId)
+  onEntryClicked: (entry) => {
+    if (entry.isFolder)
+      Cpp_JSON_ProjectEditor.selectTableFolder(entry.id)
+    else
+      Cpp_JSON_ProjectEditor.selectUserTable(entry.path)
   }
-  onVisibleChanged: if (visible) Qt.callLater(refresh)
-  Component.onCompleted: Qt.callLater(refresh)
 
   Connections {
     target: Cpp_JSON_ProjectModel
     function onTablesChanged() { Qt.callLater(root.refresh) }
-  }
-
-  Page {
-    palette.mid: Cpp_ThemeManager.colors["mid"]
-    palette.dark: Cpp_ThemeManager.colors["dark"]
-    palette.text: Cpp_ThemeManager.colors["text"]
-    palette.base: Cpp_ThemeManager.colors["base"]
-    palette.link: Cpp_ThemeManager.colors["link"]
-    palette.light: Cpp_ThemeManager.colors["light"]
-    palette.window: Cpp_ThemeManager.colors["window"]
-    palette.shadow: Cpp_ThemeManager.colors["shadow"]
-    palette.accent: Cpp_ThemeManager.colors["accent"]
-    palette.button: Cpp_ThemeManager.colors["button"]
-    palette.midlight: Cpp_ThemeManager.colors["midlight"]
-    palette.highlight: Cpp_ThemeManager.colors["highlight"]
-    palette.windowText: Cpp_ThemeManager.colors["window_text"]
-    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
-    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
-    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
-    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
-    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
-    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
-    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
-
-    anchors {
-      fill: parent
-      leftMargin: -9
-      topMargin: -16
-      rightMargin: -9
-      bottomMargin: -10
-    }
-
-    ColumnLayout {
-      spacing: 0
-      anchors.fill: parent
-
-      //
-      // Search band: above the secondary toolbar, aligned with the tree search
-      //
-      EditorSearchBand {
-        id: searchBand
-
-        resultCount: list.count
-      }
-
-      //
-      // Secondary toolbar: Add Sub-folder, Add Variables Table, Rename, Delete
-      //
-      Rectangle {
-        id: toolbar
-
-        z: 2
-        Layout.fillWidth: true
-        height: toolbarLayout.implicitHeight + 12
-        color: Cpp_ThemeManager.colors["groupbox_background"]
-
-        Rectangle {
-          height: 1
-          width: parent.width
-          anchors.bottom: parent.bottom
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        RowLayout {
-          id: toolbarLayout
-
-          spacing: 4
-          anchors {
-            margins: 8
-            topMargin: 0
-            bottomMargin: 0
-            left: parent.left
-            right: parent.right
-            verticalCenter: parent.verticalCenter
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Add Sub-folder")
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Add a sub-folder inside this folder")
-            onClicked: Cpp_JSON_ProjectModel.promptAddTableFolder(root.folderId)
-            icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-folder", 24)
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Add Variables Table")
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Add a Variables table inside this folder")
-            onClicked: Cpp_JSON_ProjectModel.promptAddTableInFolder(root.folderId)
-            icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-table", 24)
-          }
-
-          Item { Layout.fillWidth: true }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Rename")
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Rename folder")
-            onClicked: Cpp_JSON_ProjectModel.promptRenameTableFolder(root.folderId)
-            icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename-table", 24)
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Delete")
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Delete folder")
-            onClicked: Cpp_JSON_ProjectModel.confirmDeleteTableFolder(root.folderId)
-            icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete-table", 24)
-          }
-        }
-      }
-
-      //
-      // Header + contents list (folders + tables inside this folder)
-      //
-      Widgets.ProjectTableHeader {
-        Layout.fillWidth: true
-        columns: [
-          { title: qsTr("Title"),    width: 280 },
-          { title: qsTr("Variables"), width: -1 }
-        ]
-      }
-
-      ListView {
-        id: list
-
-        clip: true
-        spacing: 0
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        model: root.filteredContents
-        boundsBehavior: Flickable.StopAtBounds
-
-        ScrollBar.vertical: ScrollBar {
-          policy: ScrollBar.AsNeeded
-        }
-
-        delegate: Widgets.ProjectTableRow {
-          id: itemRow
-
-          MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            onClicked: {
-              if (modelData.isFolder)
-                Cpp_JSON_ProjectEditor.selectTableFolder(modelData.id)
-              else
-                Cpp_JSON_ProjectEditor.selectUserTable(modelData.path)
-            }
-          }
-
-          RowLayout {
-            spacing: 0
-            anchors.fill: parent
-            LayoutMirroring.enabled: root.rtl
-            LayoutMirroring.childrenInherit: true
-
-            Item {
-              Layout.fillHeight: true
-              Layout.preferredWidth: 280
-
-              RowLayout {
-                spacing: 6
-                anchors.fill: parent
-                anchors.leftMargin: 8
-
-                Image {
-                  source: modelData.icon
-                  sourceSize: Qt.size(16, 16)
-                  Layout.alignment: Qt.AlignVCenter
-                }
-
-                Label {
-                  text: modelData.title
-                  elide: Text.ElideRight
-                  Layout.fillWidth: true
-                  color: itemRow.textColor
-                  Layout.alignment: Qt.AlignVCenter
-                  font: Cpp_Misc_CommonFonts.uiFont
-                }
-              }
-            }
-
-            Rectangle {
-              implicitWidth: 1
-              Layout.fillHeight: true
-              color: itemRow.separatorColor
-            }
-
-            Label {
-              leftPadding: 8
-              text: modelData.count
-              Layout.fillWidth: true
-              color: itemRow.textColor
-              Layout.alignment: Qt.AlignVCenter
-              font: Cpp_Misc_CommonFonts.monoFont
-            }
-          }
-        }
-
-        Label {
-          opacity: 0.5
-          width: parent.width * 0.8
-          wrapMode: Label.WordWrap
-          anchors.centerIn: parent
-          visible: list.count === 0 && searchBand.query.trim().length === 0
-          color: Cpp_ThemeManager.colors["text"]
-          font: Cpp_Misc_CommonFonts.uiFont
-          horizontalAlignment: Text.AlignHCenter
-          text: qsTr("This folder is empty. Use the toolbar to add a table or sub-folder.")
-        }
-      }
-    }
   }
 }

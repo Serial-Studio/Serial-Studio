@@ -40,7 +40,7 @@ updated: 2026-10-30
 | C6 | Dashboard widget dedup | — | Dec | not born | `dup` | 1,730 → 1,728 → ≈ 980 |
 | C8 | Ledger + test-tier debt | — | Dec | not born | `ledger`, `skips` | 51/36 → 51/36 → 20/10 |
 | C9 | Singleton static-cache conversion | — | Dec–Jan | not born | `singleton` | 803 → 803 → 600 |
-| C7 | Second dedup family | — | Jan | not born | `dup` | ≈ 980 → — → 865 |
+| C7 | Second dedup family | 0121 (folder views only) | Jan | folder views in tree, rest not born | `dup` | ≈ 980 → 1,270 on 2026-11-13, before C6 → 865 |
 | C3-B | TU excess, `Dashboard.cpp` + `FrameBuilder.cpp` | — | Jan | not born | `tu` | 1,694 → — → 0 |
 
 ## Tasks
