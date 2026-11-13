@@ -2283,3 +2283,83 @@ def test_uart_internal_checks_use_port_open():
         assert not bare_is_open.search(
             body
         ), f"UART::{name} gates on isOpen(); use portOpen()"
+
+
+# ----------------------------------------------------------------------------------
+# R25 -- the session report's JSON data island cannot close its own script element
+# ----------------------------------------------------------------------------------
+
+
+def test_session_report_json_island_escapes_script_breakout():
+    """buildReportDataJson() is substituted raw into the report template's script element, and an
+    HTML parser closes that element at the first closing script tag whatever its type; a dataset
+    title carrying one (titles come from the device or a shared project) would run markup in any
+    browser that opens the exported report. The serialized blob must lose every '<'.
+
+    retire when: a ctest builds a report from a series titled with a closing script tag and
+    asserts the exported HTML holds no markup past the island's own closing tag.
+    """
+    cpp = _read("core/Storage/Sessions/HtmlReport.cpp")
+    body = re.search(
+        r"QString Sessions::HtmlReport::buildReportDataJson\(\) const\n\{\n(.*?)\n\}\n",
+        cpp,
+        re.S,
+    )
+    assert body, "buildReportDataJson not found"
+    snippet = body.group(1)
+
+    escape = r'''replace(QLatin1Char('<'), QStringLiteral("\\u003c"))'''
+    assert escape in snippet, "the JSON island must write '<' as a \\u003c escape"
+    assert snippet.index("toJson(") < snippet.index(
+        escape
+    ), "the escape must run over the serialized document, not over fragments"
+    assert len(re.findall(r"\breturn\b", snippet)) == 1, "one exit, and it is the escaped one"
+
+    blob = json.dumps({"title": "</script><img src=x onerror=1>", "units": "<V>"})
+    escaped = blob.replace("<", "\\u003c")
+    assert "<" not in escaped
+    assert json.loads(escaped) == json.loads(blob), "JSON.parse must still yield the titles"
+
+
+def _html_report_function(cpp: str, signature: str) -> str:
+    """The body of one HtmlReport.cpp function, from its signature to the brace in column 0."""
+    match = re.search(re.escape(signature) + r"\n\{\n(.*?)\n\}\n", cpp, re.S)
+    assert match, f"{signature} not found"
+    return match.group(1)
+
+
+def test_session_report_css_strings_cannot_close_the_style_element():
+    """The print footers land in double-quoted CSS strings inside the report's style element, and
+    the left one carries the document title: a closing style tag in it ends the element, and a raw
+    line break ends the string. Both footers must go through the one escaper that handles both.
+
+    retire when: the ctest named in the R25 test above also exports a hostile document title.
+    """
+    cpp = _read("core/Storage/Sessions/HtmlReport.cpp")
+    escaper = _html_report_function(cpp, "static QString escapeCssString(QString s)")
+    for needle in (r'QStringLiteral("\\3c ")', r'QStringLiteral("\\a ")'):
+        assert needle in escaper, f"escapeCssString lost {needle}"
+
+    left = _html_report_function(
+        cpp, "QString Sessions::HtmlReport::buildPrintFooterLeft() const"
+    )
+    right = _html_report_function(
+        cpp, "QString Sessions::HtmlReport::buildPrintFooterRight() const"
+    )
+    assert "return escapeCssString(" in left, "the document title must leave escaped"
+    assert right.count("escapeCssString(") == 3, "every translated fragment must be escaped"
+
+
+def test_session_report_logo_is_never_inlined_as_markup():
+    """An SVG logo inlined into the page runs whatever script the file carries, in the recipient's
+    browser and in the PDF render page; as an img data URI it is an image and executes nothing.
+
+    retire when: the ctest named in the R25 test above also exports a scripted SVG logo.
+    """
+    cpp = _read("core/Storage/Sessions/HtmlReport.cpp")
+    body = _html_report_function(
+        cpp, "QString Sessions::HtmlReport::buildCoverLogoMarkup() const"
+    )
+    assert "encodeLogoAsDataUri(" in body
+    for raw in ("readResource(", "readAll(", "fromUtf8("):
+        assert raw not in body, f"the logo must not be read as markup ({raw})"

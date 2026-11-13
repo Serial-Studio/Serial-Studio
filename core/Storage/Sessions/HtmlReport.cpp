@@ -81,6 +81,21 @@ static QString escapeHtml(const QString& in)
 }
 
 /**
+ * @brief Escapes text for a double-quoted CSS string inside the report's style element: '<' goes
+ * out as a hex escape because an HTML parser closes that element at the first closing style tag,
+ * and a raw line break would end the string and turn the rest of the text into declarations.
+ */
+static QString escapeCssString(QString s)
+{
+  s.replace(QLatin1Char('\\'), QStringLiteral("\\\\"));
+  s.replace(QLatin1Char('"'), QStringLiteral("\\\""));
+  s.replace(QLatin1Char('<'), QStringLiteral("\\3c "));
+  s.replace(QLatin1Char('\n'), QStringLiteral("\\a "));
+  s.replace(QLatin1Char('\r'), QStringLiteral("\\d "));
+  return s;
+}
+
+/**
  * @brief Formats a double for tabular display (used in the cell text + the
  *        data-sort-value attribute that drives the sortable table comparator).
  */
@@ -308,32 +323,19 @@ QString Sessions::HtmlReport::buildHtml() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Loads the cover logo as inline SVG or a base64 data URI img tag.
+ * @brief Loads the cover logo as a base64 data URI img tag, SVG included: markup inlined into the
+ * page would run any script the file carries, while an image never executes.
  */
 QString Sessions::HtmlReport::buildCoverLogoMarkup() const
 {
   if (m_opts.logoPath.isEmpty() || !QFileInfo::exists(m_opts.logoPath))
     return QString();
 
-  const QFileInfo fi(m_opts.logoPath);
-  const bool isSvg = fi.suffix().compare("svg", Qt::CaseInsensitive) == 0;
-  if (!isSvg) {
-    const QString dataUri = encodeLogoAsDataUri(m_opts.logoPath);
-    if (dataUri.isEmpty())
-      return QString();
+  const QString dataUri = encodeLogoAsDataUri(m_opts.logoPath);
+  if (dataUri.isEmpty())
+    return QString();
 
-    return QStringLiteral("<img src=\"%1\" alt=\"\">").arg(dataUri);
-  }
-
-  QString markup = readResource(m_opts.logoPath);
-  if (!markup.isEmpty())
-    return markup;
-
-  QFile f(m_opts.logoPath);
-  if (f.open(QIODevice::ReadOnly))
-    markup = QString::fromUtf8(f.readAll());
-
-  return markup;
+  return QStringLiteral("<img src=\"%1\" alt=\"\">").arg(dataUri);
 }
 
 /**
@@ -605,7 +607,9 @@ QString Sessions::HtmlReport::buildChartsSection() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Serialises all chart series into a compact JSON blob.
+ * @brief Serialises all chart series into a compact JSON blob with every '<' written as its JSON
+ * unicode escape: the blob lands inside a script element, which an HTML parser closes at the first
+ * closing script tag whatever the element's type, and the titles in it come from the device.
  */
 QString Sessions::HtmlReport::buildReportDataJson() const
 {
@@ -665,7 +669,9 @@ QString Sessions::HtmlReport::buildReportDataJson() const
   root["style"]   = style;
   root["options"] = options;
 
-  return QString::fromUtf8(QJsonDocument(root).toJson(QJsonDocument::Compact));
+  QString json = QString::fromUtf8(QJsonDocument(root).toJson(QJsonDocument::Compact));
+  json.replace(QLatin1Char('<'), QStringLiteral("\\u003c"));
+  return json;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -705,11 +711,9 @@ QString Sessions::HtmlReport::buildPrintFooterLeft() const
     m_opts.documentTitle.isEmpty() ? tr("Session Report") : m_opts.documentTitle;
 
   // code-verify off
-  QString s = QStringLiteral("Serial Studio · %1").arg(docPart);
-  s.replace('\\', QStringLiteral("\\\\"));
-  s.replace('"', QStringLiteral("\\\""));
+  const QString s = QStringLiteral("Serial Studio · %1").arg(docPart);
   // code-verify on
-  return s;
+  return escapeCssString(s);
 }
 
 /**
@@ -718,12 +722,6 @@ QString Sessions::HtmlReport::buildPrintFooterLeft() const
  */
 QString Sessions::HtmlReport::buildPrintFooterRight() const
 {
-  auto cssEscape = [](QString s) {
-    s.replace('\\', QStringLiteral("\\\\"));
-    s.replace('"', QStringLiteral("\\\""));
-    return s;
-  };
-
   QString fallback = QStringLiteral("\"Page \" counter(page) \" of \" counter(pages)");
 
   const QString tmpl = tr("Page %1 of %2");
@@ -732,16 +730,16 @@ QString Sessions::HtmlReport::buildPrintFooterRight() const
   if (p1 < 0 || p2 < 0 || p2 <= p1)
     return fallback;
 
-  const QString before  = cssEscape(tmpl.left(p1));
-  const QString between = cssEscape(tmpl.mid(p1 + 2, p2 - p1 - 2));
-  const QString after   = cssEscape(tmpl.mid(p2 + 2));
+  const QString before  = escapeCssString(tmpl.left(p1));
+  const QString between = escapeCssString(tmpl.mid(p1 + 2, p2 - p1 - 2));
+  const QString after   = escapeCssString(tmpl.mid(p2 + 2));
 
   return QStringLiteral("\"%1\" counter(page) \"%2\" counter(pages) \"%3\"")
     .arg(before, between, after);
 }
 
 /**
- * @brief Encodes a raster image as a ``data:`` URI for inlining into the HTML.
+ * @brief Encodes a raster or SVG image as a ``data:`` URI for inlining into the HTML.
  */
 QString Sessions::HtmlReport::encodeLogoAsDataUri(const QString& path) const
 {
