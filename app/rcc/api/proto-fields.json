@@ -3259,6 +3259,20 @@
       },
       "reserved": [],
       "next": 4
+    },
+    "ui.window.showMessageBox": {
+      "fields": {
+        "buttonLabels": 2,
+        "buttons": 3,
+        "defaultButton": 4,
+        "icon": 5,
+        "informativeText": 6,
+        "text": 7,
+        "title": 8,
+        "wait": 9
+      },
+      "reserved": [],
+      "next": 10
     }
   }
 }

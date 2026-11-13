@@ -213,12 +213,14 @@ def opcua_simulator_process():
 
     Returns a factory `start(port, *flags)` yielding a handle with `.url`, `.stop()` and
     `.restart()`. Skips when the asyncua package is missing. Every instance is stopped at
-    teardown.
+    teardown. Ports stay below 32768: Linux hands out 32768-60999 as ephemeral source ports,
+    and a listener cannot bind one a live connection already holds.
     """
     import os
     import socket
     import subprocess
     import sys
+    import tempfile
 
     try:
         import asyncua  # noqa: F401
@@ -250,6 +252,7 @@ def opcua_simulator_process():
             self.flags = list(flags)
             self.url = f"opc.tcp://127.0.0.1:{port}/serialstudio/"
             self.proc = None
+            self.log = tempfile.TemporaryFile()
             self._launch()
 
         def _launch(self):
@@ -264,7 +267,7 @@ def opcua_simulator_process():
                     *self.flags,
                 ],
                 stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
+                stderr=self.log,
             )
             end = time.time() + 15.0
             while time.time() < end:
@@ -272,10 +275,19 @@ def opcua_simulator_process():
                     return
                 if self.proc.poll() is not None:
                     pytest.fail(
-                        f"simulator exited early with code {self.proc.returncode}"
+                        f"simulator on port {self.port} exited early with code "
+                        f"{self.proc.returncode}; stderr:\n{self._stderr_tail()}"
                     )
                 time.sleep(0.2)
-            pytest.fail(f"simulator did not open port {self.port} within 15 s")
+            pytest.fail(
+                f"simulator did not open port {self.port} within 15 s; "
+                f"stderr:\n{self._stderr_tail()}"
+            )
+
+        def _stderr_tail(self, limit: int = 4000) -> str:
+            self.log.flush()
+            self.log.seek(0)
+            return self.log.read().decode("utf-8", "replace")[-limit:] or "(empty)"
 
         def stop(self):
             if self.proc and self.proc.poll() is None:
@@ -292,7 +304,7 @@ def opcua_simulator_process():
             self.stop()
             self._launch()
 
-    def start(port: int = 48410, *flags):
+    def start(port: int = 18410, *flags):
         handle = Handle(port, flags)
         handles.append(handle)
         return handle

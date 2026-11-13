@@ -626,7 +626,7 @@ class TestOpcUaSimulatorFlags:
         certificate, and trusting it is what lets the credentials through."""
         _require_pro(api_client)
         sim = opcua_simulator_process(
-            48411, "--security", "Basic256Sha256", "--user", "op", "--password", "pw"
+            18411, "--security", "Basic256Sha256", "--user", "op", "--password", "pw"
         )
         policy = "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256"
 
@@ -664,7 +664,7 @@ class TestOpcUaSimulatorFlags:
 
     def test_poll_fallback(self, api_client, clean_state, opcua_simulator_process):
         """R9: a server refusing subscriptions still delivers values through timed reads."""
-        sim = opcua_simulator_process(48412, "--no-subscriptions")
+        sim = opcua_simulator_process(18412, "--no-subscriptions")
         _configure(api_client, sim.url)
         _generate(api_client)
         _connect(api_client)
@@ -684,7 +684,7 @@ class TestOpcUaSimulatorFlags:
         self, api_client, clean_state, opcua_simulator_process
     ):
         """R12/AC6: a dropped server reports disconnected; reconnecting resumes without regeneration."""
-        sim = opcua_simulator_process(48413)
+        sim = opcua_simulator_process(18413)
         _configure(api_client, sim.url)
         _generate(api_client)
         _connect(api_client)
@@ -722,7 +722,7 @@ class TestOpcUaSimulatorFlags:
         self, api_client, clean_state, opcua_simulator_process
     ):
         """A tag the server cannot monitor must be polled, not silently flat-lined."""
-        sim = opcua_simulator_process(48414)
+        sim = opcua_simulator_process(18414)
         tags = SMALL_TAGS + [
             {
                 "id": "ns=2;s=Does.Not.Exist",
@@ -757,7 +757,7 @@ class TestOpcUaSimulatorFlags:
         self, api_client, clean_state, opcua_simulator_process
     ):
         """R9: the status reports the interval the server revised the subscription to."""
-        sim = opcua_simulator_process(48415)
+        sim = opcua_simulator_process(18415)
         _configure(api_client, sim.url)
         api_client.command("io.opcua.setPublishingInterval", {"intervalMs": 20})
         _generate(api_client)
@@ -778,7 +778,7 @@ class TestOpcUaSimulatorFlags:
         self, api_client, clean_state, opcua_simulator_process
     ):
         """A server that stops publishing without closing the socket must not freeze the view."""
-        sim = opcua_simulator_process(48416, "--drop-after", "6")
+        sim = opcua_simulator_process(18416, "--drop-after", "6")
         _configure(api_client, sim.url)
         _generate(api_client)
         _connect(api_client)
@@ -874,7 +874,7 @@ class TestOpcUaSecureChannel:
         """AC7/AC12/AC14: an unknown server certificate is its own distinct verdict, the prompt
         gets the fingerprint, and accepting is what lets the NEXT attempt through."""
         _require_pro(api_client)
-        sim = opcua_simulator_process(48421, "--security", "Basic256Sha256")
+        sim = opcua_simulator_process(18421, "--security", "Basic256Sha256")
         _configure(api_client, sim.url)
         _configure_security(
             api_client,
@@ -922,7 +922,7 @@ class TestOpcUaSecureChannel:
     ):
         """AC6: each supported policy opens in both Sign and Sign & Encrypt."""
         _require_pro(api_client)
-        sim = opcua_simulator_process(48422, "--security", "all")
+        sim = opcua_simulator_process(18422, "--security", "all")
         _configure(api_client, sim.url)
         _configure_security(
             api_client, f"http://opcfoundation.org/UA/SecurityPolicy#{policy}", mode
@@ -954,7 +954,7 @@ class TestOpcUaSecureChannel:
         """AC8: a server with no None endpoint is connectable, which is the whole point of
         owning the stack; the old build could only look at it."""
         _require_pro(api_client)
-        sim = opcua_simulator_process(48423, "--secure-only")
+        sim = opcua_simulator_process(18423, "--secure-only")
         _configure(api_client, sim.url)
         api_client.command("io.opcua.discoverEndpoints")
         rows = _wait(
@@ -988,7 +988,7 @@ class TestOpcUaSecureChannel:
         """AC9: discovery lands on the most secure endpoint the identity can use, and never on a
         deprecated policy by itself."""
         _require_pro(api_client)
-        sim = opcua_simulator_process(48424, "--security", "all")
+        sim = opcua_simulator_process(18424, "--security", "all")
         _configure(api_client, sim.url)
         api_client.command("io.opcua.discoverEndpoints")
         rows = _wait(
@@ -1017,7 +1017,7 @@ class TestOpcUaSecureChannel:
         """
         _require_pro(api_client)
         sim = opcua_simulator_process(
-            48425, "--security", "all", "--user", "op", "--password", "pw"
+            18425, "--security", "all", "--user", "op", "--password", "pw"
         )
 
         _configure(api_client, sim.url, auth_mode=1, user="op", pw="pw")
@@ -1055,7 +1055,7 @@ class TestOpcUaSecureChannel:
 
         _require_pro(api_client)
         sim = opcua_simulator_process(
-            48426, "--security", "all", "--allow-certificate-users"
+            18426, "--security", "all", "--allow-certificate-users"
         )
         _configure(api_client, sim.url)
 
@@ -1102,7 +1102,7 @@ class TestOpcUaSecureChannel:
         trust prompt that could wave it past would be worse than useless."""
         _require_pro(api_client)
         sim = opcua_simulator_process(
-            48428, "--security", "Basic256Sha256", "--cert-expired"
+            18428, "--security", "Basic256Sha256", "--cert-expired"
         )
         _configure(api_client, sim.url)
         _configure_security(
@@ -1143,7 +1143,7 @@ class TestOpcUaSecureChannel:
         The fix is to dial the name it was issued for, which the reason has to say."""
         _require_pro(api_client)
         sim = opcua_simulator_process(
-            48429, "--security", "Basic256Sha256", "--cert-wrong-host"
+            18429, "--security", "Basic256Sha256", "--cert-wrong-host"
         )
         _configure(api_client, sim.url)
         _configure_security(
@@ -1175,9 +1175,9 @@ class TestOpcUaSecureChannel:
 
         reasons = {}
         cases = (
-            ("untrusted", 48430, ()),
-            ("expired", 48431, ("--cert-expired",)),
-            ("hostname", 48432, ("--cert-wrong-host",)),
+            ("untrusted", 18430, ()),
+            ("expired", 18431, ("--cert-expired",)),
+            ("hostname", 18432, ("--cert-wrong-host",)),
         )
         for label, port, extra in cases:
             sim = opcua_simulator_process(port, "--security", "Basic256Sha256", *extra)
@@ -1213,7 +1213,7 @@ class TestOpcUaSecureChannel:
 
         _require_pro(api_client)
         sim = opcua_simulator_process(
-            48427, "--security", "all", "--user", "op", "--password", "pw"
+            18427, "--security", "all", "--user", "op", "--password", "pw"
         )
 
         _configure(api_client, sim.url, auth_mode=1, user="op", pw="pw")
