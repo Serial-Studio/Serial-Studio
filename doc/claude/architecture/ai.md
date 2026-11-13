@@ -239,6 +239,23 @@ can actually hold instead of letting the server do it.
   refuses symlinks and non-existent paths, cleared on conversation reset); dropped paths **never**
   widen the write root. Slice, file and scan sizes, entry counts and recursion depth are all
   capped by named constants.
+- **Attachments (spec 0122)**: the grant alone tells the model nothing, so `Assistant` queues
+  each attached path (`AttachmentResolver::probe` decides the kind from the first bytes) and
+  sends the queue with the next message. A PDF, an image or a text file up to 256 KB enters the
+  history as a **reference block** (`{"type":"attachment", name, kind, media_type, bytes,
+  path}`); a folder or a larger text file is named by absolute path in the message text
+  (`withPathNote`). **Encoded bytes never enter the history, the transcript rows or the chat
+  file.** `Conversation::issueRequest` passes the budgeted history through
+  `AttachmentResolver::resolve`, which reads each file through `FileSandbox::readAttachment`
+  per request and hands the provider translators a block carrying `_data` with the path
+  removed, or a one-line text note when the provider lacks the kind (`pdfInput` / `imageInput`
+  in `ProviderCapabilities`), the permission is gone or the 12 MB request cap ran out. The
+  three shapes live in `ProviderJson` (`anthropicAttachment`, `geminiAttachment`,
+  `chatCompletionsAttachment`). `TokenBudget` counts a reference by
+  `AttachmentBlock::estimateTokens`, a per-byte guess, not by its JSON length. Only a user
+  gesture attaches: no command, tool or remote client can. Attachments are not passed through
+  `Redactor`. `Assistant::attachmentProblem()` is both what the panel shows and what
+  `sendMessage()` refuses on.
 - **The source root (spec 0078)** is a third, read-only root: the Pro build compiles the
   hand-written text sources of its own tree into the executable as a resource tree at
   `:/source` (`app/CMakeLists.txt`, configure-time glob over explicit root and extension
@@ -275,7 +292,8 @@ for the same reason: long conversations degrade silently.
 ## Test Coverage
 
 ctest suites (`app/tests/`): `tst_sse_event_reader`, `tst_redactor`, `tst_sentinel_probe`,
-`tst_file_sandbox` (roots, traversal, dropped-path allowlist, search, the source root behind the
+`tst_file_sandbox` (roots, traversal, dropped-path allowlist, attachment kinds and resolution,
+search, the source root behind the
 `source/` prefix with its read-only refusal and opt-in search scope, **and** the async worker
 lane's generation echo), `tst_help_fetcher` (bare names and the help.json fallback at the build's
 commit ref, the `master` fallback, full-URL passthrough, the unchanged allowlist),

@@ -48,6 +48,8 @@ public:
   [[nodiscard]] QJsonObject remove(const QJsonObject& args) const;
 
   [[nodiscard]] QString registerDroppedPath(const QString& localPath);
+  [[nodiscard]] QByteArray readAttachment(const QString& path, qint64 maxBytes) const;
+  void unregisterDroppedPath(const QString& canonical);
   void clearDroppedPaths();
   void setSourceRoot(const QString& root);
 

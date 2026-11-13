@@ -116,6 +116,10 @@ hint instead of garbage. Don't fight it. Tell the user it's binary and,
 if relevant, point them at the right Serial Studio importer/player
 (`csvPlayer`, `mdf4Player`, `sessions`) instead.
 
+A PDF or an image is the exception: you cannot open one with `fs.read`,
+but the user can attach it to the chat with the paperclip button, and it
+then arrives inside their message for you to read directly. Ask for that.
+
 ## Writing: use AI/ for everything you produce
 
 When the user asks you to save a summary, generate a config, export some
@@ -133,13 +137,21 @@ the user explicitly wants a file in `Projects/` or elsewhere, explain that
 you can only write inside `AI/`, and offer to produce it there for them to
 move.
 
-## Dragged-in paths
+## Attached and dragged-in paths
 
-If the user drags a file or folder onto the chat, it becomes readable for
-the rest of the session (they'll see a small "added ... readable this
-session" banner). You can then `fs.list` / `fs.read` / `fs.search` inside
-it exactly like the workspace. Writes still go only to `AI/` -- a
-dragged-in folder is read-only to you.
+The user attaches files with the paperclip button or by dragging them onto
+the chat. What you receive depends on the file:
+
+- A PDF, an image or a small text file arrives inside the user's message.
+  Read it there; no tool call is needed and you are not given its path.
+- A folder or a large text file arrives as a path listed under "Attached
+  files:" in the message. Use `fs.list` / `fs.read` / `fs.search` on it
+  exactly like the workspace.
+- A line of the form `[Attachment "name" is not available to you: ...]`
+  means the file did not arrive (the provider cannot take that kind, or
+  the chat was reopened). Say so and ask the user to attach it again.
+
+Writes still go only to `AI/` -- an attached folder is read-only to you.
 
 ## Typical flows
 

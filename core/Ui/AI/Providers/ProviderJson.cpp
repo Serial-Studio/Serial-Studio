@@ -70,16 +70,128 @@ QString AI::ProviderJson::flattenSystemBlocks(const QJsonArray& blocks)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Splits Anthropic content blocks into OpenAI text / tool_calls / tool messages.
+ * @brief Text stand-in for an attachment block that reached a translator without its bytes.
+ */
+static QString missingAttachmentText(const QJsonObject& block)
+{
+  return QStringLiteral("[Attachment \"%1\" was not sent.]")
+    .arg(block.value(QStringLiteral("name")).toString());
+}
+
+/**
+ * @brief Translates a resolved attachment block into Anthropic's document or image block.
+ */
+QJsonObject AI::ProviderJson::anthropicAttachment(const QJsonObject& block)
+{
+  const auto data = block.value(QStringLiteral("_data")).toString();
+  QJsonObject out;
+  if (data.isEmpty()) {
+    out[QStringLiteral("type")] = QStringLiteral("text");
+    out[QStringLiteral("text")] = missingAttachmentText(block);
+    return out;
+  }
+
+  QJsonObject source;
+  source[QStringLiteral("type")]       = QStringLiteral("base64");
+  source[QStringLiteral("media_type")] = block.value(QStringLiteral("media_type"));
+  source[QStringLiteral("data")]       = data;
+
+  const bool is_pdf = block.value(QStringLiteral("kind")).toString() == QStringLiteral("pdf");
+  out[QStringLiteral("type")]   = is_pdf ? QStringLiteral("document") : QStringLiteral("image");
+  out[QStringLiteral("source")] = source;
+  if (is_pdf)
+    out[QStringLiteral("title")] = block.value(QStringLiteral("name"));
+
+  return out;
+}
+
+/**
+ * @brief Translates a resolved attachment block into a Gemini inlineData part.
+ */
+QJsonObject AI::ProviderJson::geminiAttachment(const QJsonObject& block)
+{
+  const auto data = block.value(QStringLiteral("_data")).toString();
+  QJsonObject out;
+  if (data.isEmpty()) {
+    out[QStringLiteral("text")] = missingAttachmentText(block);
+    return out;
+  }
+
+  QJsonObject inline_data;
+  inline_data[QStringLiteral("mimeType")] = block.value(QStringLiteral("media_type"));
+  inline_data[QStringLiteral("data")]     = data;
+  out[QStringLiteral("inlineData")]       = inline_data;
+  return out;
+}
+
+/**
+ * @brief Translates a resolved attachment block into a Chat Completions content part.
+ */
+QJsonObject AI::ProviderJson::chatCompletionsAttachment(const QJsonObject& block)
+{
+  const auto data = block.value(QStringLiteral("_data")).toString();
+  QJsonObject out;
+  if (data.isEmpty()) {
+    out[QStringLiteral("type")] = QStringLiteral("text");
+    out[QStringLiteral("text")] = missingAttachmentText(block);
+    return out;
+  }
+
+  const auto url = QStringLiteral("data:%1;base64,%2")
+                     .arg(block.value(QStringLiteral("media_type")).toString(), data);
+  if (block.value(QStringLiteral("kind")).toString() == QStringLiteral("pdf")) {
+    QJsonObject file;
+    file[QStringLiteral("filename")]  = block.value(QStringLiteral("name"));
+    file[QStringLiteral("file_data")] = url;
+    out[QStringLiteral("type")]       = QStringLiteral("file");
+    out[QStringLiteral("file")]       = file;
+    return out;
+  }
+
+  QJsonObject image;
+  image[QStringLiteral("url")]     = url;
+  out[QStringLiteral("type")]      = QStringLiteral("image_url");
+  out[QStringLiteral("image_url")] = image;
+  return out;
+}
+
+/**
+ * @brief Content of a translated message: the plain string every backend takes, or, when the
+ *        message carries attachments, a parts array with the file parts first and its text last.
+ */
+static QJsonValue messageContent(QJsonArray parts, const QString& text)
+{
+  if (parts.isEmpty())
+    return text;
+
+  if (text.isEmpty())
+    return parts;
+
+  QJsonObject part;
+  part[QStringLiteral("type")] = QStringLiteral("text");
+  part[QStringLiteral("text")] = text;
+  parts.append(part);
+  return parts;
+}
+
+/**
+ * @brief Splits Anthropic content blocks into OpenAI text / tool_calls / tool messages, plus
+ *        the content parts of any resolved attachment.
  */
 static void translateBlocks(const QJsonArray& blocks,
                             QString& textAccumulator,
                             QJsonArray& toolCalls,
-                            QJsonArray& toolResultMessages)
+                            QJsonArray& toolResultMessages,
+                            QJsonArray& attachmentParts)
 {
   for (const auto& bv : blocks) {
     const auto block = bv.toObject();
     const auto type  = block.value(QStringLiteral("type")).toString();
+
+    if (type == QStringLiteral("attachment")) {
+      attachmentParts.append(AI::ProviderJson::chatCompletionsAttachment(block));
+      continue;
+    }
 
     if (type == QStringLiteral("text")) {
       const auto t = block.value(QStringLiteral("text")).toString();
@@ -193,13 +305,15 @@ QJsonArray AI::ProviderJson::translateHistory(const QJsonArray& history,
     QString textAccumulator;
     QJsonArray toolCalls;
     QJsonArray toolResultMessages;
-    translateBlocks(contentValue.toArray(), textAccumulator, toolCalls, toolResultMessages);
+    QJsonArray attachmentParts;
+    translateBlocks(
+      contentValue.toArray(), textAccumulator, toolCalls, toolResultMessages, attachmentParts);
 
-    if (!textAccumulator.isEmpty() || !toolCalls.isEmpty()) {
+    if (!textAccumulator.isEmpty() || !toolCalls.isEmpty() || !attachmentParts.isEmpty()) {
       QJsonObject m;
       m[QStringLiteral("role")] = role;
-      if (!textAccumulator.isEmpty())
-        m[QStringLiteral("content")] = textAccumulator;
+      if (!textAccumulator.isEmpty() || !attachmentParts.isEmpty())
+        m[QStringLiteral("content")] = messageContent(attachmentParts, textAccumulator);
 
       if (!toolCalls.isEmpty())
         m[QStringLiteral("tool_calls")] = toolCalls;

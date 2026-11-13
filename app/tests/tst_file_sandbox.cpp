@@ -23,12 +23,14 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QSignalSpy>
 #include <QStringList>
 #include <QTemporaryDir>
 #include <QTest>
 
+#include "AI/Attachments.h"
 #include "AI/Conversation/AsyncToolRunner.h"
 #include "AI/FileSandbox.h"
 #include "Core/Bus/MessageBus.h"
@@ -73,6 +75,10 @@ private slots:
   void resourceSchemePathIsRefusedForWrite();
   void asyncRunnerTakesOnlyTheReadTools();
   void asyncRunnerReportsResultWithItsGeneration();
+  void attachmentKindComesFromTheBytes();
+  void attachmentReferenceHoldsNoBytes();
+  void attachmentResolvesToEncodedBytes();
+  void attachmentWithoutPermissionBecomesANote();
 
 private:
   QTemporaryDir m_workspace;
@@ -466,6 +472,163 @@ void TstFileSandbox::asyncRunnerReportsResultWithItsGeneration()
   const auto reply = done.at(0).at(3).toJsonObject();
   QVERIFY(reply.value(QStringLiteral("ok")).toBool());
   QVERIFY(reply.value(QStringLiteral("content")).toString().contains(QStringLiteral("needle")));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Provider attachments (spec 0122)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Writes @p bytes to a file under the outside directory and returns its path.
+ */
+static QString writeOutside(const QTemporaryDir& dir, const QString& name, const QByteArray& bytes)
+{
+  const auto path = dir.path() + QLatin1Char('/') + name;
+  QFile file(path);
+  if (file.open(QIODevice::WriteOnly))
+    file.write(bytes);
+
+  return QFileInfo(path).canonicalFilePath();
+}
+
+/**
+ * @brief Wraps reference blocks and a text block into a one-message history.
+ */
+static QJsonArray attachmentHistory(const QJsonArray& references)
+{
+  QJsonObject text;
+  text.insert(QStringLiteral("type"), QStringLiteral("text"));
+  text.insert(QStringLiteral("text"), QStringLiteral("what is the reset value?"));
+
+  QJsonArray content = references;
+  content.append(text);
+
+  QJsonObject message;
+  message.insert(QStringLiteral("role"), QStringLiteral("user"));
+  message.insert(QStringLiteral("content"), content);
+  return QJsonArray{message};
+}
+
+/**
+ * @brief The kind comes from the first bytes: a PDF named .txt is still a PDF, and bytes that
+ *        are neither a known file nor UTF-8 text are refused as Other.
+ */
+void TstFileSandbox::attachmentKindComesFromTheBytes()
+{
+  const auto pdf   = writeOutside(m_outside, QStringLiteral("sheet.txt"), "%PDF-1.7\n%bin\n");
+  const auto png   = writeOutside(m_outside, QStringLiteral("scope.dat"), "\x89PNG\r\n\x1a\nrest");
+  const auto text  = writeOutside(m_outside, QStringLiteral("log.csv"), "t,v\n0,1\n");
+  const auto other = writeOutside(m_outside, QStringLiteral("blob.bin"), QByteArray(64, '\0'));
+
+  QCOMPARE(AI::AttachmentResolver::probe(pdf).kind, AI::AttachmentKind::Pdf);
+  QCOMPARE(AI::AttachmentResolver::probe(pdf).mediaType, QStringLiteral("application/pdf"));
+  QCOMPARE(AI::AttachmentResolver::probe(png).kind, AI::AttachmentKind::Image);
+  QCOMPARE(AI::AttachmentResolver::probe(png).mediaType, QStringLiteral("image/png"));
+  QCOMPARE(AI::AttachmentResolver::probe(text).kind, AI::AttachmentKind::Text);
+  QCOMPARE(AI::AttachmentResolver::probe(other).kind, AI::AttachmentKind::Other);
+  QCOMPARE(AI::AttachmentResolver::probe(m_outside.path()).kind, AI::AttachmentKind::Folder);
+}
+
+/**
+ * @brief The block a chat file stores is a reference: it names the file and its size and holds
+ *        none of its bytes, however large the file is (AC3).
+ */
+void TstFileSandbox::attachmentReferenceHoldsNoBytes()
+{
+  QByteArray body("%PDF-1.7\n");
+  body.append(QByteArray(512 * 1024, 'x'));
+  const auto path = writeOutside(m_outside, QStringLiteral("big.pdf"), body);
+
+  const auto block = AI::AttachmentResolver::toBlock(AI::AttachmentResolver::probe(path));
+  const auto bytes = QJsonDocument(block).toJson(QJsonDocument::Compact);
+
+  QVERIFY(bytes.size() < 10 * 1024);
+  QCOMPARE(block.value(QStringLiteral("kind")).toString(), QStringLiteral("pdf"));
+  QCOMPARE(block.value(QStringLiteral("bytes")).toInteger(), static_cast<qint64>(body.size()));
+  QVERIFY(!block.contains(QStringLiteral("_data")));
+}
+
+/**
+ * @brief An attached PDF resolves to its base64 bytes with the path stripped, and an attached
+ *        text file resolves to a text block holding its contents (AC2).
+ */
+void TstFileSandbox::attachmentResolvesToEncodedBytes()
+{
+  auto& sandbox = AI::FileSandbox::instance();
+  const QByteArray pdf_bytes("%PDF-1.7\nregister map\n");
+  const auto pdf  = writeOutside(m_outside, QStringLiteral("map.pdf"), pdf_bytes);
+  const auto text = writeOutside(m_outside, QStringLiteral("pins.txt"), "PA0 = TX\n");
+  QVERIFY(!sandbox.registerDroppedPath(pdf).isEmpty());
+  QVERIFY(!sandbox.registerDroppedPath(text).isEmpty());
+
+  const QJsonArray references{AI::AttachmentResolver::toBlock(AI::AttachmentResolver::probe(pdf)),
+                              AI::AttachmentResolver::toBlock(AI::AttachmentResolver::probe(text))};
+
+  AI::AttachmentResolver resolver;
+  const auto out     = resolver.resolve(attachmentHistory(references), true, true);
+  const auto content = out.at(0).toObject().value(QStringLiteral("content")).toArray();
+  QCOMPARE(content.size(), 3);
+
+  const auto document = content.at(0).toObject();
+  QCOMPARE(document.value(QStringLiteral("type")).toString(), QStringLiteral("attachment"));
+  QCOMPARE(document.value(QStringLiteral("_data")).toString(),
+           QString::fromLatin1(pdf_bytes.toBase64()));
+  QVERIFY(!document.contains(QStringLiteral("path")));
+
+  const auto inlined = content.at(1).toObject();
+  QCOMPARE(inlined.value(QStringLiteral("type")).toString(), QStringLiteral("text"));
+  QVERIFY(inlined.value(QStringLiteral("text")).toString().contains(QStringLiteral("PA0 = TX")));
+  QVERIFY(inlined.value(QStringLiteral("text")).toString().contains(QStringLiteral("pins.txt")));
+
+  sandbox.clearDroppedPaths();
+}
+
+/**
+ * @brief A reference whose permission is gone (a reopened chat, a removed chip) becomes a
+ *        one-line note, and so does a PDF for a provider that takes none; the user's own text
+ *        block is untouched in both cases (AC3, AC4).
+ */
+void TstFileSandbox::attachmentWithoutPermissionBecomesANote()
+{
+  auto& sandbox  = AI::FileSandbox::instance();
+  const auto pdf = writeOutside(m_outside, QStringLiteral("gone.pdf"), "%PDF-1.7\nx\n");
+  const QJsonArray references{AI::AttachmentResolver::toBlock(AI::AttachmentResolver::probe(pdf))};
+  const auto history = attachmentHistory(references);
+
+  AI::AttachmentResolver resolver;
+  sandbox.clearDroppedPaths();
+  const auto denied = resolver.resolve(history, true, true)
+                        .at(0)
+                        .toObject()
+                        .value(QStringLiteral("content"))
+                        .toArray();
+  QCOMPARE(denied.size(), 2);
+  QCOMPARE(denied.at(0).toObject().value(QStringLiteral("type")).toString(),
+           QStringLiteral("text"));
+  QVERIFY(denied.at(0)
+            .toObject()
+            .value(QStringLiteral("text"))
+            .toString()
+            .contains(QStringLiteral("gone.pdf")));
+  QCOMPARE(denied.at(1).toObject().value(QStringLiteral("text")).toString(),
+           QStringLiteral("what is the reset value?"));
+
+  QVERIFY(!sandbox.registerDroppedPath(pdf).isEmpty());
+  const auto unsupported = resolver.resolve(history, false, true)
+                             .at(0)
+                             .toObject()
+                             .value(QStringLiteral("content"))
+                             .toArray();
+  QCOMPARE(unsupported.at(0).toObject().value(QStringLiteral("type")).toString(),
+           QStringLiteral("text"));
+  QVERIFY(unsupported.at(0)
+            .toObject()
+            .value(QStringLiteral("text"))
+            .toString()
+            .contains(QStringLiteral("PDF")));
+
+  sandbox.unregisterDroppedPath(pdf);
+  QVERIFY(sandbox.readAttachment(pdf, AI::AttachmentResolver::kMaxRequestBytes).isEmpty());
 }
 
 QTEST_GUILESS_MAIN(TstFileSandbox)

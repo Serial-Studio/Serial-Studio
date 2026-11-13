@@ -474,6 +474,40 @@ QString AI::FileSandbox::registerDroppedPath(const QString& localPath)
 }
 
 /**
+ * @brief Withdraws one dropped path: an attachment the user removed stops authorizing reads.
+ */
+void AI::FileSandbox::unregisterDroppedPath(const QString& canonical)
+{
+  const QMutexLocker locker(&m_dropMutex);
+  m_droppedPaths.removeAll(canonical);
+}
+
+/**
+ * @brief Returns the whole of a readable regular file for a provider attachment. Empty when the
+ *        path is no longer authorized, is a symlink, escapes its root after open, or is larger
+ *        than @p maxBytes: the caller sends a note in the file's place.
+ */
+QByteArray AI::FileSandbox::readAttachment(const QString& path, qint64 maxBytes) const
+{
+  const auto resolved = resolveRead(path);
+  if (!resolved.ok)
+    return {};
+
+  const QFileInfo info(resolved.path);
+  if (!info.isFile() || info.isSymLink() || info.size() > maxBytes)
+    return {};
+
+  QFile file(resolved.path);
+  if (!file.open(QIODevice::ReadOnly))
+    return {};
+
+  if (!openedPathWithinRoots(file.fileName(), readRoots()))
+    return {};
+
+  return file.read(maxBytes);
+}
+
+/**
  * @brief Clears every dropped path; called when a conversation is reset.
  */
 void AI::FileSandbox::clearDroppedPaths()
@@ -596,7 +630,9 @@ QJsonObject AI::FileSandbox::read(const QJsonObject& args) const
   if (looksBinary(sniff))
     return failure(QStringLiteral("binary_file"),
                    QStringLiteral("File appears binary. fs.read returns text only; request a "
-                                  "different file or a known text range."));
+                                  "different file or a known text range. For a PDF or an "
+                                  "image, ask the user to attach it to the chat with the "
+                                  "paperclip button: attached files arrive in their message."));
 
   const QByteArray chunk = file.read(limit);
   const qint64 next      = offset + chunk.size();

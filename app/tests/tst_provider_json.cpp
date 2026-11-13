@@ -57,6 +57,11 @@ private slots:
 
   void isTransientHttpStatus_data();
   void isTransientHttpStatus();
+
+  void anthropicAttachmentShapes();
+  void geminiAttachmentShape();
+  void chatCompletionsAttachmentParts();
+  void attachmentWithoutBytesBecomesText();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -384,6 +389,143 @@ void TstProviderJson::isTransientHttpStatus()
   QFETCH(int, status);
   QFETCH(bool, expected);
   QCOMPARE(AI::ProviderJson::isTransientHttpStatus(status), expected);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Attachments (spec 0122)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Builds a resolved attachment block the way AttachmentResolver hands it to a translator.
+ */
+static QJsonObject resolvedAttachment(const QString& kind,
+                                      const QString& mediaType,
+                                      const QString& name,
+                                      const QString& data)
+{
+  QJsonObject extra;
+  extra.insert(QStringLiteral("kind"), kind);
+  extra.insert(QStringLiteral("media_type"), mediaType);
+  extra.insert(QStringLiteral("name"), name);
+  if (!data.isEmpty())
+    extra.insert(QStringLiteral("_data"), data);
+
+  return block(QStringLiteral("attachment"), extra);
+}
+
+/**
+ * @brief Anthropic takes a PDF as a base64 document block and an image as an image block; the
+ *        payload is carried over untouched and no passthrough field survives.
+ */
+void TstProviderJson::anthropicAttachmentShapes()
+{
+  const auto pdf =
+    AI::ProviderJson::anthropicAttachment(resolvedAttachment(QStringLiteral("pdf"),
+                                                             QStringLiteral("application/pdf"),
+                                                             QStringLiteral("a.pdf"),
+                                                             QStringLiteral("JVBERi0=")));
+  QCOMPARE(pdf.value(QStringLiteral("type")).toString(), QStringLiteral("document"));
+  QCOMPARE(pdf.value(QStringLiteral("title")).toString(), QStringLiteral("a.pdf"));
+  QVERIFY(!pdf.contains(QStringLiteral("_data")));
+
+  const auto source = pdf.value(QStringLiteral("source")).toObject();
+  QCOMPARE(source.value(QStringLiteral("type")).toString(), QStringLiteral("base64"));
+  QCOMPARE(source.value(QStringLiteral("media_type")).toString(),
+           QStringLiteral("application/pdf"));
+  QCOMPARE(source.value(QStringLiteral("data")).toString(), QStringLiteral("JVBERi0="));
+
+  const auto image =
+    AI::ProviderJson::anthropicAttachment(resolvedAttachment(QStringLiteral("image"),
+                                                             QStringLiteral("image/png"),
+                                                             QStringLiteral("a.png"),
+                                                             QStringLiteral("iVBORw==")));
+  QCOMPARE(image.value(QStringLiteral("type")).toString(), QStringLiteral("image"));
+  QCOMPARE(
+    image.value(QStringLiteral("source")).toObject().value(QStringLiteral("data")).toString(),
+    QStringLiteral("iVBORw=="));
+}
+
+/**
+ * @brief Gemini takes either kind as an inlineData part keyed by MIME type.
+ */
+void TstProviderJson::geminiAttachmentShape()
+{
+  const auto part =
+    AI::ProviderJson::geminiAttachment(resolvedAttachment(QStringLiteral("pdf"),
+                                                          QStringLiteral("application/pdf"),
+                                                          QStringLiteral("a.pdf"),
+                                                          QStringLiteral("JVBERi0=")));
+  const auto inline_data = part.value(QStringLiteral("inlineData")).toObject();
+  QCOMPARE(inline_data.value(QStringLiteral("mimeType")).toString(),
+           QStringLiteral("application/pdf"));
+  QCOMPARE(inline_data.value(QStringLiteral("data")).toString(), QStringLiteral("JVBERi0="));
+}
+
+/**
+ * @brief Chat Completions takes a PDF as a file part with a data URL and an image as an
+ *        image_url part; a message that carries either gets array content with its text last.
+ */
+void TstProviderJson::chatCompletionsAttachmentParts()
+{
+  QJsonObject text;
+  text.insert(QStringLiteral("text"), QStringLiteral("read this"));
+
+  const QJsonArray content{resolvedAttachment(QStringLiteral("pdf"),
+                                              QStringLiteral("application/pdf"),
+                                              QStringLiteral("a.pdf"),
+                                              QStringLiteral("JVBERi0=")),
+                           resolvedAttachment(QStringLiteral("image"),
+                                              QStringLiteral("image/png"),
+                                              QStringLiteral("a.png"),
+                                              QStringLiteral("iVBORw==")),
+                           block(QStringLiteral("text"), text)};
+
+  const auto out = AI::ProviderJson::translateHistory(
+    QJsonArray{message(QStringLiteral("user"), content)}, QString(), false);
+  QCOMPARE(out.size(), 1);
+
+  const auto parts = out.at(0).toObject().value(QStringLiteral("content")).toArray();
+  QCOMPARE(parts.size(), 3);
+
+  const auto file = parts.at(0).toObject();
+  QCOMPARE(file.value(QStringLiteral("type")).toString(), QStringLiteral("file"));
+  QCOMPARE(
+    file.value(QStringLiteral("file")).toObject().value(QStringLiteral("filename")).toString(),
+    QStringLiteral("a.pdf"));
+  QCOMPARE(
+    file.value(QStringLiteral("file")).toObject().value(QStringLiteral("file_data")).toString(),
+    QStringLiteral("data:application/pdf;base64,JVBERi0="));
+
+  const auto image = parts.at(1).toObject();
+  QCOMPARE(image.value(QStringLiteral("type")).toString(), QStringLiteral("image_url"));
+  QCOMPARE(
+    image.value(QStringLiteral("image_url")).toObject().value(QStringLiteral("url")).toString(),
+    QStringLiteral("data:image/png;base64,iVBORw=="));
+
+  QCOMPARE(parts.at(2).toObject().value(QStringLiteral("type")).toString(), QStringLiteral("text"));
+  QCOMPARE(parts.at(2).toObject().value(QStringLiteral("text")).toString(),
+           QStringLiteral("read this"));
+}
+
+/**
+ * @brief A block that reaches a translator without its bytes becomes text in every shape, so
+ *        no request can carry an empty file.
+ */
+void TstProviderJson::attachmentWithoutBytesBecomesText()
+{
+  const auto bare = resolvedAttachment(
+    QStringLiteral("pdf"), QStringLiteral("application/pdf"), QStringLiteral("a.pdf"), QString());
+
+  const auto anthropic = AI::ProviderJson::anthropicAttachment(bare);
+  QCOMPARE(anthropic.value(QStringLiteral("type")).toString(), QStringLiteral("text"));
+  QVERIFY(anthropic.value(QStringLiteral("text")).toString().contains(QStringLiteral("a.pdf")));
+
+  const auto gemini = AI::ProviderJson::geminiAttachment(bare);
+  QVERIFY(!gemini.contains(QStringLiteral("inlineData")));
+  QVERIFY(gemini.value(QStringLiteral("text")).toString().contains(QStringLiteral("a.pdf")));
+
+  const auto openai = AI::ProviderJson::chatCompletionsAttachment(bare);
+  QCOMPARE(openai.value(QStringLiteral("type")).toString(), QStringLiteral("text"));
 }
 
 QTEST_APPLESS_MAIN(TstProviderJson)

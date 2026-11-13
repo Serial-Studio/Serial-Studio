@@ -43,6 +43,24 @@ namespace AI::ProviderJson {
                                           bool useDeveloperRole);
 
 /**
+ * @brief Translates one resolved attachment block (a PDF or an image with its encoded bytes
+ *        under `_data`) into Anthropic's document or image block; a block without bytes
+ *        becomes a text note, so no translator can emit an empty file.
+ */
+[[nodiscard]] QJsonObject anthropicAttachment(const QJsonObject& block);
+
+/**
+ * @brief The same translation into a Gemini `inlineData` part.
+ */
+[[nodiscard]] QJsonObject geminiAttachment(const QJsonObject& block);
+
+/**
+ * @brief The same translation into a Chat Completions content part: `image_url` with a data
+ *        URL for an image, `file` with `file_data` for a PDF.
+ */
+[[nodiscard]] QJsonObject chatCompletionsAttachment(const QJsonObject& block);
+
+/**
  * @brief Converts AI-tool definitions into the OpenAI tool-choice schema.
  */
 [[nodiscard]] QJsonArray translateTools(const QJsonArray& tools);

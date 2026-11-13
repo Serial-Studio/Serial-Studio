@@ -108,6 +108,8 @@ AI::ProviderCapabilities AI::OpenAIProvider::capabilities() const
   ProviderCapabilities caps;
   caps.promptCaching         = true;
   caps.parallelToolCalls     = true;
+  caps.pdfInput              = true;
+  caps.imageInput            = true;
   caps.developerRole         = prefersDeveloperRole(currentModel());
   caps.needsSmallToolSurface = currentModel().contains(QStringLiteral("mini"))
                             || currentModel().contains(QStringLiteral("4o-mini"));

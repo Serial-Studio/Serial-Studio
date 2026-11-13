@@ -22,13 +22,14 @@
 import QtCore
 import QtQuick
 import QtQuick.Window
+import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../../Widgets" as Widgets
 
 //
-// Assistant composer: one rounded surface with the prompt field on the left and the Clear
+// Assistant composer: one rounded surface with the prompt field on the left and the Attach
 // and Send/Cancel buttons on the right.
 //
 Rectangle {
@@ -41,6 +42,20 @@ Rectangle {
     composer.clear()
   }
 
+  //
+  // Sends the prompt. A message the pending attachments block stays in the field: the
+  // assistant refuses it and the panel shows why.
+  //
+  function send() {
+    if (Cpp_AI_Assistant.busy || composer.text.length === 0)
+      return
+
+    var blocked = Cpp_AI_Assistant.attachmentProblem.length > 0
+    Cpp_AI_Assistant.sendMessage(composer.text)
+    if (!blocked)
+      composer.clear()
+  }
+
 radius: 22
 border.width: 1
 Layout.fillWidth: true
@@ -51,6 +66,27 @@ border.color: composer.activeFocus
              : Cpp_ThemeManager.colors["groupbox_border"]
 
 Behavior on border.color { ColorAnimation { duration: 120 } }
+
+//
+// File picker for the Attach button: each pick joins the same read allowlist as a drop
+//
+FileDialog {
+  id: attachDialog
+
+  title: qsTr("Attach Files")
+  fileMode: FileDialog.OpenFiles
+  onAccepted: {
+    for (var i = 0; i < selectedFiles.length; ++i) {
+      var path = selectedFiles[i].toString()
+      if (Qt.platform.os !== "windows")
+        path = path.replace(/^(file:\/{2})/, "")
+      else
+        path = path.replace(/^(file:\/{3})/, "")
+
+      Cpp_AI_Assistant.addDroppedPath(decodeURIComponent(path))
+    }
+  }
+}
 
 RowLayout {
   spacing: 4
@@ -70,38 +106,28 @@ RowLayout {
     color: Cpp_ThemeManager.colors["text"]
     placeholderText: qsTr("Ask Serial Studio anything…")
     placeholderTextColor: Qt.darker(Cpp_ThemeManager.colors["text"], 1.5)
-    onAccepted: {
-      if (!Cpp_AI_Assistant.busy && composer.text.length > 0) {
-        Cpp_AI_Assistant.sendMessage(composer.text)
-        composer.clear()
-      }
-    }
+    onAccepted: root.send()
   }
 
   //
-  // Trailing Clear (icon-only, dimmed when inactive)
+  // Trailing Attach (icon-only): the visible door to the drag-and-drop file grant
   //
   ToolButton {
-    id: clearButton
+    id: attachButton
 
     display: AbstractButton.IconOnly
     Layout.preferredWidth: 32
     Layout.preferredHeight: 32
     Layout.alignment: Qt.AlignVCenter
-    ToolTip.text: qsTr("Clear conversation")
+    ToolTip.text: qsTr("Attach files (or drag files and folders into the chat)")
     ToolTip.visible: hovered
     ToolTip.delay: 400
-    enabled: !Cpp_AI_Assistant.busy
-             && Cpp_AI_Assistant.conversation
-             && Cpp_AI_Assistant.conversation.messageCount > 0
-    opacity: enabled ? 0.85 : 0.35
+    opacity: 0.85
     icon.width: 16
     icon.height: 16
     icon.color: Cpp_ThemeManager.colors["text"]
-    icon.source: "qrc:/icons/buttons/trash.svg"
-    onClicked: Cpp_AI_Assistant.clearConversation()
-
-    Behavior on opacity { NumberAnimation { duration: 120 } }
+    icon.source: "qrc:/icons/buttons/attach.svg"
+    onClicked: attachDialog.open()
   }
 
   //
@@ -150,12 +176,10 @@ RowLayout {
     }
 
     onClicked: {
-      if (Cpp_AI_Assistant.busy) {
+      if (Cpp_AI_Assistant.busy)
         Cpp_AI_Assistant.cancel()
-      } else if (composer.text.length > 0) {
-        Cpp_AI_Assistant.sendMessage(composer.text)
-        composer.clear()
-      }
+      else
+        root.send()
     }
   }
 }

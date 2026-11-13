@@ -78,6 +78,11 @@ static QJsonArray sanitizeHistoryToolNames(const QJsonArray& history,
       if (dropThinkingBlock(block, model, thinkingOn))
         continue;
 
+      if (block.value(QStringLiteral("type")).toString() == QStringLiteral("attachment")) {
+        newContent.append(AI::ProviderJson::anthropicAttachment(block));
+        continue;
+      }
+
       newContent.append(sanitizeBlock(block));
     }
 
@@ -176,6 +181,8 @@ AI::ProviderCapabilities AI::AnthropicProvider::capabilities() const
   caps.promptCaching          = true;
   caps.thinking               = !currentModel().contains(QStringLiteral("haiku"));
   caps.structuredToolResults  = true;
+  caps.pdfInput               = true;
+  caps.imageInput             = true;
   caps.needsSmallToolSurface  = currentModel().contains(QStringLiteral("haiku"));
   caps.toolResultByteBudget   = caps.needsSmallToolSurface ? 4096 : 8192;
   caps.contextWindowTokens    = 200000;

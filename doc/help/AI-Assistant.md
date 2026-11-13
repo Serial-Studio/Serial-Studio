@@ -121,7 +121,27 @@ New commands default to **Confirm** until they're explicitly tagged, so adding a
 
 The bar at the bottom is the input. Type a prompt and press **Enter** to send. The round button on the far right is **Send**; while the model is generating it becomes **Cancel**, which stops the stream. Whatever it already said stays in the chat, and a thin animated stripe under the message list shows it is still working.
 
-The trash icon (tooltip **Clear conversation**) saves the current chat and starts a new empty one. The old chat stays in the chat sidebar; delete it there to remove its file.
+The paperclip icon (tooltip **Attach files**) opens a file picker; dragging files or folders into the chat does the same thing, and a folder can only be added by dragging. Each attachment appears as a chip above the composer with its kind and size. The chip's close button removes it, and the assistant then loses permission to read that file. Attachments go out with your next message, and the sent message lists them by name.
+
+What the assistant receives depends on the file:
+
+| Attachment | How it is sent |
+|---|---|
+| PDF | The whole file goes to the provider, which reads its text, tables and figures. Anthropic, OpenAI, Gemini and OpenRouter only. |
+| Image (PNG, JPEG, GIF, WebP) | The whole file goes to the provider. Anthropic, OpenAI and Gemini; on OpenRouter, the Anthropic, OpenAI and Google models. |
+| Text file up to 256 KB | Its contents go inside your message, on every provider. |
+| Folder, or a larger text file | Only its path goes in your message. The assistant reads it in slices with its file tool when it needs to. |
+| Anything else (audio, video, office documents, archives) | Not sent. The panel says which file to remove. |
+
+If the selected provider cannot take a pending attachment, the panel shows the reason in red and the message is not sent; remove the file or switch provider. Attachments are limited to 12 MB per message.
+
+Things to know about PDFs:
+
+- **Length.** Providers limit pages and context. A long reference manual can be refused; the error comes back in the chat. Attach the chapter you need when the whole document does not fit.
+- **Cost.** The file is sent again with every later message in the chat, until older turns are trimmed from the history. Start a new chat when you are done with a document.
+- **Reopened chats.** A saved chat keeps the attachment's name, not the file. When you reopen it, or switch to a provider that cannot read the file, the assistant is told the file is no longer attached; attach it again to continue.
+
+Attached files are read-only, and the permission ends when you start a new chat or switch to another one.
 
 ## Chats and memory
 
@@ -135,7 +155,8 @@ Every message you send goes to the provider you chose, so read this before pasti
 
 - **Sent on every turn**: your message, the conversation history so far, the tool catalog, your remembered facts when memory is on, and a snapshot of the live project state (sources, groups, datasets, frame parser code, transforms, and so on; the same JSON your `.ssproj` would contain). Frame parser scripts and transform scripts are part of that snapshot. Secrets are redacted from the snapshot and from tool payloads before they enter the model context.
 - **Not sent**: live telemetry data, your raw serial bytes, your dashboard frames, your CSV/MDF4 logs, your Historian database, the API key for any *other* provider.
-- **Sent when a tool reads it**: the contents of any file the assistant opens, including files you drag into the chat and the application source it reads under `source/`.
+- **Sent with your message**: every PDF, image and small text file you attach, in full and without the credential scrubbing that tool results get. Check a file for secrets before you attach it.
+- **Sent when a tool reads it**: the contents of any file the assistant opens, including attached folders and large text files and the application source it reads under `source/`.
 - **Stored: API key.** Obfuscated in this machine's settings, scrambled with a key derived from the machine fingerprint. That keeps it out of the settings file as plain text and makes it useless on another machine; it is not encryption, so it does not protect the key from someone who already has your user account.
 - **Stored: conversation history.** Local JSON files (one per chat, plus an index) in the app's data directory; they survive restarting the app. Deleting a chat from the chat sidebar deletes its file.
 

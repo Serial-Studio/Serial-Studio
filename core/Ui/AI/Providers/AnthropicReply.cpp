@@ -50,7 +50,7 @@ AI::AnthropicReply::AnthropicReply(QNetworkAccessManager& nam,
   req.setRawHeader("x-api-key", apiKey.toUtf8());
   req.setRawHeader("anthropic-version", "2023-06-01");
   req.setRawHeader("accept", "text/event-stream");
-  req.setTransferTimeout(kInitialResponseTimeoutMs);
+  req.setTransferTimeout(uploadAwareTimeoutMs(kInitialResponseTimeoutMs, requestBody.size()));
   applyStreamPolicy(req);
 
   qCDebug(serialStudioAI) << "POST anthropic key=" << KeyVault::redact(apiKey)

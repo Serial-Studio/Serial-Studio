@@ -115,11 +115,14 @@ AI::OpenAICompatibleVendor AI::OpenAICompatibleProvider::mistral()
 AI::OpenAICompatibleVendor AI::OpenAICompatibleProvider::openRouter()
 {
   OpenAICompatibleVendor vendor;
-  vendor.name            = QStringLiteral("OpenRouter");
-  vendor.endpoint        = QStringLiteral("https://openrouter.ai/api/v1/chat/completions");
-  vendor.keyUrl          = QStringLiteral("https://openrouter.ai/keys");
-  vendor.toolResultBytes = 6144;
-  vendor.modelIds        = {
+  vendor.name               = QStringLiteral("OpenRouter");
+  vendor.endpoint           = QStringLiteral("https://openrouter.ai/api/v1/chat/completions");
+  vendor.keyUrl             = QStringLiteral("https://openrouter.ai/keys");
+  vendor.toolResultBytes    = 6144;
+  vendor.pdfInput           = true;
+  vendor.imageModelPrefixes = {
+    QStringLiteral("anthropic/"), QStringLiteral("openai/"), QStringLiteral("google/")};
+  vendor.modelIds = {
     QStringLiteral("anthropic/claude-haiku-4.5"),
     QStringLiteral("anthropic/claude-sonnet-4.6"),
     QStringLiteral("anthropic/claude-opus-4.8"),
@@ -226,6 +229,10 @@ AI::ProviderCapabilities AI::OpenAICompatibleProvider::capabilities() const
     || (!m_vendor.smallSurfaceMarker.isEmpty() && model.contains(m_vendor.smallSurfaceMarker));
   caps.toolResultByteBudget =
     caps.needsSmallToolSurface ? m_vendor.smallToolResultBytes : m_vendor.toolResultBytes;
+
+  caps.pdfInput = m_vendor.pdfInput;
+  for (const auto& prefix : m_vendor.imageModelPrefixes)
+    caps.imageInput = caps.imageInput || model.startsWith(prefix);
 
   return caps;
 }

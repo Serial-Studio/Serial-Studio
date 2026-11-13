@@ -451,6 +451,7 @@ if(BUILD_COMMERCIAL)
     AI/Tools/ToolSupport.h
     AI/Tools/ToolTileTools.h
     AI/Assistant.h
+    AI/Attachments.h
     AI/DocSearch.h
     AI/Redactor.h
     AI/SseEventReader.h
@@ -536,6 +537,7 @@ if(BUILD_COMMERCIAL)
     AI/Tools/ToolSupport.cpp
     AI/Tools/ToolTileTools.cpp
     AI/Assistant.cpp
+    AI/Attachments.cpp
     AI/DocSearch.cpp
     AI/Redactor.cpp
     AI/SseEventReader.cpp

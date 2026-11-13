@@ -301,8 +301,99 @@ Widgets.SmartDialog {
         }
 
         //
+        // Pending attachments: one chip per file or folder that goes out with the next message
+        //
+        Flow {
+          id: attachmentFlow
+
+          //
+          // Chip text: the name, then what the file is and how large
+          //
+          function chipText(row) {
+            var kinds = {
+              "pdf": qsTr("PDF"),
+              "image": qsTr("Image"),
+              "text": qsTr("Text"),
+              "folder": qsTr("Folder"),
+              "other": qsTr("Unsupported")
+            }
+            var detail = kinds[row.kind] || ""
+            if (row.size.length > 0)
+              detail += ", " + row.size
+
+            return row.name + " (" + detail + ")"
+          }
+
+          spacing: 6
+          Layout.fillWidth: true
+          visible: Cpp_AI_Assistant.pendingAttachments.length > 0
+
+          Repeater {
+            model: Cpp_AI_Assistant.pendingAttachments
+
+            delegate: Rectangle {
+              id: attachmentChip
+
+              required property int index
+              required property var modelData
+
+              radius: 11
+              height: 22
+              border.width: 1
+              width: attachmentRow.implicitWidth + 14
+              color: Cpp_ThemeManager.colors["base"]
+              border.color: modelData.sendable
+                            ? Cpp_ThemeManager.colors["groupbox_border"]
+                            : Cpp_ThemeManager.colors["alarm"]
+
+              Row {
+                id: attachmentRow
+
+                spacing: 2
+                anchors.centerIn: parent
+
+                Label {
+                  color: Cpp_ThemeManager.colors["text"]
+                  anchors.verticalCenter: parent.verticalCenter
+                  text: attachmentFlow.chipText(attachmentChip.modelData)
+                  font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+                }
+
+                ToolButton {
+                  width: 18
+                  height: 18
+                  padding: 0
+                  icon.width: 8
+                  icon.height: 8
+                  ToolTip.delay: 400
+                  ToolTip.visible: hovered
+                  ToolTip.text: qsTr("Remove attachment")
+                  display: AbstractButton.IconOnly
+                  icon.source: "qrc:/icons/buttons/close.svg"
+                  icon.color: Cpp_ThemeManager.colors["text"]
+                  anchors.verticalCenter: parent.verticalCenter
+                  onClicked: Cpp_AI_Assistant.removeAttachment(attachmentChip.index)
+                }
+              }
+            }
+          }
+        }
+
+        //
+        // Why the pending attachments cannot be sent with the selected provider
+        //
+        Label {
+          Layout.fillWidth: true
+          wrapMode: Text.WordWrap
+          text: Cpp_AI_Assistant.attachmentProblem
+          color: Cpp_ThemeManager.colors["alarm"]
+          font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
+          visible: Cpp_AI_Assistant.attachmentProblem.length > 0
+        }
+
+        //
         // Composer: a single rounded surface with the text field on the left
-        // and trailing icon buttons on the right (Clear + Send/Cancel).
+        // and trailing icon buttons on the right (Attach + Send/Cancel).
         //
         AssistantPanel.AssistantComposer {
           id: composerSection

@@ -36,7 +36,9 @@ struct OpenAICompatibleVendor {
   QStringList modelLabels;
   QString thinkingMarker;
   QString smallSurfaceMarker;
+  QStringList imageModelPrefixes;
   bool alwaysSmallSurface  = false;
+  bool pdfInput            = false;
   int toolResultBytes      = 8192;
   int smallToolResultBytes = 4096;
 };

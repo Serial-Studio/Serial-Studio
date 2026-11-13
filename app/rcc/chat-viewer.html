@@ -946,8 +946,13 @@
 
       if (hasText) {
         if (role === "user") {
+          var userText = msg.text;
+          if (msg.attachments && msg.attachments.length > 0 && L10N.attached)
+            userText += "\n\n" + L10N.attached.replace(
+              "{names}", msg.attachments.join(", "));
+
           html += '<div class="bubble user">' +
-                  escapeHtml(msg.text) + '</div>';
+                  escapeHtml(userText) + '</div>';
         } else if (role === "error") {
           html += '<div class="bubble error">' +
                   escapeHtml(msg.text) + '</div>';

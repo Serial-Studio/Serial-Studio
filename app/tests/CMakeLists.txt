@@ -2788,6 +2788,7 @@ qt_add_resources(SS_TEST_ICONS_RCC ${CMAKE_CURRENT_SOURCE_DIR}/support/core-icon
 ss_add_unit_test(tst_file_sandbox
   SOURCES tst_file_sandbox.cpp
           ${SS_CORE_SRC}/Ui/AI/FileSandbox.cpp
+          ${SS_CORE_SRC}/Ui/AI/Attachments.cpp
           ${SS_CORE_SRC}/Ui/AI/Conversation/AsyncToolRunner.cpp
           ${SS_CORE_SRC}/Ui/AI/Tools/ToolFilesystemTools.cpp
           ${SS_CORE_SRC}/Ui/AI/Tools/ToolSchemas.cpp

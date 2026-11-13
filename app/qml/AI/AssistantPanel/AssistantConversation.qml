@@ -347,7 +347,7 @@ Rectangle {
 }
 
 //
-// Drag & drop authorizes any dropped file/folder for sandboxed reads this session
+// Drag & drop attaches any dropped file/folder: readable now, named in the next message
 //
 DropArea {
   id: fileDrop
@@ -446,8 +446,8 @@ DropArea {
       target: Cpp_AI_Assistant
       function onDroppedPathAdded(displayName, isDir) {
         toastLabel.text = isDir
-          ? qsTr("Added folder \"%1\" - readable this session").arg(displayName)
-          : qsTr("Added \"%1\" - readable this session").arg(displayName)
+          ? qsTr("Attached folder \"%1\" - sent with your next message").arg(displayName)
+          : qsTr("Attached \"%1\" - sent with your next message").arg(displayName)
         dropToast.opacity = 1
         toastTimer.restart()
       }

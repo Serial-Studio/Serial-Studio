@@ -95,6 +95,8 @@ AI::ProviderCapabilities AI::GeminiProvider::capabilities() const
 {
   ProviderCapabilities caps;
   caps.structuredToolResults = true;
+  caps.pdfInput              = true;
+  caps.imageInput            = true;
   caps.thinking              = currentModel().contains(QStringLiteral("2.5"));
   caps.needsSmallToolSurface = currentModel().contains(QStringLiteral("flash"));
   caps.toolResultByteBudget  = caps.needsSmallToolSurface ? 4096 : 8192;
@@ -121,6 +123,9 @@ QJsonObject AI::GeminiProvider::translateBlock(const QJsonObject& block)
     textPart[QStringLiteral("text")] = t;
     return textPart;
   }
+
+  if (type == QStringLiteral("attachment"))
+    return ProviderJson::geminiAttachment(block);
 
   if (type == QStringLiteral("tool_use")) {
     QJsonObject fc;

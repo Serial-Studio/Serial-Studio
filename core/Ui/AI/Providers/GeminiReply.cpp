@@ -73,7 +73,7 @@ AI::GeminiReply::GeminiReply(QNetworkAccessManager& nam,
   req.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json"));
   req.setRawHeader("x-goog-api-key", apiKey.toUtf8());
   req.setRawHeader("accept", "text/event-stream");
-  req.setTransferTimeout(kGeminiInitialResponseTimeoutMs);
+  req.setTransferTimeout(uploadAwareTimeoutMs(kGeminiInitialResponseTimeoutMs, requestBody.size()));
   applyStreamPolicy(req);
 
   qCDebug(serialStudioAI) << "POST gemini url=" << redactUrl(endpoint)

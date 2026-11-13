@@ -105,7 +105,7 @@ void AI::OpenAIReply::issueRequest()
     req.setRawHeader(m_authHeader.toUtf8(), QStringLiteral("Bearer %1").arg(m_apiKey).toUtf8());
 
   req.setRawHeader("accept", "text/event-stream");
-  req.setTransferTimeout(m_transferTimeoutMs);
+  req.setTransferTimeout(uploadAwareTimeoutMs(m_transferTimeoutMs, m_requestBody.size()));
   applyStreamPolicy(req);
 
   qCDebug(serialStudioAI) << "POST" << m_providerLabel << m_endpointUrl

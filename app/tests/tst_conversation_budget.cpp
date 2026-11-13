@@ -25,6 +25,7 @@
 #include <QString>
 #include <QTest>
 
+#include "AI/Attachments.h"
 #include "AI/Conversation/HistorySurgery.h"
 #include "AI/Conversation/TokenBudget.h"
 
@@ -55,6 +56,8 @@ private slots:
   void budgeted_alwaysCutsAtAFreshUserTurn();
   void budgeted_isMonotonicInBudget();
   void budgeted_keepsWholeHistoryWithoutAnyBoundary();
+  void attachment_isCountedByItsOwnEstimate();
+  void attachment_turnIsKeptWhileTheWindowAllows();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -271,6 +274,60 @@ void TstConversationBudget::budgeted_keepsWholeHistoryWithoutAnyBoundary()
 
   QCOMPARE(AI::HistorySurgery::firstFreshUserTurnAt(history, 0), -1);
   QCOMPARE(AI::TokenBudget::budgetedHistory(history, 1), history);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Attachments (spec 0122)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Builds a user turn that carries one PDF reference of @p bytes.
+ */
+static QJsonObject turnWithPdf(qint64 bytes)
+{
+  QJsonObject reference;
+  reference[QStringLiteral("type")]  = QStringLiteral("attachment");
+  reference[QStringLiteral("kind")]  = QStringLiteral("pdf");
+  reference[QStringLiteral("name")]  = QStringLiteral("sheet.pdf");
+  reference[QStringLiteral("bytes")] = static_cast<double>(bytes);
+  return message(QStringLiteral("user"),
+                 QJsonArray{reference, textBlock(QStringLiteral("summarize it"))});
+}
+
+/**
+ * @brief A reference block is a few hundred bytes of JSON, but it stands for a file: the
+ *        estimate comes from the file's size, at the PDF ratio, not from the block's length.
+ */
+void TstConversationBudget::attachment_isCountedByItsOwnEstimate()
+{
+  const qint64 file_bytes = 5 * 1024 * 1024;
+  const auto turn         = turnWithPdf(file_bytes);
+
+  QCOMPARE(AI::AttachmentBlock::estimateMessageTokens(turn),
+           static_cast<int>(file_bytes / AI::AttachmentBlock::kPdfBytesPerToken));
+  QVERIFY(AI::TokenBudget::estimateTokens(QJsonArray{turn}) < 200);
+}
+
+/**
+ * @brief An older turn with a 5 MB PDF is kept while the window has room for its estimate and
+ *        is the first thing cut once it does not (AC7).
+ */
+void TstConversationBudget::attachment_turnIsKeptWhileTheWindowAllows()
+{
+  const qint64 file_bytes = 5 * 1024 * 1024;
+  const int file_tokens   = static_cast<int>(file_bytes / AI::AttachmentBlock::kPdfBytesPerToken);
+
+  QJsonArray history;
+  history.append(turnWithPdf(file_bytes));
+  history.append(message(QStringLiteral("assistant"), QJsonArray{textBlock(QStringLiteral("ok"))}));
+  history.append(message(QStringLiteral("user"), QJsonArray{textBlock(QStringLiteral("next"))}));
+
+  QCOMPARE(AI::TokenBudget::budgetedHistory(history, file_tokens + 1000).size(), 3);
+
+  const auto trimmed = AI::TokenBudget::budgetedHistory(history, file_tokens - 1000);
+  QCOMPARE(trimmed.size(), 1);
+  QCOMPARE(trimmed.at(0).toObject().value(QStringLiteral("role")).toString(),
+           QStringLiteral("user"));
 }
 
 QTEST_APPLESS_MAIN(TstConversationBudget)

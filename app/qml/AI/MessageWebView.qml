@@ -62,6 +62,7 @@ Item {
 
     var src = {
       you:           qsTr("You"),
+      attached:      qsTr("Attached: %1").arg("{names}"),
       assistant:     qsTr("Assistant"),
       error:         qsTr("Error"),
       discovery:     qsTr("Discovery"),

@@ -14,6 +14,7 @@
 #include <QJsonDocument>
 #include <QList>
 
+#include "AI/Attachments.h"
 #include "AI/Conversation/HistorySurgery.h"
 #include "Core/SSAssert.h"
 
@@ -52,7 +53,10 @@ QJsonArray AI::TokenBudget::budgetedHistory(const QJsonArray& history, int budge
   QList<qint64> suffix_bytes(n + 1, 0);
   for (auto i = n - 1; i >= 0; --i) {
     const auto bytes = QJsonDocument(QJsonArray{history.at(i)}).toJson(QJsonDocument::Compact);
-    suffix_bytes[i]  = suffix_bytes[i + 1] + bytes.size();
+    const qint64 attached =
+      static_cast<qint64>(AttachmentBlock::estimateMessageTokens(history.at(i).toObject()))
+      * kBytesPerToken;
+    suffix_bytes[i] = suffix_bytes[i + 1] + bytes.size() + attached;
   }
 
   const auto suffixTokens = [&suffix_bytes](int from) {

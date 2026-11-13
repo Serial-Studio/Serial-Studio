@@ -23,10 +23,15 @@ Item {
   property string thinking: ""
   property bool streaming: false
   property var toolCalls: []
+  property var attachments: []
   property real maxWidth: 600
   property var expansionStore: null
 
   readonly property bool isUser: role === "user"
+  readonly property string userDisplayText: attachments.length > 0
+                                     ? text + "\n\n" + qsTr("Attached: %1").arg(
+                                         attachments.join(", "))
+                                     : text
   readonly property bool hasText: text.length > 0
   readonly property bool isError: role === "error"
   readonly property bool hasThinking: thinking.length > 0
@@ -314,7 +319,7 @@ Item {
         anchors.leftMargin: 14
         anchors.rightMargin: 14
         anchors.fill: parent
-        text: root.text
+        text: root.userDisplayText
         font: Cpp_Misc_CommonFonts.uiFont
         textFormat: TextEdit.PlainText
         color: Cpp_ThemeManager.colors["highlighted_text"]
