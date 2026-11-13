@@ -68,8 +68,9 @@ When every task is done, run the Definition of Done in `tasks.md`:
 4. **Sanitize only if a generator input changed** (`api-schema.json`, `dataset.json`, a
    command manifest, `command_safety.json`, doc/help), and only when none of the maintainer's
    own files are dirty: `python scripts/sanitize-commit.py`.
-5. **Hand off.** Name the changed files and the `pytest` targets the maintainer runs against a
-   live app. Leave the edits in the tree; commit only when the maintainer asks, as one commit
+5. **Hand off.** Name the changed files, the `git diff --numstat` net total beside the spec's
+   approved total, and the `pytest` targets the maintainer runs against a live app. Over 1.5
+   times the approved total: stop, amend `spec.md` and set it back to `draft`. Leave the edits in the tree; commit only when the maintainer asks, as one commit
    of your own paths (CLAUDE.md "Commit only when asked").
 6. Set `spec.md` `status: done`.
 

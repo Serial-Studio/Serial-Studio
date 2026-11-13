@@ -83,11 +83,13 @@ over the alternatives.>
 
 ### Affected files
 
-<Every file you expect to create or edit, confirmed by grep. This list is the lane.>
+<Every file you expect to create or edit, confirmed by grep. This list is the lane, and the
+total is the size the maintainer approves: estimate net lines per file.>
 
-| File | Change |
-|------|--------|
-| `core/...` | |
+| File | Change | ± lines |
+|------|--------|---------|
+| `core/...` | | |
+| **Total** | code / tests / docs | |
 
 ### Hotpath & threading impact
 

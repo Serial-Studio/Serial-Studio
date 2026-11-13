@@ -59,9 +59,11 @@ without the codebase; the **Design** half says how. See
    **`ss-new-driver`**.
 
 7. **Diverge, then write the Design.** Sketch 2-3 *named* candidate approaches in chat (a name
-   plus one line each; at least one breaks an assumed constraint), recommend one with the
+   plus one line each; at least one breaks an assumed constraint, and one is the smallest
+   version, about a third of the size, naming the requirement it drops), recommend one with the
    one-line why, then fill the Design sections. **Hotpath & threading impact** is required even
-   when the answer is "none". List concrete file paths confirmed by grep. Put each real tradeoff
+   when the answer is "none". List concrete file paths confirmed by grep, each with a net-lines
+   estimate; the total is the size the maintainer approves. Put each real tradeoff
    in the table with a pick, and map every acceptance criterion to a check.
 
 8. **Resolve ambiguity before finishing.** Where a call is genuinely the maintainer's (scope,
