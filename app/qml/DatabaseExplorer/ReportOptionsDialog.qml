@@ -40,6 +40,14 @@ Widgets.SmartDialog {
   property int sessionId: -1
   property string datasetSearch: ""
 
+  component TabFrame: Rectangle {
+    radius: 2
+    border.width: 1
+    anchors.fill: parent
+    color: Cpp_ThemeManager.colors["groupbox_background"]
+    border.color: Cpp_ThemeManager.colors["groupbox_border"]
+  }
+
   //
   // Persisted branding + layout preferences
   //
@@ -269,13 +277,7 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        Rectangle {
-          radius: 2
-          border.width: 1
-          anchors.fill: parent
-          color: Cpp_ThemeManager.colors["groupbox_background"]
-          border.color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
+        TabFrame {}
 
         GridLayout {
           id: _brandingLayout
@@ -391,13 +393,7 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        Rectangle {
-          radius: 2
-          border.width: 1
-          anchors.fill: parent
-          color: Cpp_ThemeManager.colors["groupbox_background"]
-          border.color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
+        TabFrame {}
 
         GridLayout {
           id: _pageLayout
@@ -509,13 +505,7 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        Rectangle {
-          radius: 2
-          border.width: 1
-          anchors.fill: parent
-          color: Cpp_ThemeManager.colors["groupbox_background"]
-          border.color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
+        TabFrame {}
 
         ColumnLayout {
           id: _sectionsLayout
@@ -579,13 +569,7 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        Rectangle {
-          radius: 2
-          border.width: 1
-          anchors.fill: parent
-          color: Cpp_ThemeManager.colors["groupbox_background"]
-          border.color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
+        TabFrame {}
 
         ColumnLayout {
           spacing: 6

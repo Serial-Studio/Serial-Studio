@@ -145,146 +145,25 @@ Rectangle {
       }
     }
 
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml"
+    Repeater {
+      model: [
+        "Audio", "Modbus", "CANBus", "USB", "HID", "Process",
+        "MQTT", "OpcUa", "S7", "EthernetIp", "Iec104"
+      ]
 
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
+      Loader {
+        required property string modelData
 
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml"
+        asynchronous: true
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        active: Cpp_CommercialBuild
+        source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/" + modelData + ".qml"
 
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
-
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml"
-
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
-
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml"
-
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
-
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml"
-
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
-
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml"
-
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
-
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml"
-
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
-
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml"
-
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
-
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml"
-
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
-
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml"
-
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
-      }
-    }
-
-    Loader {
-      asynchronous: true
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      active: Cpp_CommercialBuild
-      source: "qrc:/serial-studio.com/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml"
-
-      onLoaded: {
-        if (item)
-          root.registerBus(item)
+        onLoaded: {
+          if (item)
+            root.registerBus(item)
+        }
       }
     }
       }

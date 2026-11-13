@@ -50,8 +50,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Protocol") + ":"
     } Widgets.Combo {
-      id: _protocolCombo
-
       objectName: "setup.modbus.protocolIndex"
 
       Layout.fillWidth: true
@@ -74,8 +72,6 @@ Item {
       text: qsTr("Serial Port") + ":"
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } Widgets.Combo {
-      id: _serialPortCombo
-
       objectName: "setup.modbus.serialPortIndex"
 
       Layout.fillWidth: true
@@ -114,6 +110,17 @@ Item {
 
       validator: IntValidator { bottom: 1 }
 
+      function syncRates() {
+        const rates = Cpp_IO_Modbus.baudRateList
+        const current = String(Cpp_IO_Modbus.baudRate)
+        model = rates
+        const idx = rates.indexOf(current)
+        if (idx !== -1)
+          currentIndex = idx
+        else
+          editText = current
+      }
+
       Component.onCompleted: {
         Qt.callLater(() => {
           const current = String(Cpp_IO_Modbus.baudRate)
@@ -134,15 +141,7 @@ Item {
         target: Cpp_IO_Modbus
         function onBaudRateChanged() {
           if (!_baudRateCombo.initializing && Cpp_IO_Modbus.protocolIndex === 0) {
-            const rates = Cpp_IO_Modbus.baudRateList
-            const current = String(Cpp_IO_Modbus.baudRate)
-            _baudRateCombo.model = rates
-
-            const idx = rates.indexOf(current)
-            if (idx !== -1)
-              _baudRateCombo.currentIndex = idx
-            else
-              _baudRateCombo.editText = current
+            _baudRateCombo.syncRates()
           }
         }
       }
@@ -151,15 +150,7 @@ Item {
         target: Cpp_IO_Modbus
         function onProtocolIndexChanged() {
           if (Cpp_IO_Modbus.protocolIndex === 0 && !_baudRateCombo.initializing) {
-            const rates = Cpp_IO_Modbus.baudRateList
-            const current = String(Cpp_IO_Modbus.baudRate)
-            _baudRateCombo.model = rates
-
-            const idx = rates.indexOf(current)
-            if (idx !== -1)
-              _baudRateCombo.currentIndex = idx
-            else
-              _baudRateCombo.editText = current
+            _baudRateCombo.syncRates()
           }
         }
       }
@@ -261,8 +252,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } Widgets.LineField {
-      id: _hostField
-
       objectName: "setup.modbus.host"
 
       Layout.fillWidth: true
@@ -291,8 +280,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } Widgets.LineField {
-      id: _portField
-
       objectName: "setup.modbus.port"
 
       Layout.fillWidth: true
@@ -332,8 +319,6 @@ Item {
     Label {
       text: qsTr("Slave Address") + ":"
     } Widgets.LineField {
-      id: _slaveField
-
       objectName: "setup.modbus.slaveAddress"
 
       Layout.fillWidth: true
@@ -359,8 +344,6 @@ Item {
     Label {
       text: qsTr("Poll Interval (ms)") + ":"
     } Widgets.LineField {
-      id: _intervalField
-
       objectName: "setup.modbus.pollInterval"
 
       Layout.fillWidth: true

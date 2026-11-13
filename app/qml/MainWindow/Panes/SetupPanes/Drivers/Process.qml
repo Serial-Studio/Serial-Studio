@@ -123,10 +123,6 @@ Item {
           if (enabled && text !== Cpp_IO_Process.executable)
             Cpp_IO_Process.executable = text
         }
-        onEditingFinished: {
-          if (enabled && text !== Cpp_IO_Process.executable)
-            Cpp_IO_Process.executable = text
-        }
 
         Connections {
           target: Cpp_IO_Process
@@ -171,10 +167,6 @@ Item {
         if (enabled && text !== Cpp_IO_Process.arguments)
           Cpp_IO_Process.arguments = text
       }
-      onEditingFinished: {
-        if (enabled && text !== Cpp_IO_Process.arguments)
-          Cpp_IO_Process.arguments = text
-      }
 
       Connections {
         target: Cpp_IO_Process
@@ -210,10 +202,6 @@ Item {
         placeholderText: qsTr("(optional) /working/directory")
 
         onTextEdited: {
-          if (enabled && text !== Cpp_IO_Process.workingDir)
-            Cpp_IO_Process.workingDir = text
-        }
-        onEditingFinished: {
           if (enabled && text !== Cpp_IO_Process.workingDir)
             Cpp_IO_Process.workingDir = text
         }
@@ -266,10 +254,6 @@ Item {
         text: Cpp_IO_Process.pipePath
 
         onTextEdited: {
-          if (enabled && text !== Cpp_IO_Process.pipePath)
-            Cpp_IO_Process.pipePath = text
-        }
-        onEditingFinished: {
           if (enabled && text !== Cpp_IO_Process.pipePath)
             Cpp_IO_Process.pipePath = text
         }

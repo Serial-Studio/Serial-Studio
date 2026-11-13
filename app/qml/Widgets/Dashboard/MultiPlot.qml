@@ -125,23 +125,11 @@ Item {
 
     root.restoringSweep = true
 
-    if (s["sweepMode"] !== undefined)
-      root.model.sweepMode = s["sweepMode"]
-
-    if (s["triggerEdge"] !== undefined)
-      root.model.triggerEdge = s["triggerEdge"]
-
-    if (s["triggerLevel"] !== undefined)
-      root.model.triggerLevel = s["triggerLevel"]
-
-    if (s["triggerSource"] !== undefined)
-      root.model.triggerSource = s["triggerSource"]
-
-    if (s["holdoff"] !== undefined)
-      root.model.holdoff = s["holdoff"]
-
-    if (s["sweepTimebase"] !== undefined)
-      root.model.sweepTimebase = s["sweepTimebase"]
+    for (const key of ["sweepMode", "triggerEdge", "triggerLevel", "triggerSource", "holdoff",
+                       "sweepTimebase"]) {
+      if (s[key] !== undefined)
+        root.model[key] = s[key]
+    }
 
     if (root.sweepAllowed && s["sweepEnabled"] !== undefined)
       root.model.sweepEnabled = s["sweepEnabled"]
@@ -341,16 +329,6 @@ Item {
 
     function onUiTimeout() {
       root.redrawCurves()
-    }
-  }
-
-  //
-  // Re-draw whole plot when curves changes
-  //
-  Connections {
-    target: root.model
-
-    function onCurvesChanged() {
     }
   }
 

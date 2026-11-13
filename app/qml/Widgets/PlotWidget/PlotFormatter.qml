@@ -130,13 +130,6 @@ Item {
     return root.engineeringFormat(root.plot.relativeX(value), interval)
   }
 
-  function yTickLabel(value, interval) {
-    if (root.plot.logY)
-      return root.logTickFormat(value, interval)
-
-    return root.engineeringFormat(value, interval)
-  }
-
   //
   // Tick period for the X axis: log axes keep the decade rule, linear axes converge on the
   // measured label width

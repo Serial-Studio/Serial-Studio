@@ -58,34 +58,12 @@ Widgets.SmartDialog {
   // Presets for common two- and three-state signals; each replaces the table.
   //
   readonly property var presets: [
-    {
-      label: qsTr("Off / On"),
-      rows: [{ value: 0, text: qsTr("Off") }, { value: 1, text: qsTr("On") }]
-    },
-    {
-      label: qsTr("Closed / Open"),
-      rows: [{ value: 0, text: qsTr("Closed") }, { value: 1, text: qsTr("Open") }]
-    },
-    {
-      label: qsTr("Stopped / Running"),
-      rows: [{ value: 0, text: qsTr("Stopped") }, { value: 1, text: qsTr("Running") }]
-    },
-    {
-      label: qsTr("No / Yes"),
-      rows: [{ value: 0, text: qsTr("No") }, { value: 1, text: qsTr("Yes") }]
-    },
-    {
-      label: qsTr("Low / Medium / High"),
-      rows: [{ value: 0, text: qsTr("Low") },
-             { value: 1, text: qsTr("Medium") },
-             { value: 2, text: qsTr("High") }]
-    },
-    {
-      label: qsTr("OK / Warning / Fault"),
-      rows: [{ value: 0, text: qsTr("OK") },
-             { value: 1, text: qsTr("Warning") },
-             { value: 2, text: qsTr("Fault") }]
-    }
+    { label: qsTr("Off / On"), words: [qsTr("Off"), qsTr("On")] },
+    { label: qsTr("Closed / Open"), words: [qsTr("Closed"), qsTr("Open")] },
+    { label: qsTr("Stopped / Running"), words: [qsTr("Stopped"), qsTr("Running")] },
+    { label: qsTr("No / Yes"), words: [qsTr("No"), qsTr("Yes")] },
+    { label: qsTr("Low / Medium / High"), words: [qsTr("Low"), qsTr("Medium"), qsTr("High")] },
+    { label: qsTr("OK / Warning / Fault"), words: [qsTr("OK"), qsTr("Warning"), qsTr("Fault")] }
   ]
 
   //
@@ -128,9 +106,9 @@ Widgets.SmartDialog {
       return
 
     rowsModel.clear()
-    const rows = root.presets[index].rows
-    for (let i = 0; i < rows.length; ++i)
-      rowsModel.append({ value: String(rows[i].value), text: rows[i].text })
+    const words = root.presets[index].words
+    for (let i = 0; i < words.length; ++i)
+      rowsModel.append({ value: String(i), text: words[i] })
   }
 
   //

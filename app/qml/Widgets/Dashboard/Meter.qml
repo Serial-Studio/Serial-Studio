@@ -89,6 +89,12 @@ InstrumentBase {
                                    * Cpp_Misc_CommonFonts.widgetFontScale
   readonly property real digitalFontSize: Math.max(11, Math.min(36, Math.min(width, height) / 16))
                                           * Cpp_Misc_CommonFonts.widgetFontScale
+  readonly property string widestValueText: {
+    const a = root.formatValue(root.model.minValue)
+    const b = root.formatValue(root.model.maxValue)
+    const longer = a.length >= b.length ? a : b
+    return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
+  }
 
   //
   // Shared instrument-widget formatters (ValueFormat.js), bound to this model
@@ -622,8 +628,6 @@ InstrumentBase {
               visible: labelBase.showTitle
 
               Text {
-                id: titleText
-
                 font.bold: true
                 elide: Text.ElideRight
                 anchors.fill: parent
@@ -673,14 +677,9 @@ InstrumentBase {
                   id: valueBoxMetrics
 
                   font.bold: true
+                  text: root.widestValueText
                   font.pixelSize: digitalFontSize * 1.05
                   font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-                  text: {
-                    const a = root.formatValue(root.model.minValue)
-                    const b = root.formatValue(root.model.maxValue)
-                    const longer = a.length >= b.length ? a : b
-                    return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
-                  }
                 }
 
                 Text {
@@ -749,8 +748,6 @@ InstrumentBase {
         // Document order is the stacking order: dial furniture below, border above.
         //
         Item {
-          id: needleHolder
-
           width: meterArea.faceR * 2
           height: meterArea.faceR * 2
           x: meterArea.faceCx - width / 2
@@ -858,8 +855,6 @@ InstrumentBase {
         // Pivot hub (unified style across Gauge and Meter)
         //
         Rectangle {
-          id: pivotHub
-
           x: meterArea.faceCx - width / 2
           y: meterArea.faceCy - height / 2
           width: Math.max(10, meterArea.faceR * 0.11)
@@ -945,13 +940,8 @@ InstrumentBase {
 
         font.bold: true
         font.pixelSize: 100
+        text: root.widestValueText
         font.family: Cpp_Misc_CommonFonts.monoFont.family
-        text: {
-          const a = root.formatValue(root.model.minValue)
-          const b = root.formatValue(root.model.maxValue)
-          const longer = a.length >= b.length ? a : b
-          return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
-        }
       }
 
       readonly property real availableW: Math.max(0, width  - 32)

@@ -22,6 +22,16 @@ Widgets.SmartDialog {
   objectName: "macros"
 
   //
+  // Compact icon-only toolbar button for the terminal and script panes
+  //
+  component TinyButton: Widgets.IconButton {
+    iconSize: 16
+    implicitHeight: 24
+    Layout.maximumWidth: 24
+    Layout.alignment: Qt.AlignVCenter
+  }
+
+  //
   // Window geometry & title
   //
   fixedSize: false
@@ -832,26 +842,18 @@ Widgets.SmartDialog {
                       }
                     }
 
-                    Widgets.IconButton {
-                      iconSize: 16
-                      implicitHeight: 24
-                      Layout.maximumWidth: 24
+                    TinyButton {
                       opacity: enabled ? 1 : 0.5
                       ToolTip.text: qsTr("Run command")
-                      Layout.alignment: Qt.AlignVCenter
                       onClicked: terminalPane.runLine()
                       icon.source: "qrc:/icons/buttons/send.svg"
                       enabled: commandInput.text.trim().length > 0
                     }
 
-                    Widgets.IconButton {
-                      iconSize: 16
-                      implicitHeight: 24
-                      Layout.maximumWidth: 24
+                    TinyButton {
                       opacity: enabled ? 1 : 0.5
                       onClicked: scrollback.clear()
                       enabled: scrollback.length > 0
-                      Layout.alignment: Qt.AlignVCenter
                       ToolTip.text: qsTr("Clear output")
                       icon.source: "qrc:/icons/buttons/clear.svg"
                     }
@@ -940,12 +942,8 @@ Widgets.SmartDialog {
                       Layout.fillWidth: true
                     }
 
-                    Widgets.IconButton {
-                      iconSize: 16
-                      implicitHeight: 24
-                      Layout.maximumWidth: 24
+                    TinyButton {
                       ToolTip.text: qsTr("Load macro")
-                      Layout.alignment: Qt.AlignVCenter
                       icon.source: "qrc:/icons/buttons/open.svg"
                       onClicked: {
                         if (macroEditor.confirmDiscardIfModified())
@@ -953,55 +951,35 @@ Widgets.SmartDialog {
                       }
                     }
 
-                    Widgets.IconButton {
-                      iconSize: 16
-                      implicitHeight: 24
-                      Layout.maximumWidth: 24
+                    TinyButton {
                       ToolTip.text: qsTr("Save macro")
-                      Layout.alignment: Qt.AlignVCenter
                       icon.source: "qrc:/icons/buttons/save.svg"
                       onClicked: macroRunner.saveMacro(macroEditor.text, macroEditor.language)
                     }
 
-                    Widgets.IconButton {
-                      iconSize: 16
-                      implicitHeight: 24
-                      Layout.maximumWidth: 24
-                      Layout.alignment: Qt.AlignVCenter
+                    TinyButton {
                       ToolTip.text: qsTr("Verify macro")
                       onClicked: scriptPane.verifyMacro()
                       icon.source: "qrc:/icons/buttons/apply.svg"
                     }
 
-                    Widgets.IconButton {
-                      iconSize: 16
-                      implicitHeight: 24
-                      Layout.maximumWidth: 24
+                    TinyButton {
                       enabled: !macroRunner.busy
                       opacity: enabled ? 1 : 0.5
                       ToolTip.text: qsTr("Run macro")
                       onClicked: scriptPane.runMacro()
-                      Layout.alignment: Qt.AlignVCenter
                       icon.source: "qrc:/icons/buttons/media-play.svg"
                     }
 
-                    Widgets.IconButton {
-                      iconSize: 16
-                      implicitHeight: 24
-                      Layout.maximumWidth: 24
+                    TinyButton {
                       opacity: enabled ? 1 : 0.5
                       enabled: macroRunner.canStop
                       onClicked: macroRunner.stop()
                       ToolTip.text: qsTr("Stop macro")
-                      Layout.alignment: Qt.AlignVCenter
                       icon.source: "qrc:/icons/buttons/media-stop.svg"
                     }
 
-                    Widgets.IconButton {
-                      iconSize: 16
-                      implicitHeight: 24
-                      Layout.maximumWidth: 24
-                      Layout.alignment: Qt.AlignVCenter
+                    TinyButton {
                       ToolTip.text: qsTr("Clear editor")
                       icon.source: "qrc:/icons/buttons/clear.svg"
                       onClicked: {

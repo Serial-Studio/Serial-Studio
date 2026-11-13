@@ -449,7 +449,7 @@ ColumnLayout {
         }
 
         //
-        // Text field value editor
+        // Text / password field value editor
         //
         Loader {
           id: textFieldLoader
@@ -457,18 +457,21 @@ ColumnLayout {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           active: model.widgetType === ProjectEditor.TextField
-          visible: model.widgetType === ProjectEditor.TextField
+                  || model.widgetType === ProjectEditor.PasswordField
+          visible: active
 
           property int modelRow: row
           property int modelColumn: column
           property var modelActive: model.active
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
+          property bool masked: model.widgetType === ProjectEditor.PasswordField
 
           sourceComponent: TextField {
             enabled: textFieldLoader.modelActive
             opacity: textFieldLoader.modelActive ? 1 : 0.5
             placeholderText: textFieldLoader.modelPlaceholder ?? ""
+            echoMode: textFieldLoader.masked ? TextInput.Password : TextInput.Normal
 
             property var modelValue: textFieldLoader.editableValue
 
@@ -481,51 +484,6 @@ ColumnLayout {
             onTextEdited: {
               view.model.setData(
                     view.index(textFieldLoader.modelRow, textFieldLoader.modelColumn),
-                    text,
-                    ProjectEditor.EditableValue)
-            }
-            font: Cpp_Misc_CommonFonts.monoFont
-            color: Cpp_ThemeManager.colors["table_text"]
-            horizontalAlignment: TextInput.AlignLeft
-
-            background: Item {}
-          }
-        }
-
-        //
-        // Password field value editor (masked input)
-        //
-        Loader {
-          id: passwordFieldLoader
-
-          Layout.fillWidth: true
-          Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectEditor.PasswordField
-          visible: model.widgetType === ProjectEditor.PasswordField
-
-          property int modelRow: row
-          property int modelColumn: column
-          property var modelActive: model.active
-          property var editableValue: model.editableValue
-          property var modelPlaceholder: model.placeholderValue
-
-          sourceComponent: TextField {
-            echoMode: TextInput.Password
-            enabled: passwordFieldLoader.modelActive
-            opacity: passwordFieldLoader.modelActive ? 1 : 0.5
-            placeholderText: passwordFieldLoader.modelPlaceholder ?? ""
-
-            property var modelValue: passwordFieldLoader.editableValue
-
-            Component.onCompleted: text = String(passwordFieldLoader.editableValue ?? "")
-            onModelValueChanged: {
-              if (!activeFocus)
-                text = String(modelValue ?? "")
-            }
-
-            onTextEdited: {
-              view.model.setData(
-                    view.index(passwordFieldLoader.modelRow, passwordFieldLoader.modelColumn),
                     text,
                     ProjectEditor.EditableValue)
             }

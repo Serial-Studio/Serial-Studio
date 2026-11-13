@@ -446,42 +446,18 @@ Widgets.SmartWindow {
     enabled: root.dashboardVisible && !root._focusOwnsTab()
     sequences: ["Backtab", "Shift+Tab"]
     onActivated: dashboard.cycleWindow(+1)
-  } Shortcut {
-    sequence: "Ctrl+1"
-    enabled: root.dashboardVisible
-    onActivated: dashboard.jumpToWorkspaceIndex(0)
-  } Shortcut {
-    sequence: "Ctrl+2"
-    enabled: root.dashboardVisible
-    onActivated: dashboard.jumpToWorkspaceIndex(1)
-  } Shortcut {
-    sequence: "Ctrl+3"
-    enabled: root.dashboardVisible
-    onActivated: dashboard.jumpToWorkspaceIndex(2)
-  } Shortcut {
-    sequence: "Ctrl+4"
-    enabled: root.dashboardVisible
-    onActivated: dashboard.jumpToWorkspaceIndex(3)
-  } Shortcut {
-    sequence: "Ctrl+5"
-    enabled: root.dashboardVisible
-    onActivated: dashboard.jumpToWorkspaceIndex(4)
-  } Shortcut {
-    sequence: "Ctrl+6"
-    enabled: root.dashboardVisible
-    onActivated: dashboard.jumpToWorkspaceIndex(5)
-  } Shortcut {
-    sequence: "Ctrl+7"
-    enabled: root.dashboardVisible
-    onActivated: dashboard.jumpToWorkspaceIndex(6)
-  } Shortcut {
-    sequence: "Ctrl+8"
-    enabled: root.dashboardVisible
-    onActivated: dashboard.jumpToWorkspaceIndex(7)
-  } Shortcut {
-    sequence: "Ctrl+9"
-    enabled: root.dashboardVisible
-    onActivated: dashboard.jumpToWorkspaceIndex(8)
+  }
+
+  Instantiator {
+    model: 9
+
+    delegate: Shortcut {
+      required property int index
+
+      enabled: root.dashboardVisible
+      sequence: "Ctrl+" + (index + 1)
+      onActivated: dashboard.jumpToWorkspaceIndex(index)
+    }
   }
 
   Instantiator {
@@ -510,30 +486,9 @@ Widgets.SmartWindow {
   //
   // Load user interface component
   //
-  Page {
+  Widgets.ThemedPage {
     clip: true
     anchors.fill: parent
-    palette.mid: Cpp_ThemeManager.colors["mid"]
-    palette.dark: Cpp_ThemeManager.colors["dark"]
-    palette.text: Cpp_ThemeManager.colors["text"]
-    palette.base: Cpp_ThemeManager.colors["base"]
-    palette.link: Cpp_ThemeManager.colors["link"]
-    palette.light: Cpp_ThemeManager.colors["light"]
-    palette.window: Cpp_ThemeManager.colors["window"]
-    palette.shadow: Cpp_ThemeManager.colors["shadow"]
-    palette.accent: Cpp_ThemeManager.colors["accent"]
-    palette.button: Cpp_ThemeManager.colors["button"]
-    palette.midlight: Cpp_ThemeManager.colors["midlight"]
-    palette.highlight: Cpp_ThemeManager.colors["highlight"]
-    palette.windowText: Cpp_ThemeManager.colors["window_text"]
-    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
-    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
-    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
-    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
-    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
-    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
-    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     ColumnLayout {
       id: layout

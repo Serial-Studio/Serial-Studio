@@ -182,7 +182,7 @@ Item {
 
   //
   // Tick fitting and every label/readout formatter: PlotFormatter owns the math and the
-  // font metrics it measures with, the plot keeps the names its callers already use.
+  // font metrics it measures with, the plot keeps the three names external callers use.
   //
   Parts.PlotFormatter {
     id: _format
@@ -190,32 +190,8 @@ Item {
     plot: root
   }
 
-  function xTickLabel(value, interval) {
-    return _format.xTickLabel(value, interval)
-  }
-
-  function yTickLabel(value, interval) {
-    return _format.yTickLabel(value, interval)
-  }
-
-  function safeTickAnchor(desired, min, max) {
-    return _format.safeTickAnchor(desired, min, max)
-  }
-
-  function subTicksFor(interval, logAxis) {
-    return _format.subTicksFor(interval, logAxis)
-  }
-
-  function tickDecimals(interval) {
-    return _format.tickDecimals(interval)
-  }
-
   function engineeringFormat(value, tickInterval) {
     return _format.engineeringFormat(value, tickInterval)
-  }
-
-  function logTickFormat(logValue, logStep) {
-    return _format.logTickFormat(logValue, logStep)
   }
 
   function displayValueX(worldX) {
@@ -224,10 +200,6 @@ Item {
 
   function displayValueY(worldY) {
     return _format.displayValueY(worldY)
-  }
-
-  function cursorReadout(widthPx) {
-    return _format.cursorReadout(widthPx)
   }
 
   //
@@ -415,17 +387,6 @@ Item {
     return yViewStart + yVisibleRange * (1 - (pixelY / _graph.plotArea.height))
   }
 
-  function updateCrosshairLabels(mouseX, mouseY) {
-    if (!_overlayMouse.containsMouse)
-      return
-
-    const x = pixelToWorldX(mouseX)
-    const y = pixelToWorldY(mouseY)
-
-    _xPosLabel.text = x.toFixed(2)
-    _yPosLabel.text = y.toFixed(2)
-  }
-
   //
   // Plot widget
   //
@@ -577,10 +538,10 @@ Item {
       max: root.yMax
       visible: root.yLabelVisible
       tickInterval: root.yTickInterval
-      labelDecimals: root.tickDecimals(root.yTickInterval)
-      tickAnchor: root.safeTickAnchor(root.logY ? Math.ceil(root.yMin) : root.yMin,
-                                      root.yMin, root.yMax)
-      subTickCount: root.subTicksFor(root.yTickInterval, root.logY)
+      labelDecimals: _format.tickDecimals(root.yTickInterval)
+      tickAnchor: _format.safeTickAnchor(root.logY ? Math.ceil(root.yMin) : root.yMin,
+                                         root.yMin, root.yMax)
+      subTickCount: _format.subTicksFor(root.yTickInterval, root.logY)
 
       labelDelegate: Item {
         id: _yLabelItem
@@ -595,7 +556,7 @@ Item {
 
           anchors.centerIn: parent
           text: root.logY
-                ? root.logTickFormat(parseFloat(_yLabelItem.text), root.yTickInterval)
+                ? _format.logTickFormat(parseFloat(_yLabelItem.text), root.yTickInterval)
                 : root.engineeringFormat(parseFloat(_yLabelItem.text), root.yTickInterval)
           color: Cpp_ThemeManager.colors["widget_text"]
           font: (Cpp_Misc_CommonFonts.widgetFontRevision,
@@ -614,11 +575,11 @@ Item {
       max: root.xMax
       visible: root.xLabelVisible
       tickInterval: root.xTickInterval
-      labelDecimals: root.tickDecimals(root.xTickInterval)
-      subTickCount: root.subTicksFor(root.xTickInterval, root.logX)
-      tickAnchor: root.safeTickAnchor(root.logX ? Math.ceil(root.xMin)
-                                                : (root.xZeroSet ? root.xZero : root.xMin),
-                                      root.xMin, root.xMax)
+      labelDecimals: _format.tickDecimals(root.xTickInterval)
+      subTickCount: _format.subTicksFor(root.xTickInterval, root.logX)
+      tickAnchor: _format.safeTickAnchor(root.logX ? Math.ceil(root.xMin)
+                                                   : (root.xZeroSet ? root.xZero : root.xMin),
+                                         root.xMin, root.xMax)
 
       labelDelegate: Item {
         id: _xLabelItem
@@ -632,7 +593,7 @@ Item {
           id: _xEngLabel
 
           anchors.centerIn: parent
-          text: root.xTickLabel(parseFloat(_xLabelItem.text), root.xTickInterval)
+          text: _format.xTickLabel(parseFloat(_xLabelItem.text), root.xTickInterval)
           color: Cpp_ThemeManager.colors["widget_text"]
           font: (Cpp_Misc_CommonFonts.widgetFontRevision,
                  Cpp_Misc_CommonFonts.widgetFont(0.83))
@@ -765,18 +726,6 @@ Item {
     }
 
     //
-    // X position label (removed - not needed in cursor mode)
-    //
-    Label {
-      id: _xPosLabel
-
-      padding: 4
-      visible: false
-      color: Cpp_ThemeManager.colors["widget_base"]
-      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
-    }
-
-    //
     // Y position label (removed - not needed in cursor mode)
     //
     Label {
@@ -875,7 +824,7 @@ Item {
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85, false))
         text: {
           if (root.cursorAVisible && root.cursorBVisible)
-            return root.cursorReadout(_layout.width)
+            return _format.cursorReadout(_layout.width)
           else if (!root.cursorAVisible)
             return qsTr("Click to place cursor")
           else

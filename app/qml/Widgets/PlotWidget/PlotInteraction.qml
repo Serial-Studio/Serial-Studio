@@ -311,8 +311,6 @@ MouseArea {
     root.applyCursorZoom(xAxis, xAxis.zoom, newZoomX, localX, root.plot.plotArea.width, false)
     root.applyCursorZoom(yAxis, yAxis.zoom, newZoomY, localY, root.plot.plotArea.height, true)
 
-    // Update crosshair labels to reflect new view window
-    root.plot.updateCrosshairLabels(localX, localY)
     wheel.accepted = true
   }
 

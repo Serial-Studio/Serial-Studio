@@ -220,8 +220,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Data Bits") + ":"
     } Widgets.Combo {
-      id: _dataCombo
-
       objectName: "setup.uart.dataBitsIndex"
 
       Layout.fillWidth: true
@@ -243,8 +241,6 @@ Item {
       text: qsTr("Parity") + ":"
       opacity: enabled ? 1 : 0.5
     } Widgets.Combo {
-      id: _parityCombo
-
       objectName: "setup.uart.parityIndex"
 
       Layout.fillWidth: true
@@ -266,8 +262,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Stop Bits") + ":"
     } Widgets.Combo {
-      id: _stopBitsCombo
-
       objectName: "setup.uart.stopBitsIndex"
 
       Layout.fillWidth: true
@@ -289,8 +283,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Flow Control") + ":"
     } Widgets.Combo {
-      id: _flowCombo
-
       objectName: "setup.uart.flowControlIndex"
 
       Layout.fillWidth: true
@@ -321,8 +313,6 @@ Item {
     Label {
       text: qsTr("Auto Reconnect") + ":"
     } CheckBox {
-      id: _autoreconnect
-
       objectName: "setup.uart.autoReconnect"
 
       Layout.leftMargin: -8
@@ -341,8 +331,6 @@ Item {
     Label {
       text: qsTr("Send DTR Signal") + ":"
     } CheckBox {
-      id: _dtr
-
       objectName: "setup.uart.dtrEnabled"
 
       Layout.leftMargin: -8

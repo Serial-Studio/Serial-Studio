@@ -34,9 +34,6 @@ Widgets.Pane {
   title: qsTr("Project Structure")
   icon: Cpp_Misc_IconRegistry.icon("editor", "project-structure", 16)
 
-  signal groupClicked(var title)
-  signal datasetClicked(var title)
-
   ColumnLayout {
     spacing: 0
 
@@ -133,8 +130,6 @@ Widgets.Pane {
       // Right-clicked row, mirrored into the menu bindings on open. The cascade below needs
       // the folder ids locally, everything else lives on the bindings.
       //
-      property int ctxItemId: -1
-      property int ctxItemKind: ProjectEditor.KindNone
       property int moveExcludeId: -1
       property var dynamicFolderMenus: []
 
@@ -171,8 +166,6 @@ Widgets.Pane {
         if (surface.length === 0)
           return
 
-        treeView.ctxItemId = target.id
-        treeView.ctxItemKind = target.kind
         treeView.moveExcludeId = treeView.isFolderKind(target.kind) ? target.id : -1
         treeView.refreshSelectableCount()
         menuBindings.setTarget(target)
@@ -591,6 +584,12 @@ Widgets.Pane {
                                               ? ""
                                               : Cpp_JSON_ProjectEditor.groupWidgetRole(itemId)
 
+        readonly property color badgeColor: (selected || current)
+            ? Cpp_ThemeManager.colors["highlighted_text"]
+            : (Cpp_JSON_ProjectModel.sourceCount > 1
+               ? SerialStudioHelpers.getDeviceColor(model.treeViewSourceId + 1)
+               : Cpp_ThemeManager.colors["text"])
+
         //
         // Restore expanded state from C++ model
         //
@@ -810,15 +809,7 @@ Widgets.Pane {
             visible: model.treeViewSourceName !== undefined
                      && model.treeViewSourceName !== ""
             Layout.alignment: Qt.AlignVCenter
-            color: {
-              if (selected || current)
-                return Cpp_ThemeManager.colors["highlighted_text"]
-
-              if (Cpp_JSON_ProjectModel.sourceCount > 1)
-                return SerialStudioHelpers.getDeviceColor(model.treeViewSourceId + 1)
-
-              return Cpp_ThemeManager.colors["text"]
-            }
+            color: item.badgeColor
           }
 
           Label {
@@ -839,16 +830,8 @@ Widgets.Pane {
 
               return "[" + letter + "-" + model.treeViewFrameIndex + "]"
             }
+            color: item.badgeColor
             Layout.alignment: Qt.AlignVCenter
-            color: {
-              if (selected || current)
-                return Cpp_ThemeManager.colors["highlighted_text"]
-
-              if (Cpp_JSON_ProjectModel.sourceCount > 1)
-                return SerialStudioHelpers.getDeviceColor(model.treeViewSourceId + 1)
-
-              return Cpp_ThemeManager.colors["text"]
-            }
           }
         }
       }

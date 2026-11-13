@@ -128,10 +128,13 @@ Popup {
   }
 
   //
-  // Returns visible commands matching `filter`; forwarded to the command palette.
+  // Closes every start-menu submenu popup except `self`'s.
   //
-  function searchableItems(filter) {
-    return _menuModel.items(filter)
+  function closeSubMenusExcept(self) {
+    for (const button of [_groups, _actions, _plugins, _export, _tools]) {
+      if (button !== self && button.popup)
+        button.popup.close()
+    }
   }
 
   //
@@ -187,6 +190,20 @@ Popup {
     id: _subMenuComponent
 
     Widgets.SubMenuCombo {}
+  }
+
+  //
+  // Thin separator line between start-menu button groups.
+  //
+  component StartMenuDivider: Rectangle {
+    opacity: 0.18
+    implicitHeight: 1
+    Layout.fillWidth: true
+    Layout.leftMargin: 6
+    Layout.rightMargin: 6
+    Layout.topMargin: 3
+    Layout.bottomMargin: 3
+    color: Cpp_ThemeManager.colors["start_menu_text"]
   }
 
   //
@@ -447,20 +464,7 @@ Popup {
         //
         _groups.popup.open()
 
-        //
-        // Close other menus
-        //
-        if (_actions.popup)
-          _actions.popup.close()
-
-        if (_plugins.popup)
-          _plugins.popup.close()
-
-        if (_export.popup)
-          _export.popup.close()
-
-        if (_tools.popup)
-          _tools.popup.close()
+        root.closeSubMenusExcept(_groups)
       }
 
       onClicked: _groups.showMenu()
@@ -505,18 +509,7 @@ Popup {
         // Open the popup
         _actions.popup.open()
 
-        // Close other menus
-        if (_groups.popup)
-          _groups.popup.close()
-
-        if (_plugins.popup)
-          _plugins.popup.close()
-
-        if (_export.popup)
-          _export.popup.close()
-
-        if (_tools.popup)
-          _tools.popup.close()
+        root.closeSubMenusExcept(_actions)
       }
 
       onClicked: _actions.showMenu()
@@ -584,17 +577,7 @@ Popup {
         _plugins.popup.placeholderText = qsTr("No Plugins Installed")
         _plugins.popup.open()
 
-        if (_groups.popup)
-          _groups.popup.close()
-
-        if (_actions.popup)
-          _actions.popup.close()
-
-        if (_export.popup)
-          _export.popup.close()
-
-        if (_tools.popup)
-          _tools.popup.close()
+        root.closeSubMenusExcept(_plugins)
       }
 
       onClicked: _plugins.showMenu()
@@ -604,16 +587,7 @@ Popup {
       }
     }
 
-    Rectangle {
-      opacity: 0.18
-      implicitHeight: 1
-      Layout.fillWidth: true
-      Layout.leftMargin: 6
-      Layout.rightMargin: 6
-      Layout.topMargin: 3
-      Layout.bottomMargin: 3
-      color: Cpp_ThemeManager.colors["start_menu_text"]
-    }
+    StartMenuDivider {}
 
     StartMenuToggle {
       id: _autoLayoutBt
@@ -631,15 +605,7 @@ Popup {
       commandId: "quickplot.saveAsProject"
     }
 
-    Rectangle {
-      opacity: 0.18
-      implicitHeight: 1
-      Layout.fillWidth: true
-      Layout.leftMargin: 6
-      Layout.rightMargin: 6
-      Layout.topMargin: 3
-      Layout.bottomMargin: 3
-      color: Cpp_ThemeManager.colors["start_menu_text"]
+    StartMenuDivider {
       visible: _autoLayoutBt.visible || _freezeBt.visible
     }
 
@@ -651,15 +617,7 @@ Popup {
       commandId: "window.external"
     }
 
-    Rectangle {
-      opacity: 0.18
-      implicitHeight: 1
-      Layout.fillWidth: true
-      Layout.leftMargin: 6
-      Layout.rightMargin: 6
-      Layout.topMargin: 3
-      Layout.bottomMargin: 3
-      color: Cpp_ThemeManager.colors["start_menu_text"]
+    StartMenuDivider {
       visible: !(typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
     }
 
@@ -718,18 +676,7 @@ Popup {
         // Open the popup
         _export.popup.open()
 
-        // Close other menus
-        if (_groups.popup)
-          _groups.popup.close()
-
-        if (_actions.popup)
-          _actions.popup.close()
-
-        if (_plugins.popup)
-          _plugins.popup.close()
-
-        if (_tools.popup)
-          _tools.popup.close()
+        root.closeSubMenusExcept(_export)
       }
 
       onClicked: _export.showMenu()
@@ -796,18 +743,7 @@ Popup {
         // Open the popup
         _tools.popup.open()
 
-        // Close other menus
-        if (_groups.popup)
-          _groups.popup.close()
-
-        if (_actions.popup)
-          _actions.popup.close()
-
-        if (_plugins.popup)
-          _plugins.popup.close()
-
-        if (_export.popup)
-          _export.popup.close()
+        root.closeSubMenusExcept(_tools)
       }
 
       onClicked: _tools.showMenu()
@@ -817,16 +753,7 @@ Popup {
       }
     }
 
-    Rectangle {
-      opacity: 0.18
-      implicitHeight: 1
-      Layout.fillWidth: true
-      Layout.leftMargin: 6
-      Layout.rightMargin: 6
-      Layout.topMargin: 3
-      Layout.bottomMargin: 3
-      color: Cpp_ThemeManager.colors["start_menu_text"]
-    }
+    StartMenuDivider {}
 
     StartMenuCommand {
       commandId: "app.helpCenter"
@@ -836,16 +763,7 @@ Popup {
       commandId: "app.about"
     }
 
-    Rectangle {
-      opacity: 0.18
-      implicitHeight: 1
-      Layout.fillWidth: true
-      Layout.leftMargin: 6
-      Layout.rightMargin: 6
-      Layout.topMargin: 3
-      Layout.bottomMargin: 3
-      color: Cpp_ThemeManager.colors["start_menu_text"]
-    }
+    StartMenuDivider {}
 
     StartMenuCommand {
       closesMenu: false

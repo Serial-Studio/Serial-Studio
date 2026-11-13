@@ -50,8 +50,6 @@ Item {
       text: qsTr("Host") + ":"
       opacity: enabled ? 1 : 0.5
     } Widgets.LineField {
-      id: _hostField
-
       objectName: "setup.s7.host"
 
       Layout.fillWidth: true
@@ -78,8 +76,6 @@ Item {
       text: qsTr("Rack") + ":"
       opacity: enabled ? 1 : 0.5
     } Widgets.LineField {
-      id: _rackField
-
       objectName: "setup.s7.rack"
 
       Layout.fillWidth: true
@@ -94,11 +90,6 @@ Item {
         if (!isNaN(value) && Cpp_IO_S7.rack !== value)
           Cpp_IO_S7.rack = value
       }
-      onEditingFinished: {
-        const value = parseInt(text)
-        if (!isNaN(value) && Cpp_IO_S7.rack !== value)
-          Cpp_IO_S7.rack = value
-      }
     }
 
     //
@@ -109,8 +100,6 @@ Item {
       text: qsTr("Slot") + ":"
       opacity: enabled ? 1 : 0.5
     } Widgets.LineField {
-      id: _slotField
-
       objectName: "setup.s7.slot"
 
       Layout.fillWidth: true
@@ -125,11 +114,6 @@ Item {
         if (!isNaN(value) && Cpp_IO_S7.slot !== value)
           Cpp_IO_S7.slot = value
       }
-      onEditingFinished: {
-        const value = parseInt(text)
-        if (!isNaN(value) && Cpp_IO_S7.slot !== value)
-          Cpp_IO_S7.slot = value
-      }
     }
 
     //
@@ -138,8 +122,6 @@ Item {
     Label {
       text: qsTr("Poll Interval (ms)") + ":"
     } Widgets.LineField {
-      id: _intervalField
-
       objectName: "setup.s7.pollInterval"
 
       Layout.fillWidth: true
@@ -148,11 +130,6 @@ Item {
       Component.onCompleted: text = Cpp_IO_S7.pollInterval
 
       onTextEdited: {
-        const value = parseInt(text)
-        if (!isNaN(value) && Cpp_IO_S7.pollInterval !== value)
-          Cpp_IO_S7.pollInterval = value
-      }
-      onEditingFinished: {
         const value = parseInt(text)
         if (!isNaN(value) && Cpp_IO_S7.pollInterval !== value)
           Cpp_IO_S7.pollInterval = value

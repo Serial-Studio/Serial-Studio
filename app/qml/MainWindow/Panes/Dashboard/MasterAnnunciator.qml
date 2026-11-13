@@ -166,7 +166,9 @@ Item {
   component PanelButton: Widgets.IconButton {
     padding: 3
     iconSize: 16
+    ToolTip.delay: 700
     Layout.minimumWidth: 28
+    ToolTip.visible: hovered
     Layout.preferredWidth: 28
     Layout.preferredHeight: 26
   }
@@ -220,8 +222,6 @@ Item {
         }
 
         PanelButton {
-          ToolTip.delay: 700
-          ToolTip.visible: hovered
           ToolTip.text: qsTr("Acknowledge all")
           enabled: Cpp_UI_Alarms.unacknowledgedCount > 0
           icon.source: "qrc:/icons/buttons/alarm-acknowledge.svg"
@@ -229,8 +229,6 @@ Item {
         }
 
         PanelButton {
-          ToolTip.delay: 700
-          ToolTip.visible: hovered
           ToolTip.text: qsTr("Silence")
           enabled: Cpp_UI_Alarms.sounding
           icon.source: "qrc:/icons/buttons/alarm-silence.svg"
@@ -238,8 +236,6 @@ Item {
         }
 
         PanelButton {
-          ToolTip.delay: 700
-          ToolTip.visible: hovered
           ToolTip.text: qsTr("Reset")
           enabled: Cpp_UI_Alarms.highestPriority >= 0
           icon.source: "qrc:/icons/buttons/refresh.svg"
@@ -247,8 +243,6 @@ Item {
         }
 
         PanelButton {
-          ToolTip.delay: 700
-          ToolTip.visible: hovered
           enabled: Cpp_UI_Alarms.highestPriority >= 0
           icon.source: "qrc:/icons/buttons/clear.svg"
           ToolTip.text: qsTr("Clear every alarm from the list")
@@ -256,8 +250,6 @@ Item {
         }
 
         PanelButton {
-          ToolTip.delay: 700
-          ToolTip.visible: hovered
           enabled: !Cpp_UI_Alarms.testing
           ToolTip.text: qsTr("Test sounds")
           icon.source: "qrc:/icons/buttons/alarm-test.svg"
@@ -265,8 +257,6 @@ Item {
         }
 
         PanelButton {
-          ToolTip.delay: 700
-          ToolTip.visible: hovered
           highlighted: Cpp_UI_Alarms.muted
           ToolTip.text: Cpp_UI_Alarms.muted ? qsTr("Unmute sounds") : qsTr("Mute sounds")
           icon.source: Cpp_UI_Alarms.muted

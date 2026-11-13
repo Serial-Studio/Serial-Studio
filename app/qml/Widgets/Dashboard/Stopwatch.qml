@@ -117,8 +117,6 @@ Item {
   // 30 Hz tick: only running while the stopwatch is active.
   //
   Timer {
-    id: tickTimer
-
     repeat: true
     interval: 33
     running: root.running
@@ -207,8 +205,6 @@ Item {
     // Digital readout: mirrors Gauge.qml value box (raised text, console palette)
     //
     Rectangle {
-      id: readoutBox
-
       radius: 4
       border.width: 1
       antialiasing: true
@@ -237,8 +233,6 @@ Item {
       Layout.fillWidth: true
 
       Widgets.PushButton {
-        id: startStopBtn
-
         Layout.fillWidth: true
         Layout.preferredHeight: 32
         font: Cpp_Misc_CommonFonts.boldUiFont
@@ -255,8 +249,6 @@ Item {
       }
 
       Widgets.PushButton {
-        id: lapBtn
-
         Layout.fillWidth: true
         Layout.preferredHeight: 32
         font: Cpp_Misc_CommonFonts.uiFont
@@ -271,8 +263,6 @@ Item {
       }
 
       Widgets.PushButton {
-        id: resetBtn
-
         Layout.fillWidth: true
         Layout.preferredHeight: 32
         font: Cpp_Misc_CommonFonts.uiFont

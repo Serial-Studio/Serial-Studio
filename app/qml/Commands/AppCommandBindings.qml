@@ -311,83 +311,27 @@ QtObject {
   // Driver toggles (Toolbar.qml); enabled state is shared via
   // driverSelectionEnabled.
   //
-  readonly property QtObject cmdDriverUart: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.UART
-    function run() { Cpp_IO_Manager.busType = SerialStudio.UART }
+  component DriverCommand: QtObject {
+    required property int bus
+    required property bool allowed
+    readonly property bool enabled: allowed
+    readonly property bool checked: Cpp_IO_Manager.busType === bus
+    function run() { Cpp_IO_Manager.busType = bus }
   }
 
-  readonly property QtObject cmdDriverAudio: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.Audio
-    function run() { Cpp_IO_Manager.busType = SerialStudio.Audio }
-  }
-
-  readonly property QtObject cmdDriverUsb: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.RawUsb
-    function run() { Cpp_IO_Manager.busType = SerialStudio.RawUsb }
-  }
-
-  readonly property QtObject cmdDriverNetwork: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.Network
-    function run() { Cpp_IO_Manager.busType = SerialStudio.Network }
-  }
-
-  readonly property QtObject cmdDriverModbus: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.ModBus
-    function run() { Cpp_IO_Manager.busType = SerialStudio.ModBus }
-  }
-
-  readonly property QtObject cmdDriverHid: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.HidDevice
-    function run() { Cpp_IO_Manager.busType = SerialStudio.HidDevice }
-  }
-
-  readonly property QtObject cmdDriverBluetooth: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE
-    function run() { Cpp_IO_Manager.busType = SerialStudio.BluetoothLE }
-  }
-
-  readonly property QtObject cmdDriverCanbus: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.CanBus
-    function run() { Cpp_IO_Manager.busType = SerialStudio.CanBus }
-  }
-
-  readonly property QtObject cmdDriverProcess: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.Process
-    function run() { Cpp_IO_Manager.busType = SerialStudio.Process }
-  }
-
-  readonly property QtObject cmdDriverOpcUa: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.OpcUa
-    function run() { Cpp_IO_Manager.busType = SerialStudio.OpcUa }
-  }
-
-  readonly property QtObject cmdDriverS7: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.S7
-    function run() { Cpp_IO_Manager.busType = SerialStudio.S7 }
-  }
-
-  readonly property QtObject cmdDriverEthernetIp: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.EthernetIp
-    function run() { Cpp_IO_Manager.busType = SerialStudio.EthernetIp }
-  }
-
-  readonly property QtObject cmdDriverIec104: QtObject {
-    readonly property bool enabled: root.driverSelectionEnabled
-    readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.Iec104
-    function run() { Cpp_IO_Manager.busType = SerialStudio.Iec104 }
-  }
+  readonly property QtObject cmdDriverUart: DriverCommand { bus: SerialStudio.UART; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverAudio: DriverCommand { bus: SerialStudio.Audio; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverUsb: DriverCommand { bus: SerialStudio.RawUsb; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverNetwork: DriverCommand { bus: SerialStudio.Network; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverModbus: DriverCommand { bus: SerialStudio.ModBus; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverHid: DriverCommand { bus: SerialStudio.HidDevice; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverBluetooth: DriverCommand { bus: SerialStudio.BluetoothLE; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverCanbus: DriverCommand { bus: SerialStudio.CanBus; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverProcess: DriverCommand { bus: SerialStudio.Process; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverOpcUa: DriverCommand { bus: SerialStudio.OpcUa; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverS7: DriverCommand { bus: SerialStudio.S7; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverEthernetIp: DriverCommand { bus: SerialStudio.EthernetIp; allowed: root.driverSelectionEnabled }
+  readonly property QtObject cmdDriverIec104: DriverCommand { bus: SerialStudio.Iec104; allowed: root.driverSelectionEnabled }
 
   //
   // Aural alerts (spec 0087): the ISA-18.1 operator actions on the root-owned annunciator.

@@ -36,34 +36,17 @@ Widgets.Pane {
 
   actionComponent: EditorNavActions {}
 
+  function toggleOption(option) {
+    const value = Cpp_JSON_ProjectEditor.datasetOptions & option
+    Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
+  }
+
   //
   // User interface elements
   //
-  Page {
+  Widgets.ThemedPage {
     enabled: Cpp_JSON_ProjectEditor.selectedDatasetEnabled
     opacity: Cpp_JSON_ProjectEditor.selectedDatasetEnabled ? 1 : 0.5
-
-    palette.mid: Cpp_ThemeManager.colors["mid"]
-    palette.dark: Cpp_ThemeManager.colors["dark"]
-    palette.text: Cpp_ThemeManager.colors["text"]
-    palette.base: Cpp_ThemeManager.colors["base"]
-    palette.link: Cpp_ThemeManager.colors["link"]
-    palette.light: Cpp_ThemeManager.colors["light"]
-    palette.window: Cpp_ThemeManager.colors["window"]
-    palette.shadow: Cpp_ThemeManager.colors["shadow"]
-    palette.accent: Cpp_ThemeManager.colors["accent"]
-    palette.button: Cpp_ThemeManager.colors["button"]
-    palette.midlight: Cpp_ThemeManager.colors["midlight"]
-    palette.highlight: Cpp_ThemeManager.colors["highlight"]
-    palette.windowText: Cpp_ThemeManager.colors["window_text"]
-    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
-    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
-    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
-    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
-    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
-    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
-    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     anchors {
       fill: parent
@@ -170,11 +153,7 @@ Widgets.Pane {
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "plot", 24)
               ToolTip.text: qsTr("Show or hide a plot of this value over time.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetPlot
-              onClicked: {
-                const option = SerialStudio.DatasetPlot
-                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-              }
+              onClicked: root.toggleOption(SerialStudio.DatasetPlot)
             }
 
             Widgets.ToolbarButton {
@@ -185,11 +164,7 @@ Widgets.Pane {
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "fft", 24)
               ToolTip.text: qsTr("Show or hide a plot of the signal's frequencies.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetFFT
-              onClicked: {
-                const option = SerialStudio.DatasetFFT
-                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-              }
+              onClicked: root.toggleOption(SerialStudio.DatasetFFT)
             }
 
             Widgets.ToolbarButton {
@@ -201,11 +176,7 @@ Widgets.Pane {
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetWaterfall
               ToolTip.text: qsTr("Show or hide a scrolling picture of the frequencies over time. "
                                  + "Uses the FFT settings.")
-              onClicked: {
-                const option = SerialStudio.DatasetWaterfall
-                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-              }
+              onClicked: root.toggleOption(SerialStudio.DatasetWaterfall)
             }
           }
 
@@ -229,11 +200,7 @@ Widgets.Pane {
               ToolTip.text: qsTr("Show or hide a bar for this value.")
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "bar", 24)
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
-              onClicked: {
-                const option = SerialStudio.DatasetBar
-                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-              }
+              onClicked: root.toggleOption(SerialStudio.DatasetBar)
             }
 
             Widgets.ToolbarButton {
@@ -245,11 +212,7 @@ Widgets.Pane {
               icon.source: Cpp_Misc_IconRegistry.icon("widgets", "gauge", 24)
               ToolTip.text: qsTr("Show or hide a round gauge for this value.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
-              onClicked: {
-                const option = SerialStudio.DatasetGauge
-                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-              }
+              onClicked: root.toggleOption(SerialStudio.DatasetGauge)
             }
 
             Widgets.ToolbarButton {
@@ -261,11 +224,7 @@ Widgets.Pane {
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "compass", 24)
               ToolTip.text: qsTr("Show or hide a compass for a direction value.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetCompass
-              onClicked: {
-                const option = SerialStudio.DatasetCompass
-                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-              }
+              onClicked: root.toggleOption(SerialStudio.DatasetCompass)
             }
 
             Widgets.ToolbarButton {
@@ -277,11 +236,7 @@ Widgets.Pane {
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "meter", 24)
               ToolTip.text: qsTr("Show or hide a half-circle meter for this value.")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter
-              onClicked: {
-                const option = SerialStudio.DatasetMeter
-                const value = Cpp_JSON_ProjectEditor.datasetOptions & option
-                Cpp_JSON_ProjectModel.changeDatasetOption(option, !value)
-              }
+              onClicked: root.toggleOption(SerialStudio.DatasetMeter)
             }
           }
 

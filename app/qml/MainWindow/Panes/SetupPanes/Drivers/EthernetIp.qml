@@ -50,8 +50,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Gateway") + ":"
     } Widgets.LineField {
-      id: _hostField
-
       objectName: "setup.eip.host"
 
       Layout.fillWidth: true
@@ -78,8 +76,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("CIP Path") + ":"
     } Widgets.LineField {
-      id: _pathField
-
       objectName: "setup.eip.cipPath"
 
       Layout.fillWidth: true
@@ -106,8 +102,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Controller") + ":"
     } Widgets.Combo {
-      id: _familyCombo
-
       objectName: "setup.eip.plcTypeIndex"
 
       Layout.fillWidth: true
@@ -127,8 +121,6 @@ Item {
     Label {
       text: qsTr("Poll Interval (ms)") + ":"
     } Widgets.LineField {
-      id: _intervalField
-
       objectName: "setup.eip.pollInterval"
 
       Layout.fillWidth: true

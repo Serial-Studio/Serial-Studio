@@ -399,103 +399,52 @@ QtObject {
   //
   // Creation: group templates.
   //
-  readonly property QtObject cmdAddGroupGeneric: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Dataset Container"), SerialStudio.NoGroupWidget) }
+  component AddGroupCommand: QtObject {
+    required property var host
+    required property string groupName
+    required property int widget
+    readonly property bool visible: host.singleTarget
+    function run() { host.addGroup(groupName, widget) }
   }
 
-  readonly property QtObject cmdAddGroupDataGrid: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Data Grid"), SerialStudio.DataGrid) }
+  component AddDatasetCommand: QtObject {
+    required property var host
+    required property int option
+    readonly property bool visible: host.singleTarget
+    function run() { host.addDataset(option) }
   }
 
-  readonly property QtObject cmdAddGroupBarPanel: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Bar Panel"), SerialStudio.BarPanel) }
+  component AddOutputCommand: QtObject {
+    required property var host
+    required property int type
+    readonly property bool visible: host.singleTarget
+    readonly property bool enabled: Cpp_CommercialBuild
+    function run() { host.addOutput(type) }
   }
 
-  readonly property QtObject cmdAddGroupLEDPanel: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("LED Panel"), SerialStudio.LEDPanel) }
-  }
-
-  readonly property QtObject cmdAddGroupMultiPlot: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Multi-Plot"), SerialStudio.MultiPlot) }
-  }
-
-  readonly property QtObject cmdAddGroupPlot3D: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D) }
-  }
-
-  readonly property QtObject cmdAddGroupAccelerometer: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Accelerometer"), SerialStudio.Accelerometer) }
-  }
-
-  readonly property QtObject cmdAddGroupGyroscope: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Gyroscope"), SerialStudio.Gyroscope) }
-  }
-
-  readonly property QtObject cmdAddGroupGps: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("GPS Map"), SerialStudio.GPS) }
-  }
-
-  readonly property QtObject cmdAddGroupImageView: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Image View"), SerialStudio.ImageView) }
-  }
-
-  readonly property QtObject cmdAddGroupWebView: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Web View"), SerialStudio.WebView) }
-  }
-
-  readonly property QtObject cmdAddGroupPainter: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addGroup(qsTr("Canvas Widget"), SerialStudio.Painter) }
-  }
+  readonly property QtObject cmdAddGroupGeneric: AddGroupCommand { host: root; groupName: qsTr("Dataset Container"); widget: SerialStudio.NoGroupWidget }
+  readonly property QtObject cmdAddGroupDataGrid: AddGroupCommand { host: root; groupName: qsTr("Data Grid"); widget: SerialStudio.DataGrid }
+  readonly property QtObject cmdAddGroupBarPanel: AddGroupCommand { host: root; groupName: qsTr("Bar Panel"); widget: SerialStudio.BarPanel }
+  readonly property QtObject cmdAddGroupLEDPanel: AddGroupCommand { host: root; groupName: qsTr("LED Panel"); widget: SerialStudio.LEDPanel }
+  readonly property QtObject cmdAddGroupMultiPlot: AddGroupCommand { host: root; groupName: qsTr("Multi-Plot"); widget: SerialStudio.MultiPlot }
+  readonly property QtObject cmdAddGroupPlot3D: AddGroupCommand { host: root; groupName: qsTr("3D Plot"); widget: SerialStudio.Plot3D }
+  readonly property QtObject cmdAddGroupAccelerometer: AddGroupCommand { host: root; groupName: qsTr("Accelerometer"); widget: SerialStudio.Accelerometer }
+  readonly property QtObject cmdAddGroupGyroscope: AddGroupCommand { host: root; groupName: qsTr("Gyroscope"); widget: SerialStudio.Gyroscope }
+  readonly property QtObject cmdAddGroupGps: AddGroupCommand { host: root; groupName: qsTr("GPS Map"); widget: SerialStudio.GPS }
+  readonly property QtObject cmdAddGroupImageView: AddGroupCommand { host: root; groupName: qsTr("Image View"); widget: SerialStudio.ImageView }
+  readonly property QtObject cmdAddGroupWebView: AddGroupCommand { host: root; groupName: qsTr("Web View"); widget: SerialStudio.WebView }
+  readonly property QtObject cmdAddGroupPainter: AddGroupCommand { host: root; groupName: qsTr("Canvas Widget"); widget: SerialStudio.Painter }
 
   //
   // Creation: dataset types.
   //
-  readonly property QtObject cmdAddDatasetGeneric: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addDataset(SerialStudio.DatasetGeneric) }
-  }
-
-  readonly property QtObject cmdAddDatasetPlot: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addDataset(SerialStudio.DatasetPlot) }
-  }
-
-  readonly property QtObject cmdAddDatasetFFT: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addDataset(SerialStudio.DatasetFFT) }
-  }
-
-  readonly property QtObject cmdAddDatasetGauge: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addDataset(SerialStudio.DatasetGauge) }
-  }
-
-  readonly property QtObject cmdAddDatasetBar: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addDataset(SerialStudio.DatasetBar) }
-  }
-
-  readonly property QtObject cmdAddDatasetCompass: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addDataset(SerialStudio.DatasetCompass) }
-  }
-
-  readonly property QtObject cmdAddDatasetMeter: QtObject {
-    readonly property bool visible: root.singleTarget
-    function run() { root.addDataset(SerialStudio.DatasetMeter) }
-  }
+  readonly property QtObject cmdAddDatasetGeneric: AddDatasetCommand { host: root; option: SerialStudio.DatasetGeneric }
+  readonly property QtObject cmdAddDatasetPlot: AddDatasetCommand { host: root; option: SerialStudio.DatasetPlot }
+  readonly property QtObject cmdAddDatasetFFT: AddDatasetCommand { host: root; option: SerialStudio.DatasetFFT }
+  readonly property QtObject cmdAddDatasetGauge: AddDatasetCommand { host: root; option: SerialStudio.DatasetGauge }
+  readonly property QtObject cmdAddDatasetBar: AddDatasetCommand { host: root; option: SerialStudio.DatasetBar }
+  readonly property QtObject cmdAddDatasetCompass: AddDatasetCommand { host: root; option: SerialStudio.DatasetCompass }
+  readonly property QtObject cmdAddDatasetMeter: AddDatasetCommand { host: root; option: SerialStudio.DatasetMeter }
 
   //
   // Creation: output controls (Pro).
@@ -511,35 +460,11 @@ QtObject {
     }
   }
 
-  readonly property QtObject cmdAddOutputSlider: QtObject {
-    readonly property bool visible: root.singleTarget
-    readonly property bool enabled: Cpp_CommercialBuild
-    function run() { root.addOutput(SerialStudio.OutputSlider) }
-  }
-
-  readonly property QtObject cmdAddOutputToggle: QtObject {
-    readonly property bool visible: root.singleTarget
-    readonly property bool enabled: Cpp_CommercialBuild
-    function run() { root.addOutput(SerialStudio.OutputToggle) }
-  }
-
-  readonly property QtObject cmdAddOutputKnob: QtObject {
-    readonly property bool visible: root.singleTarget
-    readonly property bool enabled: Cpp_CommercialBuild
-    function run() { root.addOutput(SerialStudio.OutputKnob) }
-  }
-
-  readonly property QtObject cmdAddOutputTextField: QtObject {
-    readonly property bool visible: root.singleTarget
-    readonly property bool enabled: Cpp_CommercialBuild
-    function run() { root.addOutput(SerialStudio.OutputTextField) }
-  }
-
-  readonly property QtObject cmdAddOutputButton: QtObject {
-    readonly property bool visible: root.singleTarget
-    readonly property bool enabled: Cpp_CommercialBuild
-    function run() { root.addOutput(SerialStudio.OutputButton) }
-  }
+  readonly property QtObject cmdAddOutputSlider: AddOutputCommand { host: root; type: SerialStudio.OutputSlider }
+  readonly property QtObject cmdAddOutputToggle: AddOutputCommand { host: root; type: SerialStudio.OutputToggle }
+  readonly property QtObject cmdAddOutputKnob: AddOutputCommand { host: root; type: SerialStudio.OutputKnob }
+  readonly property QtObject cmdAddOutputTextField: AddOutputCommand { host: root; type: SerialStudio.OutputTextField }
+  readonly property QtObject cmdAddOutputButton: AddOutputCommand { host: root; type: SerialStudio.OutputButton }
 
   //
   // Items the current operation applies to: the filtered tree selection, or the single target
@@ -924,45 +849,19 @@ QtObject {
   // Dataset visualizations: checkable mirrors of the dataset view's button row. Tree-only,
   // because the check state reads the selected dataset and the tree selects what you click.
   //
-  readonly property QtObject cmdDatasetPlot: QtObject {
-    readonly property bool visible: root.datasetVisualsVisible
-    readonly property bool checked: root.datasetOptionOn(SerialStudio.DatasetPlot)
-    function run() { root.toggleDatasetOption(SerialStudio.DatasetPlot) }
+  component DatasetToggleCommand: QtObject {
+    required property var host
+    required property int option
+    readonly property bool visible: host.datasetVisualsVisible
+    readonly property bool checked: host.datasetOptionOn(option)
+    function run() { host.toggleDatasetOption(option) }
   }
 
-  readonly property QtObject cmdDatasetFFT: QtObject {
-    readonly property bool visible: root.datasetVisualsVisible
-    readonly property bool checked: root.datasetOptionOn(SerialStudio.DatasetFFT)
-    function run() { root.toggleDatasetOption(SerialStudio.DatasetFFT) }
-  }
-
-  readonly property QtObject cmdDatasetWaterfall: QtObject {
-    readonly property bool visible: root.datasetVisualsVisible
-    readonly property bool checked: root.datasetOptionOn(SerialStudio.DatasetWaterfall)
-    function run() { root.toggleDatasetOption(SerialStudio.DatasetWaterfall) }
-  }
-
-  readonly property QtObject cmdDatasetBar: QtObject {
-    readonly property bool visible: root.datasetVisualsVisible
-    readonly property bool checked: root.datasetOptionOn(SerialStudio.DatasetBar)
-    function run() { root.toggleDatasetOption(SerialStudio.DatasetBar) }
-  }
-
-  readonly property QtObject cmdDatasetGauge: QtObject {
-    readonly property bool visible: root.datasetVisualsVisible
-    readonly property bool checked: root.datasetOptionOn(SerialStudio.DatasetGauge)
-    function run() { root.toggleDatasetOption(SerialStudio.DatasetGauge) }
-  }
-
-  readonly property QtObject cmdDatasetCompass: QtObject {
-    readonly property bool visible: root.datasetVisualsVisible
-    readonly property bool checked: root.datasetOptionOn(SerialStudio.DatasetCompass)
-    function run() { root.toggleDatasetOption(SerialStudio.DatasetCompass) }
-  }
-
-  readonly property QtObject cmdDatasetMeter: QtObject {
-    readonly property bool visible: root.datasetVisualsVisible
-    readonly property bool checked: root.datasetOptionOn(SerialStudio.DatasetMeter)
-    function run() { root.toggleDatasetOption(SerialStudio.DatasetMeter) }
-  }
+  readonly property QtObject cmdDatasetPlot: DatasetToggleCommand { host: root; option: SerialStudio.DatasetPlot }
+  readonly property QtObject cmdDatasetFFT: DatasetToggleCommand { host: root; option: SerialStudio.DatasetFFT }
+  readonly property QtObject cmdDatasetWaterfall: DatasetToggleCommand { host: root; option: SerialStudio.DatasetWaterfall }
+  readonly property QtObject cmdDatasetBar: DatasetToggleCommand { host: root; option: SerialStudio.DatasetBar }
+  readonly property QtObject cmdDatasetGauge: DatasetToggleCommand { host: root; option: SerialStudio.DatasetGauge }
+  readonly property QtObject cmdDatasetCompass: DatasetToggleCommand { host: root; option: SerialStudio.DatasetCompass }
+  readonly property QtObject cmdDatasetMeter: DatasetToggleCommand { host: root; option: SerialStudio.DatasetMeter }
 }

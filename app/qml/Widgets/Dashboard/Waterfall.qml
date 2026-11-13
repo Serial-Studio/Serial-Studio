@@ -50,6 +50,17 @@ Item {
   readonly property real uiScale: Cpp_Misc_CommonFonts.autoScale(Math.min(width, height), 260)
 
   //
+  // Flip a boolean model property and persist it under its settings key
+  //
+  function toggleSetting(prop, key) {
+    if (!root.model)
+      return
+
+    root.model[prop] = !root.model[prop]
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, key, root.model[prop])
+  }
+
+  //
   // Reparent the painted-item model into the central waterfall area
   //
   onModelChanged: {
@@ -69,23 +80,11 @@ Item {
 
     const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
 
-    if (s["colorMap"] !== undefined)
-      model.colorMap = s["colorMap"]
-
-    if (s["minDb"] !== undefined)
-      model.minDb = s["minDb"]
-
-    if (s["maxDb"] !== undefined)
-      model.maxDb = s["maxDb"]
-
-    if (s["axisVisible"] !== undefined)
-      model.axisVisible = s["axisVisible"]
-
-    if (s["cursorEnabled"] !== undefined)
-      model.cursorEnabled = s["cursorEnabled"]
-
-    if (s["colorbarVisible"] !== undefined)
-      model.colorbarVisible = s["colorbarVisible"]
+    for (const key of ["colorMap", "minDb", "maxDb", "axisVisible", "cursorEnabled",
+                       "colorbarVisible"]) {
+      if (s[key] !== undefined)
+        model[key] = s[key]
+    }
 
     if (s["showFrequencyMarkers"] !== undefined)
       model.markersVisible = s["showFrequencyMarkers"]
@@ -165,8 +164,6 @@ Item {
     }
 
     Label {
-      id: minDbLabel
-
       Layout.alignment: Qt.AlignVCenter
       horizontalAlignment: Text.AlignRight
       color: Cpp_ThemeManager.colors["text"]
@@ -174,8 +171,6 @@ Item {
     }
 
     RangeSlider {
-      id: rangeSlider
-
       to: 20
       from: -120
       stepSize: 1
@@ -210,8 +205,6 @@ Item {
     }
 
     Label {
-      id: maxDbLabel
-
       Layout.alignment: Qt.AlignVCenter
       horizontalAlignment: Text.AlignLeft
       color: Cpp_ThemeManager.colors["text"]
@@ -232,26 +225,14 @@ Item {
       glyph: "commands/color"
       ToolTip.text: qsTr("Show Colorbar")
       checked: root.model && root.model.colorbarVisible
-      onClicked: {
-        if (!root.model)
-          return
-
-        root.model.colorbarVisible = !root.model.colorbarVisible
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "colorbarVisible", root.model.colorbarVisible)
-      }
+      onClicked: root.toggleSetting("colorbarVisible", "colorbarVisible")
     }
 
     DashboardToolButton {
       glyph: "commands/abscissa"
       ToolTip.text: qsTr("Show Axes & Grid")
       checked: root.model && root.model.axisVisible
-      onClicked: {
-        if (!root.model)
-          return
-
-        root.model.axisVisible = !root.model.axisVisible
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "axisVisible", root.model.axisVisible)
-      }
+      onClicked: root.toggleSetting("axisVisible", "axisVisible")
     }
 
     Rectangle {
@@ -264,28 +245,14 @@ Item {
       glyph: "commands/crosshair"
       ToolTip.text: qsTr("Show Crosshair")
       checked: root.model && root.model.cursorEnabled
-      onClicked: {
-        if (!root.model)
-          return
-
-        root.model.cursorEnabled = !root.model.cursorEnabled
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "cursorEnabled", root.model.cursorEnabled)
-      }
+      onClicked: root.toggleSetting("cursorEnabled", "cursorEnabled")
     }
 
     DashboardToolButton {
       glyph: "commands/labels"
       ToolTip.text: qsTr("Show Frequency Markers")
       checked: root.model && root.model.markersVisible
-      onClicked: {
-        if (!root.model)
-          return
-
-        root.model.markersVisible = !root.model.markersVisible
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId,
-                                                "showFrequencyMarkers",
-                                                root.model.markersVisible)
-      }
+      onClicked: root.toggleSetting("markersVisible", "showFrequencyMarkers")
     }
 
     Rectangle {

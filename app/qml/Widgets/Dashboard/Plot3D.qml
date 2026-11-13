@@ -75,23 +75,11 @@ Item {
     if (model) {
       const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
 
-      if (s["interpolationEnabled"] !== undefined)
-        model.interpolationEnabled = s["interpolationEnabled"]
-
-      if (s["autoCenter"] !== undefined)
-        model.autoCenter = s["autoCenter"]
-
-      if (s["orbitNavigation"] !== undefined)
-        model.orbitNavigation = s["orbitNavigation"]
-
-      if (s["anaglyphEnabled"] !== undefined)
-        model.anaglyphEnabled = s["anaglyphEnabled"]
-
-      if (s["invertEyePositions"] !== undefined)
-        model.invertEyePositions = s["invertEyePositions"]
-
-      if (s["eyeSeparation"] !== undefined)
-        model.eyeSeparation = s["eyeSeparation"]
+      for (const key of ["interpolationEnabled", "autoCenter", "orbitNavigation",
+                         "anaglyphEnabled", "invertEyePositions", "eyeSeparation"]) {
+        if (s[key] !== undefined)
+          model[key] = s[key]
+      }
     }
   }
 
@@ -198,8 +186,6 @@ Item {
     }
 
     DashboardToolButton {
-      id: _interpolate
-
       onClicked: {
         model.interpolationEnabled = !model.interpolationEnabled
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolationEnabled", model.interpolationEnabled)
@@ -292,8 +278,6 @@ Item {
     }
 
     DashboardToolButton {
-      id: _anaglyph
-
       onClicked: {
         model.invertEyePositions = !model.invertEyePositions
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "invertEyePositions", model.invertEyePositions)
@@ -306,8 +290,6 @@ Item {
     }
 
     Slider {
-      id: _eyeSeparation
-
       to: 100
       from: 30
       stepSize: 1

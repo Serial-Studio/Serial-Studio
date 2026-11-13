@@ -50,8 +50,6 @@ Item {
       text: qsTr("Host") + ":"
       opacity: enabled ? 1 : 0.5
     } Widgets.LineField {
-      id: _hostField
-
       objectName: "setup.iec104.host"
 
       Layout.fillWidth: true
@@ -78,8 +76,6 @@ Item {
       text: qsTr("Port") + ":"
       opacity: enabled ? 1 : 0.5
     } Widgets.LineField {
-      id: _portField
-
       objectName: "setup.iec104.port"
 
       Layout.fillWidth: true
@@ -109,8 +105,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Common Address") + ":"
     } Widgets.LineField {
-      id: _addressField
-
       objectName: "setup.iec104.commonAddress"
 
       Layout.fillWidth: true
@@ -138,8 +132,6 @@ Item {
     Label {
       text: qsTr("Send Window (k)") + ":"
     } Widgets.LineField {
-      id: _windowKField
-
       objectName: "setup.iec104.windowK"
 
       Layout.fillWidth: true
@@ -162,8 +154,6 @@ Item {
     Label {
       text: qsTr("Ack Window (w)") + ":"
     } Widgets.LineField {
-      id: _windowWField
-
       objectName: "setup.iec104.windowW"
 
       Layout.fillWidth: true
@@ -186,8 +176,6 @@ Item {
     Label {
       text: qsTr("Timeout t1 (ms)") + ":"
     } Widgets.LineField {
-      id: _t1Field
-
       objectName: "setup.iec104.timeoutT1"
 
       Layout.fillWidth: true
@@ -210,8 +198,6 @@ Item {
     Label {
       text: qsTr("Timeout t2 (ms)") + ":"
     } Widgets.LineField {
-      id: _t2Field
-
       objectName: "setup.iec104.timeoutT2"
 
       Layout.fillWidth: true
@@ -234,8 +220,6 @@ Item {
     Label {
       text: qsTr("Timeout t3 (ms)") + ":"
     } Widgets.LineField {
-      id: _t3Field
-
       objectName: "setup.iec104.timeoutT3"
 
       Layout.fillWidth: true

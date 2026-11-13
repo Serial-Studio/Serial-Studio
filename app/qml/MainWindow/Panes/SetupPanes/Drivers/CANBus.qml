@@ -187,14 +187,8 @@ Item {
         function syncFromDriver() {
           const current = String(Cpp_IO_CANBus.bitrate)
           const rates = Cpp_IO_CANBus.bitrateList
-          const idx = rates.indexOf(current)
-          if (idx !== -1) {
-            _bitrateCombo.currentIndex = idx
-            _bitrateCombo.editText = current
-          } else {
-            _bitrateCombo.currentIndex = -1
-            _bitrateCombo.editText = current
-          }
+          _bitrateCombo.currentIndex = rates.indexOf(current)
+          _bitrateCombo.editText = current
         }
 
         Component.onCompleted: Qt.callLater(syncFromDriver)
@@ -230,8 +224,6 @@ Item {
         visible: Cpp_IO_CANBus.interfaceList.length > 0
         opacity: Cpp_IO_CANBus.interfaceSupportsFD ? 1 : 0.5
       } CheckBox {
-        id: _canFDCheck
-
         objectName: "setup.canbus.canFD"
 
         Layout.leftMargin: -8
@@ -272,14 +264,8 @@ Item {
         function syncFromDriver() {
           const current = String(Cpp_IO_CANBus.dataBitrate)
           const rates = Cpp_IO_CANBus.dataBitrateList
-          const idx = rates.indexOf(current)
-          if (idx !== -1) {
-            _dataBitrateCombo.currentIndex = idx
-            _dataBitrateCombo.editText = current
-          } else {
-            _dataBitrateCombo.currentIndex = -1
-            _dataBitrateCombo.editText = current
-          }
+          _dataBitrateCombo.currentIndex = rates.indexOf(current)
+          _dataBitrateCombo.editText = current
         }
 
         Component.onCompleted: Qt.callLater(syncFromDriver)
@@ -314,8 +300,6 @@ Item {
         text: qsTr("Loopback") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } CheckBox {
-        id: _loopbackCheck
-
         objectName: "setup.canbus.loopback"
 
         Layout.leftMargin: -8
@@ -336,8 +320,6 @@ Item {
         text: qsTr("Listen-Only") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } CheckBox {
-        id: _listenOnlyCheck
-
         objectName: "setup.canbus.listenOnly"
 
         Layout.leftMargin: -8
@@ -358,8 +340,6 @@ Item {
         text: qsTr("Multi-Frame Reassembly") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } CheckBox {
-        id: _tpReassemblyCheck
-
         objectName: "setup.canbus.tpReassembly"
 
         Layout.leftMargin: -8

@@ -155,19 +155,33 @@ QtObject {
   // Group/dataset/output-control factories (ProjectEditorActions.qml);
   // default names stay localized via qsTr, matching the toolbar buttons.
   //
-  readonly property QtObject cmdEditorAddGroup: QtObject {
-    function run() {
-      Cpp_JSON_ProjectModel.addGroup(qsTr("Dataset Container"), SerialStudio.NoGroupWidget)
-    }
+  component GroupCommand: QtObject {
+    required property string groupName
+    required property int widget
+    function run() { Cpp_JSON_ProjectModel.addGroup(groupName, widget) }
   }
 
-  readonly property QtObject cmdEditorAddImageView: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Image View"), SerialStudio.ImageView) }
+  component DatasetCommand: QtObject {
+    required property int option
+    function run() { Cpp_JSON_ProjectModel.addDataset(option) }
   }
 
-  readonly property QtObject cmdEditorAddWebView: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Web View"), SerialStudio.WebView) }
+  component OutputCommand: QtObject {
+    required property int type
+    function run() { Cpp_JSON_ProjectModel.addOutputControl(type) }
   }
+
+  readonly property QtObject cmdEditorAddGroup: GroupCommand { groupName: qsTr("Dataset Container"); widget: SerialStudio.NoGroupWidget }
+  readonly property QtObject cmdEditorAddImageView: GroupCommand { groupName: qsTr("Image View"); widget: SerialStudio.ImageView }
+  readonly property QtObject cmdEditorAddWebView: GroupCommand { groupName: qsTr("Web View"); widget: SerialStudio.WebView }
+  readonly property QtObject cmdEditorAddDataGrid: GroupCommand { groupName: qsTr("Data Grid"); widget: SerialStudio.DataGrid }
+  readonly property QtObject cmdEditorAddBarPanel: GroupCommand { groupName: qsTr("Bar Panel"); widget: SerialStudio.BarPanel }
+  readonly property QtObject cmdEditorAddLEDPanel: GroupCommand { groupName: qsTr("LED Panel"); widget: SerialStudio.LEDPanel }
+  readonly property QtObject cmdEditorAddMultiPlot: GroupCommand { groupName: qsTr("Multi-Plot"); widget: SerialStudio.MultiPlot }
+  readonly property QtObject cmdEditorAddPlot3D: GroupCommand { groupName: qsTr("3D Plot"); widget: SerialStudio.Plot3D }
+  readonly property QtObject cmdEditorAddAccelerometer: GroupCommand { groupName: qsTr("Accelerometer"); widget: SerialStudio.Accelerometer }
+  readonly property QtObject cmdEditorAddGyroscope: GroupCommand { groupName: qsTr("Gyroscope"); widget: SerialStudio.Gyroscope }
+  readonly property QtObject cmdEditorAddGPS: GroupCommand { groupName: qsTr("GPS Map"); widget: SerialStudio.GPS }
 
   readonly property QtObject cmdEditorAddPainter: QtObject {
     readonly property bool hasPro: Cpp_CommercialBuild
@@ -178,65 +192,12 @@ QtObject {
     function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Canvas Widget"), SerialStudio.Painter) }
   }
 
-  readonly property QtObject cmdEditorAddDataGrid: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Data Grid"), SerialStudio.DataGrid) }
-  }
-
-  readonly property QtObject cmdEditorAddBarPanel: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Bar Panel"), SerialStudio.BarPanel) }
-  }
-
-  readonly property QtObject cmdEditorAddLEDPanel: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("LED Panel"), SerialStudio.LEDPanel) }
-  }
-
-  readonly property QtObject cmdEditorAddMultiPlot: QtObject {
-    function run() {
-      Cpp_JSON_ProjectModel.addGroup(qsTr("Multi-Plot"), SerialStudio.MultiPlot)
-    }
-  }
-
-  readonly property QtObject cmdEditorAddPlot3D: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("3D Plot"), SerialStudio.Plot3D) }
-  }
-
-  readonly property QtObject cmdEditorAddAccelerometer: QtObject {
-    function run() {
-      Cpp_JSON_ProjectModel.addGroup(qsTr("Accelerometer"), SerialStudio.Accelerometer)
-    }
-  }
-
-  readonly property QtObject cmdEditorAddGyroscope: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), SerialStudio.Gyroscope) }
-  }
-
-  readonly property QtObject cmdEditorAddGPS: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addGroup(qsTr("GPS Map"), SerialStudio.GPS) }
-  }
-
-  readonly property QtObject cmdEditorAddDataset: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric) }
-  }
-
-  readonly property QtObject cmdEditorAddPlot: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot) }
-  }
-
-  readonly property QtObject cmdEditorAddFFT: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT) }
-  }
-
-  readonly property QtObject cmdEditorAddGauge: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge) }
-  }
-
-  readonly property QtObject cmdEditorAddBar: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar) }
-  }
-
-  readonly property QtObject cmdEditorAddCompass: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass) }
-  }
+  readonly property QtObject cmdEditorAddDataset: DatasetCommand { option: SerialStudio.DatasetGeneric }
+  readonly property QtObject cmdEditorAddPlot: DatasetCommand { option: SerialStudio.DatasetPlot }
+  readonly property QtObject cmdEditorAddFFT: DatasetCommand { option: SerialStudio.DatasetFFT }
+  readonly property QtObject cmdEditorAddGauge: DatasetCommand { option: SerialStudio.DatasetGauge }
+  readonly property QtObject cmdEditorAddBar: DatasetCommand { option: SerialStudio.DatasetBar }
+  readonly property QtObject cmdEditorAddCompass: DatasetCommand { option: SerialStudio.DatasetCompass }
 
   readonly property QtObject cmdEditorAddAction: QtObject {
     function run() { Cpp_JSON_ProjectModel.addAction() }
@@ -246,25 +207,11 @@ QtObject {
     function run() { Cpp_JSON_ProjectModel.addOutputPanel() }
   }
 
-  readonly property QtObject cmdEditorAddOutputSlider: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputSlider) }
-  }
-
-  readonly property QtObject cmdEditorAddOutputToggle: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputToggle) }
-  }
-
-  readonly property QtObject cmdEditorAddOutputKnob: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputKnob) }
-  }
-
-  readonly property QtObject cmdEditorAddOutputTextField: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputTextField) }
-  }
-
-  readonly property QtObject cmdEditorAddOutputButton: QtObject {
-    function run() { Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputButton) }
-  }
+  readonly property QtObject cmdEditorAddOutputSlider: OutputCommand { type: SerialStudio.OutputSlider }
+  readonly property QtObject cmdEditorAddOutputToggle: OutputCommand { type: SerialStudio.OutputToggle }
+  readonly property QtObject cmdEditorAddOutputKnob: OutputCommand { type: SerialStudio.OutputKnob }
+  readonly property QtObject cmdEditorAddOutputTextField: OutputCommand { type: SerialStudio.OutputTextField }
+  readonly property QtObject cmdEditorAddOutputButton: OutputCommand { type: SerialStudio.OutputButton }
 
   //
   // Help/navigation/context commands (JSON-only ids, no toolbar button).

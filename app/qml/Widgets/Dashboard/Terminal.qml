@@ -33,6 +33,25 @@ Item {
   implicitHeight: layout.implicitHeight + 32
 
   //
+  // Shared button shapes: 32 px ribbon buttons and 24 px send-row buttons
+  //
+  component RibbonButton: Widgets.IconButton {
+    flat: true
+    leftPadding: 8
+    rightPadding: 8
+    implicitHeight: 32
+    icon.color: "transparent"
+    Layout.alignment: Qt.AlignVCenter
+    Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
+  }
+
+  component SmallButton: Widgets.IconButton {
+    iconSize: 16
+    implicitHeight: 24
+    Layout.maximumWidth: 24
+  }
+
+  //
   // Widget data inputs (unused)
   //
   property var color
@@ -173,8 +192,6 @@ Item {
     onClosed: terminal.forceActiveFocus()
 
     MenuItem {
-      id: copyMenu
-
       text: qsTr("Copy")
       opacity: enabled ? 1 : 0.5
       onClicked: terminal.copy()
@@ -226,8 +243,6 @@ Item {
       // sections fold to a compact icon+label dropdown first, then it scrolls.
       //
       Widgets.RibbonToolbar {
-        id: consoleRibbon
-
         anchors.fill: parent
         anchors.rightMargin: 8
         secondaryToolbar: true
@@ -244,40 +259,22 @@ Item {
           separatorColor: Cpp_ThemeManager.colors["widget_border"]
           collapsedIcon: Cpp_Misc_IconRegistry.icon("console", "utilities", 32)
 
-          Widgets.IconButton {
-            id: clearButton
-
+          RibbonButton {
             objectName: "console.clear"
 
-            flat: true
-            leftPadding: 8
-            rightPadding: 8
-            implicitHeight: 32
             text: qsTr("Clear")
             onClicked: root.clear()
-            icon.color: "transparent"
-            Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Clear console output")
             icon.source: Cpp_Misc_IconRegistry.icon("console", "clear", 32)
-            Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
           }
 
-          Widgets.IconButton {
-            id: searchButton
-
+          RibbonButton {
             objectName: "console.search"
 
-            flat: true
-            leftPadding: 8
-            rightPadding: 8
             text: qsTr("Find")
-            implicitHeight: 32
             checked: root.searchOpen
-            icon.color: "transparent"
-            Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Search console output")
             icon.source: Cpp_Misc_IconRegistry.icon("console", "search", 32)
-            Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
 
             onClicked: {
               if (root.searchOpen)
@@ -291,39 +288,21 @@ Item {
             }
           }
 
-          Widgets.IconButton  {
-            id: collapseButton
-
-            flat: true
-            leftPadding: 8
-            rightPadding: 8
-            implicitHeight: 32
+          RibbonButton {
             text: qsTr("Collapse")
-            icon.color: "transparent"
-            Layout.alignment: Qt.AlignVCenter
             checked: Cpp_Console_Handler.collapseDuplicates
             ToolTip.text: qsTr("Collapse repeated lines into a single entry")
-            Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
             icon.source: Cpp_Misc_IconRegistry.icon("console", "collapse-duplicates", 32)
             onClicked: Cpp_Console_Handler.collapseDuplicates = !Cpp_Console_Handler.collapseDuplicates
           }
 
-          Widgets.IconButton {
-            id: annotationsButton
-
+          RibbonButton {
             objectName: "console.annotations"
 
-            flat: true
-            leftPadding: 8
-            rightPadding: 8
-            implicitHeight: 32
             text: qsTr("Annotations")
-            icon.color: "transparent"
             checked: root.annotationsOpen
-            Layout.alignment: Qt.AlignVCenter
             onClicked: root.annotationsOpen = !root.annotationsOpen
             icon.source: Cpp_Misc_IconRegistry.icon("console", "annotations", 32)
-            Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
             ToolTip.text: qsTr("Label the incoming bytes with a decoder and inspect them")
           }
         }
@@ -335,18 +314,10 @@ Item {
           showSeparator: false
           separatorColor: Cpp_ThemeManager.colors["widget_border"]
 
-          Widgets.IconButton {
-            id: pauseButton
-
+          RibbonButton {
             objectName: "console.pause"
 
-            flat: true
-            leftPadding: 8
-            rightPadding: 8
-            implicitHeight: 32
             checked: terminal.paused
-            icon.color: "transparent"
-            Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_IO_Manager.isConnected
             onClicked: terminal.paused = !terminal.paused
             text: terminal.paused ? qsTr("Resume") : qsTr("Pause")
@@ -356,7 +327,6 @@ Item {
             ToolTip.text: terminal.paused
                           ? qsTr("Resume console updates")
                           : qsTr("Freeze the console display (data keeps logging)")
-            Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
           }
         }
 
@@ -378,38 +348,24 @@ Item {
           separatorColor: Cpp_ThemeManager.colors["widget_border"]
           collapsedIcon: Cpp_Misc_IconRegistry.icon("console", "plain-text", 16)
 
-          Widgets.IconButton {
+          RibbonButton {
             objectName: "console.displayText"
 
-            flat: true
-            leftPadding: 8
-            rightPadding: 8
             text: qsTr("Text")
-            implicitHeight: 32
-            icon.color: "transparent"
-            Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Plain text display mode")
             checked: Cpp_Console_Handler.displayMode === 0
             onClicked: Cpp_Console_Handler.displayMode = 0
             icon.source: Cpp_Misc_IconRegistry.icon("console", "plain-text", 16)
-            Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
           }
 
-          Widgets.IconButton {
+          RibbonButton {
             objectName: "console.displayHex"
 
-            flat: true
-            leftPadding: 8
-            rightPadding: 8
             text: qsTr("Hex")
-            implicitHeight: 32
-            icon.color: "transparent"
-            Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Hex display mode")
             checked: Cpp_Console_Handler.displayMode === 1
             onClicked: Cpp_Console_Handler.displayMode = 1
             icon.source: Cpp_Misc_IconRegistry.icon("console", "hexadecimal", 16)
-            Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
           }
         }
 
@@ -419,21 +375,14 @@ Item {
         Widgets.RibbonSection {
           showSeparator: false
 
-          Widgets.IconButton {
+          RibbonButton {
             id: settingsButton
 
             objectName: "console.settings"
 
-            flat: true
-            leftPadding: 8
-            rightPadding: 8
-            implicitHeight: 32
             text: qsTr("Settings")
-            icon.color: "transparent"
-            Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Console settings")
             icon.source: Cpp_Misc_IconRegistry.icon("console", "settings", 32)
-            Layout.preferredWidth: implicitContentWidth + leftPadding + rightPadding
             onClicked: settingsPopup.visible ? settingsPopup.close() : settingsPopup.open()
 
             Popup {
@@ -456,8 +405,6 @@ Item {
                 spacing: 4
 
                 CheckBox {
-                  id: timestampCheck
-
                   objectName: "console.showTimestamp"
 
                   onCheckedChanged: {
@@ -470,8 +417,6 @@ Item {
                 }
 
                 CheckBox {
-                  id: echoCheck
-
                   objectName: "console.echo"
 
                   text: qsTr("Echo")
@@ -484,8 +429,6 @@ Item {
                 }
 
                 CheckBox {
-                  id: vt100Check
-
                   objectName: "console.vt100"
 
                   onCheckedChanged: {
@@ -500,8 +443,6 @@ Item {
                 }
 
                 CheckBox {
-                  id: ansiColorsCheck
-
                   objectName: "console.ansiColors"
 
                   onCheckedChanged: {
@@ -605,8 +546,6 @@ Item {
       }
 
       MouseArea {
-        id: mouseArea
-
         anchors.fill: parent
         cursorShape: Qt.IBeamCursor
         propagateComposedEvents: true
@@ -712,12 +651,9 @@ Item {
             }
           }
 
-          Widgets.IconButton {
+          SmallButton {
             objectName: "console.searchPrevious"
 
-            iconSize: 16
-            implicitHeight: 24
-            Layout.maximumWidth: 24
             opacity: enabled ? 1 : 0.5
             ToolTip.text: qsTr("Previous match")
             onClicked: terminal.searchPrevious()
@@ -725,12 +661,9 @@ Item {
             icon.source: "qrc:/icons/buttons/backward.svg"
           }
 
-          Widgets.IconButton {
+          SmallButton {
             objectName: "console.searchNext"
 
-            iconSize: 16
-            implicitHeight: 24
-            Layout.maximumWidth: 24
             opacity: enabled ? 1 : 0.5
             ToolTip.text: qsTr("Next match")
             onClicked: terminal.searchNext()
@@ -738,12 +671,9 @@ Item {
             icon.source: "qrc:/icons/buttons/forward.svg"
           }
 
-          Widgets.IconButton {
+          SmallButton {
             objectName: "console.searchClose"
 
-            iconSize: 16
-            implicitHeight: 24
-            Layout.maximumWidth: 24
             ToolTip.text: qsTr("Close search")
             onClicked: root.closeSearch()
             icon.source: "qrc:/icons/buttons/close.svg"
@@ -756,8 +686,6 @@ Item {
     // Frame annotation layer (track / table / payload / decoder), toggled from the toolbar
     //
     ConsoleAnnotations {
-      id: annotationsPanel
-
       Layout.leftMargin: 8
       Layout.rightMargin: 8
       Layout.fillWidth: true
@@ -779,14 +707,9 @@ Item {
       Layout.fillWidth: true
       visible: root.width > implicitWidth
 
-      Widgets.IconButton {
-        id: ftButton
-
+      SmallButton {
         objectName: "console.fileTransfer"
 
-        iconSize: 16
-        implicitHeight: 24
-        Layout.maximumWidth: 24
         visible: !app.runtimeMode
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Manager.readWrite
@@ -826,14 +749,9 @@ Item {
         }
       }
 
-      Widgets.IconButton {
-        id: libraryButton
-
+      SmallButton {
         objectName: "console.sendLibrary"
 
-        iconSize: 16
-        implicitHeight: 24
-        Layout.maximumWidth: 24
         visible: !app.runtimeMode
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
@@ -987,8 +905,6 @@ Item {
       }
 
       Widgets.Combo {
-        id: lineEndingCombo
-
         objectName: "console.lineEnding"
 
         Layout.minimumWidth: 96
@@ -1005,8 +921,6 @@ Item {
       }
 
       Widgets.Combo {
-        id: checkumCombo
-
         objectName: "console.checksum"
 
         Layout.minimumWidth: 96
@@ -1022,16 +936,14 @@ Item {
                      }
       }
 
-      Widgets.IconButton {
+      SmallButton {
         id: cyclicBt
 
         objectName: "console.cyclic"
 
         readonly property var lib: Cpp_Console_Handler.sendLibrary
 
-        iconSize: 16
         checkable: true
-        implicitHeight: 24
         Layout.maximumWidth: 32
         checked: lib.cyclicArmed
         opacity: enabled ? 1 : 0.5
@@ -1053,13 +965,9 @@ Item {
         }
       }
 
-      Widgets.IconButton {
-        id: sendBt
-
+      SmallButton {
         objectName: "console.sendButton"
 
-        iconSize: 16
-        implicitHeight: 24
         Layout.maximumWidth: 32
         opacity: enabled ? 1 : 0.5
         onClicked: root.sendData()

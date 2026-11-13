@@ -35,29 +35,23 @@ Widgets.Pane {
 
   actionComponent: EditorNavActions {}
 
-  Page {
-    palette.mid: Cpp_ThemeManager.colors["mid"]
-    palette.dark: Cpp_ThemeManager.colors["dark"]
-    palette.text: Cpp_ThemeManager.colors["text"]
-    palette.base: Cpp_ThemeManager.colors["base"]
-    palette.link: Cpp_ThemeManager.colors["link"]
-    palette.light: Cpp_ThemeManager.colors["light"]
-    palette.window: Cpp_ThemeManager.colors["window"]
-    palette.shadow: Cpp_ThemeManager.colors["shadow"]
-    palette.accent: Cpp_ThemeManager.colors["accent"]
-    palette.button: Cpp_ThemeManager.colors["button"]
-    palette.midlight: Cpp_ThemeManager.colors["midlight"]
-    palette.highlight: Cpp_ThemeManager.colors["highlight"]
-    palette.windowText: Cpp_ThemeManager.colors["window_text"]
-    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
-    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
-    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
-    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
-    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
-    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
-    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
-    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
+  //
+  // Toolbar button that is live only with publishing and TLS on; tlsTip is the working tooltip
+  //
+  component TlsButton: Widgets.ToolbarButton {
+    property string tlsTip
 
+    iconSize: 24
+    toolbarButton: false
+    Layout.alignment: Qt.AlignVCenter
+    enabled: Cpp_MQTT_Publisher.enabled && Cpp_MQTT_Publisher.sslEnabled
+    icon.source: Cpp_Misc_IconRegistry.icon("editor", "load-ca-certs", 24)
+    ToolTip.text: !Cpp_MQTT_Publisher.enabled
+                  ? qsTr("Enable publishing first")
+                  : (Cpp_MQTT_Publisher.sslEnabled ? tlsTip : qsTr("Enable SSL/TLS first"))
+  }
+
+  Widgets.ThemedPage {
     anchors {
       fill: parent
       leftMargin: -9
@@ -160,54 +154,27 @@ Widgets.Pane {
           //
           // Load CA certificates from a folder (TLS only)
           //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            Layout.alignment: Qt.AlignVCenter
+          TlsButton {
             text: qsTr("Load CA Certs")
-            enabled: Cpp_MQTT_Publisher.enabled && Cpp_MQTT_Publisher.sslEnabled
-            icon.source: Cpp_Misc_IconRegistry.icon("editor", "load-ca-certs", 24)
-            ToolTip.text: !Cpp_MQTT_Publisher.enabled
-                          ? qsTr("Enable publishing first")
-                          : (Cpp_MQTT_Publisher.sslEnabled
-                             ? qsTr("Add PEM certificates from a folder")
-                             : qsTr("Enable SSL/TLS first"))
+            tlsTip: qsTr("Add PEM certificates from a folder")
             onClicked: Cpp_MQTT_Publisher.addCaCertificates()
           }
 
           //
           // Pick the mutual-TLS client certificate (TLS only)
           //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            Layout.alignment: Qt.AlignVCenter
+          TlsButton {
             text: qsTr("Client Certificate")
-            enabled: Cpp_MQTT_Publisher.enabled && Cpp_MQTT_Publisher.sslEnabled
-            icon.source: Cpp_Misc_IconRegistry.icon("editor", "load-ca-certs", 24)
-            ToolTip.text: !Cpp_MQTT_Publisher.enabled
-                          ? qsTr("Enable publishing first")
-                          : (Cpp_MQTT_Publisher.sslEnabled
-                             ? qsTr("Select the PEM client certificate for mutual TLS")
-                             : qsTr("Enable SSL/TLS first"))
+            tlsTip: qsTr("Select the PEM client certificate for mutual TLS")
             onClicked: Cpp_MQTT_Publisher.selectClientCertificate()
           }
 
           //
           // Pick the mutual-TLS private key (TLS only)
           //
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
+          TlsButton {
             text: qsTr("Private Key")
-            Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_MQTT_Publisher.enabled && Cpp_MQTT_Publisher.sslEnabled
-            icon.source: Cpp_Misc_IconRegistry.icon("editor", "load-ca-certs", 24)
-            ToolTip.text: !Cpp_MQTT_Publisher.enabled
-                          ? qsTr("Enable publishing first")
-                          : (Cpp_MQTT_Publisher.sslEnabled
-                             ? qsTr("Select the PEM private key for mutual TLS")
-                             : qsTr("Enable SSL/TLS first"))
+            tlsTip: qsTr("Select the PEM private key for mutual TLS")
             onClicked: Cpp_MQTT_Publisher.selectPrivateKey()
           }
         }

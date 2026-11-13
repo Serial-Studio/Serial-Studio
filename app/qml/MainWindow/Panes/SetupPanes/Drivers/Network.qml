@@ -106,8 +106,6 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Socket Type") + ":"
       } Widgets.Combo {
-        id: _typeCombo
-
         objectName: "setup.network.socketTypeIndex"
 
         Layout.fillWidth: true
@@ -336,8 +334,6 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Send Format") + ":"
       } Widgets.Combo {
-        id: _wsFormat
-
         objectName: "setup.network.webSocketFormatIndex"
 
         Layout.fillWidth: true
@@ -392,8 +388,6 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Method") + ":"
       } Widgets.Combo {
-        id: _httpMethod
-
         objectName: "setup.network.httpMethodIndex"
 
         visible: root.isHttp
