@@ -91,14 +91,6 @@ const char* Misc::GraphicsBackend::hdrPendingKey() noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the default platform backend identifier (Default = let Qt decide).
- */
-int Misc::GraphicsBackend::defaultBackendForPlatform() noexcept
-{
-  return Backend::Default;
-}
-
-/**
  * @brief Returns whether the given backend is selectable on this platform.
  */
 bool Misc::GraphicsBackend::isBackendAvailable(int backend) noexcept

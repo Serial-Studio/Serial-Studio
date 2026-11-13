@@ -237,22 +237,6 @@ QString Titlebar::title() const
 }
 
 /**
- * @brief Returns whether the parent window is currently active.
- */
-bool Titlebar::windowActive() const
-{
-  return m_windowActive;
-}
-
-/**
- * @brief Returns the title bar background color.
- */
-QColor Titlebar::backgroundColor() const
-{
-  return m_backgroundColor;
-}
-
-/**
  * @brief Returns the foreground color with optimal contrast to the background.
  */
 QColor Titlebar::foregroundColor() const
@@ -289,7 +273,6 @@ void Titlebar::setTitle(const QString& title)
 {
   if (m_title != title) {
     m_title = title;
-    Q_EMIT titleChanged();
     update();
   }
 }
@@ -301,7 +284,6 @@ void Titlebar::setWindowActive(bool active)
 {
   if (m_windowActive != active) {
     m_windowActive = active;
-    Q_EMIT windowActiveChanged();
     update();
   }
 }
@@ -315,7 +297,6 @@ void Titlebar::setBackgroundColor(const QColor& color)
 
   if (m_backgroundColor != color) {
     m_backgroundColor = color;
-    Q_EMIT backgroundColorChanged();
     update();
   }
 }
@@ -820,22 +801,6 @@ Window::~Window()
     if (m_border)
       m_border->deleteLater();
   }
-}
-
-/**
- * @brief Returns the decorated window.
- */
-QWindow* Window::window() const
-{
-  return m_window;
-}
-
-/**
- * @brief Returns the title bar component.
- */
-Titlebar* Window::titleBar() const
-{
-  return m_titleBar;
 }
 
 /**

@@ -63,12 +63,6 @@ class IconPacks : public QObject {
              READ pack
              WRITE setPack
              NOTIFY packChanged)
-  Q_PROPERTY(QString activePackId
-             READ activePackId
-             NOTIFY revisionChanged)
-  Q_PROPERTY(bool mono
-             READ mono
-             NOTIFY revisionChanged)
   Q_PROPERTY(int widgetPack
              READ widgetPack
              WRITE setWidgetPack
@@ -99,8 +93,6 @@ public:
 
   [[nodiscard]] int pack() const;
   [[nodiscard]] int widgetPack() const;
-  [[nodiscard]] bool mono() const;
-  [[nodiscard]] QString activePackId() const;
   [[nodiscard]] const QStringList& availablePacks() const noexcept;
   [[nodiscard]] const QStringList& availableWidgetPacks() const noexcept;
 

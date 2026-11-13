@@ -202,6 +202,27 @@ void API::Handlers::ConsoleHandler::registerIoAndExportCommands()
                            &getConfiguration);
 }
 
+namespace {
+/**
+ * @brief Shared body of the boolean "enabled" setters: validate, apply, echo the value back.
+ */
+template<typename Apply>
+[[nodiscard]] API::CommandResponse setEnabledFlag(const QString& id,
+                                                  const QJsonObject& params,
+                                                  Apply&& apply)
+{
+  if (!params.contains(QStringLiteral("enabled")))
+    return API::CommandResponse::makeMissingParam(id, "enabled");
+
+  const bool enabled = params.value(QStringLiteral("enabled")).toBool();
+  apply(enabled);
+
+  QJsonObject result;
+  result[QStringLiteral("enabled")] = enabled;
+  return API::CommandResponse::makeSuccess(id, result);
+}
+}  // namespace
+
 //--------------------------------------------------------------------------------------------------
 // Setters
 //--------------------------------------------------------------------------------------------------
@@ -212,18 +233,8 @@ void API::Handlers::ConsoleHandler::registerIoAndExportCommands()
 API::CommandResponse API::Handlers::ConsoleHandler::setEcho(const QString& id,
                                                             const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
-
-  const bool enabled   = params.value(QStringLiteral("enabled")).toBool();
-  static auto& handler = Console::Handler::instance();
-  handler.setEcho(enabled);
-
-  QJsonObject result;
-  result[QStringLiteral("enabled")] = enabled;
-  return CommandResponse::makeSuccess(id, result);
+  return setEnabledFlag(
+    id, params, [](bool value) { Console::Handler::instance().setEcho(value); });
 }
 
 /**
@@ -232,18 +243,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setEcho(const QString& id,
 API::CommandResponse API::Handlers::ConsoleHandler::setShowTimestamp(const QString& id,
                                                                      const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
-
-  const bool enabled   = params.value(QStringLiteral("enabled")).toBool();
-  static auto& handler = Console::Handler::instance();
-  handler.setShowTimestamp(enabled);
-
-  QJsonObject result;
-  result[QStringLiteral("enabled")] = enabled;
-  return CommandResponse::makeSuccess(id, result);
+  return setEnabledFlag(
+    id, params, [](bool value) { Console::Handler::instance().setShowTimestamp(value); });
 }
 
 /**
@@ -252,18 +253,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setShowTimestamp(const QStri
 API::CommandResponse API::Handlers::ConsoleHandler::setCollapseDuplicates(const QString& id,
                                                                           const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
-
-  const bool enabled   = params.value(QStringLiteral("enabled")).toBool();
-  static auto& handler = Console::Handler::instance();
-  handler.setCollapseDuplicates(enabled);
-
-  QJsonObject result;
-  result[QStringLiteral("enabled")] = enabled;
-  return CommandResponse::makeSuccess(id, result);
+  return setEnabledFlag(
+    id, params, [](bool value) { Console::Handler::instance().setCollapseDuplicates(value); });
 }
 
 /**
@@ -272,18 +263,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setCollapseDuplicates(const 
 API::CommandResponse API::Handlers::ConsoleHandler::setSearchCaseSensitive(
   const QString& id, const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
-
-  const bool enabled   = params.value(QStringLiteral("enabled")).toBool();
-  static auto& handler = Console::Handler::instance();
-  handler.setSearchCaseSensitive(enabled);
-
-  QJsonObject result;
-  result[QStringLiteral("enabled")] = enabled;
-  return CommandResponse::makeSuccess(id, result);
+  return setEnabledFlag(
+    id, params, [](bool value) { Console::Handler::instance().setSearchCaseSensitive(value); });
 }
 
 /**
@@ -292,10 +273,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setSearchCaseSensitive(
 API::CommandResponse API::Handlers::ConsoleHandler::setDisplayMode(const QString& id,
                                                                    const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("modeIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: modeIndex"));
-  }
+  if (!params.contains(QStringLiteral("modeIndex")))
+    return CommandResponse::makeMissingParam(id, "modeIndex");
 
   const int mode_index = params.value(QStringLiteral("modeIndex")).toInt();
   if (mode_index < 0 || mode_index > 1) {
@@ -322,10 +301,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setDisplayMode(const QString
 API::CommandResponse API::Handlers::ConsoleHandler::setDataMode(const QString& id,
                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("modeIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: modeIndex"));
-  }
+  if (!params.contains(QStringLiteral("modeIndex")))
+    return CommandResponse::makeMissingParam(id, "modeIndex");
 
   const int mode_index = params.value(QStringLiteral("modeIndex")).toInt();
   if (mode_index < 0 || mode_index > 1) {
@@ -352,10 +329,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setDataMode(const QString& i
 API::CommandResponse API::Handlers::ConsoleHandler::setLineEnding(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("endingIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: endingIndex"));
-  }
+  if (!params.contains(QStringLiteral("endingIndex")))
+    return CommandResponse::makeMissingParam(id, "endingIndex");
 
   const int ending_index = params.value(QStringLiteral("endingIndex")).toInt();
   if (ending_index < 0 || ending_index > 3) {
@@ -397,10 +372,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setLineEnding(const QString&
 API::CommandResponse API::Handlers::ConsoleHandler::setFontFamily(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("fontFamily"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: fontFamily"));
-  }
+  if (!params.contains(QStringLiteral("fontFamily")))
+    return CommandResponse::makeMissingParam(id, "fontFamily");
 
   const QString font_family = params.value(QStringLiteral("fontFamily")).toString();
   if (font_family.isEmpty()) {
@@ -422,10 +395,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setFontFamily(const QString&
 API::CommandResponse API::Handlers::ConsoleHandler::setFontSize(const QString& id,
                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("fontSize"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: fontSize"));
-  }
+  if (!params.contains(QStringLiteral("fontSize")))
+    return CommandResponse::makeMissingParam(id, "fontSize");
 
   const int font_size = params.value(QStringLiteral("fontSize")).toInt();
   if (font_size <= 0) {
@@ -447,10 +418,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setFontSize(const QString& i
 API::CommandResponse API::Handlers::ConsoleHandler::setChecksumMethod(const QString& id,
                                                                       const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("methodIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: methodIndex"));
-  }
+  if (!params.contains(QStringLiteral("methodIndex")))
+    return CommandResponse::makeMissingParam(id, "methodIndex");
 
   const int method_index = params.value(QStringLiteral("methodIndex")).toInt();
 
@@ -479,17 +448,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setChecksumMethod(const QStr
 API::CommandResponse API::Handlers::ConsoleHandler::setVt100Emulation(const QString& id,
                                                                       const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-
-  const bool enabled   = params.value(QStringLiteral("enabled")).toBool();
-  static auto& handler = Console::Handler::instance();
-  handler.setVt100Emulation(enabled);
-
-  QJsonObject result;
-  result[QStringLiteral("enabled")] = enabled;
-  return CommandResponse::makeSuccess(id, result);
+  return setEnabledFlag(
+    id, params, [](bool value) { Console::Handler::instance().setVt100Emulation(value); });
 }
 
 /**
@@ -498,17 +458,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::setVt100Emulation(const QStr
 API::CommandResponse API::Handlers::ConsoleHandler::setAnsiColorsEnabled(const QString& id,
                                                                          const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-
-  const bool enabled   = params.value(QStringLiteral("enabled")).toBool();
-  static auto& handler = Console::Handler::instance();
-  handler.setAnsiColorsEnabled(enabled);
-
-  QJsonObject result;
-  result[QStringLiteral("enabled")] = enabled;
-  return CommandResponse::makeSuccess(id, result);
+  return setEnabledFlag(
+    id, params, [](bool value) { Console::Handler::instance().setAnsiColorsEnabled(value); });
 }
 
 /**
@@ -518,8 +469,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::setEncoding(const QString& i
                                                                 const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("encoding")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: encoding"));
+    return CommandResponse::makeMissingParam(id, "encoding");
 
   const int encoding   = params.value(QStringLiteral("encoding")).toInt();
   static auto& handler = Console::Handler::instance();
@@ -562,10 +512,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::clear(const QString& id,
 API::CommandResponse API::Handlers::ConsoleHandler::send(const QString& id,
                                                          const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("data"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: data"));
-  }
+  if (!params.contains(QStringLiteral("data")))
+    return CommandResponse::makeMissingParam(id, "data");
 
   const QString data   = params.value(QStringLiteral("data")).toString();
   static auto& handler = Console::Handler::instance();
@@ -613,18 +561,8 @@ API::CommandResponse API::Handlers::ConsoleHandler::getConfiguration(const QStri
 API::CommandResponse API::Handlers::ConsoleHandler::exportSetEnabled(const QString& id,
                                                                      const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
-
-  const bool enabled    = params.value(QStringLiteral("enabled")).toBool();
-  static auto& exporter = Console::Export::instance();
-  exporter.setExportEnabled(enabled);
-
-  QJsonObject result;
-  result[QStringLiteral("enabled")] = enabled;
-  return CommandResponse::makeSuccess(id, result);
+  return setEnabledFlag(
+    id, params, [](bool value) { Console::Export::instance().setExportEnabled(value); });
 }
 
 /**

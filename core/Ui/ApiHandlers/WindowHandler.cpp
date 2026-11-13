@@ -489,10 +489,8 @@ API::CommandResponse API::Handlers::WindowHandler::getGroups(const QString& id,
 API::CommandResponse API::Handlers::WindowHandler::setActiveGroup(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("groupId"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
-  }
+  if (!params.contains(QStringLiteral("groupId")))
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   static auto& sessionRegistry = UI::UISessionRegistry::instance();
   auto* taskbar                = sessionRegistry.primaryTaskbar();
@@ -514,10 +512,8 @@ API::CommandResponse API::Handlers::WindowHandler::setActiveGroup(const QString&
 API::CommandResponse API::Handlers::WindowHandler::setActiveGroupIndex(const QString& id,
                                                                        const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("index"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: index"));
-  }
+  if (!params.contains(QStringLiteral("index")))
+    return CommandResponse::makeMissingParam(id, "index");
 
   static auto& sessionRegistry = UI::UISessionRegistry::instance();
   auto* taskbar                = sessionRegistry.primaryTaskbar();
@@ -628,10 +624,8 @@ API::CommandResponse API::Handlers::WindowHandler::setWindowState(const QString&
 API::CommandResponse API::Handlers::WindowHandler::setAutoLayout(const QString& id,
                                                                  const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
+  if (!params.contains(QStringLiteral("enabled")))
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   static auto& sessionRegistry = UI::UISessionRegistry::instance();
   auto* wm                     = sessionRegistry.primaryWindowManager();
@@ -712,8 +706,7 @@ API::CommandResponse API::Handlers::WindowHandler::setLayoutPattern(const QStrin
                                                                     const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("pattern")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: pattern"));
+    return CommandResponse::makeMissingParam(id, "pattern");
 
   static auto& sessionRegistry = UI::UISessionRegistry::instance();
   auto* wm                     = sessionRegistry.primaryWindowManager();
@@ -736,10 +729,8 @@ API::CommandResponse API::Handlers::WindowHandler::setLayoutPattern(const QStrin
 API::CommandResponse API::Handlers::WindowHandler::setLayout(const QString& id,
                                                              const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("layout"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: layout"));
-  }
+  if (!params.contains(QStringLiteral("layout")))
+    return CommandResponse::makeMissingParam(id, "layout");
 
   static auto& sessionRegistry = UI::UISessionRegistry::instance();
   auto* wm                     = sessionRegistry.primaryWindowManager();
@@ -768,10 +759,8 @@ API::CommandResponse API::Handlers::WindowHandler::setLayout(const QString& id,
 API::CommandResponse API::Handlers::WindowHandler::getWidgetSettings(const QString& id,
                                                                      const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("widgetId"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: widgetId"));
-  }
+  if (!params.contains(QStringLiteral("widgetId")))
+    return CommandResponse::makeMissingParam(id, "widgetId");
 
   const QString widget_id    = params.value(QStringLiteral("widgetId")).toString();
   auto& projectModel         = DataModel::pipelineModules().projectModel;

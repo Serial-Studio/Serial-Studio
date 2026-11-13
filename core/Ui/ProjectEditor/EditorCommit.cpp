@@ -114,6 +114,25 @@ EditorCommit::EditorCommit(ProjectEditor& editor, ProjectModel& model)
 }
 
 /**
+ * @brief Retitles the first tree item whose cached record satisfies @p match, in both the item and
+ *        its cached record.
+ */
+template<typename Map, typename Pred>
+static void retitleTreeItem(Map& items, const QString& title, Pred match)
+{
+  for (auto it = items.begin(); it != items.end(); ++it) {
+    if (!match(it.value()))
+      continue;
+
+    auto* treeItem = it.key();
+    treeItem->setText(title);
+    treeItem->setData(title, TreeViewText);
+    items[treeItem].title = title;
+    break;
+  }
+}
+
+/**
  * @brief Applies a source-title edit and syncs the tree-item cache.
  */
 void EditorCommit::handleSourceTitleChange(QStandardItem* item)
@@ -127,16 +146,9 @@ void EditorCommit::handleSourceTitleChange(QStandardItem* item)
     tr("Rename Device"), QStringLiteral("source-title:%1").arg(m_editor.m_selectedSource.sourceId));
   m_model.updateSourceTitle(m_editor.m_selectedSource.sourceId, newTitle, false);
 
-  for (auto it = m_editor.m_sourceItems.begin(); it != m_editor.m_sourceItems.end(); ++it) {
-    if (it.value().sourceId != m_editor.m_selectedSource.sourceId)
-      continue;
-
-    auto* treeItem = it.key();
-    treeItem->setText(newTitle);
-    treeItem->setData(newTitle, TreeViewText);
-    m_editor.m_sourceItems[treeItem].title = newTitle;
-    break;
-  }
+  retitleTreeItem(m_editor.m_sourceItems, newTitle, [&](const auto& s) {
+    return s.sourceId == m_editor.m_selectedSource.sourceId;
+  });
 
   Q_EMIT m_editor.selectedTextChanged();
 }
@@ -523,16 +535,8 @@ bool EditorCommit::applyGroupTitleEdit(const QString& newTitle, int groupId)
   m_model.setNextUndoHint(tr("Rename Group"), QStringLiteral("group-title:%1").arg(groupId));
   m_model.updateGroup(groupId, m_editor.m_selectedGroup, false);
 
-  for (auto it = m_editor.m_groupItems.begin(); it != m_editor.m_groupItems.end(); ++it) {
-    if (it.value().groupId != groupId)
-      continue;
-
-    auto* treeItem = it.key();
-    treeItem->setText(newTitle);
-    treeItem->setData(newTitle, TreeViewText);
-    m_editor.m_groupItems[treeItem].title = newTitle;
-    break;
-  }
+  retitleTreeItem(
+    m_editor.m_groupItems, newTitle, [&](const auto& g) { return g.groupId == groupId; });
 
   Q_EMIT m_editor.selectedTextChanged();
   return true;
@@ -736,16 +740,8 @@ void EditorCommit::onActionItemChanged(QStandardItem* item)
 
   if (static_cast<ActionItem>(id.toInt()) == kActionView_Title) {
     const auto newTitle = value.toString();
-    for (auto it = m_editor.m_actionItems.begin(); it != m_editor.m_actionItems.end(); ++it) {
-      if (it.value().actionId != actionId)
-        continue;
-
-      auto* treeItem = it.key();
-      treeItem->setText(newTitle);
-      treeItem->setData(newTitle, TreeViewText);
-      m_editor.m_actionItems[treeItem].title = newTitle;
-      break;
-    }
+    retitleTreeItem(
+      m_editor.m_actionItems, newTitle, [&](const auto& a) { return a.actionId == actionId; });
 
     Q_EMIT m_editor.selectedTextChanged();
   } else {
@@ -1232,16 +1228,9 @@ void EditorCommit::commitDatasetFormEdit(int formId)
     pm.setNextUndoHint(tr("Rename Dataset"), key);
     pm.updateDataset(groupId, datasetId, m_editor.m_selectedDataset, false);
 
-    for (auto it = m_editor.m_datasetItems.begin(); it != m_editor.m_datasetItems.end(); ++it) {
-      if (it.value().groupId != groupId || it.value().datasetId != datasetId)
-        continue;
-
-      auto* treeItem = it.key();
-      treeItem->setText(newTitle);
-      treeItem->setData(newTitle, TreeViewText);
-      m_editor.m_datasetItems[treeItem].title = newTitle;
-      break;
-    }
+    retitleTreeItem(m_editor.m_datasetItems, newTitle, [&](const auto& d) {
+      return d.groupId == groupId && d.datasetId == datasetId;
+    });
 
     Q_EMIT m_editor.selectedTextChanged();
     Q_EMIT m_editor.datasetOptionsChanged();

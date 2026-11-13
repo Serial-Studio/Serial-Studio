@@ -204,8 +204,7 @@ API::CommandResponse API::Handlers::WorkspaceProfileHandler::profileUpdate(
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
   if (!params.contains(QStringLiteral("profileId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: profileId"));
+    return CommandResponse::makeMissingParam(id, "profileId");
 
   auto& pm            = DataModel::pipelineModules().projectModel;
   const int profileId = params.value(QStringLiteral("profileId")).toInt();
@@ -241,8 +240,7 @@ API::CommandResponse API::Handlers::WorkspaceProfileHandler::profileRemove(
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
   if (!params.contains(QStringLiteral("profileId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: profileId"));
+    return CommandResponse::makeMissingParam(id, "profileId");
 
   auto& pm            = DataModel::pipelineModules().projectModel;
   const int profileId = params.value(QStringLiteral("profileId")).toInt();

@@ -732,14 +732,6 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_vocabulary.generateComboBoxModels();
 }
 
-/**
- * @brief Adds one widget-picker entry per installed extension package (EditorVocabulary).
- */
-void DataModel::ProjectEditor::appendExtensionWidgets()
-{
-  m_vocabulary.appendExtensionWidgets();
-}
-
 //--------------------------------------------------------------------------------------------------
 // View state: the facade's own view latch (the enum is nested here, a sub-object header cannot
 // name it)
@@ -919,7 +911,7 @@ void DataModel::ProjectEditor::selectOutputWidget(int groupId, int widgetId)
  */
 void DataModel::ProjectEditor::selectFrameParser(int sourceId)
 {
-  m_selection.selectFrameParser(sourceId);
+  m_selection.displayFrameParserView(sourceId);
 }
 
 /**
@@ -1047,7 +1039,7 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
  */
 void DataModel::ProjectEditor::openTransformEditor()
 {
-  m_forms.openTransformEditor();
+  m_forms.openTransformEditorFor(m_selectedDataset.groupId, m_selectedDataset.datasetId);
 }
 
 /**
@@ -1071,7 +1063,7 @@ void DataModel::ProjectEditor::openAlarmBandsEditorForSelection()
  */
 void DataModel::ProjectEditor::openFrequencyMarkersEditorForSelection()
 {
-  m_forms.openFrequencyMarkersEditorForSelection();
+  m_forms.openFrequencyMarkersEditorFor(m_selectedDataset);
 }
 
 /**

@@ -116,25 +116,6 @@ QJsonObject attachRepairHint(QJsonObject reply, const QString& commandName)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the metadata block for an assistant.* tool, or empty if none matches.
- */
-QJsonObject assistantToolDescription(const QString& name)
-{
-  for (const auto& def : assistantToolDefs()) {
-    if (def.name != name)
-      continue;
-
-    QJsonObject desc;
-    desc[QStringLiteral("name")]        = def.name;
-    desc[QStringLiteral("description")] = def.description;
-    desc[QStringLiteral("inputSchema")] = def.inputSchema;
-    return desc;
-  }
-
-  return {};
-}
-
-/**
  * @brief Top-level dispatcher for every assistant.* virtual tool name.
  */
 QJsonObject executeAssistantTool(const QString& name, const QJsonObject& args)

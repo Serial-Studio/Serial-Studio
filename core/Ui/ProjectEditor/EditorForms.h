@@ -51,10 +51,8 @@ public:
   EditorForms& operator=(const EditorForms&) = delete;
 
   void buildProjectModel();
-  void openTransformEditor();
   void openAlarmBandsEditorForSelection();
   void openTransformEditorFor(int groupId, int datasetId);
-  void openFrequencyMarkersEditorForSelection();
   void openAlarmBandsEditorFor(const DataModel::Dataset& dataset);
   void openFrequencyMarkersEditorFor(const DataModel::Dataset& dataset);
   void buildGroupModel(const DataModel::Group& group);
@@ -62,7 +60,6 @@ public:
   void buildActionModel(const DataModel::Action& action);
   void buildDatasetModel(const DataModel::Dataset& dataset);
   void buildOutputWidgetModel(const DataModel::OutputWidget& widget);
-  void buildOutputWidgetValueRows(const DataModel::OutputWidget& widget);
   void buildOutputWidgetCommonRows(const DataModel::OutputWidget& widget);
   void buildOutputWidgetLabelRows(const DataModel::OutputWidget& widget);
   void buildOutputWidgetTransmitRow(const DataModel::OutputWidget& widget);

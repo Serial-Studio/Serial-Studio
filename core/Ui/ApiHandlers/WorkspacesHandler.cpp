@@ -767,8 +767,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::get(const QString& id,
                                                            const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("id")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: id"));
+    return CommandResponse::makeMissingParam(id, "id");
 
   const int wid = params.value(QStringLiteral("id")).toInt();
 
@@ -830,8 +829,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::remove(const QString& id,
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
   if (!params.contains(QStringLiteral("id")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: id"));
+    return CommandResponse::makeMissingParam(id, "id");
 
   const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
 
@@ -932,12 +930,10 @@ API::CommandResponse API::Handlers::WorkspacesHandler::rename(const QString& id,
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
   if (!params.contains(QStringLiteral("id")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: id"));
+    return CommandResponse::makeMissingParam(id, "id");
 
   if (!params.contains(QStringLiteral("title")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: title"));
+    return CommandResponse::makeMissingParam(id, "title");
 
   auto& pm = DataModel::pipelineModules().projectModel;
   if (!pm.customizeWorkspaces())
@@ -972,8 +968,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::update(const QString& id,
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
   if (!params.contains(QStringLiteral("id")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: id"));
+    return CommandResponse::makeMissingParam(id, "id");
 
   auto& pm = DataModel::pipelineModules().projectModel;
   if (!pm.customizeWorkspaces())
@@ -1079,8 +1074,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::customizeSet(const QStrin
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
   if (!params.contains(QStringLiteral("enabled")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
   auto& pm           = DataModel::pipelineModules().projectModel;
@@ -1442,8 +1436,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::reorder(const QString& id
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
   if (!params.contains(QStringLiteral("workspaceIds")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: workspaceIds"));
+    return CommandResponse::makeMissingParam(id, "workspaceIds");
 
   if (!params.value(QStringLiteral("workspaceIds")).isArray())
     return CommandResponse::makeError(

@@ -444,12 +444,22 @@ QString canonicalToolName(const QString& name)
  */
 QJsonObject describeCommand(const QString& requestedName)
 {
-  const QString name = canonicalToolName(requestedName);
-  if (isAssistantTool(name))
-    return assistantToolDescription(name);
+  const QString name     = canonicalToolName(requestedName);
+  const bool isAssistant = isAssistantTool(name);
+  if (isAssistant || isFsTool(name)) {
+    for (const auto& def : isAssistant ? assistantToolDefs() : fsToolDefs()) {
+      if (def.name != name)
+        continue;
 
-  if (isFsTool(name))
-    return fsToolDescription(name);
+      QJsonObject desc;
+      desc[QStringLiteral("name")]        = def.name;
+      desc[QStringLiteral("description")] = def.description;
+      desc[QStringLiteral("inputSchema")] = def.inputSchema;
+      return desc;
+    }
+
+    return {};
+  }
 
   auto& apiRegistry    = API::handlerContext().registry;
   const auto& commands = apiRegistry.commands();

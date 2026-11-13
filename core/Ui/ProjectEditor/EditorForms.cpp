@@ -459,18 +459,7 @@ void EditorForms::buildGroupModel(const DataModel::Group& group)
   buildGroupSourceSection(group);
 
   if (group.groupType != DataModel::GroupType::Output) {
-    int index  = 0;
-    bool found = false;
-    for (auto it = m_editor.m_groupWidgets.begin(); it != m_editor.m_groupWidgets.end();
-         ++it, ++index) {
-      if (it.key() == group.widget) {
-        found = true;
-        break;
-      }
-    }
-
-    if (!found)
-      index = 0;
+    const int index = qMax(0, m_editor.m_groupWidgets.keys().indexOf(group.widget));
 
     auto* widgetItem = new QStandardItem();
     widgetItem->setEditable(true);
@@ -836,18 +825,7 @@ void EditorForms::buildActionPayloadRows(const DataModel::Action& action)
     m_editor.m_actionModel->appendRow(encodingItem);
   }
 
-  int eolIndex = 0;
-  bool found   = false;
-  for (auto it = m_editor.m_eolSequences.begin(); it != m_editor.m_eolSequences.end();
-       ++it, ++eolIndex) {
-    if (it.key() == action.eolSequence) {
-      found = true;
-      break;
-    }
-  }
-
-  if (!found)
-    eolIndex = 0;
+  const int eolIndex = qMax(0, m_editor.m_eolSequences.keys().indexOf(action.eolSequence));
 
   auto* eolItem = new QStandardItem();
   eolItem->setData(ComboBox, WidgetType);
@@ -1101,14 +1079,6 @@ void EditorForms::openAlarmBandsEditorForMultiSelection()
 }
 
 /**
- * @brief Emits openFrequencyMarkersEditor for the currently-selected dataset.
- */
-void EditorForms::openFrequencyMarkersEditorForSelection()
-{
-  openFrequencyMarkersEditorFor(m_editor.m_selectedDataset);
-}
-
-/**
  * @brief Emits openFrequencyMarkersEditor for @p dataset; the editable frequency range is 0 to
  *        Nyquist from the dataset's configured FFT sampling rate.
  */
@@ -1321,14 +1291,6 @@ void EditorForms::buildOutputWidgetTransmitRow(const DataModel::OutputWidget& wi
 }
 
 /**
- * @brief Appends the Value Range rows (Input kind, Min, Max, Step, Decimals, Units, Quantize).
- */
-void EditorForms::buildOutputWidgetValueRows(const DataModel::OutputWidget& widget)
-{
-  appendOutputValueRows(m_editor.m_outputWidgetModel, widget);
-}
-
-/**
  * @brief Builds the form model for editing an output widget's properties.
  */
 void EditorForms::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
@@ -1345,7 +1307,7 @@ void EditorForms::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
   buildOutputWidgetCommonRows(widget);
   appendOutputPresentationRows(m_editor.m_outputWidgetModel, widget);
   buildOutputWidgetTransmitRow(widget);
-  buildOutputWidgetValueRows(widget);
+  appendOutputValueRows(m_editor.m_outputWidgetModel, widget);
   appendOutputStateRows(m_editor.m_outputWidgetModel, widget, m_model);
 
   QObject::connect(
@@ -1355,14 +1317,6 @@ void EditorForms::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
     [this](QStandardItem* item) { m_editor.m_commit.onOutputWidgetItemChanged(item); });
 
   Q_EMIT m_editor.outputWidgetModelChanged();
-}
-
-/**
- * @brief Opens the dataset value transform editor for the selected dataset.
- */
-void EditorForms::openTransformEditor()
-{
-  openTransformEditorFor(m_editor.m_selectedDataset.groupId, m_editor.m_selectedDataset.datasetId);
 }
 
 /**

@@ -30,18 +30,6 @@
 
 #include "Misc/ThemeCatalog.h"
 
-template<typename... Colors>
-inline QString QSS(const QString& style, const Colors&... colors)
-{
-  QStringList colorNames;
-  (colorNames << ... << colors.name());
-  QString result = style;
-  for (int i = 0; i < colorNames.size(); ++i)
-    result = result.arg(colorNames[i]);
-
-  return result;
-}
-
 namespace Misc {
 /**
  * @brief Republishes @p colors into @p map one key at a time, so only the entries that actually

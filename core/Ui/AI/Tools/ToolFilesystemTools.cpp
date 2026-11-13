@@ -14,25 +14,6 @@
 namespace AI::ToolDetail {
 
 /**
- * @brief Returns the metadata block for an fs.* tool, or empty if none matches.
- */
-QJsonObject fsToolDescription(const QString& name)
-{
-  for (const auto& def : fsToolDefs()) {
-    if (def.name != name)
-      continue;
-
-    QJsonObject desc;
-    desc[QStringLiteral("name")]        = def.name;
-    desc[QStringLiteral("description")] = def.description;
-    desc[QStringLiteral("inputSchema")] = def.inputSchema;
-    return desc;
-  }
-
-  return {};
-}
-
-/**
  * @brief Routes an fs.* tool call to the bounded FileSandbox primitive on the calling thread.
  *        The conversation runs fs.read and fs.search on a worker (spec 0075, J3), so nothing
  *        added here may touch a GUI-owned object: the sandbox guards its own state and every

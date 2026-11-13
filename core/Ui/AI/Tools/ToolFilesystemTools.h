@@ -16,7 +16,6 @@
 
 namespace AI::ToolDetail {
 
-[[nodiscard]] QJsonObject fsToolDescription(const QString& name);
 [[nodiscard]] QJsonObject executeFsTool(const QString& name, const QJsonObject& args);
 
 }  // namespace AI::ToolDetail

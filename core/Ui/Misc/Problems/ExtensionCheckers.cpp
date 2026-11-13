@@ -133,15 +133,6 @@ static void checkEntityReference(const QString& widget,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Republishes the catalog's load-time rejections: malformed manifests, incompatible host
- *        ranges, reserved identifiers, missing QML files, and unresolved dependencies.
- */
-static void checkCatalogFindings(QList<Finding>& out)
-{
-  out.append(widgetCatalog().findings());
-}
-
-/**
  * @brief Walks the project for group and dataset widget selections that name a widget package,
  *        reporting the ones that cannot render. Built-in widget strings are reserved identifiers,
  *        so they never reach the catalog lookup.
@@ -168,7 +159,7 @@ static void checkProjectReferences(QList<Finding>& out)
  */
 static void checkWidgetExtensions(QList<Finding>& out)
 {
-  checkCatalogFindings(out);
+  out.append(widgetCatalog().findings());
   checkProjectReferences(out);
 }
 

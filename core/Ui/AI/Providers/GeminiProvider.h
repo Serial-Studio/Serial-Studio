@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <functional>
 #include <QJsonValue>
 
 #include "AI/Providers/Provider.h"
@@ -16,11 +15,6 @@
 class QNetworkAccessManager;
 
 namespace AI {
-
-/**
- * @brief Functor that returns the current API key (or empty when unset).
- */
-using KeyGetter = std::function<QString()>;
 
 /**
  * @brief Google Gemini API adapter (first-slice stub).

@@ -128,22 +128,6 @@ int Misc::IconPacks::widgetPack() const
 }
 
 /**
- * @brief Whether the pack in effect is monochrome and drawn through the tint provider.
- */
-bool Misc::IconPacks::mono() const
-{
-  return m_registry.isMono();
-}
-
-/**
- * @brief The pack in effect (empty for the house set), after the theme's parameter is applied.
- */
-QString Misc::IconPacks::activePackId() const
-{
-  return m_registry.pack();
-}
-
-/**
  * @brief The selector entries in the interface language.
  */
 const QStringList& Misc::IconPacks::availablePacks() const noexcept

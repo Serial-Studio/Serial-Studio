@@ -658,20 +658,26 @@ void EditorSelection::navigateForward()
 }
 
 /**
+ * @brief Makes the first item of @p map matching @p pred the current tree selection.
+ */
+template<typename Map, typename Pred>
+static void selectNavMatch(QItemSelectionModel* model, const Map& map, Pred&& pred)
+{
+  if (!model)
+    return;
+
+  if (auto* item = navFind(map, pred))
+    model->setCurrentIndex(item->index(), QItemSelectionModel::ClearAndSelect);
+}
+
+/**
  * @brief Selects the source item with the given sourceId in the tree.
  */
 void EditorSelection::selectSource(int sourceId)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_sourceItems.begin(); it != m_editor.m_sourceItems.end(); ++it) {
-    if (it.value().sourceId == sourceId) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
+  selectNavMatch(m_editor.m_selectionModel, m_editor.m_sourceItems, [sourceId](const auto& s) {
+    return s.sourceId == sourceId;
+  });
 }
 
 /**
@@ -679,16 +685,9 @@ void EditorSelection::selectSource(int sourceId)
  */
 void EditorSelection::selectGroup(int groupId)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_groupItems.begin(); it != m_editor.m_groupItems.end(); ++it) {
-    if (it.value().groupId == groupId) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
+  selectNavMatch(m_editor.m_selectionModel, m_editor.m_groupItems, [groupId](const auto& g) {
+    return g.groupId == groupId;
+  });
 }
 
 /**
@@ -696,16 +695,10 @@ void EditorSelection::selectGroup(int groupId)
  */
 void EditorSelection::selectDataset(int groupId, int datasetId)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_datasetItems.begin(); it != m_editor.m_datasetItems.end(); ++it) {
-    if (it.value().groupId == groupId && it.value().datasetId == datasetId) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
+  selectNavMatch(
+    m_editor.m_selectionModel, m_editor.m_datasetItems, [groupId, datasetId](const auto& d) {
+      return d.groupId == groupId && d.datasetId == datasetId;
+    });
 }
 
 /**
@@ -713,24 +706,9 @@ void EditorSelection::selectDataset(int groupId, int datasetId)
  */
 void EditorSelection::selectAction(int actionId)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_actionItems.begin(); it != m_editor.m_actionItems.end(); ++it) {
-    if (it.value().actionId == actionId) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
-}
-
-/**
- * @brief Selects the Frame Parser tree node for the given source.
- */
-void EditorSelection::selectFrameParser(int sourceId)
-{
-  displayFrameParserView(sourceId);
+  selectNavMatch(m_editor.m_selectionModel, m_editor.m_actionItems, [actionId](const auto& a) {
+    return a.actionId == actionId;
+  });
 }
 
 /**
@@ -738,17 +716,10 @@ void EditorSelection::selectFrameParser(int sourceId)
  */
 void EditorSelection::selectOutputWidget(int groupId, int widgetId)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_outputWidgetItems.begin(); it != m_editor.m_outputWidgetItems.end();
-       ++it) {
-    if (it.value().groupId == groupId && it.value().widgetId == widgetId) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
+  selectNavMatch(
+    m_editor.m_selectionModel, m_editor.m_outputWidgetItems, [groupId, widgetId](const auto& w) {
+      return w.groupId == groupId && w.widgetId == widgetId;
+    });
 }
 
 /**

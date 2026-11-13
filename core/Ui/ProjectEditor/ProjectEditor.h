@@ -558,7 +558,6 @@ public slots:
   Q_INVOKABLE [[nodiscard]] QString groupWidgetRole(int groupId) const;
 
 private slots:
-  void appendExtensionWidgets();
   void generateComboBoxModels();
   void setCurrentView(const DataModel::ProjectEditor::CurrentView view);
 

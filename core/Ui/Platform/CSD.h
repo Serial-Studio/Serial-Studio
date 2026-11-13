@@ -46,13 +46,10 @@ class Titlebar : public QQuickPaintedItem {
   Q_OBJECT
 
 signals:
-  void titleChanged();
   void closeClicked();
   void minimizeClicked();
   void maximizeClicked();
   void systemMenuRequested();
-  void windowActiveChanged();
-  void backgroundColorChanged();
 
 public:
   explicit Titlebar(QQuickItem* parent = nullptr);
@@ -60,8 +57,6 @@ public:
   void paint(QPainter* painter) override;
 
   [[nodiscard]] QString title() const;
-  [[nodiscard]] bool windowActive() const;
-  [[nodiscard]] QColor backgroundColor() const;
 
 public slots:
   void setTitle(const QString& title);
@@ -137,9 +132,6 @@ class Window : public QObject {
 public:
   explicit Window(QWindow* window, const QString& color = QString(), QObject* parent = nullptr);
   ~Window() override;
-
-  [[nodiscard]] QWindow* window() const;
-  [[nodiscard]] Titlebar* titleBar() const;
 
   [[nodiscard]] int titleBarHeight() const;
 

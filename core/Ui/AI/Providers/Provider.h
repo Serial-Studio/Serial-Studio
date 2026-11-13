@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <functional>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QObject>
@@ -25,6 +26,11 @@ class QUrl;
 class QNetworkRequest;
 
 namespace AI {
+
+/**
+ * @brief Functor that returns the current API key (or empty when unset).
+ */
+using KeyGetter = std::function<QString()>;
 
 /**
  * @brief Backend capability hints used to shape the assistant tool surface.
@@ -38,6 +44,8 @@ struct ProviderCapabilities {
   bool structuredToolResults  = false;
   bool needsSmallToolSurface  = true;
   bool slowFirstToken         = false;
+  bool pdfInput               = false;
+  bool imageInput             = false;
   int toolResultByteBudget    = 4096;
   int contextWindowTokens     = 128000;
   int maxOutputTokens         = 8192;
@@ -73,6 +81,7 @@ class Reply : public QObject {
 
 public:
   static constexpr qint64 kMaxStreamedReplyBytes = 8 * 1024 * 1024;
+  static constexpr qsizetype kLargeRequestBytes  = 1024 * 1024;
 
   explicit Reply(QObject* parent = nullptr)
     : QObject(parent), m_transientError(false), m_finished(false), m_streamedBytes(0)
@@ -83,6 +92,16 @@ public:
   virtual void abort() = 0;
 
   [[nodiscard]] bool transientError() const noexcept { return m_transientError; }
+
+  /**
+   * @brief Inactivity timeout for a request of @p bodyBytes: a body that carries attachments
+   *        gets three times the base, because the provider reads the files before its first
+   *        byte comes back.
+   */
+  [[nodiscard]] static constexpr int uploadAwareTimeoutMs(int baseMs, qsizetype bodyBytes) noexcept
+  {
+    return bodyBytes > kLargeRequestBytes ? baseMs * 3 : baseMs;
+  }
 
   [[nodiscard]] static bool isTransportAllowed(const QUrl& url);
   [[nodiscard]] static bool endsTurnOnParseError(const QString& reason);

@@ -16,7 +16,6 @@
 
 namespace AI::ToolDetail {
 
-[[nodiscard]] QJsonObject assistantToolDescription(const QString& name);
 [[nodiscard]] QJsonObject makeRepairHint(const QString& name, const QString& message);
 [[nodiscard]] QJsonObject runCommand(const QString& name, const QJsonObject& args = {});
 [[nodiscard]] QJsonObject attachRepairHint(QJsonObject reply, const QString& commandName);

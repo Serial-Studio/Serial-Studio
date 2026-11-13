@@ -59,6 +59,84 @@ EditorMultiSelect::EditorMultiSelect(ProjectEditor& editor, ProjectModel& model)
   : m_editor(editor), m_model(model)
 {}
 
+/**
+ * @brief Resolves each batch (groupId, itemId) pair to its record in @p sel (and the pair into
+ *        @p ids when given), skipping ids that no longer name an item.
+ */
+template<typename Item>
+static void collectBatchSelection(const std::vector<DataModel::Group>& groups,
+                                  const QVector<QPair<int, int>>& batch,
+                                  std::vector<Item> DataModel::Group::* members,
+                                  int Item::* idField,
+                                  QVector<Item>& sel,
+                                  QVector<QPair<int, int>>* ids)
+{
+  sel.reserve(static_cast<qsizetype>(batch.size()));
+  for (const auto& pr : batch) {
+    const int gid = pr.first;
+    if (gid < 0 || static_cast<size_t>(gid) >= groups.size())
+      continue;
+
+    for (const auto& item : groups[gid].*members)
+      if (item.*idField == pr.second) {
+        sel.append(item);
+        if (ids)
+          ids->append(pr);
+
+        break;
+      }
+  }
+}
+
+/**
+ * @brief Greys the identity rows of an aggregate form and marks every other row whose value
+ *        differs across @p maps as Mixed; @p autoIntWidget counts AutoIntField as an int editor.
+ */
+template<typename IsIdentity>
+static void markMixedRows(QStandardItemModel* model,
+                          const QVector<QHash<int, QVariant>>& maps,
+                          const bool autoIntWidget,
+                          IsIdentity isIdentity)
+{
+  const int rows = model->rowCount();
+  for (int r = 0; r < rows; ++r) {
+    auto* it = model->item(r);
+    if (!it)
+      continue;
+
+    const auto ptVar = it->data(ParameterType);
+    if (!ptVar.isValid())
+      continue;
+
+    const int wt = it->data(WidgetType).toInt();
+    const bool intWidget =
+      (wt == ComboBox || wt == CheckBox || (autoIntWidget && wt == AutoIntField));
+    const QVariant blank = intWidget ? QVariant(-1) : QVariant(QString());
+
+    const int pt = ptVar.toInt();
+    if (isIdentity(pt)) {
+      it->setEditable(false);
+      it->setData(false, Active);
+      it->setData(blank, EditableValue);
+      it->setData(ProjectEditor::tr("(multiple)"), PlaceholderValue);
+      continue;
+    }
+
+    const QVariant first = maps.first().value(pt);
+    bool mixed           = false;
+    for (int i = 1; i < maps.size(); ++i)
+      if (maps[i].contains(pt) && maps[i].value(pt) != first) {
+        mixed = true;
+        break;
+      }
+
+    if (mixed) {
+      it->setData(blank, EditableValue);
+      it->setData(ProjectEditor::tr("Mixed"), PlaceholderValue);
+    }
+  }
+}
+
 //--------------------------------------------------------------------------------------------------
 // Multi-selection aggregate editing
 //--------------------------------------------------------------------------------------------------
@@ -158,18 +236,12 @@ void EditorMultiSelect::buildMultiDatasetModel()
   const auto& groups = pm.groups();
 
   QVector<DataModel::Dataset> sel;
-  sel.reserve(static_cast<qsizetype>(m_editor.m_batchItems.size()));
-  for (const auto& pr : m_editor.m_batchItems) {
-    const int gid = pr.first, dsid = pr.second;
-    if (gid < 0 || static_cast<size_t>(gid) >= groups.size())
-      continue;
-
-    for (const auto& d : groups[gid].datasets)
-      if (d.datasetId == dsid) {
-        sel.append(d);
-        break;
-      }
-  }
+  collectBatchSelection(groups,
+                        m_editor.m_batchItems,
+                        &DataModel::Group::datasets,
+                        &DataModel::Dataset::datasetId,
+                        sel,
+                        nullptr);
 
   if (sel.isEmpty())
     return;
@@ -195,42 +267,9 @@ void EditorMultiSelect::buildMultiDatasetModel()
   if (DataModel::PropertyHooks::ledEnabled(m_editor.m_selectedDataset, m_editor.m_projectModelRef))
     m_editor.addLEDSection(m_editor.m_datasetModel, m_editor.m_selectedDataset);
 
-  const int rows = m_editor.m_datasetModel->rowCount();
-  for (int r = 0; r < rows; ++r) {
-    auto* it = m_editor.m_datasetModel->item(r);
-    if (!it)
-      continue;
-
-    const auto ptVar = it->data(ParameterType);
-    if (!ptVar.isValid())
-      continue;
-
-    const int wt         = it->data(WidgetType).toInt();
-    const bool intWidget = (wt == ComboBox || wt == CheckBox || wt == AutoIntField);
-    const QVariant blank = intWidget ? QVariant(-1) : QVariant(QString());
-
-    const int pt = ptVar.toInt();
-    if (pt == kDatasetView_Title || pt == kDatasetView_Index || pt == kDatasetView_Alias) {
-      it->setEditable(false);
-      it->setData(false, Active);
-      it->setData(blank, EditableValue);
-      it->setData(tr("(multiple)"), PlaceholderValue);
-      continue;
-    }
-
-    const QVariant first = maps.first().value(pt);
-    bool mixed           = false;
-    for (int i = 1; i < maps.size(); ++i)
-      if (maps[i].contains(pt) && maps[i].value(pt) != first) {
-        mixed = true;
-        break;
-      }
-
-    if (mixed) {
-      it->setData(blank, EditableValue);
-      it->setData(tr("Mixed"), PlaceholderValue);
-    }
-  }
+  markMixedRows(m_editor.m_datasetModel, maps, true, [](int pt) {
+    return pt == kDatasetView_Title || pt == kDatasetView_Index || pt == kDatasetView_Alias;
+  });
 
   QObject::connect(m_editor.m_datasetModel,
                    &CustomModel::itemChanged,
@@ -284,18 +323,12 @@ void EditorMultiSelect::buildMultiOutputWidgetModel()
   const auto& groups = pm.groups();
 
   QVector<DataModel::OutputWidget> sel;
-  sel.reserve(static_cast<qsizetype>(m_editor.m_batchItems.size()));
-  for (const auto& pr : m_editor.m_batchItems) {
-    const int gid = pr.first, wid = pr.second;
-    if (gid < 0 || static_cast<size_t>(gid) >= groups.size())
-      continue;
-
-    for (const auto& w : groups[gid].outputWidgets)
-      if (w.widgetId == wid) {
-        sel.append(w);
-        break;
-      }
-  }
+  collectBatchSelection(groups,
+                        m_editor.m_batchItems,
+                        &DataModel::Group::outputWidgets,
+                        &DataModel::OutputWidget::widgetId,
+                        sel,
+                        nullptr);
 
   if (sel.isEmpty())
     return;
@@ -315,7 +348,7 @@ void EditorMultiSelect::buildMultiOutputWidgetModel()
 
   m_editor.m_forms.buildOutputWidgetCommonRows(m_editor.m_selectedOutputWidget);
   m_editor.m_forms.buildOutputWidgetTransmitRow(m_editor.m_selectedOutputWidget);
-  m_editor.m_forms.buildOutputWidgetValueRows(m_editor.m_selectedOutputWidget);
+  appendOutputValueRows(m_editor.m_outputWidgetModel, m_editor.m_selectedOutputWidget);
 
   const auto type = sel.first().type;
   const bool alike =
@@ -324,42 +357,8 @@ void EditorMultiSelect::buildMultiOutputWidgetModel()
     DataModel::appendOutputPresentationRows(m_editor.m_outputWidgetModel,
                                             m_editor.m_selectedOutputWidget);
 
-  const int rows = m_editor.m_outputWidgetModel->rowCount();
-  for (int r = 0; r < rows; ++r) {
-    auto* it = m_editor.m_outputWidgetModel->item(r);
-    if (!it)
-      continue;
-
-    const auto ptVar = it->data(ParameterType);
-    if (!ptVar.isValid())
-      continue;
-
-    const int wt         = it->data(WidgetType).toInt();
-    const bool intWidget = (wt == ComboBox || wt == CheckBox);
-    const QVariant blank = intWidget ? QVariant(-1) : QVariant(QString());
-
-    const int pt = ptVar.toInt();
-    if (pt == kOutputWidget_Title) {
-      it->setEditable(false);
-      it->setData(false, Active);
-      it->setData(blank, EditableValue);
-      it->setData(tr("(multiple)"), PlaceholderValue);
-      continue;
-    }
-
-    const QVariant first = maps.first().value(pt);
-    bool mixed           = false;
-    for (int i = 1; i < maps.size(); ++i)
-      if (maps[i].contains(pt) && maps[i].value(pt) != first) {
-        mixed = true;
-        break;
-      }
-
-    if (mixed) {
-      it->setData(blank, EditableValue);
-      it->setData(tr("Mixed"), PlaceholderValue);
-    }
-  }
+  markMixedRows(
+    m_editor.m_outputWidgetModel, maps, false, [](int pt) { return pt == kOutputWidget_Title; });
 
   QObject::connect(m_editor.m_outputWidgetModel,
                    &CustomModel::itemChanged,
@@ -435,21 +434,12 @@ void EditorMultiSelect::onMultiSelectionItemChanged(QStandardItem* item)
 
   QVector<DataModel::Dataset> sel;
   QVector<QPair<int, int>> ids;
-  {
-    const auto& groups = pm.groups();
-    for (const auto& pr : m_editor.m_batchItems) {
-      const int gid = pr.first, dsid = pr.second;
-      if (gid < 0 || static_cast<size_t>(gid) >= groups.size())
-        continue;
-
-      for (const auto& d : groups[gid].datasets)
-        if (d.datasetId == dsid) {
-          sel.append(d);
-          ids.append(pr);
-          break;
-        }
-    }
-  }
+  collectBatchSelection(pm.groups(),
+                        m_editor.m_batchItems,
+                        &DataModel::Group::datasets,
+                        &DataModel::Dataset::datasetId,
+                        sel,
+                        &ids);
 
   const ProjectUndoFrame undo_frame{pm, tr("Edit Selection")};
   pm.setNextUndoHint(tr("Edit Selection"),
@@ -473,17 +463,12 @@ void EditorMultiSelect::onMultiSelectionItemChanged(QStandardItem* item)
     m_editor.m_commit.syncDatasetTreeIcon(ds);
   }
 
-  if (multiSelectionEditKeepsModel(item, rebuild)) {
-    m_editor.m_batchApplying = false;
-    pm.setAutoSaveSuspended(false);
-    QTimer::singleShot(0, &m_editor, [this] { m_model.flushAutoSave(); });
-    return;
-  }
-
+  const bool keep          = multiSelectionEditKeepsModel(item, rebuild);
   m_editor.m_batchApplying = false;
   pm.setAutoSaveSuspended(false);
+  if (!keep)
+    buildMultiDatasetModel();
 
-  buildMultiDatasetModel();
   QTimer::singleShot(0, &m_editor, [this] { m_model.flushAutoSave(); });
 }
 
@@ -498,21 +483,12 @@ void EditorMultiSelect::fanOutputWidgetSelectionEdit(QStandardItem* item)
 
   QVector<DataModel::OutputWidget> sel;
   QVector<QPair<int, int>> ids;
-  {
-    const auto& groups = pm.groups();
-    for (const auto& pr : m_editor.m_batchItems) {
-      const int gid = pr.first, wid = pr.second;
-      if (gid < 0 || static_cast<size_t>(gid) >= groups.size())
-        continue;
-
-      for (const auto& w : groups[gid].outputWidgets)
-        if (w.widgetId == wid) {
-          sel.append(w);
-          ids.append(pr);
-          break;
-        }
-    }
-  }
+  collectBatchSelection(pm.groups(),
+                        m_editor.m_batchItems,
+                        &DataModel::Group::outputWidgets,
+                        &DataModel::OutputWidget::widgetId,
+                        sel,
+                        &ids);
 
   const ProjectUndoFrame undo_frame{pm, tr("Edit Selection")};
   pm.setNextUndoHint(tr("Edit Selection"),
@@ -527,17 +503,12 @@ void EditorMultiSelect::fanOutputWidgetSelectionEdit(QStandardItem* item)
     pm.updateOutputWidget(ids[i].first, ids[i].second, widget, false);
   }
 
-  if (multiSelectionEditKeepsModel(item, PropertyHooks::RebuildHint::None)) {
-    m_editor.m_batchApplying = false;
-    pm.setAutoSaveSuspended(false);
-    QTimer::singleShot(0, &m_editor, [this] { m_model.flushAutoSave(); });
-    return;
-  }
-
+  const bool keep          = multiSelectionEditKeepsModel(item, PropertyHooks::RebuildHint::None);
   m_editor.m_batchApplying = false;
   pm.setAutoSaveSuspended(false);
+  if (!keep)
+    buildMultiOutputWidgetModel();
 
-  buildMultiOutputWidgetModel();
   QTimer::singleShot(0, &m_editor, [this] { m_model.flushAutoSave(); });
 }
 
@@ -555,21 +526,12 @@ void EditorMultiSelect::changeDatasetOptionForSelection(int option, bool checked
 
   QVector<DataModel::Dataset> sel;
   QVector<QPair<int, int>> ids;
-  {
-    const auto& groups = pm.groups();
-    for (const auto& pr : m_editor.m_batchItems) {
-      const int gid = pr.first, dsid = pr.second;
-      if (gid < 0 || static_cast<size_t>(gid) >= groups.size())
-        continue;
-
-      for (const auto& d : groups[gid].datasets)
-        if (d.datasetId == dsid) {
-          sel.append(d);
-          ids.append(pr);
-          break;
-        }
-    }
-  }
+  collectBatchSelection(pm.groups(),
+                        m_editor.m_batchItems,
+                        &DataModel::Group::datasets,
+                        &DataModel::Dataset::datasetId,
+                        sel,
+                        &ids);
 
   const ProjectUndoFrame undo_frame{pm, tr("Edit Selection")};
   pm.setAutoSaveSuspended(true);

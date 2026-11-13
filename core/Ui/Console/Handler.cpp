@@ -272,7 +272,7 @@ bool Console::Handler::ansiColorsEnabled() const
  */
 bool Console::Handler::vt100Emulation() const
 {
-  if (hasImageWidget())
+  if (imageWidgetActive())
     return false;
 
   return m_vt100Emulation;
@@ -283,7 +283,7 @@ bool Console::Handler::vt100Emulation() const
  */
 bool Console::Handler::ansiColors() const
 {
-  if (hasImageWidget())
+  if (imageWidgetActive())
     return false;
 
   return m_ansiColors;
@@ -1305,9 +1305,9 @@ void Console::Handler::appendSequenceNote(int sourceId, const QString& text)
 }
 
 /**
- * @brief Returns whether the active project contains an image widget.
+ * @brief Returns true when project mode is active and at least one image widget is present.
  */
-bool Console::Handler::hasImageWidget() const
+bool Console::Handler::imageWidgetActive() const
 {
   SS_ASSERT(m_connectionManager != nullptr, return false);
   SS_ASSERT(m_appState != nullptr, return false);
@@ -1325,14 +1325,6 @@ bool Console::Handler::hasImageWidget() const
       return true;
 
   return false;
-}
-
-/**
- * @brief Returns true when project mode is active and at least one image widget is present.
- */
-bool Console::Handler::imageWidgetActive() const
-{
-  return hasImageWidget();
 }
 
 /**

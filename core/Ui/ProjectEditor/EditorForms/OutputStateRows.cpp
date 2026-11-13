@@ -322,16 +322,6 @@ static void applyTableTarget(DataModel::OutputWidget& widget,
 }
 
 /**
- * @brief Adopts the dataset at picker @p index as the state source.
- */
-static void applyDatasetTarget(DataModel::OutputWidget& widget,
-                               const DataModel::ProjectModel& project,
-                               const int index)
-{
-  widget.stateDatasetId = datasetIdAtIndex(project, index);
-}
-
-/**
  * @brief Resolves a picker index back onto the widget. Index 0 is "None", which clears the
  *        binding; an index past the end also clears it rather than binding to something arbitrary.
  */
@@ -350,7 +340,7 @@ void DataModel::applyOutputStateTarget(OutputWidget& widget,
     return;
   }
 
-  applyDatasetTarget(widget, project, index);
+  widget.stateDatasetId = datasetIdAtIndex(project, index);
 }
 
 /**

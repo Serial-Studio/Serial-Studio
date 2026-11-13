@@ -354,7 +354,6 @@ private:
     TextFormat::LineState line;
   };
 
-  [[nodiscard]] bool hasImageWidget() const;
   QString dataToString(QByteArrayView data);
   QString plainTextStr(QByteArrayView data);
   [[nodiscard]] QString appendToDevice(int deviceId, const QString& str, bool addTimestamp);

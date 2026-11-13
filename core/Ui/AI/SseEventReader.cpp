@@ -31,11 +31,6 @@ AI::SseEventReader::SseEventReader(QObject* parent) : QObject(parent), m_pending
  */
 void AI::SseEventReader::feed(const QByteArray& chunk)
 {
-  if (chunk.isEmpty()) {
-    drainFrames();
-    return;
-  }
-
   const auto normalized = normalizeNewlines(chunk);
   if (normalized.isEmpty()) {
     drainFrames();

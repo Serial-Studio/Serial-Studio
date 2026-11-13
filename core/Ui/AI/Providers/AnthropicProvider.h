@@ -8,18 +8,11 @@
 
 #pragma once
 
-#include <functional>
-
 #include "AI/Providers/Provider.h"
 
 class QNetworkAccessManager;
 
 namespace AI {
-
-/**
- * @brief Functor that returns the current API key (or empty when unset).
- */
-using KeyGetter = std::function<QString()>;
 
 /**
  * @brief Anthropic Messages API adapter (first-slice stub).

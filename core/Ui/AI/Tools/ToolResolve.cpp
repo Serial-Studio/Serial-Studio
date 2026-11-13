@@ -23,36 +23,34 @@ QJsonObject resolveDataset(const QJsonObject& args)
 {
   QJsonArray attempts;
 
-  auto tryResolve = [&attempts](const QString& command, const QJsonObject& params) {
+  QJsonObject resolved;
+  QString method;
+
+  auto tryResolve = [&attempts, &resolved, &method](
+                      const QString& command, const QJsonObject& params, const QString& name) {
     QJsonObject attempt;
     attempt[QStringLiteral("command")]   = command;
     attempt[QStringLiteral("arguments")] = params;
     const auto reply                     = runCommand(command, params);
     attempt[QStringLiteral("ok")]        = reply.value(QStringLiteral("ok")).toBool();
     attempts.append(attempt);
-    return reply;
+    if (!reply.value(QStringLiteral("ok")).toBool())
+      return;
+
+    resolved = reply.value(QStringLiteral("result")).toObject();
+    method   = name;
   };
 
-  QJsonObject resolved;
-  QString method;
   if (args.contains(Keys::UniqueId)) {
     QJsonObject params;
     params[Keys::UniqueId] = args.value(Keys::UniqueId);
-    const auto reply       = tryResolve(QStringLiteral("project.dataset.getByUniqueId"), params);
-    if (reply.value(QStringLiteral("ok")).toBool()) {
-      resolved = reply.value(QStringLiteral("result")).toObject();
-      method   = Keys::UniqueId;
-    }
+    tryResolve(QStringLiteral("project.dataset.getByUniqueId"), params, QString(Keys::UniqueId));
   }
 
   if (resolved.isEmpty() && !args.value(QStringLiteral("path")).toString().isEmpty()) {
     QJsonObject params;
     params[QStringLiteral("path")] = args.value(QStringLiteral("path")).toString();
-    const auto reply = tryResolve(QStringLiteral("project.dataset.getByPath"), params);
-    if (reply.value(QStringLiteral("ok")).toBool()) {
-      resolved = reply.value(QStringLiteral("result")).toObject();
-      method   = QStringLiteral("path");
-    }
+    tryResolve(QStringLiteral("project.dataset.getByPath"), params, QStringLiteral("path"));
   }
 
   const auto path = args.value(QStringLiteral("path")).toString();
@@ -69,11 +67,7 @@ QJsonObject resolveDataset(const QJsonObject& args)
     if (args.contains(Keys::SourceId))
       params[Keys::SourceId] = args.value(Keys::SourceId).toInt();
 
-    const auto reply = tryResolve(QStringLiteral("project.dataset.getByTitle"), params);
-    if (reply.value(QStringLiteral("ok")).toBool()) {
-      resolved = reply.value(QStringLiteral("result")).toObject();
-      method   = QStringLiteral("title");
-    }
+    tryResolve(QStringLiteral("project.dataset.getByTitle"), params, QStringLiteral("title"));
   }
 
   QJsonObject out;
@@ -123,16 +117,11 @@ QJsonObject resolveWorkspace(const QJsonObject& args)
   }
 
   for (const auto& value : rows) {
-    const auto row = value.toObject();
-    if (wantedId >= 0 && row.value(QStringLiteral("id")).toInt() == wantedId) {
-      QJsonObject out;
-      out[QStringLiteral("ok")]        = true;
-      out[QStringLiteral("workspace")] = row;
-      return out;
-    }
-
-    if (!title.isEmpty()
-        && row.value(QStringLiteral("title")).toString().toCaseFolded() == titleFold) {
+    const auto row  = value.toObject();
+    const bool byId = wantedId >= 0 && row.value(QStringLiteral("id")).toInt() == wantedId;
+    const bool byTitle =
+      !title.isEmpty() && row.value(QStringLiteral("title")).toString().toCaseFolded() == titleFold;
+    if (byId || byTitle) {
       QJsonObject out;
       out[QStringLiteral("ok")]        = true;
       out[QStringLiteral("workspace")] = row;
@@ -162,17 +151,13 @@ QJsonObject resolveGroup(const QJsonObject& args)
   const auto title   = args.value(QStringLiteral("group")).toString().toCaseFolded();
 
   for (const auto& value : rows) {
-    const auto row = value.toObject();
-    if (wantedId >= 0
-        && (row.value(QStringLiteral("groupId")).toInt(-1) == wantedId
-            || row.value(QStringLiteral("id")).toInt(-1) == wantedId)) {
-      QJsonObject out;
-      out[QStringLiteral("ok")]    = true;
-      out[QStringLiteral("group")] = row;
-      return out;
-    }
-
-    if (!title.isEmpty() && row.value(QStringLiteral("title")).toString().toCaseFolded() == title) {
+    const auto row  = value.toObject();
+    const bool byId = wantedId >= 0
+                   && (row.value(QStringLiteral("groupId")).toInt(-1) == wantedId
+                       || row.value(QStringLiteral("id")).toInt(-1) == wantedId);
+    const bool byTitle =
+      !title.isEmpty() && row.value(QStringLiteral("title")).toString().toCaseFolded() == title;
+    if (byId || byTitle) {
       QJsonObject out;
       out[QStringLiteral("ok")]    = true;
       out[QStringLiteral("group")] = row;

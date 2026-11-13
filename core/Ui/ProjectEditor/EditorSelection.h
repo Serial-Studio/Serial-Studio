@@ -55,7 +55,6 @@ public:
   void selectGroup(int groupId);
   void selectSource(int sourceId);
   void selectAction(int actionId);
-  void selectFrameParser(int sourceId);
   void displayFrameParserView(int sourceId);
   void selectDataset(int groupId, int datasetId);
   void selectOutputWidget(int groupId, int widgetId);

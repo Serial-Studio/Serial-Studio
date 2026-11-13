@@ -135,7 +135,6 @@ public slots:
 private:
   static int readPersistedBackend();
   static bool readPersistedHdrRequest(int backend);
-  static int defaultBackendForPlatform() noexcept;
   static bool isBackendAvailable(int backend) noexcept;
   static bool isHdrCapableBackend(int backend) noexcept;
   static const char* settingsKey() noexcept;

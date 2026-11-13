@@ -513,35 +513,24 @@ static API::CommandResponse resolveAddTileDataset(const QJsonObject& params,
                                                   int& outDatasetId,
                                                   int& outUniqueId)
 {
-  if (params.contains(QStringLiteral("dataset"))) {
-    QJsonObject p;
-    p.insert(QStringLiteral("path"), params.value(QStringLiteral("dataset")));
-    const auto resp =
-      forward(QStringLiteral("project.dataset.getByPath"), QStringLiteral("inner"), p);
-    if (!resp.success)
-      return resp;
+  const bool byPath = params.contains(QStringLiteral("dataset"));
+  if (!byPath && !params.contains(Keys::UniqueId))
+    return API::CommandResponse::makeSuccess(QStringLiteral("inner"));
 
-    outGroupId   = resp.result.value(QStringLiteral("groupId")).toInt();
-    outDatasetId = resp.result.value(Keys::DatasetId).toInt();
-    outUniqueId  = resp.result.value(Keys::UniqueId).toInt();
+  const QString inKey = byPath ? QStringLiteral("dataset") : QString(Keys::UniqueId);
+  QJsonObject p;
+  p.insert(byPath ? QStringLiteral("path") : QString(Keys::UniqueId), params.value(inKey));
+  const auto resp = forward(byPath ? QStringLiteral("project.dataset.getByPath")
+                                   : QStringLiteral("project.dataset.getByUniqueId"),
+                            QStringLiteral("inner"),
+                            p);
+  if (!resp.success)
     return resp;
-  }
 
-  if (params.contains(Keys::UniqueId)) {
-    QJsonObject p;
-    p.insert(Keys::UniqueId, params.value(Keys::UniqueId));
-    const auto resp =
-      forward(QStringLiteral("project.dataset.getByUniqueId"), QStringLiteral("inner"), p);
-    if (!resp.success)
-      return resp;
-
-    outGroupId   = resp.result.value(QStringLiteral("groupId")).toInt();
-    outDatasetId = resp.result.value(Keys::DatasetId).toInt();
-    outUniqueId  = resp.result.value(Keys::UniqueId).toInt();
-    return resp;
-  }
-
-  return API::CommandResponse::makeSuccess(QStringLiteral("inner"));
+  outGroupId   = resp.result.value(QStringLiteral("groupId")).toInt();
+  outDatasetId = resp.result.value(Keys::DatasetId).toInt();
+  outUniqueId  = resp.result.value(Keys::UniqueId).toInt();
+  return resp;
 }
 
 /**

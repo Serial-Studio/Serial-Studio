@@ -8,18 +8,11 @@
 
 #pragma once
 
-#include <functional>
-
 #include "AI/Providers/Provider.h"
 
 class QNetworkAccessManager;
 
 namespace AI {
-
-/**
- * @brief Callable returning the API key for the active provider.
- */
-using KeyGetter = std::function<QString()>;
 
 /**
  * @brief OpenAI Chat Completions adapter (first-slice stub).
