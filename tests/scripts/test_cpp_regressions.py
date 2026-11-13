@@ -2308,17 +2308,21 @@ def test_session_report_json_island_escapes_script_breakout():
     assert body, "buildReportDataJson not found"
     snippet = body.group(1)
 
-    escape = r'''replace(QLatin1Char('<'), QStringLiteral("\\u003c"))'''
+    escape = r"""replace(QLatin1Char('<'), QStringLiteral("\\u003c"))"""
     assert escape in snippet, "the JSON island must write '<' as a \\u003c escape"
     assert snippet.index("toJson(") < snippet.index(
         escape
     ), "the escape must run over the serialized document, not over fragments"
-    assert len(re.findall(r"\breturn\b", snippet)) == 1, "one exit, and it is the escaped one"
+    assert (
+        len(re.findall(r"\breturn\b", snippet)) == 1
+    ), "one exit, and it is the escaped one"
 
     blob = json.dumps({"title": "</script><img src=x onerror=1>", "units": "<V>"})
     escaped = blob.replace("<", "\\u003c")
     assert "<" not in escaped
-    assert json.loads(escaped) == json.loads(blob), "JSON.parse must still yield the titles"
+    assert json.loads(escaped) == json.loads(
+        blob
+    ), "JSON.parse must still yield the titles"
 
 
 def _html_report_function(cpp: str, signature: str) -> str:
@@ -2347,7 +2351,9 @@ def test_session_report_css_strings_cannot_close_the_style_element():
         cpp, "QString Sessions::HtmlReport::buildPrintFooterRight() const"
     )
     assert "return escapeCssString(" in left, "the document title must leave escaped"
-    assert right.count("escapeCssString(") == 3, "every translated fragment must be escaped"
+    assert (
+        right.count("escapeCssString(") == 3
+    ), "every translated fragment must be escaped"
 
 
 def test_session_report_logo_is_never_inlined_as_markup():
