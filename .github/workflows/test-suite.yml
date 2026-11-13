@@ -324,6 +324,9 @@ jobs:
       env:
         PYTHONIOENCODING: utf-8
         PYTHONUTF8: '1'
+        # A service this leg started must be reachable: its tests fail instead of skipping
+        SS_REQUIRE_BROKER: ${{ inputs.broker && '1' || '' }}
+        SS_REQUIRE_OPCUA_SIM: ${{ inputs.opcua_sim && '1' || '' }}
       run: |
         pytest tests/ \
           --deselect tests/integration/test_licensing.py::test_rapid_status_queries_no_crash \

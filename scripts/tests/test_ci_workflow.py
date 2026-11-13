@@ -222,6 +222,21 @@ def test_every_packaged_platform_is_tested_against_its_own_build(ci):
         assert job["name"], f"{name} has no name; the check renders as the job id"
 
 
+def test_a_leg_requires_the_services_it_starts(suite):
+    """
+    A broker or simulator the leg started must be reachable (spec 0120): its tests fail instead of
+    skipping. The requirement follows the leg's own inputs, so a leg without the service still
+    skips, and a leg that starts one cannot go green on a service that never came up.
+    """
+    run_tests = next(
+        (step for step in _steps(suite) if step.get("id") == "run_tests"), None
+    )
+    assert run_tests is not None, "the run_tests step is gone"
+    env = run_tests.get("env", {})
+    assert "inputs.broker" in str(env.get("SS_REQUIRE_BROKER", ""))
+    assert "inputs.opcua_sim" in str(env.get("SS_REQUIRE_OPCUA_SIM", ""))
+
+
 def test_the_test_job_consumes_build_artifacts_not_a_release(suite):
     """Downloading from the Release is what forced test to run after upload."""
     steps = _steps(suite)
