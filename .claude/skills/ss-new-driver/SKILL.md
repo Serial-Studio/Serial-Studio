@@ -77,7 +77,7 @@ The list above drifts as the app grows. Before declaring done, grep a recently a
 
 ## Rules
 
-- This is a multi-file change (>3 files): state the plan and get confirmation before executing.
+- A new driver is debatable work: start with `/ss-spec` and wait for its approval.
 - Follow `doc/claude/code-style.md` (header ordering, `[[nodiscard]]`, no in-header member init,
   `Q_EMIT` not `emit`, Christmas-tree ordering).
 - Run `python scripts/code-verify.py --check` on the new files before handoff.

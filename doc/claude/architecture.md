@@ -39,11 +39,11 @@ section a pointer names before working there. The inline blocks are pointers, no
 | [trust-contract.md](trust-contract.md) | Full text of the Trust Contract in CLAUDE.md, with the incidents behind each rule. |
 | [hotpath-rules.md](hotpath-rules.md) | Before editing the Driver -> FrameReader -> FrameBuilder -> Dashboard path: every threading and hotpath rule in full (the inline block in CLAUDE.md is the summary). |
 | [subsystem-contracts.md](subsystem-contracts.md) | The table of what breaks silently in each subsystem (undo, registries, alarms, mirror, HDR, AI tiers, ...); read the row for the area being edited. |
-| [delegation.md](delegation.md) | Before spawning a subagent or splitting work: advisor economics, what stays in the main session, how to brief an executor. |
+| [delegation.md](delegation.md) | Before spawning a subagent: the main session writes the code, subagents read, fan-out only on request. |
 | [directory-map.md](directory-map.md) | The `core/` / `app/src` / `app/qml` / `lib` tree, one line of role per subsystem. |
 | [scripts.md](scripts.md) | The per-script table for `scripts/`. |
 | [working-relationship.md](working-relationship.md) | How to collaborate here: recommend don't enumerate, push back when a choice will cost, ground truth outranks on-paper reasoning. Read once per session. |
 | [j-space.md](j-space.md) | The verbalization discipline and its grounding. Read when tuning any AI-facing doc or skill. |
 | [repo-skills.md](repo-skills.md) | The project `/`-skills catalog and when each fires. Most auto-activate; this is the deliberate-pick lookup. |
-| [spec-driven.md](spec-driven.md) | Before any non-trivial or multi-file feature: the four gated phases, where artifacts live, when to skip. |
+| [spec-driven.md](spec-driven.md) | Before any debatable feature: the two steps and the one approval, where artifacts live, when to skip. |
 | [TODO.md](TODO.md) | Open work across sessions: icons to draw, commands to wire, follow-ups, maintainer steps. Read it at the start of a task; add what you defer, delete what you finish in the same commit. |

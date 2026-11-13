@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Claude Code PreToolUse hook: judge the shape of a `git commit` before it runs.
 
-Companion to commit-sanitize-gate.py, which checks that sanitize ran; this
+Companion to commit-sanitize-gate.py, which lints the commit's files; this
 checks the commit's shape with scripts/commit-shape.py (size, isolated
 surfaces, spec-born, fix(ci) run citation) and additionally requires the
 `Co-Authored-By: Claude` trailer, because every commit this hook sees is one

@@ -106,7 +106,7 @@ When asked to review rather than change, report — do not fix unless asked.
   code from this skill, and never document the intended behavior instead of the actual one.
 - Em dashes are allowed sparingly; the linter's density and ` -- `-substitute rules are the
   contract (the upstream blog plugin's "zero em dashes" rule does not apply here).
-- `sanitize-commit.py` runs `documentation-verify.py` as part of the pre-commit pipeline;
+- `sanitize-commit.py` runs `documentation-verify.py` as part of its chain;
   passing the gate here means no surprises there.
 - Keep the manual's terminology stable: the UI string is the term ("Project Editor", "frame
   parser", "Setup panel") — no synonym rotation for variety.

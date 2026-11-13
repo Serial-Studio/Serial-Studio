@@ -1,19 +1,19 @@
 ---
 name: ss-spec
 description: >-
-  Phase 1 of Serial Studio's spec-driven workflow: capture WHAT a feature must do and WHY,
-  with no implementation detail. Use to start any non-trivial or multi-file feature — "spec
-  this out", "write a spec", "start a feature", "let's spec-drive X". Produces
-  doc/claude/specs/NNNN-slug/spec.md and gates on human approval before /ss-plan.
+  Step 1 of Serial Studio's spec-driven workflow: capture WHAT a feature must do, WHY, and the
+  design that delivers it, in one document. Use to start any debatable feature or anything on
+  the hotpath, licensing or API auth — "spec this out", "write a spec", "start a feature",
+  "plan this". Produces doc/claude/specs/NNNN-slug/spec.md and gates on the one human approval
+  before /ss-implement.
 argument-hint: "[feature name or one-line description]"
 ---
 
-# Serial Studio — /ss-spec (phase 1 of 4)
+# Serial Studio — /ss-spec (step 1 of 2)
 
-Capture the **WHAT** and the **WHY**. No file paths, class names, signal wiring, or algorithm
-choices — those belong to `/ss-plan`. A spec that leaks implementation pre-commits the design
-before it has been reviewed. See [doc/claude/spec-driven.md](../../../doc/claude/spec-driven.md)
-for the full workflow and the gate discipline.
+One document, one approval. The first half says **what and why** in terms a reviewer can read
+without the codebase; the **Design** half says how. See
+[doc/claude/spec-driven.md](../../../doc/claude/spec-driven.md).
 
 ## Procedure
 
@@ -25,15 +25,11 @@ for the full workflow and the gate discipline.
      | sed -E 's#.*/([0-9]{4}).*#\1#' | sort -n | tail -1
    ```
 
-   If that prints nothing, start at `0001`. Choose a short kebab-case slug from the feature
-   name (`0007-canbus-filter`).
+   Choose a short kebab-case slug from the feature name (`0007-canbus-filter`).
 
-2. **Ground yourself first.** Skim the relevant `doc/claude/` sub-doc(s) for the area so the
-   spec's claims about current behavior are true — but keep the spec implementation-free.
-   Ground in real behavior (a report, a screenshot, a measured limit), not a hypothesis.
-   Then state the problem and the one deciding constraint in a single chat sentence *before*
-   drafting sections — a problem you can name is one the requirements will actually serve
-   (`doc/claude/j-space.md`, verbalize-to-load).
+2. **Ground yourself in real behavior** (a report, a screenshot, a measured limit), then state
+   the problem and the one deciding constraint in a single chat sentence *before* drafting — a
+   problem you can name is one the requirements will actually serve (`doc/claude/j-space.md`).
 
 3. **Create the directory and copy the template:**
 
@@ -45,34 +41,43 @@ for the full workflow and the gate discipline.
    Fill in the frontmatter (`spec`, `title`, `created`, `author: Alex Spataru`, `status:
    draft`).
 
-4. **Write the spec** into every section: Problem/Motivation, Goals, Non-Goals, Requirements
-   (numbered + testable), Acceptance Criteria (tied to a real check), Constraints & Invariants,
-   Open Questions.
+4. **Write the what and why:** Problem/Motivation, Goals, Non-Goals, Requirements (numbered,
+   testable, no file paths or class names), Acceptance Criteria (each tied to a real check),
+   Constraints & Invariants.
 
 5. **Run the premise check.** Name the one measurement that would kill the spec (the coupling
    figure that retired spec 0069, the local benchmark that would have stopped spec 0090 before
    eleven commits), run it time-boxed to about an hour in the scratchpad or against the running
-   app, and record the question, the number and the verdict in the spec's **Premise Check**
-   section. If the premise cannot be measured, say so there in one sentence; the maintainer
-   decides whether to proceed on reasoning alone.
+   app, and record the question, the number and the verdict. If the premise cannot be measured,
+   say so there in one sentence; the maintainer decides whether to proceed on reasoning alone.
 
-6. **Resolve ambiguity before finishing.** Where a requirement is genuinely the maintainer's
-   call (scope, tier gating, UX shape), use `AskUserQuestion` with a recommendation — do not
-   guess and bury the assumption. Unresolved items stay in Open Questions.
+6. **Read the ground truth before designing — never from memory.** The
+   [architecture.md](../../../doc/claude/architecture.md) file(s) for the touched subsystems,
+   the rows of [common-mistakes.md](../../../doc/claude/common-mistakes.md) the change is
+   exposed to, and the actual code. Hotpath: invoke **`ss-hotpath`** and read `FrameBuilder` /
+   `CircularBuffer` / `FrameReader` / `Dashboard` in full. New driver: follow
+   **`ss-new-driver`**.
+
+7. **Diverge, then write the Design.** Sketch 2-3 *named* candidate approaches in chat (a name
+   plus one line each; at least one breaks an assumed constraint), recommend one with the
+   one-line why, then fill the Design sections. **Hotpath & threading impact** is required even
+   when the answer is "none". List concrete file paths confirmed by grep. Put each real tradeoff
+   in the table with a pick, and map every acceptance criterion to a check.
+
+8. **Resolve ambiguity before finishing.** Where a call is genuinely the maintainer's (scope,
+   tier gating, UX shape), use `AskUserQuestion` with a recommendation — do not guess and bury
+   the assumption. Unresolved items stay in Open Questions.
 
 ## Gate
 
-Stop after writing `spec.md`. Present it for review and **do not run `/ss-plan` until the
-maintainer approves it** (set `status: approved`). The spec is the contract every later phase
-is measured against; an unreviewed spec poisons the plan and the build.
+Stop after writing `spec.md`. Present it — especially the tradeoffs and the hotpath answer —
+and **do not run `/ss-implement` until the maintainer approves it** (set `status: approved`).
+This is the only gate, so everything a reviewer might veto has to be in this file.
 
 ## Rules
 
-- WHAT/WHY only. The first reviewer should be able to read it without seeing the codebase.
-- Acceptance criteria must be verifiable — prefer ones that map to `pytest`, `tests/scripts/`,
-  `--benchmark-hotpath`, or a concrete in-app observation.
-- This file is the only thing you create. No code, no plan, no scaffolding yet.
-- The Premise Check section never keeps its template text: `/ss-plan` refuses a spec without a
-  recorded measurement or an explicit one-sentence "unmeasurable" verdict.
-- The spec rides in the feature's single commit with the code; a spec approved but not yet
-  implemented may land alone as `docs(spec): NNNN <slug>` so it survives the session.
+- This file is the only thing you create. No code, no scaffolding yet.
+- The Premise Check section never keeps its template text.
+- The spec's file list *is* the lane for `/ss-implement`.
+- A change to the spec after approval goes through the advisor, then back to `draft` for
+  re-confirmation.

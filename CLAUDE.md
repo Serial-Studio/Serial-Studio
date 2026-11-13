@@ -7,28 +7,28 @@
   before touching it. **Read `BluetoothLE.h/.cpp`** before writing any new driver — it's the
   canonical reference.
 - **Read existing signal/slot wiring** in a file before adding or changing any.
-- **Plan before multi-file changes** (>3 files): state the plan, get confirmation. Non-trivial
-  or multi-file work runs through spec-driven development (`/ss-spec` → `/ss-plan` → `/ss-tasks`
-  → `/ss-implement`); see [doc/claude/spec-driven.md](doc/claude/spec-driven.md).
+- **One approval before debatable work.** A small or obvious change: say the plan in a line or
+  two, then do it. Where a reviewer could prefer another approach, or the change touches the
+  hotpath, licensing or API auth: `/ss-spec` writes one `spec.md` with the design in it, the
+  maintainer approves once, then `/ss-implement`. No other gate; see
+  [doc/claude/spec-driven.md](doc/claude/spec-driven.md).
 - **Edit, don't rewrite.** Targeted `Edit` calls; full rewrite only when asked or >70% changed.
 - **Work on master, in the main checkout.** No branches and no worktrees, yours or a subagent's
-  (`isolation: "worktree"`): the maintainer builds and tests what master holds, and
-  `.claude/settings.json` denies `git branch`, `git worktree add` and `EnterWorktree`. Commit as
-  soon as a change verifies: ONE commit per change (spec, code, tests, docs together), one
-  `git add` plus `git commit -m` with the `Co-Authored-By` trailer. The commit hooks lint the
-  staged files; a whole-tree `sanitize-commit.py` is for generator inputs and before a push,
-  never a per-commit tax.
+  (`isolation: "worktree"`): the maintainer builds and tests what master holds.
+- **Commit only when asked in that message.** Otherwise leave the edits in the tree and name the
+  files. When asked: ONE commit per change (spec, code, tests, docs together),
+  `git commit -m ... -- <your paths>` with the `Co-Authored-By` trailer, `git add` only for new
+  files, never `-a`. Never push unasked.
 - **No preamble, no trailing summary** — except a one-line statement of
   intent before non-trivial work, and one or two sentences naming what
   changed (and what's next) when you stop. Skip both on trivial edits.
   (The Context Canary line below is exempt — it is mandatory on every response.)
 - **Do not create markdown/doc files** unless asked. Share info conversationally.
 - **Never build — but always syntax-check.** Never invoke `cmake`/`jom` or produce build
-  artifacts — the developer builds the app themselves. The ONE sanctioned compiler use
-  (2026-10-04) is `scripts/syntax-check.py` (clang `-fsyntax-only` via the newest compile
-  database under `build/`): run it on every C++ file you edit, every time — lint checks shape, only the compiler checks truth, and every
-  AI batch-edit failure of 2026-10 was compiler-class and lint-invisible. A hook runs it
-  per edit; a SKIP (stale database) means the claim "it compiles" is unverified — say so.
+  artifacts — the developer builds the app themselves. The ONE sanctioned compiler use is
+  `scripts/syntax-check.py` (clang `-fsyntax-only` via the newest compile database under
+  `build/`) on every C++ file you edit: lint checks shape, only the compiler checks truth. A
+  hook runs it per edit; a SKIP (stale database) means "it compiles" is unverified — say so.
 - **Runtime experiments are sanctioned.** Ground truth beats on-paper reasoning: drive a
   *running* app through the API server (`localhost:7777`, `tests/utils/api_client.py`) to
   probe hypotheses, not only to verify fixes; run `ctest` and already-built binaries
@@ -38,7 +38,8 @@
 - **Sample the running app before theorizing about a GUI stall.** Never reason a freeze, stutter or ignored resize out of the source: `sample <pid>` in the
   background while the user reproduces. Recipe, stack signatures and the 2026-08-13 incident:
   [doc/claude/common-mistakes.md](doc/claude/common-mistakes.md) "Diagnosing a GUI Stall".
-- **Update CLAUDE.md** for any architectural change that future me would otherwise miss.
+- **Update CLAUDE.md** for any architectural change that future me would otherwise miss. Each
+  rule has one home: when the maintainer reverses one, fix it there (and in memory) that turn.
 - **`scripts/` is the style contract.** When in doubt, run it; don't restate it here.
 
 ## Context Canary — Last Line of Every Response
@@ -74,9 +75,9 @@ text and the incidents behind each rule:
 - **Show the why, not the what.** Comment/reply/commit message explains *why*, and only when
   the choice was non-obvious. One sentence.
 - **State the plan before non-trivial work** — visible *before* execution, not a summary
-  after. Operationalized as `/ss-spec`, whose premise check measures the one number that
-  would kill the spec. `scripts/commit-shape.py` refuses a protected surface staged with other
-  code and bulk without a `Mechanical:` trailer. Never cite the archive as proof of gating.
+  after (Behavioral Rules, "One approval"). `scripts/commit-shape.py` refuses a protected
+  surface staged with other code and bulk without a `Mechanical:` trailer. Never cite the
+  archive as proof of gating.
 - **Self-review before handoff.** Re-read the diff: is this *what was asked, and only that*?
 - **Security-sensitive surfaces are decision-visible.** `app/src/Licensing/`,
   `core/Core/Licensing/`, `MachineID`, and the API Server auth/consent files: any
@@ -85,28 +86,26 @@ text and the incidents behind each rule:
   shipped a seat-cloning hole into master for a month exactly that way). The checklist is
   [doc/claude/specs/0042-license-token-hardening/consumers.md](doc/claude/specs/0042-license-token-hardening/consumers.md).
 
-## Delegation & Cost — Advisor Economics
+## Delegation
 
-Quality concentrates in planning and review: the main session advises, cheaper executors type.
-The full rules and their measurements: [doc/claude/delegation.md](doc/claude/delegation.md).
+Full text: [doc/claude/delegation.md](doc/claude/delegation.md).
 
-- **The main session plans, reviews, and integrates; mechanical execution is delegated** to
-  subagents on a cheaper model (Sonnet by default, Haiku for purely mechanical work). Design
-  decisions, hotpath edits, and anything on a protected surface stay in the main session. An
-  executor brief names a donor file whose pattern the output matches.
+- **The main session writes the code, by hand.** Subagents search and review, read-only. A
+  fan-out to executor agents happens only when the maintainer asks for it in that message: each
+  gets disjoint files and a brief naming a donor file, and none touches a protected surface.
 - **Searches fan out, conclusions come back.** A line number a subagent reports is a hint:
   re-read the slice before editing it. A whole-file read over 800 lines is refused and redirected,
   the read-in-full hotpath files excepted. Enforced: hook:large-read-gate.py.
-- **No process tax on trivial work.** Keep the "skip for trivial" escape hatches.
 
 ## Scripts
 
 All scripts in `scripts/` are CWD-independent and write LF endings; run from anywhere. The
 per-script table lives in [doc/claude/scripts.md](doc/claude/scripts.md). What binds you:
-the commit hooks run `code-verify.py --check` and the pinned clang-format over the staged
-files, so a commit needs no pre-run; **run `sanitize-commit.py`** (sanitize only — it never
-commits or pushes) when you touched a generator input (`api-schema.json`, `dataset.json`, a
-command manifest, `command_safety.json`, doc/help) and before a push, never per commit;
+a commit you issue is linted by the Claude hooks (`code-verify.py --check` and the pinned
+clang-format over its files), so it needs no pre-run; **run `sanitize-commit.py`** (sanitize
+only — it never commits or pushes) when you touched a generator input (`api-schema.json`,
+`dataset.json`, a command manifest, `command_safety.json`, doc/help) and before a push, never
+per commit, and never while the maintainer's own files are dirty (it rewrites the whole tree);
 `code-verify.py` is the structural linter (`--fix` rewrites, `--check` regenerates
 `.code-report`; errors block CI). Suppression: `// code-verify off` / `// code-verify on`
 (C++/QML), `<!-- doc-verify off -->` / `<!-- doc-verify on -->` (Markdown) — suppressions
@@ -167,7 +166,7 @@ section a pointer names before working there. The inline blocks are pointers, no
 | [working-relationship.md](doc/claude/working-relationship.md) | How to collaborate here. Read once per session. |
 | [j-space.md](doc/claude/j-space.md) | The verbalization discipline. Read when tuning any AI-facing doc or skill. |
 | [repo-skills.md](doc/claude/repo-skills.md) | The project `/`-skills catalog and when each fires. |
-| [spec-driven.md](doc/claude/spec-driven.md) | Before any non-trivial or multi-file feature. |
+| [spec-driven.md](doc/claude/spec-driven.md) | Before any debatable feature. |
 | [TODO.md](doc/claude/TODO.md) | Open work across sessions. Read it at the start of a task; add what you defer, delete what you finish in the same commit. |
 
 ## J-Space Discipline — Verbalize the Binding Constraints

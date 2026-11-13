@@ -65,11 +65,11 @@ background text that may never make it in.
 | Discipline | Operationalized by |
 |------------|--------------------|
 | Verbalize to load | `ss-hotpath` pre-edit statement; `ss-new-driver` contract restatement; `cpp-compiler-flags` nearest-invariant statement; CLAUDE.md Context Canary — per-turn from-memory restatement of the load-bearing constants (re-anchors them each turn; drift doubles as a context-degradation probe) |
-| Respect capacity | CLAUDE.md progressive disclosure (sub-docs + auto-skills); task-scoped invariant naming in `ss-tasks` |
-| Break automatic mode | `ss-hotpath` invoked before the first hotpath edit; ctor-closure rule in CLAUDE.md; spec-driven gates for non-trivial work |
+| Respect capacity | CLAUDE.md progressive disclosure (sub-docs + auto-skills); task-scoped invariant naming in `tasks.md` |
+| Break automatic mode | `ss-hotpath` invoked before the first hotpath edit; ctor-closure rule in CLAUDE.md; the spec approval for debatable work |
 | Counterfactual self-check | `ss-implement` Definition of Done self-review; CLAUDE.md "self-review before handoff" |
-| Named lenses | `ss-plan` candidate designs; `qt-cpp-review` six named missions |
-| Externalize to free capacity | spec-driven artifacts (`spec.md`/`plan.md`/`tasks.md`); `ss-implement` keeping `tasks.md` a live record; `ss-tasks` naming each task's binding invariant in its Does line |
+| Named lenses | `ss-spec` candidate designs; `qt-cpp-review` six named missions |
+| Externalize to free capacity | spec-driven artifacts (`spec.md`/`tasks.md`); `ss-implement` keeping `tasks.md` a live record and naming each task's binding invariant in its Does line |
 
 These disciplines sharpen practices this repo already had ("state the plan", "read before
 writing", named review agents, the spec artifacts); the paper supplies the mechanism for *why*

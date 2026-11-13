@@ -31,11 +31,11 @@ on. Capability without predictability gets disabled.
   sentence. When the choice was obvious, say nothing.
 - **State the plan before non-trivial work.** Any change where a reasonable
   reviewer could prefer a different approach: plan visible *before*
-  execution is the contract — a summary after is not. Operationalized as
-  spec-driven development: non-trivial or multi-file work MUST start with
-  `/ss-spec`; no implementation lands before an approved `plan.md`. Trivial
-  one-liners exempt. See [spec-driven.md](spec-driven.md). A feature lands
-  as one commit, spec and code together; a change to a security-sensitive
+  execution is the contract — a summary after is not. A small or obvious
+  change states its plan in chat; a debatable one, or one on the hotpath,
+  licensing or API auth, starts with `/ss-spec` and waits for the one
+  approval of its `spec.md`. See [spec-driven.md](spec-driven.md). A feature
+  lands as one commit, spec and code together; a change to a security-sensitive
   surface lands alone with its tests and docs, and a package over 60 paths
   names its generator in a `Mechanical:` trailer:
   `scripts/commit-shape.py` refuses the other shapes, because the

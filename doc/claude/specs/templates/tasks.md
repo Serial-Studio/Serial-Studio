@@ -1,16 +1,14 @@
 ---
 spec: NNNN-short-slug
 phase: tasks
-status: draft        # draft -> approved (gate before /ss-implement)
 updated: YYYY-MM-DD
 ---
 
 # Tasks NNNN — <Feature name>
 
-> **Phase 3 of 4 — the ordered checklist.** Decompose [`plan.md`](./plan.md) into units that
-> are small, ordered, and *individually verifiable* — each one a coherent diff a reviewer
-> could read in isolation. `/ss-implement` works this list top to bottom and keeps the status
-> boxes current. Gate: do not start `/ss-implement` until a human marks this `approved`.
+> **The ordered checklist.** `/ss-implement` decomposes the Design in [`spec.md`](./spec.md)
+> into units that are small, ordered, and *individually verifiable*, works the list top to
+> bottom and keeps the boxes current. No approval gate: the spec was the gate.
 
 ## Conventions
 
@@ -47,7 +45,7 @@ updated: YYYY-MM-DD
 - [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
 - [ ] `ss-hotpath` checks pass / `--benchmark-hotpath` not regressed (if hotpath touched).
-- [ ] Relevant `pytest` tests identified for the maintainer to run (listed in `plan.md`).
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [ ] Relevant `pytest` tests identified for the maintainer to run (listed in `spec.md`).
+- [ ] `python scripts/sanitize-commit.py` run, only if a generator input changed.
 - [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
 - [ ] `spec.md` status set to `done`.

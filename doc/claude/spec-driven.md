@@ -1,112 +1,58 @@
 # Spec-Driven Development
 
-The default workflow for non-trivial work in this repo. Instead of steering a feature through
-an open-ended chat ("prompt engineering"), the intent is captured as reviewable artifacts that
-gate each other: **spec -> plan -> tasks -> implementation**. Each phase produces a document a
-human approves before the next begins. The contract moves from "did the agent guess right" to
-"did we agree on this, in writing, before code existed".
-
-This is not a generic framework bolted on top of the repo. It reuses what is already here — the
-`doc/claude/` sub-docs as the knowledge base the plan reads, the `scripts/` linters as the
-verification gate, the existing skills (`ss-hotpath`, `ss-new-driver`, `ss-verify`,
-`qt-cpp-review`, `ss-cpp-modern`, `cpp-compiler-flags`, `qt-qml`, `qt-qml-review`, `ss-docs`, `ss-ai-audit`), and the
-Trust Contract from CLAUDE.md.
-The workflow just sequences them.
-
-## Why spec-driven over prompt engineering
-
-- **The design is reviewable before it is built.** A wrong approach gets vetoed in `plan.md`,
-  when changing it is free, not in a 600-line diff.
-- **Tradeoffs surface up front, as decisions.** The working-relationship rule ("surface
-  tradeoffs as decisions, not after-the-fact notes") is built into the plan template.
-- **The hotpath and silent-breakage classes get a required, explicit answer** every time —
-  not an afterthought discovered when frames stop flowing.
-- **Work is resumable.** A half-finished feature is three files (`spec`/`plan`/`tasks`), not a
-  lost chat. Context summarization, a new session, or a different person can pick it up.
-- **A spec is a durable artifact.** It travels with the code, can be linked from a PR, and
-  records *why* — not just *what* — for future-you.
-
-## The four phases
-
-| Phase | Skill | Produces | Gate |
-|-------|-------|----------|------|
-| 1. Specify | `/ss-spec` | `spec.md` — WHAT & WHY: problem, goals, non-goals, numbered requirements, acceptance criteria, constraints, and the premise check (the one measurement that would kill the spec, run) | Maintainer marks spec `approved` |
-| 2. Plan | `/ss-plan` | `plan.md` — HOW: affected files, data flow, hotpath/threading impact, data model, API/QML, tradeoffs, risks, test plan | Maintainer approves the design |
-| 3. Tasks | `/ss-tasks` | `tasks.md` — ordered, individually-verifiable checklist + Definition of Done | Maintainer approves the breakdown |
-| 4. Implement | `/ss-implement` | code, task by task; `tasks.md` kept current | Definition of Done met; self-review; sanitize |
-
-Artifacts live in `doc/claude/specs/NNNN-slug/` (see
-[specs/README.md](./specs/README.md) for numbering and the `status:` lifecycle). The templates
-the skills copy from are in `doc/claude/specs/templates/`.
-
-## Phase 0 — explore (optional, ungated)
-
-Before `/ss-spec`, throwaway prototyping is sanctioned: scratchpad sims (Node/Python), API
-experiments against a running app (`localhost:7777`), quick sketches of shapes that will be
-rejected. No artifact, no gate, no approval — the output is understanding, and anything worth
-keeping is restated inside `spec.md`. Nothing from phase 0 lands in the repo except the
-premise check: the one measurement that would have killed the spec, with its number, in the
-spec's own section. The point is abductive: form the hypothesis by poking reality before
-writing it down, instead of speccing from armchair reasoning. Spec 0069 (TU decomposition)
-was retired after five failed builds for want of a coupling figure, and spec 0090 (BOLT) was
-reverted after eleven commits for want of one local benchmark; both numbers took an hour.
-
-## Gate discipline
-
-The gates are the point. **Do not run the next phase until a human has approved the current
-one.** The agent writes a phase, stops, and presents it; the maintainer reviews and either
-sends it back or approves. Skipping ahead — planning an unreviewed spec, coding an unreviewed
-plan — defeats the workflow and reintroduces exactly the "guessed wrong, found out late"
-failure mode it exists to prevent.
-
-Each phase reads the previous artifact as its source of truth. If a later phase reveals that an
-earlier one was wrong (planning exposes a bad requirement, implementation exposes a missing
-task), **go back, amend the earlier document, and re-confirm** — do not silently diverge. The
-artifacts must stay true; a stale spec is worse than none.
-
-## Landing — one commit per feature
-
-A feature lands as ONE commit: `spec.md`, `plan.md`, `tasks.md`, the code, its tests and
-docs together. Until 2026-11-07 the spec and plan had to land first in their own
-`docs(spec):` commit, and every feature became a planned multi-commit series; that cost the
-maintainer tokens and half a day of committing per feature for an ordering `git log` could
-show but never prove. `scripts/commit-shape.py`, which `.claude/hooks/commit-shape-gate.py`
-runs on every commit Claude issues, still keeps a security-sensitive surface in a commit of
-its own and caps unexplained commits at 60 paths (a `Mechanical:` trailer naming the
-generator lifts the cap), because both 2026 user-facing failures were a change inside a
-package too large to read. The archive cannot prove a plan was *approved* before the code;
-the review conversation does that, so never cite the archive as proof of gating.
+How debatable work gets agreed before code exists: one document, one approval.
 
 ## When to use it — and when to skip
 
-Spec-driven is the **default for non-trivial or multi-file work** (this folds in, and now
-operationalizes, the CLAUDE.md "plan before multi-file changes" and "state the plan before
-non-trivial work" rules). Reach for it when a reasonable reviewer could prefer a different
-approach: a new driver, a new widget, a schema change, an API surface, anything touching the
-hotpath.
+- **Skip it** when the change is small or obvious and a reviewer could not reasonably prefer a
+  different approach: state the plan in a line or two of chat and make the change.
+- **Use it** when a reviewer could prefer another approach (a new driver, a new widget, a schema
+  change, an API surface), and always when the change touches the hotpath, licensing or the API
+  auth and consent files.
 
-**Skip it for the genuinely trivial** — a typo, a one-line fix, a rename, a comment, a doc
-tweak. Forcing a four-phase ceremony onto a one-liner is its own kind of waste. The boundary is
-judgment, same as before; the rule of thumb is the existing one: if the change is small,
-obvious, and a reviewer could not reasonably prefer a different approach, just make it.
+## The two steps
+
+| Step | Skill | Produces | Gate |
+|------|-------|----------|------|
+| 1. Specify | `/ss-spec` | `spec.md`: the problem, goals, non-goals, numbered requirements, acceptance criteria, the premise check, and the design (files, data flow, hotpath and threading answer, tradeoffs, risks, tests) | The maintainer marks it `approved`. The only gate. |
+| 2. Implement | `/ss-implement` | `tasks.md` (an ordered checklist, written without a gate and kept current), then the code, task by task | Definition of Done met; self-review |
+
+Artifacts live in `doc/claude/specs/NNNN-slug/` (see [specs/README.md](./specs/README.md) for
+numbering and the `status:` lifecycle). Specs written before 2026-11-12 keep their separate
+`plan.md`; read it as the design.
+
+If implementation shows the approved spec was wrong, stop, amend `spec.md`, set it back to
+`draft` and get it re-confirmed. That is the only second gate; do not silently diverge.
+
+## Before the spec — explore (ungated)
+
+Throwaway prototyping is sanctioned: scratchpad sims (Node/Python), API experiments against a
+running app (`localhost:7777`), quick sketches of shapes that will be rejected. Nothing from it
+lands in the repo except the premise check: the one measurement that would have killed the spec,
+with its number, in the spec's own section. Spec 0069 (TU decomposition) was retired after five
+failed builds for want of a coupling figure, and spec 0090 (BOLT) was reverted after eleven
+commits for want of one local benchmark; both numbers took an hour.
+
+## Landing
+
+A feature is ONE commit: `spec.md`, `tasks.md`, the code, its tests and docs together, made when
+the maintainer asks for it (CLAUDE.md "Commit only when asked"). `scripts/commit-shape.py`,
+which `.claude/hooks/commit-shape-gate.py` runs on every commit Claude issues, keeps a
+security-sensitive surface in a commit of its own and caps unexplained commits at 60 paths (a
+`Mechanical:` trailer naming the generator lifts the cap), because both 2026 user-facing
+failures were a change inside a package too large to read. The archive cannot prove a spec was
+*approved* before the code; the review conversation does that, so never cite the archive as
+proof of gating.
 
 ## How it composes with the rest of the repo
 
-- **Hotpath** — `/ss-plan` requires an explicit hotpath/threading answer and pulls in
+- **Hotpath** — the spec's design requires an explicit hotpath/threading answer and pulls in
   `ss-hotpath`; `/ss-implement` reads the hotpath files in full and routes `--benchmark-hotpath`
   to the maintainer.
-- **Verify** — `/ss-implement` runs `code-verify --check` per task; the commit hooks lint the
-  staged files, and `sanitize-commit.py` runs only when a generator input changed;
-  `qt-cpp-review` runs on the C++ diff before handoff.
-- **Trust Contract** — the plan's file list *is* the lane. Anything outside it is named in chat,
-  not slipped into the diff. Foreign working-tree files are never touched. A verified change lands as one commit
-  (see Landing). A self-review ("what was asked, and only that") is part
-  of the Definition of Done.
+- **Verify** — `/ss-implement` runs `code-verify --check` per task; `sanitize-commit.py` runs
+  only when a generator input changed; `qt-cpp-review` runs on the C++ diff before handoff.
+- **Trust Contract** — the spec's file list *is* the lane. Anything outside it is named in chat,
+  not slipped into the diff. Foreign working-tree files are never touched.
 - **Tests** — acceptance criteria map to concrete checks: `tests/scripts/` JS units the agent
   can run, and `pytest` integration/security/perf suites the maintainer runs against a live
   app.
-
-## One-line mental model
-
-`/ss-spec` agrees on the problem. `/ss-plan` agrees on the solution. `/ss-tasks` agrees on the
-steps. `/ss-implement` executes, verifies, and proves it — with a human gate between each.

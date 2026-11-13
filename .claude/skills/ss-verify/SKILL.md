@@ -1,7 +1,7 @@
 ---
 name: ss-verify
 description: >-
-  Run Serial Studio's structural/style linter and commit pipeline. Use before committing, when
+  Run Serial Studio's structural/style linter and sanitize driver. Use before committing, when
   asked to "verify conventions", "check code style", "lint", "run code-verify", or "sanitize the
   commit". Wraps scripts/code-verify.py and scripts/sanitize-commit.py — the repo's style contract.
 allowed-tools: Bash(python scripts/code-verify.py:*), Bash(python scripts/sanitize-commit.py:*)
@@ -26,9 +26,10 @@ always blockers. To auto-fix formatting in place: `python scripts/code-verify.py
 
 ## Whole-tree sanitize (generator inputs and pre-push, not per commit)
 
-The commit hooks already lint the staged files. Run the top-level driver when a generator
-input changed (`api-schema.json`, `dataset.json`, a command manifest, `command_safety.json`,
-doc/help) and before a push; it chains: chmod (POSIX) → expand-doxygen →
+The Claude hooks already lint the files of a commit you issue. Run the top-level driver when a
+generator input changed (`api-schema.json`, `dataset.json`, a command manifest,
+`command_safety.json`, doc/help) and before a push, never while the maintainer's own files are
+dirty (it rewrites the whole tree); it chains: chmod (POSIX) → expand-doxygen →
 clang-format → code-verify --fix → clang-format → singleton-census gate
 (spec 0039, blocking) → tu-census gate (blocking) → black (Python) → documentation-verify →
 claim-verify gate (blocking) → ledger-verify gate (blocking) → generate-sdk (regenerates
@@ -58,4 +59,4 @@ a restructure was due, a renamed symbol that still leaks the design problem).
   `.doc-report`); CLAUDE.md is exempt.
 - Touching `core/` or a source that could move there: also run `python scripts/layer-verify.py`
   (spec 0076) — it is not in the `sanitize-commit.py` chain but is a hard CI lint-job gate.
-- Commit as soon as the change verifies, as one commit; push only when the developer asks.
+- Commit and push only when the developer asks; one commit per change, your own paths only.
