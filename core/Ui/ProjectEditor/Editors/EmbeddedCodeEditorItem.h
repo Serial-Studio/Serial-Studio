@@ -48,6 +48,14 @@ public:
   EmbeddedCodeEditorItem& operator=(EmbeddedCodeEditorItem&&)      = delete;
   EmbeddedCodeEditorItem& operator=(const EmbeddedCodeEditorItem&) = delete;
 
+public slots:
+  void cut();
+  void undo();
+  void redo();
+  void copy();
+  void paste();
+  void selectAll();
+
 protected slots:
   void renderWidget();
   void resizeWidget();

@@ -47,8 +47,6 @@ public:
   WindowLayoutStore& operator=(WindowLayoutStore&&)      = delete;
   WindowLayoutStore& operator=(const WindowLayoutStore&) = delete;
 
-  [[nodiscard]] QSize referenceCanvas() const;
-
   [[nodiscard]] QJsonObject serialize(const QVector<int>& order,
                                       const QMap<int, QQuickItem*>& windows,
                                       const QSize& canvas,

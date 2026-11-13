@@ -97,7 +97,6 @@ struct SnapResult {
 };
 
 [[nodiscard]] int snapToGrid(int value, int gridSize);
-[[nodiscard]] int snapToFraction(int value, int extent, int tolerance);
 [[nodiscard]] QString fractionLabel(int size, int extent);
 [[nodiscard]] SnapResult resolveMoveSnap(const SnapInput& input);
 [[nodiscard]] SnapResult resolveResizeSnap(const SnapInput& input, const MovingEdges& edges);

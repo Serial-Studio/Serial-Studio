@@ -81,7 +81,6 @@ private:
   QByteArray m_endSeq;
   QByteArray m_accumulator;
   bool m_inFrame;
-  qsizetype m_frameStartPos;
 };
 
 /**

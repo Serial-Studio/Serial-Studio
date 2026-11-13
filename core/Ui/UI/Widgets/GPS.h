@@ -89,13 +89,8 @@ public:
   ~GPS() override;
   void paint(QPainter* painter) override;
 
-  [[nodiscard]] double altitude() const;
-  [[nodiscard]] double latitude() const;
-  [[nodiscard]] double longitude() const;
-
   [[nodiscard]] int mapType() const;
   [[nodiscard]] int zoomLevel() const;
-  [[nodiscard]] double zoomLevelPrecise() const;
 
   [[nodiscard]] bool autoCenter() const;
   [[nodiscard]] bool showWeather() const;

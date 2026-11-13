@@ -59,13 +59,7 @@ public:
   [[nodiscard]] Q_INVOKABLE bool confirmDiscardIfModified();
 
 public slots:
-  void cut();
-  void undo();
-  void redo();
-  void copy();
   void clear();
-  void paste();
-  void selectAll();
   void setLanguage(int language);
   void setText(const QString& text);
   void markSaved();

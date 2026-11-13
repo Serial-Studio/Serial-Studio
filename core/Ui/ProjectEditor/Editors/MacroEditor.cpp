@@ -92,60 +92,12 @@ bool DataModel::MacroEditor::confirmDiscardIfModified()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Cuts the current selection into the clipboard.
- */
-void DataModel::MacroEditor::cut()
-{
-  m_editor.cut();
-}
-
-/**
- * @brief Undoes the last edit.
- */
-void DataModel::MacroEditor::undo()
-{
-  m_editor.undo();
-}
-
-/**
- * @brief Redoes the previously undone edit.
- */
-void DataModel::MacroEditor::redo()
-{
-  m_editor.redo();
-}
-
-/**
- * @brief Copies the current selection to the clipboard.
- */
-void DataModel::MacroEditor::copy()
-{
-  m_editor.copy();
-}
-
-/**
  * @brief Clears the editor content and its undo history.
  */
 void DataModel::MacroEditor::clear()
 {
   m_editor.setSourceText(QString());
   Q_EMIT modifiedChanged();
-}
-
-/**
- * @brief Pastes the clipboard contents into the editor.
- */
-void DataModel::MacroEditor::paste()
-{
-  m_editor.paste();
-}
-
-/**
- * @brief Selects all editor text.
- */
-void DataModel::MacroEditor::selectAll()
-{
-  m_editor.selectAll();
 }
 
 /**

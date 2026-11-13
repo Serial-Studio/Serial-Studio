@@ -154,6 +154,47 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns the highlight rectangle for characters [@p hlStart, @p hlEnd) of a word-wrapped
+ *        segment, mirrored against the right edge in RTL and clamped to the text area.
+ */
+[[nodiscard]] static QRect segmentHighlightRect(const QFontMetrics& fm,
+                                                const QString& line,
+                                                int segStart,
+                                                int hlStart,
+                                                int hlEnd,
+                                                int y,
+                                                qreal widgetWidth,
+                                                int borderX,
+                                                int cellHeight,
+                                                bool rtl)
+{
+  int leadingOffset = 0;
+  int hlWidth       = 0;
+  for (int j = segStart; j < hlEnd; ++j) {
+    const int charWidth = fm.horizontalAdvance(line[j]);
+    if (j < hlStart)
+      leadingOffset += charWidth;
+    else
+      hlWidth += charWidth;
+  }
+
+  const int maxWidth = widgetWidth - 2 * borderX;
+  int startX         = 0;
+  if (rtl) {
+    const int rightEdge = widgetWidth - borderX;
+    startX              = rightEdge - leadingOffset - hlWidth;
+    hlWidth             = qMin(hlWidth, maxWidth);
+  }
+
+  else {
+    startX  = borderX + leadingOffset;
+    hlWidth = qMin(hlWidth, maxWidth - leadingOffset);
+  }
+
+  return QRect(startX, y, hlWidth, cellHeight);
+}
+
+/**
  * @brief Draws the selection highlight for one word-wrapped segment of a line.
  */
 void Widgets::Terminal::drawSegmentSelection(
@@ -183,32 +224,16 @@ void Widgets::Terminal::drawSegmentSelection(
   if (selStartX >= selEndX)
     return;
 
-  int leadingOffset  = 0;
-  int selectionWidth = 0;
-  for (int j = segStart; j < selEndX; ++j) {
-    const int charWidth = painter->fontMetrics().horizontalAdvance(line[j]);
-    if (j < selStartX)
-      leadingOffset += charWidth;
-    else
-      selectionWidth += charWidth;
-  }
-
-  const bool rtl     = m_translator.rtl();
-  const int maxWidth = width() - 2 * m_borderX;
-  int startX         = 0;
-
-  if (rtl) {
-    const int rightEdge = width() - m_borderX;
-    startX              = rightEdge - leadingOffset - selectionWidth;
-    selectionWidth      = qMin(selectionWidth, maxWidth);
-  }
-
-  else {
-    startX         = m_borderX + leadingOffset;
-    selectionWidth = qMin(selectionWidth, maxWidth - leadingOffset);
-  }
-
-  painter->fillRect(QRect(startX, y, selectionWidth, m_cHeight),
+  painter->fillRect(segmentHighlightRect(painter->fontMetrics(),
+                                         line,
+                                         segStart,
+                                         selStartX,
+                                         selEndX,
+                                         y,
+                                         width(),
+                                         m_borderX,
+                                         m_cHeight,
+                                         m_translator.rtl()),
                     m_palette.color(QPalette::Highlight));
 }
 
@@ -469,36 +494,14 @@ void Widgets::Terminal::drawSegmentMatch(QPainter* painter,
   if (selStartX >= selEndX)
     return;
 
-  int leadingOffset = 0;
-  int matchWidth    = 0;
-  for (int j = segStart; j < selEndX; ++j) {
-    const int charWidth = fm.horizontalAdvance(line[j]);
-    if (j < selStartX)
-      leadingOffset += charWidth;
-    else
-      matchWidth += charWidth;
-  }
-
-  const bool rtl     = m_translator.rtl();
-  const int maxWidth = width() - 2 * m_borderX;
-
-  int startX = 0;
-  if (rtl) {
-    const int rightEdge = width() - m_borderX;
-    startX              = rightEdge - leadingOffset - matchWidth;
-    matchWidth          = qMin(matchWidth, maxWidth);
-  }
-
-  else {
-    startX     = m_borderX + leadingOffset;
-    matchWidth = qMin(matchWidth, maxWidth - leadingOffset);
-  }
+  const QRect rect = segmentHighlightRect(
+    fm, line, segStart, selStartX, selEndX, y, width(), m_borderX, m_cHeight, m_translator.rtl());
 
   QColor fill = m_palette.color(QPalette::Highlight);
   if (!isCurrent)
     fill.setAlpha(110);
 
-  painter->fillRect(QRect(startX, y, matchWidth, m_cHeight), fill);
+  painter->fillRect(rect, fill);
 }
 
 /**
@@ -960,14 +963,6 @@ void Widgets::Terminal::geometryChange(const QRectF& newGeometry, const QRectF& 
   }
 }
 
-/**
- * @brief Gets the current cursor position within the terminal.
- */
-const QPoint& Widgets::Terminal::cursorPosition() const
-{
-  return m_buffer.cursor();
-}
-
 //--------------------------------------------------------------------------------------------------
 // Clipboard & selection
 //--------------------------------------------------------------------------------------------------
@@ -1139,7 +1134,7 @@ void Widgets::Terminal::clear()
   const bool had_selection = !m_selectionStart.isNull() || !m_selectionEnd.isNull();
 
   initBuffer();
-  setCursorPosition(0, 0);
+  setCursorPosition(QPoint(0, 0));
   setAutoscroll(true);
   m_catchUp.reset();
 
@@ -1637,19 +1632,6 @@ void Widgets::Terminal::appendString(QStringView string)
 }
 
 /**
- * @brief Removes characters from the terminal buffer starting from the cursor position.
- */
-void Widgets::Terminal::removeStringFromCursor(const Direction direction, int len)
-{
-  const auto sense =
-    (direction == LeftDirection) ? AnsiEraseDirection::Left : AnsiEraseDirection::Right;
-
-  m_buffer.removeFromCursor(sense, len);
-  m_search.markDirty();
-  drainBufferEvents();
-}
-
-/**
  * @brief Initializes the terminal's data buffer.
  */
 void Widgets::Terminal::initBuffer()
@@ -1706,8 +1688,9 @@ void Widgets::Terminal::applySgrCodes(const QList<int>& codes)
  */
 void Widgets::Terminal::eraseFromCursor(AnsiEraseDirection direction, int length)
 {
-  const Direction sense = (direction == AnsiEraseDirection::Left) ? LeftDirection : RightDirection;
-  removeStringFromCursor(sense, length);
+  m_buffer.removeFromCursor(direction, length);
+  m_search.markDirty();
+  drainBufferEvents();
 }
 
 /**
@@ -1814,14 +1797,6 @@ void Widgets::Terminal::setCursorPosition(const QPoint& position)
 {
   m_buffer.setCursor(position);
   drainBufferEvents();
-}
-
-/**
- * @brief Sets the cursor position to specified coordinates.
- */
-void Widgets::Terminal::setCursorPosition(const int x, const int y)
-{
-  setCursorPosition(QPoint(x, y));
 }
 
 /**

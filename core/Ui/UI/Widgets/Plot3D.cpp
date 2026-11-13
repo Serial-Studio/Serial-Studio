@@ -386,14 +386,6 @@ bool Widgets::Plot3D::interpolationEnabled() const
   return m_interpolate;
 }
 
-/**
- * @brief Returns the widget size in device pixels.
- */
-const QSize& Widgets::Plot3D::widgetSize() const
-{
-  return m_size;
-}
-
 //--------------------------------------------------------------------------------------------------
 // Camera control setters
 //--------------------------------------------------------------------------------------------------
@@ -695,13 +687,10 @@ void Widgets::Plot3D::markCameraDirty()
 }
 
 /**
- * @brief Updates the internal size to match the current widget size in device pixels.
+ * @brief Marks the plot dirty after a width, height or scale change.
  */
 void Widgets::Plot3D::updateSize()
 {
-  auto dpr = displayPixelRatio();
-  m_size   = QSize(static_cast<int>(width() * dpr), static_cast<int>(height() * dpr));
-
   markDirty();
 }
 
@@ -841,12 +830,12 @@ void Widgets::Plot3D::updateCamera(const DSP::LineSeries3D& data)
 void Widgets::Plot3D::drawData()
 {
   const auto& data = m_dashboard.plotData3D(m_index);
-  if (data.empty()) {
-    for (int slot = 0; slot < Plot3DStereo::kEyeSlots; ++slot) {
-      m_tracePx[slot].clear();
-      m_traceColors[slot].clear();
-    }
+  for (int slot = 0; slot < Plot3DStereo::kEyeSlots; ++slot) {
+    m_tracePx[slot].clear();
+    m_traceColors[slot].clear();
+  }
 
+  if (data.empty()) {
     m_dirtyData = false;
     return;
   }
@@ -854,11 +843,6 @@ void Widgets::Plot3D::drawData()
   if (m_dataUpdated) {
     updateCamera(data);
     m_dataUpdated = false;
-  }
-
-  for (int slot = 0; slot < Plot3DStereo::kEyeSlots; ++slot) {
-    m_tracePx[slot].clear();
-    m_traceColors[slot].clear();
   }
 
   QMatrix4x4 matrix;

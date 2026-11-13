@@ -436,35 +436,6 @@ int UI::Snap::snapToGrid(const int value, const int gridSize)
 }
 
 /**
- * @brief Snaps a coordinate onto the nearest wrench-ladder stop of @a extent when one sits
- *        within @a tolerance, else returns it untouched. Canvas bounds count as stops, so a
- *        layout rescale lands shared edges on one coordinate instead of drifting apart.
- */
-int UI::Snap::snapToFraction(const int value, const int extent, const int tolerance)
-{
-  if (extent <= 0)
-    return value;
-
-  int best     = value;
-  int bestDist = tolerance + 1;
-  for (const int den : kFractionDenominators) {
-    if (extent / den < kMinFractionSpacing)
-      continue;
-
-    for (int num = 0; num <= den; ++num) {
-      const int stop = extent * num / den;
-      const int dist = qAbs(stop - value);
-      if (dist < bestDist) {
-        bestDist = dist;
-        best     = stop;
-      }
-    }
-  }
-
-  return bestDist <= tolerance ? best : value;
-}
-
-/**
  * @brief Returns @a size as a reduced wrench fraction of @a extent ("1/2", "3/16"), or empty
  *        when it is not ON a live stop -- it confirms a snap landed and must never name a
  *        fraction the size merely resembles. Coarsest rung first, so shared stops reduce.

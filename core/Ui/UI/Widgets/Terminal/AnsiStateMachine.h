@@ -68,13 +68,11 @@ public:
     Escape,
     Format,
     ResetFont,
-    OSC,
-    IgnoreSeq
+    OSC
   };
 
   explicit AnsiStateMachine(AnsiSink& sink);
 
-  [[nodiscard]] State state() const;
   [[nodiscard]] bool inTextState() const;
 
   void beginEscape();
@@ -87,10 +85,9 @@ private:
   void processEscape(const QChar& byte);
   void processFormat(const QChar& byte);
   void handleCsiCursorMove(char final);
-  void processIgnoreSeq(const QChar& byte);
   void handleCsiCursorAbsolute(char final);
   void handleCsiDecPrivateMode(const QChar& byte);
-  [[nodiscard]] bool dispatchCsiFinal(const QChar& byte);
+  void dispatchCsiFinal(const QChar& byte);
 
 private:
   AnsiSink& m_sink;

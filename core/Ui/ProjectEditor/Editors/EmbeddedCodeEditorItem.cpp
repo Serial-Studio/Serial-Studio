@@ -104,6 +104,58 @@ void DataModel::EmbeddedCodeEditorItem::applyEditorTheme()
 }
 
 //--------------------------------------------------------------------------------------------------
+// Editor operations
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Cuts the current selection into the clipboard.
+ */
+void DataModel::EmbeddedCodeEditorItem::cut()
+{
+  m_editor.cut();
+}
+
+/**
+ * @brief Undoes the last edit.
+ */
+void DataModel::EmbeddedCodeEditorItem::undo()
+{
+  m_editor.undo();
+}
+
+/**
+ * @brief Redoes the previously undone edit.
+ */
+void DataModel::EmbeddedCodeEditorItem::redo()
+{
+  m_editor.redo();
+}
+
+/**
+ * @brief Copies the current selection to the clipboard.
+ */
+void DataModel::EmbeddedCodeEditorItem::copy()
+{
+  m_editor.copy();
+}
+
+/**
+ * @brief Pastes the clipboard contents into the editor.
+ */
+void DataModel::EmbeddedCodeEditorItem::paste()
+{
+  m_editor.paste();
+}
+
+/**
+ * @brief Selects all editor text.
+ */
+void DataModel::EmbeddedCodeEditorItem::selectAll()
+{
+  m_editor.selectAll();
+}
+
+//--------------------------------------------------------------------------------------------------
 // Event forwarding
 //--------------------------------------------------------------------------------------------------
 

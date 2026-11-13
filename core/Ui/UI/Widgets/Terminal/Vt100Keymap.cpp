@@ -34,91 +34,45 @@
  */
 QByteArray Widgets::Vt100Keymap::specialKey(int key)
 {
-  QByteArray seq;
-  switch (key) {
-    case Qt::Key_Backspace:
-      seq.append('\x7f');
-      break;
-    case Qt::Key_Delete:
-      seq.append("\x1b[3~");
-      break;
-    case Qt::Key_Tab:
-      seq.append('\t');
-      break;
-    case Qt::Key_Backtab:
-      seq.append("\x1b[Z");
-      break;
-    case Qt::Key_Escape:
-      seq.append('\x1b');
-      break;
-    case Qt::Key_Up:
-      seq.append("\x1b[A");
-      break;
-    case Qt::Key_Down:
-      seq.append("\x1b[B");
-      break;
-    case Qt::Key_Right:
-      seq.append("\x1b[C");
-      break;
-    case Qt::Key_Left:
-      seq.append("\x1b[D");
-      break;
-    case Qt::Key_Home:
-      seq.append("\x1b[H");
-      break;
-    case Qt::Key_End:
-      seq.append("\x1b[F");
-      break;
-    case Qt::Key_PageUp:
-      seq.append("\x1b[5~");
-      break;
-    case Qt::Key_PageDown:
-      seq.append("\x1b[6~");
-      break;
-    case Qt::Key_Insert:
-      seq.append("\x1b[2~");
-      break;
-    case Qt::Key_F1:
-      seq.append("\x1bOP");
-      break;
-    case Qt::Key_F2:
-      seq.append("\x1bOQ");
-      break;
-    case Qt::Key_F3:
-      seq.append("\x1bOR");
-      break;
-    case Qt::Key_F4:
-      seq.append("\x1bOS");
-      break;
-    case Qt::Key_F5:
-      seq.append("\x1b[15~");
-      break;
-    case Qt::Key_F6:
-      seq.append("\x1b[17~");
-      break;
-    case Qt::Key_F7:
-      seq.append("\x1b[18~");
-      break;
-    case Qt::Key_F8:
-      seq.append("\x1b[19~");
-      break;
-    case Qt::Key_F9:
-      seq.append("\x1b[20~");
-      break;
-    case Qt::Key_F10:
-      seq.append("\x1b[21~");
-      break;
-    case Qt::Key_F11:
-      seq.append("\x1b[23~");
-      break;
-    case Qt::Key_F12:
-      seq.append("\x1b[24~");
-      break;
-    default:
-      break;
-  }
+  struct KeySequence {
+    int key;
+    const char* seq;
+  };
 
-  return seq;
+  static constexpr KeySequence kTable[] = {
+    {Qt::Key_Backspace,     "\x7f"},
+    {   Qt::Key_Delete,  "\x1b[3~"},
+    {      Qt::Key_Tab,       "\t"},
+    {  Qt::Key_Backtab,   "\x1b[Z"},
+    {   Qt::Key_Escape,     "\x1b"},
+    {       Qt::Key_Up,   "\x1b[A"},
+    {     Qt::Key_Down,   "\x1b[B"},
+    {    Qt::Key_Right,   "\x1b[C"},
+    {     Qt::Key_Left,   "\x1b[D"},
+    {     Qt::Key_Home,   "\x1b[H"},
+    {      Qt::Key_End,   "\x1b[F"},
+    {   Qt::Key_PageUp,  "\x1b[5~"},
+    { Qt::Key_PageDown,  "\x1b[6~"},
+    {   Qt::Key_Insert,  "\x1b[2~"},
+    {       Qt::Key_F1,   "\x1bOP"},
+    {       Qt::Key_F2,   "\x1bOQ"},
+    {       Qt::Key_F3,   "\x1bOR"},
+    {       Qt::Key_F4,   "\x1bOS"},
+    {       Qt::Key_F5, "\x1b[15~"},
+    {       Qt::Key_F6, "\x1b[17~"},
+    {       Qt::Key_F7, "\x1b[18~"},
+    {       Qt::Key_F8, "\x1b[19~"},
+    {       Qt::Key_F9, "\x1b[20~"},
+    {      Qt::Key_F10, "\x1b[21~"},
+    {      Qt::Key_F11, "\x1b[23~"},
+    {      Qt::Key_F12, "\x1b[24~"},
+  };
+
+  for (const auto& entry : kTable)
+    if (entry.key == key)
+      return QByteArray(entry.seq);
+
+  return QByteArray();
 }
 
 /**

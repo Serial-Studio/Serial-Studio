@@ -34,9 +34,6 @@ class PublisherScriptEditor : public QDialog {
 public:
   explicit PublisherScriptEditor(QWidget* parent = nullptr);
 
-  [[nodiscard]] QString code() const;
-  [[nodiscard]] int language() const;
-
 signals:
   void scriptApplied(const QString& code, int language);
 

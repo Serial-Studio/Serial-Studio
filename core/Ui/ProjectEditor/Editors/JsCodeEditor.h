@@ -76,17 +76,10 @@ public:
   Q_INVOKABLE [[nodiscard]] bool prepareParserTest();
 
 public slots:
-  void cut();
-  void undo();
-  void redo();
-  void help();
-  void copy();
-  void paste();
   void apply();
   void importFile();
   void evaluate();
   void readCode();
-  void selectAll();
   void formatDocument();
   void formatSelection();
   void selectTemplate();
@@ -94,7 +87,6 @@ public slots:
   void setLanguage(const int language);
   void switchLanguage(const int language);
   void reload(const bool guiTrigger = false);
-  void loadDefaultTemplate(const bool guiTrigger = false);
 
 private:
   void switchNativeLanguage(const int language);

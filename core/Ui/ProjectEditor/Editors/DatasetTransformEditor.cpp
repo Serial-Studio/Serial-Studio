@@ -376,14 +376,6 @@ void DataModel::DatasetTransformEditor::displayDialog(const QString& datasetTitl
 }
 
 /**
- * @brief Returns the current editor text.
- */
-QString DataModel::DatasetTransformEditor::code() const
-{
-  return m_editor->toPlainText();
-}
-
-/**
  * @brief Returns the parameter table as a typed map; blank names are skipped.
  */
 QVariantMap DataModel::DatasetTransformEditor::params() const
@@ -401,30 +393,6 @@ QVariantMap DataModel::DatasetTransformEditor::params() const
   }
 
   return params;
-}
-
-/**
- * @brief Returns the active scripting language (Lua or JavaScript).
- */
-int DataModel::DatasetTransformEditor::language() const
-{
-  return m_language;
-}
-
-/**
- * @brief Returns the group ID the editor is currently targeting.
- */
-int DataModel::DatasetTransformEditor::targetGroupId() const noexcept
-{
-  return m_targetGroupId;
-}
-
-/**
- * @brief Returns the dataset ID the editor is currently targeting.
- */
-int DataModel::DatasetTransformEditor::targetDatasetId() const noexcept
-{
-  return m_targetDatasetId;
 }
 
 //--------------------------------------------------------------------------------------------------

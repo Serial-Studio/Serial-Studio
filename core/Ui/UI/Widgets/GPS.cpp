@@ -198,30 +198,6 @@ void Widgets::GPS::paint(QPainter* painter)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the current GPS altitude.
- */
-double Widgets::GPS::altitude() const
-{
-  return m_altitude;
-}
-
-/**
- * @brief Returns the current GPS latitude.
- */
-double Widgets::GPS::latitude() const
-{
-  return m_latitude;
-}
-
-/**
- * @brief Returns the current GPS longitude.
- */
-double Widgets::GPS::longitude() const
-{
-  return m_longitude;
-}
-
-/**
  * @brief Returns the currently selected map type index.
  */
 int Widgets::GPS::mapType() const
@@ -235,14 +211,6 @@ int Widgets::GPS::mapType() const
 int Widgets::GPS::zoomLevel() const
 {
   return qRound(m_zoom);
-}
-
-/**
- * @brief Returns the precise (floating-point) zoom level.
- */
-double Widgets::GPS::zoomLevelPrecise() const
-{
-  return m_zoom;
 }
 
 /**

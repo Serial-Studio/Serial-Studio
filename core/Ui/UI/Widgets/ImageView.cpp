@@ -53,7 +53,7 @@ static constexpr quint32 kMaxImageSize = 64 * 1024 * 1024;
  * @brief Constructs an autodetect-mode reader.
  */
 Widgets::ImageFrameReader::ImageFrameReader(QObject* parent)
-  : QObject(parent), m_mode(DetectionMode::Autodetect), m_inFrame(false), m_frameStartPos(-1)
+  : QObject(parent), m_mode(DetectionMode::Autodetect), m_inFrame(false)
 {}
 
 /**
@@ -65,7 +65,6 @@ Widgets::ImageFrameReader::ImageFrameReader(QByteArray startSeq, QByteArray endS
   , m_startSeq(std::move(startSeq))
   , m_endSeq(std::move(endSeq))
   , m_inFrame(false)
-  , m_frameStartPos(-1)
 {}
 
 /**
@@ -129,8 +128,7 @@ void Widgets::ImageFrameReader::processAutodetect()
   constexpr qsizetype kMaxAccumulator = 16 * 1024 * 1024;
   if (m_accumulator.size() > kMaxAccumulator) {
     m_accumulator.clear();
-    m_inFrame       = false;
-    m_frameStartPos = -1;
+    m_inFrame = false;
   }
 }
 
@@ -165,8 +163,7 @@ bool Widgets::ImageFrameReader::seekToFrameStart()
     return false;
 
   m_accumulator.remove(0, startPos);
-  m_inFrame       = true;
-  m_frameStartPos = 0;
+  m_inFrame = true;
   return true;
 }
 
@@ -188,8 +185,7 @@ Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractWebpFram
 
   if (chunkSize > kMaxImageSize) {
     m_accumulator.remove(0, 4);
-    m_inFrame       = false;
-    m_frameStartPos = -1;
+    m_inFrame = false;
     return StepResult::Continue;
   }
 
@@ -198,8 +194,7 @@ Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractWebpFram
 
   QByteArray frame = m_accumulator.left(frameLen);
   m_accumulator.remove(0, frameLen);
-  m_inFrame       = false;
-  m_frameStartPos = -1;
+  m_inFrame = false;
 
   Q_EMIT frameReady(frame);
   return StepResult::Continue;
@@ -222,8 +217,7 @@ Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractBmpFrame
 
   if (sz < 14 || sz > kMaxImageSize) {
     m_accumulator.remove(0, 2);
-    m_inFrame       = false;
-    m_frameStartPos = -1;
+    m_inFrame = false;
     return StepResult::Continue;
   }
 
@@ -232,8 +226,7 @@ Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractBmpFrame
 
   QByteArray frame = m_accumulator.left(static_cast<qsizetype>(sz));
   m_accumulator.remove(0, static_cast<qsizetype>(sz));
-  m_inFrame       = false;
-  m_frameStartPos = -1;
+  m_inFrame = false;
 
   Q_EMIT frameReady(frame);
   return StepResult::Continue;
@@ -254,8 +247,7 @@ Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractMarkerFr
     endMarkerLen = kPngEnd.size();
   } else {
     m_accumulator.clear();
-    m_inFrame       = false;
-    m_frameStartPos = -1;
+    m_inFrame = false;
     return StepResult::Break;
   }
 
@@ -266,8 +258,7 @@ Widgets::ImageFrameReader::StepResult Widgets::ImageFrameReader::extractMarkerFr
   qsizetype frameLen = endPos + endMarkerLen;
   QByteArray frame   = m_accumulator.left(frameLen);
   m_accumulator.remove(0, frameLen);
-  m_inFrame       = false;
-  m_frameStartPos = -1;
+  m_inFrame = false;
 
   Q_EMIT frameReady(frame);
   return StepResult::Continue;
@@ -294,8 +285,7 @@ void Widgets::ImageFrameReader::processManual()
         break;
 
       m_accumulator.remove(0, startPos + m_startSeq.size());
-      m_inFrame       = true;
-      m_frameStartPos = 0;
+      m_inFrame = true;
     }
 
     qsizetype endPos = m_accumulator.indexOf(m_endSeq);
@@ -304,8 +294,7 @@ void Widgets::ImageFrameReader::processManual()
 
     QByteArray frame = m_accumulator.left(endPos);
     m_accumulator.remove(0, endPos + m_endSeq.size());
-    m_inFrame       = false;
-    m_frameStartPos = -1;
+    m_inFrame = false;
 
     if (!frame.isEmpty())
       Q_EMIT frameReady(frame);
@@ -317,8 +306,7 @@ void Widgets::ImageFrameReader::processManual()
   constexpr qsizetype kMaxAccumulator = 16 * 1024 * 1024;
   if (m_accumulator.size() > kMaxAccumulator) {
     m_accumulator.clear();
-    m_inFrame       = false;
-    m_frameStartPos = -1;
+    m_inFrame = false;
   }
 }
 

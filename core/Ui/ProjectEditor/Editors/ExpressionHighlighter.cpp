@@ -53,33 +53,18 @@ void DataModel::ExpressionHighlighter::highlightBlock(const QString& text)
   if (!style)
     return;
 
-  auto braced = m_braced.globalMatch(text);
-  while (braced.hasNext()) {
-    const auto match = braced.next();
-    setFormat(match.capturedStart(), match.capturedLength(), style->getFormat("String"));
-  }
+  const auto paint =
+    [this, style, &text](const QRegularExpression& regex, int group, const char* name) {
+      auto it = regex.globalMatch(text);
+      while (it.hasNext()) {
+        const auto match = it.next();
+        setFormat(match.capturedStart(group), match.capturedLength(group), style->getFormat(name));
+      }
+    };
 
-  auto numbers = m_number.globalMatch(text);
-  while (numbers.hasNext()) {
-    const auto match = numbers.next();
-    setFormat(match.capturedStart(), match.capturedLength(), style->getFormat("Number"));
-  }
-
-  auto builtins = m_builtin.globalMatch(text);
-  while (builtins.hasNext()) {
-    const auto match = builtins.next();
-    setFormat(match.capturedStart(), match.capturedLength(), style->getFormat("Keyword"));
-  }
-
-  auto functions = m_function.globalMatch(text);
-  while (functions.hasNext()) {
-    const auto match = functions.next();
-    setFormat(match.capturedStart(1), match.capturedLength(1), style->getFormat("Function"));
-  }
-
-  auto comments = m_comment.globalMatch(text);
-  while (comments.hasNext()) {
-    const auto match = comments.next();
-    setFormat(match.capturedStart(), match.capturedLength(), style->getFormat("Comment"));
-  }
+  paint(m_braced, 0, "String");
+  paint(m_number, 0, "Number");
+  paint(m_builtin, 0, "Keyword");
+  paint(m_function, 1, "Function");
+  paint(m_comment, 0, "Comment");
 }

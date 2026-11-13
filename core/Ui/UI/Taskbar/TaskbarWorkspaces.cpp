@@ -180,20 +180,7 @@ bool UI::TaskbarWorkspaces::contains(int workspaceId) const
  */
 int UI::TaskbarWorkspaces::indexForGroupId(int groupId) const
 {
-  const auto list = model();
-  int index       = 0;
-  for (auto it = list.begin(); it != list.end(); ++it) {
-    const auto map = it->toMap();
-    if (!map.contains(QStringLiteral("id")))
-      continue;
-
-    if (map.value(QStringLiteral("id")).toInt() == groupId)
-      return index;
-
-    ++index;
-  }
-
-  return -1;
+  return changeIndices(groupId, groupId).first;
 }
 
 /**

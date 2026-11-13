@@ -29,41 +29,6 @@
 #include "UI/WindowManager/WindowGeometry.h"
 
 //--------------------------------------------------------------------------------------------------
-// Local helpers
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Serializes guide lines and spacing gaps into the QVariantList shape the QML overlay
- *        consumes.
- */
-static void snapVisualsToVariants(const UI::Snap::SnapResult& result,
-                                  QVariantList& guides,
-                                  QVariantList& spacings)
-{
-  guides.reserve(result.guides.size());
-  for (const auto& guide : result.guides) {
-    QVariantMap entry;
-    entry["x"]      = guide.rect.x();
-    entry["y"]      = guide.rect.y();
-    entry["width"]  = guide.rect.width();
-    entry["height"] = guide.rect.height();
-    entry["center"] = guide.kind == UI::Snap::GuideKind::Center;
-    guides.append(entry);
-  }
-
-  spacings.reserve(result.spacings.size());
-  for (const auto& spacing : result.spacings) {
-    QVariantMap entry;
-    entry["x"]      = spacing.rect.x();
-    entry["y"]      = spacing.rect.y();
-    entry["width"]  = spacing.rect.width();
-    entry["height"] = spacing.rect.height();
-    entry["gap"]    = spacing.gap;
-    spacings.append(entry);
-  }
-}
-
-//--------------------------------------------------------------------------------------------------
 // Construction
 //--------------------------------------------------------------------------------------------------
 
@@ -189,8 +154,28 @@ void UI::SnapOverlay::clearSnapSiblings()
 void UI::SnapOverlay::publishSnapGuides(const Snap::SnapResult& result)
 {
   QVariantList guides;
+  guides.reserve(result.guides.size());
+  for (const auto& guide : result.guides) {
+    QVariantMap entry;
+    entry["x"]      = guide.rect.x();
+    entry["y"]      = guide.rect.y();
+    entry["width"]  = guide.rect.width();
+    entry["height"] = guide.rect.height();
+    entry["center"] = guide.kind == UI::Snap::GuideKind::Center;
+    guides.append(entry);
+  }
+
   QVariantList spacings;
-  snapVisualsToVariants(result, guides, spacings);
+  spacings.reserve(result.spacings.size());
+  for (const auto& spacing : result.spacings) {
+    QVariantMap entry;
+    entry["x"]      = spacing.rect.x();
+    entry["y"]      = spacing.rect.y();
+    entry["width"]  = spacing.rect.width();
+    entry["height"] = spacing.rect.height();
+    entry["gap"]    = spacing.gap;
+    spacings.append(entry);
+  }
 
   if (m_alignmentGuides != guides) {
     m_alignmentGuides = std::move(guides);

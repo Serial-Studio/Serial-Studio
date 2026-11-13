@@ -35,14 +35,6 @@ Widgets::AnsiStateMachine::AnsiStateMachine(AnsiSink& sink)
 {}
 
 /**
- * @brief Returns the parse state the next byte will be interpreted in.
- */
-Widgets::AnsiStateMachine::State Widgets::AnsiStateMachine::state() const
-{
-  return m_state;
-}
-
-/**
  * @brief Returns true while no escape sequence is in flight, which is the facade's cue that
  *        the incoming bytes belong to the printable-run fast lane.
  */
@@ -77,9 +69,6 @@ void Widgets::AnsiStateMachine::feed(const QChar& byte)
       break;
     case OSC:
       processOsc(byte);
-      break;
-    case IgnoreSeq:
-      processIgnoreSeq(byte);
       break;
     default:
       break;
@@ -157,16 +146,14 @@ void Widgets::AnsiStateMachine::processFormat(const QChar& byte)
     return;
   }
 
-  if (dispatchCsiFinal(byte))
-    return;
-
+  dispatchCsiFinal(byte);
   m_state = Text;
 }
 
 /**
- * @brief Dispatches the final byte of a CSI sequence; returns true if handled.
+ * @brief Dispatches the final byte of a CSI sequence; unknown finals are dropped.
  */
-bool Widgets::AnsiStateMachine::dispatchCsiFinal(const QChar& byte)
+void Widgets::AnsiStateMachine::dispatchCsiFinal(const QChar& byte)
 {
   const char final = byte.toLatin1();
   switch (final) {
@@ -176,22 +163,19 @@ bool Widgets::AnsiStateMachine::dispatchCsiFinal(const QChar& byte)
         m_sink.applySgrCodes(m_formatValues);
       }
 
-      m_state = Text;
-      return true;
+      break;
 
     case 's':
       if (!m_privateMode)
         m_savedCursorPosition = m_sink.currentCursor();
 
-      m_state = Text;
-      return true;
+      break;
 
     case 'u':
       if (!m_privateMode)
         m_sink.moveCursor(m_savedCursorPosition);
 
-      m_state = Text;
-      return true;
+      break;
 
     case 'A':
     case 'B':
@@ -200,26 +184,22 @@ bool Widgets::AnsiStateMachine::dispatchCsiFinal(const QChar& byte)
     case 'E':
     case 'F':
       handleCsiCursorMove(final);
-      m_state = Text;
-      return true;
+      break;
 
     case 'H':
     case 'f':
     case 'G':
     case 'd':
       handleCsiCursorAbsolute(final);
-      m_state = Text;
-      return true;
+      break;
 
     case 'J':
       handleCsiEraseDisplay();
-      m_state = Text;
-      return true;
+      break;
 
     case 'K':
       handleCsiEraseLine();
-      m_state = Text;
-      return true;
+      break;
 
     case 'P':
       if (!m_privateMode) {
@@ -227,22 +207,15 @@ bool Widgets::AnsiStateMachine::dispatchCsiFinal(const QChar& byte)
         m_sink.eraseFromCursor(AnsiEraseDirection::Right, INT_MAX);
       }
 
-      m_state = Text;
-      return true;
+      break;
 
     case 'h':
     case 'l':
       handleCsiDecPrivateMode(byte);
-      m_state = Text;
-      return true;
+      break;
 
     default:
-      if ((final >= 'A' && final <= 'Z') || (final >= 'a' && final <= 'z')) {
-        m_state = Text;
-        return true;
-      }
-
-      return false;
+      break;
   }
 }
 
@@ -393,13 +366,4 @@ void Widgets::AnsiStateMachine::processOsc(const QChar& byte)
 
   else if (latin == 0x1b)
     m_state = Escape;
-}
-
-/**
- * @brief Consumes one byte while ignoring an unknown CSI sequence.
- */
-void Widgets::AnsiStateMachine::processIgnoreSeq(const QChar& byte)
-{
-  if ((byte >= 'A' && byte <= 'Z') || (byte >= 'a' && byte <= 'z'))
-    m_state = Text;
 }

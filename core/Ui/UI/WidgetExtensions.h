@@ -156,16 +156,11 @@ public:
 
   [[nodiscard]] QStringList ids() const;
   [[nodiscard]] bool contains(const QString& id) const;
-  [[nodiscard]] QStringList idsForScope(Scope scope) const;
   [[nodiscard]] const Descriptor& descriptor(const QString& id) const;
   [[nodiscard]] const QList<Misc::ProblemCenter::Finding>& findings() const noexcept;
   [[nodiscard]] QString builtinReplacement(const QString& builtinWidgetId) const;
 
   [[nodiscard]] bool canInstantiate(const QString& id) const;
-  [[nodiscard]] bool acceptsEntity(const QString& id,
-                                   Scope scope,
-                                   int datasetCount,
-                                   bool numericValues) const;
 
   Q_INVOKABLE [[nodiscard]] QString qmlUrl(const QString& id) const;
   Q_INVOKABLE [[nodiscard]] bool consentGranted(const QString& id) const;

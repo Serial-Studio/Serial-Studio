@@ -77,7 +77,7 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
     if (m_readingCode)
       return;
 
-    scheduleValidation();
+    m_validateTimer.start();
   });
 
   m_validateTimer.setSingleShot(true);
@@ -260,7 +260,7 @@ void DataModel::OutputCodeEditor::readCode()
 
   QString code = sel.transmitFunction;
   if (code.isEmpty())
-    code = defaultTemplate();
+    code = defaultOutputWidgetTemplate();
 
   m_editor.setSourceText(code);
 
@@ -275,7 +275,7 @@ void DataModel::OutputCodeEditor::readCode()
 void DataModel::OutputCodeEditor::reload(bool guiTrigger)
 {
   Q_UNUSED(guiTrigger)
-  m_editor.setSourceText(defaultTemplate());
+  m_editor.setSourceText(defaultOutputWidgetTemplate());
   Q_EMIT modifiedChanged();
 }
 
@@ -284,29 +284,12 @@ void DataModel::OutputCodeEditor::reload(bool guiTrigger)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Loads the default transmit function template from resources.
- */
-QString DataModel::OutputCodeEditor::defaultTemplate()
-{
-  return defaultOutputWidgetTemplate();
-}
-
-/**
  * @brief Rebuilds the cached list of output-widget templates from resources.
  */
 void DataModel::OutputCodeEditor::loadTemplates()
 {
   m_templates.reload();
   Q_EMIT templatesChanged();
-}
-
-/**
- * @brief Restarts the validation debounce. Every keystroke would otherwise build a fresh engine and
- *        install the whole host surface into it, which is far too expensive to do per character.
- */
-void DataModel::OutputCodeEditor::scheduleValidation()
-{
-  m_validateTimer.start();
 }
 
 /**

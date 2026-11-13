@@ -85,6 +85,94 @@ static QVariantList buildFolderTree(const std::vector<Folder>& folders, int pare
   return out;
 }
 
+/**
+ * @brief Appends one row per folder directly under @p parentFolderId; each row counts the
+ *        sub-folders and @p items filed under that folder.
+ */
+template<typename Folder, typename Item>
+static void appendFolderRows(QVariantList& out,
+                             const std::vector<Folder>& folders,
+                             const std::vector<Item>& items,
+                             int parentFolderId)
+{
+  auto& registry = Core::services().iconRegistry;
+  for (const auto& f : folders) {
+    if (f.parentFolderId != parentFolderId)
+      continue;
+
+    int children = 0;
+    for (const auto& sub : folders)
+      if (sub.parentFolderId == f.folderId)
+        ++children;
+
+    for (const auto& item : items)
+      if (item.parentFolderId == f.folderId)
+        ++children;
+
+    QVariantMap row;
+    row[QStringLiteral("isFolder")] = true;
+    row[QStringLiteral("id")]       = f.folderId;
+    row[QStringLiteral("title")]    = f.title;
+    row[QStringLiteral("icon")] =
+      registry.icon(QStringLiteral("widgets"), QStringLiteral("folder"), 16);
+    row[QStringLiteral("count")] = children;
+    out.append(row);
+  }
+}
+
+/**
+ * @brief Moves the tree selection onto @p item; no-op when either argument is null.
+ */
+static void selectTreeItem(QItemSelectionModel* selection, const QStandardItem* item)
+{
+  if (!selection || !item)
+    return;
+
+  selection->setCurrentIndex(item->index(), QItemSelectionModel::ClearAndSelect);
+}
+
+/**
+ * @brief Returns the first tree item whose mapped value equals @p value, or nullptr.
+ */
+template<typename Value>
+[[nodiscard]] static QStandardItem* findMappedItem(const QMap<QStandardItem*, Value>& items,
+                                                   const Value& value)
+{
+  for (auto it = items.begin(); it != items.end(); ++it)
+    if (it.value() == value)
+      return it.key();
+
+  return nullptr;
+}
+
+/**
+ * @brief Returns the index of the next workspace under the same parent folder as workspace
+ *        @p workspaceId in direction @p step (+1/-1), or -1 when there is none.
+ */
+[[nodiscard]] static int siblingWorkspaceIndex(const std::vector<Workspace>& workspaces,
+                                               int workspaceId,
+                                               int step)
+{
+  const int n = static_cast<int>(workspaces.size());
+
+  int from = -1;
+  for (int i = 0; i < n; ++i)
+    if (workspaces[static_cast<size_t>(i)].workspaceId == workspaceId) {
+      from = i;
+      break;
+    }
+
+  if (from < 0)
+    return -1;
+
+  const int parent = workspaces[static_cast<size_t>(from)].parentFolderId;
+  for (int j = from + step; j >= 0 && j < n; j += step)
+    if (workspaces[static_cast<size_t>(j)].parentFolderId == parent)
+      return j;
+
+  return -1;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Multi-selection
 //--------------------------------------------------------------------------------------------------
@@ -168,16 +256,7 @@ QVariantList EditorSummaries::tablesSummary() const
  */
 void EditorSummaries::selectUserTable(const QString& tableName)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_userTableItems.begin(); it != m_editor.m_userTableItems.end(); ++it) {
-    if (it.value() == tableName) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
+  selectTreeItem(m_editor.m_selectionModel, findMappedItem(m_editor.m_userTableItems, tableName));
 }
 
 /**
@@ -185,16 +264,7 @@ void EditorSummaries::selectUserTable(const QString& tableName)
  */
 void EditorSummaries::selectWorkspace(int workspaceId)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_workspaceItems.begin(); it != m_editor.m_workspaceItems.end(); ++it) {
-    if (it.value() == workspaceId) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
+  selectTreeItem(m_editor.m_selectionModel, findMappedItem(m_editor.m_workspaceItems, workspaceId));
 }
 
 /**
@@ -202,18 +272,8 @@ void EditorSummaries::selectWorkspace(int workspaceId)
  */
 void EditorSummaries::selectWorkspaceFolder(int folderId)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_workspaceFolderItems.begin();
-       it != m_editor.m_workspaceFolderItems.end();
-       ++it) {
-    if (it.value() == folderId) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
+  selectTreeItem(m_editor.m_selectionModel,
+                 findMappedItem(m_editor.m_workspaceFolderItems, folderId));
 }
 
 /**
@@ -235,28 +295,7 @@ QVariantList EditorSummaries::workspaceFolderContents(int parentFolderId) const
   const auto& workspaces = pm.editorWorkspaces();
 
   QVariantList out;
-  for (const auto& f : folders) {
-    if (f.parentFolderId != parentFolderId)
-      continue;
-
-    int children = 0;
-    for (const auto& sub : folders)
-      if (sub.parentFolderId == f.folderId)
-        ++children;
-
-    for (const auto& ws : workspaces)
-      if (ws.parentFolderId == f.folderId)
-        ++children;
-
-    QVariantMap row;
-    row[QStringLiteral("isFolder")] = true;
-    row[QStringLiteral("id")]       = f.folderId;
-    row[QStringLiteral("title")]    = f.title;
-    row[QStringLiteral("icon")] =
-      registry.icon(QStringLiteral("widgets"), QStringLiteral("folder"), 16);
-    row[QStringLiteral("count")] = children;
-    out.append(row);
-  }
+  appendFolderRows(out, folders, workspaces, parentFolderId);
 
   for (const auto& ws : workspaces) {
     if (ws.parentFolderId != parentFolderId)
@@ -289,34 +328,12 @@ QVariantList EditorSummaries::groupFolderTree() const
  */
 QVariantList EditorSummaries::groupFolderContents(int parentFolderId) const
 {
-  auto& registry      = Core::services().iconRegistry;
   const auto& pm      = m_model;
   const auto& folders = pm.editorGroupFolders();
   const auto& groups  = pm.groups();
 
   QVariantList out;
-  for (const auto& f : folders) {
-    if (f.parentFolderId != parentFolderId)
-      continue;
-
-    int children = 0;
-    for (const auto& sub : folders)
-      if (sub.parentFolderId == f.folderId)
-        ++children;
-
-    for (const auto& g : groups)
-      if (g.parentFolderId == f.folderId)
-        ++children;
-
-    QVariantMap row;
-    row[QStringLiteral("isFolder")] = true;
-    row[QStringLiteral("id")]       = f.folderId;
-    row[QStringLiteral("title")]    = f.title;
-    row[QStringLiteral("icon")] =
-      registry.icon(QStringLiteral("widgets"), QStringLiteral("folder"), 16);
-    row[QStringLiteral("count")] = children;
-    out.append(row);
-  }
+  appendFolderRows(out, folders, groups, parentFolderId);
 
   for (const auto& g : groups) {
     if (g.parentFolderId != parentFolderId)
@@ -374,28 +391,7 @@ QVariantList EditorSummaries::tableFolderContents(int parentFolderId) const
   const auto& tables  = pm.tables();
 
   QVariantList out;
-  for (const auto& f : folders) {
-    if (f.parentFolderId != parentFolderId)
-      continue;
-
-    int children = 0;
-    for (const auto& sub : folders)
-      if (sub.parentFolderId == f.folderId)
-        ++children;
-
-    for (const auto& t : tables)
-      if (t.parentFolderId == f.folderId)
-        ++children;
-
-    QVariantMap row;
-    row[QStringLiteral("isFolder")] = true;
-    row[QStringLiteral("id")]       = f.folderId;
-    row[QStringLiteral("title")]    = f.title;
-    row[QStringLiteral("icon")] =
-      registry.icon(QStringLiteral("widgets"), QStringLiteral("folder"), 16);
-    row[QStringLiteral("count")] = children;
-    out.append(row);
-  }
+  appendFolderRows(out, folders, tables, parentFolderId);
 
   for (const auto& t : tables) {
     if (t.parentFolderId != parentFolderId)
@@ -419,17 +415,7 @@ QVariantList EditorSummaries::tableFolderContents(int parentFolderId) const
  */
 void EditorSummaries::selectGroupFolder(int folderId)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_groupFolderItems.begin(); it != m_editor.m_groupFolderItems.end();
-       ++it) {
-    if (it.value() == folderId) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
+  selectTreeItem(m_editor.m_selectionModel, findMappedItem(m_editor.m_groupFolderItems, folderId));
 }
 
 /**
@@ -437,17 +423,7 @@ void EditorSummaries::selectGroupFolder(int folderId)
  */
 void EditorSummaries::selectTableFolder(int folderId)
 {
-  if (!m_editor.m_selectionModel)
-    return;
-
-  for (auto it = m_editor.m_tableFolderItems.begin(); it != m_editor.m_tableFolderItems.end();
-       ++it) {
-    if (it.value() == folderId) {
-      m_editor.m_selectionModel->setCurrentIndex(it.key()->index(),
-                                                 QItemSelectionModel::ClearAndSelect);
-      return;
-    }
-  }
+  selectTreeItem(m_editor.m_selectionModel, findMappedItem(m_editor.m_tableFolderItems, folderId));
 }
 
 /**
@@ -455,11 +431,7 @@ void EditorSummaries::selectTableFolder(int folderId)
  */
 void EditorSummaries::selectSystemDatasets()
 {
-  if (!m_editor.m_selectionModel || !m_editor.m_systemDatasetsItem)
-    return;
-
-  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_systemDatasetsItem->index(),
-                                             QItemSelectionModel::ClearAndSelect);
+  selectTreeItem(m_editor.m_selectionModel, m_editor.m_systemDatasetsItem);
 }
 
 /**
@@ -467,11 +439,7 @@ void EditorSummaries::selectSystemDatasets()
  */
 void EditorSummaries::selectMqttPublisher()
 {
-  if (!m_editor.m_selectionModel || !m_editor.m_mqttPublisherItem)
-    return;
-
-  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_mqttPublisherItem->index(),
-                                             QItemSelectionModel::ClearAndSelect);
+  selectTreeItem(m_editor.m_selectionModel, m_editor.m_mqttPublisherItem);
 }
 
 /**
@@ -479,11 +447,7 @@ void EditorSummaries::selectMqttPublisher()
  */
 void EditorSummaries::selectInfluxSink()
 {
-  if (!m_editor.m_selectionModel || !m_editor.m_influxSinkItem)
-    return;
-
-  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_influxSinkItem->index(),
-                                             QItemSelectionModel::ClearAndSelect);
+  selectTreeItem(m_editor.m_selectionModel, m_editor.m_influxSinkItem);
 }
 
 /**
@@ -491,11 +455,7 @@ void EditorSummaries::selectInfluxSink()
  */
 void EditorSummaries::selectControlScript()
 {
-  if (!m_editor.m_selectionModel || !m_editor.m_controlScriptItem)
-    return;
-
-  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_controlScriptItem->index(),
-                                             QItemSelectionModel::ClearAndSelect);
+  selectTreeItem(m_editor.m_selectionModel, m_editor.m_controlScriptItem);
 }
 
 /**
@@ -503,11 +463,7 @@ void EditorSummaries::selectControlScript()
  */
 void EditorSummaries::selectTransformLibrary()
 {
-  if (!m_editor.m_selectionModel || !m_editor.m_transformLibraryItem)
-    return;
-
-  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_transformLibraryItem->index(),
-                                             QItemSelectionModel::ClearAndSelect);
+  selectTreeItem(m_editor.m_selectionModel, m_editor.m_transformLibraryItem);
 }
 
 /**
@@ -515,11 +471,7 @@ void EditorSummaries::selectTransformLibrary()
  */
 void EditorSummaries::selectJsLibrary()
 {
-  if (!m_editor.m_selectionModel || !m_editor.m_jsLibraryItem)
-    return;
-
-  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_jsLibraryItem->index(),
-                                             QItemSelectionModel::ClearAndSelect);
+  selectTreeItem(m_editor.m_selectionModel, m_editor.m_jsLibraryItem);
 }
 
 /**
@@ -527,11 +479,7 @@ void EditorSummaries::selectJsLibrary()
  */
 void EditorSummaries::selectProjectScripts()
 {
-  if (!m_editor.m_selectionModel || !m_editor.m_scriptsRootItem)
-    return;
-
-  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_scriptsRootItem->index(),
-                                             QItemSelectionModel::ClearAndSelect);
+  selectTreeItem(m_editor.m_selectionModel, m_editor.m_scriptsRootItem);
 }
 
 /**
@@ -539,11 +487,7 @@ void EditorSummaries::selectProjectScripts()
  */
 void EditorSummaries::selectDataExport()
 {
-  if (!m_editor.m_selectionModel || !m_editor.m_exportRootItem)
-    return;
-
-  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_exportRootItem->index(),
-                                             QItemSelectionModel::ClearAndSelect);
+  selectTreeItem(m_editor.m_selectionModel, m_editor.m_exportRootItem);
 }
 
 /**
@@ -899,26 +843,9 @@ bool EditorSummaries::canMoveCurrent(int direction) const
         && target < static_cast<int>(groups[static_cast<size_t>(gid)].outputWidgets.size());
   }
 
-  if (m_editor.m_currentView == WorkspaceView) {
-    const auto& ws = m_model.editorWorkspaces();
-    const int n    = static_cast<int>(ws.size());
-    int from       = -1;
-    for (int i = 0; i < n; ++i)
-      if (ws[static_cast<size_t>(i)].workspaceId == m_editor.m_selectedWorkspaceId) {
-        from = i;
-        break;
-      }
-
-    if (from < 0)
-      return false;
-
-    const int parent = ws[static_cast<size_t>(from)].parentFolderId;
-    for (int j = from + step; j >= 0 && j < n; j += step)
-      if (ws[static_cast<size_t>(j)].parentFolderId == parent)
-        return true;
-
-    return false;
-  }
+  if (m_editor.m_currentView == WorkspaceView)
+    return siblingWorkspaceIndex(m_model.editorWorkspaces(), m_editor.m_selectedWorkspaceId, step)
+        >= 0;
 
   return m_editor.m_currentView == GroupFolderView || m_editor.m_currentView == TableFolderView
       || m_editor.m_currentView == WorkspaceFolderView;
@@ -1029,30 +956,8 @@ bool EditorSummaries::moveCurrentOutputWidget(int direction)
  */
 bool EditorSummaries::moveWorkspace(int workspaceId, int direction)
 {
-  const auto& workspaces = m_model.editorWorkspaces();
-  const int n            = static_cast<int>(workspaces.size());
-
-  int from = -1;
-  for (int i = 0; i < n; ++i)
-    if (workspaces[static_cast<size_t>(i)].workspaceId == workspaceId) {
-      from = i;
-      break;
-    }
-
-  if (from < 0)
-    return false;
-
-  const int parent = workspaces[static_cast<size_t>(from)].parentFolderId;
-  const int step   = (direction < 0) ? -1 : 1;
-
-  int target = -1;
-  for (int j = from + step; j >= 0 && j < n; j += step)
-    if (workspaces[static_cast<size_t>(j)].parentFolderId == parent) {
-      target = j;
-      break;
-    }
-
-  if (target < 0)
+  const int step = (direction < 0) ? -1 : 1;
+  if (siblingWorkspaceIndex(m_model.editorWorkspaces(), workspaceId, step) < 0)
     return false;
 
   m_model.moveWorkspaceInFolder(workspaceId, direction);

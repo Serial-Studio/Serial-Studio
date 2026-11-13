@@ -21,6 +21,8 @@
 
 #include "UI/Taskbar/TaskbarSearch.h"
 
+#include <optional>
+#include <QStandardItem>
 #include <QVariantMap>
 
 #include "Core/SerialStudio.h"
@@ -88,6 +90,29 @@ void UI::TaskbarSearch::setFilter(const QString& filter)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Builds one widget entry for the popup; the widget type is passed in so each caller keeps
+ *        the QVariant type it always stored, and isGroupWidget is only emitted when given.
+ */
+[[nodiscard]] static QVariantMap makeWidgetEntry(const QStandardItem* item,
+                                                 const QString& groupName,
+                                                 const QVariant& widgetType,
+                                                 std::optional<bool> isGroupWidget = std::nullopt)
+{
+  QVariantMap entry;
+  entry[QStringLiteral("windowId")]    = item->data(UI::TaskbarModel::WindowIdRole);
+  entry[QStringLiteral("widgetName")]  = item->data(UI::TaskbarModel::WidgetNameRole);
+  entry[QStringLiteral("widgetIcon")]  = item->data(UI::TaskbarModel::WidgetIconRole);
+  entry[QStringLiteral("widgetType")]  = widgetType;
+  entry[QStringLiteral("groupName")]   = groupName;
+  entry[QStringLiteral("groupId")]     = item->data(UI::TaskbarModel::GroupIdRole);
+  entry[QStringLiteral("isWorkspace")] = false;
+  if (isGroupWidget)
+    entry[QStringLiteral("isGroupWidget")] = *isGroupWidget;
+
+  return entry;
+}
+
+/**
  * @brief Returns a flat list of widgets matching the current search filter, capped so the popup
  *        stays a picker rather than a browser. An empty filter matches everything.
  */
@@ -111,16 +136,7 @@ QVariantList UI::TaskbarSearch::results() const
     if (groupType != SerialStudio::DashboardNoWidget
         && (noFilter || SerialStudio::searchMatches(filter, groupWidgetName)
             || SerialStudio::searchMatches(filter, groupName))) {
-      QVariantMap entry;
-      entry[QStringLiteral("windowId")]      = groupItem->data(TaskbarModel::WindowIdRole);
-      entry[QStringLiteral("widgetName")]    = groupWidgetName;
-      entry[QStringLiteral("widgetIcon")]    = groupItem->data(TaskbarModel::WidgetIconRole);
-      entry[QStringLiteral("widgetType")]    = groupType;
-      entry[QStringLiteral("groupName")]     = groupName;
-      entry[QStringLiteral("groupId")]       = groupItem->data(TaskbarModel::GroupIdRole);
-      entry[QStringLiteral("isWorkspace")]   = false;
-      entry[QStringLiteral("isGroupWidget")] = true;
-      results.append(entry);
+      results.append(makeWidgetEntry(groupItem, groupName, groupType, true));
     }
 
     for (int j = 0; j < groupItem->rowCount() && results.size() < kMaxSearchResults; ++j) {
@@ -135,16 +151,8 @@ QVariantList UI::TaskbarSearch::results() const
       const auto name = child->data(TaskbarModel::WidgetNameRole).toString();
       if (noFilter || SerialStudio::searchMatches(filter, name)
           || SerialStudio::searchMatches(filter, groupName)) {
-        QVariantMap entry;
-        entry[QStringLiteral("windowId")]      = child->data(TaskbarModel::WindowIdRole);
-        entry[QStringLiteral("widgetName")]    = name;
-        entry[QStringLiteral("widgetIcon")]    = child->data(TaskbarModel::WidgetIconRole);
-        entry[QStringLiteral("widgetType")]    = child->data(TaskbarModel::WidgetTypeRole);
-        entry[QStringLiteral("groupName")]     = groupName;
-        entry[QStringLiteral("groupId")]       = child->data(TaskbarModel::GroupIdRole);
-        entry[QStringLiteral("isWorkspace")]   = false;
-        entry[QStringLiteral("isGroupWidget")] = false;
-        results.append(entry);
+        results.append(
+          makeWidgetEntry(child, groupName, child->data(TaskbarModel::WidgetTypeRole), false));
       }
     }
   }
@@ -168,17 +176,8 @@ QVariantList UI::TaskbarSearch::allWidgets() const
     const auto groupName = groupItem->data(TaskbarModel::GroupNameRole).toString();
 
     const auto groupType = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
-    if (groupType != SerialStudio::DashboardNoWidget) {
-      QVariantMap entry;
-      entry[QStringLiteral("windowId")]    = groupItem->data(TaskbarModel::WindowIdRole);
-      entry[QStringLiteral("widgetName")]  = groupItem->data(TaskbarModel::WidgetNameRole);
-      entry[QStringLiteral("widgetIcon")]  = groupItem->data(TaskbarModel::WidgetIconRole);
-      entry[QStringLiteral("widgetType")]  = groupType;
-      entry[QStringLiteral("groupName")]   = groupName;
-      entry[QStringLiteral("groupId")]     = groupItem->data(TaskbarModel::GroupIdRole);
-      entry[QStringLiteral("isWorkspace")] = false;
-      results.append(entry);
-    }
+    if (groupType != SerialStudio::DashboardNoWidget)
+      results.append(makeWidgetEntry(groupItem, groupName, groupType));
 
     for (int j = 0; j < groupItem->rowCount(); ++j) {
       auto* child = groupItem->child(j);
@@ -189,15 +188,7 @@ QVariantList UI::TaskbarSearch::allWidgets() const
       if (childType == SerialStudio::DashboardNoWidget)
         continue;
 
-      QVariantMap entry;
-      entry[QStringLiteral("windowId")]    = child->data(TaskbarModel::WindowIdRole);
-      entry[QStringLiteral("widgetName")]  = child->data(TaskbarModel::WidgetNameRole);
-      entry[QStringLiteral("widgetIcon")]  = child->data(TaskbarModel::WidgetIconRole);
-      entry[QStringLiteral("widgetType")]  = child->data(TaskbarModel::WidgetTypeRole);
-      entry[QStringLiteral("groupName")]   = groupName;
-      entry[QStringLiteral("groupId")]     = child->data(TaskbarModel::GroupIdRole);
-      entry[QStringLiteral("isWorkspace")] = false;
-      results.append(entry);
+      results.append(makeWidgetEntry(child, groupName, child->data(TaskbarModel::WidgetTypeRole)));
     }
   }
 

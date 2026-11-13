@@ -349,8 +349,7 @@ void Widgets::PainterContext::setLineWidth(qreal w)
 
   m_state.strokePen.setWidthF(w);
 
-  if (m_painter)
-    m_painter->setPen(m_state.strokePen);
+  rebindStrokeBrush();
 }
 
 /**
@@ -360,8 +359,7 @@ void Widgets::PainterContext::setLineCap(const QString& cap)
 {
   m_state.strokePen.setCapStyle(PainterEnums::mapLineCap(cap));
 
-  if (m_painter)
-    m_painter->setPen(m_state.strokePen);
+  rebindStrokeBrush();
 }
 
 /**
@@ -371,8 +369,7 @@ void Widgets::PainterContext::setLineJoin(const QString& join)
 {
   m_state.strokePen.setJoinStyle(PainterEnums::mapLineJoin(join));
 
-  if (m_painter)
-    m_painter->setPen(m_state.strokePen);
+  rebindStrokeBrush();
 }
 
 /**
@@ -386,8 +383,7 @@ void Widgets::PainterContext::setMiterLimit(qreal limit)
   m_state.miterLimit = limit;
   m_state.strokePen.setMiterLimit(limit);
 
-  if (m_painter)
-    m_painter->setPen(m_state.strokePen);
+  rebindStrokeBrush();
 }
 
 /**
@@ -493,7 +489,9 @@ void Widgets::PainterContext::setShadowOffsetY(qreal dy)
 void Widgets::PainterContext::setImageSmoothingEnabled(bool enabled)
 {
   m_state.imageSmoothing = enabled;
-  applyImageSmoothing();
+
+  if (m_painter)
+    m_painter->setRenderHint(QPainter::SmoothPixmapTransform, m_state.imageSmoothing);
 }
 
 /**
@@ -1261,17 +1259,7 @@ void Widgets::PainterContext::applyDashToPen()
     m_state.strokePen.setDashOffset(m_state.lineDashOffset / w);
   }
 
-  if (m_painter)
-    m_painter->setPen(m_state.strokePen);
-}
-
-/**
- * @brief Re-applies SmoothPixmapTransform per the current imageSmoothing flag.
- */
-void Widgets::PainterContext::applyImageSmoothing()
-{
-  if (m_painter)
-    m_painter->setRenderHint(QPainter::SmoothPixmapTransform, m_state.imageSmoothing);
+  rebindStrokeBrush();
 }
 
 /**

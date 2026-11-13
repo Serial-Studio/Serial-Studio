@@ -55,11 +55,7 @@ class DatasetTransformEditor : public QDialog {
 public:
   explicit DatasetTransformEditor(QWidget* parent = nullptr);
 
-  [[nodiscard]] QString code() const;
-  [[nodiscard]] int language() const;
   [[nodiscard]] QVariantMap params() const;
-  [[nodiscard]] int targetGroupId() const noexcept;
-  [[nodiscard]] int targetDatasetId() const noexcept;
 
 signals:
   void transformApplied(

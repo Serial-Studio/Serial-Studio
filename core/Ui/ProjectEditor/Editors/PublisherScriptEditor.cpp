@@ -233,22 +233,6 @@ void MQTT::PublisherScriptEditor::displayDialog(const QString& currentCode, int 
   m_editor->setFocus();
 }
 
-/**
- * @brief Returns the current editor text.
- */
-QString MQTT::PublisherScriptEditor::code() const
-{
-  return m_editor->toPlainText();
-}
-
-/**
- * @brief Returns the active scripting language (JavaScript or Lua).
- */
-int MQTT::PublisherScriptEditor::language() const
-{
-  return m_language;
-}
-
 //--------------------------------------------------------------------------------------------------
 // Private slots
 //--------------------------------------------------------------------------------------------------

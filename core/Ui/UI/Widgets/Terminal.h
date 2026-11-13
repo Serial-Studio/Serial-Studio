@@ -135,13 +135,6 @@ public:
   Terminal(QQuickItem* parent = 0);
   void paint(QPainter* painter) override;
 
-  enum Direction {
-    LeftDirection,
-    RightDirection
-  };
-
-  Q_ENUM(Direction);
-
   [[nodiscard]] int charWidth() const;
   [[nodiscard]] int charHeight() const;
 
@@ -164,7 +157,6 @@ public:
   [[nodiscard]] int terminalColumns() const;
   [[nodiscard]] int terminalRows() const;
 
-  [[nodiscard]] const QPoint& cursorPosition() const;
   [[nodiscard]] QPoint positionToCursor(const QPoint& pos) const;
 
   static QString formatDebugMessage(QtMsgType type, const QString& message, bool useAnsiColors);
@@ -193,8 +185,6 @@ private slots:
   void append(const QString& data);
   void appendString(QStringView string);
   void onDisplayString(const QString& data);
-  void removeStringFromCursor(const Widgets::Terminal::Direction direction = RightDirection,
-                              int len                                      = INT_MAX);
 
 private:
   void initBuffer();
@@ -216,7 +206,6 @@ private:
   void eraseFromCursor(AnsiEraseDirection direction, int length) override;
 
   void setCursorPosition(const QPoint& position);
-  void setCursorPosition(const int x, const int y);
 
   [[nodiscard]] int findCharAtPixelX(const QString& line,
                                      int segStart,

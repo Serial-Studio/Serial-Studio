@@ -50,8 +50,6 @@ public:
   FocusCycler& operator=(FocusCycler&&)      = delete;
   FocusCycler& operator=(const FocusCycler&) = delete;
 
-  [[nodiscard]] bool running() const;
-
 public slots:
   void stop();
   void remove(QQuickItem* window);

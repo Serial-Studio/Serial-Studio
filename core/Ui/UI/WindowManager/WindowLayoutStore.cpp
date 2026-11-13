@@ -185,19 +185,6 @@ UI::WindowLayoutStore::WindowLayoutStore(UI::Dashboard& dashboard)
 {}
 
 //--------------------------------------------------------------------------------------------------
-// State queries
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Returns the canvas size the stored manual reference was measured on; a zero extent means
- *        no reference has been captured yet.
- */
-QSize UI::WindowLayoutStore::referenceCanvas() const
-{
-  return QSize(m_manualCanvasWidth, m_manualCanvasHeight);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Serialization
 //--------------------------------------------------------------------------------------------------
 

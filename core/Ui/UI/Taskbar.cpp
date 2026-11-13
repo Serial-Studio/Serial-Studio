@@ -88,7 +88,6 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   , m_activeGroupId(-1)
   , m_desiredGroupId(-1)
   , m_rebuildInProgress(false)
-  , m_batchUpdateInProgress(false)
   , m_restoringLayout(false)
   , m_independentWorkspace(false)
   , m_viewShown(true)
@@ -399,21 +398,10 @@ QQuickItem* UI::Taskbar::nextActiveWindow(int delta) const
     return nullptr;
 
   QList<QQuickItem*> windows;
-  windows.reserve(m_taskbarButtons->rowCount());
-  for (int i = 0; i < m_taskbarButtons->rowCount(); ++i) {
-    auto* row = m_taskbarButtons->item(i);
-    if (!row)
-      continue;
-
-    const int wid = row->data(TaskbarModel::WindowIdRole).toInt();
-    auto* win     = windowData(wid);
-    if (!win)
-      continue;
-
-    if (windowState(win) == TaskbarModel::WindowClosed)
-      continue;
-
-    windows.append(win);
+  for (const int wid : taskbarWindowIds()) {
+    auto* win = windowData(wid);
+    if (win && windowState(win) != TaskbarModel::WindowClosed)
+      windows.append(win);
   }
 
   if (windows.isEmpty())
@@ -1140,39 +1128,6 @@ QStandardItem* UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
     return nullptr;
 
   return findItemByWindowId(windowId, parentItem);
-}
-
-/**
- * @brief Finds a group item by its group ID.
- */
-QStandardItem* UI::Taskbar::findGroupItemByGroupId(int groupId) const
-{
-  for (int i = 0; i < fullModel()->rowCount(); ++i) {
-    QStandardItem* item = fullModel()->item(i);
-    if (item && item->data(TaskbarModel::GroupIdRole).toInt() == groupId)
-      return item;
-  }
-
-  return nullptr;
-}
-
-/**
- * @brief Creates a QStandardItem from widget info.
- */
-QStandardItem* UI::Taskbar::createItemFromWidgetInfo(const UI::WidgetInfo& info)
-{
-  auto* item = new QStandardItem();
-  auto icon  = SerialStudio::dashboardWidgetIcon(info.type, true);
-
-  item->setData(info.groupId, TaskbarModel::GroupIdRole);
-  item->setData(info.title, TaskbarModel::WidgetNameRole);
-  item->setData(info.type, TaskbarModel::WidgetTypeRole);
-  item->setData(icon, TaskbarModel::WidgetIconRole);
-  item->setData(SerialStudio::dashboardWidgetIconId(info.type), TaskbarModel::IconIdRole);
-  item->setData(info.isGroupWidget, TaskbarModel::IsGroupRole);
-  item->setData(TaskbarModel::WindowNormal, TaskbarModel::WindowStateRole);
-
-  return item;
 }
 
 //--------------------------------------------------------------------------------------------------

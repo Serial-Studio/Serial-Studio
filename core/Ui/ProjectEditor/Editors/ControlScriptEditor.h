@@ -61,15 +61,9 @@ public:
   [[nodiscard]] QString text() const;
 
 public slots:
-  void cut();
-  void undo();
-  void redo();
-  void copy();
-  void paste();
   void importFile();
   void reload();
   void evaluate();
-  void selectAll();
   void readCode();
   void formatDocument();
   void formatSelection();

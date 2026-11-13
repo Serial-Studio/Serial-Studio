@@ -119,7 +119,6 @@ private:
     QString formatted;
   };
 
-  [[nodiscard]] QString formatValue(const DataModel::Dataset& dataset) const;
   void rebuildRows();
 
 private:

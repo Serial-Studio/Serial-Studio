@@ -207,7 +207,6 @@ private:
   [[nodiscard]] QString resolveImagePath(const QString& src) const;
   [[nodiscard]] QPointF alignTextOrigin(const QString& text, qreal x, qreal y) const;
   void applyDashToPen();
-  void applyImageSmoothing();
   [[nodiscard]] bool shadowActive() const noexcept;
   void renderWithShadow(const std::function<void(QPainter*)>& draw, const QRectF& bounds);
   void rebindFillBrush();

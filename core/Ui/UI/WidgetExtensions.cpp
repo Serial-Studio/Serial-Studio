@@ -194,21 +194,6 @@ bool UI::WidgetExtensions::contains(const QString& id) const
 }
 
 /**
- * @brief Returns the registered package ids that attach to @p scope.
- */
-QStringList UI::WidgetExtensions::idsForScope(Scope scope) const
-{
-  QStringList list;
-  for (const auto& id : m_order) {
-    const auto it = m_descriptors.constFind(id);
-    if (it != m_descriptors.constEnd() && it->scope == scope)
-      list.append(id);
-  }
-
-  return list;
-}
-
-/**
  * @brief Returns the descriptor for @p id, or an invalid descriptor when nothing is registered.
  */
 const UI::WidgetExtensions::Descriptor& UI::WidgetExtensions::descriptor(const QString& id) const
@@ -234,31 +219,6 @@ const QList<Finding>& UI::WidgetExtensions::findings() const noexcept
 QString UI::WidgetExtensions::builtinReplacement(const QString& builtinWidgetId) const
 {
   return m_replacements.value(builtinWidgetId);
-}
-
-/**
- * @brief Returns whether the entity shape matches what @p id declared it accepts; the picker and
- *        the host both refuse a package for an entity it never claimed to render.
- */
-bool UI::WidgetExtensions::acceptsEntity(const QString& id,
-                                         Scope scope,
-                                         int datasetCount,
-                                         bool numericValues) const
-{
-  const auto& package = descriptor(id);
-  if (!package.isValid() || package.scope != scope)
-    return false;
-
-  if (datasetCount < package.accepts.minDatasets)
-    return false;
-
-  if (package.accepts.maxDatasets >= 0 && datasetCount > package.accepts.maxDatasets)
-    return false;
-
-  if (package.accepts.value == NumericValue && !numericValues)
-    return false;
-
-  return !(package.accepts.value == StringValue && numericValues);
 }
 
 //--------------------------------------------------------------------------------------------------

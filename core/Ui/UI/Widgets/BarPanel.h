@@ -113,8 +113,6 @@ private:
     std::vector<RowBand> bands;
   };
 
-  [[nodiscard]] static int bandIndexFor(const Row& row, double value) noexcept;
-  [[nodiscard]] static int nearestBandIndex(const Row& row, double value) noexcept;
   [[nodiscard]] double rowFraction(const Row& row, double value) const noexcept;
   void buildRows();
   bool refreshRow(int index, const DataModel::Dataset& dataset);

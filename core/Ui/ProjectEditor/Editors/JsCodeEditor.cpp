@@ -22,12 +22,10 @@
 #include "ProjectEditor/Editors/JsCodeEditor.h"
 
 #include <QApplication>
-#include <QDesktopServices>
 #include <QDir>
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QJsonObject>
-#include <QUrl>
 
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
@@ -255,56 +253,6 @@ bool DataModel::JsCodeEditor::redoAvailable() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Cuts the current selection into the clipboard.
- */
-void DataModel::JsCodeEditor::cut()
-{
-  m_editor.cut();
-}
-
-/**
- * @brief Undoes the last edit.
- */
-void DataModel::JsCodeEditor::undo()
-{
-  m_editor.undo();
-}
-
-/**
- * @brief Redoes the previously undone edit.
- */
-void DataModel::JsCodeEditor::redo()
-{
-  m_editor.redo();
-}
-
-/**
- * @brief Opens the online documentation for the frame parser.
- */
-void DataModel::JsCodeEditor::help()
-{
-  // clang-format off
-  QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki/Data-Flow-in-Serial-Studio#frame-parser-function")));
-  // clang-format on
-}
-
-/**
- * @brief Copies the current selection to the clipboard.
- */
-void DataModel::JsCodeEditor::copy()
-{
-  m_editor.copy();
-}
-
-/**
- * @brief Pastes the clipboard contents into the editor.
- */
-void DataModel::JsCodeEditor::paste()
-{
-  m_editor.paste();
-}
-
-/**
  * @brief Validates the current code and reloads the FrameParser engine.
  */
 void DataModel::JsCodeEditor::apply()
@@ -384,14 +332,6 @@ void DataModel::JsCodeEditor::readCode()
 }
 
 /**
- * @brief Selects all editor text.
- */
-void DataModel::JsCodeEditor::selectAll()
-{
-  m_editor.selectAll();
-}
-
-/**
  * @brief Reformats the entire editor contents.
  */
 void DataModel::JsCodeEditor::formatDocument()
@@ -454,14 +394,6 @@ bool DataModel::JsCodeEditor::prepareParserTest()
  * @brief Reloads the default template.
  */
 void DataModel::JsCodeEditor::reload(const bool guiTrigger)
-{
-  loadDefaultTemplate(guiTrigger);
-}
-
-/**
- * @brief Loads the default CSV template.
- */
-void DataModel::JsCodeEditor::loadDefaultTemplate(const bool guiTrigger)
 {
   m_frameParser.loadDefaultTemplate(m_sourceId, guiTrigger);
 }

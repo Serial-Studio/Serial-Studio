@@ -112,16 +112,12 @@ public slots:
   void applyTemplate(const int index);
   void reload(bool guiTrigger = false);
 
-public:
-  [[nodiscard]] static QString defaultTemplate();
-
 private:
   void loadTemplates();
   void flushInputMethod();
   void validateNow();
   void refreshVerdict(const bool persist);
   [[nodiscard]] QString verdictDetail() const;
-  void scheduleValidation();
 
 private:
   bool m_readingCode;

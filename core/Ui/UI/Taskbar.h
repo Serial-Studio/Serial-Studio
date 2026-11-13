@@ -218,8 +218,6 @@ private:
                               bool alreadyRegistered);
   [[nodiscard]] QStandardItem* findItemByWidgetId(UI::WidgetID widgetId,
                                                   QStandardItem* parentItem = nullptr) const;
-  [[nodiscard]] QStandardItem* findGroupItemByGroupId(int groupId) const;
-  [[nodiscard]] QStandardItem* createItemFromWidgetInfo(const UI::WidgetInfo& info);
   [[nodiscard]] QString layoutContextKey() const;
 
   UI::Dashboard& m_dashboard;
@@ -231,7 +229,6 @@ private:
   int m_activeGroupId;
   int m_desiredGroupId;
   bool m_rebuildInProgress;
-  bool m_batchUpdateInProgress;
   bool m_restoringLayout;
   bool m_independentWorkspace;
   bool m_viewShown;

@@ -79,12 +79,7 @@ public:
   [[nodiscard]] static WidgetRegistry& instance();
 
   // clang-format off
-  [[nodiscard]] int widgetCount() const;
-  [[nodiscard]] bool isInBatchUpdate() const;
-  [[nodiscard]] bool contains(WidgetID id) const;
-  [[nodiscard]] QVector<WidgetID> allWidgetIds() const;
   [[nodiscard]] WidgetInfo widgetInfo(WidgetID id) const;
-  [[nodiscard]] QVector<WidgetID> widgetIdsByGroup(int groupId) const;
   [[nodiscard]] QVector<WidgetID> widgetIdsByType(SerialStudio::DashboardWidget type) const;
   [[nodiscard]] WidgetID widgetIdByTypeAndIndex(SerialStudio::DashboardWidget type, int relativeIndex) const;
   [[nodiscard]] WidgetID createWidget(SerialStudio::DashboardWidget type,

@@ -291,26 +291,6 @@ double Widgets::BarPanel::maxSeenFrac(int row) const
   return m_maxSeenFracs.value(row, 0.0);
 }
 
-//--------------------------------------------------------------------------------------------------
-// Band lookup
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Returns the index of the band that contains @a value; -1 if none.
- */
-int Widgets::BarPanel::bandIndexFor(const Row& row, double value) noexcept
-{
-  return Bands::indexFor(row.bands, value, row.hint);
-}
-
-/**
- * @brief Returns the index of the band closest to @a value; -1 only when no bands exist.
- */
-int Widgets::BarPanel::nearestBandIndex(const Row& row, double value) noexcept
-{
-  return Bands::nearestIndex(row.bands, value);
-}
-
 /**
  * @brief Returns the normalized scale position of @a value on a row's track.
  */
@@ -342,9 +322,9 @@ bool Widgets::BarPanel::refreshRow(int index, const DataModel::Dataset& dataset)
   QString text = QStringLiteral("--");
   if (numeric) {
     frac     = rowFraction(row, dataset.numericValue);
-    int band = bandIndexFor(row, dataset.numericValue);
+    int band = Bands::indexFor(row.bands, dataset.numericValue, row.hint);
     if (band < 0 && !row.bands.empty())
-      band = nearestBandIndex(row, dataset.numericValue);
+      band = Bands::nearestIndex(row.bands, dataset.numericValue);
 
     if (band >= 0) {
       row.hint = band;

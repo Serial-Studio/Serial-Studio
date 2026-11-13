@@ -133,54 +133,6 @@ bool DataModel::ControlScriptEditor::redoAvailable() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Cuts the current selection into the clipboard.
- */
-void DataModel::ControlScriptEditor::cut()
-{
-  m_editor.cut();
-}
-
-/**
- * @brief Undoes the last edit.
- */
-void DataModel::ControlScriptEditor::undo()
-{
-  m_editor.undo();
-}
-
-/**
- * @brief Redoes the previously undone edit.
- */
-void DataModel::ControlScriptEditor::redo()
-{
-  m_editor.redo();
-}
-
-/**
- * @brief Copies the current selection to the clipboard.
- */
-void DataModel::ControlScriptEditor::copy()
-{
-  m_editor.copy();
-}
-
-/**
- * @brief Pastes the clipboard contents into the editor.
- */
-void DataModel::ControlScriptEditor::paste()
-{
-  m_editor.paste();
-}
-
-/**
- * @brief Selects all editor text.
- */
-void DataModel::ControlScriptEditor::selectAll()
-{
-  m_editor.selectAll();
-}
-
-/**
  * @brief Reformats the entire control-script source.
  */
 void DataModel::ControlScriptEditor::formatDocument()

@@ -139,8 +139,6 @@ public:
   [[nodiscard]] bool orbitNavigation() const;
   [[nodiscard]] bool interpolationEnabled() const;
 
-  [[nodiscard]] const QSize& widgetSize() const;
-
 public slots:
   void setWorldScale(const double z);
   void setCameraAngleX(const double angle);
@@ -291,8 +289,6 @@ private:
   double m_targetWorldScale;
   int m_shrinkTicks;
   bool m_centerInitialized;
-
-  QSize m_size;
 
   UI::Dashboard& m_dashboard;
   Misc::TimerEvents& m_timerEvents;

@@ -67,14 +67,6 @@ void UI::WidgetRegistry::endBatchUpdate()
   }
 }
 
-/**
- * @brief Checks if currently in a batch update.
- */
-bool UI::WidgetRegistry::isInBatchUpdate() const
-{
-  return m_batchDepth > 0;
-}
-
 //--------------------------------------------------------------------------------------------------
 // Widget management
 //--------------------------------------------------------------------------------------------------
@@ -116,22 +108,6 @@ UI::WidgetInfo UI::WidgetRegistry::widgetInfo(UI::WidgetID id) const
 }
 
 /**
- * @brief Checks if a widget ID exists in the registry.
- */
-bool UI::WidgetRegistry::contains(UI::WidgetID id) const
-{
-  return m_widgets.contains(id);
-}
-
-/**
- * @brief Gets all widget IDs in creation order.
- */
-QVector<UI::WidgetID> UI::WidgetRegistry::allWidgetIds() const
-{
-  return m_widgetOrder;
-}
-
-/**
  * @brief Gets widget IDs filtered by type.
  */
 QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByType(SerialStudio::DashboardWidget type) const
@@ -139,19 +115,6 @@ QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByType(SerialStudio::Dashboar
   QVector<WidgetID> result;
   for (const auto& id : m_widgetOrder)
     if (m_widgets.value(id).type == type)
-      result.append(id);
-
-  return result;
-}
-
-/**
- * @brief Gets widget IDs filtered by group.
- */
-QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByGroup(int groupId) const
-{
-  QVector<WidgetID> result;
-  for (const auto& id : m_widgetOrder)
-    if (m_widgets.value(id).groupId == groupId)
       result.append(id);
 
   return result;
@@ -168,14 +131,6 @@ UI::WidgetID UI::WidgetRegistry::widgetIdByTypeAndIndex(SerialStudio::DashboardW
     return ids[relativeIndex];
 
   return UI::kInvalidWidgetId;
-}
-
-/**
- * @brief Gets the total number of registered widgets.
- */
-int UI::WidgetRegistry::widgetCount() const
-{
-  return m_widgets.size();
 }
 
 /**

@@ -237,7 +237,7 @@ void Widgets::DataGrid::updateData()
     if (cache.isNumeric != dataset.isNumeric || cache.raw != dataset.value) {
       cache.isNumeric = dataset.isNumeric;
       cache.raw       = dataset.value;
-      cache.formatted = formatValue(dataset);
+      cache.formatted = DataModel::ValueFormat::formatValue(dataset);
     }
 
     m_rowsModel->updateRow(i, dataset.title, cache.formatted);
@@ -283,20 +283,11 @@ void Widgets::DataGrid::rebuildRows()
     RowValueCache cache;
     cache.isNumeric = dataset.isNumeric;
     cache.raw       = dataset.value;
-    cache.formatted = formatValue(dataset);
+    cache.formatted = DataModel::ValueFormat::formatValue(dataset);
     rows.append({dataset.title, cache.formatted, datasetWidgetLinks(m_dashboard, dataset)});
     m_valueCache.push_back(std::move(cache));
   }
 
   m_rowsModel->reset(rows);
   m_lastRowCount = rows.size();
-}
-
-/**
- * @brief Formats a dataset value for display through the one presentation formatter: its label
- *        when one matches, else the number with its units; empty when no sample has arrived.
- */
-QString Widgets::DataGrid::formatValue(const DataModel::Dataset& dataset) const
-{
-  return DataModel::ValueFormat::formatValue(dataset);
 }
