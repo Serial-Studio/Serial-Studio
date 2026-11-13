@@ -62,6 +62,9 @@ Decisions:
   (`tst_publisher_logic_strip` plus a two-instance observation), or decide otherwise.
 - [ ] Spec 0107 R8: the macOS proof leg takes 367 s against a five-minute budget. Spec 0107 T3 and
   T6, and spec 0104 T4, wait on this.
+- [ ] Spec 0107 R4: the Windows MSI proof step is off (`if: false` in `build-windows`, 2026-11-13).
+  Six of sixty runs lost the hosted runner inside it, with no log left. Re-enable it as three
+  steps (install, self-test, uninstall) so step status names the phase, or retire R4.
 
 With a current build:
 

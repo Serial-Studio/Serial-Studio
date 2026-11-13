@@ -1818,7 +1818,13 @@ jobs:
     # runner's Qt; QT_FORCE_STDERR_LOGGING keeps the [selftest] lines on stderr, where the
     # redirect can read them, instead of the debugger channel.
     #
+    # Disabled 2026-11-13: about one run in ten the hosted runner lost communication inside this
+    # step, which no step timeout can bound and which leaves no log, so the job failed 45 minutes
+    # later with nothing to read. Re-enable split into install, self-test and uninstall steps so
+    # the surviving step status names the phase that takes the runner down.
+    #
     - name: '🧪 Prove the MSI installs, runs its self-test and uninstalls (spec 0107)'
+      if: false
       timeout-minutes: 10
       env:
         QT_QPA_PLATFORM: offscreen
