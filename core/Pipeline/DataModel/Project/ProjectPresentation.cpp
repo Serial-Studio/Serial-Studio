@@ -604,6 +604,24 @@ void DataModel::ProjectPresentation::setDiagramCollapse(const QJsonObject& state
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Maps each dataset uniqueId to its "title (group)" label, first dataset winning a shared
+ *        id, sorted by uniqueId.
+ */
+[[nodiscard]] static QMap<int, QString> datasetLabelsByUid(const DataModel::ProjectModel& model)
+{
+  QMap<int, QString> labels;
+  for (const auto& group : model.groups()) {
+    for (const auto& dataset : group.datasets) {
+      const auto uid = dataset.uniqueId;
+      if (!labels.contains(uid))
+        labels.insert(uid, QString("%1 (%2)").arg(dataset.title, group.title));
+    }
+  }
+
+  return labels;
+}
+
+/**
  * @brief Returns "Time", "Samples", then every dataset label sorted by uniqueId.
  */
 QStringList DataModel::ProjectPresentation::xDataSources() const
@@ -611,19 +629,7 @@ QStringList DataModel::ProjectPresentation::xDataSources() const
   QStringList list;
   list.append(ProjectModel::tr("Time"));
   list.append(ProjectModel::tr("Samples"));
-
-  QMap<int, QString> datasets;
-  for (const auto& group : m_model.groups()) {
-    for (const auto& dataset : group.datasets) {
-      const auto uid = dataset.uniqueId;
-      if (!datasets.contains(uid))
-        datasets.insert(uid, QString("%1 (%2)").arg(dataset.title, group.title));
-    }
-  }
-
-  for (auto it = datasets.cbegin(); it != datasets.cend(); ++it)
-    list.append(it.value());
-
+  list.append(datasetLabelsByUid(m_model).values());
   return list;
 }
 
@@ -636,19 +642,7 @@ QList<int> DataModel::ProjectPresentation::xDataSourceUniqueIds() const
   QList<int> out;
   out.append(kXAxisTime);
   out.append(kXAxisSamples);
-
-  QMap<int, bool> seen;
-  for (const auto& group : m_model.groups()) {
-    for (const auto& dataset : group.datasets) {
-      const auto uid = dataset.uniqueId;
-      if (!seen.contains(uid))
-        seen.insert(uid, true);
-    }
-  }
-
-  for (auto it = seen.cbegin(); it != seen.cend(); ++it)
-    out.append(it.key());
-
+  out.append(datasetLabelsByUid(m_model).keys());
   return out;
 }
 
@@ -659,19 +653,7 @@ QStringList DataModel::ProjectPresentation::yWaterfallSources() const
 {
   QStringList list;
   list.append(ProjectModel::tr("Time"));
-
-  QMap<int, QString> datasets;
-  for (const auto& group : m_model.groups()) {
-    for (const auto& dataset : group.datasets) {
-      const auto uid = dataset.uniqueId;
-      if (!datasets.contains(uid))
-        datasets.insert(uid, QString("%1 (%2)").arg(dataset.title, group.title));
-    }
-  }
-
-  for (auto it = datasets.cbegin(); it != datasets.cend(); ++it)
-    list.append(it.value());
-
+  list.append(datasetLabelsByUid(m_model).values());
   return list;
 }
 
@@ -683,19 +665,7 @@ QList<int> DataModel::ProjectPresentation::yWaterfallSourceUniqueIds() const
 {
   QList<int> out;
   out.append(0);
-
-  QMap<int, bool> seen;
-  for (const auto& group : m_model.groups()) {
-    for (const auto& dataset : group.datasets) {
-      const auto uid = dataset.uniqueId;
-      if (!seen.contains(uid))
-        seen.insert(uid, true);
-    }
-  }
-
-  for (auto it = seen.cbegin(); it != seen.cend(); ++it)
-    out.append(it.key());
-
+  out.append(datasetLabelsByUid(m_model).keys());
   return out;
 }
 

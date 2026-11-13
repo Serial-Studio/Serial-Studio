@@ -66,30 +66,56 @@ static QString uniqueEntityTitle(const QString& title, const QStringList& taken)
 {
   int count        = 1;
   QString newTitle = title;
-  for (const auto& t : taken) {
-    if (t == newTitle) {
-      count++;
-      newTitle = QString("%1 (%2)").arg(title, QString::number(count));
-    }
-  }
-
-  while (count > 1) {
-    bool titleExists = false;
-    for (const auto& t : taken) {
-      if (t != newTitle)
-        continue;
-
-      count++;
-      newTitle    = QString("%1 (%2)").arg(title, QString::number(count));
-      titleExists = true;
-      break;
-    }
-
-    if (!titleExists)
-      break;
-  }
+  while (taken.contains(newTitle))
+    newTitle = QString("%1 (%2)").arg(title, QString::number(++count));
 
   return newTitle;
+}
+
+/**
+ * @brief Collects the title of every element of @p items, in order.
+ */
+template<typename T>
+[[nodiscard]] static QStringList titlesOf(const std::vector<T>& items)
+{
+  QStringList titles;
+  titles.reserve(static_cast<qsizetype>(items.size()));
+  for (const auto& item : items)
+    titles.append(item.title);
+
+  return titles;
+}
+
+/**
+ * @brief Asks for a new name and returns it trimmed, or an empty string when the dialog was
+ *        cancelled, left empty, or the name is unchanged from @p old.
+ */
+[[nodiscard]] static QString promptNewTitle(const QString& heading, const QString& old)
+{
+  bool ok = false;
+  const auto fresh =
+    QInputDialog::getText(nullptr, heading, ProjectModel::tr("Name:"), QLineEdit::Normal, old, &ok)
+      .trimmed();
+
+  return (!ok || fresh == old) ? QString() : fresh;
+}
+
+/**
+ * @brief Asks the user to confirm a delete unless prompts are suppressed; true when it may go on.
+ */
+[[nodiscard]] static bool confirmDelete(const bool suppressed, const QString& text)
+{
+  if (suppressed)
+    return true;
+
+  const auto ret = Core::Prompt::showMessageBox(
+    text,
+    ProjectModel::tr("This action cannot be undone. Do you wish to proceed?"),
+    Core::Prompt::Question,
+    APP_NAME,
+    Core::Prompt::Yes | Core::Prompt::No);
+
+  return ret == Core::Prompt::Yes;
 }
 
 }  // namespace DataModel
@@ -342,17 +368,10 @@ void DataModel::ProjectEntities::setDatasetEnabled(const int groupId,
  */
 void DataModel::ProjectEntities::deleteCurrentGroup()
 {
-  if (!m_model.m_suppressMessageBoxes) {
-    const auto ret = Core::Prompt::showMessageBox(
-      ProjectModel::tr("Do you want to delete group \"%1\"?").arg(m_model.m_selectedGroup.title),
-      ProjectModel::tr("This action cannot be undone. Do you wish to proceed?"),
-      Core::Prompt::Question,
-      APP_NAME,
-      Core::Prompt::Yes | Core::Prompt::No);
-
-    if (ret != Core::Prompt::Yes)
-      return;
-  }
+  if (!confirmDelete(
+        m_model.m_suppressMessageBoxes,
+        ProjectModel::tr("Do you want to delete group \"%1\"?").arg(m_model.m_selectedGroup.title)))
+    return;
 
   const auto gid = m_model.m_selectedGroup.groupId;
   if (gid < 0 || static_cast<size_t>(gid) >= m_model.m_groups.size())
@@ -384,17 +403,10 @@ void DataModel::ProjectEntities::deleteCurrentGroup()
  */
 void DataModel::ProjectEntities::deleteCurrentAction()
 {
-  if (!m_model.m_suppressMessageBoxes) {
-    const auto ret = Core::Prompt::showMessageBox(
-      ProjectModel::tr("Do you want to delete action \"%1\"?").arg(m_model.m_selectedAction.title),
-      ProjectModel::tr("This action cannot be undone. Do you wish to proceed?"),
-      Core::Prompt::Question,
-      APP_NAME,
-      Core::Prompt::Yes | Core::Prompt::No);
-
-    if (ret != Core::Prompt::Yes)
-      return;
-  }
+  if (!confirmDelete(m_model.m_suppressMessageBoxes,
+                     ProjectModel::tr("Do you want to delete action \"%1\"?")
+                       .arg(m_model.m_selectedAction.title)))
+    return;
 
   const auto aid = m_model.m_selectedAction.actionId;
   if (aid < 0 || static_cast<size_t>(aid) >= m_model.m_actions.size())
@@ -418,18 +430,10 @@ void DataModel::ProjectEntities::deleteCurrentAction()
  */
 void DataModel::ProjectEntities::deleteCurrentDataset()
 {
-  if (!m_model.m_suppressMessageBoxes) {
-    const auto ret = Core::Prompt::showMessageBox(
-      ProjectModel::tr("Do you want to delete dataset \"%1\"?")
-        .arg(m_model.m_selectedDataset.title),
-      ProjectModel::tr("This action cannot be undone. Do you wish to proceed?"),
-      Core::Prompt::Question,
-      APP_NAME,
-      Core::Prompt::Yes | Core::Prompt::No);
-
-    if (ret != Core::Prompt::Yes)
-      return;
-  }
+  if (!confirmDelete(m_model.m_suppressMessageBoxes,
+                     ProjectModel::tr("Do you want to delete dataset \"%1\"?")
+                       .arg(m_model.m_selectedDataset.title)))
+    return;
 
   const auto groupId   = m_model.m_selectedDataset.groupId;
   const auto datasetId = m_model.m_selectedDataset.datasetId;
@@ -507,12 +511,7 @@ void DataModel::ProjectEntities::duplicateCurrentGroup()
   group.datasets.clear();
   group.outputWidgets.clear();
 
-  QStringList existingTitles;
-  existingTitles.reserve(static_cast<int>(groups.size()));
-  for (const auto& g : groups)
-    existingTitles.append(g.title);
-
-  group.title = nextDuplicateTitle(selected.title, existingTitles);
+  group.title = nextDuplicateTitle(selected.title, titlesOf(groups));
 
   for (size_t i = 0; i < selected.datasets.size(); ++i) {
     auto dataset     = selected.datasets[i];
@@ -555,12 +554,7 @@ void DataModel::ProjectEntities::duplicateCurrentAction()
   action.timerIntervalMs      = selected.timerIntervalMs;
   action.autoExecuteOnConnect = selected.autoExecuteOnConnect;
 
-  QStringList existingTitles;
-  existingTitles.reserve(static_cast<int>(actions.size()));
-  for (const auto& a : actions)
-    existingTitles.append(a.title);
-
-  action.title = nextDuplicateTitle(selected.title, existingTitles);
+  action.title = nextDuplicateTitle(selected.title, titlesOf(actions));
 
   actions.push_back(action);
   m_model.m_selectedAction = action;
@@ -586,13 +580,8 @@ void DataModel::ProjectEntities::duplicateCurrentDataset()
   dataset.datasetId = groups[dataset.groupId].datasets.size();
   dataset.uniqueId  = m_model.allocateUniqueId();
 
-  const auto& siblings = groups[dataset.groupId].datasets;
-  QStringList existingTitles;
-  existingTitles.reserve(static_cast<int>(siblings.size()));
-  for (const auto& d : siblings)
-    existingTitles.append(d.title);
-
-  dataset.title = nextDuplicateTitle(m_model.m_selectedDataset.title, existingTitles);
+  dataset.title =
+    nextDuplicateTitle(m_model.m_selectedDataset.title, titlesOf(groups[dataset.groupId].datasets));
 
   groups[dataset.groupId].datasets.push_back(dataset);
   m_model.m_selectedDataset = dataset;
@@ -715,12 +704,7 @@ void DataModel::ProjectEntities::addDataset(const SerialStudio::DatasetOption op
       break;
   }
 
-  QStringList siblingTitles;
-  siblingTitles.reserve(static_cast<int>(groups[groupId].datasets.size()));
-  for (const auto& d : std::as_const(groups[groupId].datasets))
-    siblingTitles.append(d.title);
-
-  dataset.title     = uniqueEntityTitle(title, siblingTitles);
+  dataset.title     = uniqueEntityTitle(title, titlesOf(groups[groupId].datasets));
   dataset.index     = m_model.nextDatasetIndex();
   dataset.datasetId = groups[groupId].datasets.size();
   dataset.uniqueId  = m_model.allocateUniqueId();
@@ -836,13 +820,8 @@ void DataModel::ProjectEntities::addAction(int sourceId)
   const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Add Action")};
   auto& actions = m_model.m_actions;
 
-  QStringList existingTitles;
-  existingTitles.reserve(static_cast<int>(actions.size()));
-  for (const auto& a : std::as_const(actions))
-    existingTitles.append(a.title);
-
   DataModel::Action action;
-  action.title    = uniqueEntityTitle(ProjectModel::tr("New Action"), existingTitles);
+  action.title    = uniqueEntityTitle(ProjectModel::tr("New Action"), titlesOf(actions));
   action.actionId = actions.size();
   if (sourceId >= 0)
     action.sourceId = sourceId;
@@ -864,17 +843,12 @@ void DataModel::ProjectEntities::addActionFromTemplate(const Action& action)
   const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Add Action")};
   auto& actions = m_model.m_actions;
 
-  QStringList existingTitles;
-  existingTitles.reserve(static_cast<int>(actions.size()));
-  for (const auto& a : std::as_const(actions))
-    existingTitles.append(a.title);
-
   Action copy   = action;
   copy.actionId = actions.size();
   if (copy.title.isEmpty())
     copy.title = ProjectModel::tr("New Action");
 
-  copy.title = uniqueEntityTitle(copy.title, existingTitles);
+  copy.title = uniqueEntityTitle(copy.title, titlesOf(actions));
   if (copy.sourceId < 0)
     copy.sourceId = 0;
 
@@ -897,13 +871,8 @@ void DataModel::ProjectEntities::addGroup(const QString& title,
   const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Add Group")};
   auto& groups = m_model.m_groups;
 
-  QStringList existingTitles;
-  existingTitles.reserve(static_cast<int>(groups.size()));
-  for (const auto& g : std::as_const(groups))
-    existingTitles.append(g.title);
-
   DataModel::Group group;
-  group.title    = uniqueEntityTitle(title, existingTitles);
+  group.title    = uniqueEntityTitle(title, titlesOf(groups));
   group.groupId  = groups.size();
   group.uniqueId = m_model.allocateUniqueId();
   group.parentFolderId =
@@ -1377,16 +1346,8 @@ void DataModel::ProjectEntities::promptRenameGroup(int groupId)
   if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
     return;
 
-  bool ok          = false;
-  const auto old   = groups[groupId].title;
-  const auto fresh = QInputDialog::getText(nullptr,
-                                           ProjectModel::tr("Rename Group"),
-                                           ProjectModel::tr("Name:"),
-                                           QLineEdit::Normal,
-                                           old,
-                                           &ok)
-                       .trimmed();
-  if (!ok || fresh.isEmpty() || fresh == old)
+  const auto fresh = promptNewTitle(ProjectModel::tr("Rename Group"), groups[groupId].title);
+  if (fresh.isEmpty())
     return;
 
   auto group  = groups[groupId];
@@ -1406,16 +1367,9 @@ void DataModel::ProjectEntities::promptRenameDataset(int groupId, int datasetId)
   if (datasetId < 0 || static_cast<size_t>(datasetId) >= groups[groupId].datasets.size())
     return;
 
-  bool ok          = false;
-  const auto old   = groups[groupId].datasets[datasetId].title;
-  const auto fresh = QInputDialog::getText(nullptr,
-                                           ProjectModel::tr("Rename Dataset"),
-                                           ProjectModel::tr("Name:"),
-                                           QLineEdit::Normal,
-                                           old,
-                                           &ok)
-                       .trimmed();
-  if (!ok || fresh.isEmpty() || fresh == old)
+  const auto fresh =
+    promptNewTitle(ProjectModel::tr("Rename Dataset"), groups[groupId].datasets[datasetId].title);
+  if (fresh.isEmpty())
     return;
 
   auto dataset  = groups[groupId].datasets[datasetId];
@@ -1432,16 +1386,8 @@ void DataModel::ProjectEntities::promptRenameAction(int actionId)
   if (actionId < 0 || static_cast<size_t>(actionId) >= actions.size())
     return;
 
-  bool ok          = false;
-  const auto old   = actions[actionId].title;
-  const auto fresh = QInputDialog::getText(nullptr,
-                                           ProjectModel::tr("Rename Action"),
-                                           ProjectModel::tr("Name:"),
-                                           QLineEdit::Normal,
-                                           old,
-                                           &ok)
-                       .trimmed();
-  if (!ok || fresh.isEmpty() || fresh == old)
+  const auto fresh = promptNewTitle(ProjectModel::tr("Rename Action"), actions[actionId].title);
+  if (fresh.isEmpty())
     return;
 
   auto action  = actions[actionId];

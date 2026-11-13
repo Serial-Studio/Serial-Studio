@@ -60,7 +60,7 @@ static constexpr int kDiskCheckRetryLimit = 4;
 namespace DataModel {
 
 /**
- * @brief Serializes any folder vector to a JSON array.
+ * @brief Serializes any entity vector (folders, groups, tables, ...) to a JSON array.
  */
 template<typename Folder>
 static QJsonArray serializeFolders(const std::vector<Folder>& folders)
@@ -164,27 +164,14 @@ void DataModel::ProjectPersistence::serializeDocumentScalars(QJsonObject& json) 
  */
 void DataModel::ProjectPersistence::serializeEntityArrays(QJsonObject& json) const
 {
-  QJsonArray groupArray;
-  for (const auto& group : std::as_const(m_model.m_groups))
-    groupArray.append(DataModel::serialize(group));
-
-  json.insert(Keys::Groups, groupArray);
+  json.insert(Keys::Groups, serializeFolders(m_model.m_groups));
 
   const auto& groupFolders = m_model.m_folders.groupFolders();
   if (!groupFolders.empty())
     json.insert(Keys::GroupFolders, serializeFolders(groupFolders));
 
-  QJsonArray actionsArray;
-  for (const auto& action : std::as_const(m_model.m_actions))
-    actionsArray.append(DataModel::serialize(action));
-
-  json.insert(Keys::Actions, actionsArray);
-
-  QJsonArray sourcesArray;
-  for (const auto& source : std::as_const(m_model.m_sources))
-    sourcesArray.append(DataModel::serialize(source));
-
-  json.insert(Keys::Sources, sourcesArray);
+  json.insert(Keys::Actions, serializeFolders(m_model.m_actions));
+  json.insert(Keys::Sources, serializeFolders(m_model.m_sources));
 }
 
 /**
@@ -197,23 +184,13 @@ void DataModel::ProjectPersistence::serializeWorkspacesAndTables(QJsonObject& js
   if (m_model.m_workspaces.customizeWorkspaces()) {
     json.insert(Keys::CustomizeWorkspaces, true);
 
-    QJsonArray workspacesArray;
-    for (const auto& ws : std::as_const(m_model.m_workspaces.list()))
-      workspacesArray.append(DataModel::serialize(ws));
+    json.insert(Keys::Workspaces, serializeFolders(m_model.m_workspaces.list()));
 
-    json.insert(Keys::Workspaces, workspacesArray);
-
-    QJsonArray foldersArray;
-    for (const auto& folder : std::as_const(m_model.m_folders.workspaceFolders()))
-      foldersArray.append(DataModel::serialize(folder));
-
+    const QJsonArray foldersArray = serializeFolders(m_model.m_folders.workspaceFolders());
     if (!foldersArray.isEmpty())
       json.insert(Keys::WorkspaceFolders, foldersArray);
 
-    QJsonArray profilesArray;
-    for (const auto& profile : std::as_const(m_model.m_profiles.list()))
-      profilesArray.append(DataModel::serialize(profile));
-
+    const QJsonArray profilesArray = serializeFolders(m_model.m_profiles.list());
     if (!profilesArray.isEmpty())
       json.insert(Keys::WorkspaceProfiles, profilesArray);
   }
@@ -228,13 +205,8 @@ void DataModel::ProjectPersistence::serializeWorkspacesAndTables(QJsonObject& js
   }
 
   const auto& tables = m_model.m_tables.list();
-  if (!tables.empty()) {
-    QJsonArray tablesArray;
-    for (const auto& table : std::as_const(tables))
-      tablesArray.append(DataModel::serialize(table));
-
-    json.insert(Keys::Tables, tablesArray);
-  }
+  if (!tables.empty())
+    json.insert(Keys::Tables, serializeFolders(tables));
 
   const auto& tableFolders = m_model.m_folders.tableFolders();
   if (!tableFolders.empty())

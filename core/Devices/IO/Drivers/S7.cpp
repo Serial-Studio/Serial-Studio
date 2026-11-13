@@ -1088,18 +1088,9 @@ void IO::Drivers::S7::setPollInterval(const int interval)
  *        its live peer, or the pane would let the user edit a list the running session already
  *        sized. Silent: the UI-to-live property echo hits this on every configuration change.
  */
-bool IO::Drivers::S7::variablesFrozen() const noexcept
-{
-  return m_worker != nullptr || sessionPeer() != nullptr;
-}
-
-/**
- * @brief Peer-aware frozen flag the variables dialog binds its editing controls to, so the dialog
- *        visibly locks while a session is live rather than silently dropping edits.
- */
 bool IO::Drivers::S7::variablesLocked() const noexcept
 {
-  return variablesFrozen();
+  return m_worker != nullptr || sessionPeer() != nullptr;
 }
 
 /**
@@ -1125,7 +1116,7 @@ void IO::Drivers::S7::setVariables(const QJsonArray& variables)
     list.append(variable);
   }
 
-  if (list == m_variables || variablesFrozen())
+  if (list == m_variables || variablesLocked())
     return;
 
   m_variables = std::move(list);
@@ -1141,7 +1132,7 @@ void IO::Drivers::S7::addVariable(const QString& name, const QString& address)
 {
   const auto trimmedAddress = address.trimmed();
   const auto trimmedName    = name.trimmed().isEmpty() ? trimmedAddress : name.trimmed();
-  if (trimmedAddress.isEmpty() || variablesFrozen())
+  if (trimmedAddress.isEmpty() || variablesLocked())
     return;
 
   if (m_variables.size() >= OpcUaWire::kMaxTags)
@@ -1168,7 +1159,7 @@ void IO::Drivers::S7::addVariable(const QString& name, const QString& address)
  */
 void IO::Drivers::S7::removeVariable(const int index)
 {
-  if (index < 0 || index >= m_variables.size() || variablesFrozen())
+  if (index < 0 || index >= m_variables.size() || variablesLocked())
     return;
 
   m_variables.removeAt(index);
@@ -1182,7 +1173,7 @@ void IO::Drivers::S7::removeVariable(const int index)
  */
 void IO::Drivers::S7::clearVariables()
 {
-  if (m_variables.isEmpty() || variablesFrozen())
+  if (m_variables.isEmpty() || variablesLocked())
     return;
 
   m_variables.clear();

@@ -22,6 +22,7 @@
 
 #include "DataModel/Importers/ModbusRegisterMap.h"
 
+#include <array>
 #include <initializer_list>
 #include <QDebug>
 #include <QFile>
@@ -65,119 +66,76 @@ struct CsvColumnMap {
 };
 
 /**
- * @brief Returns true if any of the literals matches the lowercase column name.
+ * @brief One header-cell rule: the column-map slot and the lowercase names that fill it.
  */
-[[nodiscard]] static bool matchAny(const QString& col, std::initializer_list<QLatin1String> options)
-{
-  for (const auto& opt : options)
-    if (col == opt)
-      return true;
-
-  return false;
-}
+struct CsvColumnRule {
+  int CsvColumnMap::* slot;
+  std::array<QLatin1String, 4> names;
+  int count;
+};
 
 /**
- * @brief Maps the spec-0083 header cells (unit id, bit, access, word order); returns false when
- *        the cell is none of them. "unit" alone stays the units column.
- */
-[[nodiscard]] static bool mapCsvExtraColumn(const QString& col, int index, CsvColumnMap& map)
-{
-  if (matchAny(col,
-               {QLatin1String("slave"),
-                QLatin1String("unit_id"),
-                QLatin1String("unitid"),
-                QLatin1String("device")})) {
-    map.unitId = index;
-    return true;
-  }
-
-  if (matchAny(col, {QLatin1String("bit"), QLatin1String("bit_index")})) {
-    map.bit = index;
-    return true;
-  }
-
-  if (matchAny(col, {QLatin1String("rw"), QLatin1String("access"), QLatin1String("writable")})) {
-    map.access = index;
-    return true;
-  }
-
-  if (matchAny(
-        col, {QLatin1String("order"), QLatin1String("word_order"), QLatin1String("byte_order")})) {
-    map.order = index;
-    return true;
-  }
-
-  return false;
-}
-
-/**
- * @brief Maps a single header cell to its column-map slot.
+ * @brief Maps a single header cell to its column-map slot; "unit" alone stays the units column and
+ *        a description-like cell only names the row when no name column was seen.
  */
 static void mapCsvHeaderColumn(const QString& col, int index, CsvColumnMap& map)
 {
-  if (mapCsvExtraColumn(col, index, map))
-    return;
+  static const CsvColumnRule kRules[] = {
+    {  &CsvColumnMap::unitId,
+     {QLatin1String("slave"),
+     QLatin1String("unit_id"),
+     QLatin1String("unitid"),
+     QLatin1String("device")},
+     4                                                                                                },
+    {     &CsvColumnMap::bit,                    {QLatin1String("bit"), QLatin1String("bit_index")}, 2},
+    {  &CsvColumnMap::access,
+     {QLatin1String("rw"), QLatin1String("access"), QLatin1String("writable")},
+     3                                                                                                },
+    {   &CsvColumnMap::order,
+     {QLatin1String("order"), QLatin1String("word_order"), QLatin1String("byte_order")},
+     3                                                                                                },
+    {    &CsvColumnMap::addr,
+     {QLatin1String("address"),
+     QLatin1String("addr"),
+     QLatin1String("register"),
+     QLatin1String("reg")},
+     4                                                                                                },
+    {    &CsvColumnMap::name, {QLatin1String("name"), QLatin1String("label"), QLatin1String("tag")}, 3},
+    {    &CsvColumnMap::type,
+     {QLatin1String("type"),
+     QLatin1String("register_type"),
+     QLatin1String("function"),
+     QLatin1String("fc")},
+     4                                                                                                },
+    {&CsvColumnMap::dataType,
+     {QLatin1String("datatype"), QLatin1String("data_type"), QLatin1String("format")},
+     3                                                                                                },
+    {   &CsvColumnMap::units,
+     {QLatin1String("units"), QLatin1String("unit"), QLatin1String("eng_units")},
+     3                                                                                                },
+    {     &CsvColumnMap::min,
+     {QLatin1String("min"), QLatin1String("minimum"), QLatin1String("range_min")},
+     3                                                                                                },
+    {     &CsvColumnMap::max,
+     {QLatin1String("max"), QLatin1String("maximum"), QLatin1String("range_max")},
+     3                                                                                                },
+    {   &CsvColumnMap::scale,
+     {QLatin1String("scale"), QLatin1String("factor"), QLatin1String("multiplier")},
+     3                                                                                                },
+    {  &CsvColumnMap::offset,                                             {QLatin1String("offset")}, 1},
+  };
 
-  if (matchAny(col,
-               {QLatin1String("address"),
-                QLatin1String("addr"),
-                QLatin1String("register"),
-                QLatin1String("reg")})) {
-    map.addr = index;
-    return;
-  }
+  for (const auto& rule : kRules)
+    for (int i = 0; i < rule.count; ++i)
+      if (col == rule.names[i]) {
+        map.*rule.slot = index;
+        return;
+      }
 
-  if (matchAny(col, {QLatin1String("name"), QLatin1String("label"), QLatin1String("tag")})) {
+  if (map.name < 0
+      && (col == QLatin1String("description") || col == QLatin1String("desc")
+          || col == QLatin1String("comment")))
     map.name = index;
-    return;
-  }
-
-  if (matchAny(col,
-               {QLatin1String("type"),
-                QLatin1String("register_type"),
-                QLatin1String("function"),
-                QLatin1String("fc")})) {
-    map.type = index;
-    return;
-  }
-
-  if (matchAny(col,
-               {QLatin1String("datatype"), QLatin1String("data_type"), QLatin1String("format")})) {
-    map.dataType = index;
-    return;
-  }
-
-  if (matchAny(col, {QLatin1String("units"), QLatin1String("unit"), QLatin1String("eng_units")})) {
-    map.units = index;
-    return;
-  }
-
-  if (matchAny(col, {QLatin1String("min"), QLatin1String("minimum"), QLatin1String("range_min")})) {
-    map.min = index;
-    return;
-  }
-
-  if (matchAny(col, {QLatin1String("max"), QLatin1String("maximum"), QLatin1String("range_max")})) {
-    map.max = index;
-    return;
-  }
-
-  if (matchAny(col,
-               {QLatin1String("scale"), QLatin1String("factor"), QLatin1String("multiplier")})) {
-    map.scale = index;
-    return;
-  }
-
-  if (col == QLatin1String("offset")) {
-    map.offset = index;
-    return;
-  }
-
-  if (matchAny(col,
-               {QLatin1String("description"), QLatin1String("desc"), QLatin1String("comment")})) {
-    if (map.name < 0)
-      map.name = index;
-  }
 }
 
 /**

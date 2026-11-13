@@ -85,7 +85,6 @@ public:
   OpcUaSession& operator=(const OpcUaSession&) = delete;
 
   [[nodiscard]] bool isOpen() const noexcept;
-  [[nodiscard]] bool isConnecting() const noexcept;
   [[nodiscard]] int readLimit() const noexcept;
   [[nodiscard]] int revisedInterval() const noexcept;
   [[nodiscard]] QStringList namespaceArray() const;
@@ -118,7 +117,6 @@ public:
                         OpcUaTypes::StatusCode serviceStatus);
   void handleSubscriptionLost(const QString& reason);
   [[nodiscard]] OpcUaTypes::StatusCode verifyServerCertificate(const QByteArray& certificate);
-  void handleValue(const OpcUaTypes::MonitoredValue& value);
   void handleRead(quint32 requestId,
                   const QList<OpcUaTypes::ReadRow>& rows,
                   OpcUaTypes::StatusCode status);
@@ -187,8 +185,7 @@ private:
   [[nodiscard]] bool applyIdentity(const Identity& identity);
   [[nodiscard]] bool applySecurity(const OpcUaTypes::Endpoint& endpoint);
   void createMonitoredItems();
-  void requestServerLimits();
-  void requestNamespaceArray();
+  void requestInternalRead(const char* nodeId, InternalRead kind);
   [[nodiscard]] bool sendRead(const QList<OpcUaTypes::ReadRow>& rows,
                               InternalRead internalRead,
                               bool valueRead,

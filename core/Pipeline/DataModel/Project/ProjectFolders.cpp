@@ -78,6 +78,19 @@ static void sanitizeFolderTree(std::vector<Folder>& folders, std::vector<Entity>
 }
 
 /**
+ * @brief Asks for a name and returns it trimmed, or an empty string when the dialog was cancelled
+ *        or left blank.
+ */
+[[nodiscard]] static QString promptName(const QString& heading, const QString& initial)
+{
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, heading, ProjectModel::tr("Name:"), QLineEdit::Normal, initial, &ok);
+
+  return ok ? name.trimmed() : QString();
+}
+
+/**
  * @brief Returns @p rootId and every descendant folder id in top-down (breadth-first) order, so a
  *        parent is always listed before its children. Cycle-safe: bounded by the folder count.
  */
@@ -516,18 +529,11 @@ void DataModel::ProjectFolders::promptAddWorkspaceFolder(int parentFolderId)
     return;
   }
 
-  bool ok            = false;
-  const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("New Folder"),
-                                             ProjectModel::tr("Name:"),
-                                             QLineEdit::Normal,
-                                             ProjectModel::tr("Folder"),
-                                             &ok);
-
-  if (!ok || name.trimmed().isEmpty())
+  const QString name = promptName(ProjectModel::tr("New Folder"), ProjectModel::tr("Folder"));
+  if (name.isEmpty())
     return;
 
-  const int newId = addWorkspaceFolder(parentFolderId, name.trimmed());
+  const int newId = addWorkspaceFolder(parentFolderId, name);
   QTimer::singleShot(0, &m_model, [this, newId] {
     Q_EMIT m_model.editorSelectionRequested(DataModel::KindWorkspaceFolder, newId, QString());
   });
@@ -543,18 +549,11 @@ void DataModel::ProjectFolders::promptAddWorkspaceInFolder(int parentFolderId)
     return;
   }
 
-  bool ok            = false;
-  const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("New Workspace"),
-                                             ProjectModel::tr("Name:"),
-                                             QLineEdit::Normal,
-                                             ProjectModel::tr("Workspace"),
-                                             &ok);
-
-  if (!ok || name.trimmed().isEmpty())
+  const QString name = promptName(ProjectModel::tr("New Workspace"), ProjectModel::tr("Workspace"));
+  if (name.isEmpty())
     return;
 
-  const int newId = m_model.m_workspaces.addWorkspace(name.trimmed());
+  const int newId = m_model.m_workspaces.addWorkspace(name);
   moveWorkspaceToFolder(newId, parentFolderId);
   QTimer::singleShot(0, &m_model, [this, newId] {
     Q_EMIT m_model.editorSelectionRequested(DataModel::KindWorkspace, newId, QString());
@@ -570,18 +569,11 @@ void DataModel::ProjectFolders::promptRenameWorkspaceFolder(int folderId)
   if (current.isEmpty())
     return;
 
-  bool ok            = false;
-  const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("Rename Folder"),
-                                             ProjectModel::tr("Name:"),
-                                             QLineEdit::Normal,
-                                             current,
-                                             &ok);
-
-  if (!ok || name.trimmed().isEmpty() || name.trimmed() == current)
+  const QString name = promptName(ProjectModel::tr("Rename Folder"), current);
+  if (name.isEmpty() || name == current)
     return;
 
-  renameWorkspaceFolder(folderId, name.trimmed());
+  renameWorkspaceFolder(folderId, name);
 }
 
 /**
@@ -756,18 +748,11 @@ void DataModel::ProjectFolders::moveGroupFolderInParent(int folderId, int direct
  */
 void DataModel::ProjectFolders::promptAddGroupFolder(int parentFolderId)
 {
-  bool ok            = false;
-  const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("New Folder"),
-                                             ProjectModel::tr("Name:"),
-                                             QLineEdit::Normal,
-                                             ProjectModel::tr("Folder"),
-                                             &ok);
-
-  if (!ok || name.trimmed().isEmpty())
+  const QString name = promptName(ProjectModel::tr("New Folder"), ProjectModel::tr("Folder"));
+  if (name.isEmpty())
     return;
 
-  const int newId = addGroupFolder(parentFolderId, name.trimmed());
+  const int newId = addGroupFolder(parentFolderId, name);
   QTimer::singleShot(0, &m_model, [this, newId] {
     Q_EMIT m_model.editorSelectionRequested(DataModel::KindGroupFolder, newId, QString());
   });
@@ -782,18 +767,11 @@ void DataModel::ProjectFolders::promptRenameGroupFolder(int folderId)
   if (current.isEmpty())
     return;
 
-  bool ok            = false;
-  const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("Rename Folder"),
-                                             ProjectModel::tr("Name:"),
-                                             QLineEdit::Normal,
-                                             current,
-                                             &ok);
-
-  if (!ok || name.trimmed().isEmpty() || name.trimmed() == current)
+  const QString name = promptName(ProjectModel::tr("Rename Folder"), current);
+  if (name.isEmpty() || name == current)
     return;
 
-  renameGroupFolder(folderId, name.trimmed());
+  renameGroupFolder(folderId, name);
 }
 
 /**
@@ -977,18 +955,11 @@ void DataModel::ProjectFolders::moveTableFolderInParent(int folderId, int direct
  */
 void DataModel::ProjectFolders::promptAddTableFolder(int parentFolderId)
 {
-  bool ok            = false;
-  const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("New Folder"),
-                                             ProjectModel::tr("Name:"),
-                                             QLineEdit::Normal,
-                                             ProjectModel::tr("Folder"),
-                                             &ok);
-
-  if (!ok || name.trimmed().isEmpty())
+  const QString name = promptName(ProjectModel::tr("New Folder"), ProjectModel::tr("Folder"));
+  if (name.isEmpty())
     return;
 
-  const int newId = addTableFolder(parentFolderId, name.trimmed());
+  const int newId = addTableFolder(parentFolderId, name);
   QTimer::singleShot(0, &m_model, [this, newId] {
     Q_EMIT m_model.editorSelectionRequested(DataModel::KindTableFolder, newId, QString());
   });
@@ -1004,18 +975,12 @@ void DataModel::ProjectFolders::promptAddTableInFolder(int parentFolderId)
     return;
   }
 
-  bool ok            = false;
-  const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("New Variables Table"),
-                                             ProjectModel::tr("Name:"),
-                                             QLineEdit::Normal,
-                                             ProjectModel::tr("Variables Table"),
-                                             &ok);
-
-  if (!ok || name.trimmed().isEmpty())
+  const QString name =
+    promptName(ProjectModel::tr("New Variables Table"), ProjectModel::tr("Variables Table"));
+  if (name.isEmpty())
     return;
 
-  const QString added = m_model.m_tables.addTable(name.trimmed(), parentFolderId);
+  const QString added = m_model.m_tables.addTable(name, parentFolderId);
   QTimer::singleShot(0, &m_model, [this, added] {
     Q_EMIT m_model.editorSelectionRequested(DataModel::KindUserTable, -1, added);
   });
@@ -1030,18 +995,11 @@ void DataModel::ProjectFolders::promptRenameTableFolder(int folderId)
   if (current.isEmpty())
     return;
 
-  bool ok            = false;
-  const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("Rename Folder"),
-                                             ProjectModel::tr("Name:"),
-                                             QLineEdit::Normal,
-                                             current,
-                                             &ok);
-
-  if (!ok || name.trimmed().isEmpty() || name.trimmed() == current)
+  const QString name = promptName(ProjectModel::tr("Rename Folder"), current);
+  if (name.isEmpty() || name == current)
     return;
 
-  renameTableFolder(folderId, name.trimmed());
+  renameTableFolder(folderId, name);
 }
 
 /**

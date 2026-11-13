@@ -793,7 +793,9 @@ void DataModel::ProjectLoader::postLoadNotice(const QString& title, const QStrin
 /**
  * @brief Replaces the in-memory document from a parsed project JSON object: clears the
  *        replaced containers, loads scalars/arrays, runs the sanitizers and legacy
- *        migrations, and returns the schema flags the caller needs for follow-up work.
+ *        migrations, and returns the schema flags the caller needs for follow-up work. The freeze
+ *        flag is written to the member directly (never setFrozen) so an unlicensed load/save
+ *        cycle preserves it.
  */
 DataModel::ProjectLoader::DocumentLoadFlags DataModel::ProjectLoader::applyJsonDocumentCore(
   const QJsonObject& json)
@@ -843,9 +845,10 @@ DataModel::ProjectLoader::DocumentLoadFlags DataModel::ProjectLoader::applyJsonD
 
   loadPointCount(json);
   loadPlotTimeRange(json);
-  loadFrozen(json);
-  loadChangeDrivenTransforms(json);
-  loadLuaFastMode(json);
+  m_model.m_frozen = json.value(Keys::Frozen).toBool(false);
+  m_model.m_changeDrivenTransforms.store(json.value(Keys::ChangeDrivenTransforms).toBool(false),
+                                         std::memory_order_relaxed);
+  m_model.m_luaFastMode = json.value(Keys::LuaFastMode).toBool(false);
   migrateLegacyLayoutKeys();
   migrateLegacyDashboardLayout(json);
   (void)m_model.m_workspaces.rebindWidgetRefs();
@@ -1302,6 +1305,19 @@ void DataModel::ProjectLoader::loadWidgetSettingsAndWorkspaces(const QJsonObject
 }
 
 /**
+ * @brief Appends every element of @p array that reads cleanly as a T onto @p out.
+ */
+template<typename T>
+static void readArrayInto(const QJsonArray& array, std::vector<T>& out)
+{
+  for (const auto& val : array) {
+    T item;
+    if (DataModel::read(item, val.toObject()))
+      out.push_back(item);
+  }
+}
+
+/**
  * @brief Reads the user-customised workspace list, moving any stored ID that now falls inside the
  *        reserved auto range into the user range so a project written before the range split keeps
  *        its workspaces instead of colliding with the synthesised ones.
@@ -1312,13 +1328,8 @@ void DataModel::ProjectLoader::loadCustomWorkspaces(const QJsonObject& json)
   if (!workspaces.customizeWorkspaces() || !json.contains(Keys::Workspaces))
     return;
 
-  auto& list         = workspaces.mutableList();
-  const auto wsArray = json.value(Keys::Workspaces).toArray();
-  for (const auto& val : wsArray) {
-    DataModel::Workspace ws;
-    if (DataModel::read(ws, val.toObject()))
-      list.push_back(ws);
-  }
+  auto& list = workspaces.mutableList();
+  readArrayInto(json.value(Keys::Workspaces).toArray(), list);
 
   int collisions = 0;
   int nextId     = WorkspaceIds::UserStart;
@@ -1355,27 +1366,15 @@ void DataModel::ProjectLoader::loadCustomWorkspaces(const QJsonObject& json)
  */
 void DataModel::ProjectLoader::loadWorkspaceAndGroupFolders(const QJsonObject& json)
 {
-  if (m_model.m_workspaces.customizeWorkspaces() && json.contains(Keys::WorkspaceFolders)) {
-    auto& folders          = m_model.m_folders.mutableWorkspaceFolders();
-    const auto folderArray = json.value(Keys::WorkspaceFolders).toArray();
-    for (const auto& val : folderArray) {
-      DataModel::WorkspaceFolder folder;
-      if (DataModel::read(folder, val.toObject()))
-        folders.push_back(folder);
-    }
-  }
+  if (m_model.m_workspaces.customizeWorkspaces() && json.contains(Keys::WorkspaceFolders))
+    readArrayInto(json.value(Keys::WorkspaceFolders).toArray(),
+                  m_model.m_folders.mutableWorkspaceFolders());
 
   m_model.m_folders.sanitizeWorkspaceFolders();
 
-  if (json.contains(Keys::GroupFolders)) {
-    auto& folders          = m_model.m_folders.mutableGroupFolders();
-    const auto folderArray = json.value(Keys::GroupFolders).toArray();
-    for (const auto& val : folderArray) {
-      DataModel::GroupFolder folder;
-      if (DataModel::read(folder, val.toObject()))
-        folders.push_back(folder);
-    }
-  }
+  if (json.contains(Keys::GroupFolders))
+    readArrayInto(json.value(Keys::GroupFolders).toArray(),
+                  m_model.m_folders.mutableGroupFolders());
 
   m_model.m_folders.sanitizeGroupFolders();
 }
@@ -1394,25 +1393,12 @@ void DataModel::ProjectLoader::loadHiddenGroupsAndTables(const QJsonObject& json
   }
 
   m_model.m_tables.clear();
-  if (json.contains(Keys::Tables)) {
-    auto& tables           = m_model.m_tables.mutableList();
-    const auto tablesArray = json.value(Keys::Tables).toArray();
-    for (const auto& val : tablesArray) {
-      DataModel::TableDef table;
-      if (DataModel::read(table, val.toObject()))
-        tables.push_back(table);
-    }
-  }
+  if (json.contains(Keys::Tables))
+    readArrayInto(json.value(Keys::Tables).toArray(), m_model.m_tables.mutableList());
 
-  if (json.contains(Keys::TableFolders)) {
-    auto& folders          = m_model.m_folders.mutableTableFolders();
-    const auto folderArray = json.value(Keys::TableFolders).toArray();
-    for (const auto& val : folderArray) {
-      DataModel::TableFolder folder;
-      if (DataModel::read(folder, val.toObject()))
-        folders.push_back(folder);
-    }
-  }
+  if (json.contains(Keys::TableFolders))
+    readArrayInto(json.value(Keys::TableFolders).toArray(),
+                  m_model.m_folders.mutableTableFolders());
 
   m_model.m_folders.sanitizeTableFolders();
 }
@@ -1465,32 +1451,6 @@ void DataModel::ProjectLoader::loadPlotTimeRange(const QJsonObject& json)
     if (secs > 0)
       m_model.m_plotTimeRange = secs;
   }
-}
-
-/**
- * @brief Resolves the dashboard freeze flag from JSON; absent means false. Writes the member
- *        directly (never setFrozen) so an unlicensed load/save cycle preserves the flag.
- */
-void DataModel::ProjectLoader::loadFrozen(const QJsonObject& json)
-{
-  m_model.m_frozen = json.value(Keys::Frozen).toBool(false);
-}
-
-/**
- * @brief Resolves the change-driven-transforms flag from JSON; absent means false (opt-in).
- */
-void DataModel::ProjectLoader::loadChangeDrivenTransforms(const QJsonObject& json)
-{
-  m_model.m_changeDrivenTransforms.store(json.value(Keys::ChangeDrivenTransforms).toBool(false),
-                                         std::memory_order_relaxed);
-}
-
-/**
- * @brief Reads the Fast-Lua-execution flag from the project document (absent key = Safe).
- */
-void DataModel::ProjectLoader::loadLuaFastMode(const QJsonObject& json)
-{
-  m_model.m_luaFastMode = json.value(Keys::LuaFastMode).toBool(false);
 }
 
 //--------------------------------------------------------------------------------------------------

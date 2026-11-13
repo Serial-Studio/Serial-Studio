@@ -117,11 +117,6 @@ enum class NodeClass : std::uint32_t {
   return static_cast<NodeClass>(static_cast<std::uint32_t>(a) | static_cast<std::uint32_t>(b));
 }
 
-[[nodiscard]] inline constexpr bool testFlag(NodeClass mask, NodeClass flag) noexcept
-{
-  return (static_cast<std::uint32_t>(mask) & static_cast<std::uint32_t>(flag)) != 0;
-}
-
 /**
  * @brief The access-level bit that says a variable can be read at all.
  */

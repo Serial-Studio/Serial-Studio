@@ -158,7 +158,6 @@ private:
     bool probing;
     bool attributesRead;
     bool checked;
-    bool inherited;
     bool readable;
     bool euResolved;
     int arrayLen;
@@ -183,7 +182,6 @@ private:
       , probing(false)
       , attributesRead(false)
       , checked(false)
-      , inherited(false)
       , readable(false)
       , euResolved(false)
       , arrayLen(1)

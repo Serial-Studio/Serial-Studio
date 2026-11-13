@@ -119,7 +119,6 @@ private:
 
   [[nodiscard]] const ProtoMessage* findMessage(const QString& typeRef) const;
   [[nodiscard]] const ProtoMessage* messageAt(int index) const;
-  [[nodiscard]] int countScalarFields(const ProtoMessage& message) const;
   [[nodiscard]] int countFieldsRecursive(const ProtoMessage& message) const;
   [[nodiscard]] int countFieldsRecursive(const ProtoMessage& message,
                                          QSet<const ProtoMessage*>& visited) const;

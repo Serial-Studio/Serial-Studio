@@ -33,7 +33,6 @@ namespace DataModel {
 class IDashboardControl;
 
 void setDashboardControl(IDashboardControl* control) noexcept;
-[[nodiscard]] IDashboardControl* dashboardControl() noexcept;
 [[nodiscard]] IDashboardControl& requireDashboardControl();
 
 /**

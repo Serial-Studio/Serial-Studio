@@ -117,16 +117,7 @@ static const QSet<QString>& jsHangingKeywords()
  */
 static bool isLuaIdentChar(QChar ch, bool first)
 {
-  if (ch == QLatin1Char('_'))
-    return true;
-
-  if (ch.isLetter())
-    return true;
-
-  if (!first && ch.isDigit())
-    return true;
-
-  return false;
+  return ch != QLatin1Char('$') && isJsIdentChar(ch, first);
 }
 
 /**
@@ -517,14 +508,6 @@ static LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
 }
 
 /**
- * @brief Splits text into lines while preserving the trailing-newline shape.
- */
-static QStringList splitLines(const QString& text)
-{
-  return text.split(QLatin1Char('\n'), Qt::KeepEmptyParts);
-}
-
-/**
  * @brief Returns line stripped of trailing whitespace and any '\r' from CRLF normalization.
  */
 static QString rtrim(const QString& line)
@@ -613,18 +596,6 @@ static ScanResult scanAllLines(const QStringList& lines, Language lang)
 }
 
 /**
- * @brief Returns the rendered indentation string for a line.
- */
-static QString computeIndent(int depth, int outdentLeading, int indentSpaces)
-{
-  int rendered = depth - outdentLeading;
-  if (rendered < 0)
-    rendered = 0;
-
-  return QString(rendered * indentSpaces, QLatin1Char(' '));
-}
-
-/**
  * @brief Reformats one line based on its scanner state, brace depth and hanging indent.
  */
 static QString reformatOne(
@@ -640,7 +611,8 @@ static QString reformatOne(
     return QString();
 
   const QString body = trimmed.mid(lead);
-  return computeIndent(depthAtStart + hangAtStart, info.outdentLeading, indentSpaces) + body;
+  const int rendered = qMax(0, depthAtStart + hangAtStart - info.outdentLeading);
+  return QString(rendered * indentSpaces, QLatin1Char(' ')) + body;
 }
 
 namespace DataModel::CodeFormatter {
@@ -653,7 +625,7 @@ QString formatDocument(const QString& source, Language language, int indentSpace
   if (source.isEmpty())
     return source;
 
-  const QStringList lines = splitLines(source);
+  const QStringList lines = source.split(QLatin1Char('\n'), Qt::KeepEmptyParts);
   const ScanResult scan   = scanAllLines(lines, language);
 
   QStringList out;
@@ -674,7 +646,7 @@ QString formatLineRange(
   if (source.isEmpty())
     return source;
 
-  QStringList lines = splitLines(source);
+  QStringList lines = source.split(QLatin1Char('\n'), Qt::KeepEmptyParts);
   if (firstLine < 0)
     firstLine = 0;
 

@@ -402,7 +402,6 @@ void IO::FileTransmission::beginTransmission()
       }
 
       m_timer.start();
-      Q_EMIT activeChanged();
       break;
     }
 
@@ -414,25 +413,15 @@ void IO::FileTransmission::beginTransmission()
       }
 
       m_timer.start();
-      Q_EMIT activeChanged();
       break;
     }
 
-    case XModem: {
-      m_xmodem->setUse1K(false);
-      m_xmodem->setMaxRetries(m_maxRetries);
-      m_xmodem->setTimeoutMs(m_protocolTimeout);
-      m_xmodem->startTransfer(m_filePath);
-      Q_EMIT activeChanged();
-      break;
-    }
-
+    case XModem:
     case XModem1K: {
-      m_xmodem->setUse1K(true);
+      m_xmodem->setUse1K(m_transferMode == XModem1K);
       m_xmodem->setMaxRetries(m_maxRetries);
       m_xmodem->setTimeoutMs(m_protocolTimeout);
       m_xmodem->startTransfer(m_filePath);
-      Q_EMIT activeChanged();
       break;
     }
 
@@ -440,7 +429,6 @@ void IO::FileTransmission::beginTransmission()
       m_ymodem->setMaxRetries(m_maxRetries);
       m_ymodem->setTimeoutMs(m_protocolTimeout);
       m_ymodem->startTransfer(m_filePath);
-      Q_EMIT activeChanged();
       break;
     }
 
@@ -449,10 +437,11 @@ void IO::FileTransmission::beginTransmission()
       m_zmodem->setMaxRetries(m_maxRetries);
       m_zmodem->setTimeoutMs(m_protocolTimeout);
       m_zmodem->startTransfer(m_filePath);
-      Q_EMIT activeChanged();
       break;
     }
   }
+
+  Q_EMIT activeChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

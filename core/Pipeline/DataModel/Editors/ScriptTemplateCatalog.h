@@ -40,14 +40,12 @@ public:
   void reload();
 
   [[nodiscard]] bool isEmpty() const noexcept;
-  [[nodiscard]] QString defaultFile() const;
   [[nodiscard]] const QStringList& names() const noexcept;
   [[nodiscard]] const QStringList& files() const noexcept;
 
 private:
   const char* m_context;
   QString m_suffix;
-  QString m_defaultFile;
   QString m_manifestPath;
   QString m_resourceRoot;
   QStringList m_names;

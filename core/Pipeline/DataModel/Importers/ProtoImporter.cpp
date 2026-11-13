@@ -71,18 +71,12 @@ ScalarRange defaultRangeFor(DataModel::ProtoScalar s)
   switch (s) {
     case S::Bool:
       return {0.0, 1.0};
-    case S::UInt32:
-    case S::UInt64:
-    case S::Fixed32:
-    case S::Fixed64:
-      return {0.0, 100.0};
     case S::Int32:
     case S::Int64:
     case S::SInt32:
     case S::SInt64:
     case S::SFixed32:
     case S::SFixed64:
-      return {-100.0, 100.0};
     case S::Float:
     case S::Double:
       return {-100.0, 100.0};
@@ -440,10 +434,6 @@ void DataModel::ProtoImporter::buildGroups(const ProtoMessage& message,
     if (field.scalar == ProtoScalar::MessageRef)
       continue;
 
-    if (!isNumericScalar(field.scalar) && field.scalar != ProtoScalar::String
-        && field.scalar != ProtoScalar::Bytes && field.scalar != ProtoScalar::EnumRef)
-      continue;
-
     Dataset d;
     d.index  = datasetIndexCounter++;
     d.title  = field.name;
@@ -517,9 +507,6 @@ QString DataModel::ProtoImporter::selectGroupWidget(const ProtoMessage& message)
     if (f.scalar == ProtoScalar::MessageRef)
       continue;
 
-    if (!isNumericScalar(f.scalar) && f.scalar != ProtoScalar::String
-        && f.scalar != ProtoScalar::Bytes && f.scalar != ProtoScalar::EnumRef)
-      continue;
     scalars.append(&f);
   }
 
@@ -590,8 +577,6 @@ static QString luaTypeTagForScalar(DataModel::ProtoScalar s)
       return QStringLiteral("string");
     case DataModel::ProtoScalar::Bytes:
       return QStringLiteral("bytes");
-    case DataModel::ProtoScalar::EnumRef:
-      return QStringLiteral("enum");
     case DataModel::ProtoScalar::MessageRef:
       break;
   }
@@ -612,7 +597,6 @@ static int wireTypeFor(DataModel::ProtoScalar s)
     case S::UInt64:
     case S::SInt32:
     case S::SInt64:
-    case S::EnumRef:
       return 0;
     case S::Fixed64:
     case S::SFixed64:
@@ -728,11 +712,6 @@ QString DataModel::ProtoImporter::formatDispatchEntry(const ProtoField& field,
       .arg(field.tag)
       .arg(records.at(childRecIdx).varName);
   }
-
-  const bool emittable = isNumericScalar(field.scalar) || field.scalar == ProtoScalar::String
-                      || field.scalar == ProtoScalar::Bytes || field.scalar == ProtoScalar::EnumRef;
-  if (!emittable)
-    return QString();
 
   QString entry = QStringLiteral("[%1] = { type = '%2', wire = %3, out = %4 }")
                     .arg(field.tag)
@@ -1120,21 +1099,6 @@ const DataModel::ProtoMessage* DataModel::ProtoImporter::messageAt(int index) co
 }
 
 /**
- * @brief Counts immediate scalar fields in a message (no descent into submessages).
- */
-int DataModel::ProtoImporter::countScalarFields(const ProtoMessage& message) const
-{
-  int n = 0;
-  for (const auto& f : message.fields) {
-    if (f.scalar == ProtoScalar::MessageRef)
-      continue;
-
-    ++n;
-  }
-  return n;
-}
-
-/**
  * @brief Counts scalar fields recursively, descending into referenced submessages.
  */
 int DataModel::ProtoImporter::countFieldsRecursive(const ProtoMessage& message) const
@@ -1153,14 +1117,12 @@ int DataModel::ProtoImporter::countFieldsRecursive(const ProtoMessage& message,
     return 0;
 
   visited.insert(&message);
-  int n = countScalarFields(message);
-  for (const auto& f : message.fields) {
+  int n = 0;
+  for (const auto& f : message.fields)
     if (f.scalar != ProtoScalar::MessageRef)
-      continue;
-
-    if (const auto* sub = findMessage(f.typeRef))
+      ++n;
+    else if (const auto* sub = findMessage(f.typeRef))
       n += countFieldsRecursive(*sub, visited);
-  }
 
   visited.remove(&message);
   return n;

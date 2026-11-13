@@ -48,7 +48,6 @@ enum class ProtoScalar {
   String,
   Bytes,
   MessageRef,
-  EnumRef,
 };
 
 /**

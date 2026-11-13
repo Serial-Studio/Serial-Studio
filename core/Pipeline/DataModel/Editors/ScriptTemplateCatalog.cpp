@@ -69,15 +69,12 @@ void DataModel::ScriptTemplateCatalog::reload()
 {
   m_names.clear();
   m_files.clear();
-  m_defaultFile.clear();
 
   const auto templates = loadScriptTemplateManifest(m_manifestPath, m_context);
   for (const auto& tmpl : templates) {
     m_names.append(tmpl.name);
     m_files.append(templateResourcePath(m_resourceRoot, tmpl.file, m_suffix));
   }
-
-  m_defaultFile = defaultFileOf(templates);
 }
 
 /**
@@ -86,14 +83,6 @@ void DataModel::ScriptTemplateCatalog::reload()
 bool DataModel::ScriptTemplateCatalog::isEmpty() const noexcept
 {
   return m_names.isEmpty();
-}
-
-/**
- * @brief Returns the manifest file name of the default template.
- */
-QString DataModel::ScriptTemplateCatalog::defaultFile() const
-{
-  return m_defaultFile;
 }
 
 /**

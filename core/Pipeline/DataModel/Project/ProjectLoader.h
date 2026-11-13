@@ -94,9 +94,6 @@ private:
   void loadSinkConfigs(const QJsonObject& json);
   void loadPointCount(const QJsonObject& json);
   void loadPlotTimeRange(const QJsonObject& json);
-  void loadFrozen(const QJsonObject& json);
-  void loadChangeDrivenTransforms(const QJsonObject& json);
-  void loadLuaFastMode(const QJsonObject& json);
 
   void migrateLegacyWorkspaceRefs();
   void migrateLegacyXAxisIds();

@@ -724,9 +724,6 @@ std::unique_ptr<IO::Drivers::OpcUaTagModel::Node> IO::Drivers::OpcUaTagModel::ma
   child->path =
     parent == m_root.get() ? parent->name : parent->path + QLatin1Char('/') + parent->name;
 
-  if (parent->checked && parent->folder)
-    child->inherited = true;
-
   child->checked = isPreselected(child->nodeId);
 
   return child;
@@ -987,7 +984,7 @@ void IO::Drivers::OpcUaTagModel::refreshAncestors(Node* node)
 }
 
 /**
- * @brief Publishes a row once its attributes landed, and inherits a parent folder's tick.
+ * @brief Publishes a row once its attributes landed.
  */
 void IO::Drivers::OpcUaTagModel::finishAttributes(Node* node)
 {
@@ -998,11 +995,6 @@ void IO::Drivers::OpcUaTagModel::finishAttributes(Node* node)
     node->checked = false;
   else if (!node->checked)
     node->checked = isPreselected(node->nodeId);
-  else if (node->inherited && !node->checked) {
-    node->checked   = true;
-    node->inherited = false;
-    queueUnits(node);
-  }
 
   const auto index = indexOf(node);
   Q_EMIT dataChanged(index, index);

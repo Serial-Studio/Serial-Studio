@@ -48,6 +48,22 @@ static IO::ConnectionManager& connectionManager()
   return manager;
 }
 
+/**
+ * @brief Index-to-enum tables matching the order of the parity, data bits, stop bits and flow
+ *        control lists.
+ */
+static constexpr QSerialPort::Parity kParities[]   = {QSerialPort::NoParity,
+                                                      QSerialPort::EvenParity,
+                                                      QSerialPort::OddParity,
+                                                      QSerialPort::SpaceParity,
+                                                      QSerialPort::MarkParity};
+static constexpr QSerialPort::DataBits kDataBits[] = {
+  QSerialPort::Data5, QSerialPort::Data6, QSerialPort::Data7, QSerialPort::Data8};
+static constexpr QSerialPort::StopBits kStopBits[] = {
+  QSerialPort::OneStop, QSerialPort::OneAndHalfStop, QSerialPort::TwoStop};
+static constexpr QSerialPort::FlowControl kFlowControls[] = {
+  QSerialPort::NoFlowControl, QSerialPort::HardwareControl, QSerialPort::SoftwareControl};
+
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
@@ -688,23 +704,7 @@ void IO::Drivers::UART::setParity(const quint8 parityIndex)
   m_parityIndex = parityIndex;
   persistSetting(m_settings, "UartDriver/parity", parityIndex);
 
-  switch (parityIndex) {
-    case 0:
-      m_parity = QSerialPort::NoParity;
-      break;
-    case 1:
-      m_parity = QSerialPort::EvenParity;
-      break;
-    case 2:
-      m_parity = QSerialPort::OddParity;
-      break;
-    case 3:
-      m_parity = QSerialPort::SpaceParity;
-      break;
-    case 4:
-      m_parity = QSerialPort::MarkParity;
-      break;
-  }
+  m_parity = kParities[parityIndex];
 
   if (port() && !m_runner)
     port()->setParity(parity());
@@ -728,20 +728,7 @@ void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
   m_dataBitsIndex = dataBitsIndex;
   persistSetting(m_settings, "UartDriver/dataBits", dataBitsIndex);
 
-  switch (dataBitsIndex) {
-    case 0:
-      m_dataBits = QSerialPort::Data5;
-      break;
-    case 1:
-      m_dataBits = QSerialPort::Data6;
-      break;
-    case 2:
-      m_dataBits = QSerialPort::Data7;
-      break;
-    case 3:
-      m_dataBits = QSerialPort::Data8;
-      break;
-  }
+  m_dataBits = kDataBits[dataBitsIndex];
 
   if (port() && !m_runner)
     port()->setDataBits(dataBits());
@@ -765,17 +752,7 @@ void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
   m_stopBitsIndex = stopBitsIndex;
   persistSetting(m_settings, "UartDriver/stopBits", stopBitsIndex);
 
-  switch (stopBitsIndex) {
-    case 0:
-      m_stopBits = QSerialPort::OneStop;
-      break;
-    case 1:
-      m_stopBits = QSerialPort::OneAndHalfStop;
-      break;
-    case 2:
-      m_stopBits = QSerialPort::TwoStop;
-      break;
-  }
+  m_stopBits = kStopBits[stopBitsIndex];
 
   if (port() && !m_runner)
     port()->setStopBits(stopBits());
@@ -812,17 +789,7 @@ void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
   m_flowControlIndex = flowControlIndex;
   persistSetting(m_settings, "UartDriver/flowControl", flowControlIndex);
 
-  switch (flowControlIndex) {
-    case 0:
-      m_flowControl = QSerialPort::NoFlowControl;
-      break;
-    case 1:
-      m_flowControl = QSerialPort::HardwareControl;
-      break;
-    case 2:
-      m_flowControl = QSerialPort::SoftwareControl;
-      break;
-  }
+  m_flowControl = kFlowControls[flowControlIndex];
 
   if (port() && !m_runner)
     port()->setFlowControl(flowControl());

@@ -100,16 +100,9 @@ QString DataModel::ExportStructure::sanitizeTitle(const QString& title, const QS
   safe.remove(QStringLiteral(".."));
   safe = safe.simplified();
 
-  int keep = 0;
-  for (int i = safe.size(); i > 0; --i) {
-    const QChar c = safe.at(i - 1);
-    if (c != QChar('.') && c != QChar(' ')) {
-      keep = i;
-      break;
-    }
-  }
+  while (!safe.isEmpty() && (safe.back() == QChar('.') || safe.back() == QChar(' ')))
+    safe.chop(1);
 
-  safe.truncate(keep);
   return safe.isEmpty() ? fallback : safe;
 }
 

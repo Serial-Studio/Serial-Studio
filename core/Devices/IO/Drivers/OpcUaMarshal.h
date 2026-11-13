@@ -50,7 +50,6 @@ namespace OpcUaMarshal {
 [[nodiscard]] QVariant toVariant(const UA_Variant& variant);
 [[nodiscard]] QString statusText(OpcUaTypes::StatusCode status);
 
-[[nodiscard]] OpcUaTypes::NodeClass toNodeClass(quint32 mask) noexcept;
 [[nodiscard]] OpcUaTypes::SecurityMode toSecurityMode(int mode) noexcept;
 [[nodiscard]] OpcUaTypes::UserTokenType toUserTokenType(int type) noexcept;
 

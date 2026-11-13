@@ -239,7 +239,6 @@ private:
   void saveVariables();
   void refreshItems();
   [[nodiscard]] QString itemFaultText() const;
-  [[nodiscard]] bool variablesFrozen() const noexcept;
   [[nodiscard]] const S7* sessionPeer() const;
   [[nodiscard]] static OpcUaWire::Type wireTypeFor(S7Address::Type type) noexcept;
   [[nodiscard]] static DataModel::Dataset datasetFor(const S7Variable& variable,

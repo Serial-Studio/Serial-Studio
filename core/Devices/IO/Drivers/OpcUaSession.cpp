@@ -223,14 +223,6 @@ bool IO::Drivers::OpcUaSession::isOpen() const noexcept
 }
 
 /**
- * @brief True while a dial is in flight and its verdict has not been reported.
- */
-bool IO::Drivers::OpcUaSession::isConnecting() const noexcept
-{
-  return m_connecting;
-}
-
-/**
  * @brief The server's MaxNodesPerRead, or a conservative default; a batched poll larger than this
  *        is rejected wholesale with Bad_TooManyOperations.
  */
@@ -594,8 +586,8 @@ void IO::Drivers::OpcUaSession::handleStateChanged(int channelState,
     m_open       = true;
     m_connecting = false;
     m_intent     = Intent::Idle;
-    requestServerLimits();
-    requestNamespaceArray();
+    requestInternalRead(kNodeMaxNodesPerRead, InternalRead::ReadLimit);
+    requestInternalRead(kNodeNamespaceArray, InternalRead::NamespaceArray);
     Q_EMIT connected();
     return;
   }
@@ -925,7 +917,7 @@ static void valueTrampoline(
   if (value->hasValue)
     notification.value = toVariant(value->value);
 
-  session->handleValue(notification);
+  Q_EMIT session->valueChanged(notification);
 }
 
 /**
@@ -1059,15 +1051,6 @@ void IO::Drivers::OpcUaSession::handleSubscriptionLost(const QString& reason)
 {
   m_subscriptionId = 0;
   Q_EMIT subscriptionLost(reason);
-}
-
-/**
- * @brief Forwards one monitored value. Nothing is stamped here: the timestamp on it is the
- *        server's own and travels unmodified to the driver's slot cache.
- */
-void IO::Drivers::OpcUaSession::handleValue(const OpcUaTypes::MonitoredValue& value)
-{
-  Q_EMIT valueChanged(value);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1259,35 +1242,18 @@ void IO::Drivers::OpcUaSession::handleRead(quint32 requestId,
 }
 
 /**
- * @brief Asks the server for its MaxNodesPerRead once per session. A batched poll larger than
- *        that limit is rejected wholesale with Bad_TooManyOperations, so the default stands only
- *        until the server says otherwise.
+ * @brief Sends one session-internal Read of a node's Value. The server's MaxNodesPerRead bounds a
+ *        batched poll (a larger one is rejected wholesale with Bad_TooManyOperations), and its
+ *        namespace table turns an aggregating server's namespace-URI references into node ids that
+ *        mean the same thing on the next connect.
  */
-void IO::Drivers::OpcUaSession::requestServerLimits()
+void IO::Drivers::OpcUaSession::requestInternalRead(const char* nodeId, InternalRead kind)
 {
   SS_ASSERT(m_client != nullptr, return);
 
   ReadRow row;
-  row.nodeId      = QString::fromLatin1(kNodeMaxNodesPerRead);
-  row.attribute   = NodeAttribute::Value;
-  const bool sent = sendRead({row}, InternalRead::ReadLimit, false, 0);
-  SS_ASSERT_LOG(sent);
-}
-
-/**
- * @brief Asks the server for its namespace table once per session. An aggregating server answers
- *        a browse with references that name a namespace URI rather than an index, and this table
- *        is what turns those into a node id that means the same thing on the next connect.
- */
-void IO::Drivers::OpcUaSession::requestNamespaceArray()
-{
-  SS_ASSERT(m_client != nullptr, return);
-
-  ReadRow row;
-  row.nodeId    = QString::fromLatin1(kNodeNamespaceArray);
-  row.attribute = NodeAttribute::Value;
-
-  const bool sent = sendRead({row}, InternalRead::NamespaceArray, false, 0);
+  row.nodeId      = QString::fromLatin1(nodeId);
+  const bool sent = sendRead({row}, kind, false, 0);
   SS_ASSERT_LOG(sent);
 }
 
@@ -1334,7 +1300,7 @@ static void browseTrampoline(UA_Client* client,
       row.namespaceUri = toQString(reference.nodeId.namespaceUri);
       row.browseName   = toQString(reference.browseName.name);
       row.displayName  = toQString(reference.displayName.text);
-      row.nodeClass    = toNodeClass(static_cast<quint32>(reference.nodeClass));
+      row.nodeClass    = static_cast<NodeClass>(static_cast<quint32>(reference.nodeClass));
       children.append(row);
     }
   }

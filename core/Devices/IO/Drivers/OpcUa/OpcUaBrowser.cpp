@@ -130,16 +130,7 @@ void IO::Drivers::OpcUaBrowser::stop()
     m_host.commitBrowsedTags(array);
   }
 
-  if (m_tagModel)
-    m_tagModel->setSession(nullptr);
-
-  m_timer->stop();
-  teardownSession();
-  if (!m_browsing)
-    return;
-
-  m_browsing = false;
-  Q_EMIT browsingChanged();
+  cancel();
 }
 
 /**

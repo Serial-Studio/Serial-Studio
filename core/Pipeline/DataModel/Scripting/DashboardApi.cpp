@@ -53,14 +53,6 @@ void DataModel::setDashboardControl(IDashboardControl* control) noexcept
 }
 
 /**
- * @brief Returns the bound dashboard control, or nullptr before the root binds one.
- */
-DataModel::IDashboardControl* DataModel::dashboardControl() noexcept
-{
-  return s_dashboardControl;
-}
-
-/**
  * @brief Returns the bound dashboard control; a script API reached before the root has bound one
  *        is a composition defect, so the release fallback is a static control that ignores every
  *        verb and knows no action, never a null dereference.

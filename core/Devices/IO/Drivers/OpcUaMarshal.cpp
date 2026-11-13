@@ -243,14 +243,6 @@ QString IO::Drivers::OpcUaMarshal::statusText(OpcUaTypes::StatusCode status)
 }
 
 /**
- * @brief Maps an OPC UA node-class mask onto the driver's enumeration.
- */
-IO::Drivers::OpcUaTypes::NodeClass IO::Drivers::OpcUaMarshal::toNodeClass(quint32 mask) noexcept
-{
-  return static_cast<OpcUaTypes::NodeClass>(mask);
-}
-
-/**
  * @brief Maps a message-security-mode value onto the driver's enumeration; anything unexpected is
  *        Invalid rather than silently treated as None.
  */
