@@ -135,8 +135,8 @@ static void selectTreeItem(QItemSelectionModel* selection, const QStandardItem* 
  * @brief Returns the first tree item whose mapped value equals @p value, or nullptr.
  */
 template<typename Value>
-[[nodiscard]] static QStandardItem* findMappedItem(const QMap<QStandardItem*, Value>& items,
-                                                   const Value& value)
+[[nodiscard]] static QStandardItem* findItemByValue(const QMap<QStandardItem*, Value>& items,
+                                                    const Value& value)
 {
   for (auto it = items.begin(); it != items.end(); ++it)
     if (it.value() == value)
@@ -256,7 +256,7 @@ QVariantList EditorSummaries::tablesSummary() const
  */
 void EditorSummaries::selectUserTable(const QString& tableName)
 {
-  selectTreeItem(m_editor.m_selectionModel, findMappedItem(m_editor.m_userTableItems, tableName));
+  selectTreeItem(m_editor.m_selectionModel, findItemByValue(m_editor.m_userTableItems, tableName));
 }
 
 /**
@@ -264,7 +264,8 @@ void EditorSummaries::selectUserTable(const QString& tableName)
  */
 void EditorSummaries::selectWorkspace(int workspaceId)
 {
-  selectTreeItem(m_editor.m_selectionModel, findMappedItem(m_editor.m_workspaceItems, workspaceId));
+  selectTreeItem(m_editor.m_selectionModel,
+                 findItemByValue(m_editor.m_workspaceItems, workspaceId));
 }
 
 /**
@@ -273,7 +274,7 @@ void EditorSummaries::selectWorkspace(int workspaceId)
 void EditorSummaries::selectWorkspaceFolder(int folderId)
 {
   selectTreeItem(m_editor.m_selectionModel,
-                 findMappedItem(m_editor.m_workspaceFolderItems, folderId));
+                 findItemByValue(m_editor.m_workspaceFolderItems, folderId));
 }
 
 /**
@@ -415,7 +416,7 @@ QVariantList EditorSummaries::tableFolderContents(int parentFolderId) const
  */
 void EditorSummaries::selectGroupFolder(int folderId)
 {
-  selectTreeItem(m_editor.m_selectionModel, findMappedItem(m_editor.m_groupFolderItems, folderId));
+  selectTreeItem(m_editor.m_selectionModel, findItemByValue(m_editor.m_groupFolderItems, folderId));
 }
 
 /**
@@ -423,7 +424,7 @@ void EditorSummaries::selectGroupFolder(int folderId)
  */
 void EditorSummaries::selectTableFolder(int folderId)
 {
-  selectTreeItem(m_editor.m_selectionModel, findMappedItem(m_editor.m_tableFolderItems, folderId));
+  selectTreeItem(m_editor.m_selectionModel, findItemByValue(m_editor.m_tableFolderItems, folderId));
 }
 
 /**
