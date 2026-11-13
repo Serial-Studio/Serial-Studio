@@ -896,21 +896,14 @@ QByteArray IO::Drivers::SparkplugB::encodeRebirthRequest(quint64 timestampMs)
 
   QByteArray metric;
   metric.reserve(name.size() + 16);
-  appendTag(metric, kMetricName, kWireLengthDelimited);
-  appendVarint(metric, static_cast<quint64>(name.size()));
-  metric.append(name);
-  appendTag(metric, kMetricDatatype, kWireVarint);
-  appendVarint(metric, static_cast<quint64>(DataType::Boolean));
-  appendTag(metric, kMetricBooleanValue, kWireVarint);
-  appendVarint(metric, 1);
+  appendLengthDelimited(metric, kMetricName, name);
+  appendVarintField(metric, kMetricDatatype, static_cast<quint64>(DataType::Boolean));
+  appendVarintField(metric, kMetricBooleanValue, 1);
 
   QByteArray payload;
   payload.reserve(metric.size() + 16);
-  appendTag(payload, kPayloadTimestamp, kWireVarint);
-  appendVarint(payload, timestampMs);
-  appendTag(payload, kPayloadMetrics, kWireLengthDelimited);
-  appendVarint(payload, static_cast<quint64>(metric.size()));
-  payload.append(metric);
+  appendVarintField(payload, kPayloadTimestamp, timestampMs);
+  appendLengthDelimited(payload, kPayloadMetrics, metric);
 
   SS_ASSERT_LOG(payload.size() > metric.size());
   return payload;

@@ -57,14 +57,6 @@ void DataModel::setDeviceWriter(IO::IDeviceWriter* writer) noexcept
 }
 
 /**
- * @brief Returns the bound device writer, or nullptr before the root binds one.
- */
-IO::IDeviceWriter* DataModel::deviceWriter() noexcept
-{
-  return s_deviceWriter;
-}
-
-/**
  * @brief Returns the bound device writer; a write reached before the root has bound one is a
  *        composition defect, so the release fallback is a static writer that fails every write
  *        and captures nothing, never a null dereference.
@@ -249,14 +241,6 @@ void DataModel::DeviceWriteApi::installJS(QJSEngine* js, int defaultSourceId)
   }
 
   bridge->defaultSourceId = defaultSourceId;
-}
-
-/**
- * @brief Updates the Lua deviceWrite() default sourceId by re-installing the closure.
- */
-void DataModel::DeviceWriteApi::setLuaDefaultSourceId(lua_State* L, int defaultSourceId)
-{
-  installLua(L, defaultSourceId);
 }
 
 /**

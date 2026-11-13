@@ -15,6 +15,7 @@
 
 #include "AI/Assistant.h"
 #include "AI/CommandRegistry.h"
+#include "AI/Conversation/ReplyAssembly.h"
 #include "AI/Logging.h"
 #include "AI/Redactor.h"
 #include "AI/SentinelProbe.h"
@@ -47,17 +48,6 @@ static AI::Assistant& assistantRef()
 {
   static auto& singleton = AI::Assistant::instance();
   return singleton;
-}
-
-/**
- * @brief Neutralizes any forged <untrusted> delimiter inside untrusted payload text.
- */
-static QString neutralizeUntrustedDelimiter(const QString& payload)
-{
-  QString out = payload;
-  out.replace(QStringLiteral("</untrusted"), QStringLiteral("< /untrusted"), Qt::CaseInsensitive);
-  out.replace(QStringLiteral("<untrusted"), QStringLiteral("< untrusted"), Qt::CaseInsensitive);
-  return out;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -903,7 +893,7 @@ QString AI::ContextBuilder::liveProjectStateBlock()
   QString out;
   out += QStringLiteral("# Current project state\n\n");
   out += QStringLiteral("<untrusted source=\"project_state\">\n");
-  out += neutralizeUntrustedDelimiter(QString::fromUtf8(pretty));
+  out += AI::ReplyAssembly::neutralizeHistoryDelimiter(QString::fromUtf8(pretty));
   out += tail;
   out += QStringLiteral("\n</untrusted>\n");
   return out;
@@ -922,7 +912,7 @@ QString AI::ContextBuilder::memoryIndexBlock()
   QString out;
   out += QStringLiteral("# Remembered facts (user-approved, from earlier chats)\n\n");
   out += QStringLiteral("<untrusted source=\"assistant_memory\">\n");
-  out += neutralizeUntrustedDelimiter(index);
+  out += AI::ReplyAssembly::neutralizeHistoryDelimiter(index);
   out += QStringLiteral("</untrusted>\n");
   return out;
 }
@@ -940,7 +930,7 @@ QString AI::ContextBuilder::handoffBlock()
   QString out;
   out += QStringLiteral("# Previous chat handoff (continue from here)\n\n");
   out += QStringLiteral("<untrusted source=\"previous_chat\">\n");
-  out += neutralizeUntrustedDelimiter(seed);
+  out += AI::ReplyAssembly::neutralizeHistoryDelimiter(seed);
   out += QStringLiteral("\n</untrusted>\n");
   return out;
 }

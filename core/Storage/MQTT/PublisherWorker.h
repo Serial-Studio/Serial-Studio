@@ -113,7 +113,6 @@ public:
                   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
                   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* frameQueueBytes,
                   std::atomic<int>* mode,
-                  std::atomic<int>* scriptLanguage,
                   std::atomic<quint64>* messagesSent,
                   std::atomic<quint64>* bytesSent);
   ~PublisherWorker() override;
@@ -126,12 +125,10 @@ public:
   void processData() override;
   void closeResources() override;
   [[nodiscard]] bool isResourceOpen() const override;
-  [[nodiscard]] QString errorString(QMqttClient::ClientError error) const;
 
 public slots:
   void bootstrap();
   void openBroker();
-  void closeBroker();
   void runTestConnection();
   void setStructureGeneration(quint64 generation);
   void applyBrokerConfig(const MQTT::BrokerConfig& cfg);
@@ -149,7 +146,6 @@ protected:
 
 private:
   [[nodiscard]] Async::Task* buildReconnectFlow();
-  [[nodiscard]] bool sparkplugActive() const;
   bool publishAndCount(const QMqttTopicName& topic, const QByteArray& payload);
   [[nodiscard]] static QString describeMqttError(QMqttClient::ClientError error);
 
@@ -176,7 +172,6 @@ private:
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* m_rawQueue;
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* m_frameQueueBytes;
   std::atomic<int>* m_mode;
-  std::atomic<int>* m_scriptLanguage;
   std::atomic<quint64>* m_messagesSent;
   std::atomic<quint64>* m_bytesSent;
 

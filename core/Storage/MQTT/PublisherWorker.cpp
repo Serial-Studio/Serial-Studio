@@ -107,7 +107,6 @@ MQTT::PublisherWorker::PublisherWorker(
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* rawQueue,
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* frameQueueBytes,
   std::atomic<int>* mode,
-  std::atomic<int>* scriptLanguage,
   std::atomic<quint64>* messagesSent,
   std::atomic<quint64>* bytesSent)
   : DataModel::FrameConsumerWorker<DataModel::DataBlockPtr>(frameQueue, enabled, queueSize)
@@ -115,7 +114,6 @@ MQTT::PublisherWorker::PublisherWorker(
   , m_rawQueue(rawQueue)
   , m_frameQueueBytes(frameQueueBytes)
   , m_mode(mode)
-  , m_scriptLanguage(scriptLanguage)
   , m_messagesSent(messagesSent)
   , m_bytesSent(bytesSent)
   , m_script(nullptr)
@@ -173,14 +171,6 @@ void MQTT::PublisherWorker::bootstrap()
 bool MQTT::PublisherWorker::isResourceOpen() const
 {
   return m_client && m_client->state() == QMqttClient::Connected;
-}
-
-/**
- * @brief Returns the localized human-readable description for an MQTT error.
- */
-QString MQTT::PublisherWorker::errorString(QMqttClient::ClientError error) const
-{
-  return PublisherWorker::describeMqttError(error);
 }
 
 /**
@@ -256,7 +246,7 @@ void MQTT::PublisherWorker::processData()
   if (!isResourceOpen())
     return;
 
-  if (sparkplugActive()) {
+  if (m_sparkplug.valid()) {
     discardSuppressedPayloads();
     if (m_sparkplug.needsRebirth())
       publishSparkplugBirth();
@@ -342,7 +332,7 @@ void MQTT::PublisherWorker::processItems(const std::vector<DataModel::DataBlockP
   if (!isResourceOpen())
     return;
 
-  if (sparkplugActive()) {
+  if (m_sparkplug.valid()) {
     publishSparkplugBlocks(items);
     return;
   }
@@ -746,18 +736,6 @@ void MQTT::PublisherWorker::openBroker()
 }
 
 /**
- * @brief Closes the broker connection and cancels any reconnect still in flight.
- */
-void MQTT::PublisherWorker::closeBroker()
-{
-  if (m_runner)
-    m_runner->cancel();
-
-  if (m_client && m_client->state() != QMqttClient::Disconnected)
-    m_client->disconnectFromHost();
-}
-
-/**
  * @brief Runs an out-of-band connection probe using a throwaway QMqttClient.
  */
 void MQTT::PublisherWorker::runTestConnection()
@@ -828,7 +806,7 @@ void MQTT::PublisherWorker::runTestConnection()
  */
 void MQTT::PublisherWorker::onClientStateChanged(QMqttClient::ClientState state)
 {
-  if (state == QMqttClient::Connected && sparkplugActive()) {
+  if (state == QMqttClient::Connected && m_sparkplug.valid()) {
     subscribeSparkplugCommands();
     publishSparkplugBirth();
   }
@@ -858,16 +836,6 @@ void MQTT::PublisherWorker::onClientErrorChanged(QMqttClient::ClientError error)
 //==================================================================================================
 // Sparkplug: edge-node lifecycle
 //==================================================================================================
-
-/**
- * @brief Whether the applied broker config publishes as a Sparkplug edge node. The verdict comes
- *        from the state machine's own copy of the config, which changes only while the client is
- *        disconnected, so a settings edit cannot switch payload formats mid-connection.
- */
-bool MQTT::PublisherWorker::sparkplugActive() const
-{
-  return m_sparkplug.valid();
-}
 
 /**
  * @brief Registers (or clears) the NDEATH will and opens the connection's bdSeq. Called from
@@ -909,7 +877,7 @@ void MQTT::PublisherWorker::configureSparkplugWill()
 void MQTT::PublisherWorker::subscribeSparkplugCommands()
 {
   SS_ASSERT(m_client != nullptr, return);
-  SS_ASSERT_LOG(sparkplugActive());
+  SS_ASSERT_LOG(m_sparkplug.valid());
 
   const QMqttTopicFilter filter(m_sparkplug.commandTopic());
   if (!filter.isValid())
@@ -934,7 +902,7 @@ void MQTT::PublisherWorker::subscribeSparkplugCommands()
 void MQTT::PublisherWorker::publishSparkplugBirth()
 {
   SS_ASSERT(m_client != nullptr, return);
-  SS_ASSERT_LOG(sparkplugActive());
+  SS_ASSERT_LOG(m_sparkplug.valid());
 
   const auto stamp    = static_cast<quint64>(QDateTime::currentMSecsSinceEpoch());
   const auto messages = m_sparkplug.birthMessages(stamp);
@@ -960,7 +928,7 @@ void MQTT::PublisherWorker::onSparkplugCommand(const QMqttMessage& message)
   SS_ASSERT(m_client != nullptr, return);
   SS_ASSERT_LOG(!message.topic().name().isEmpty());
 
-  if (!sparkplugActive())
+  if (!m_sparkplug.valid())
     return;
 
   if (!m_sparkplug.isRebirthCommand(message.payload()))
@@ -1015,7 +983,7 @@ void MQTT::PublisherWorker::publishSparkplugBlocks(
   const std::vector<DataModel::DataBlockPtr>& blocks)
 {
   SS_ASSERT(m_client != nullptr, return);
-  SS_ASSERT_LOG(sparkplugActive());
+  SS_ASSERT_LOG(m_sparkplug.valid());
 
   quint64 stamp = 0;
   for (const auto& block : blocks) {
@@ -1049,7 +1017,7 @@ void MQTT::PublisherWorker::publishSparkplugBlocks(
  */
 void MQTT::PublisherWorker::discardSuppressedPayloads()
 {
-  SS_ASSERT_LOG(sparkplugActive());
+  SS_ASSERT_LOG(m_sparkplug.valid());
   SS_ASSERT_LOG(m_client != nullptr);
 
   if (m_rawQueue) {

@@ -166,12 +166,12 @@ private:
   void backfillSparseSources();
   [[nodiscard]] QVector<quint8> buildChannelSourceBits();
   void anchorSteadyBase(int frameIndex);
+  void stepFrame(int delta);
   [[nodiscard]] int seekWindowStartRow(int target) const;
   void buildSeekWindow(int startRow,
                        int endRow,
                        QVector<double>& times,
                        QHash<qint64, QVector<double>>& series);
-  [[nodiscard]] bool buildRowCells(int index, QStringList& cells) const;
   [[nodiscard]] qsizetype buildRowCellsTyped(
     int index, QVarLengthArray<DataModel::FrameBuilder::ReplayCell, 128>& cells) const;
   [[nodiscard]] QByteArray getFrame(const int index);

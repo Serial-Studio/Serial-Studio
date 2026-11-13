@@ -91,7 +91,6 @@ public:
 
   [[nodiscard]] QString templateCode(int sourceId = 0) const;
   [[nodiscard]] const QStringList& templateNames() const;
-  [[nodiscard]] const QStringList& templateNames(int language) const;
   [[nodiscard]] const QStringList& templateFiles() const;
 
   [[nodiscard]] QList<QStringList> parseMultiFrame(const QString& frame, int sourceId);
@@ -123,7 +122,6 @@ public slots:
   void prepareShutdown();
   void readCode();
   void reloadSourceCode(int sourceId);
-  void clearContext();
   void collectGarbage();
   void loadTemplateNames();
   void setupExternalConnections();

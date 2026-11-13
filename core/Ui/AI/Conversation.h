@@ -21,6 +21,7 @@
 #include <QVariantList>
 #include <QVariantMap>
 
+#include "AI/Attachments.h"
 #include "AI/Conversation/AsyncToolRunner.h"
 #include "AI/Conversation/AutoVerifier.h"
 #include "AI/Conversation/HelpFetcher.h"
@@ -113,7 +114,7 @@ signals:
   void memoryProposed(const QString& category, const QString& text);
 
 public slots:
-  void start(const QString& userText);
+  void start(const QString& userText, const QJsonArray& attachments = QJsonArray());
   void cancel();
   void approveToolCall(const QString& callId);
   void denyToolCall(const QString& callId);
@@ -147,7 +148,7 @@ private:
   void maybeProposeMemory(const QString& userText);
   void evaluateProbe();
   [[nodiscard]] QString probeComplianceKey() const;
-  void appendUserMessage(const QString& text);
+  void appendUserMessage(const QString& text, const QJsonArray& attachments);
   void beginAssistantMessage();
   void appendToolCallCard(const QString& callId,
                           const QString& name,
@@ -158,9 +159,6 @@ private:
                           const QJsonObject& result       = {},
                           const QJsonObject& verification = {}) override;
   void runToolCall(const QString& callId, const QString& name, const QJsonObject& arguments);
-  [[nodiscard]] bool runToolCallAsync(const QString& callId,
-                                      const QString& name,
-                                      const QJsonObject& arguments);
   void finishToolCall(const QString& callId,
                       const QString& name,
                       const QJsonObject& arguments,
@@ -233,6 +231,7 @@ private:
   SentinelProbe m_probe;
 
   AsyncToolRunner m_asyncTools;
+  AttachmentResolver m_attachments;
 };
 
 }  // namespace AI

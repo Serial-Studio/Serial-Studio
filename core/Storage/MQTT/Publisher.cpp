@@ -74,7 +74,6 @@ MQTT::Publisher::Publisher()
   , m_hotSparkplug(false)
   , m_hotHasTopic(false)
   , m_workerMode(static_cast<int>(Mode::RawRxData))
-  , m_workerScriptLanguage(0)
   , m_isConnected(false)
   , m_messagesSent(0)
   , m_bytesSent(0)
@@ -151,7 +150,6 @@ DataModel::FrameConsumerWorkerBase* MQTT::Publisher::createWorker()
                              &m_rawBytesQueue,
                              &m_rawFramesQueue,
                              &m_workerMode,
-                             &m_workerScriptLanguage,
                              &m_messagesSent,
                              &m_bytesSent);
 }
@@ -698,7 +696,7 @@ void MQTT::Publisher::addCaCertificates()
       this,
       [this, path]() {
         m_tls.addCaCertificatesFromDirectory(path);
-        scheduleSyncToWorker();
+        m_syncTimer.start();
       },
       Qt::QueuedConnection);
   });
@@ -1190,7 +1188,6 @@ void MQTT::Publisher::setScriptLanguage(const int language)
     return;
 
   m_scriptLanguage = language;
-  m_workerScriptLanguage.store(language, std::memory_order_relaxed);
   markConfigChanged();
 }
 
@@ -1450,16 +1447,8 @@ void MQTT::Publisher::markConfigChanged()
   if (m_inApply)
     return;
 
-  scheduleSyncToWorker();
-  Q_EMIT configurationChanged();
-}
-
-/**
- * @brief Restarts the debounce timer; final fire flushes one snapshot to the worker.
- */
-void MQTT::Publisher::scheduleSyncToWorker()
-{
   m_syncTimer.start();
+  Q_EMIT configurationChanged();
 }
 
 /**

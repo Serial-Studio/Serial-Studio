@@ -335,18 +335,3 @@ DataModel::PipelineResult DataModel::runNativeTemplatePipeline(const QByteArray&
   const auto descriptor = CFrameParser::buildDescriptor(templateId, params);
   return runFrameParserPipelineWithCode(input, spec, descriptor, SerialStudio::Native);
 }
-
-/**
- * @brief Returns the decoder-side representation that the parser would receive for @p raw.
- */
-QString DataModel::previewDecoderOutput(const QByteArray& raw,
-                                        SerialStudio::DecoderMethod method,
-                                        bool* producedBinary)
-{
-  bool isBinary   = false;
-  const auto repr = decoderRepresentation(raw, method, isBinary);
-  if (producedBinary)
-    *producedBinary = isBinary;
-
-  return repr;
-}

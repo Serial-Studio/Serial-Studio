@@ -95,20 +95,12 @@ static bool loadDatasetSkeleton(QSqlDatabase& db,
     if (!selectedUniqueIds.isEmpty() && !selectedUniqueIds.contains(uid))
       continue;
 
-    Sessions::DatasetStats ds;
-    ds.uniqueId       = uid;
-    ds.group          = colQ.value(1).toString();
-    ds.title          = colQ.value(2).toString();
-    ds.units          = colQ.value(3).toString();
-    ds.sourceTitle    = colQ.value(4).toString();
-    ds.numericSamples = 0;
-    ds.stringSamples  = 0;
-    ds.minValue       = 0.0;
-    ds.maxValue       = 0.0;
-    ds.mean           = 0.0;
-    ds.stddev         = 0.0;
-    ds.firstValue     = 0.0;
-    ds.lastValue      = 0.0;
+    Sessions::DatasetStats ds{};
+    ds.uniqueId    = uid;
+    ds.group       = colQ.value(1).toString();
+    ds.title       = colQ.value(2).toString();
+    ds.units       = colQ.value(3).toString();
+    ds.sourceTitle = colQ.value(4).toString();
     datasets.push_back(std::move(ds));
   }
 

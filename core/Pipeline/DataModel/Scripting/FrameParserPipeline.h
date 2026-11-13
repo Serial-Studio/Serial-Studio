@@ -126,11 +126,4 @@ void splitQuickPlotChannels(const QByteArray& rawFrame, QList<QStringList>& outC
                                                        const QString& templateId,
                                                        const QJsonObject& params);
 
-/**
- * @brief Returns the decoder-side representation the parser would receive for @p raw.
- */
-[[nodiscard]] QString previewDecoderOutput(const QByteArray& raw,
-                                           SerialStudio::DecoderMethod method,
-                                           bool* producedBinary = nullptr);
-
 }  // namespace DataModel

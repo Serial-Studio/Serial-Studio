@@ -242,7 +242,6 @@ private:
   void wireExporter();
   [[nodiscard]] quint64 nextToken();
   void setBusy(bool busy);
-  void runRestoreProjectFromJson(const QString& json);
   [[nodiscard]] QString sessionProjectTitle(int sessionId) const;
 
 private:

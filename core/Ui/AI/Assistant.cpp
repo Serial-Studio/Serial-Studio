@@ -8,7 +8,10 @@
 
 #include "AI/Assistant.h"
 
+#include <algorithm>
+#include <QDir>
 #include <QFileInfo>
+#include <QLocale>
 #include <QMessageBox>
 
 #include "AI/CommandRegistry.h"
@@ -435,18 +438,6 @@ bool AI::Assistant::addMemory(const QString& category, const QString& text)
 }
 
 /**
- * @brief Rewrites a remembered fact's text.
- */
-bool AI::Assistant::updateMemory(const QString& id, const QString& text)
-{
-  const bool ok = m_memory.updateFact(id, text);
-  if (ok)
-    Q_EMIT memoryChanged();
-
-  return ok;
-}
-
-/**
  * @brief Deletes a remembered fact; it never rides on a subsequent request.
  */
 void AI::Assistant::deleteMemory(const QString& id)
@@ -501,17 +492,6 @@ bool AI::Assistant::hasKey(int providerIdx) const
     return m_local != nullptr;
 
   return m_vault.hasKey(static_cast<ProviderId>(providerIdx));
-}
-
-/**
- * @brief Returns a redacted form of the stored key safe to display.
- */
-QString AI::Assistant::redactedKey(int providerIdx) const
-{
-  if (!m_vault.hasKey(static_cast<ProviderId>(providerIdx)))
-    return {};
-
-  return KeyVault::redact(QString());
 }
 
 /**
@@ -570,6 +550,7 @@ void AI::Assistant::setModel(int providerIdx, const QString& model)
 
   qCDebug(serialStudioAI) << "Model changed for provider" << providerIdx << "to"
                           << p->currentModel();
+  Q_EMIT pendingAttachmentsChanged();
 }
 
 /**
@@ -610,6 +591,7 @@ void AI::Assistant::setCurrentProvider(int providerIdx)
   rewireConversationProvider();
   reportCacheStats(0, 0);
   Q_EMIT currentProviderChanged();
+  Q_EMIT pendingAttachmentsChanged();
 }
 
 /**
@@ -618,14 +600,6 @@ void AI::Assistant::setCurrentProvider(int providerIdx)
 void AI::Assistant::openKeyManager()
 {
   Q_EMIT requestKeyManager();
-}
-
-/**
- * @brief Slot variant of setCurrentProvider for QML.
- */
-void AI::Assistant::selectProvider(int idx)
-{
-  setCurrentProvider(idx);
 }
 
 /**
@@ -696,8 +670,24 @@ void AI::Assistant::sendMessage(const QString& userText)
     return;
   }
 
+  const auto text = userText.trimmed();
+  if (text.isEmpty())
+    return;
+
+  const auto problem = attachmentProblem();
+  if (!problem.isEmpty()) {
+    Q_EMIT errorOccurred(problem);
+    return;
+  }
+
   rewireConversationProvider();
-  m_conversation->start(userText);
+  const bool was_busy = m_conversation->busy();
+  m_conversation->start(withPathNote(text), attachmentBlocks());
+  if (was_busy || m_pendingAttachments.isEmpty())
+    return;
+
+  m_pendingAttachments.clear();
+  Q_EMIT pendingAttachmentsChanged();
 }
 
 /**
@@ -746,14 +736,6 @@ void AI::Assistant::denyToolCallGroup(const QString& family)
 }
 
 /**
- * @brief Starts a fresh chat (kept as the legacy "clear" entry point).
- */
-void AI::Assistant::clearConversation()
-{
-  newChat();
-}
-
-/**
  * @brief Persists the current chat, then opens a new empty one and switches to it.
  */
 void AI::Assistant::newChat()
@@ -771,8 +753,7 @@ void AI::Assistant::newChat()
   if (m_conversation)
     m_conversation->clear();
 
-  static auto& fileSandbox = AI::FileSandbox::instance();
-  fileSandbox.clearDroppedPaths();
+  resetAttachments();
 
   Q_EMIT chatListChanged();
   Q_EMIT activeChatChanged();
@@ -817,8 +798,7 @@ void AI::Assistant::switchChat(const QString& id)
   m_chats.setLastActiveId(id);
   loadActiveSnapshot();
 
-  static auto& fileSandbox = AI::FileSandbox::instance();
-  fileSandbox.clearDroppedPaths();
+  resetAttachments();
   Q_EMIT activeChatChanged();
 }
 
@@ -839,6 +819,7 @@ void AI::Assistant::deleteChat(const QString& id)
                                      : rows.first().toMap().value(QStringLiteral("id")).toString();
     m_chats.setLastActiveId(m_activeChatId);
     loadActiveSnapshot();
+    resetAttachments();
     Q_EMIT activeChatChanged();
   }
 
@@ -855,7 +836,36 @@ void AI::Assistant::renameChat(const QString& id, const QString& title)
 }
 
 /**
- * @brief Authorizes a user-dropped file/folder for sandboxed reads this session.
+ * @brief True when the attachment's bytes go inside the request: a PDF, an image, or a text
+ *        file small enough to inline. Folders and larger text files travel as a path the file
+ *        tool pages through.
+ */
+static bool travelsInRequest(const AI::AttachmentInfo& info)
+{
+  if (info.kind == AI::AttachmentKind::Pdf || info.kind == AI::AttachmentKind::Image)
+    return true;
+
+  return info.kind == AI::AttachmentKind::Text && info.bytes > 0
+      && info.bytes <= AI::AttachmentResolver::kMaxInlineTextBytes;
+}
+
+/**
+ * @brief True when @p caps lets the attachment be sent at all.
+ */
+static bool sendable(const AI::AttachmentInfo& info, const AI::ProviderCapabilities& caps)
+{
+  if (info.kind == AI::AttachmentKind::Other)
+    return false;
+
+  if (info.kind == AI::AttachmentKind::Pdf)
+    return caps.pdfInput;
+
+  return info.kind != AI::AttachmentKind::Image || caps.imageInput;
+}
+
+/**
+ * @brief Authorizes a user-attached file/folder for sandboxed reads and queues it for the next
+ *        message: the grant alone tells the model nothing, so the file has to travel with a turn.
  */
 void AI::Assistant::addDroppedPath(const QString& localPath)
 {
@@ -866,17 +876,146 @@ void AI::Assistant::addDroppedPath(const QString& localPath)
     return;
   }
 
-  const QFileInfo info(canonical);
-  Q_EMIT droppedPathAdded(info.fileName(), info.isDir());
+  const auto info = AttachmentResolver::probe(canonical);
+  const bool known =
+    std::any_of(m_pendingAttachments.cbegin(),
+                m_pendingAttachments.cend(),
+                [&canonical](const AttachmentInfo& pending) { return pending.path == canonical; });
+  if (!known) {
+    m_pendingAttachments.append(info);
+    Q_EMIT pendingAttachmentsChanged();
+  }
+
+  Q_EMIT droppedPathAdded(info.name, info.kind == AttachmentKind::Folder);
 }
 
 /**
- * @brief Drops every session-authorized path from the read allow-list.
+ * @brief Takes one attachment out of the queue and withdraws the read permission it carried.
  */
-void AI::Assistant::clearDroppedPaths()
+void AI::Assistant::removeAttachment(int index)
+{
+  if (index < 0 || index >= m_pendingAttachments.size())
+    return;
+
+  static auto& fileSandbox = AI::FileSandbox::instance();
+  fileSandbox.unregisterDroppedPath(m_pendingAttachments.at(index).path);
+  m_pendingAttachments.removeAt(index);
+  Q_EMIT pendingAttachmentsChanged();
+}
+
+/**
+ * @brief The attachments that go out with the next message, one row per chip: name, kind, a
+ *        formatted size and whether the selected provider can take it.
+ */
+QVariantList AI::Assistant::pendingAttachments() const
+{
+  const auto* provider = providerAt(m_currentProvider);
+  const auto caps      = provider ? provider->capabilities() : ProviderCapabilities();
+
+  QVariantList rows;
+  for (const auto& info : m_pendingAttachments) {
+    const bool is_folder = info.kind == AttachmentKind::Folder;
+
+    QVariantMap row;
+    row[QStringLiteral("name")] = info.name;
+    row[QStringLiteral("kind")] = AttachmentResolver::kindName(info.kind);
+    row[QStringLiteral("size")] = is_folder ? QString() : QLocale().formattedDataSize(info.bytes);
+    row[QStringLiteral("sendable")] = sendable(info, caps);
+    rows.append(row);
+  }
+
+  return rows;
+}
+
+/**
+ * @brief Why the queued attachments cannot be sent with the selected provider and model, empty
+ *        when they can. The composer shows it and sendMessage() refuses on it, so nothing leaves
+ *        with a file silently dropped.
+ */
+QString AI::Assistant::attachmentProblem() const
+{
+  const auto* provider = providerAt(m_currentProvider);
+  if (!provider)
+    return {};
+
+  qint64 total    = 0;
+  const auto caps = provider->capabilities();
+  for (const auto& info : m_pendingAttachments) {
+    if (info.kind == AttachmentKind::Other)
+      return tr("\"%1\" is not a kind of file the assistant can send. Remove it to continue.")
+        .arg(info.name);
+
+    if (info.kind == AttachmentKind::Pdf && !caps.pdfInput)
+      return tr("%1 cannot read PDF files with the selected model. Remove \"%2\" or switch "
+                "provider.")
+        .arg(provider->displayName(), info.name);
+
+    if (info.kind == AttachmentKind::Image && !caps.imageInput)
+      return tr("%1 cannot read images with the selected model. Remove \"%2\" or switch "
+                "provider.")
+        .arg(provider->displayName(), info.name);
+
+    if (travelsInRequest(info))
+      total += info.bytes;
+  }
+
+  if (total > AttachmentResolver::kMaxRequestBytes)
+    return tr("Attachments exceed the %1 limit for one message. Remove a file to continue.")
+      .arg(QLocale().formattedDataSize(AttachmentResolver::kMaxRequestBytes));
+
+  return {};
+}
+
+/**
+ * @brief Revokes every attachment grant and empties the queue; a chat switch or a new chat
+ *        starts with neither.
+ */
+void AI::Assistant::resetAttachments()
 {
   static auto& fileSandbox = AI::FileSandbox::instance();
   fileSandbox.clearDroppedPaths();
+
+  if (m_pendingAttachments.isEmpty())
+    return;
+
+  m_pendingAttachments.clear();
+  Q_EMIT pendingAttachmentsChanged();
+}
+
+/**
+ * @brief Reference blocks of the queued attachments whose bytes travel in the request.
+ */
+QJsonArray AI::Assistant::attachmentBlocks() const
+{
+  QJsonArray blocks;
+  for (const auto& info : m_pendingAttachments)
+    if (travelsInRequest(info))
+      blocks.append(AttachmentResolver::toBlock(info));
+
+  return blocks;
+}
+
+/**
+ * @brief Returns the user text with the paths of the queued folders and oversized text files
+ *        appended. The note names absolute paths because the read tools resolve nothing else
+ *        outside the workspace; attachments that travel in the request are never named by path.
+ */
+QString AI::Assistant::withPathNote(const QString& userText) const
+{
+  QString list;
+  for (const auto& info : m_pendingAttachments) {
+    if (travelsInRequest(info))
+      continue;
+
+    list += QStringLiteral("\n- `%1`").arg(QDir::toNativeSeparators(info.path));
+    if (info.kind == AttachmentKind::Folder)
+      list += QLatin1Char(' ') + tr("(folder)");
+  }
+
+  if (list.isEmpty())
+    return userText;
+
+  return userText + QStringLiteral("\n\n") + tr("Attached files:") + list;
 }
 
 /**

@@ -16,6 +16,8 @@
 #pragma once
 
 #include <memory>
+#include <QJsonArray>
+#include <QList>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QSettings>
@@ -23,6 +25,7 @@
 #include <QStringList>
 #include <QVariantList>
 
+#include "AI/Attachments.h"
 #include "AI/ChatStore.h"
 #include "AI/KeyVault.h"
 #include "AI/MemoryStore.h"
@@ -108,6 +111,12 @@ class Assistant : public QObject {
   Q_PROPERTY(bool activeChatSeeded
              READ activeChatSeeded
              NOTIFY activeChatChanged)
+  Q_PROPERTY(QVariantList pendingAttachments
+             READ pendingAttachments
+             NOTIFY pendingAttachmentsChanged)
+  Q_PROPERTY(QString attachmentProblem
+             READ attachmentProblem
+             NOTIFY pendingAttachmentsChanged)
   // clang-format on
 
 signals:
@@ -128,6 +137,7 @@ signals:
   void memoryChanged();
   void memoryProposed(const QString& category, const QString& text);
   void droppedPathAdded(const QString& displayName, bool isDir);
+  void pendingAttachmentsChanged();
   void chatListChanged();
   void activeChatChanged();
 
@@ -163,11 +173,12 @@ public:
   [[nodiscard]] bool contextDegraded() const;
   [[nodiscard]] QString degradationDetail() const;
   [[nodiscard]] bool activeChatSeeded() const;
+  [[nodiscard]] QVariantList pendingAttachments() const;
+  [[nodiscard]] QString attachmentProblem() const;
   [[nodiscard]] QString memoryIndex() const;
   [[nodiscard]] QString handoffSeedText() const;
 
   Q_INVOKABLE [[nodiscard]] bool hasKey(int providerIdx) const;
-  Q_INVOKABLE [[nodiscard]] QString redactedKey(int providerIdx) const;
   Q_INVOKABLE [[nodiscard]] QString keyVendorUrl(int providerIdx) const;
   Q_INVOKABLE [[nodiscard]] QStringList availableModels(int providerIdx) const;
   Q_INVOKABLE [[nodiscard]] QString currentModel(int providerIdx) const;
@@ -177,7 +188,6 @@ public:
   Q_INVOKABLE [[nodiscard]] int localContextWindow() const;
   Q_INVOKABLE [[nodiscard]] QVariantList memoryList() const;
   Q_INVOKABLE [[nodiscard]] bool addMemory(const QString& category, const QString& text);
-  Q_INVOKABLE [[nodiscard]] bool updateMemory(const QString& id, const QString& text);
 
   void reportCacheStats(int readTokens, int createdTokens);
 
@@ -192,7 +202,6 @@ public:
 
 public slots:
   void openKeyManager();
-  void selectProvider(int idx);
   void requestProviderSwitch(int idx);
   void setKey(int providerIdx, const QString& plaintext);
   void setModel(int providerIdx, const QString& model);
@@ -206,7 +215,6 @@ public slots:
   void denyToolCall(const QString& callId);
   void approveToolCallGroup(const QString& family);
   void denyToolCallGroup(const QString& family);
-  void clearConversation();
   void newChat();
   void newChatFromHandoff(const QString& id);
   void deleteMemory(const QString& id);
@@ -214,7 +222,7 @@ public slots:
   void deleteChat(const QString& id);
   void renameChat(const QString& id, const QString& title);
   void addDroppedPath(const QString& localPath);
-  void clearDroppedPaths();
+  void removeAttachment(int index);
 
 private slots:
   void onConversationBusyChanged();
@@ -227,6 +235,9 @@ private:
   void initChats();
   void loadActiveSnapshot();
   void persistActiveChat();
+  void resetAttachments();
+  [[nodiscard]] QJsonArray attachmentBlocks() const;
+  [[nodiscard]] QString withPathNote(const QString& userText) const;
   [[nodiscard]] Provider* providerAt(int idx) const;
   [[nodiscard]] static QString modelSettingsKey(int providerIdx);
 
@@ -248,6 +259,7 @@ private:
   ChatStore m_chats;
   MemoryStore m_memory;
   QString m_activeChatId;
+  QList<AttachmentInfo> m_pendingAttachments;
   int m_currentProvider;
   int m_cacheReadTokens;
   int m_cacheCreatedTokens;

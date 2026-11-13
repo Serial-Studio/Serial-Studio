@@ -47,8 +47,6 @@ public:
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] int sessionId() const noexcept;
-  [[nodiscard]] bool usesBlocks() const noexcept;
-  [[nodiscard]] bool hasFinalValues() const noexcept;
 
   [[nodiscard]] bool open(const QString& filePath, int sessionId);
   void close();

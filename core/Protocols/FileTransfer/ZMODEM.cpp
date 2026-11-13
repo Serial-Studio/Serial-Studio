@@ -124,8 +124,7 @@ void IO::Protocols::ZMODEM::cancelTransfer()
   m_state      = State::Idle;
   m_parseState = ParseState::Idle;
 
-  if (m_file.isOpen())
-    m_file.close();
+  m_file.close();
 
   Q_EMIT statusMessage(tr("Transfer cancelled"));
   Q_EMIT finished(false, tr("Transfer cancelled by user"));
@@ -175,11 +174,11 @@ void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
         break;
 
       case ParseState::ReadingBin32Header:
-        processBin32Byte(ch);
+        processBinaryByte(ch, true);
         break;
 
       case ParseState::ReadingBinHeader:
-        processBinByte(ch);
+        processBinaryByte(ch, false);
         break;
     }
   }
@@ -314,9 +313,10 @@ bool IO::Protocols::ZMODEM::binaryHeaderCrcValid(bool wide)
 }
 
 /**
- * @brief Processes one byte of an incoming binary-32 header (ZDLE-decoded).
+ * @brief Processes one byte of an incoming binary header (ZDLE-decoded); wide selects the
+ *        binary-32 (CRC-32) layout over the CRC-16 one.
  */
-void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
+void IO::Protocols::ZMODEM::processBinaryByte(quint8 ch, bool wide)
 {
   static constexpr int kMaxBinHeaderBytes = 128;
 
@@ -340,49 +340,7 @@ void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
   if (m_headerBuf.size() < m_headerBytesExpected)
     return;
 
-  if (!binaryHeaderCrcValid(true)) {
-    m_parseState = ParseState::Idle;
-    return;
-  }
-
-  quint8 type = static_cast<quint8>(m_headerBuf[0]);
-  quint32 arg = static_cast<quint32>(static_cast<quint8>(m_headerBuf[1]))
-              | (static_cast<quint32>(static_cast<quint8>(m_headerBuf[2])) << 8)
-              | (static_cast<quint32>(static_cast<quint8>(m_headerBuf[3])) << 16)
-              | (static_cast<quint32>(static_cast<quint8>(m_headerBuf[4])) << 24);
-
-  parseReceivedHeader(type, arg);
-  m_parseState = ParseState::Idle;
-}
-
-/**
- * @brief Processes one byte of an incoming binary header (ZDLE-decoded).
- */
-void IO::Protocols::ZMODEM::processBinByte(quint8 ch)
-{
-  static constexpr int kMaxBinHeaderBytes = 128;
-
-  if (m_headerBuf.size() >= kMaxBinHeaderBytes) [[unlikely]] {
-    m_parseState = ParseState::Idle;
-    m_headerBuf.clear();
-    m_zdleEscape = false;
-    return;
-  }
-
-  if (m_zdleEscape) {
-    m_headerBuf.append(static_cast<char>(ch ^ 0x40));
-    m_zdleEscape = false;
-  } else if (ch == kZDLE) {
-    m_zdleEscape = true;
-    return;
-  } else {
-    m_headerBuf.append(static_cast<char>(ch));
-  }
-
-  if (m_headerBuf.size() < m_headerBytesExpected)
-    return;
-
-  if (!binaryHeaderCrcValid(false)) {
+  if (!binaryHeaderCrcValid(wide)) {
     m_parseState = ParseState::Idle;
     return;
   }
@@ -508,8 +466,7 @@ void IO::Protocols::ZMODEM::sendDataSubpackets()
   if (!m_file.seek(m_fileOffset)) [[unlikely]] {
     m_state = State::Idle;
     m_timeoutTimer.stop();
-    if (m_file.isOpen())
-      m_file.close();
+    m_file.close();
 
     Q_EMIT finished(false, tr("Failed to seek to offset %1").arg(m_fileOffset));
     return;
@@ -653,8 +610,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       if (m_retryCount >= m_maxRetries) {
         sendCancel();
         m_state = State::Idle;
-        if (m_file.isOpen())
-          m_file.close();
+        m_file.close();
 
         Q_EMIT protocolError();
         Q_EMIT statusMessage(tr("Too many errors, transfer aborted"));
@@ -681,8 +637,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       Q_EMIT writeRequested(QByteArray("OO"));
       m_state = State::Done;
 
-      if (m_file.isOpen())
-        m_file.close();
+      m_file.close();
 
       Q_EMIT statusMessage(tr("Transfer complete"));
       Q_EMIT finished(true, QString());
@@ -691,8 +646,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
     case kZABORT:
     case kZCAN:
       m_state = State::Idle;
-      if (m_file.isOpen())
-        m_file.close();
+      m_file.close();
 
       Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
       Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
@@ -700,8 +654,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
 
     case kZFERR:
       m_state = State::Idle;
-      if (m_file.isOpen())
-        m_file.close();
+      m_file.close();
 
       Q_EMIT statusMessage(tr("Receiver reported a file error"));
       Q_EMIT finished(false, tr("Receiver reported a file error"));
@@ -881,8 +834,7 @@ void IO::Protocols::ZMODEM::handleTimeout()
   if (m_retryCount >= m_maxRetries) {
     sendCancel();
     m_state = State::Idle;
-    if (m_file.isOpen())
-      m_file.close();
+    m_file.close();
 
     Q_EMIT statusMessage(tr("Transfer timed out"));
     Q_EMIT finished(false, tr("Timeout: no response from receiver"));

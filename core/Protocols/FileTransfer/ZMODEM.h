@@ -127,8 +127,7 @@ private:
   void parseReceivedHeader(quint8 type, quint32 arg);
   void startHeaderForZdleByte(quint8 ch);
   void processHexByte(quint8 ch);
-  void processBin32Byte(quint8 ch);
-  void processBinByte(quint8 ch);
+  void processBinaryByte(quint8 ch, bool wide);
   [[nodiscard]] bool binaryHeaderCrcValid(bool wide);
 
   [[nodiscard]] static QByteArray toHex(quint8 byte);

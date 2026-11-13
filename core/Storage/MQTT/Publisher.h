@@ -370,7 +370,6 @@ private:
   [[nodiscard]] bool licenseValid() const;
   void registerBrokerOptions();
   void markConfigChanged();
-  void scheduleSyncToWorker();
   void syncToWorker();
   void applyTimerInterval();
   void reloadCredentialsFromVault();
@@ -428,7 +427,6 @@ private:
   alignas(64) std::atomic<bool> m_hotSparkplug;
   alignas(64) std::atomic<bool> m_hotHasTopic;
   alignas(64) std::atomic<int> m_workerMode;
-  alignas(64) std::atomic<int> m_workerScriptLanguage;
   alignas(64) std::atomic<bool> m_isConnected;
   alignas(64) std::atomic<quint64> m_messagesSent;
   alignas(64) std::atomic<quint64> m_bytesSent;

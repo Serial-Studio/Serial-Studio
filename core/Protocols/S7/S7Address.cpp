@@ -145,21 +145,24 @@ int IO::Drivers::S7Address::typeWidth(Type type) noexcept
 }
 
 /**
+ * @brief Canonical type names, indexed by the numeric value of Type.
+ */
+static constexpr const char* k_codes[] = {
+  "BOOL",
+  "BYTE",
+  "WORD",
+  "DWORD",
+  "INT",
+  "DINT",
+  "REAL",
+  "STRING",
+};
+
+/**
  * @brief Maps a type name ("REAL", "dint", "string") onto its enumerator.
  */
 Type IO::Drivers::S7Address::typeFromCode(const QString& code) noexcept
 {
-  static constexpr const char* k_codes[] = {
-    "BOOL",
-    "BYTE",
-    "WORD",
-    "DWORD",
-    "INT",
-    "DINT",
-    "REAL",
-    "STRING",
-  };
-
   const auto upper = code.trimmed().toUpper().toLatin1();
   for (std::uint8_t i = 0; i < static_cast<std::uint8_t>(std::size(k_codes)); ++i)
     if (upper == k_codes[i])
@@ -174,17 +177,6 @@ Type IO::Drivers::S7Address::typeFromCode(const QString& code) noexcept
  */
 QString IO::Drivers::S7Address::codeFromType(Type type) noexcept
 {
-  static constexpr const char* k_codes[] = {
-    "BOOL",
-    "BYTE",
-    "WORD",
-    "DWORD",
-    "INT",
-    "DINT",
-    "REAL",
-    "STRING",
-  };
-
   const auto raw = static_cast<std::uint8_t>(type);
   SS_ASSERT_LOG(raw < std::size(k_codes) || type == Type::Invalid);
   if (raw >= std::size(k_codes))

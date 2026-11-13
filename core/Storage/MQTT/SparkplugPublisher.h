@@ -119,7 +119,6 @@ public:
 
   void reset();
   void commitBirth();
-  void clearRegistry();
   void dropStaleMetrics();
   void clearSource(int sourceId);
   void setLiveGeneration(quint64 generation);

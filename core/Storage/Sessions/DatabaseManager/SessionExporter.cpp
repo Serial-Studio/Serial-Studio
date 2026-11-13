@@ -328,17 +328,9 @@ void Sessions::SessionExporter::requestPdfOutputPath(int sessionId,
 }
 
 /**
- * @brief Worker shipped the report data bundle -- kick off rendering on the main thread.
- */
-void Sessions::SessionExporter::onReportDataReady(const ReportPayloadPtr& payload)
-{
-  renderReportFromPayload(payload);
-}
-
-/**
  * @brief Continues the PDF flow on the main thread once the worker has shipped data.
  */
-void Sessions::SessionExporter::renderReportFromPayload(const ReportPayloadPtr& payload)
+void Sessions::SessionExporter::onReportDataReady(const ReportPayloadPtr& payload)
 {
   if (!m_pendingPdfActive)
     return;

@@ -84,25 +84,28 @@ struct Entry {
 };
 
 /**
+ * @brief Schema letter codes, indexed by the numeric value of Type.
+ */
+inline constexpr const char* k_codes[] = {
+  "bool",
+  "i8",
+  "u8",
+  "i16",
+  "u16",
+  "i32",
+  "u32",
+  "i64",
+  "u64",
+  "f32",
+  "f64",
+  "str",
+};
+
+/**
  * @brief Maps the schema letter code ("bool", "i16", "f64", "str", ...) to a wire type.
  */
 [[nodiscard]] inline Type typeFromCode(const QString& code) noexcept
 {
-  static constexpr const char* k_codes[] = {
-    "bool",
-    "i8",
-    "u8",
-    "i16",
-    "u16",
-    "i32",
-    "u32",
-    "i64",
-    "u64",
-    "f32",
-    "f64",
-    "str",
-  };
-
   const auto latin = code.toLatin1();
   for (std::uint8_t i = 0; i < static_cast<std::uint8_t>(std::size(k_codes)); ++i)
     if (latin == k_codes[i])
@@ -116,21 +119,6 @@ struct Entry {
  */
 [[nodiscard]] inline QString codeFromType(Type type) noexcept
 {
-  static constexpr const char* k_codes[] = {
-    "bool",
-    "i8",
-    "u8",
-    "i16",
-    "u16",
-    "i32",
-    "u32",
-    "i64",
-    "u64",
-    "f32",
-    "f64",
-    "str",
-  };
-
   const auto raw = static_cast<std::uint8_t>(type);
   SS_ASSERT_LOG(raw < std::size(k_codes) || type == Type::Invalid);
   if (raw >= std::size(k_codes))

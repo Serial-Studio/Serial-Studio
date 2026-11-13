@@ -216,17 +216,6 @@ const QStringList& DataModel::FrameParser::templateNames() const
 }
 
 /**
- * @brief Returns the localized template display names for the given language.
- */
-const QStringList& DataModel::FrameParser::templateNames(int language) const
-{
-  if (language == SerialStudio::Native)
-    return m_templates.nativeNames();
-
-  return m_templates.names();
-}
-
-/**
  * @brief Returns the resource file basenames of every available template.
  */
 const QStringList& DataModel::FrameParser::templateFiles() const
@@ -759,46 +748,6 @@ void DataModel::FrameParser::reloadSourceCode(int sourceId)
     (void)loadScript(sourceId, script, sourceId == 0 && !suppress);
 
   Q_EMIT modifiedChanged();
-}
-
-/**
- * @brief Resets the execution context by re-loading all current code.
- */
-void DataModel::FrameParser::clearContext()
-{
-  if (QThread::currentThread() != thread()) {
-    IO::PipelineHost::runOnObjectThread(this, [this] { clearContext(); });
-    return;
-  }
-
-  for (auto it = m_engines.begin(); it != m_engines.end();)
-    if (it->first != 0)
-      it = m_engines.erase(it);
-    else
-      ++it;
-
-  auto it0 = m_engines.find(0);
-  if (it0 != m_engines.end() && it0->second->language() != languageForSource(0))
-    m_engines.erase(it0);
-
-  refreshEngineCaches();
-
-  std::vector<DataModel::Source> sources;
-  IO::PipelineHost::runOnGuiThreadBlocking([&] {
-    static auto& projectModel = ProjectModel::instance();
-    sources                   = projectModel.sources();
-  });
-
-  const QString code = sources.empty() ? QString() : scriptForSource(sources[0]);
-
-  if (!code.isEmpty())
-    (void)loadScript(0, code, !m_suppressMessageBoxes);
-
-  for (const auto& src : sources) {
-    const QString script = (src.sourceId > 0) ? scriptForSource(src) : QString();
-    if (!script.isEmpty())
-      (void)loadScript(src.sourceId, script, false);
-  }
 }
 
 /**

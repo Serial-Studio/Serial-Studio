@@ -35,7 +35,6 @@ class IDeviceWriter;
 namespace DataModel {
 
 void setDeviceWriter(IO::IDeviceWriter* writer) noexcept;
-[[nodiscard]] IO::IDeviceWriter* deviceWriter() noexcept;
 [[nodiscard]] IO::IDeviceWriter& requireDeviceWriter();
 
 /**
@@ -76,7 +75,6 @@ public:
   static void installLua(lua_State* L, int defaultSourceId);
   static void installJS(QJSEngine* js, int defaultSourceId);
 
-  static void setLuaDefaultSourceId(lua_State* L, int defaultSourceId);
   static void setJSDefaultSourceId(QJSEngine* js, int defaultSourceId);
 };
 

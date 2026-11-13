@@ -45,58 +45,32 @@ bool AI::MetaToolRunner::dispatch(const QString& callId,
                                   const QString& name,
                                   const QJsonObject& arguments)
 {
-  if (name == QStringLiteral("meta.listCategories")) {
-    runListCategories(callId, name, arguments);
-    return true;
-  }
+  using Handler = void (MetaToolRunner::*)(const QString&, const QString&, const QJsonObject&);
 
-  if (name == QStringLiteral("meta.snapshot")) {
-    runSnapshot(callId, name, arguments);
-    return true;
-  }
+  struct Entry {
+    QLatin1String name;
+    Handler run;
+  };
 
-  if (name == QStringLiteral("meta.listCommands")) {
-    runListCommands(callId, name, arguments);
-    return true;
-  }
+  static const Entry kHandlers[] = {
+    {    QLatin1String("meta.listCategories"), &MetaToolRunner::runListCategories},
+    {          QLatin1String("meta.snapshot"),       &MetaToolRunner::runSnapshot},
+    {      QLatin1String("meta.listCommands"),   &MetaToolRunner::runListCommands},
+    {   QLatin1String("meta.describeCommand"),       &MetaToolRunner::runDescribe},
+    {    QLatin1String("meta.executeCommand"), &MetaToolRunner::runExecuteCommand},
+    {         QLatin1String("meta.fetchHelp"),      &MetaToolRunner::runFetchHelp},
+    {QLatin1String("meta.fetchScriptingDocs"),  &MetaToolRunner::runScriptingDocs},
+    {             QLatin1String("meta.howTo"),          &MetaToolRunner::runHowTo},
+    {         QLatin1String("meta.loadSkill"),      &MetaToolRunner::runLoadSkill},
+    {        QLatin1String("meta.searchDocs"),     &MetaToolRunner::runSearchDocs},
+    {            QLatin1String("meta.search"),         &MetaToolRunner::runSearch},
+  };
 
-  if (name == QStringLiteral("meta.describeCommand")) {
-    runDescribe(callId, name, arguments);
-    return true;
-  }
+  for (const auto& entry : kHandlers) {
+    if (name != entry.name)
+      continue;
 
-  if (name == QStringLiteral("meta.executeCommand")) {
-    runExecuteCommand(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.fetchHelp")) {
-    runFetchHelp(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.fetchScriptingDocs")) {
-    runScriptingDocs(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.howTo")) {
-    runHowTo(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.loadSkill")) {
-    runLoadSkill(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.searchDocs")) {
-    runSearchDocs(callId, name, arguments);
-    return true;
-  }
-
-  if (name == QStringLiteral("meta.search")) {
-    runSearch(callId, name, arguments);
+    (this->*entry.run)(callId, name, arguments);
     return true;
   }
 

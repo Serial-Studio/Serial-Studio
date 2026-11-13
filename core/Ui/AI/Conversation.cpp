@@ -170,9 +170,10 @@ QString AI::Conversation::lastError() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sends a new user message after gating on build availability and idle state.
+ * @brief Sends a new user message, with the attachment references that travel in it, after
+ *        gating on build availability and idle state.
  */
-void AI::Conversation::start(const QString& userText)
+void AI::Conversation::start(const QString& userText, const QJsonArray& attachments)
 {
   const auto trimmed = userText.trimmed();
   if (trimmed.isEmpty())
@@ -214,7 +215,7 @@ void AI::Conversation::start(const QString& userText)
   if (m_probe.degraded() != was_degraded)
     Q_EMIT probeStateChanged();
 
-  appendUserMessage(trimmed);
+  appendUserMessage(trimmed, attachments);
   injectRoutedSkill(trimmed);
   maybeProposeMemory(trimmed);
   setBusy(true);
@@ -460,6 +461,7 @@ void AI::Conversation::clear()
   cancel();
   m_history = QJsonArray();
   m_uiMessages.clear();
+  m_attachments.clear();
   m_handoffSeed.clear();
   m_loadedSkills.clear();
 
@@ -882,7 +884,9 @@ void AI::Conversation::issueRequest()
                           << "loaded_skills=" << m_loadedSkills.size()
                           << "handoff_seeded=" << !m_handoffSeed.isEmpty();
 
-  m_reply = m_provider->sendMessage(history, tools, m_summaryForced);
+  const auto caps = m_provider->capabilities();
+  m_reply         = m_provider->sendMessage(
+    m_attachments.resolve(history, caps.pdfInput, caps.imageInput), tools, m_summaryForced);
   if (!m_reply) {
     setLastError(tr("Provider returned no reply"));
     Q_EMIT errorOccurred(m_lastError);
@@ -955,23 +959,27 @@ void AI::Conversation::onHelpFetchFinished(const QString& callId, const QJsonObj
 }
 
 /**
- * @brief Adds a user message to both history and the UI message list.
+ * @brief Adds a user message to both history and the UI message list. Attachment references
+ *        go first in the content, and the row keeps their names only.
  */
-void AI::Conversation::appendUserMessage(const QString& text)
+void AI::Conversation::appendUserMessage(const QString& text, const QJsonArray& attachments)
 {
   QJsonObject content;
   content[QStringLiteral("type")] = QStringLiteral("text");
   content[QStringLiteral("text")] = text;
 
   QJsonObject userMsg;
-  userMsg[QStringLiteral("role")]    = QStringLiteral("user");
-  userMsg[QStringLiteral("content")] = QJsonArray{content};
+  userMsg[QStringLiteral("role")] = QStringLiteral("user");
+  QJsonArray blocks               = attachments;
+  blocks.append(content);
+  userMsg[QStringLiteral("content")] = blocks;
   m_history.append(userMsg);
 
   QVariantMap row;
-  row[QStringLiteral("role")]      = QStringLiteral("user");
-  row[QStringLiteral("text")]      = text;
-  row[QStringLiteral("toolCalls")] = QVariantList();
+  row[QStringLiteral("role")]        = QStringLiteral("user");
+  row[QStringLiteral("text")]        = text;
+  row[QStringLiteral("toolCalls")]   = QVariantList();
+  row[QStringLiteral("attachments")] = AttachmentBlock::names(attachments);
   m_uiMessages.append(row);
   Q_EMIT messagesChanged();
   Q_EMIT messageCountChanged();
@@ -1045,28 +1053,15 @@ void AI::Conversation::runToolCall(const QString& callId,
   else
     updateToolCallCard(callId, CallStatus::Running);
 
-  if (runToolCallAsync(callId, name, arguments))
+  if (AsyncToolRunner::handles(name)) {
+    m_asyncTools.run(callId, name, arguments, m_turnGeneration);
     return;
+  }
 
   const bool held = m_project.autoSaveHeld();
   m_project.setAutoSaveHeld(true);
   const auto release = qScopeGuard([this, held] { m_project.setAutoSaveHeld(held); });
   finishToolCall(callId, name, arguments, m_dispatcher->executeCommand(name, arguments));
-}
-
-/**
- * @brief Hands the read-only filesystem tools to the worker lane and returns true when it took
- *        the call, so the display tick keeps running through a large workspace scan (J3).
- */
-bool AI::Conversation::runToolCallAsync(const QString& callId,
-                                        const QString& name,
-                                        const QJsonObject& arguments)
-{
-  if (!AsyncToolRunner::handles(name))
-    return false;
-
-  m_asyncTools.run(callId, name, arguments, m_turnGeneration);
-  return true;
 }
 
 /**
@@ -1357,6 +1352,7 @@ void AI::Conversation::loadSnapshot(const QJsonObject& doc)
 {
   cancel();
 
+  m_attachments.clear();
   m_history    = doc.value(QStringLiteral("history")).toArray();
   m_uiMessages = doc.value(QStringLiteral("messages")).toArray().toVariantList();
 

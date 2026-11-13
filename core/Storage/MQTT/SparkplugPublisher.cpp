@@ -202,21 +202,6 @@ void MQTT::SparkplugPublisher::reset()
 }
 
 /**
- * @brief Drops the whole metric table but keeps the alias map, so a uniqueId re-registered after
- *        the clear recovers its old alias (aliases retire only on reset(), R10). Emptying the table
- *        invalidates a held birth, so it marks the registry dirty; per-source scoping goes through
- *        clearSource, and this whole-table clear stays for reset() and the single-source rebuild.
- */
-void MQTT::SparkplugPublisher::clearRegistry()
-{
-  SS_ASSERT_LOG(m_metrics.size() <= SpPubLimits::kMaxMetrics);
-
-  m_index.clear();
-  m_metrics.clear();
-  m_registryDirty = m_born;
-}
-
-/**
  * @brief Adopts a new edge-node identity. A change of identity is a different node on the wire, so
  *        the whole state machine restarts; an unchanged configuration is left alone precisely so a
  *        routine settings push cannot bump `bdSeq` behind the host's back.

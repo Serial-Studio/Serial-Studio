@@ -1158,7 +1158,7 @@ void Sessions::DatabaseManager::restoreProjectFromDb()
 /**
  * @brief Worker handed back the global project JSON -- finish the restore on the main thread.
  */
-void Sessions::DatabaseManager::runRestoreProjectFromJson(const QString& json)
+void Sessions::DatabaseManager::onWorkerGlobalProjectJsonReady(const QString& json)
 {
   SS_ASSERT(m_projectModel != nullptr, return);
   SS_ASSERT(m_appState != nullptr, return);
@@ -1388,14 +1388,6 @@ void Sessions::DatabaseManager::onWorkerMutationFinished(quint64 token,
 
   if (!ok && !error.isEmpty())
     qWarning() << "[Sessions] mutation failed:" << error;
-}
-
-/**
- * @brief Worker handed back the global project JSON -- finish the restore flow.
- */
-void Sessions::DatabaseManager::onWorkerGlobalProjectJsonReady(const QString& json)
-{
-  runRestoreProjectFromJson(json);
 }
 
 //--------------------------------------------------------------------------------------------------

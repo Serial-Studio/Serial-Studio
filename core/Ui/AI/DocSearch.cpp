@@ -205,11 +205,3 @@ QList<AI::DocSearch::Hit> AI::DocSearch::search(const QString& query, int k) con
   }
   return out;
 }
-
-/**
- * @brief Reports the number of indexed chunks (0 if load failed).
- */
-int AI::DocSearch::corpusSize() const noexcept
-{
-  return m_docs.size();
-}

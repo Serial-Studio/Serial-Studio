@@ -64,22 +64,6 @@ int Sessions::SessionDbReader::sessionId() const noexcept
 }
 
 /**
- * @brief Returns @c true when the session stores its samples as spec-0055 blocks.
- */
-bool Sessions::SessionDbReader::usesBlocks() const noexcept
-{
-  return m_usesBlocks;
-}
-
-/**
- * @brief Returns @c true when post-transform values are stored alongside the raw ones.
- */
-bool Sessions::SessionDbReader::hasFinalValues() const noexcept
-{
-  return m_hasFinalValues;
-}
-
-/**
  * @brief Opens a main-thread connection to @p filePath for @p sessionId. The session id is taken
  *        here rather than set later because the schema probe below already queries by it: a stale
  *        id made a block-format session read the empty readings table for a whole replay

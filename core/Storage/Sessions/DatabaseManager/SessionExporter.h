@@ -80,7 +80,6 @@ public slots:
 private:
   void launchPdfExport(int sessionId, HtmlReportOptions opts);
   void requestPdfOutputPath(int sessionId, HtmlReportOptions opts, const QString& projectTitle);
-  void renderReportFromPayload(const ReportPayloadPtr& payload);
 
 private:
   bool m_csvBusy;

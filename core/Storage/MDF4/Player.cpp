@@ -530,9 +530,9 @@ void MDF4::Player::onDecodeFinished(const MDF4::PlayerDecodePayloadPtr& payload)
 }
 
 /**
- * @brief Advances to the next frame
+ * @brief Moves one frame forward (@p delta > 0) or back, pausing playback and rebuilding the plots
  */
-void MDF4::Player::nextFrame()
+void MDF4::Player::stepFrame(int delta)
 {
   if (!isOpen())
     return;
@@ -540,19 +540,28 @@ void MDF4::Player::nextFrame()
   if (isPlaying())
     pause();
 
-  if (m_framePos < frameCount() - 1) {
-    ++m_framePos;
+  if (delta > 0 ? m_framePos >= frameCount() - 1 : m_framePos <= 0)
+    return;
 
-    auto& dashboard = plotSink();
-    dashboard.clearPlotData();
+  m_framePos += delta;
 
-    int framesToLoad = dashboard.points();
-    int startFrame   = std::max(0, m_framePos - framesToLoad);
-    int endFrame     = std::min(frameCount() - 1, m_framePos);
+  auto& dashboard = plotSink();
+  dashboard.clearPlotData();
 
-    processFrameBatch(startFrame, endFrame);
-    updateData();
-  }
+  int framesToLoad = dashboard.points();
+  int startFrame   = std::max(0, m_framePos - framesToLoad);
+  int endFrame     = std::min(frameCount() - 1, m_framePos);
+
+  processFrameBatch(startFrame, endFrame);
+  updateData();
+}
+
+/**
+ * @brief Advances to the next frame
+ */
+void MDF4::Player::nextFrame()
+{
+  stepFrame(1);
 }
 
 /**
@@ -560,25 +569,7 @@ void MDF4::Player::nextFrame()
  */
 void MDF4::Player::previousFrame()
 {
-  if (!isOpen())
-    return;
-
-  if (isPlaying())
-    pause();
-
-  if (m_framePos > 0) {
-    --m_framePos;
-
-    auto& dashboard = plotSink();
-    dashboard.clearPlotData();
-
-    int framesToLoad = dashboard.points();
-    int startFrame   = std::max(0, m_framePos - framesToLoad);
-    int endFrame     = std::min(frameCount() - 1, m_framePos);
-
-    processFrameBatch(startFrame, endFrame);
-    updateData();
-  }
+  stepFrame(-1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -975,35 +966,6 @@ bool MDF4::Player::channelActive(int channel, int frameIndex) const
 }
 
 /**
- * @brief Fills @p cells with the row at @p index for the byte path. String-typed channels
- *        replay their cached text verbatim; numeric channels format the cached double with
- *        the same 'g'/10 rendering the typed lane uses.
- */
-bool MDF4::Player::buildRowCells(int index, QStringList& cells) const
-{
-  if (!isOpen() || index < 0 || index >= frameCount())
-    return false;
-
-  const auto row            = static_cast<size_t>(index);
-  const size_t channelCount = m_channelIsString.size();
-
-  cells.clear();
-  cells.reserve(static_cast<int>(channelCount));
-
-  for (size_t c = 0; c < channelCount; ++c) {
-    const bool is_string = m_channelIsString[c];
-    if (is_string && c < m_text.size() && row < m_text[c].size())
-      cells.append(m_text[c][row]);
-    else if (!is_string && c < m_numeric.size() && row < m_numeric[c].size())
-      cells.append(QString::number(m_numeric[c][row], 'g', 10));
-    else
-      cells.append(QStringLiteral("0"));
-  }
-
-  return true;
-}
-
-/**
  * @brief Fills @p cells with typed replay cells for the row at @p index: numeric channels
  *        pass the native double (spec 0022 R7), string channels borrow the cached text.
  */
@@ -1034,13 +996,29 @@ qsizetype MDF4::Player::buildRowCellsTyped(
 }
 
 /**
- * @brief Extracts a frame of data at the specified index as a joined replay row.
+ * @brief Extracts a frame of data at the specified index as a joined replay row. String-typed
+ *        channels replay their cached text verbatim; numeric channels format the cached double
+ *        with the same 'g'/10 rendering the typed lane uses.
  */
 QByteArray MDF4::Player::getFrame(const int index)
 {
-  QStringList cells;
-  if (!buildRowCells(index, cells))
+  if (!isOpen() || index < 0 || index >= frameCount())
     return QByteArray();
+
+  const auto row            = static_cast<size_t>(index);
+  const size_t channelCount = m_channelIsString.size();
+
+  QStringList cells;
+  cells.reserve(static_cast<int>(channelCount));
+  for (size_t c = 0; c < channelCount; ++c) {
+    const bool is_string = m_channelIsString[c];
+    if (is_string && c < m_text.size() && row < m_text[c].size())
+      cells.append(m_text[c][row]);
+    else if (!is_string && c < m_numeric.size() && row < m_numeric[c].size())
+      cells.append(QString::number(m_numeric[c][row], 'g', 10));
+    else
+      cells.append(QStringLiteral("0"));
+  }
 
   QByteArray frame = DataModel::joinReplayRow(cells);
   frame.append('\n');
@@ -1313,30 +1291,21 @@ void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
   const QString row = QString::fromUtf8(frame).trimmed();
   const auto fields = DataModel::splitReplayRow(row);
 
-  QMap<int, QStringList> sourceFields;
-  QMap<int, bool> sourceHasActive;
+  QMap<int, QByteArray> sourcePayloads;
   for (auto it = m_sourceChannelsByIndex.constBegin(); it != m_sourceChannelsByIndex.constEnd();
        ++it) {
-    const int srcId        = it.key();
     const auto& orderedChs = it.value();
     QStringList orderedCells;
     orderedCells.reserve(orderedChs.size());
-    bool anyActive = false;
+    bool anyActive = frameIndex < 0;
     for (int ch : orderedChs) {
       const QString cell = (ch >= 0 && ch < fields.size()) ? fields[ch] : QString();
       orderedCells.append(cell);
       anyActive = anyActive || channelActive(ch, frameIndex);
     }
-    sourceFields.insert(srcId, std::move(orderedCells));
-    sourceHasActive.insert(srcId, anyActive || frameIndex < 0);
-  }
 
-  QMap<int, QByteArray> sourcePayloads;
-  for (auto it = sourceFields.constBegin(); it != sourceFields.constEnd(); ++it) {
-    if (!sourceHasActive.value(it.key(), true))
-      continue;
-
-    sourcePayloads[it.key()] = DataModel::joinReplayRow(it.value()) + '\n';
+    if (anyActive)
+      sourcePayloads[it.key()] = DataModel::joinReplayRow(orderedCells) + '\n';
   }
 
   if (!sourcePayloads.isEmpty()) {
