@@ -93,6 +93,7 @@ static constexpr Entry kCapable[] = {
   {QLatin1StringView("system.runningProcesses"), ControlScriptOnly, NoCapability},
   {QLatin1StringView("ui.automation.click"), DrivesUi, NoCapability},
   {QLatin1StringView("ui.automation.key"), DrivesUi, NoCapability},
+  {QLatin1StringView("ui.window.showMessageBox"), DrivesUi, NoCapability},
 };
 
 static constexpr QLatin1StringView kPlain[] = {
@@ -503,7 +504,6 @@ static constexpr QLatin1StringView kPlain[] = {
   QLatin1StringView("ui.window.setLayoutPattern"),
   QLatin1StringView("ui.window.setWidgetSetting"),
   QLatin1StringView("ui.window.setWindowState"),
-  QLatin1StringView("ui.window.showMessageBox"),
 };
 // clang-format on
 
