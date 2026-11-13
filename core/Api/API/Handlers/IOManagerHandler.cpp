@@ -27,6 +27,7 @@
 
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
+#include "API/SchemaBuilder.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/EnumLabels.h"
 #include "DataModel/FrameBuilder.h"
@@ -54,10 +55,6 @@ void API::Handlers::IOManagerHandler::registerConnectionCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  QJsonObject emptySchema;
-  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
-
   registry.registerCommand(
     QStringLiteral("io.connect"),
     QStringLiteral("Open the I/O connection using the active bus type's currently-"
@@ -67,7 +64,7 @@ void API::Handlers::IOManagerHandler::registerConnectionCommands()
                    "etc.) must already be set. Use io.getStatus to verify "
                    "configurationOk before connecting. Idempotent if already "
                    "connected to the same device."),
-    emptySchema,
+    emptySchema(),
     &connect);
 
   registry.registerCommand(
@@ -75,29 +72,22 @@ void API::Handlers::IOManagerHandler::registerConnectionCommands()
     QStringLiteral("Close the active I/O connection. Safe to call when already "
                    "disconnected. Does NOT reset the configuration -- the next "
                    "io.connect will reuse the same device + params."),
-    emptySchema,
+    emptySchema(),
     &disconnect);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("paused")] = QJsonObject{
-      {       QStringLiteral("type"),              QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Pause data streaming")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("paused")};
-    registry.registerCommand(
-      QStringLiteral("io.setPaused"),
-      QStringLiteral("Pause or resume frame processing without disconnecting. The "
-                     "device keeps streaming bytes; we drop them on the floor. Use "
-                     "this when the user wants to inspect the current dashboard "
-                     "state without it scrolling, or when running an export and the "
-                     "user doesn't want new frames mid-export."),
-      schema,
-      &setPaused);
-  }
+  registry.registerCommand(
+    QStringLiteral("io.setPaused"),
+    QStringLiteral("Pause or resume frame processing without disconnecting. The "
+                   "device keeps streaming bytes; we drop them on the floor. Use "
+                   "this when the user wants to inspect the current dashboard "
+                   "state without it scrolling, or when running an export and the "
+                   "user doesn't want new frames mid-export."),
+    makeSchema({
+      {QStringLiteral("paused"),
+       QStringLiteral("boolean"),
+       QStringLiteral("Pause data streaming")}
+  }),
+    &setPaused);
 }
 
 /**
@@ -107,65 +97,44 @@ void API::Handlers::IOManagerHandler::registerBusConfigCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  {
-    QJsonObject props;
-    props[Keys::BusType] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("0=UART (serial port; most embedded boards), "
-       "1=Network (TCP/UDP client/server), "
-       "2=BLE (BLE GATT characteristic; Pro), "
-       "3=Audio (microphone-as-data; Pro), "
-       "4=Modbus (RTU/TCP; Pro), "
-       "5=CAN (CANopen; Pro), "
-       "6=USB (raw USB endpoints via libusb; Pro), "
-       "7=HID (HID via hidapi; Pro), "
-       "8=Process (spawn a subprocess and read its stdout; Pro).")               },
-      {       QStringLiteral("enum"),       QJsonArray{0, 1, 2, 3, 4, 5, 6, 7, 8}},
-      {    QStringLiteral("default"),                                           0}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QString(Keys::BusType)};
-    registry.registerCommand(
-      QStringLiteral("io.setBusType"),
-      QStringLiteral("Switch the active bus. CRITICAL: this discards the previous "
-                     "bus's runtime config (port, baud rate, host, etc. are NOT "
-                     "carried over). After switching, configure the new bus with "
-                     "its setters before calling io.connect. The project's source "
-                     "list is independent -- this only affects what's currently "
-                     "live."),
-      schema,
-      &setBusType);
-  }
+  registry.registerCommand(
+    QStringLiteral("io.setBusType"),
+    QStringLiteral("Switch the active bus. CRITICAL: this discards the previous "
+                   "bus's runtime config (port, baud rate, host, etc. are NOT "
+                   "carried over). After switching, configure the new bus with "
+                   "its setters before calling io.connect. The project's source "
+                   "list is independent -- this only affects what's currently "
+                   "live."),
+    makeSchema({enumProp(Keys::BusType,
+                         QStringLiteral("0=UART (serial port; most embedded boards), "
+                                        "1=Network (TCP/UDP client/server), "
+                                        "2=BLE (BLE GATT characteristic; Pro), "
+                                        "3=Audio (microphone-as-data; Pro), "
+                                        "4=Modbus (RTU/TCP; Pro), "
+                                        "5=CAN (CANopen; Pro), "
+                                        "6=USB (raw USB endpoints via libusb; Pro), "
+                                        "7=HID (HID via hidapi; Pro), "
+                                        "8=Process (spawn a subprocess and read its "
+                                        "stdout; Pro)."),
+                         QJsonArray{0, 1, 2, 3, 4, 5, 6, 7, 8},
+                         0)}),
+    &setBusType);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("data")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {     QStringLiteral("binary"),                             true},
-      {QStringLiteral("description"),
-       QStringLiteral("Raw bytes to transmit, tagged with an encoding argument "
-       "(SerialStudio.Hex / .Text / .Base64) in the SDK wrapper. The device "
-       "receives the decoded bytes verbatim -- no line ending appended. For "
-       "text + line ending, use console.send instead.")               }
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("data")};
-    registry.registerCommand(
-      QStringLiteral("io.writeData"),
-      QStringLiteral("Transmit raw bytes to the device (params: data - base64 "
-                     "encoded). Hardware-write: remote clients must clear the "
-                     "one-time device-write consent prompt (the user's answer is "
-                     "persisted); in-process scripts are not prompted. "
-                     "Failure modes: not connected (connection_lost), bus busy "
-                     "(bus_busy). Prefer console.send for text protocols."),
-      schema,
-      &writeData);
-  }
+  registry.registerCommand(
+    QStringLiteral("io.writeData"),
+    QStringLiteral("Transmit raw bytes to the device (params: data - base64 "
+                   "encoded). Hardware-write: remote clients must clear the "
+                   "one-time device-write consent prompt (the user's answer is "
+                   "persisted); in-process scripts are not prompted. "
+                   "Failure modes: not connected (connection_lost), bus busy "
+                   "(bus_busy). Prefer console.send for text protocols."),
+    makeSchema({byteProp(QStringLiteral("data"),
+                         QStringLiteral("Raw bytes to transmit, tagged with an encoding argument "
+                                        "(SerialStudio.Hex / .Text / .Base64) in the SDK "
+                                        "wrapper. The device receives the decoded bytes "
+                                        "verbatim -- no line ending appended. For text + line "
+                                        "ending, use console.send instead."))}),
+    &writeData);
 }
 
 /**
@@ -174,10 +143,6 @@ void API::Handlers::IOManagerHandler::registerBusConfigCommands()
 void API::Handlers::IOManagerHandler::registerQueryCommands()
 {
   static auto& registry = CommandRegistry::instance();
-
-  QJsonObject emptySchema;
-  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
 
   registry.registerCommand(
     QStringLiteral("io.getStatus"),
@@ -193,7 +158,7 @@ void API::Handlers::IOManagerHandler::registerQueryCommands()
                    "user reports a connection issue. Reconnection is each driver's "
                    "own business, so no attempt counter is reported: poll "
                    "isConnected to watch a link that keeps dropping."),
-    emptySchema,
+    emptySchema(),
     &getStatus);
 
   registry.registerCommand(
@@ -201,49 +166,35 @@ void API::Handlers::IOManagerHandler::registerQueryCommands()
     QStringLiteral("Returns the list of bus types this build supports. Pro builds "
                    "have all 9; GPL builds only ship UART/Network/BLE/Audio. Use "
                    "before io.setBusType to confirm the bus is available."),
-    emptySchema,
+    emptySchema(),
     &getAvailableBuses);
 
-  {
-    QJsonObject sourceProp;
-    sourceProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
-    sourceProp.insert(QStringLiteral("description"),
-                      QStringLiteral("Optional source filter; omit for the newest frame "
-                                     "across all sources."));
-
-    QJsonObject encodingProp;
-    encodingProp.insert(QStringLiteral("type"), QStringLiteral("string"));
-    encodingProp.insert(
-      QStringLiteral("enum"),
-      QJsonArray{QStringLiteral("text"), QStringLiteral("base64"), QStringLiteral("both")});
-    encodingProp.insert(QStringLiteral("description"),
-                        QStringLiteral("Payload encoding in the response (default: text)."));
-
-    QJsonObject props;
-    props.insert(Keys::SourceId, sourceProp);
-    props.insert(QStringLiteral("encoding"), encodingProp);
-
-    QJsonObject schema;
-    schema.insert(QStringLiteral("type"), QStringLiteral("object"));
-    schema.insert(QStringLiteral("properties"), props);
-
-    registry.registerCommand(
-      QStringLiteral("io.getLatestFrame"),
-      QStringLiteral("Returns the latest RAW frame received from the device: sequence "
-                     "number, payload (text/base64) and the parser's channel tokens in "
-                     "values[] -- including channels NOT yet mapped to any dataset "
-                     "(dashboard.getData only shows mapped data). Poll it from a control "
-                     "script loop() to detect new channels and auto-build widgets via "
-                     "project mutations; the sequence field tells you when a new frame "
-                     "arrived. Capture runs only while a control script is running or "
-                     "the API server is enabled, so hasData:false means no data OR no "
-                     "active consumer. timestampMs is a monotonic clock in milliseconds "
-                     "(not Unix epoch time); use it only for deltas between frames. "
-                     "ageMs is the time elapsed since the frame was captured -- use it "
-                     "for staleness watchdogs instead of mixing clocks."),
-      schema,
-      &getLatestFrame);
-  }
+  registry.registerCommand(
+    QStringLiteral("io.getLatestFrame"),
+    QStringLiteral("Returns the latest RAW frame received from the device: sequence "
+                   "number, payload (text/base64) and the parser's channel tokens in "
+                   "values[] -- including channels NOT yet mapped to any dataset "
+                   "(dashboard.getData only shows mapped data). Poll it from a control "
+                   "script loop() to detect new channels and auto-build widgets via "
+                   "project mutations; the sequence field tells you when a new frame "
+                   "arrived. Capture runs only while a control script is running or "
+                   "the API server is enabled, so hasData:false means no data OR no "
+                   "active consumer. timestampMs is a monotonic clock in milliseconds "
+                   "(not Unix epoch time); use it only for deltas between frames. "
+                   "ageMs is the time elapsed since the frame was captured -- use it "
+                   "for staleness watchdogs instead of mixing clocks."),
+    makeSchema(
+      {
+  },
+      {{Keys::SourceId,
+        QStringLiteral("integer"),
+        QStringLiteral("Optional source filter; omit for the newest frame "
+                       "across all sources.")},
+       {QStringLiteral("encoding"),
+        QStringLiteral("string"),
+        QStringLiteral("Payload encoding in the response (default: text)."),
+        QJsonArray{QStringLiteral("text"), QStringLiteral("base64"), QStringLiteral("both")}}}),
+    &getLatestFrame);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -310,10 +261,8 @@ API::CommandResponse API::Handlers::IOManagerHandler::disconnect(const QString& 
 API::CommandResponse API::Handlers::IOManagerHandler::setPaused(const QString& id,
                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("paused"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: paused"));
-  }
+  if (!params.contains(QStringLiteral("paused")))
+    return CommandResponse::makeMissingParam(id, "paused");
 
   const bool paused = params.value(QStringLiteral("paused")).toBool();
   auto& manager     = API::handlerContext().connectionManager;
@@ -330,10 +279,8 @@ API::CommandResponse API::Handlers::IOManagerHandler::setPaused(const QString& i
 API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& id,
                                                                  const QJsonObject& params)
 {
-  if (!params.contains(Keys::BusType)) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: busType"));
-  }
+  if (!params.contains(Keys::BusType))
+    return CommandResponse::makeMissingParam(id, "busType");
 
   const int busType   = params.value(Keys::BusType).toInt();
   const auto metaEnum = QMetaEnum::fromType<SerialStudio::BusType>();
@@ -361,10 +308,8 @@ API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& 
 API::CommandResponse API::Handlers::IOManagerHandler::writeData(const QString& id,
                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("data"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: data"));
-  }
+  if (!params.contains(QStringLiteral("data")))
+    return CommandResponse::makeMissingParam(id, "data");
 
   const QString dataStr = params.value(QStringLiteral("data")).toString();
   const QByteArray data = QByteArray::fromBase64(dataStr.toUtf8());

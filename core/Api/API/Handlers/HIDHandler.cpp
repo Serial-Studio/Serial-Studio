@@ -15,6 +15,7 @@
 
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
+#include "API/SchemaBuilder.h"
 #include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -28,43 +29,24 @@ void API::Handlers::HIDHandler::registerCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "HID device index (0 = placeholder)");
-    props.insert("deviceIndex", prop);
-    QJsonObject schema;
-    schema.insert("type", "object");
-    schema.insert("properties", props);
-    QJsonArray req;
-    req.append("deviceIndex");
-    schema.insert("required", req);
-    registry.registerCommand(QStringLiteral("io.hid.setDeviceIndex"),
-                             QStringLiteral("Select HID device by index (params: deviceIndex)"),
-                             schema,
-                             &setDeviceIndex);
-  }
+  registry.registerCommand(QStringLiteral("io.hid.setDeviceIndex"),
+                           QStringLiteral("Select HID device by index (params: deviceIndex)"),
+                           makeSchema({
+                             {QStringLiteral("deviceIndex"),
+                              QStringLiteral("integer"),
+                              QStringLiteral("HID device index (0 = placeholder)")}
+  }),
+                           &setDeviceIndex);
 
-  {
-    QJsonObject emptySchema;
-    emptySchema.insert("type", "object");
-    emptySchema.insert("properties", QJsonObject());
-    registry.registerCommand(QStringLiteral("io.hid.listDevices"),
-                             QStringLiteral("List available HID devices"),
-                             emptySchema,
-                             &getDeviceList);
-  }
+  registry.registerCommand(QStringLiteral("io.hid.listDevices"),
+                           QStringLiteral("List available HID devices"),
+                           emptySchema(),
+                           &getDeviceList);
 
-  {
-    QJsonObject emptySchema;
-    emptySchema.insert("type", "object");
-    emptySchema.insert("properties", QJsonObject());
-    registry.registerCommand(QStringLiteral("io.hid.getConfig"),
-                             QStringLiteral("Get complete HID driver configuration"),
-                             emptySchema,
-                             &getConfiguration);
-  }
+  registry.registerCommand(QStringLiteral("io.hid.getConfig"),
+                           QStringLiteral("Get complete HID driver configuration"),
+                           emptySchema(),
+                           &getConfiguration);
 }
 
 //--------------------------------------------------------------------------------------------------

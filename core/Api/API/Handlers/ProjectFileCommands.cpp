@@ -436,26 +436,27 @@ API::CommandResponse API::Handlers::ProjectFileCommands::fileNew(const QString& 
   return CommandResponse::makeSuccess(id, result);
 }
 
+namespace API::Handlers {
+
 /**
- * @brief Undo the most recent project-document step (shared UI/API history).
+ * @brief Runs one undo or redo step on the shared project history and reports the outcome.
  */
-API::CommandResponse API::Handlers::ProjectFileCommands::projectUndo(const QString& id,
-                                                                     const QJsonObject& params)
+[[nodiscard]] static CommandResponse stepProjectHistory(const QString& id, bool redo)
 {
-  Q_UNUSED(params);
   auto& projectModel = DataModel::pipelineModules().projectModel;
 
   QJsonObject result;
-  if (!projectModel.canUndo()) {
+  if (!(redo ? projectModel.canRedo() : projectModel.canUndo())) {
     result[QStringLiteral("performed")] = false;
-    result[QStringLiteral("reason")]    = QStringLiteral("nothing to undo");
+    result[QStringLiteral("reason")] =
+      redo ? QStringLiteral("nothing to redo") : QStringLiteral("nothing to undo");
     attachProjectEpoch(result);
     return CommandResponse::makeSuccess(id, result);
   }
 
-  const QString label = projectModel.undoText();
+  const QString label = redo ? projectModel.redoText() : projectModel.undoText();
   projectModel.setSuppressMessageBoxes(true);
-  const bool performed = projectModel.undo();
+  const bool performed = redo ? projectModel.redo() : projectModel.undo();
   projectModel.setSuppressMessageBoxes(false);
 
   if (!performed) {
@@ -465,10 +466,22 @@ API::CommandResponse API::Handlers::ProjectFileCommands::projectUndo(const QStri
     return CommandResponse::makeSuccess(id, result);
   }
 
-  result[QStringLiteral("performed")] = true;
-  result[QStringLiteral("undone")]    = label;
+  result[QStringLiteral("performed")]                                = true;
+  result[redo ? QStringLiteral("redone") : QStringLiteral("undone")] = label;
   attachProjectEpoch(result);
   return CommandResponse::makeSuccess(id, result);
+}
+
+}  // namespace API::Handlers
+
+/**
+ * @brief Undo the most recent project-document step (shared UI/API history).
+ */
+API::CommandResponse API::Handlers::ProjectFileCommands::projectUndo(const QString& id,
+                                                                     const QJsonObject& params)
+{
+  Q_UNUSED(params);
+  return stepProjectHistory(id, false);
 }
 
 /**
@@ -478,32 +491,7 @@ API::CommandResponse API::Handlers::ProjectFileCommands::projectRedo(const QStri
                                                                      const QJsonObject& params)
 {
   Q_UNUSED(params);
-  auto& projectModel = DataModel::pipelineModules().projectModel;
-
-  QJsonObject result;
-  if (!projectModel.canRedo()) {
-    result[QStringLiteral("performed")] = false;
-    result[QStringLiteral("reason")]    = QStringLiteral("nothing to redo");
-    attachProjectEpoch(result);
-    return CommandResponse::makeSuccess(id, result);
-  }
-
-  const QString label = projectModel.redoText();
-  projectModel.setSuppressMessageBoxes(true);
-  const bool performed = projectModel.redo();
-  projectModel.setSuppressMessageBoxes(false);
-
-  if (!performed) {
-    result[QStringLiteral("performed")] = false;
-    result[QStringLiteral("reason")]    = QStringLiteral("snapshot apply failed");
-    attachProjectEpoch(result);
-    return CommandResponse::makeSuccess(id, result);
-  }
-
-  result[QStringLiteral("performed")] = true;
-  result[QStringLiteral("redone")]    = label;
-  attachProjectEpoch(result);
-  return CommandResponse::makeSuccess(id, result);
+  return stepProjectHistory(id, true);
 }
 
 /**
@@ -512,10 +500,8 @@ API::CommandResponse API::Handlers::ProjectFileCommands::projectRedo(const QStri
 API::CommandResponse API::Handlers::ProjectFileCommands::setTitle(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("title"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: title"));
-  }
+  if (!params.contains(QStringLiteral("title")))
+    return CommandResponse::makeMissingParam(id, "title");
 
   const QString title = params.value(QStringLiteral("title")).toString();
   if (title.isEmpty()) {
@@ -537,10 +523,8 @@ API::CommandResponse API::Handlers::ProjectFileCommands::setTitle(const QString&
 API::CommandResponse API::Handlers::ProjectFileCommands::fileOpen(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("filePath"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: filePath"));
-  }
+  if (!params.contains(QStringLiteral("filePath")))
+    return CommandResponse::makeMissingParam(id, "filePath");
 
   const QString file_path = params.value(QStringLiteral("filePath")).toString();
   if (file_path.isEmpty()) {
@@ -946,10 +930,8 @@ API::CommandResponse API::Handlers::ProjectFileCommands::projectSnapshot(const Q
 API::CommandResponse API::Handlers::ProjectFileCommands::loadFromJSON(const QString& id,
                                                                       const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("config"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: config"));
-  }
+  if (!params.contains(QStringLiteral("config")))
+    return CommandResponse::makeMissingParam(id, "config");
 
   const QJsonObject config = params.value(QStringLiteral("config")).toObject();
   if (config.isEmpty()) {
@@ -1107,8 +1089,7 @@ API::CommandResponse API::Handlers::ProjectFileCommands::templateApply(const QSt
                                                                        const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("templateId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: templateId"));
+    return CommandResponse::makeMissingParam(id, "templateId");
 
   const auto templateId = params.value(QStringLiteral("templateId")).toString();
   const auto body       = loadTemplateBodyById(templateId);

@@ -58,7 +58,6 @@ private:
 public:
   [[nodiscard]] static CommandHandler& instance();
 
-  [[nodiscard]] bool isApiMessage(const QByteArray& data) const;
   [[nodiscard]] QByteArray processMessage(const QByteArray& data,
                                           const CommandOrigin origin = CommandOrigin::Trusted);
   [[nodiscard]] CommandResponse processCommand(const CommandRequest& request,

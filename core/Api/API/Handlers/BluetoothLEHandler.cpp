@@ -201,10 +201,8 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::startDiscovery(const QSt
 API::CommandResponse API::Handlers::BluetoothLEHandler::selectDevice(const QString& id,
                                                                      const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("deviceIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: deviceIndex"));
-  }
+  if (!params.contains(QStringLiteral("deviceIndex")))
+    return CommandResponse::makeMissingParam(id, "deviceIndex");
 
   const int deviceIndex   = params.value(QStringLiteral("deviceIndex")).toInt();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -235,10 +233,8 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectDevice(const QStri
 API::CommandResponse API::Handlers::BluetoothLEHandler::selectService(const QString& id,
                                                                       const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("serviceIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: serviceIndex"));
-  }
+  if (!params.contains(QStringLiteral("serviceIndex")))
+    return CommandResponse::makeMissingParam(id, "serviceIndex");
 
   const int serviceIndex   = params.value(QStringLiteral("serviceIndex")).toInt();
   auto& connectionManager  = API::handlerContext().connectionManager;
@@ -270,10 +266,8 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectService(const QStr
 API::CommandResponse API::Handlers::BluetoothLEHandler::selectServiceByUuid(
   const QString& id, const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("serviceUuid"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: serviceUuid"));
-  }
+  if (!params.contains(QStringLiteral("serviceUuid")))
+    return CommandResponse::makeMissingParam(id, "serviceUuid");
 
   const QString uuid      = params.value(QStringLiteral("serviceUuid")).toString();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -298,12 +292,8 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectServiceByUuid(
 API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
   const QString& id, const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("characteristicIndex"))) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::MissingParam,
-      QStringLiteral("Missing required parameter: characteristicIndex"));
-  }
+  if (!params.contains(QStringLiteral("characteristicIndex")))
+    return CommandResponse::makeMissingParam(id, "characteristicIndex");
 
   const int characteristicIndex   = params.value(QStringLiteral("characteristicIndex")).toInt();
   auto& connectionManager         = API::handlerContext().connectionManager;
@@ -336,12 +326,8 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
 API::CommandResponse API::Handlers::BluetoothLEHandler::setNotifyCharacteristic(
   const QString& id, const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("characteristicUuid"))) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::MissingParam,
-      QStringLiteral("Missing required parameter: characteristicUuid"));
-  }
+  if (!params.contains(QStringLiteral("characteristicUuid")))
+    return CommandResponse::makeMissingParam(id, "characteristicUuid");
 
   const QString uuid      = params.value(QStringLiteral("characteristicUuid")).toString();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -365,17 +351,11 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::setNotifyCharacteristic(
 API::CommandResponse API::Handlers::BluetoothLEHandler::writeCharacteristic(
   const QString& id, const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("characteristicUuid"))) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::MissingParam,
-      QStringLiteral("Missing required parameter: characteristicUuid"));
-  }
+  if (!params.contains(QStringLiteral("characteristicUuid")))
+    return CommandResponse::makeMissingParam(id, "characteristicUuid");
 
-  if (!params.contains(QStringLiteral("data"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: data"));
-  }
+  if (!params.contains(QStringLiteral("data")))
+    return CommandResponse::makeMissingParam(id, "data");
 
   const QString uuid    = params.value(QStringLiteral("characteristicUuid")).toString();
   const QString dataStr = params.value(QStringLiteral("data")).toString();

@@ -138,10 +138,8 @@ void API::Handlers::CANBusHandler::registerCommands()
 API::CommandResponse API::Handlers::CANBusHandler::setPluginIndex(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("pluginIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: pluginIndex"));
-  }
+  if (!params.contains(QStringLiteral("pluginIndex")))
+    return CommandResponse::makeMissingParam(id, "pluginIndex");
 
   const int pluginIndex   = params.value(QStringLiteral("pluginIndex")).toInt();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -170,10 +168,8 @@ API::CommandResponse API::Handlers::CANBusHandler::setPluginIndex(const QString&
 API::CommandResponse API::Handlers::CANBusHandler::setInterfaceIndex(const QString& id,
                                                                      const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("interfaceIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: interfaceIndex"));
-  }
+  if (!params.contains(QStringLiteral("interfaceIndex")))
+    return CommandResponse::makeMissingParam(id, "interfaceIndex");
 
   const int interfaceIndex  = params.value(QStringLiteral("interfaceIndex")).toInt();
   auto& connectionManager   = API::handlerContext().connectionManager;
@@ -203,10 +199,8 @@ API::CommandResponse API::Handlers::CANBusHandler::setInterfaceIndex(const QStri
 API::CommandResponse API::Handlers::CANBusHandler::setBitrate(const QString& id,
                                                               const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("bitrate"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: bitrate"));
-  }
+  if (!params.contains(QStringLiteral("bitrate")))
+    return CommandResponse::makeMissingParam(id, "bitrate");
 
   const int bitrate = params.value(QStringLiteral("bitrate")).toInt();
 
@@ -229,10 +223,8 @@ API::CommandResponse API::Handlers::CANBusHandler::setBitrate(const QString& id,
 API::CommandResponse API::Handlers::CANBusHandler::setCanFD(const QString& id,
                                                             const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
+  if (!params.contains(QStringLiteral("enabled")))
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   const bool enabled      = params.value(QStringLiteral("enabled")).toBool();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -249,10 +241,8 @@ API::CommandResponse API::Handlers::CANBusHandler::setCanFD(const QString& id,
 API::CommandResponse API::Handlers::CANBusHandler::setDataBitrate(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("dataBitrate"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: dataBitrate"));
-  }
+  if (!params.contains(QStringLiteral("dataBitrate")))
+    return CommandResponse::makeMissingParam(id, "dataBitrate");
 
   const int dataBitrate = params.value(QStringLiteral("dataBitrate")).toInt();
 
@@ -275,10 +265,8 @@ API::CommandResponse API::Handlers::CANBusHandler::setDataBitrate(const QString&
 API::CommandResponse API::Handlers::CANBusHandler::setLoopback(const QString& id,
                                                                const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
+  if (!params.contains(QStringLiteral("enabled")))
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   const bool enabled      = params.value(QStringLiteral("enabled")).toBool();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -295,10 +283,8 @@ API::CommandResponse API::Handlers::CANBusHandler::setLoopback(const QString& id
 API::CommandResponse API::Handlers::CANBusHandler::setListenOnly(const QString& id,
                                                                  const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
+  if (!params.contains(QStringLiteral("enabled")))
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   const bool enabled      = params.value(QStringLiteral("enabled")).toBool();
   auto& connectionManager = API::handlerContext().connectionManager;

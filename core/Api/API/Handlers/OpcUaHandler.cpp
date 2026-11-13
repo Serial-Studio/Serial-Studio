@@ -31,6 +31,7 @@
 #include "API/SchemaBuilder.h"
 #include "Core/EnumLabels.h"
 #include "IO/ConnectionManager.h"
+#include "IO/Drivers/OpcUa/OpcUaEndpointSelection.h"
 #include "IO/Drivers/OpcUaTagModel.h"
 
 /**
@@ -40,17 +41,6 @@
 {
   auto& connectionManager = API::handlerContext().connectionManager;
   return connectionManager.opcUa();
-}
-
-/**
- * @brief Standard missing-parameter error.
- */
-[[nodiscard]] static API::CommandResponse missingParam(const QString& id, const char* name)
-{
-  return API::CommandResponse::makeError(
-    id,
-    API::ErrorCode::MissingParam,
-    QStringLiteral("Missing required parameter: %1").arg(QLatin1String(name)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -340,12 +330,12 @@ API::CommandResponse API::Handlers::OpcUaHandler::setSecurityPolicy(const QStrin
                                                                     const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("policy")))
-    return missingParam(id, "policy");
+    return API::CommandResponse::makeMissingParam(id, "policy");
 
   const auto requested = params.value(QStringLiteral("policy")).toString();
   auto* driver         = opcUaDriver();
 
-  const auto policies = IO::Drivers::OpcUa::supportedPolicies();
+  const auto policies = IO::Drivers::OpcUaEndpointSelection::supportedPolicies();
   for (const auto& uri : policies) {
     if (uri != requested && uri.section(QLatin1Char('#'), -1) != requested)
       continue;
@@ -368,7 +358,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::setSecurityMode(const QString&
                                                                   const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("mode")))
-    return missingParam(id, "mode");
+    return API::CommandResponse::makeMissingParam(id, "mode");
 
   const int mode = params.value(QStringLiteral("mode")).toInt();
   if (mode < 1 || mode > 3)
@@ -389,7 +379,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::setIdentityType(const QString&
                                                                   const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("type")))
-    return missingParam(id, "type");
+    return API::CommandResponse::makeMissingParam(id, "type");
 
   QJsonObject forwarded;
   forwarded.insert(QStringLiteral("mode"), params.value(QStringLiteral("type")));
@@ -404,10 +394,10 @@ API::CommandResponse API::Handlers::OpcUaHandler::setUserCertificate(const QStri
                                                                      const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("certificate")))
-    return missingParam(id, "certificate");
+    return API::CommandResponse::makeMissingParam(id, "certificate");
 
   if (!params.contains(QStringLiteral("key")))
-    return missingParam(id, "key");
+    return API::CommandResponse::makeMissingParam(id, "key");
 
   const auto certificate = params.value(QStringLiteral("certificate")).toString();
   const auto key         = params.value(QStringLiteral("key")).toString();
@@ -470,7 +460,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::exportCertificate(const QStrin
                                                                     const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("path")))
-    return missingParam(id, "path");
+    return API::CommandResponse::makeMissingParam(id, "path");
 
   const auto path = params.value(QStringLiteral("path")).toString();
 
@@ -505,7 +495,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::trustServer(const QString& id,
                                                               const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("fingerprint")))
-    return missingParam(id, "fingerprint");
+    return API::CommandResponse::makeMissingParam(id, "fingerprint");
 
   const auto fingerprint = params.value(QStringLiteral("fingerprint")).toString();
   auto* driver           = opcUaDriver();
@@ -528,7 +518,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::revokeTrust(const QString& id,
                                                               const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("fingerprint")))
-    return missingParam(id, "fingerprint");
+    return API::CommandResponse::makeMissingParam(id, "fingerprint");
 
   auto* driver = opcUaDriver();
   if (!driver->revokeServerCertificate(params.value(QStringLiteral("fingerprint")).toString()))
@@ -552,7 +542,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::setEndpointUrl(const QString& 
                                                                  const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("url")))
-    return missingParam(id, "url");
+    return API::CommandResponse::makeMissingParam(id, "url");
 
   const QString url = params.value(QStringLiteral("url")).toString();
   const QUrl parsed(url);
@@ -576,7 +566,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::setEndpointIndex(const QString
                                                                    const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("index")))
-    return missingParam(id, "index");
+    return API::CommandResponse::makeMissingParam(id, "index");
 
   const int index = params.value(QStringLiteral("index")).toInt();
   auto* driver    = opcUaDriver();
@@ -598,7 +588,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::setAuthMode(const QString& id,
                                                               const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("mode")))
-    return missingParam(id, "mode");
+    return API::CommandResponse::makeMissingParam(id, "mode");
 
   const int mode = params.value(QStringLiteral("mode")).toInt();
   if (mode < 0 || mode > 2)
@@ -619,7 +609,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::setUsername(const QString& id,
                                                               const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("username")))
-    return missingParam(id, "username");
+    return API::CommandResponse::makeMissingParam(id, "username");
 
   const QString username = params.value(QStringLiteral("username")).toString();
   opcUaDriver()->setUsername(username);
@@ -636,7 +626,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::setPassword(const QString& id,
                                                               const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("password")))
-    return missingParam(id, "password");
+    return API::CommandResponse::makeMissingParam(id, "password");
 
   opcUaDriver()->setPassword(params.value(QStringLiteral("password")).toString());
   return CommandResponse::makeSuccess(id,
@@ -652,7 +642,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::setPublishingInterval(const QS
                                                                         const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("intervalMs")))
-    return missingParam(id, "intervalMs");
+    return API::CommandResponse::makeMissingParam(id, "intervalMs");
 
   const int interval = params.value(QStringLiteral("intervalMs")).toInt();
   if (interval < 10 || interval > 60000)
@@ -774,7 +764,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::setTags(const QString& id,
                                                           const QJsonObject& params)
 {
   if (!params.value(QStringLiteral("tags")).isArray())
-    return missingParam(id, "tags");
+    return API::CommandResponse::makeMissingParam(id, "tags");
 
   auto* driver       = opcUaDriver();
   const auto request = params.value(QStringLiteral("tags")).toArray();
@@ -796,10 +786,10 @@ API::CommandResponse API::Handlers::OpcUaHandler::addTag(const QString& id,
                                                          const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("id")))
-    return missingParam(id, "id");
+    return API::CommandResponse::makeMissingParam(id, "id");
 
   if (!params.contains(QStringLiteral("t")))
-    return missingParam(id, "t");
+    return API::CommandResponse::makeMissingParam(id, "t");
 
   const auto type =
     IO::Drivers::OpcUaWire::typeFromCode(params.value(QStringLiteral("t")).toString());
@@ -836,7 +826,7 @@ API::CommandResponse API::Handlers::OpcUaHandler::removeTag(const QString& id,
                                                             const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("index")))
-    return missingParam(id, "index");
+    return API::CommandResponse::makeMissingParam(id, "index");
 
   auto* driver    = opcUaDriver();
   const int index = params.value(QStringLiteral("index")).toInt();

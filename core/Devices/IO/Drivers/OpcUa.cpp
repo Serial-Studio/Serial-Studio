@@ -51,6 +51,7 @@ using IO::Drivers::OpcUaEndpointSelection::endpointAcceptsToken;
 using IO::Drivers::OpcUaEndpointSelection::endpointUsable;
 using IO::Drivers::OpcUaEndpointSelection::kPolicyNoneUri;
 using IO::Drivers::OpcUaEndpointSelection::policyIsDeprecated;
+using IO::Drivers::OpcUaEndpointSelection::supportedPolicies;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor
@@ -1234,15 +1235,6 @@ void IO::Drivers::OpcUa::clearTags()
 //--------------------------------------------------------------------------------------------------
 // Security configuration
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Every security policy this build can open, weakest first. Kept on the driver because the
- *        API handler and the property model read the catalogue through it.
- */
-const QStringList& IO::Drivers::OpcUa::supportedPolicies()
-{
-  return OpcUaEndpointSelection::supportedPolicies();
-}
 
 /**
  * @brief Picks the endpoint to dial after a discovery. A URL that was already selected keeps its

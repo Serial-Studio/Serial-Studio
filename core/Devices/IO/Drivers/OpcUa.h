@@ -250,7 +250,6 @@ public:
   [[nodiscard]] int publishingInterval() const override { return m_publishingInterval; }
 
   [[nodiscard]] int securityPolicyIndex() const;
-  [[nodiscard]] static const QStringList& supportedPolicies();
   [[nodiscard]] QVariantMap clientCertificate() const;
   [[nodiscard]] QVariantList trustedCertificates() const;
   [[nodiscard]] QString negotiatedPolicy() const;

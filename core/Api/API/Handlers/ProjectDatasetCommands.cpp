@@ -350,12 +350,10 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetAdd(const QSt
                                                                        const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(QStringLiteral("options")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: options"));
+    return CommandResponse::makeMissingParam(id, "options");
 
   const int groupId = params.value(QStringLiteral("groupId")).toInt();
   const int options = params.value(QStringLiteral("options")).toInt();
@@ -372,19 +370,7 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetAdd(const QSt
   if (!DataModel::ProjectEntities::acceptsDatasets(groups[groupId]))
     return fixedGroupError(id, groupId, groups[groupId]);
 
-  SerialStudio::DatasetOption headline = SerialStudio::DatasetGeneric;
-  for (const auto cand : {SerialStudio::DatasetPlot,
-                          SerialStudio::DatasetFFT,
-                          SerialStudio::DatasetBar,
-                          SerialStudio::DatasetGauge,
-                          SerialStudio::DatasetCompass,
-                          SerialStudio::DatasetWaterfall,
-                          SerialStudio::DatasetMeter}) {
-    if (options & cand) {
-      headline = cand;
-      break;
-    }
-  }
+  const auto headline = pickHeadlineDatasetOption(options);
 
   project.setSelectedGroup(groups[groupId]);
   project.addDataset(headline);
@@ -514,12 +500,10 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetDelete(const 
                                                                           const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(Keys::DatasetId))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: datasetId"));
+    return CommandResponse::makeMissingParam(id, "datasetId");
 
   const int groupId   = params.value(QStringLiteral("groupId")).toInt();
   const int datasetId = params.value(Keys::DatasetId).toInt();
@@ -607,12 +591,10 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetDuplicate(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(Keys::DatasetId))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: datasetId"));
+    return CommandResponse::makeMissingParam(id, "datasetId");
 
   const int groupId   = params.value(QStringLiteral("groupId")).toInt();
   const int datasetId = params.value(Keys::DatasetId).toInt();
@@ -644,20 +626,16 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetSetOption(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(Keys::DatasetId))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: datasetId"));
+    return CommandResponse::makeMissingParam(id, "datasetId");
 
   if (!params.contains(QStringLiteral("option")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: option"));
+    return CommandResponse::makeMissingParam(id, "option");
 
   if (!params.contains(QStringLiteral("enabled")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   const int groupId   = params.value(QStringLiteral("groupId")).toInt();
   const int datasetId = params.value(Keys::DatasetId).toInt();
@@ -716,16 +694,13 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetSetOptions(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(Keys::DatasetId))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: datasetId"));
+    return CommandResponse::makeMissingParam(id, "datasetId");
 
   if (!params.contains(QStringLiteral("options")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: options"));
+    return CommandResponse::makeMissingParam(id, "options");
 
   const int groupId   = params.value(QStringLiteral("groupId")).toInt();
   const int datasetId = params.value(Keys::DatasetId).toInt();

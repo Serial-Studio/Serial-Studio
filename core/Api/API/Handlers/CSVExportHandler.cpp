@@ -26,6 +26,7 @@
 
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
+#include "API/SchemaBuilder.h"
 #include "CSV/Export.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -39,57 +40,37 @@ void API::Handlers::CSVExportHandler::registerCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("enabled")] = QJsonObject{
-      {       QStringLiteral("type"),                      QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Enable or disable CSV export")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("enabled")};
-    registry.registerCommand(QStringLiteral("csvExport.setEnabled"),
-                             QStringLiteral("Enable or disable CSV export (params: enabled)"),
-                             schema,
-                             &setEnabled);
-  }
+  registry.registerCommand(QStringLiteral("csvExport.setEnabled"),
+                           QStringLiteral("Enable or disable CSV export (params: enabled)"),
+                           makeSchema({
+                             {QStringLiteral("enabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Enable or disable CSV export")}
+  }),
+                           &setEnabled);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("intervalMs")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),
+  registry.registerCommand(
+    QStringLiteral("csvExport.setInterval"),
+    QStringLiteral("Set the CSV logging cadence (params: intervalMs). 0 (default) writes one "
+                   "row per received frame; a positive value switches the recorder to a "
+                   "fixed-interval snapshot log where every row carries the latest value of "
+                   "every column -- use this for multi-source or high-rate projects where "
+                   "per-frame rows explode the file size. Applies live to an open recording "
+                   "and persists across restarts."),
+    makeSchema({
+      {QStringLiteral("intervalMs"),
+       QStringLiteral("integer"),
        QStringLiteral("Snapshot interval in milliseconds; 0 restores one row per frame")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("intervalMs")};
-    registry.registerCommand(
-      QStringLiteral("csvExport.setInterval"),
-      QStringLiteral("Set the CSV logging cadence (params: intervalMs). 0 (default) writes one "
-                     "row per received frame; a positive value switches the recorder to a "
-                     "fixed-interval snapshot log where every row carries the latest value of "
-                     "every column -- use this for multi-source or high-rate projects where "
-                     "per-frame rows explode the file size. Applies live to an open recording "
-                     "and persists across restarts."),
-      schema,
-      &setInterval);
-  }
+  }),
+    &setInterval);
 
-  QJsonObject emptySchema;
-  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
-
-  registry.registerCommand(QStringLiteral("csvExport.close"),
-                           QStringLiteral("Close the current CSV file"),
-                           emptySchema,
-                           &close);
+  const auto empty = emptySchema();
+  registry.registerCommand(
+    QStringLiteral("csvExport.close"), QStringLiteral("Close the current CSV file"), empty, &close);
 
   registry.registerCommand(QStringLiteral("csvExport.getStatus"),
                            QStringLiteral("Get CSV export status"),
-                           emptySchema,
+                           empty,
                            &getStatus);
 }
 

@@ -122,15 +122,11 @@ void API::Handlers::ProjectGroupCommands::registerCommands()
 API::CommandResponse API::Handlers::ProjectGroupCommands::groupAdd(const QString& id,
                                                                    const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("title"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: title"));
-  }
+  if (!params.contains(QStringLiteral("title")))
+    return CommandResponse::makeMissingParam(id, "title");
 
-  if (!params.contains(QStringLiteral("widgetType"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: widgetType"));
-  }
+  if (!params.contains(QStringLiteral("widgetType")))
+    return CommandResponse::makeMissingParam(id, "widgetType");
 
   const QString title = params.value(QStringLiteral("title")).toString();
   if (title.isEmpty()) {
@@ -168,8 +164,7 @@ API::CommandResponse API::Handlers::ProjectGroupCommands::groupDelete(const QStr
                                                                       const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   auto& project      = DataModel::pipelineModules().projectModel;
@@ -264,8 +259,7 @@ API::CommandResponse API::Handlers::ProjectGroupCommands::groupDuplicate(const Q
                                                                          const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   auto& project      = DataModel::pipelineModules().projectModel;

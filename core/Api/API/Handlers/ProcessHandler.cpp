@@ -100,10 +100,8 @@ void API::Handlers::ProcessHandler::registerCommands()
 API::CommandResponse API::Handlers::ProcessHandler::setMode(const QString& id,
                                                             const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("mode"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: mode"));
-  }
+  if (!params.contains(QStringLiteral("mode")))
+    return CommandResponse::makeMissingParam(id, "mode");
 
   const int mode = params.value(QStringLiteral("mode")).toInt();
   if (mode < 0 || mode > 1) {
@@ -127,10 +125,8 @@ API::CommandResponse API::Handlers::ProcessHandler::setMode(const QString& id,
 API::CommandResponse API::Handlers::ProcessHandler::setExecutable(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("executable"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: executable"));
-  }
+  if (!params.contains(QStringLiteral("executable")))
+    return CommandResponse::makeMissingParam(id, "executable");
 
   const QString path = params.value(QStringLiteral("executable")).toString();
 
@@ -148,10 +144,8 @@ API::CommandResponse API::Handlers::ProcessHandler::setExecutable(const QString&
 API::CommandResponse API::Handlers::ProcessHandler::setArguments(const QString& id,
                                                                  const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("arguments"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: arguments"));
-  }
+  if (!params.contains(QStringLiteral("arguments")))
+    return CommandResponse::makeMissingParam(id, "arguments");
 
   const QString args      = params.value(QStringLiteral("arguments")).toString();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -168,10 +162,8 @@ API::CommandResponse API::Handlers::ProcessHandler::setArguments(const QString& 
 API::CommandResponse API::Handlers::ProcessHandler::setWorkingDir(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("workingDir"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: workingDir"));
-  }
+  if (!params.contains(QStringLiteral("workingDir")))
+    return CommandResponse::makeMissingParam(id, "workingDir");
 
   const QString dir = params.value(QStringLiteral("workingDir")).toString();
 
@@ -189,10 +181,8 @@ API::CommandResponse API::Handlers::ProcessHandler::setWorkingDir(const QString&
 API::CommandResponse API::Handlers::ProcessHandler::setPipePath(const QString& id,
                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("pipePath"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: pipePath"));
-  }
+  if (!params.contains(QStringLiteral("pipePath")))
+    return CommandResponse::makeMissingParam(id, "pipePath");
 
   const QString path = params.value(QStringLiteral("pipePath")).toString();
 

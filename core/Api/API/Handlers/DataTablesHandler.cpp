@@ -21,6 +21,7 @@
 
 #include "API/Handlers/DataTablesHandler.h"
 
+#include <optional>
 #include <QJsonArray>
 #include <QJsonObject>
 
@@ -79,20 +80,51 @@
   return QVariant(0.0);
 }
 
+namespace detail {
+/**
+ * @brief A table matched by bare name or full folder path; def is null when none matched.
+ */
+struct TableHit {
+  const DataModel::TableDef* def;
+  QString path;
+};
+}  // namespace detail
+
+/**
+ * @brief Finds a table by bare name or full "/"-joined folder path, first match wins.
+ */
+[[nodiscard]] static detail::TableHit findTable(const DataModel::ProjectModel& pm,
+                                                const QString& name)
+{
+  const auto& folders = pm.editorTableFolders();
+  for (const auto& t : pm.tables()) {
+    QString full = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
+    if (full == name || t.name == name)
+      return {&t, std::move(full)};
+  }
+
+  return {nullptr, QString()};
+}
+
+/**
+ * @brief Reads the required non-empty table and name params; returns the MissingParam error for
+ *        the first one that is absent or empty.
+ */
+[[nodiscard]] static std::optional<API::CommandResponse> requireTableAndName(
+  const QString& id, const QJsonObject& params, QString& table, QString& name)
+{
+  if (!requireString(params, QStringLiteral("table"), table))
+    return API::CommandResponse::makeMissingParam(id, "table");
+
+  if (!requireString(params, QStringLiteral("name"), name))
+    return API::CommandResponse::makeMissingParam(id, "name");
+
+  return std::nullopt;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Command registration
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Builds the property descriptor for a table register's defaultValue.
- */
-[[nodiscard]] static QJsonObject defaultValueProp()
-{
-  return QJsonObject{
-    {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
-    {QStringLiteral("description"),             QStringLiteral("Default value (number or string)")}
-  };
-}
 
 /**
  * @brief Register all data-table commands with the command registry.
@@ -202,53 +234,33 @@ void API::Handlers::DataTablesHandler::registerTableMutationCommands()
   }),
     &tableRename);
 
-  QJsonObject valueProps;
-  valueProps[QStringLiteral("table")] = QJsonObject{
-    {       QStringLiteral("type"),            QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("Owning table name")}
-  };
-  valueProps[QStringLiteral("name")] = QJsonObject{
-    {       QStringLiteral("type"),        QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("Variable name")}
-  };
-  valueProps[QStringLiteral("value")] = QJsonObject{
-    {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
-    {QStringLiteral("description"),         QStringLiteral("New runtime value (number or string)")}
-  };
-  QJsonObject valueSchema;
-  valueSchema[QStringLiteral("type")]       = QStringLiteral("object");
-  valueSchema[QStringLiteral("properties")] = valueProps;
-  valueSchema[QStringLiteral("required")] =
-    QJsonArray{QStringLiteral("table"), QStringLiteral("name"), QStringLiteral("value")};
+  const API::SchemaProp value{QStringLiteral("value"),
+                              QStringLiteral("number|string"),
+                              QStringLiteral("New runtime value (number or string)")};
   registry.registerCommand(
     QStringLiteral("project.dataTable.setValue"),
     QStringLiteral("Write a variable's LIVE runtime value into the data-table store (params: "
                    "table, name, value). Same effect as a parser/transform tableSet(); control "
                    "scripts use it through the tableSet() global. Constant variables reject "
                    "writes."),
-    valueSchema,
+    API::makeSchema({
+      {QStringLiteral("table"), QStringLiteral("string"), QStringLiteral("Owning table name")},
+      { QStringLiteral("name"), QStringLiteral("string"),     QStringLiteral("Variable name")},
+      value
+  }),
     &valueSet);
 
-  QJsonObject valueHProps;
-  valueHProps[QStringLiteral("handle")] = QJsonObject{
-    {       QStringLiteral("type"),                               QStringLiteral("number")},
-    {QStringLiteral("description"), QStringLiteral("Handle from project.dataTable.handle")}
-  };
-  valueHProps[QStringLiteral("value")] = QJsonObject{
-    {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
-    {QStringLiteral("description"),         QStringLiteral("New runtime value (number or string)")}
-  };
-  QJsonObject valueHSchema;
-  valueHSchema[QStringLiteral("type")]       = QStringLiteral("object");
-  valueHSchema[QStringLiteral("properties")] = valueHProps;
-  valueHSchema[QStringLiteral("required")] =
-    QJsonArray{QStringLiteral("handle"), QStringLiteral("value")};
   registry.registerCommand(
     QStringLiteral("project.dataTable.setValueH"),
     QStringLiteral("Write a variable's LIVE runtime value by handle (params: handle, value). A "
                    "stale, invalid, or constant-variable handle yields written=false. Mirrors "
                    "tableSetH()."),
-    valueHSchema,
+    API::makeSchema({
+      {QStringLiteral("handle"),
+       QStringLiteral("number"),
+       QStringLiteral("Handle from project.dataTable.handle")},
+      value
+  }),
     &valueSetH);
 }
 
@@ -259,31 +271,25 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  QJsonObject addProps;
-  addProps[QStringLiteral("table")] = QJsonObject{
-    {       QStringLiteral("type"),            QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("Owning table name")}
-  };
-  addProps[QStringLiteral("name")] = QJsonObject{
-    {       QStringLiteral("type"),                          QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("Variable name (auto-uniquified)")}
-  };
-  addProps[QStringLiteral("computed")] = QJsonObject{
-    {       QStringLiteral("type"),QStringLiteral("boolean")},
-    {QStringLiteral("description"),
-     QStringLiteral("true=computed (writable by transforms, persists across frames), "
-     "false=constant")    }
-  };
-  addProps[QStringLiteral("defaultValue")] = defaultValueProp();
-  QJsonObject addSchema;
-  addSchema[QStringLiteral("type")]       = QStringLiteral("object");
-  addSchema[QStringLiteral("properties")] = addProps;
-  addSchema[QStringLiteral("required")] =
-    QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
+  const API::SchemaProp defaultValue{QStringLiteral("defaultValue"),
+                                     QStringLiteral("number|string"),
+                                     QStringLiteral("Default value (number or string)")};
+
   registry.registerCommand(
     QStringLiteral("project.dataTable.addRegister"),
     QStringLiteral("Append a variable (params: table, name, computed=true, defaultValue=0)"),
-    addSchema,
+    API::makeSchema(
+      {
+        {QStringLiteral("table"),QStringLiteral("string"),QStringLiteral("Owning table name")                      },
+        { QStringLiteral("name"),
+         QStringLiteral("string"),
+         QStringLiteral("Variable name (auto-uniquified)")}
+  },
+      {{QStringLiteral("computed"),
+        QStringLiteral("boolean"),
+        QStringLiteral("true=computed (writable by transforms, persists across frames), "
+                       "false=constant")},
+       defaultValue}),
     &registerAdd);
 
   registry.registerCommand(
@@ -300,33 +306,23 @@ void API::Handlers::DataTablesHandler::registerRegisterCommands()
         QStringLiteral("If true, return what would be deleted without committing.")}}),
     &registerDelete);
 
-  QJsonObject updProps;
-  updProps[QStringLiteral("table")] = QJsonObject{
-    {       QStringLiteral("type"),            QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("Owning table name")}
-  };
-  updProps[QStringLiteral("name")] = QJsonObject{
-    {       QStringLiteral("type"),                QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("Current variable name")}
-  };
-  updProps[QStringLiteral("newName")] = QJsonObject{
-    {       QStringLiteral("type"),                       QStringLiteral("string")},
-    {QStringLiteral("description"), QStringLiteral("New variable name (optional)")}
-  };
-  updProps[QStringLiteral("computed")] = QJsonObject{
-    {       QStringLiteral("type"),                               QStringLiteral("boolean")},
-    {QStringLiteral("description"), QStringLiteral("Switch to computed (true) or constant")}
-  };
-  updProps[QStringLiteral("defaultValue")] = defaultValueProp();
-  QJsonObject updSchema;
-  updSchema[QStringLiteral("type")]       = QStringLiteral("object");
-  updSchema[QStringLiteral("properties")] = updProps;
-  updSchema[QStringLiteral("required")] =
-    QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
   registry.registerCommand(
     QStringLiteral("project.dataTable.updateRegister"),
     QStringLiteral("Update a variable (params: table, name, newName?, computed?, defaultValue?)"),
-    updSchema,
+    API::makeSchema(
+      {
+        {QStringLiteral("table"),QStringLiteral("string"),QStringLiteral("Owning table name")            },
+        { QStringLiteral("name"),
+         QStringLiteral("string"),
+         QStringLiteral("Current variable name")}
+  },
+      {{QStringLiteral("newName"),
+        QStringLiteral("string"),
+        QStringLiteral("New variable name (optional)")},
+       {QStringLiteral("computed"),
+        QStringLiteral("boolean"),
+        QStringLiteral("Switch to computed (true) or constant")},
+       defaultValue}),
     &registerUpdate);
 }
 
@@ -372,23 +368,13 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableGet(const QString& i
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
 
-  auto& projectModel  = DataModel::pipelineModules().projectModel;
-  const auto& tables  = projectModel.tables();
-  const auto& folders = projectModel.editorTableFolders();
-
-  QString path;
-  for (const auto& t : tables) {
-    const QString full = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
-    if (full == name || t.name == name) {
-      path = full;
-      break;
-    }
-  }
-
-  if (path.isEmpty())
+  auto& projectModel = DataModel::pipelineModules().projectModel;
+  const auto hit     = findTable(projectModel, name);
+  if (!hit.def)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Table not found: %1").arg(name));
 
+  const QString& path  = hit.path;
   const auto registers = projectModel.registersForTable(path);
 
   QJsonArray arr = QJsonArray::fromVariantList(registers);
@@ -438,20 +424,9 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableDelete(const QString
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
 
   auto& pm            = DataModel::pipelineModules().projectModel;
-  const auto& tables  = pm.tables();
-  const auto& folders = pm.editorTableFolders();
-
-  QString path;
-  const DataModel::TableDef* def = nullptr;
-  for (const auto& t : tables) {
-    const QString full = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
-    if (full == name || t.name == name) {
-      path = full;
-      def  = &t;
-      break;
-    }
-  }
-
+  const auto hit      = findTable(pm, name);
+  const auto* def     = hit.def;
+  const QString& path = hit.path;
   if (!def)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Table not found: %1").arg(name));
@@ -504,16 +479,9 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableRename(const QString
   const auto& tables  = pm.tables();
   const auto& folders = pm.editorTableFolders();
 
-  QString oldPath;
-  int parentFolderId = -1;
-  for (const auto& t : tables) {
-    const QString full = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
-    if (full == oldName || t.name == oldName) {
-      oldPath        = full;
-      parentFolderId = t.parentFolderId;
-      break;
-    }
-  }
+  const auto hit           = findTable(pm, oldName);
+  const QString& oldPath   = hit.path;
+  const int parentFolderId = hit.def ? hit.def->parentFolderId : -1;
 
   const QString newLeaf = newName.simplified().remove(QLatin1Char('/'));
   bool collides         = false;
@@ -558,28 +526,14 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerAdd(const QString
 
   QString table;
   QString name;
-  if (!requireString(params, QStringLiteral("table"), table))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: table"));
-
-  if (!requireString(params, QStringLiteral("name"), name))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
+  if (const auto err = requireTableAndName(id, params, table, name))
+    return *err;
 
   auto& pm            = DataModel::pipelineModules().projectModel;
-  const auto& tables  = pm.tables();
   const auto& folders = pm.editorTableFolders();
-
-  QString path;
-  for (const auto& t : tables) {
-    const QString full = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
-    if (full == table || t.name == table) {
-      path = full;
-      break;
-    }
-  }
-
-  if (path.isEmpty())
+  const auto hit      = findTable(pm, table);
+  const QString& path = hit.path;
+  if (!hit.def)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Table not found: %1").arg(table));
 
@@ -621,29 +575,13 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerDelete(const QStr
 {
   QString table;
   QString name;
-  if (!requireString(params, QStringLiteral("table"), table))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: table"));
-
-  if (!requireString(params, QStringLiteral("name"), name))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
+  if (const auto err = requireTableAndName(id, params, table, name))
+    return *err;
 
   auto& pm            = DataModel::pipelineModules().projectModel;
-  const auto& tables  = pm.tables();
-  const auto& folders = pm.editorTableFolders();
-
-  QString path;
-  const DataModel::TableDef* def = nullptr;
-  for (const auto& t : tables) {
-    const QString full = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
-    if (full == table || t.name == table) {
-      path = full;
-      def  = &t;
-      break;
-    }
-  }
-
+  const auto hit      = findTable(pm, table);
+  const auto* def     = hit.def;
+  const QString& path = hit.path;
   if (!def)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Table not found: %1").arg(table));
@@ -687,29 +625,13 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerUpdate(const QStr
 
   QString table;
   QString name;
-  if (!requireString(params, QStringLiteral("table"), table))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: table"));
-
-  if (!requireString(params, QStringLiteral("name"), name))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
+  if (const auto err = requireTableAndName(id, params, table, name))
+    return *err;
 
   auto& pm            = DataModel::pipelineModules().projectModel;
-  const auto& tables  = pm.tables();
-  const auto& folders = pm.editorTableFolders();
-
-  QString path;
-  const DataModel::TableDef* def = nullptr;
-  for (const auto& t : tables) {
-    const QString full = DataModel::tableFullPath(folders, t.parentFolderId, t.name);
-    if (full == table || t.name == table) {
-      path = full;
-      def  = &t;
-      break;
-    }
-  }
-
+  const auto hit      = findTable(pm, table);
+  const auto* def     = hit.def;
+  const QString& path = hit.path;
   if (!def)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Table not found: %1").arg(table));
@@ -766,13 +688,8 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueGet(const QString& i
 {
   QString table;
   QString name;
-  if (!requireString(params, QStringLiteral("table"), table))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: table"));
-
-  if (!requireString(params, QStringLiteral("name"), name))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
+  if (const auto err = requireTableAndName(id, params, table, name))
+    return *err;
 
   auto& frameBuilder = DataModel::pipelineModules().frameBuilder;
 
@@ -821,13 +738,8 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueSet(const QString& i
 {
   QString table;
   QString name;
-  if (!requireString(params, QStringLiteral("table"), table))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: table"));
-
-  if (!requireString(params, QStringLiteral("name"), name))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
+  if (const auto err = requireTableAndName(id, params, table, name))
+    return *err;
 
   if (!params.contains(QStringLiteral("value")))
     return CommandResponse::makeError(
@@ -882,13 +794,8 @@ API::CommandResponse API::Handlers::DataTablesHandler::valueHandle(const QString
 {
   QString table;
   QString name;
-  if (!requireString(params, QStringLiteral("table"), table))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: table"));
-
-  if (!requireString(params, QStringLiteral("name"), name))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
+  if (const auto err = requireTableAndName(id, params, table, name))
+    return *err;
 
   auto& frameBuilder = DataModel::pipelineModules().frameBuilder;
 

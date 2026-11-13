@@ -27,6 +27,7 @@
 
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
+#include "API/SchemaBuilder.h"
 #include "Core/SerialStudio.h"
 #include "CSV/Player.h"
 
@@ -50,33 +51,17 @@ void API::Handlers::CSVPlayerHandler::registerFileCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  QJsonObject emptySchema;
-  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
-
-  QJsonObject openFilePathProp;
-  openFilePathProp.insert(QStringLiteral("type"), QStringLiteral("string"));
-  openFilePathProp.insert(QStringLiteral("description"),
-                          QStringLiteral("Path to the CSV file to open"));
-
-  QJsonObject openProps;
-  openProps.insert(QStringLiteral("filePath"), openFilePathProp);
-
-  QJsonArray openRequired;
-  openRequired.append(QStringLiteral("filePath"));
-
-  QJsonObject openSchema;
-  openSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  openSchema.insert(QStringLiteral("properties"), openProps);
-  openSchema.insert(QStringLiteral("required"), openRequired);
-
   registry.registerCommand(QStringLiteral("csvPlayer.open"),
                            QStringLiteral("Open CSV file (params: filePath)"),
-                           openSchema,
+                           makeSchema({
+                             {QStringLiteral("filePath"),
+                              QStringLiteral("string"),
+                              QStringLiteral("Path to the CSV file to open")}
+  }),
                            &open);
 
   registry.registerCommand(
-    QStringLiteral("csvPlayer.close"), QStringLiteral("Close CSV file"), emptySchema, &close);
+    QStringLiteral("csvPlayer.close"), QStringLiteral("Close CSV file"), emptySchema(), &close);
 }
 
 /**
@@ -86,75 +71,40 @@ void API::Handlers::CSVPlayerHandler::registerPlaybackCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  QJsonObject emptySchema;
-  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
-
-  QJsonObject progressProp;
-  progressProp.insert(QStringLiteral("type"), QStringLiteral("number"));
-  progressProp.insert(QStringLiteral("description"),
-                      QStringLiteral("Playback position from 0.0 to 1.0"));
-  progressProp.insert(QStringLiteral("minimum"), 0.0);
-  progressProp.insert(QStringLiteral("maximum"), 1.0);
-
-  QJsonObject progressProps;
-  progressProps.insert(QStringLiteral("progress"), progressProp);
-
-  QJsonArray progressRequired;
-  progressRequired.append(QStringLiteral("progress"));
-
-  QJsonObject progressSchema;
-  progressSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  progressSchema.insert(QStringLiteral("properties"), progressProps);
-  progressSchema.insert(QStringLiteral("required"), progressRequired);
-
-  QJsonObject pausedProp;
-  pausedProp.insert(QStringLiteral("type"), QStringLiteral("boolean"));
-  pausedProp.insert(QStringLiteral("description"),
-                    QStringLiteral("True to pause, false to resume"));
-
-  QJsonObject pausedProps;
-  pausedProps.insert(QStringLiteral("paused"), pausedProp);
-
-  QJsonArray pausedRequired;
-  pausedRequired.append(QStringLiteral("paused"));
-
-  QJsonObject pausedSchema;
-  pausedSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  pausedSchema.insert(QStringLiteral("properties"), pausedProps);
-  pausedSchema.insert(QStringLiteral("required"), pausedRequired);
-
-  QJsonObject deltaProp;
-  deltaProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
-  deltaProp.insert(QStringLiteral("description"),
-                   QStringLiteral("Frames to advance; negative goes back. Default 1"));
-
-  QJsonObject stepProps;
-  stepProps.insert(QStringLiteral("delta"), deltaProp);
-
-  QJsonObject stepSchema;
-  stepSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  stepSchema.insert(QStringLiteral("properties"), stepProps);
-
   registry.registerCommand(QStringLiteral("csvPlayer.setPaused"),
                            QStringLiteral("Pause or resume playback (params: paused: bool)"),
-                           pausedSchema,
+                           makeSchema({
+                             {QStringLiteral("paused"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("True to pause, false to resume")}
+  }),
                            &setPaused);
 
   registry.registerCommand(
     QStringLiteral("csvPlayer.step"),
     QStringLiteral("Step delta frames forward (or backward if negative; default 1)"),
-    stepSchema,
+    makeSchema(
+      {
+  },
+      {{QStringLiteral("delta"),
+        QStringLiteral("integer"),
+        QStringLiteral("Frames to advance; negative goes back. Default 1")}}),
     &step);
 
   registry.registerCommand(QStringLiteral("csvPlayer.setProgress"),
                            QStringLiteral("Seek to position (params: progress: 0.0-1.0)"),
-                           progressSchema,
+                           makeSchema({
+                             {QStringLiteral("progress"),
+                              QStringLiteral("number"),
+                              QStringLiteral("Playback position from 0.0 to 1.0"),
+                              {},
+                              0.0, 1.0}
+  }),
                            &setProgress);
 
   registry.registerCommand(QStringLiteral("csvPlayer.getStatus"),
                            QStringLiteral("Get player status"),
-                           emptySchema,
+                           emptySchema(),
                            &getStatus);
 }
 
@@ -168,10 +118,8 @@ void API::Handlers::CSVPlayerHandler::registerPlaybackCommands()
 API::CommandResponse API::Handlers::CSVPlayerHandler::open(const QString& id,
                                                            const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("filePath"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: filePath"));
-  }
+  if (!params.contains(QStringLiteral("filePath")))
+    return CommandResponse::makeMissingParam(id, "filePath");
 
   const QString file_path = params.value(QStringLiteral("filePath")).toString();
   if (file_path.isEmpty()) {
@@ -210,10 +158,8 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::close(const QString& id,
 API::CommandResponse API::Handlers::CSVPlayerHandler::setPaused(const QString& id,
                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("paused"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: paused"));
-  }
+  if (!params.contains(QStringLiteral("paused")))
+    return CommandResponse::makeMissingParam(id, "paused");
 
   auto& player = API::handlerContext().csvPlayer;
 
@@ -265,10 +211,8 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::step(const QString& id,
 API::CommandResponse API::Handlers::CSVPlayerHandler::setProgress(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("progress"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: progress"));
-  }
+  if (!params.contains(QStringLiteral("progress")))
+    return CommandResponse::makeMissingParam(id, "progress");
 
   const double progress = SerialStudio::toDouble(params.value(QStringLiteral("progress")));
   if (progress < 0.0 || progress > 1.0) {

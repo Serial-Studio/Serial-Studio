@@ -214,10 +214,8 @@ void API::Handlers::NetworkHandler::registerUrlTransportCommands(CommandRegistry
 API::CommandResponse API::Handlers::NetworkHandler::setRemoteAddress(const QString& id,
                                                                      const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("address"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: address"));
-  }
+  if (!params.contains(QStringLiteral("address")))
+    return CommandResponse::makeMissingParam(id, "address");
 
   const QString address = params.value(QStringLiteral("address")).toString();
   if (address.isEmpty()) {
@@ -239,10 +237,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setRemoteAddress(const QStri
 API::CommandResponse API::Handlers::NetworkHandler::setTcpPort(const QString& id,
                                                                const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("port"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: port"));
-  }
+  if (!params.contains(QStringLiteral("port")))
+    return CommandResponse::makeMissingParam(id, "port");
 
   const int port = params.value(QStringLiteral("port")).toInt();
   if (port < 1 || port > 65535) {
@@ -264,10 +260,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setTcpPort(const QString& id
 API::CommandResponse API::Handlers::NetworkHandler::setUdpLocalPort(const QString& id,
                                                                     const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("port"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: port"));
-  }
+  if (!params.contains(QStringLiteral("port")))
+    return CommandResponse::makeMissingParam(id, "port");
 
   const int port = params.value(QStringLiteral("port")).toInt();
   if (port < 0 || port > 65535) {
@@ -289,10 +283,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setUdpLocalPort(const QStrin
 API::CommandResponse API::Handlers::NetworkHandler::setUdpRemotePort(const QString& id,
                                                                      const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("port"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: port"));
-  }
+  if (!params.contains(QStringLiteral("port")))
+    return CommandResponse::makeMissingParam(id, "port");
 
   const int port = params.value(QStringLiteral("port")).toInt();
   if (port < 1 || port > 65535) {
@@ -314,10 +306,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setUdpRemotePort(const QStri
 API::CommandResponse API::Handlers::NetworkHandler::setSocketType(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("socketTypeIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: socketTypeIndex"));
-  }
+  if (!params.contains(QStringLiteral("socketTypeIndex")))
+    return CommandResponse::makeMissingParam(id, "socketTypeIndex");
 
   const int socketTypeIndex = params.value(QStringLiteral("socketTypeIndex")).toInt();
   auto& conn                = API::handlerContext().connectionManager;
@@ -346,10 +336,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setSocketType(const QString&
 API::CommandResponse API::Handlers::NetworkHandler::setUdpMulticast(const QString& id,
                                                                     const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
+  if (!params.contains(QStringLiteral("enabled")))
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
   auto& conn         = API::handlerContext().connectionManager;
@@ -366,10 +354,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setUdpMulticast(const QStrin
 API::CommandResponse API::Handlers::NetworkHandler::lookup(const QString& id,
                                                            const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("host"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: host"));
-  }
+  if (!params.contains(QStringLiteral("host")))
+    return CommandResponse::makeMissingParam(id, "host");
 
   const QString host = params.value(QStringLiteral("host")).toString();
   if (host.isEmpty()) {
@@ -392,10 +378,8 @@ API::CommandResponse API::Handlers::NetworkHandler::lookup(const QString& id,
 API::CommandResponse API::Handlers::NetworkHandler::setWebSocketUrl(const QString& id,
                                                                     const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("url"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: url"));
-  }
+  if (!params.contains(QStringLiteral("url")))
+    return CommandResponse::makeMissingParam(id, "url");
 
   const QString url    = params.value(QStringLiteral("url")).toString().trimmed();
   const QString scheme = QUrl(url, QUrl::StrictMode).scheme().toLower();
@@ -417,10 +401,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setWebSocketUrl(const QStrin
 API::CommandResponse API::Handlers::NetworkHandler::setHttpUrl(const QString& id,
                                                                const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("url"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: url"));
-  }
+  if (!params.contains(QStringLiteral("url")))
+    return CommandResponse::makeMissingParam(id, "url");
 
   const QString url    = params.value(QStringLiteral("url")).toString().trimmed();
   const QString scheme = QUrl(url, QUrl::StrictMode).scheme().toLower();
@@ -442,10 +424,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setHttpUrl(const QString& id
 API::CommandResponse API::Handlers::NetworkHandler::setHttpMethod(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("method"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: method"));
-  }
+  if (!params.contains(QStringLiteral("method")))
+    return CommandResponse::makeMissingParam(id, "method");
 
   const QString method = params.value(QStringLiteral("method")).toString().toUpper();
   const int index      = networkDriver()->httpMethods().indexOf(method);
@@ -470,10 +450,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setHttpMethod(const QString&
 API::CommandResponse API::Handlers::NetworkHandler::setHttpBody(const QString& id,
                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("body"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: body"));
-  }
+  if (!params.contains(QStringLiteral("body")))
+    return CommandResponse::makeMissingParam(id, "body");
 
   const QString body = params.value(QStringLiteral("body")).toString();
   networkDriver()->setHttpBody(body);
@@ -489,10 +467,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setHttpBody(const QString& i
 API::CommandResponse API::Handlers::NetworkHandler::setHttpHeaders(const QString& id,
                                                                    const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("headers"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: headers"));
-  }
+  if (!params.contains(QStringLiteral("headers")))
+    return CommandResponse::makeMissingParam(id, "headers");
 
   const QString headers = params.value(QStringLiteral("headers")).toString();
   networkDriver()->setHttpHeaders(headers);
@@ -508,10 +484,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setHttpHeaders(const QString
 API::CommandResponse API::Handlers::NetworkHandler::setHttpInterval(const QString& id,
                                                                     const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("interval"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: interval"));
-  }
+  if (!params.contains(QStringLiteral("interval")))
+    return CommandResponse::makeMissingParam(id, "interval");
 
   const int interval = params.value(QStringLiteral("interval")).toInt();
   if (interval < 0 || interval > 3600000) {
@@ -532,10 +506,8 @@ API::CommandResponse API::Handlers::NetworkHandler::setHttpInterval(const QStrin
 API::CommandResponse API::Handlers::NetworkHandler::setIgnoreTlsErrors(const QString& id,
                                                                        const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
+  if (!params.contains(QStringLiteral("enabled")))
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
   networkDriver()->setIgnoreTlsErrors(enabled);

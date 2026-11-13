@@ -239,35 +239,66 @@ void API::Handlers::ModbusHandler::registerQueryCommands()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Range-checks a list index param, applies it, and echoes the index and the list entry.
+ */
+template<typename Apply>
+[[nodiscard]] static API::CommandResponse selectFromList(const QString& id,
+                                                         const QJsonObject& params,
+                                                         const QStringList& list,
+                                                         const char* indexKey,
+                                                         const char* nameKey,
+                                                         Apply&& apply)
+{
+  const QString key = QString::fromLatin1(indexKey);
+  if (!params.contains(key))
+    return API::CommandResponse::makeMissingParam(id, indexKey);
+
+  const int index = params.value(key).toInt();
+  if (index < 0 || index >= list.count()) {
+    return API::CommandResponse::makeError(id,
+                                           API::ErrorCode::InvalidParam,
+                                           QStringLiteral("Invalid %1: %2. Valid range: 0-%3")
+                                             .arg(key)
+                                             .arg(index)
+                                             .arg(list.count() - 1));
+  }
+
+  apply(index);
+
+  QJsonObject result;
+  result[key]                          = index;
+  result[QString::fromLatin1(nameKey)] = list.at(index);
+  return API::CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief One {index, <valueKey>} object per list entry, the shape of every list command.
+ */
+[[nodiscard]] static QJsonArray indexedNameArray(const QStringList& list,
+                                                 const char* valueKey = "name")
+{
+  QJsonArray array;
+  for (int i = 0; i < list.count(); ++i) {
+    QJsonObject entry;
+    entry[QStringLiteral("index")]       = i;
+    entry[QString::fromLatin1(valueKey)] = list.at(i);
+    array.append(entry);
+  }
+
+  return array;
+}
+
+/**
  * @brief Set Modbus protocol (RTU or TCP)
  */
 API::CommandResponse API::Handlers::ModbusHandler::setProtocolIndex(const QString& id,
                                                                     const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("protocolIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: protocolIndex"));
-  }
-
-  const int protocolIndex  = params.value(QStringLiteral("protocolIndex")).toInt();
-  auto& connectionManager  = API::handlerContext().connectionManager;
-  auto* modbus             = connectionManager.modbus();
-  const auto& protocolList = modbus->protocolList();
-
-  if (protocolIndex < 0 || protocolIndex >= protocolList.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid protocolIndex: %1. Valid range: 0-%2")
-                                        .arg(protocolIndex)
-                                        .arg(protocolList.count() - 1));
-  }
-
-  modbus->setProtocolIndex(static_cast<quint8>(protocolIndex));
-
-  QJsonObject result;
-  result[QStringLiteral("protocolIndex")] = protocolIndex;
-  result[QStringLiteral("protocolName")]  = protocolList.at(protocolIndex);
-  return CommandResponse::makeSuccess(id, result);
+  auto* modbus = API::handlerContext().connectionManager.modbus();
+  return selectFromList(
+    id, params, modbus->protocolList(), "protocolIndex", "protocolName", [modbus](int index) {
+      modbus->setProtocolIndex(static_cast<quint8>(index));
+    });
 }
 
 /**
@@ -276,10 +307,8 @@ API::CommandResponse API::Handlers::ModbusHandler::setProtocolIndex(const QStrin
 API::CommandResponse API::Handlers::ModbusHandler::setSlaveAddress(const QString& id,
                                                                    const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("address"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: address"));
-  }
+  if (!params.contains(QStringLiteral("address")))
+    return CommandResponse::makeMissingParam(id, "address");
 
   const int address = params.value(QStringLiteral("address")).toInt();
 
@@ -304,10 +333,8 @@ API::CommandResponse API::Handlers::ModbusHandler::setSlaveAddress(const QString
 API::CommandResponse API::Handlers::ModbusHandler::setPollInterval(const QString& id,
                                                                    const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("intervalMs"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: intervalMs"));
-  }
+  if (!params.contains(QStringLiteral("intervalMs")))
+    return CommandResponse::makeMissingParam(id, "intervalMs");
 
   const int intervalMs = params.value(QStringLiteral("intervalMs")).toInt();
 
@@ -330,10 +357,8 @@ API::CommandResponse API::Handlers::ModbusHandler::setPollInterval(const QString
 API::CommandResponse API::Handlers::ModbusHandler::setHost(const QString& id,
                                                            const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("host"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: host"));
-  }
+  if (!params.contains(QStringLiteral("host")))
+    return CommandResponse::makeMissingParam(id, "host");
 
   const QString host = params.value(QStringLiteral("host")).toString();
 
@@ -356,10 +381,8 @@ API::CommandResponse API::Handlers::ModbusHandler::setHost(const QString& id,
 API::CommandResponse API::Handlers::ModbusHandler::setPort(const QString& id,
                                                            const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("port"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: port"));
-  }
+  if (!params.contains(QStringLiteral("port")))
+    return CommandResponse::makeMissingParam(id, "port");
 
   const int port = params.value(QStringLiteral("port")).toInt();
 
@@ -384,30 +407,11 @@ API::CommandResponse API::Handlers::ModbusHandler::setPort(const QString& id,
 API::CommandResponse API::Handlers::ModbusHandler::setSerialPortIndex(const QString& id,
                                                                       const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("portIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: portIndex"));
-  }
-
-  const int portIndex     = params.value(QStringLiteral("portIndex")).toInt();
-  auto& connectionManager = API::handlerContext().connectionManager;
-  auto* modbus            = connectionManager.modbus();
-  const auto& portList    = modbus->serialPortList();
-
-  if (portIndex < 0 || portIndex >= portList.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid portIndex: %1. Valid range: 0-%2")
-                                        .arg(portIndex)
-                                        .arg(portList.count() - 1));
-  }
-
-  modbus->setSerialPortIndex(static_cast<quint8>(portIndex));
-
-  QJsonObject result;
-  result[QStringLiteral("portIndex")] = portIndex;
-  result[QStringLiteral("portName")]  = portList.at(portIndex);
-  return CommandResponse::makeSuccess(id, result);
+  auto* modbus = API::handlerContext().connectionManager.modbus();
+  return selectFromList(
+    id, params, modbus->serialPortList(), "portIndex", "portName", [modbus](int index) {
+      modbus->setSerialPortIndex(static_cast<quint8>(index));
+    });
 }
 
 /**
@@ -416,10 +420,8 @@ API::CommandResponse API::Handlers::ModbusHandler::setSerialPortIndex(const QStr
 API::CommandResponse API::Handlers::ModbusHandler::setBaudRate(const QString& id,
                                                                const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("baudRate"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: baudRate"));
-  }
+  if (!params.contains(QStringLiteral("baudRate")))
+    return CommandResponse::makeMissingParam(id, "baudRate");
 
   const int baudRate = params.value(QStringLiteral("baudRate")).toInt();
 
@@ -442,30 +444,11 @@ API::CommandResponse API::Handlers::ModbusHandler::setBaudRate(const QString& id
 API::CommandResponse API::Handlers::ModbusHandler::setParityIndex(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("parityIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: parityIndex"));
-  }
-
-  const int parityIndex   = params.value(QStringLiteral("parityIndex")).toInt();
-  auto& connectionManager = API::handlerContext().connectionManager;
-  auto* modbus            = connectionManager.modbus();
-  const auto& parityList  = modbus->parityList();
-
-  if (parityIndex < 0 || parityIndex >= parityList.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid parityIndex: %1. Valid range: 0-%2")
-                                        .arg(parityIndex)
-                                        .arg(parityList.count() - 1));
-  }
-
-  modbus->setParityIndex(static_cast<quint8>(parityIndex));
-
-  QJsonObject result;
-  result[QStringLiteral("parityIndex")] = parityIndex;
-  result[QStringLiteral("parityName")]  = parityList.at(parityIndex);
-  return CommandResponse::makeSuccess(id, result);
+  auto* modbus = API::handlerContext().connectionManager.modbus();
+  return selectFromList(
+    id, params, modbus->parityList(), "parityIndex", "parityName", [modbus](int index) {
+      modbus->setParityIndex(static_cast<quint8>(index));
+    });
 }
 
 /**
@@ -474,30 +457,11 @@ API::CommandResponse API::Handlers::ModbusHandler::setParityIndex(const QString&
 API::CommandResponse API::Handlers::ModbusHandler::setDataBitsIndex(const QString& id,
                                                                     const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("dataBitsIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: dataBitsIndex"));
-  }
-
-  const int dataBitsIndex  = params.value(QStringLiteral("dataBitsIndex")).toInt();
-  auto& connectionManager  = API::handlerContext().connectionManager;
-  auto* modbus             = connectionManager.modbus();
-  const auto& dataBitsList = modbus->dataBitsList();
-
-  if (dataBitsIndex < 0 || dataBitsIndex >= dataBitsList.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid dataBitsIndex: %1. Valid range: 0-%2")
-                                        .arg(dataBitsIndex)
-                                        .arg(dataBitsList.count() - 1));
-  }
-
-  modbus->setDataBitsIndex(static_cast<quint8>(dataBitsIndex));
-
-  QJsonObject result;
-  result[QStringLiteral("dataBitsIndex")] = dataBitsIndex;
-  result[QStringLiteral("dataBitsValue")] = dataBitsList.at(dataBitsIndex);
-  return CommandResponse::makeSuccess(id, result);
+  auto* modbus = API::handlerContext().connectionManager.modbus();
+  return selectFromList(
+    id, params, modbus->dataBitsList(), "dataBitsIndex", "dataBitsValue", [modbus](int index) {
+      modbus->setDataBitsIndex(static_cast<quint8>(index));
+    });
 }
 
 /**
@@ -506,30 +470,11 @@ API::CommandResponse API::Handlers::ModbusHandler::setDataBitsIndex(const QStrin
 API::CommandResponse API::Handlers::ModbusHandler::setStopBitsIndex(const QString& id,
                                                                     const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("stopBitsIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: stopBitsIndex"));
-  }
-
-  const int stopBitsIndex  = params.value(QStringLiteral("stopBitsIndex")).toInt();
-  auto& connectionManager  = API::handlerContext().connectionManager;
-  auto* modbus             = connectionManager.modbus();
-  const auto& stopBitsList = modbus->stopBitsList();
-
-  if (stopBitsIndex < 0 || stopBitsIndex >= stopBitsList.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid stopBitsIndex: %1. Valid range: 0-%2")
-                                        .arg(stopBitsIndex)
-                                        .arg(stopBitsList.count() - 1));
-  }
-
-  modbus->setStopBitsIndex(static_cast<quint8>(stopBitsIndex));
-
-  QJsonObject result;
-  result[QStringLiteral("stopBitsIndex")] = stopBitsIndex;
-  result[QStringLiteral("stopBitsValue")] = stopBitsList.at(stopBitsIndex);
-  return CommandResponse::makeSuccess(id, result);
+  auto* modbus = API::handlerContext().connectionManager.modbus();
+  return selectFromList(
+    id, params, modbus->stopBitsList(), "stopBitsIndex", "stopBitsValue", [modbus](int index) {
+      modbus->setStopBitsIndex(static_cast<quint8>(index));
+    });
 }
 
 /**
@@ -612,10 +557,8 @@ API::CommandResponse API::Handlers::ModbusHandler::addRegisterGroup(const QStrin
 API::CommandResponse API::Handlers::ModbusHandler::removeRegisterGroup(const QString& id,
                                                                        const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("groupIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupIndex"));
-  }
+  if (!params.contains(QStringLiteral("groupIndex")))
+    return CommandResponse::makeMissingParam(id, "groupIndex");
 
   const int groupIndex    = params.value(QStringLiteral("groupIndex")).toInt();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -722,13 +665,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getProtocolList(const QString
   auto& connectionManager  = API::handlerContext().connectionManager;
   const auto& protocolList = connectionManager.modbus()->protocolList();
 
-  QJsonArray protocols;
-  for (int i = 0; i < protocolList.count(); ++i) {
-    QJsonObject protocol;
-    protocol[QStringLiteral("index")] = i;
-    protocol[QStringLiteral("name")]  = protocolList.at(i);
-    protocols.append(protocol);
-  }
+  const QJsonArray protocols = indexedNameArray(protocolList);
 
   QJsonObject result;
   result[QStringLiteral("protocolList")]         = protocols;
@@ -747,13 +684,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getSerialPortList(const QStri
   auto& connectionManager = API::handlerContext().connectionManager;
   const auto& portList    = connectionManager.modbus()->serialPortList();
 
-  QJsonArray ports;
-  for (int i = 0; i < portList.count(); ++i) {
-    QJsonObject port;
-    port[QStringLiteral("index")] = i;
-    port[QStringLiteral("name")]  = portList.at(i);
-    ports.append(port);
-  }
+  const QJsonArray ports = indexedNameArray(portList);
 
   QJsonObject result;
   result[QStringLiteral("serialPortList")]         = ports;
@@ -772,13 +703,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getParityList(const QString& 
   auto& connectionManager = API::handlerContext().connectionManager;
   const auto& parityList  = connectionManager.modbus()->parityList();
 
-  QJsonArray parities;
-  for (int i = 0; i < parityList.count(); ++i) {
-    QJsonObject parity;
-    parity[QStringLiteral("index")] = i;
-    parity[QStringLiteral("name")]  = parityList.at(i);
-    parities.append(parity);
-  }
+  const QJsonArray parities = indexedNameArray(parityList);
 
   QJsonObject result;
   result[QStringLiteral("parityList")]         = parities;
@@ -797,13 +722,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getDataBitsList(const QString
   auto& connectionManager  = API::handlerContext().connectionManager;
   const auto& dataBitsList = connectionManager.modbus()->dataBitsList();
 
-  QJsonArray dataBitsArray;
-  for (int i = 0; i < dataBitsList.count(); ++i) {
-    QJsonObject dataBits;
-    dataBits[QStringLiteral("index")] = i;
-    dataBits[QStringLiteral("value")] = dataBitsList.at(i);
-    dataBitsArray.append(dataBits);
-  }
+  const QJsonArray dataBitsArray = indexedNameArray(dataBitsList, "value");
 
   QJsonObject result;
   result[QStringLiteral("dataBitsList")]         = dataBitsArray;
@@ -822,13 +741,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getStopBitsList(const QString
   auto& connectionManager  = API::handlerContext().connectionManager;
   const auto& stopBitsList = connectionManager.modbus()->stopBitsList();
 
-  QJsonArray stopBitsArray;
-  for (int i = 0; i < stopBitsList.count(); ++i) {
-    QJsonObject stopBits;
-    stopBits[QStringLiteral("index")] = i;
-    stopBits[QStringLiteral("value")] = stopBitsList.at(i);
-    stopBitsArray.append(stopBits);
-  }
+  const QJsonArray stopBitsArray = indexedNameArray(stopBitsList, "value");
 
   QJsonObject result;
   result[QStringLiteral("stopBitsList")]         = stopBitsArray;
@@ -868,13 +781,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getRegisterTypeList(const QSt
   auto& connectionManager = API::handlerContext().connectionManager;
   const auto& typeList    = connectionManager.modbus()->registerTypeList();
 
-  QJsonArray types;
-  for (int i = 0; i < typeList.count(); ++i) {
-    QJsonObject type;
-    type[QStringLiteral("index")] = i;
-    type[QStringLiteral("name")]  = typeList.at(i);
-    types.append(type);
-  }
+  const QJsonArray types = indexedNameArray(typeList);
 
   QJsonObject result;
   result[QStringLiteral("registerTypeList")] = types;

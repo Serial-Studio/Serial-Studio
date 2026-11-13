@@ -408,8 +408,7 @@ API::CommandResponse API::Handlers::ProjectListCommands::datasetGetByUniqueId(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(Keys::UniqueId))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: uniqueId"));
+    return CommandResponse::makeMissingParam(id, "uniqueId");
 
   QString error;
   const auto match = resolveDatasetSelector(params.value(Keys::UniqueId), error);
@@ -426,8 +425,7 @@ API::CommandResponse API::Handlers::ProjectListCommands::datasetGetByTitle(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(Keys::Title))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: title"));
+    return CommandResponse::makeMissingParam(id, "title");
 
   const QString title        = params.value(Keys::Title).toString();
   const bool hasSourceFilter = params.contains(Keys::SourceId);
@@ -483,8 +481,7 @@ API::CommandResponse API::Handlers::ProjectListCommands::datasetGetByPath(const 
                                                                           const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("path")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: path"));
+    return CommandResponse::makeMissingParam(id, "path");
 
   const QString path  = params.value(QStringLiteral("path")).toString();
   const auto segments = path.split(QChar('/'), Qt::SkipEmptyParts);
@@ -561,12 +558,10 @@ API::CommandResponse API::Handlers::ProjectListCommands::datasetMove(const QStri
                                                                      const QJsonObject& params)
 {
   if (!params.contains(Keys::UniqueId))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: uniqueId"));
+    return CommandResponse::makeMissingParam(id, "uniqueId");
 
   if (!params.contains(QStringLiteral("newPosition")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: newPosition"));
+    return CommandResponse::makeMissingParam(id, "newPosition");
 
   const int newPosition = params.value(QStringLiteral("newPosition")).toInt();
   const bool isDryRun   = params.value(QStringLiteral("dryRun")).toBool(false);
@@ -646,12 +641,10 @@ API::CommandResponse API::Handlers::ProjectListCommands::groupMove(const QString
                                                                    const QJsonObject& params)
 {
   if (!params.contains(Keys::GroupId))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(QStringLiteral("newPosition")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: newPosition"));
+    return CommandResponse::makeMissingParam(id, "newPosition");
 
   const int groupId     = params.value(Keys::GroupId).toInt();
   const int newPosition = params.value(QStringLiteral("newPosition")).toInt();

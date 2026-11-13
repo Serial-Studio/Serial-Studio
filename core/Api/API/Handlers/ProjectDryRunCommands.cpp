@@ -445,12 +445,10 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::frameParserDryRun(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("code")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
+    return CommandResponse::makeMissingParam(id, "code");
 
   if (!params.contains(QStringLiteral("language")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: language"));
+    return CommandResponse::makeMissingParam(id, "language");
 
   if (!params.contains(QStringLiteral("inputBytes"))
       && !params.contains(QStringLiteral("inputBytesHex")))
@@ -541,12 +539,10 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::frameParserDryCompile
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("code")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
+    return CommandResponse::makeMissingParam(id, "code");
 
   if (!params.contains(QStringLiteral("language")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: language"));
+    return CommandResponse::makeMissingParam(id, "language");
 
   const auto code     = params.value(QStringLiteral("code")).toString();
   const auto language = params.value(QStringLiteral("language")).toInt();
@@ -588,6 +584,32 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::frameParserDryCompile
   return CommandResponse::makeSuccess(id, result);
 }
 
+namespace API::Handlers {
+
+/**
+ * @brief Wraps a transform() script so it can be driven via IScriptEngine::parseString.
+ */
+static QString wrapTransformForParser(const QString& code, int language)
+{
+  if (language == 1)
+    return code
+         + QStringLiteral("\n\nfunction parse(frame)\n"
+                          "  local v = tonumber(frame)\n"
+                          "  if v == nil then v = frame end\n"
+                          "  local out = transform(v)\n"
+                          "  return { tostring(out) }\n"
+                          "end\n");
+
+  return code
+       + QStringLiteral("\n\nfunction parse(frame) {\n"
+                        "  var v = parseFloat(frame);\n"
+                        "  if (isNaN(v)) v = frame;\n"
+                        "  return [String(transform(v))];\n"
+                        "}\n");
+}
+
+}  // namespace API::Handlers
+
 /**
  * @brief Transform dry-run: compile + apply transform() to a list of values.
  */
@@ -595,38 +617,19 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::transformDryRun(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("code")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
+    return CommandResponse::makeMissingParam(id, "code");
 
   if (!params.contains(QStringLiteral("language")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: language"));
+    return CommandResponse::makeMissingParam(id, "language");
 
   if (!params.contains(QStringLiteral("values")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: values"));
+    return CommandResponse::makeMissingParam(id, "values");
 
   const auto code     = params.value(QStringLiteral("code")).toString();
   const auto language = params.value(QStringLiteral("language")).toInt();
   const auto values   = params.value(QStringLiteral("values")).toArray();
 
-  QString wrapped;
-  if (language == 1) {
-    wrapped = code
-            + QStringLiteral("\n\nfunction parse(frame)\n"
-                             "  local v = tonumber(frame)\n"
-                             "  if v == nil then v = frame end\n"
-                             "  local out = transform(v)\n"
-                             "  return { tostring(out) }\n"
-                             "end\n");
-  } else {
-    wrapped = code
-            + QStringLiteral("\n\nfunction parse(frame) {\n"
-                             "  var v = parseFloat(frame);\n"
-                             "  if (isNaN(v)) v = frame;\n"
-                             "  return [String(transform(v))];\n"
-                             "}\n");
-  }
+  const QString wrapped = wrapTransformForParser(code, language);
 
   auto engine = makeScriptEngine(language);
   if (!engine->loadScript(wrapped, 0, false))
@@ -675,8 +678,7 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::painterDryRun(const Q
                                                                          const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("code")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
+    return CommandResponse::makeMissingParam(id, "code");
 
   const auto code = params.value(QStringLiteral("code")).toString();
 
@@ -807,8 +809,7 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::outputWidgetDryRun(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("code")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
+    return CommandResponse::makeMissingParam(id, "code");
 
   const auto code    = params.value(QStringLiteral("code")).toString();
   auto& frameBuilder = DataModel::pipelineModules().frameBuilder;
@@ -889,28 +890,6 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::outputWidgetDryRun(
 }
 
 namespace API::Handlers {
-
-/**
- * @brief Wraps a transform() script so it can be driven via IScriptEngine::parseString.
- */
-static QString wrapTransformForParser(const QString& code, int language)
-{
-  if (language == 1)
-    return code
-         + QStringLiteral("\n\nfunction parse(frame)\n"
-                          "  local v = tonumber(frame)\n"
-                          "  if v == nil then v = frame end\n"
-                          "  local out = transform(v)\n"
-                          "  return { tostring(out) }\n"
-                          "end\n");
-
-  return code
-       + QStringLiteral("\n\nfunction parse(frame) {\n"
-                        "  var v = parseFloat(frame);\n"
-                        "  if (isNaN(v)) v = frame;\n"
-                        "  return [String(transform(v))];\n"
-                        "}\n");
-}
 
 /**
  * @brief Applies a single dataset's transform to a raw cell value via a cached engine.

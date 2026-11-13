@@ -89,14 +89,6 @@ API::CommandHandler& API::CommandHandler::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Check if data appears to be an API message
- */
-bool API::CommandHandler::isApiMessage(const QByteArray& data) const
-{
-  return API::isApiMessage(data);
-}
-
-/**
  * @brief Process an incoming message and generate a response
  */
 QByteArray API::CommandHandler::processMessage(const QByteArray& data, const CommandOrigin origin)

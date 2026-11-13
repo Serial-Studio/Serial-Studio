@@ -151,35 +151,48 @@ void API::Handlers::AudioHandler::registerGetterCommands()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Range-checks the index parameter against an option list, applies it and echoes the pick.
+ */
+template<typename Apply>
+[[nodiscard]] static API::CommandResponse applyListIndex(const QString& id,
+                                                         const QJsonObject& params,
+                                                         const char* key,
+                                                         const char* name_key,
+                                                         const QStringList& list,
+                                                         Apply apply)
+{
+  const int index = params.value(QLatin1String(key)).toInt();
+  if (index < 0 || index >= list.count()) {
+    return API::CommandResponse::makeError(id,
+                                           API::ErrorCode::InvalidParam,
+                                           QStringLiteral("Invalid %1: %2. Valid range: 0-%3")
+                                             .arg(QLatin1String(key))
+                                             .arg(index)
+                                             .arg(list.count() - 1));
+  }
+
+  apply(index);
+
+  QJsonObject result;
+  result[QLatin1String(key)]      = index;
+  result[QLatin1String(name_key)] = list.at(index);
+  return API::CommandResponse::makeSuccess(id, result);
+}
+
+/**
  * @brief Set input device
  */
 API::CommandResponse API::Handlers::AudioHandler::setInputDevice(const QString& id,
                                                                  const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("deviceIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: deviceIndex"));
-  }
+  if (!params.contains(QStringLiteral("deviceIndex")))
+    return CommandResponse::makeMissingParam(id, "deviceIndex");
 
-  const int device_index = params.value(QStringLiteral("deviceIndex")).toInt();
-
-  auto& connectionManager = API::handlerContext().connectionManager;
-  const auto& devices     = connectionManager.audio()->inputDeviceList();
-  if (device_index < 0 || device_index >= devices.count()) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QString(QStringLiteral("Invalid deviceIndex: %1. Valid range: 0-%2"))
-        .arg(device_index)
-        .arg(devices.count() - 1));
-  }
-
-  connectionManager.audio()->setSelectedInputDevice(device_index);
-
-  QJsonObject result;
-  result[QStringLiteral("deviceIndex")] = device_index;
-  result[QStringLiteral("deviceName")]  = devices.at(device_index);
-  return CommandResponse::makeSuccess(id, result);
+  auto* audio = API::handlerContext().connectionManager.audio();
+  return applyListIndex(
+    id, params, "deviceIndex", "deviceName", audio->inputDeviceList(), [audio](int index) {
+      audio->setSelectedInputDevice(index);
+    });
 }
 
 /**
@@ -188,30 +201,14 @@ API::CommandResponse API::Handlers::AudioHandler::setInputDevice(const QString& 
 API::CommandResponse API::Handlers::AudioHandler::setOutputDevice(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("deviceIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: deviceIndex"));
-  }
+  if (!params.contains(QStringLiteral("deviceIndex")))
+    return CommandResponse::makeMissingParam(id, "deviceIndex");
 
-  const int device_index = params.value(QStringLiteral("deviceIndex")).toInt();
-
-  auto& connectionManager = API::handlerContext().connectionManager;
-  const auto& devices     = connectionManager.audio()->outputDeviceList();
-  if (device_index < 0 || device_index >= devices.count()) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QString(QStringLiteral("Invalid deviceIndex: %1. Valid range: 0-%2"))
-        .arg(device_index)
-        .arg(devices.count() - 1));
-  }
-
-  connectionManager.audio()->setSelectedOutputDevice(device_index);
-
-  QJsonObject result;
-  result[QStringLiteral("deviceIndex")] = device_index;
-  result[QStringLiteral("deviceName")]  = devices.at(device_index);
-  return CommandResponse::makeSuccess(id, result);
+  auto* audio = API::handlerContext().connectionManager.audio();
+  return applyListIndex(
+    id, params, "deviceIndex", "deviceName", audio->outputDeviceList(), [audio](int index) {
+      audio->setSelectedOutputDevice(index);
+    });
 }
 
 /**
@@ -220,30 +217,14 @@ API::CommandResponse API::Handlers::AudioHandler::setOutputDevice(const QString&
 API::CommandResponse API::Handlers::AudioHandler::setSampleRate(const QString& id,
                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("rateIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: rateIndex"));
-  }
+  if (!params.contains(QStringLiteral("rateIndex")))
+    return CommandResponse::makeMissingParam(id, "rateIndex");
 
-  const int rate_index = params.value(QStringLiteral("rateIndex")).toInt();
-
-  auto& connectionManager = API::handlerContext().connectionManager;
-  const auto& rates       = connectionManager.audio()->sampleRates();
-  if (rate_index < 0 || rate_index >= rates.count()) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QString(QStringLiteral("Invalid rateIndex: %1. Valid range: 0-%2"))
-        .arg(rate_index)
-        .arg(rates.count() - 1));
-  }
-
-  connectionManager.audio()->setSelectedSampleRate(rate_index);
-
-  QJsonObject result;
-  result[QStringLiteral("rateIndex")] = rate_index;
-  result[QStringLiteral("rateName")]  = rates.at(rate_index);
-  return CommandResponse::makeSuccess(id, result);
+  auto* audio = API::handlerContext().connectionManager.audio();
+  return applyListIndex(
+    id, params, "rateIndex", "rateName", audio->sampleRates(), [audio](int index) {
+      audio->setSelectedSampleRate(index);
+    });
 }
 
 /**
@@ -252,10 +233,8 @@ API::CommandResponse API::Handlers::AudioHandler::setSampleRate(const QString& i
 API::CommandResponse API::Handlers::AudioHandler::setNormalization(const QString& id,
                                                                    const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("enabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
-  }
+  if (!params.contains(QStringLiteral("enabled")))
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
 
@@ -273,30 +252,14 @@ API::CommandResponse API::Handlers::AudioHandler::setNormalization(const QString
 API::CommandResponse API::Handlers::AudioHandler::setInputSampleFormat(const QString& id,
                                                                        const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("formatIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: formatIndex"));
-  }
+  if (!params.contains(QStringLiteral("formatIndex")))
+    return CommandResponse::makeMissingParam(id, "formatIndex");
 
-  const int format_index = params.value(QStringLiteral("formatIndex")).toInt();
-
-  auto& connectionManager = API::handlerContext().connectionManager;
-  const auto& formats     = connectionManager.audio()->inputSampleFormats();
-  if (format_index < 0 || format_index >= formats.count()) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QString(QStringLiteral("Invalid formatIndex: %1. Valid range: 0-%2"))
-        .arg(format_index)
-        .arg(formats.count() - 1));
-  }
-
-  connectionManager.audio()->setSelectedInputSampleFormat(format_index);
-
-  QJsonObject result;
-  result[QStringLiteral("formatIndex")] = format_index;
-  result[QStringLiteral("formatName")]  = formats.at(format_index);
-  return CommandResponse::makeSuccess(id, result);
+  auto* audio = API::handlerContext().connectionManager.audio();
+  return applyListIndex(
+    id, params, "formatIndex", "formatName", audio->inputSampleFormats(), [audio](int index) {
+      audio->setSelectedInputSampleFormat(index);
+    });
 }
 
 /**
@@ -305,30 +268,16 @@ API::CommandResponse API::Handlers::AudioHandler::setInputSampleFormat(const QSt
 API::CommandResponse API::Handlers::AudioHandler::setInputChannelConfig(const QString& id,
                                                                         const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("channelIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: channelIndex"));
-  }
+  if (!params.contains(QStringLiteral("channelIndex")))
+    return CommandResponse::makeMissingParam(id, "channelIndex");
 
-  const int channel_index = params.value(QStringLiteral("channelIndex")).toInt();
-
-  auto& connectionManager = API::handlerContext().connectionManager;
-  const auto& channels    = connectionManager.audio()->inputChannelConfigurations();
-  if (channel_index < 0 || channel_index >= channels.count()) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QString(QStringLiteral("Invalid channelIndex: %1. Valid range: 0-%2"))
-        .arg(channel_index)
-        .arg(channels.count() - 1));
-  }
-
-  connectionManager.audio()->setSelectedInputChannelConfiguration(channel_index);
-
-  QJsonObject result;
-  result[QStringLiteral("channelIndex")] = channel_index;
-  result[QStringLiteral("channelName")]  = channels.at(channel_index);
-  return CommandResponse::makeSuccess(id, result);
+  auto* audio = API::handlerContext().connectionManager.audio();
+  return applyListIndex(id,
+                        params,
+                        "channelIndex",
+                        "channelName",
+                        audio->inputChannelConfigurations(),
+                        [audio](int index) { audio->setSelectedInputChannelConfiguration(index); });
 }
 
 /**
@@ -337,30 +286,14 @@ API::CommandResponse API::Handlers::AudioHandler::setInputChannelConfig(const QS
 API::CommandResponse API::Handlers::AudioHandler::setOutputSampleFormat(const QString& id,
                                                                         const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("formatIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: formatIndex"));
-  }
+  if (!params.contains(QStringLiteral("formatIndex")))
+    return CommandResponse::makeMissingParam(id, "formatIndex");
 
-  const int format_index = params.value(QStringLiteral("formatIndex")).toInt();
-
-  auto& connectionManager = API::handlerContext().connectionManager;
-  const auto& formats     = connectionManager.audio()->outputSampleFormats();
-  if (format_index < 0 || format_index >= formats.count()) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QString(QStringLiteral("Invalid formatIndex: %1. Valid range: 0-%2"))
-        .arg(format_index)
-        .arg(formats.count() - 1));
-  }
-
-  connectionManager.audio()->setSelectedOutputSampleFormat(format_index);
-
-  QJsonObject result;
-  result[QStringLiteral("formatIndex")] = format_index;
-  result[QStringLiteral("formatName")]  = formats.at(format_index);
-  return CommandResponse::makeSuccess(id, result);
+  auto* audio = API::handlerContext().connectionManager.audio();
+  return applyListIndex(
+    id, params, "formatIndex", "formatName", audio->outputSampleFormats(), [audio](int index) {
+      audio->setSelectedOutputSampleFormat(index);
+    });
 }
 
 /**
@@ -369,30 +302,17 @@ API::CommandResponse API::Handlers::AudioHandler::setOutputSampleFormat(const QS
 API::CommandResponse API::Handlers::AudioHandler::setOutputChannelConfig(const QString& id,
                                                                          const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("channelIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: channelIndex"));
-  }
+  if (!params.contains(QStringLiteral("channelIndex")))
+    return CommandResponse::makeMissingParam(id, "channelIndex");
 
-  const int channel_index = params.value(QStringLiteral("channelIndex")).toInt();
-
-  auto& connectionManager = API::handlerContext().connectionManager;
-  const auto& channels    = connectionManager.audio()->outputChannelConfigurations();
-  if (channel_index < 0 || channel_index >= channels.count()) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QString(QStringLiteral("Invalid channelIndex: %1. Valid range: 0-%2"))
-        .arg(channel_index)
-        .arg(channels.count() - 1));
-  }
-
-  connectionManager.audio()->setSelectedOutputChannelConfiguration(channel_index);
-
-  QJsonObject result;
-  result[QStringLiteral("channelIndex")] = channel_index;
-  result[QStringLiteral("channelName")]  = channels.at(channel_index);
-  return CommandResponse::makeSuccess(id, result);
+  auto* audio = API::handlerContext().connectionManager.audio();
+  return applyListIndex(
+    id,
+    params,
+    "channelIndex",
+    "channelName",
+    audio->outputChannelConfigurations(),
+    [audio](int index) { audio->setSelectedOutputChannelConfiguration(index); });
 }
 
 //--------------------------------------------------------------------------------------------------

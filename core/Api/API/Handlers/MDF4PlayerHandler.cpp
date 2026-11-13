@@ -16,6 +16,7 @@
 
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
+#include "API/SchemaBuilder.h"
 #include "Core/SerialStudio.h"
 #include "MDF4/Player.h"
 
@@ -30,91 +31,52 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  QJsonObject openSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "string");
-    prop.insert("description", "Path to the MDF4 file to open");
-    props.insert("filePath", prop);
-    openSchema.insert("type", "object");
-    openSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("filePath");
-    openSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("mdf4Player.open"),
                            QStringLiteral("Open MDF4 file (params: filePath)"),
-                           openSchema,
+                           makeSchema({
+                             {QStringLiteral("filePath"),
+                              QStringLiteral("string"),
+                              QStringLiteral("Path to the MDF4 file to open")}
+  }),
                            &open);
 
-  QJsonObject emptySchema;
-  emptySchema.insert("type", "object");
-  emptySchema.insert("properties", QJsonObject());
-
   registry.registerCommand(
-    QStringLiteral("mdf4Player.close"), QStringLiteral("Close MDF4 file"), emptySchema, &close);
+    QStringLiteral("mdf4Player.close"), QStringLiteral("Close MDF4 file"), emptySchema(), &close);
 
-  QJsonObject pausedSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "boolean");
-    prop.insert("description", "True to pause, false to resume");
-    props.insert("paused", prop);
-    pausedSchema.insert("type", "object");
-    pausedSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("paused");
-    pausedSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("mdf4Player.setPaused"),
                            QStringLiteral("Pause or resume playback (params: paused: bool)"),
-                           pausedSchema,
+                           makeSchema({
+                             {QStringLiteral("paused"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("True to pause, false to resume")}
+  }),
                            &setPaused);
 
-  QJsonObject stepSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "integer");
-    prop.insert("description", "Frames to advance; negative goes back. Default 1");
-    props.insert("delta", prop);
-    stepSchema.insert("type", "object");
-    stepSchema.insert("properties", props);
-  }
   registry.registerCommand(
     QStringLiteral("mdf4Player.step"),
     QStringLiteral("Step delta frames forward (or backward if negative; default 1)"),
-    stepSchema,
+    makeSchema(
+      {
+  },
+      {{QStringLiteral("delta"),
+        QStringLiteral("integer"),
+        QStringLiteral("Frames to advance; negative goes back. Default 1")}}),
     &step);
 
-  QJsonObject setProgressSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "number");
-    prop.insert("description", "Playback position from 0.0 to 1.0");
-    prop.insert("minimum", 0.0);
-    prop.insert("maximum", 1.0);
-    props.insert("progress", prop);
-    setProgressSchema.insert("type", "object");
-    setProgressSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("progress");
-    setProgressSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("mdf4Player.setProgress"),
                            QStringLiteral("Seek to position (params: progress: 0.0-1.0)"),
-                           setProgressSchema,
+                           makeSchema({
+                             {QStringLiteral("progress"),
+                              QStringLiteral("number"),
+                              QStringLiteral("Playback position from 0.0 to 1.0"),
+                              {},
+                              0.0, 1.0}
+  }),
                            &setProgress);
 
-  QJsonObject getStatusSchema;
-  getStatusSchema.insert("type", "object");
-  getStatusSchema.insert("properties", QJsonObject());
   registry.registerCommand(QStringLiteral("mdf4Player.getStatus"),
                            QStringLiteral("Get player status"),
-                           getStatusSchema,
+                           emptySchema(),
                            &getStatus);
 }
 
@@ -128,10 +90,8 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
 API::CommandResponse API::Handlers::MDF4PlayerHandler::open(const QString& id,
                                                             const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("filePath"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: filePath"));
-  }
+  if (!params.contains(QStringLiteral("filePath")))
+    return CommandResponse::makeMissingParam(id, "filePath");
 
   const QString file_path = params.value(QStringLiteral("filePath")).toString();
   if (file_path.isEmpty()) {
@@ -170,10 +130,8 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::close(const QString& id,
 API::CommandResponse API::Handlers::MDF4PlayerHandler::setPaused(const QString& id,
                                                                  const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("paused"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: paused"));
-  }
+  if (!params.contains(QStringLiteral("paused")))
+    return CommandResponse::makeMissingParam(id, "paused");
 
   auto& player = API::handlerContext().mdf4Player;
 
@@ -231,10 +189,8 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::step(const QString& id,
 API::CommandResponse API::Handlers::MDF4PlayerHandler::setProgress(const QString& id,
                                                                    const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("progress"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: progress"));
-  }
+  if (!params.contains(QStringLiteral("progress")))
+    return CommandResponse::makeMissingParam(id, "progress");
 
   const double progress = SerialStudio::toDouble(params.value(QStringLiteral("progress")));
   if (progress < 0.0 || progress > 1.0) {

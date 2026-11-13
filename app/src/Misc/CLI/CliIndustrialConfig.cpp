@@ -53,21 +53,6 @@ namespace CliIndustrialConfig {
 //---------------------------------------------------------------------------------------------------
 
 /**
- * @brief Parses a Modbus register spec string and registers it with @p modbus.
- */
-static void applyModbusRegister(IO::Drivers::Modbus* modbus, const QString& spec)
-{
-  quint8 registerType = 0;
-  quint16 start       = 0;
-  quint16 count       = 0;
-  quint8 slave        = 0;
-  if (!CliSpecParsers::parseModbusRegisterSpec(spec, registerType, start, count, &slave))
-    return;
-
-  modbus->addRegisterGroup(registerType, start, count, slave);
-}
-
-/**
  * @brief Applies the Modbus parity option to @p modbus.
  */
 static void applyModbusParity(IO::Drivers::Modbus* modbus, const QString& parity)
@@ -186,8 +171,14 @@ static void applyModbusRegisters(IO::Drivers::Modbus* modbus,
   }
 
   const QStringList registerSpecs = parser.values(opt);
-  for (const QString& spec : std::as_const(registerSpecs))
-    applyModbusRegister(modbus, spec);
+  for (const QString& spec : std::as_const(registerSpecs)) {
+    quint8 registerType = 0;
+    quint16 start       = 0;
+    quint16 count       = 0;
+    quint8 slave        = 0;
+    if (CliSpecParsers::parseModbusRegisterSpec(spec, registerType, start, count, &slave))
+      modbus->addRegisterGroup(registerType, start, count, slave);
+  }
 }
 
 /**

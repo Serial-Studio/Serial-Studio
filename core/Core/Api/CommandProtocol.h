@@ -161,6 +161,13 @@ struct CommandResponse {
     resp.errorData    = data;
     return resp;
   }
+
+  static CommandResponse makeMissingParam(const QString& id, const char* name)
+  {
+    return makeError(id,
+                     ErrorCode::MissingParam,
+                     QStringLiteral("Missing required parameter: %1").arg(QLatin1String(name)));
+  }
 };
 
 /**

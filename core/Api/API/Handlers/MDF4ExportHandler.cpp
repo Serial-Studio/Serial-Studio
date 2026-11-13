@@ -24,6 +24,7 @@
 
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
+#include "API/SchemaBuilder.h"
 #include "MDF4/Export.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -37,38 +38,23 @@ void API::Handlers::MDF4ExportHandler::registerCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  QJsonObject setEnabledSchema;
-  {
-    QJsonObject props;
-    QJsonObject prop;
-    prop.insert("type", "boolean");
-    prop.insert("description", "Whether to enable MDF4 export");
-    props.insert("enabled", prop);
-    setEnabledSchema.insert("type", "object");
-    setEnabledSchema.insert("properties", props);
-    QJsonArray req;
-    req.append("enabled");
-    setEnabledSchema.insert("required", req);
-  }
   registry.registerCommand(QStringLiteral("mdf4Export.setEnabled"),
                            QStringLiteral("Enable or disable MDF4 export"),
-                           setEnabledSchema,
+                           makeSchema({
+                             {QStringLiteral("enabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Whether to enable MDF4 export")}
+  }),
                            &setEnabled);
 
-  QJsonObject closeSchema;
-  closeSchema.insert("type", "object");
-  closeSchema.insert("properties", QJsonObject());
   registry.registerCommand(QStringLiteral("mdf4Export.close"),
                            QStringLiteral("Close the current MDF4 file"),
-                           closeSchema,
+                           emptySchema(),
                            &close);
 
-  QJsonObject getStatusSchema;
-  getStatusSchema.insert("type", "object");
-  getStatusSchema.insert("properties", QJsonObject());
   registry.registerCommand(QStringLiteral("mdf4Export.getStatus"),
                            QStringLiteral("Get MDF4 export status"),
-                           getStatusSchema,
+                           emptySchema(),
                            &getStatus);
 }
 

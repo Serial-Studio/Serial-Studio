@@ -344,10 +344,10 @@ API::CommandResponse API::Handlers::MqttHandler::publisherGetConfig(const QStrin
 }
 
 /**
- * @brief Applies session + TLS fields to the publisher; returns error on failure.
+ * @brief Applies session + TLS fields to a publisher or subscriber; returns error on failure.
  */
-[[nodiscard]] static std::optional<QString> applyPublisherSessionAndTls(MQTT::Publisher& p,
-                                                                        const QJsonObject& params)
+template<typename Target>
+[[nodiscard]] static std::optional<QString> applySessionAndTls(Target& p, const QJsonObject& params)
 {
   if (params.contains(QStringLiteral("cleanSession")))
     p.setCleanSession(params.value(QStringLiteral("cleanSession")).toBool());
@@ -412,7 +412,7 @@ API::CommandResponse API::Handlers::MqttHandler::publisherSetConfig(const QStrin
   if (auto err = applyPublisherTopics(p, params); err)
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, *err);
 
-  if (auto err = applyPublisherSessionAndTls(p, params); err)
+  if (auto err = applySessionAndTls(p, params); err)
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, *err);
 
   if (params.contains(QStringLiteral("enabled")))
@@ -536,64 +536,6 @@ API::CommandResponse API::Handlers::MqttHandler::subscriberGetConfig(const QStri
 }
 
 /**
- * @brief Applies session + TLS fields to the subscriber.
- */
-[[nodiscard]] static std::optional<QString> applySubscriberSessionAndTls(IO::Drivers::MQTT* d,
-                                                                         const QJsonObject& params)
-{
-  if (params.contains(QStringLiteral("cleanSession")))
-    d->setCleanSession(params.value(QStringLiteral("cleanSession")).toBool());
-
-  if (params.contains(QStringLiteral("autoKeepAlive")))
-    d->setAutoKeepAlive(params.value(QStringLiteral("autoKeepAlive")).toBool());
-
-  if (params.contains(QStringLiteral("keepAlive"))) {
-    const int ka = params.value(QStringLiteral("keepAlive")).toInt(-1);
-    if (ka < 0 || ka > 65535)
-      return QStringLiteral("keepAlive must be in [0, 65535] (got %1)").arg(ka);
-
-    d->setKeepAlive(static_cast<quint16>(ka));
-  }
-
-  if (params.contains(QStringLiteral("mqttVersion"))) {
-    const int v = params.value(QStringLiteral("mqttVersion")).toInt(-1);
-    if (!indexInRange(v, d->mqttVersions().size()))
-      return QStringLiteral("mqttVersion index out of range (got %1)").arg(v);
-
-    d->setMqttVersion(static_cast<quint8>(v));
-  }
-
-  if (params.contains(QStringLiteral("sslEnabled")))
-    d->setSslEnabled(params.value(QStringLiteral("sslEnabled")).toBool());
-
-  if (params.contains(QStringLiteral("sslProtocol"))) {
-    const int v = params.value(QStringLiteral("sslProtocol")).toInt(-1);
-    if (!indexInRange(v, d->sslProtocols().size()))
-      return QStringLiteral("sslProtocol index out of range (got %1)").arg(v);
-
-    d->setSslProtocol(static_cast<quint8>(v));
-  }
-
-  if (params.contains(QStringLiteral("peerVerifyMode"))) {
-    const int v = params.value(QStringLiteral("peerVerifyMode")).toInt(-1);
-    if (!indexInRange(v, d->peerVerifyModes().size()))
-      return QStringLiteral("peerVerifyMode index out of range (got %1)").arg(v);
-
-    d->setPeerVerifyMode(static_cast<quint8>(v));
-  }
-
-  if (params.contains(QStringLiteral("peerVerifyDepth"))) {
-    const int dp = params.value(QStringLiteral("peerVerifyDepth")).toInt(-1);
-    if (dp < 0 || dp > 65535)
-      return QStringLiteral("peerVerifyDepth must be in [0, 65535] (got %1)").arg(dp);
-
-    d->setPeerVerifyDepth(dp);
-  }
-
-  return std::nullopt;
-}
-
-/**
  * @brief Applies a partial config patch to the subscriber driver.
  */
 API::CommandResponse API::Handlers::MqttHandler::subscriberSetConfig(const QString& id,
@@ -607,7 +549,10 @@ API::CommandResponse API::Handlers::MqttHandler::subscriberSetConfig(const QStri
   if (auto err = applySubscriberEndpoint(d, params); err)
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, *err);
 
-  if (auto err = applySubscriberSessionAndTls(d, params); err)
+  if (params.contains(QStringLiteral("autoKeepAlive")))
+    d->setAutoKeepAlive(params.value(QStringLiteral("autoKeepAlive")).toBool());
+
+  if (auto err = applySessionAndTls(*d, params); err)
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, *err);
 
   QJsonObject result;

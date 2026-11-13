@@ -350,6 +350,31 @@ void API::Handlers::ProjectDatasetFieldCommands::registerMarkerCommands()
     &datasetSetFFTMarkers);
 }
 
+/**
+ * @brief Finds the project dataset @p params names; null with @p error set when none matches.
+ */
+[[nodiscard]] static const DataModel::Dataset* labelTarget(const QJsonObject& params,
+                                                           QString& error)
+{
+  const int groupId   = params.value(Keys::GroupId).toInt();
+  const int datasetId = params.value(Keys::DatasetId).toInt();
+  for (const auto& group : DataModel::pipelineModules().projectModel.groups()) {
+    if (group.groupId != groupId)
+      continue;
+
+    for (const auto& dataset : group.datasets)
+      if (dataset.datasetId == datasetId)
+        return &dataset;
+
+    error = QStringLiteral("Dataset id not found in group: %1/%2")
+              .arg(QString::number(groupId), QString::number(datasetId));
+    return nullptr;
+  }
+
+  error = QStringLiteral("Group id not found: %1").arg(groupId);
+  return nullptr;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Dataset field setters (v3.3)
 //--------------------------------------------------------------------------------------------------
@@ -375,27 +400,13 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetVirtu
   const int datasetId = params.value(Keys::DatasetId).toInt();
   const bool isVirt   = params.value(Keys::Virtual).toBool();
 
-  auto& pm           = DataModel::pipelineModules().projectModel;
-  const auto& groups = pm.groups();
-  const auto git     = std::find_if(
-    groups.begin(), groups.end(), [groupId](const auto& g) { return g.groupId == groupId; });
+  auto& pm = DataModel::pipelineModules().projectModel;
+  QString error;
+  const auto* dataset = labelTarget(params, error);
+  if (!dataset)
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
 
-  if (git == groups.end())
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
-
-  const auto& datasets = git->datasets;
-  const auto dit       = std::find_if(datasets.begin(), datasets.end(), [datasetId](const auto& d) {
-    return d.datasetId == datasetId;
-  });
-
-  if (dit == datasets.end())
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Dataset id not found in group: %1/%2")
-                                        .arg(QString::number(groupId), QString::number(datasetId)));
-
-  DataModel::Dataset updated = *dit;
+  DataModel::Dataset updated = *dataset;
   updated.virtual_           = isVirt;
   pm.updateDataset(groupId, datasetId, updated, true);
 
@@ -429,27 +440,13 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetTrans
   const int datasetId = params.value(Keys::DatasetId).toInt();
   const QString code  = params.value(QStringLiteral("code")).toString();
 
-  auto& pm           = DataModel::pipelineModules().projectModel;
-  const auto& groups = pm.groups();
-  const auto git     = std::find_if(
-    groups.begin(), groups.end(), [groupId](const auto& g) { return g.groupId == groupId; });
+  auto& pm = DataModel::pipelineModules().projectModel;
+  QString error;
+  const auto* dataset = labelTarget(params, error);
+  if (!dataset)
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
 
-  if (git == groups.end())
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
-
-  const auto& datasets = git->datasets;
-  const auto dit       = std::find_if(datasets.begin(), datasets.end(), [datasetId](const auto& d) {
-    return d.datasetId == datasetId;
-  });
-
-  if (dit == datasets.end())
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Dataset id not found in group: %1/%2")
-                                        .arg(QString::number(groupId), QString::number(datasetId)));
-
-  DataModel::Dataset updated = *dit;
+  DataModel::Dataset updated = *dataset;
   updated.transformCode      = code;
 
   bool languageInherited = false;
@@ -475,7 +472,7 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetTrans
     languageInherited         = true;
   }
 
-  if (SerialStudio::authorsTransform(*dit, updated) && !Core::License::activated())
+  if (SerialStudio::authorsTransform(*dataset, updated) && !Core::License::activated())
     return CommandResponse::makeError(id, ErrorCode::OperationFailed, transformsRequirePro());
 
   pm.updateDataset(groupId, datasetId, updated, true);
@@ -528,28 +525,13 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetGetAlarm
   const int groupId   = params.value(Keys::GroupId).toInt();
   const int datasetId = params.value(Keys::DatasetId).toInt();
 
-  auto& pm           = DataModel::pipelineModules().projectModel;
-  const auto& groups = pm.groups();
-  const auto git     = std::find_if(
-    groups.begin(), groups.end(), [groupId](const auto& g) { return g.groupId == groupId; });
-
-  if (git == groups.end())
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
-
-  const auto& datasets = git->datasets;
-  const auto dit       = std::find_if(datasets.begin(), datasets.end(), [datasetId](const auto& d) {
-    return d.datasetId == datasetId;
-  });
-
-  if (dit == datasets.end())
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Dataset id not found in group: %1/%2")
-                                        .arg(QString::number(groupId), QString::number(datasetId)));
+  QString error;
+  const auto* dataset = labelTarget(params, error);
+  if (!dataset)
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
 
   QJsonArray bands;
-  for (const auto& b : dit->alarmBands)
+  for (const auto& b : dataset->alarmBands)
     bands.append(DataModel::serialize(b));
 
   QJsonObject result;
@@ -557,8 +539,8 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetGetAlarm
   result[Keys::DatasetId]            = datasetId;
   result[Keys::AlarmBands]           = bands;
   result[QStringLiteral("count")]    = bands.size();
-  result[QStringLiteral("rangeMin")] = qMin(dit->wgtMin, dit->wgtMax);
-  result[QStringLiteral("rangeMax")] = qMax(dit->wgtMin, dit->wgtMax);
+  result[QStringLiteral("rangeMin")] = qMin(dataset->wgtMin, dataset->wgtMax);
+  result[QStringLiteral("rangeMax")] = qMax(dataset->wgtMin, dataset->wgtMax);
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -579,27 +561,13 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetAlarm
   const int datasetId = params.value(Keys::DatasetId).toInt();
   const auto arr      = params.value(Keys::AlarmBands).toArray();
 
-  auto& pm           = DataModel::pipelineModules().projectModel;
-  const auto& groups = pm.groups();
-  const auto git     = std::find_if(
-    groups.begin(), groups.end(), [groupId](const auto& g) { return g.groupId == groupId; });
+  auto& pm = DataModel::pipelineModules().projectModel;
+  QString error;
+  const auto* dataset = labelTarget(params, error);
+  if (!dataset)
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
 
-  if (git == groups.end())
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
-
-  const auto& datasets = git->datasets;
-  const auto dit       = std::find_if(datasets.begin(), datasets.end(), [datasetId](const auto& d) {
-    return d.datasetId == datasetId;
-  });
-
-  if (dit == datasets.end())
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Dataset id not found in group: %1/%2")
-                                        .arg(QString::number(groupId), QString::number(datasetId)));
-
-  DataModel::Dataset updated = *dit;
+  DataModel::Dataset updated = *dataset;
   updated.alarmBands.clear();
   updated.alarmBands.reserve(arr.size());
 
@@ -640,28 +608,13 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetGetFFTMa
   const int groupId   = params.value(Keys::GroupId).toInt();
   const int datasetId = params.value(Keys::DatasetId).toInt();
 
-  auto& pm           = DataModel::pipelineModules().projectModel;
-  const auto& groups = pm.groups();
-  const auto git     = std::find_if(
-    groups.begin(), groups.end(), [groupId](const auto& g) { return g.groupId == groupId; });
-
-  if (git == groups.end())
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
-
-  const auto& datasets = git->datasets;
-  const auto dit       = std::find_if(datasets.begin(), datasets.end(), [datasetId](const auto& d) {
-    return d.datasetId == datasetId;
-  });
-
-  if (dit == datasets.end())
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Dataset id not found in group: %1/%2")
-                                        .arg(QString::number(groupId), QString::number(datasetId)));
+  QString error;
+  const auto* dataset = labelTarget(params, error);
+  if (!dataset)
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
 
   QJsonArray markers;
-  for (const auto& m : dit->fftMarkers)
+  for (const auto& m : dataset->fftMarkers)
     markers.append(DataModel::serialize(m));
 
   QJsonObject result;
@@ -669,7 +622,7 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetGetFFTMa
   result[Keys::DatasetId]           = datasetId;
   result[Keys::FFTMarkers]          = markers;
   result[QStringLiteral("count")]   = markers.size();
-  result[QStringLiteral("nyquist")] = qMax(1, dit->fftSamplingRate) * 0.5;
+  result[QStringLiteral("nyquist")] = qMax(1, dataset->fftSamplingRate) * 0.5;
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -690,27 +643,13 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetFFTMa
   const int datasetId = params.value(Keys::DatasetId).toInt();
   const auto arr      = params.value(Keys::FFTMarkers).toArray();
 
-  auto& pm           = DataModel::pipelineModules().projectModel;
-  const auto& groups = pm.groups();
-  const auto git     = std::find_if(
-    groups.begin(), groups.end(), [groupId](const auto& g) { return g.groupId == groupId; });
+  auto& pm = DataModel::pipelineModules().projectModel;
+  QString error;
+  const auto* dataset = labelTarget(params, error);
+  if (!dataset)
+    return CommandResponse::makeError(id, ErrorCode::InvalidParam, error);
 
-  if (git == groups.end())
-    return CommandResponse::makeError(
-      id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
-
-  const auto& datasets = git->datasets;
-  const auto dit       = std::find_if(datasets.begin(), datasets.end(), [datasetId](const auto& d) {
-    return d.datasetId == datasetId;
-  });
-
-  if (dit == datasets.end())
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Dataset id not found in group: %1/%2")
-                                        .arg(QString::number(groupId), QString::number(datasetId)));
-
-  DataModel::Dataset updated = *dit;
+  DataModel::Dataset updated = *dataset;
   updated.fftMarkers.clear();
   updated.fftMarkers.reserve(arr.size());
 
@@ -739,31 +678,6 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetFFTMa
 //--------------------------------------------------------------------------------------------------
 // Value labels (spec 0108)
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Finds the project dataset @p params names; null with @p error set when none matches.
- */
-[[nodiscard]] static const DataModel::Dataset* labelTarget(const QJsonObject& params,
-                                                           QString& error)
-{
-  const int groupId   = params.value(Keys::GroupId).toInt();
-  const int datasetId = params.value(Keys::DatasetId).toInt();
-  for (const auto& group : DataModel::pipelineModules().projectModel.groups()) {
-    if (group.groupId != groupId)
-      continue;
-
-    for (const auto& dataset : group.datasets)
-      if (dataset.datasetId == datasetId)
-        return &dataset;
-
-    error = QStringLiteral("Dataset id not found in group: %1/%2")
-              .arg(QString::number(groupId), QString::number(datasetId));
-    return nullptr;
-  }
-
-  error = QStringLiteral("Group id not found: %1").arg(groupId);
-  return nullptr;
-}
 
 /**
  * @brief Returns the index of the first label entry whose value is not an integer a double holds
