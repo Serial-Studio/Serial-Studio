@@ -447,14 +447,14 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Stops every active module and exits the application event loop. Latching teardown is
- *        the first statement: past this point the GUI thread stops pumping events, so every
- *        cross-thread marshal must degrade to a no-op instead of blocking on it.
+ * @brief Stops every module and exits the event loop, latching first so later marshals no-op. Its
+ *        latched aboutToQuit pass joins a control script left inside its box (spec 0120 R6).
  */
 void Misc::ModuleManager::onQuit()
 {
+  auto& controlScript = DataModel::ControlScript::instance();
   if (m_quitHandled)
-    return;
+    return controlScript.shutdown();
 
   m_quitHandled = true;
 
@@ -462,7 +462,7 @@ void Misc::ModuleManager::onQuit()
 
   qInstallMessageHandler(nullptr);
 
-  DataModel::ControlScript::instance().shutdown();
+  controlScript.shutdown();
 
   Misc::ExtensionManager::instance().stopAllPlugins();
   Misc::TimerEvents::instance().stopTimers();

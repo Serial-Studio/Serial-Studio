@@ -23,6 +23,7 @@
 
 #include <QFont>
 #include <QObject>
+#include <QSet>
 #include <QSettings>
 #include <QStringList>
 
@@ -88,6 +89,7 @@ public:
   [[nodiscard]] QStringList availableFonts() const;
   [[nodiscard]] int widgetFontRevision() const;
   [[nodiscard]] int widgetFontIndex() const;
+  [[nodiscard]] static QStringList bundledFamilies();
 
   [[nodiscard]] Q_INVOKABLE QFont customUiFont(double fraction = 1, bool bold = false);
   [[nodiscard]] Q_INVOKABLE QFont customMonoFont(double fraction = 1, bool bold = false);
@@ -96,6 +98,7 @@ public:
 
   void setWidgetFontScale(double scale);
   void setWidgetFontFamily(const QString& family);
+  void ensureFamilyLoaded(const QString& family);
 
 private:
   QSettings m_settings;
@@ -106,5 +109,6 @@ private:
   double m_widgetFontScale;
   int m_widgetFontIndex;
   int m_widgetFontRevision;
+  QSet<QString> m_loadedFamilies;
 };
 }  // namespace Misc

@@ -234,7 +234,8 @@ int Misc::Utilities::showMessageBox(const QString& text,
                                     const QString& windowTitle,
                                     QMessageBox::StandardButtons bt,
                                     QMessageBox::StandardButton defaultButton,
-                                    const ButtonTextMap& buttonTexts)
+                                    const ButtonTextMap& buttonTexts,
+                                    const MessageBoxHook& onOpen)
 {
   if (qApp->platformName() == QLatin1String("offscreen"))
     return QMessageBox::Ok;
@@ -244,8 +245,9 @@ int Misc::Utilities::showMessageBox(const QString& text,
                << "-- showing it asynchronously.";
     QMetaObject::invokeMethod(
       qApp,
-      [text, informativeText, icon, windowTitle, bt, defaultButton, buttonTexts] {
-        showMessageBox(text, informativeText, icon, windowTitle, bt, defaultButton, buttonTexts);
+      [text, informativeText, icon, windowTitle, bt, defaultButton, buttonTexts, onOpen] {
+        showMessageBox(
+          text, informativeText, icon, windowTitle, bt, defaultButton, buttonTexts, onOpen);
       },
       Qt::QueuedConnection);
     return QMessageBox::NoButton;
@@ -314,6 +316,9 @@ int Misc::Utilities::showMessageBox(const QString& text,
   auto* spacer = new QSpacerItem(320, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
   auto* layout = qobject_cast<QGridLayout*>(box.layout());
   layout->addItem(spacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+  if (onOpen)
+    onOpen(&box);
 
   return box.exec();
 }

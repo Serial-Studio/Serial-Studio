@@ -457,7 +457,8 @@ int Console::Handler::fontFamilyIndex() const
 }
 
 /**
- * @brief Returns the list of all available monospace fonts.
+ * @brief Returns the list of all available monospace fonts, plus the bundled families that load
+ *        only when chosen (spec 0120 R15).
  */
 QStringList Console::Handler::availableFonts() const
 {
@@ -469,6 +470,10 @@ QStringList Console::Handler::availableFonts() const
     if (fontInfo.fixedPitch() && !monospaceFonts.contains(family))
       monospaceFonts.append(family);
   }
+
+  for (const auto& bundled : Misc::CommonFonts::bundledFamilies())
+    if (!monospaceFonts.contains(bundled))
+      monospaceFonts.append(bundled);
 
   monospaceFonts.sort(Qt::CaseInsensitive);
   const int idx = monospaceFonts.indexOf(defaultFamily);
@@ -906,6 +911,7 @@ void Console::Handler::setChecksumMethod(const int method)
 void Console::Handler::setFontFamily(const QString& family)
 {
   if (m_fontFamily != family) {
+    m_commonFonts->ensureFamilyLoaded(family);
     QFont testFont(family);
     QFontInfo fontInfo(testFont);
     if (!fontInfo.fixedPitch())
@@ -1334,6 +1340,7 @@ bool Console::Handler::imageWidgetActive() const
  */
 void Console::Handler::updateFont()
 {
+  m_commonFonts->ensureFamilyLoaded(m_fontFamily);
   QFont testFont(m_fontFamily, m_fontSize);
   QFontInfo fontInfo(testFont);
 

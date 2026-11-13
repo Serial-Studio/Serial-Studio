@@ -111,6 +111,12 @@ class DeviceSimulator:
                         except Exception:
                             pass
                         continue
+                    # Each send_frame() leaves at once: Nagle plus a delayed ACK can hold a
+                    # frame in the kernel past the test's next step (spec 0120 R12).
+                    try:
+                        client.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                    except OSError:
+                        pass
                     with self._client_lock:
                         previous = self._client_socket
                         self._client_socket = client

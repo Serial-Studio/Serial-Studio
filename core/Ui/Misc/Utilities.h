@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <functional>
 #include <QApplication>
 #include <QMessageBox>
 #include <QObject>
@@ -31,6 +32,11 @@
  * @brief Maps QMessageBox standard buttons to their localized labels.
  */
 typedef QMap<QMessageBox::StandardButton, QString> ButtonTextMap;
+
+/**
+ * @brief Called with the built box just before its modal loop starts.
+ */
+using MessageBoxHook = std::function<void(QMessageBox*)>;
 
 namespace Misc {
 /**
@@ -70,7 +76,8 @@ public:
                             const QString& windowTitle = "",
                             QMessageBox::StandardButtons bt = QMessageBox::Ok,
                             QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
-                            const ButtonTextMap& buttonTexts = ButtonTextMap());
+                            const ButtonTextMap& buttonTexts = ButtonTextMap(),
+                            const MessageBoxHook& onOpen = MessageBoxHook());
 
   static void postMessageBox(const QString& text,
                              const QString& informativeText = "",

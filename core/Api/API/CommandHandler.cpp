@@ -37,7 +37,10 @@
 #include "API/Handlers/SystemHandler.h"
 #include "API/Handlers/TransformLibraryHandler.h"
 #include "API/Handlers/UARTHandler.h"
+#include "API/ScriptCommandPolicy.h"
 #include "API/Server.h"
+#include "DataModel/PipelineModules.h"
+#include "DataModel/ProjectModel.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "API/Handlers/AudioHandler.h"
@@ -145,10 +148,28 @@ QByteArray API::CommandHandler::processMessage(const QByteArray& data, const Com
 }
 
 /**
+ * @brief The policy a project's own scripts dispatch under (spec 0120): every command, outer or
+ *        nested, except the few ScriptCommandPolicy refuses. Refused, never prompted.
+ */
+static API::DispatchPolicy scriptDispatchPolicy()
+{
+  return [](const QString& id, const QString& name, const QJsonObject& params, int depth) {
+    Q_UNUSED(depth)
+    const auto& project = DataModel::pipelineModules().projectModel;
+    const auto refusal  = API::ScriptCommandPolicy::refusal(name, params, project.jsonFilePath());
+    if (!refusal.has_value())
+      return std::optional<API::CommandResponse>();
+
+    return std::optional<API::CommandResponse>(
+      API::CommandResponse::makeError(id, API::ErrorCode::ExecutionError, *refusal));
+  };
+}
+
+/**
  * @brief Process a single command request under the origin's dispatch scope: a remote request
  *        answers to the server's policy for it and every command it nests; a trusted request
  *        shadows any remote scope it runs inside. Both scopes also shadow a caller's dispatch
- *        policy (spec 0098), which governs that caller's own commands only.
+ *        policy (spec 0098), so a script's own policy opens AFTER the trusted scope.
  */
 API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& request,
                                                          const CommandOrigin origin)
@@ -156,6 +177,10 @@ API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& r
   static auto& registry = CommandRegistry::instance();
   if (origin != CommandOrigin::Remote) {
     const RemoteDispatchScope trusted((RemoteGate()));
+    if (origin != CommandOrigin::Script)
+      return registry.execute(request.command, request.id, request.params);
+
+    const DispatchPolicyScope scriptPolicy(scriptDispatchPolicy());
     return registry.execute(request.command, request.id, request.params);
   }
 
@@ -222,12 +247,13 @@ QJsonObject API::CommandHandler::getAvailableCommands() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Runs one in-process command for a script or an assistant tool; trusted origin, so the
- *        remote consent gate never applies here.
+ * @brief Runs one in-process command for a project's script (parser, transform, control script or
+ *        macro, the only ICommandExecutor callers); script origin, so the remote consent gate never
+ *        applies and only the script policy does.
  */
 API::CommandResponse API::CommandHandler::execute(const CommandRequest& request)
 {
-  return processCommand(request, CommandOrigin::Trusted);
+  return processCommand(request, CommandOrigin::Script);
 }
 
 /**

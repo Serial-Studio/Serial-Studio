@@ -51,6 +51,28 @@ static constexpr int kRuntimeWatchdogMs = 2000;
 
 static std::atomic<bool> s_shutdownRequested{false};
 
+/**
+ * @brief Whether this run ends because it was stopped or the app is quitting: an error it raised
+ *        on the way out (an apiCall throwing at the stop) is no script error, so it stops quietly.
+ */
+static bool endedByStop(const DataModel::ControlApiMarshaller& marshaller)
+{
+  return marshaller.runStopped() || s_shutdownRequested.load(std::memory_order_acquire);
+}
+
+/**
+ * @brief Throws into @p bridge's engine that its run was stopped, so the script ends at this call
+ *        instead of carrying on with a refused one (spec 0120 R5).
+ */
+static QVariantMap stoppedCall(QObject* bridge)
+{
+  const auto message = QStringLiteral("apiCall: the control script was stopped");
+  if (auto* engine = qjsEngine(bridge))
+    engine->throwError(message);
+
+  return DataModel::ScriptResult::makeError(message);
+}
+
 //--------------------------------------------------------------------------------------------------
 // GUI-thread API marshaller
 //--------------------------------------------------------------------------------------------------
@@ -58,13 +80,48 @@ static std::atomic<bool> s_shutdownRequested{false};
 /**
  * @brief Constructs the GUI-thread API marshaller.
  */
-DataModel::ControlApiMarshaller::ControlApiMarshaller(QObject* parent) : QObject(parent) {}
+DataModel::ControlApiMarshaller::ControlApiMarshaller(QObject* parent)
+  : QObject(parent), m_activeRun(0), m_stops(0)
+{}
 
 /**
- * @brief Runs an apiCall on the GUI thread; fails fast once shutdown is requested. The control
- *        script is a first-party privileged surface, so no untrusted-script allow-list or rate
- *        limit applies, and it alone may wait on the user (a modal message box): its worker owns
- *        no acquisition work, so parking it behind a dialog stalls nothing else.
+ * @brief Whether the owner stopped the run now active; any thread, after the run began.
+ */
+bool DataModel::ControlApiMarshaller::runStopped() const noexcept
+{
+  return m_activeRun.load(std::memory_order_acquire) != m_stops.load(std::memory_order_acquire);
+}
+
+/**
+ * @brief The id a run queued now runs as; read on the GUI thread when the owner queues a start, so
+ *        a stop between that queue and the start still reaches the run.
+ */
+quint64 DataModel::ControlApiMarshaller::nextRun() const noexcept
+{
+  return m_stops.load(std::memory_order_acquire);
+}
+
+/**
+ * @brief Marks @p run (from nextRun()) as the run now active, on whichever thread starts it.
+ */
+void DataModel::ControlApiMarshaller::beginRun(quint64 run) noexcept
+{
+  m_activeRun.store(run, std::memory_order_release);
+}
+
+/**
+ * @brief Ends the run now active (GUI thread): its pending and later apiCalls are refused or throw.
+ */
+void DataModel::ControlApiMarshaller::stopRun() noexcept
+{
+  m_stops.fetch_add(1, std::memory_order_acq_rel);
+}
+
+/**
+ * @brief Runs an apiCall on the GUI thread; fails fast once shutdown is requested or the calling
+ *        run was stopped, so a call posted before a stop never opens a box after it. The control
+ *        script and macros may wait on the user (a modal message box), granted by this marshaller:
+ *        their workers own no acquisition work, so parking one behind a dialog stalls nothing else.
  */
 QVariantMap DataModel::ControlApiMarshaller::dispatch(const QString& method,
                                                       const QVariantMap& params)
@@ -74,12 +131,15 @@ QVariantMap DataModel::ControlApiMarshaller::dispatch(const QString& method,
   if (s_shutdownRequested.load(std::memory_order_acquire))
     return ScriptResult::makeError(QStringLiteral("apiCall: application is shutting down"));
 
+  if (runStopped())
+    return ScriptResult::makeError(QStringLiteral("apiCall: the script was stopped"));
+
   API::CommandRequest request;
   request.id      = QStringLiteral("cs-%1").arg(s_requestSeq.fetch_add(1) + 1);
   request.command = method;
   request.params  = QJsonObject::fromVariantMap(params);
 
-  const API::UserWaitScope userWait(true);
+  const API::UserWaitScope userWait(true, this);
   const auto response = DataModel::requireCommandExecutor().execute(request);
 
   QVariantMap out;
@@ -157,6 +217,9 @@ QVariantMap DataModel::ControlApiBridge::call(const QString& method, const QVari
   if (s_shutdownRequested.load(std::memory_order_acquire))
     return ScriptResult::makeError(QStringLiteral("apiCall: application is shutting down"));
 
+  if (m_marshaller->runStopped())
+    return stoppedCall(this);
+
   if (m_watchdog)
     m_watchdog->disarm();
 
@@ -168,6 +231,9 @@ QVariantMap DataModel::ControlApiBridge::call(const QString& method, const QVari
                                             Q_ARG(QVariantMap, params));
   if (m_watchdog && !s_shutdownRequested.load(std::memory_order_acquire))
     m_watchdog->arm();
+
+  if (endedByStop(*m_marshaller))
+    return stoppedCall(this);
 
   if (!ok) {
     out.insert(QStringLiteral("ok"), false);
@@ -193,21 +259,22 @@ QVariantList DataModel::ControlApiBridge::listCommands()
 
 /**
  * @brief Writes @p data to @p sourceId then blocks the worker (never the GUI) until the reply
- *        satisfies @p until or @p timeoutMs elapses; shutdown is what aborts the wait here.
+ *        satisfies @p until or @p timeoutMs elapses; a stop of this run or shutdown aborts it.
  */
 QVariantMap DataModel::ControlApiBridge::writeAndWait(const QJSValue& data,
                                                       int timeoutMs,
                                                       const QJSValue& until,
                                                       int sourceId)
 {
-  const auto shuttingDown = [] {
-    return s_shutdownRequested.load(std::memory_order_acquire);
+  const auto* marshaller = m_marshaller;
+  const auto aborted     = [marshaller] {
+    return endedByStop(*marshaller);
   };
 
   return ScriptDeviceWait::writeAndWait(m_marshaller,
                                         m_watchdog,
-                                        shuttingDown,
-                                        QStringLiteral("deviceWriteAndWait: shutting down"),
+                                        aborted,
+                                        QStringLiteral("deviceWriteAndWait: stopped"),
                                         data,
                                         timeoutMs,
                                         until,
@@ -216,13 +283,13 @@ QVariantMap DataModel::ControlApiBridge::writeAndWait(const QJSValue& data,
 
 /**
  * @brief Blocks the worker thread for the given time (capped at one hour), sleeping in slices
- *        so shutdown can interrupt the wait, then defers the watchdog deadline.
+ *        so a stop of this run or shutdown can interrupt the wait, then defers the watchdog.
  */
 void DataModel::ControlApiBridge::delay(int milliseconds)
 {
   const int total = qBound(0, milliseconds, kControlMaxDelayMs);
   for (int slept = 0; slept < total; slept += kDelaySliceMs) {
-    if (s_shutdownRequested.load(std::memory_order_acquire))
+    if (endedByStop(*m_marshaller))
       return;
 
     QThread::msleep(static_cast<unsigned long>(qMin(kDelaySliceMs, total - slept)));
@@ -273,17 +340,25 @@ void DataModel::ControlScriptWorker::requestShutdown() noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Compiles the script, runs setup(), and arms the loop scheduler.
+ * @brief Compiles the script, runs setup(), and arms the loop scheduler, as @p run (the
+ *        marshaller's nextRun() when the owner queued it): a stop since then cancels it unrun.
  */
-void DataModel::ControlScriptWorker::start(const QString& source)
+void DataModel::ControlScriptWorker::start(const QString& source, quint64 run)
 {
   stop();
+  m_marshaller->beginRun(run);
 
-  if (source.trimmed().isEmpty())
+  if (source.trimmed().isEmpty() || m_marshaller->runStopped())
     return;
 
   QString errorOut;
-  if (!compile(source, errorOut)) {
+  const bool compiled = compile(source, errorOut);
+  if (endedByStop(*m_marshaller)) {
+    stop();
+    return;
+  }
+
+  if (!compiled) {
     Q_EMIT scriptError(errorOut);
     return;
   }
@@ -342,6 +417,11 @@ void DataModel::ControlScriptWorker::runLoopTick()
   QJSValueList args;
   const QJSValue result = m_watchdog->call(m_loopFn, args);
 
+  if (endedByStop(*m_marshaller)) {
+    stop();
+    return;
+  }
+
   if (m_watchdog->lastCallTimedOut()) {
     Q_EMIT scriptError(QStringLiteral("Control script loop() exceeded %1 ms budget; stopped.")
                          .arg(kRuntimeWatchdogMs));
@@ -371,6 +451,11 @@ void DataModel::ControlScriptWorker::runSetup()
 
   QJSValueList args;
   const QJSValue result = m_watchdog->call(m_setupFn, args);
+
+  if (endedByStop(*m_marshaller)) {
+    stop();
+    return;
+  }
 
   if (m_watchdog->lastCallTimedOut()) {
     Q_EMIT scriptError(

@@ -27,6 +27,7 @@
 #include <QJSValue>
 
 #include "AppState.h"
+#include "Core/Api/UserWaitScope.h"
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/SerialStudio.h"
@@ -122,8 +123,8 @@ void DataModel::ControlScript::setupExternalConnections()
 }
 
 /**
- * @brief Joins the worker thread; normally a no-op because shutdown() already ran on
- *        aboutToQuit, while the GUI event loop was still alive.
+ * @brief Joins the worker thread; normally a no-op because shutdown() already ran from
+ *        ModuleManager::onQuit, while the GUI event loop was still alive.
  */
 DataModel::ControlScript::~ControlScript()
 {
@@ -131,14 +132,20 @@ DataModel::ControlScript::~ControlScript()
 }
 
 /**
- * @brief Stops the worker and joins its thread while the GUI thread can still drain the
- *        blocking apiCall marshaller; a worker parked inside an apiCall dispatch is released
- *        by sendPostedEvents() and then fails fast on the shutdown flag.
+ * @brief Stops the worker and joins its thread while the GUI can still drain the marshaller. Inside
+ *        this script's box (its modal loop, which no join outwaits) it closes the box and returns
+ *        unlatched; ModuleManager::onQuit's aboutToQuit pass joins once unwound (spec 0120 R6).
  */
 void DataModel::ControlScript::shutdown()
 {
   if (m_shutdown)
     return;
+
+  if (API::UserWaitScope::waitingBoxOpen(m_marshaller)) {
+    ControlScriptWorker::requestShutdown();
+    API::UserWaitScope::cancelWaitingBox(m_marshaller);
+    return;
+  }
 
   m_shutdown = true;
   ControlScriptWorker::requestShutdown();
@@ -355,7 +362,11 @@ void DataModel::ControlScript::startWorker()
 
   m_lastError.clear();
   m_stoppedOnError = false;
-  QMetaObject::invokeMethod(m_worker, "start", Qt::QueuedConnection, Q_ARG(QString, m_code));
+  QMetaObject::invokeMethod(m_worker,
+                            "start",
+                            Qt::QueuedConnection,
+                            Q_ARG(QString, m_code),
+                            Q_ARG(quint64, m_marshaller->nextRun()));
   m_running.store(true, std::memory_order_relaxed);
 
   SS_ASSERT_LOG(!m_tableArmed);
@@ -368,16 +379,17 @@ void DataModel::ControlScript::startWorker()
 }
 
 /**
- * @brief Asks the worker thread to stop the running script. Always queues the (idempotent)
- *        stop so a worker that desynced from m_running can never keep an old engine alive
- *        across a connection cycle. No-op after shutdown(): the joined worker thread has
- *        already deleted m_worker, so the pointer dangles.
+ * @brief Stops this run only (never the next one), closing a box it waits on so its apiCall
+ *        throws instead of answering (spec 0120 R5). Always queues the idempotent stop, so a
+ *        desynced worker never keeps an old engine alive; no-op after shutdown() joined it.
  */
 void DataModel::ControlScript::stopWorker()
 {
   if (m_shutdown)
     return;
 
+  m_marshaller->stopRun();
+  API::UserWaitScope::cancelWaitingBox(m_marshaller);
   QMetaObject::invokeMethod(m_worker, "stop", Qt::QueuedConnection);
 
   if (m_tableArmed) {

@@ -18,6 +18,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from utils import DataGenerator, DeviceSimulator, SerialStudioClient
+from utils.required_services import REQUIRE_BROKER, REQUIRE_OPCUA_SIM, missing_service
 
 
 @pytest.fixture(scope="session")
@@ -153,7 +154,8 @@ def device_simulator(api_client):
 @pytest.fixture
 def mosquitto_broker():
     """
-    Skip the test unless an MQTT broker is reachable on 127.0.0.1:1883.
+    Skip the test unless an MQTT broker is reachable on 127.0.0.1:1883; fail instead on a CI
+    leg that started one (SS_REQUIRE_BROKER=1).
 
     CI launches `mosquitto -d` before pytest; local developers can run
     `mosquitto -p 1883` in another terminal. Returns a dict with the
@@ -166,7 +168,7 @@ def mosquitto_broker():
     try:
         sock.connect(("127.0.0.1", 1883))
     except (ConnectionRefusedError, OSError, socket.timeout):
-        pytest.skip("MQTT broker not reachable on 127.0.0.1:1883")
+        missing_service("MQTT broker not reachable on 127.0.0.1:1883", REQUIRE_BROKER)
     finally:
         try:
             sock.close()
@@ -179,7 +181,8 @@ def mosquitto_broker():
 @pytest.fixture
 def opcua_simulator():
     """
-    Skip the test unless the OPC UA simulator answers on 127.0.0.1:4840.
+    Skip the test unless the OPC UA simulator answers on 127.0.0.1:4840; fail instead on a CI
+    leg that started it (SS_REQUIRE_OPCUA_SIM=1).
 
     CI launches `examples/OPC UA PLC Simulator/opcua_plc_simulator.py` before pytest;
     local developers run it in another terminal (`pip install asyncua`). Returns the
@@ -192,7 +195,9 @@ def opcua_simulator():
     try:
         sock.connect(("127.0.0.1", 4840))
     except (ConnectionRefusedError, OSError, socket.timeout):
-        pytest.skip("OPC UA simulator not reachable on 127.0.0.1:4840")
+        missing_service(
+            "OPC UA simulator not reachable on 127.0.0.1:4840", REQUIRE_OPCUA_SIM
+        )
     finally:
         try:
             sock.close()

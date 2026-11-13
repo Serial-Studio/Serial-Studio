@@ -22,11 +22,50 @@
 #include "Misc/CommonFonts.h"
 
 #include <QApplication>
-#include <QDir>
+#include <QDebug>
 #include <QFontDatabase>
+#include <QThread>
 
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
+
+//--------------------------------------------------------------------------------------------------
+// Bundled font families loaded on demand (spec 0120 R15)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief One bundled face and the family it belongs to. Explicit, because the file prefix alone
+ *        cannot tell families apart (Tiny5Mono-CRT* is "Tiny5 Mono CRT", not "Tiny5 Mono").
+ */
+struct BundledFace {
+  QLatin1StringView family;
+  QLatin1StringView file;
+};
+
+// clang-format off
+static constexpr BundledFace kBundledFaces[] = {
+  {QLatin1StringView("Tiny5 Mono"),        QLatin1StringView("Tiny5Mono-Regular.ttf")         },
+  {QLatin1StringView("Tiny5 Mono"),        QLatin1StringView("Tiny5Mono-Bold.ttf")            },
+  {QLatin1StringView("Tiny5 Mono"),        QLatin1StringView("Tiny5Mono-Italic.ttf")          },
+  {QLatin1StringView("Tiny5 Mono"),        QLatin1StringView("Tiny5Mono-BoldItalic.ttf")      },
+  {QLatin1StringView("Tiny5 Mono CRT"),    QLatin1StringView("Tiny5Mono-CRT.ttf")             },
+  {QLatin1StringView("Tiny5 Mono CRT"),    QLatin1StringView("Tiny5Mono-CRTBold.ttf")         },
+  {QLatin1StringView("Tiny5 Mono CRT"),    QLatin1StringView("Tiny5Mono-CRTItalic.ttf")       },
+  {QLatin1StringView("Tiny5 Mono CRT"),    QLatin1StringView("Tiny5Mono-CRTBoldItalic.ttf")   },
+  {QLatin1StringView("Tiny5 Mono LCD"),    QLatin1StringView("Tiny5Mono-LCD.ttf")             },
+  {QLatin1StringView("Tiny5 Mono LCD"),    QLatin1StringView("Tiny5Mono-LCDBold.ttf")         },
+  {QLatin1StringView("Tiny5 Mono LCD"),    QLatin1StringView("Tiny5Mono-LCDItalic.ttf")       },
+  {QLatin1StringView("Tiny5 Mono LCD"),    QLatin1StringView("Tiny5Mono-LCDBoldItalic.ttf")   },
+  {QLatin1StringView("Tiny5 Mono Matrix"), QLatin1StringView("Tiny5Mono-Matrix.ttf")          },
+  {QLatin1StringView("Tiny5 Mono Matrix"), QLatin1StringView("Tiny5Mono-MatrixBold.ttf")      },
+  {QLatin1StringView("Tiny5 Mono Matrix"), QLatin1StringView("Tiny5Mono-MatrixItalic.ttf")    },
+  {QLatin1StringView("Tiny5 Mono Matrix"), QLatin1StringView("Tiny5Mono-MatrixBoldItalic.ttf")},
+  {QLatin1StringView("Tiny5 Mono SC"),     QLatin1StringView("Tiny5MonoSC-Regular.ttf")       },
+  {QLatin1StringView("Tiny5 Mono SC"),     QLatin1StringView("Tiny5MonoSC-Bold.ttf")          },
+  {QLatin1StringView("Tiny5 Mono SC"),     QLatin1StringView("Tiny5MonoSC-Italic.ttf")        },
+  {QLatin1StringView("Tiny5 Mono SC"),     QLatin1StringView("Tiny5MonoSC-BoldItalic.ttf")    },
+};
+// clang-format on
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -50,11 +89,6 @@ Misc::CommonFonts::CommonFonts() : m_widgetFontIndex(0), m_widgetFontRevision(0)
 
   QFontDatabase::addApplicationFont(":/fonts/GeistMono-Bold.ttf");
   QFontDatabase::addApplicationFont(":/fonts/GeistMono-Medium.ttf");
-
-  const QDir fontDir(QStringLiteral(":/fonts"));
-  const auto faces = fontDir.entryList({QStringLiteral("Tiny5Mono*.ttf")}, QDir::Files);
-  for (const auto& face : faces)
-    QFontDatabase::addApplicationFont(fontDir.filePath(face));
 
   const auto id = QFontDatabase::addApplicationFont(":/fonts/GeistMono-Regular.ttf");
   if (id != -1) {
@@ -81,6 +115,7 @@ Misc::CommonFonts::CommonFonts() : m_widgetFontIndex(0), m_widgetFontRevision(0)
     m_monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 
   m_widgetFontFamily = m_settings.value("CommonFonts/FontFamily", m_monoFont.family()).toString();
+  ensureFamilyLoaded(m_widgetFontFamily);
   m_widgetFontScale =
     SerialStudio::toDouble(m_settings.value("CommonFonts/FontScale", kScaleNormal));
   m_widgetFontScale = qBound(0.5, m_widgetFontScale, 3.0);
@@ -209,6 +244,10 @@ QStringList Misc::CommonFonts::availableFonts() const
     families.append(family);
   }
 
+  for (const auto& bundled : bundledFamilies())
+    if (!families.contains(bundled))
+      families.append(bundled);
+
   families.sort(Qt::CaseInsensitive);
 
   const QString mono = m_monoFont.family();
@@ -216,6 +255,47 @@ QStringList Misc::CommonFonts::availableFonts() const
   families.prepend(mono);
 
   return families;
+}
+
+/**
+ * @brief The bundled families that load on demand, listed before any of their files is loaded.
+ */
+QStringList Misc::CommonFonts::bundledFamilies()
+{
+  QStringList families;
+  for (const auto& face : kBundledFaces)
+    if (!families.contains(face.family))
+      families.append(QString(face.family));
+
+  SS_ASSERT_LOG(!families.isEmpty());
+  return families;
+}
+
+/**
+ * @brief Registers @p family's bundled faces the first time it is chosen or restored (spec 0120
+ *        R15): the 20 Tiny5 Mono faces held 19 MB resident and 30 ms at every startup for a font
+ *        most users never pick. A family that is not bundled, or already loaded, is a no-op.
+ */
+void Misc::CommonFonts::ensureFamilyLoaded(const QString& family)
+{
+  SS_ASSERT_LOG(qApp == nullptr || QThread::currentThread() == qApp->thread());
+
+  if (family.isEmpty() || m_loadedFamilies.contains(family))
+    return;
+
+  bool bundled = false;
+  for (const auto& face : kBundledFaces) {
+    if (family != face.family)
+      continue;
+
+    bundled         = true;
+    const auto path = QStringLiteral(":/fonts/") + face.file;
+    if (QFontDatabase::addApplicationFont(path) < 0)
+      qWarning() << "[CommonFonts] Could not load bundled font" << path;
+  }
+
+  if (bundled)
+    m_loadedFamilies.insert(family);
 }
 
 /**
@@ -272,6 +352,7 @@ void Misc::CommonFonts::setWidgetFontFamily(const QString& family)
   if (m_widgetFontFamily == family)
     return;
 
+  ensureFamilyLoaded(family);
   m_widgetFontFamily = family;
   m_widgetFontIndex  = availableFonts().indexOf(m_widgetFontFamily);
   ++m_widgetFontRevision;

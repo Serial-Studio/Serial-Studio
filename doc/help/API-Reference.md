@@ -197,13 +197,21 @@ when the project is reopened.
 |--------|-----------------|--------|------------|
 | **Allow API device control?** | Remote API/MCP/gRPC clients | `io.writeData`, `io.ble.writeCharacteristic`, `console.send`, raw-mode bytes, and `project.action.update` / `project.action.duplicate` when the call changes an action's payload, target or arming | Per session |
 | **Allow API clients to modify project scripts?** | Remote API/MCP/gRPC clients | `controlScript.set`/`setCode`, `project.frameParser.setCode`, `project.source.setFrameParserCode`, `project.dataset.setTransformCode`, `project.transformLibrary.set`, `project.painter.setCode`, `extensions.install`, `extensions.addRepository`, every command that loads a project (`project.loadJson`, `project.open`, `project.template.apply`, `assistant.restore`, `sessions.regress`, `sessions.verify`, `sessions.replay`), and `project.dataset.update` / `project.group.update` / `project.outputWidget.update` when the call carries `transformCode` / `painterCode` / `transmitFunction` | Per session |
-| **Allow API clients to drive the user interface?** | Remote API/MCP/gRPC clients | `ui.automation.click` and `ui.automation.key`, which press controls and type into the window as the person would, so they can do anything the person can (connect, save, delete). The read-only `ui.automation.*` commands need no prompt | Per session |
+| **Allow API clients to drive the user interface?** | Remote API/MCP/gRPC clients | `ui.automation.click` and `ui.automation.key`, which press controls and type into the window as the person would, so they can do anything the person can (connect, save, delete), and `ui.window.showMessageBox`, which puts a box in front of the person. The read-only `ui.automation.*` commands need no prompt | Per session |
 | **Allow this project to launch programs?** | Any script calling `system.exec`, including the project's own control script, and any Process I/O source starting its program, whoever chose the program | `system.exec`, and the Launch-mode start of a Process I/O source | Per project file; session-only for a project without a file |
 
 Project scripts run with the application's full privileges: a script installed over the API
 can call `system.exec` as first-party code, which is why installing one needs the second
 prompt. The gate applies to the whole dispatch, so a `project.batch` op or an assistant
 command that forwards to one of these commands is checked the same way as a direct call.
+
+A few commands reach past the project, so a project's own scripts (frame parser, transforms,
+control script and macros) are refused them with an error, never a prompt: adding or removing an
+extension repository, installing or uninstalling an extension, activating, deactivating or
+changing the licence, starting a trial, and `project.save` to any file other than the project's
+own or through a Save dialog (`askPath`, or a project that has no file yet). `project.save` with
+no `filePath` still saves a project that has a file. Everything else stays open to
+the project's scripts, and remote clients and the assistant keep the gates described here.
 
 Loading a project runs the scripts inside it, so every command that loads one asks for the
 script-changes prompt, whatever the project contains. That includes the Historian's
@@ -243,10 +251,10 @@ script-changes prompt only when the call carries `transformCode`.
 | Installs script code | `project.frameParser.setCode`, `controlScript.set`, `project.dataset.setTransformCode`, `extensions.install`, `extensions.addRepository` | Script-changes prompt |
 | Loads a project | `project.open`, `project.loadJson`, `project.template.apply`, `assistant.restore`, `sessions.regress`, `sessions.verify`, `sessions.replay` | Script-changes prompt |
 | Writes to a device | `io.writeData`, `console.send`, `io.ble.writeCharacteristic` | Device-control prompt |
-| Drives the user interface | `ui.automation.click`, `ui.automation.key` | Interface-driving prompt; the device-control prompt does not cover it, and consents never combine |
+| Drives the user interface | `ui.automation.click`, `ui.automation.key`, `ui.window.showMessageBox` | Interface-driving prompt; the device-control prompt does not cover it, and consents never combine |
 | Chooses the program a source starts | `io.process.setExecutable`, `io.process.setArguments`, `io.process.setWorkingDir`, `io.process.setMode`, `io.setBusType` switching to Process, `project.source.setProperty` with a program key | No prompt at the call; the first such change in a session clears the project's launch consent, so the next start asks |
 | Starts a program | `io.connect` on a Process I/O source in Launch mode | Launch prompt, at the start |
-| Control script only | `system.exec`, `system.kill`, `system.runningProcesses` | Refused to every remote client |
+| Control script only | `system.exec`, `system.kill`, `system.runningProcesses` | Refused to every remote client. A project's own scripts may call them, and `system.exec` asks the launch prompt first |
 | Runs code with no effect | The dry runs and compile checks below | No prompt, because they have no side effects |
 | Runs other commands | `project.batch`, `assistant.project.bulkApply`, `assistant.script.apply`, `assistant.workspace.addTile` | Each inner command is checked as if it were called directly |
 
@@ -4988,19 +4996,32 @@ Set one widget setting.
 
 #### 🟢 `ui.window.showMessageBox`
 Show a message box with an icon. By default it returns at once. With `wait: true` it stays open
-until a button is clicked and returns that button, so a control script can ask the operator and
-act on the answer. Only the control script's `setup()` and `loop()` may wait: a frame parser or
-transform runs on the data path, and `onConnect()` runs while the connection opens, so blocking
-either on a dialog would stall it. Those callers and external clients get an error for
-`wait: true`. Text is shown as plain text; markup is displayed, not rendered.
+until a button is clicked and returns that button, so a control script or macro can ask the
+operator and act on the answer. Only the control script's `setup()` and `loop()` and JavaScript
+macros may wait. A frame parser or transform runs on the data path, `onConnect()` runs while the
+connection opens, and a Lua macro runs on the interface thread, so blocking any of them on a
+dialog would stall it. Those callers and external clients get an error for `wait: true`. Time a
+macro spends waiting does not count against its time limit. Text is shown as plain text; markup
+is displayed, not rendered.
+
+Every box ends with a fixed line saying it was sent by the project's scripts or an API client,
+not by Serial Studio, and `none` shows no icon rather than the application's. One box shows at a
+time; a request while one is open gets an error. Stopping the script (a disconnect, a project
+change, or stopping a macro) closes its box, and the waiting call throws instead of returning,
+so the script stops there. In a run with no display, a waiting request gets an error and a
+non-waiting one is written to the log. A remote client needs the interface-driving prompt first
+(see [Consent Prompts](#consent-prompts)); the project's own scripts do not. Through UI
+automation, an open box is listed by `ui.automation.listWindows` with the id `dialog`, and
+`ui.automation.key` with `keys: "Escape"` closes it with the `cancel` answer.
 
 **Parameters:**
 - `text` (string): Headline
 - `informativeText` (string, optional): Detail under the headline
 - `title` (string, optional): Window title
 - `icon` (string, optional): `info` (default), `warning`, `critical`, `question`, or `none` for
-  the application logo
-- `wait` (bool, optional): Block until a button is clicked and return it. Control script only
+  no icon
+- `wait` (bool, optional): Block until a button is clicked and return it. Control script and
+  JavaScript macros only
 - `buttons` (array of string, optional, needs `wait`): Any of `ok`, `cancel`, `yes`, `no`,
   `retry`, `abort`, `ignore`, `close`, `save`, `discard`, `apply`, `reset`. Default `["ok"]`
 - `defaultButton` (string, optional, needs `wait`): The button Enter presses; one of `buttons`

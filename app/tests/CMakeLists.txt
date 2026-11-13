@@ -850,6 +850,26 @@ ss_add_unit_test(tst_republish_lanes
 )
 
 #
+# The message-box rules for API and script callers (spec 0120): one box at a time, a headless wait
+# refused rather than answered "ok", and a wait only where the script marshaller grants it.
+# MessageBoxGate.h is header-only, so the suite links nothing but QtCore.
+#
+ss_add_unit_test(tst_message_box_gate
+  SOURCES tst_message_box_gate.cpp
+  LIBS    Qt6::Core
+)
+
+#
+# What a project's own scripts are refused (spec 0120): extension sources and installs, licence
+# changes, and saving over another project's file. ScriptCommandPolicy.h is header-only and pure, so
+# the suite links nothing but QtCore.
+#
+ss_add_unit_test(tst_script_command_policy
+  SOURCES tst_script_command_policy.cpp
+  LIBS    Qt6::Core
+)
+
+#
 # The live re-sync decisions (spec 0119): which layouts a session announces, when the combined
 # frame may stand in, and the rebuild retry per (source, generation). SessionAnnouncer reaches its
 # effects through a host and the ledger is header-only, so neither needs FrameBuilder's or

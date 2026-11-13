@@ -28,12 +28,14 @@
 
 namespace API {
 /**
- * @brief Identifies who issued a command: in-process callers (scripts, internal modules) are
- *        trusted; network clients must pass the device-write consent gate.
+ * @brief Identifies who issued a command: internal modules are trusted; a project's own scripts
+ *        are trusted except for the few commands no project script needs (spec 0120); network
+ *        clients must pass the device-write consent gate.
  */
 enum class CommandOrigin : quint8 {
   Trusted,
   Remote,
+  Script,
 };
 
 /**

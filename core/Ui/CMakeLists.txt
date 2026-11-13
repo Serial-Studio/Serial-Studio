@@ -206,6 +206,7 @@ qt_add_library(
   ApiHandlers/UiHandlers.h
   ApiHandlers/AssistantHandler.h
   ApiHandlers/AutomationHandler.h
+  ApiHandlers/MessageBoxGate.h
   ApiHandlers/ConsoleHandler.h
   ApiHandlers/DashboardHandler.h
   ApiHandlers/DiagnosticsHandler.h

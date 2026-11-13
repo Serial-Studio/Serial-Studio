@@ -118,6 +118,15 @@ and `setReduceMotion` (it persists a preference, so it is no read) in `confirm`,
 `key` in `deviceGated`;
 `tests/scripts/test_ai_assistant_static.py` pins each to exactly one tier.
 
+`ui.window.showMessageBox` (a `WindowHandler` command, not one of the six) also carries
+`DrivesUi` since spec 0120, so a remote client asks the same session-only consent before it can
+put a box in front of the person; it stays allowed in sealed sessions for the deployment's own
+scripts. While an API or script box is open, `listWindows` appends a `dialog` entry found through
+`QGuiApplication::modalWindow()` (`WindowInventory::modalDialog`, Gui only so the ctest links no
+Widgets), with the box's text, and the main window reports `modal`. A bare `key` Escape goes to
+`UserWaitScope::cancelOpenBox()` instead of a Quick window, because the modal box would swallow
+it, and the waiting call answers `cancel`.
+
 ## Headless and the reduce-motion switch
 
 A headless root loads no QML: `listWindows` answers an empty list and every other command an

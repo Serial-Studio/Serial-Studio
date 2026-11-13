@@ -81,8 +81,9 @@ bool DataModel::MacroApiBridge::stopRequested() const noexcept
 }
 
 /**
- * @brief Implements apiCall(method, params) by blocking onto the GUI-thread marshaller;
- *        refuses once Stop was pressed and re-arms the watchdog after the call.
+ * @brief Implements apiCall(method, params) by blocking onto the GUI-thread marshaller, watchdog
+ *        disarmed so waiting on the user is not billed (R7). A Stop meanwhile throws instead of
+ *        answering (R5), after re-arming, so a macro catching the throw in a loop stays bounded.
  */
 QVariantMap DataModel::MacroApiBridge::call(const QString& method, const QVariantMap& params)
 {
@@ -93,14 +94,24 @@ QVariantMap DataModel::MacroApiBridge::call(const QString& method, const QVarian
   if (stopRequested())
     return ScriptResult::makeError(QStringLiteral("apiCall: macro stop requested"));
 
+  if (m_watchdog)
+    m_watchdog->disarm();
+
   const bool ok = QMetaObject::invokeMethod(m_marshaller,
                                             "dispatch",
                                             Qt::BlockingQueuedConnection,
                                             Q_RETURN_ARG(QVariantMap, out),
                                             Q_ARG(QString, method),
                                             Q_ARG(QVariantMap, params));
-  if (m_watchdog && !stopRequested())
+  if (m_watchdog)
     m_watchdog->arm();
+
+  if (stopRequested()) {
+    if (auto* engine = qjsEngine(this))
+      engine->throwError(QStringLiteral("apiCall: the macro was stopped"));
+
+    return ScriptResult::makeError(QStringLiteral("apiCall: the macro was stopped"));
+  }
 
   if (!ok) {
     out.insert(QStringLiteral("ok"), false);
@@ -229,10 +240,9 @@ void DataModel::MacroWorker::requestTeardown() noexcept
 }
 
 /**
- * @brief Evaluates one macro in a fresh engine: SDK prelude + the marshal bridge ONLY (direct
- *        helper bridges wrap main-thread singletons and must never execute on this thread);
- *        console output is routed through the bridge log() shim, and the engine is released
- *        after every run so no state survives into the next one.
+ * @brief Evaluates one macro in a fresh engine with the marshal bridge ONLY (direct bridges wrap
+ *        main-thread singletons); console output goes through log(), the engine is released per
+ *        run, and an error raised while stopping (an apiCall throwing at the Stop) reports a stop.
  */
 void DataModel::MacroWorker::run(const QString& source)
 {
@@ -288,6 +298,12 @@ void DataModel::MacroWorker::run(const QString& source)
                          : QStringLiteral("Macro exceeded the %1 ms script budget between API "
                                           "calls and was interrupted")
                              .arg(kMacroWatchdogMs));
+    releaseEngine();
+    return;
+  }
+
+  if (result.isError() && m_stopRequested.load(std::memory_order_acquire)) {
+    Q_EMIT scriptError(QStringLiteral("Macro stopped by user"));
     releaseEngine();
     return;
   }

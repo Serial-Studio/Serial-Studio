@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <memory>
 #include <QJSValue>
 #include <QObject>
@@ -36,7 +37,9 @@ namespace DataModel {
 class JsWatchdog;
 
 /**
- * @brief GUI-thread sink that runs an apiCall command and returns the wrapped result.
+ * @brief GUI-thread sink that runs an apiCall command and returns the wrapped result. It also
+ *        tracks whether its owner stopped the script run now active (spec 0120 R5): a stop belongs
+ *        to one run, so the next run, queued behind it or ahead of it, never inherits or erases it.
  */
 class ControlApiMarshaller : public QObject {
   // clang-format off
@@ -46,12 +49,21 @@ class ControlApiMarshaller : public QObject {
 public:
   explicit ControlApiMarshaller(QObject* parent = nullptr);
 
+  [[nodiscard]] bool runStopped() const noexcept;
+  [[nodiscard]] quint64 nextRun() const noexcept;
+  void beginRun(quint64 run) noexcept;
+  void stopRun() noexcept;
+
   Q_INVOKABLE [[nodiscard]] QVariantMap dispatch(const QString& method, const QVariantMap& params);
   Q_INVOKABLE [[nodiscard]] qint64 writeAndArm(int sourceId, const QByteArray& data);
   Q_INVOKABLE [[nodiscard]] QByteArray pollReply(int sourceId);
 
 public slots:
   void disarmReply(int sourceId);
+
+private:
+  alignas(64) std::atomic<quint64> m_activeRun;
+  alignas(64) std::atomic<quint64> m_stops;
 };
 
 /**
@@ -105,7 +117,7 @@ public:
   static void requestShutdown() noexcept;
 
 public slots:
-  void start(const QString& source);
+  void start(const QString& source, quint64 run);
   void stop();
 
 private slots:

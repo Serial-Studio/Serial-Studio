@@ -24,15 +24,19 @@
 #include <algorithm>
 #include <cmath>
 #include <optional>
+#include <QApplication>
 #include <QJsonArray>
 #include <QKeySequence>
+#include <QMessageBox>
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QQuickWindow>
+#include <QTextDocumentFragment>
 
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
 #include "API/SchemaBuilder.h"
+#include "Core/Api/UserWaitScope.h"
 #include "Core/SerialStudio.h"
 #include "UI/Automation/ElementCatalog.h"
 #include "UI/Automation/InputSynthesizer.h"
@@ -79,6 +83,63 @@ static API::CommandResponse noWindow(const QString& id, const QString& name)
 
   return API::CommandResponse::makeError(
     id, API::ErrorCode::InvalidParam, QStringLiteral("No visible window named '%1'").arg(name));
+}
+
+/**
+ * @brief One window as listWindows reports it.
+ */
+static QJsonObject windowJson(const WindowInfo& info)
+{
+  QJsonObject json;
+  json.insert(QStringLiteral("id"), info.id);
+  json.insert(QStringLiteral("title"), info.title);
+  json.insert(QStringLiteral("x"), info.frame.x());
+  json.insert(QStringLiteral("y"), info.frame.y());
+  json.insert(QStringLiteral("width"), info.frame.width());
+  json.insert(QStringLiteral("height"), info.frame.height());
+  json.insert(QStringLiteral("scale"), info.scale);
+  json.insert(QStringLiteral("active"), info.active);
+  json.insert(QStringLiteral("modal"), info.modal);
+  json.insert(QStringLiteral("focusedId"), info.focusedId);
+  return json;
+}
+
+/**
+ * @brief The open modal dialog's entry, with a message box's text and detail as plain text
+ *        (spec 0120 R8); nothing when no dialog is open.
+ */
+static std::optional<QJsonObject> dialogJson()
+{
+  QWindow* dialog = WindowInventory::modalDialog();
+  if (dialog == nullptr)
+    return std::nullopt;
+
+  QJsonObject json = windowJson(WindowInventory::describeDialog(dialog));
+  if (const auto* box = qobject_cast<QMessageBox*>(QApplication::activeModalWidget())) {
+    json.insert(QStringLiteral("text"), QTextDocumentFragment::fromHtml(box->text()).toPlainText());
+    json.insert(QStringLiteral("informativeText"),
+                QTextDocumentFragment::fromHtml(box->informativeText()).toPlainText());
+  }
+
+  return json;
+}
+
+/**
+ * @brief Whether a key request is a bare Escape aimed at an open API or script message box, which
+ *        closes it with the cancel answer (spec 0120 R8): the box is modal, so a key sent to a
+ *        Quick window behind it would never arrive.
+ */
+static bool closesApiMessageBox(const QJsonObject& params)
+{
+  if (!API::UserWaitScope::boxOpen())
+    return false;
+
+  if (!params.value(QStringLiteral("text")).toString().isEmpty())
+    return false;
+
+  const QKeySequence sequence(params.value(QStringLiteral("keys")).toString(),
+                              QKeySequence::PortableText);
+  return sequence == QKeySequence(Qt::Key_Escape);
 }
 
 /**
@@ -386,21 +447,11 @@ API::CommandResponse API::Handlers::AutomationHandler::listWindows(const QString
   (void)params;
   QJsonArray windows;
   const auto list = WindowInventory::windows();
-  for (QQuickWindow* window : list) {
-    const WindowInfo info = WindowInventory::describe(window);
-    QJsonObject json;
-    json.insert(QStringLiteral("id"), info.id);
-    json.insert(QStringLiteral("title"), info.title);
-    json.insert(QStringLiteral("x"), info.frame.x());
-    json.insert(QStringLiteral("y"), info.frame.y());
-    json.insert(QStringLiteral("width"), info.frame.width());
-    json.insert(QStringLiteral("height"), info.frame.height());
-    json.insert(QStringLiteral("scale"), info.scale);
-    json.insert(QStringLiteral("active"), info.active);
-    json.insert(QStringLiteral("modal"), info.modal);
-    json.insert(QStringLiteral("focusedId"), info.focusedId);
-    windows.append(json);
-  }
+  for (QQuickWindow* window : list)
+    windows.append(windowJson(WindowInventory::describe(window)));
+
+  if (const auto dialog = dialogJson())
+    windows.append(*dialog);
 
   return CommandResponse::makeSuccess(id,
                                       QJsonObject{
@@ -587,6 +638,16 @@ API::CommandResponse API::Handlers::AutomationHandler::click(const QString& id,
 API::CommandResponse API::Handlers::AutomationHandler::key(const QString& id,
                                                            const QJsonObject& params)
 {
+  if (closesApiMessageBox(params)) {
+    API::UserWaitScope::cancelOpenBox();
+    return CommandResponse::makeSuccess(
+      id,
+      QJsonObject{
+        {QStringLiteral("delivered"),      true},
+        {QStringLiteral("focusedId"), QString()}
+    });
+  }
+
   QString name;
   QQuickWindow* window = resolveWindow(params, name);
   if (window == nullptr)

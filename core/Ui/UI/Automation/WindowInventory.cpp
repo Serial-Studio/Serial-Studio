@@ -33,6 +33,7 @@
 //--------------------------------------------------------------------------------------------------
 
 static constexpr const char* kDefaultWindowId = "main";
+static constexpr const char* kDialogWindowId  = "dialog";
 static constexpr const char* kOverlayClass    = "QQuickOverlay";
 static constexpr const char* kPopupItemClass  = "QQuickPopupItem";
 static constexpr int kMaxAncestors            = 64;
@@ -114,8 +115,41 @@ UI::Automation::WindowInfo UI::Automation::WindowInventory::describe(QQuickWindo
   info.frame     = window->frameGeometry();
   info.scale     = window->devicePixelRatio();
   info.active    = window->isActive();
-  info.modal     = hasModalPopup(window);
+  info.modal     = hasModalPopup(window) || modalDialog() != nullptr;
   info.focusedId = focusedId(window);
+  return info;
+}
+
+/**
+ * @brief The visible application-modal dialog that is not a Qt Quick window (a message box an API
+ *        caller or the application opened), or nullptr. It blocks every Quick window while open.
+ */
+QWindow* UI::Automation::WindowInventory::modalDialog()
+{
+  QWindow* modal = QGuiApplication::modalWindow();
+  if (modal == nullptr || !modal->isVisible())
+    return nullptr;
+
+  return qobject_cast<QQuickWindow*>(modal) == nullptr ? modal : nullptr;
+}
+
+/**
+ * @brief The modal dialog as the automation surface reports it (spec 0120 R8): id "dialog",
+ *        always modal, no focus id because its controls are widgets, not Quick items.
+ */
+UI::Automation::WindowInfo UI::Automation::WindowInventory::describeDialog(QWindow* dialog)
+{
+  WindowInfo info;
+  info.scale  = 1.0;
+  info.active = false;
+  info.modal  = true;
+  SS_ASSERT(dialog != nullptr, return info);
+
+  info.id     = QString::fromLatin1(kDialogWindowId);
+  info.title  = dialog->title();
+  info.frame  = dialog->frameGeometry();
+  info.scale  = dialog->devicePixelRatio();
+  info.active = dialog->isActive();
   return info;
 }
 

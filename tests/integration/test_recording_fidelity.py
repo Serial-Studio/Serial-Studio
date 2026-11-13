@@ -157,6 +157,24 @@ def _attach(api_client, port=9000):
     api_client.connect_device()
 
 
+def _wait_for_last_frame(api_client, timeout: float = 5.0) -> None:
+    """
+    Wait until the app has read the last frame sent (spec 0120 R12). Disconnecting or pausing
+    legitimately discards bytes the app has not read yet, so toggling 20 ms after the last send was
+    a race; the frame's block is still open here, so the edge still tests the tail flush.
+    """
+    deadline = time.time() + timeout
+    last = str(FRAME_COUNT)
+    while time.time() < deadline:
+        result = api_client.command("io.getLatestFrame")
+        if result.get("hasData") and result.get("text", "").strip() == last:
+            return
+
+        time.sleep(0.02)
+
+    pytest.fail(f"the app never received frame {FRAME_COUNT}")
+
+
 @pytest.mark.integration
 @pytest.mark.project
 class TestRecordingTail:
@@ -178,7 +196,9 @@ class TestRecordingTail:
             device_simulator.send_frame(f"{index + 1}\n".encode())
             time.sleep(FRAME_INTERVAL)
 
-        # No settle: disconnecting immediately is exactly the case that lost the tail.
+        # No settle after the app has the last frame: disconnecting with its block still open is
+        # exactly the case that lost the tail.
+        _wait_for_last_frame(api_client)
         api_client.disconnect_device()
         time.sleep(SETTLE_SECONDS)
         api_client.disable_csv_export()
@@ -206,6 +226,7 @@ class TestRecordingTail:
             device_simulator.send_frame(f"{index + 1}\n".encode())
             time.sleep(FRAME_INTERVAL)
 
+        _wait_for_last_frame(api_client)
         api_client.command("io.setPaused", {"paused": True})
         time.sleep(SETTLE_SECONDS)
 

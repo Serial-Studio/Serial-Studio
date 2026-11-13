@@ -23,14 +23,21 @@
 
 #include <algorithm>
 #include <iterator>
+#include <memory>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QGuiApplication>
 #include <QJsonArray>
 #include <QMessageBox>
+#include <QPointer>
 #include <QTextDocument>
 
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
 #include "API/SchemaBuilder.h"
+#include "ApiHandlers/MessageBoxGate.h"
 #include "Core/Api/UserWaitScope.h"
+#include "Core/SSAssert.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/Utilities.h"
@@ -810,10 +817,122 @@ API::CommandResponse API::Handlers::WindowHandler::setWidgetSetting(const QStrin
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Shows a message box through Misc::Utilities. The text is escaped, so a caller cannot dress
- *        markup up as the application's own dialog. Without wait it is posted and returns at once;
- *        with wait it runs modally and answers the clicked button, which only a control script
- *        may ask for, and nothing dispatched inside that modal loop inherits the permission.
+ * @brief The one API box in flight (spec 0120 R1): the dialog once it opens, and whether its
+ *        closer asked to drop it while it was still queued.
+ */
+struct ApiBoxState {
+  QPointer<QMessageBox> box;
+  bool cancelled;
+};
+
+/**
+ * @brief The error a gated request gets, worded for the caller that has to change.
+ */
+static QString messageBoxRefusalText(API::MessageBoxGate::Refusal refusal)
+{
+  using Refusal = API::MessageBoxGate::Refusal;
+  SS_ASSERT_LOG(refusal != Refusal::None);
+
+  switch (refusal) {
+    case Refusal::WaitNotAllowed:
+      return QStringLiteral("wait: true is only available to the control script's setup() and "
+                            "loop() and to macros; other callers would block while the dialog is "
+                            "open. Call again without wait.");
+    case Refusal::HeadlessWait:
+      return QStringLiteral("wait: true needs a display, and this session is headless, so nobody "
+                            "could answer. Call again without wait.");
+    case Refusal::Busy:
+      return QStringLiteral("A message box from a script or API client is already showing. Try "
+                            "again once it closes.");
+    case Refusal::None:
+      break;
+  }
+
+  return QString();
+}
+
+/**
+ * @brief Appends the line a caller cannot change, so a box never passes as Serial Studio's own
+ * (R2).
+ */
+static QString withProvenance(const QString& info)
+{
+  SS_ASSERT_LOG(qApp != nullptr);
+  const auto line = QCoreApplication::translate(
+    "WindowHandler", "Sent by the project's scripts or an API client, not by Serial Studio.");
+  return info + QStringLiteral("<p><i>%1</i></p>").arg(line.toHtmlEscaped());
+}
+
+/**
+ * @brief Takes the one API box slot and registers its closer (R1, R5, R8): the closer drops a box
+ *        still queued and answers cancel for one already open. @p waiter is the marshaller whose
+ *        script waits on the box, or null for a box nobody waits on.
+ */
+static std::shared_ptr<ApiBoxState> openApiBoxSlot(const void* waiter)
+{
+  SS_ASSERT_LOG(!API::UserWaitScope::boxOpen());
+
+  auto state = std::make_shared<ApiBoxState>(ApiBoxState{nullptr, false});
+  API::UserWaitScope::registerCloser(
+    [state] {
+      state->cancelled = true;
+      if (state->box)
+        state->box->done(QMessageBox::Cancel);
+    },
+    waiter);
+
+  SS_ASSERT_LOG(API::UserWaitScope::boxOpen());
+  return state;
+}
+
+/**
+ * @brief The open hook of an API box: records the dialog for its closer, and keeps the
+ *        application's own icon off a box that asked for none (R2).
+ */
+static MessageBoxHook apiBoxHook(const std::shared_ptr<ApiBoxState>& state, QMessageBox::Icon icon)
+{
+  SS_ASSERT_LOG(state != nullptr);
+  return [state, icon](QMessageBox* box) {
+    state->box = box;
+    if (icon == QMessageBox::NoIcon)
+      box->setIconPixmap(QPixmap());
+  };
+}
+
+/**
+ * @brief Queues an API box for the next event-loop pass. The slot stays taken until it closes, so
+ *        a queued box counts as open (R1), and a closer that fires first drops it unshown.
+ */
+static void postApiMessageBox(const QString& headline,
+                              const QString& info,
+                              QMessageBox::Icon icon,
+                              const QString& title)
+{
+  SS_ASSERT(qApp != nullptr, return);
+
+  auto state = openApiBoxSlot(nullptr);
+  QMetaObject::invokeMethod(
+    qApp,
+    [state, headline, info, icon, title] {
+      if (!state->cancelled)
+        (void)Misc::Utilities::showMessageBox(headline,
+                                              info,
+                                              icon,
+                                              title,
+                                              QMessageBox::Ok,
+                                              QMessageBox::NoButton,
+                                              ButtonTextMap(),
+                                              apiBoxHook(state, icon));
+
+      API::UserWaitScope::clearCloser();
+    },
+    Qt::QueuedConnection);
+}
+
+/**
+ * @brief Shows an escaped message box via Misc::Utilities. Without wait it is posted; with wait
+ *        (control script and macros only) it runs modally and answers the clicked button, and
+ *        nothing dispatched inside that loop inherits the wait or the script's command policy.
  */
 API::CommandResponse API::Handlers::WindowHandler::showMessageBox(const QString& id,
                                                                   const QJsonObject& params)
@@ -835,36 +954,51 @@ API::CommandResponse API::Handlers::WindowHandler::showMessageBox(const QString&
   const auto info     = detail.isEmpty() ? QString() : Qt::convertFromPlainText(detail);
   const auto title    = params.value(QStringLiteral("title")).toString();
 
-  QJsonObject result;
-  if (!params.value(QStringLiteral("wait")).toBool()) {
-    if (params.contains(QStringLiteral("buttons"))
-        || params.contains(QStringLiteral("defaultButton"))
-        || params.contains(QStringLiteral("buttonLabels")))
-      return CommandResponse::makeError(
-        id,
-        ErrorCode::InvalidParam,
-        QStringLiteral("buttons, defaultButton and buttonLabels need wait: true"));
+  const bool wait = params.value(QStringLiteral("wait")).toBool();
+  if (!wait
+      && (params.contains(QStringLiteral("buttons"))
+          || params.contains(QStringLiteral("defaultButton"))
+          || params.contains(QStringLiteral("buttonLabels"))))
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("buttons, defaultButton and buttonLabels need wait: true"));
 
-    Misc::Utilities::postMessageBox(headline, info, iconIt->icon, title);
+  const bool headless = QGuiApplication::platformName() == QLatin1String("offscreen");
+  const auto refusal  = API::MessageBoxGate::refusal(
+    wait, API::UserWaitScope::allowed(), headless, API::UserWaitScope::boxOpen());
+  if (refusal != API::MessageBoxGate::Refusal::None)
+    return CommandResponse::makeError(
+      id, ErrorCode::ExecutionError, messageBoxRefusalText(refusal));
+
+  QJsonObject result;
+  if (!wait) {
+    if (API::MessageBoxGate::logInsteadOfShow(headless))
+      qInfo().noquote() << "[API] Message box with no display to show it:" << text << detail;
+    else
+      postApiMessageBox(headline, withProvenance(info), iconIt->icon, title);
+
     result[QStringLiteral("waited")] = false;
     return CommandResponse::makeSuccess(id, result);
   }
-
-  if (!API::UserWaitScope::allowed())
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::ExecutionError,
-      QStringLiteral("wait: true is only available to the control script's setup() and loop(); "
-                     "other callers would block while the dialog is open. Call again without "
-                     "wait."));
 
   const auto choice = readMessageBoxChoice(params);
   if (!choice.error.isEmpty())
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, choice.error);
 
+  const auto* waiter = API::UserWaitScope::waiter();
   const API::UserWaitScope noNestedWait(false);
-  const int clicked = Misc::Utilities::showMessageBox(
-    headline, info, iconIt->icon, title, choice.buttons, choice.defaultButton, choice.labels);
+  const API::DispatchPolicyScope noScriptPolicy((API::DispatchPolicy()));
+  const auto state  = openApiBoxSlot(waiter);
+  const int clicked = Misc::Utilities::showMessageBox(headline,
+                                                      withProvenance(info),
+                                                      iconIt->icon,
+                                                      title,
+                                                      choice.buttons,
+                                                      choice.defaultButton,
+                                                      choice.labels,
+                                                      apiBoxHook(state, iconIt->icon));
+  API::UserWaitScope::clearCloser();
 
   result[QStringLiteral("waited")] = true;
   result[QStringLiteral("button")] = messageBoxButtonName(clicked);

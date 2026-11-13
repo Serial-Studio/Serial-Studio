@@ -113,6 +113,7 @@ qt_add_library(
   API/CommandHandler.h
   API/MCPHandler.h
   API/PathPolicy.h
+  API/ScriptCommandPolicy.h
   API/SealedPolicy.h
   API/CommandCapabilities.h
   API/CommandSafety.h

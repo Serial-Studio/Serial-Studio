@@ -74,7 +74,7 @@ def run_lupdate(ts_dir, app_sources, lib_sources):
     all_sources = app_sources + lib_sources
 
     with _sources_response_file(all_sources) as list_path:
-        command = ["lupdate", "@" + list_path, "-ts"] + ts_files
+        command = ["lupdate", "@" + list_path, "-no-obsolete", "-ts"] + ts_files
         print(
             f"Running lupdate on {len(all_sources)} source files (via response file {list_path})"
         )

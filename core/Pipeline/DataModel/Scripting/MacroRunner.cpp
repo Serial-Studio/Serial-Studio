@@ -43,6 +43,7 @@ extern "C" {
 #include <QStandardPaths>
 #include <stdexcept>
 
+#include "Core/Api/UserWaitScope.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
 #include "DataModel/DataTable.h"
@@ -252,8 +253,8 @@ void DataModel::MacroRunner::postLog(const QString& message)
 
 /**
  * @brief Queues a JS macro onto the worker thread; the GUI never blocks on the run. The stop
- *        flag is reset here (GUI side, before the queue) so a Stop pressed after busyChanged
- *        can never be erased by the worker's entry.
+ *        flag is reset and the marshaller's run begins here (GUI side, before the queue) so a
+ *        Stop pressed after busyChanged can never be erased by the worker's entry.
  */
 void DataModel::MacroRunner::runJs(const QString& source)
 {
@@ -261,6 +262,7 @@ void DataModel::MacroRunner::runJs(const QString& source)
     return;
 
   m_worker->resetStop();
+  m_marshaller->beginRun(m_marshaller->nextRun());
   m_busy      = true;
   m_jsRunning = true;
   Q_EMIT busyChanged();
@@ -362,13 +364,18 @@ void DataModel::MacroRunner::runLua(const QString& source)
 }
 
 /**
- * @brief Requests interruption of the running JS macro; bridge touch-points abort promptly
- *        and the watchdog bounds a pure-JS spin.
+ * @brief Requests interruption of the running JS macro; bridge touch-points abort promptly, the
+ *        watchdog bounds a pure-JS spin, a dispatch it already posted is refused, and a message
+ *        box it waits on closes (spec 0120 R5), leaving any other script's box alone.
  */
 void DataModel::MacroRunner::stop()
 {
-  if (m_worker && canStop())
-    m_worker->requestStop();
+  if (!m_worker || !canStop())
+    return;
+
+  m_worker->requestStop();
+  m_marshaller->stopRun();
+  API::UserWaitScope::cancelWaitingBox(m_marshaller);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -27,6 +27,7 @@
 
 class QQuickItem;
 class QQuickWindow;
+class QWindow;
 
 namespace UI::Automation {
 
@@ -55,6 +56,8 @@ public:
   [[nodiscard]] static QList<QQuickWindow*> windows();
   [[nodiscard]] static QQuickWindow* resolve(const QString& id);
   [[nodiscard]] static WindowInfo describe(QQuickWindow* window);
+  [[nodiscard]] static QWindow* modalDialog();
+  [[nodiscard]] static WindowInfo describeDialog(QWindow* dialog);
   [[nodiscard]] static bool hasModalPopup(QQuickWindow* window);
   [[nodiscard]] static QString focusedId(QQuickWindow* window);
   [[nodiscard]] static QString nearestId(const QQuickItem* item);

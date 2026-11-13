@@ -462,14 +462,43 @@ reports `published`. (Spec 0023 briefly deferred and coalesced this into the UI-
 that was reverted because it jagged per-frame curves. CSV interval-snapshot mode remains the
 export-rate bound.)
 
-**Waiting on the user (`ui.window.showMessageBox` with `wait: true`).** Only
-`ControlApiMarshaller::dispatch` opens `API::UserWaitScope(true)`, so only setup()/loop() may
-block on a modal dialog; a parser, transform, `onConnect()` or remote client is refused, because
-each sits on a path that must not stall. The handler reopens the scope as false around the modal
-loop, so a command dispatched inside that loop never inherits it. `ControlApiBridge::call`
-disarms the watchdog for every apiCall and re-arms after, or a deadline that passed mid-wait could
-interrupt the engine in the gap inside `arm()`. A new modal command must gate on the same scope.
-Enforced: pytest:test_message_box.py::test_static_only_the_control_script_grants_wait.
+**Waiting on the user (`ui.window.showMessageBox` with `wait: true`, spec 0120).** Only
+`ControlApiMarshaller::dispatch` opens `API::UserWaitScope(true)`. The control script's
+setup()/loop() and JS macros (`MacroWorker` shares the marshaller) may block on a modal dialog.
+A parser, transform, `onConnect()`, Lua macro (GUI-synchronous through `ScriptApiCall`) or remote
+client is refused, because each sits on a path that must not stall. The handler reopens the
+scope as false around the modal loop, so a command dispatched inside it never inherits it. Both
+bridges (`ControlApiBridge::call`, `MacroApiBridge::call`) disarm their watchdog for every apiCall
+and re-arm after, so wait time is never billed and a deadline that passed mid-wait cannot
+interrupt the engine in the gap inside `arm()`; the macro bridge re-arms before a stop throws, so a
+macro catching it stays bounded. One API box at a time: `UserWaitScope` holds the open box's
+closer and the marshaller whose script waits on it, and a second request is refused while it
+shows. A stop belongs to one run, not to the worker: `ControlApiMarshaller::stopRun()` ends the
+active run, and the owner passes `nextRun()` with each start (the control script through
+`start(code, run)`, macros by beginning the run GUI-side before the queue, as their stop flag
+does), so a stop is never erased by the next start nor inherited by it. After a stop the
+marshaller refuses the run's posted dispatches, every apiCall throws instead of answering,
+`delay()` and `deviceWriteAndWait` return early, `cancelWaitingBox(marshaller)` closes that script's box and no other, and the worker ends
+the run without a `scriptError` (a stop is not a script error). `ControlScript::shutdown()` with
+its box open closes it and returns unlatched; `ModuleManager::onQuit`'s latched `aboutToQuit`
+pass re-calls it once the stack has unwound and joins. An automation `ui.automation.key` Escape
+closes the box with the cancel answer (`listWindows` reports it as `dialog`), and the modal loop
+opens an empty `DispatchPolicyScope` so nothing dispatched inside it inherits the script policy.
+A new modal command must gate on the same scope and register a closer.
+Enforced: pytest:test_message_box.py::test_static_only_the_script_marshaller_grants_wait,
+pytest:test_message_box.py::test_a_stop_mid_api_call_is_no_script_error, ctest:tst_message_box_gate.
+
+**A project's scripts are refused a few commands (spec 0120).** `CommandHandler::execute` (the
+only `ICommandExecutor`, used by the parser, transforms, control script and macros) dispatches as
+`CommandOrigin::Script` and opens a `DispatchPolicyScope` over `API::ScriptCommandPolicy`, AFTER
+the trusted `RemoteDispatchScope` (which would otherwise shadow it). Refused, with an error and no
+prompt: extension repository and install/uninstall commands, the licensing mutators, and
+`project.save` to any file but the project's own (checked after the saver's `.ssproj` suffix,
+case exact), through `askPath`, or with no project file (both open a Save dialog per call). Remote
+clients and the AI assistant keep their
+own gates. A script is still trusted for everything else, and the launch consent stays the one
+question per project. Enforced: ctest:tst_script_command_policy,
+pytest:test_message_box.py::test_static_script_refusals_live_in_one_place.
 
 ## Control Script — Per-Connection Lifecycle
 
