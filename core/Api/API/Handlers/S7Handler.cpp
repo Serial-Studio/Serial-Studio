@@ -141,10 +141,8 @@ API::CommandResponse API::Handlers::S7Handler::setProperty(const QString& id,
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: key"));
   }
 
-  if (!params.contains(QStringLiteral("value"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: value"));
-  }
+  if (!params.contains(QStringLiteral("value")))
+    return CommandResponse::makeMissingParam(id, "value");
 
   auto& manager = API::handlerContext().connectionManager;
   auto* driver  = manager.s7();
@@ -228,10 +226,8 @@ API::CommandResponse API::Handlers::S7Handler::addVariable(const QString& id,
 API::CommandResponse API::Handlers::S7Handler::removeVariable(const QString& id,
                                                               const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("index"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: index"));
-  }
+  if (!params.contains(QStringLiteral("index")))
+    return CommandResponse::makeMissingParam(id, "index");
 
   if (!params.value(QStringLiteral("index")).isDouble()) {
     return CommandResponse::makeError(

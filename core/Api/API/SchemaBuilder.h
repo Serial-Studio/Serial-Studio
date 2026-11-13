@@ -137,27 +137,6 @@ struct SchemaProp {
 [[nodiscard]] QJsonObject schemaPropToJson(const SchemaProp& p);
 
 /**
- * @brief Build a JSON-Schema object from a flat list of properties.
- */
-[[nodiscard]] inline QJsonObject makeSchema(std::initializer_list<SchemaProp> props)
-{
-  QJsonObject properties;
-  QJsonArray required;
-  for (const auto& p : props) {
-    properties.insert(p.name, schemaPropToJson(p));
-    required.append(p.name);
-  }
-
-  QJsonObject schema;
-  schema.insert(QStringLiteral("type"), QStringLiteral("object"));
-  schema.insert(QStringLiteral("properties"), properties);
-  if (!required.isEmpty())
-    schema.insert(QStringLiteral("required"), required);
-
-  return schema;
-}
-
-/**
  * @brief Build a JSON-Schema with explicit required vs. optional properties.
  */
 [[nodiscard]] inline QJsonObject makeSchema(std::initializer_list<SchemaProp> required_props,
@@ -180,6 +159,14 @@ struct SchemaProp {
     schema.insert(QStringLiteral("required"), required);
 
   return schema;
+}
+
+/**
+ * @brief Build a JSON-Schema object from a flat list of properties.
+ */
+[[nodiscard]] inline QJsonObject makeSchema(std::initializer_list<SchemaProp> props)
+{
+  return makeSchema(props, {});
 }
 
 }  // namespace API

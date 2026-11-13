@@ -78,8 +78,6 @@ public:
   [[nodiscard]] int viewers() const noexcept;
   [[nodiscard]] int maxViewers() const;
   [[nodiscard]] bool viewersAllowed() const;
-  [[nodiscard]] quint64 epoch() const noexcept;
-  [[nodiscard]] bool subscribed(const QString& sessionId) const;
   [[nodiscard]] int effectiveHz(const int hz) const;
 
   [[nodiscard]] int structureParts();

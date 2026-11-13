@@ -48,14 +48,6 @@ IO::Audio::SoundBank::SoundBank(int deviceRate, const std::atomic<quint64>& gene
 }
 
 /**
- * @brief The playback rate every slot is converted to.
- */
-int IO::Audio::SoundBank::deviceRate() const noexcept
-{
-  return m_deviceRate;
-}
-
-/**
  * @brief True when the slot holds a sound.
  */
 bool IO::Audio::SoundBank::loaded(int slot) const noexcept

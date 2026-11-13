@@ -60,29 +60,6 @@ template<typename T>
 concept ByteLike = std::integral<T> && sizeof(T) == 1;
 
 /**
- * @concept Comparable
- * @brief Constrains template parameter to types supporting equality comparison.
- *
- * @tparam T Type to check for comparison support
- */
-template<typename T>
-concept Comparable = requires(T a, T b) {
-  { a == b } -> std::convertible_to<bool>;
-  { a != b } -> std::convertible_to<bool>;
-};
-
-/**
- * @concept Hashable
- * @brief Constrains template parameter to types that can be hashed.
- *
- * @tparam T Type to check for hash support
- */
-template<typename T>
-concept Hashable = requires(T a) {
-  { std::hash<T>{}(a) } -> std::convertible_to<std::size_t>;
-};
-
-/**
  * @concept Serializable
  * @brief Constrains template parameter to types with read() and serialize()
  * methods.
@@ -96,42 +73,6 @@ template<typename T>
 concept Serializable = requires(T obj) {
   { serialize(obj) };
   { read(obj, std::declval<const QJsonObject&>()) } -> std::same_as<bool>;
-};
-
-/**
- * @concept Frameable
- * @brief Constrains template parameter to types that represent data frames.
- *
- * Ensures type T has groups, actions, and title members, matching the Frame
- * structure.
- *
- * @tparam T Type to check for frame properties
- */
-template<typename T>
-concept Frameable = requires(T frame) {
-  { frame.groups };
-  { frame.actions };
-  { frame.title } -> std::convertible_to<QString>;
-};
-
-/**
- * @concept Driver
- * @brief Constrains template parameter to types implementing HAL_Driver
- * interface.
- *
- * Ensures type T provides the core I/O driver methods: open(), close(),
- * write(), and state queries.
- *
- * @tparam T Type to check for driver interface compliance
- */
-template<typename T>
-concept Driver = requires(T driver) {
-  { driver.open(std::declval<QIODevice::OpenMode>()) } -> std::same_as<bool>;
-  { driver.close() } -> std::same_as<void>;
-  { driver.isOpen() } -> std::same_as<bool>;
-  { driver.isReadable() } -> std::same_as<bool>;
-  { driver.isWritable() } -> std::same_as<bool>;
-  { driver.write(std::declval<const QByteArray&>()) } -> std::convertible_to<quint64>;
 };
 
 }  // namespace Concepts

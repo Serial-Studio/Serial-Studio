@@ -87,12 +87,10 @@ API::CommandResponse API::Handlers::ProjectPainterCommands::painterSetCode(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(QStringLiteral("code")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
+    return CommandResponse::makeMissingParam(id, "code");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   const QString code = params.value(QStringLiteral("code")).toString();
@@ -120,8 +118,7 @@ API::CommandResponse API::Handlers::ProjectPainterCommands::painterGetCode(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   auto& model        = DataModel::pipelineModules().projectModel;

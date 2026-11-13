@@ -281,23 +281,6 @@ bool IO::Drivers::Audio::packPlaybackFrame(const QByteArray& line, int channels,
 }
 
 /**
- * @brief How many capture blocks the real-time callback had to drop for want of a free slot;
- *        pulled, never pushed (spec 0033).
- */
-quint64 IO::Drivers::Audio::inputDrops() const noexcept
-{
-  return m_inputDrops.load(std::memory_order_relaxed);
-}
-
-/**
- * @brief How many output callbacks ran out of buffered samples and played silence instead.
- */
-quint64 IO::Drivers::Audio::playbackUnderruns() const noexcept
-{
-  return m_playbackRing.underruns();
-}
-
-/**
  * @brief Opens the audio I/O device with the current configuration.
  */
 bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
@@ -1140,14 +1123,6 @@ void IO::Drivers::Audio::publishTypedBlock(const QByteArray& raw,
 bool IO::Drivers::Audio::isStreamCapable() const noexcept
 {
   return true;
-}
-
-/**
- * @brief Returns whether the stream lane currently consumes this driver's blocks.
- */
-bool IO::Drivers::Audio::streamLaneActive() const noexcept
-{
-  return m_streamLaneActive.load(std::memory_order_relaxed);
 }
 
 /**

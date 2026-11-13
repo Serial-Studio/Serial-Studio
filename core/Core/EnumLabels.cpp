@@ -9,9 +9,28 @@
 
 #include "Core/EnumLabels.h"
 
+#include <QHash>
 #include <QStringList>
 
-#include "Core/LayoutPatterns.h"
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+struct DatasetOptionInfo {
+  int bit;
+  QLatin1String slug;
+  QLatin1String label;
+};
+
+static constexpr DatasetOptionInfo kDatasetOptions[] = {
+  {     SerialStudio::DatasetPlot,      QLatin1String("plot"),      QLatin1String("plot")},
+  {      SerialStudio::DatasetFFT,       QLatin1String("fft"),       QLatin1String("FFT")},
+  {      SerialStudio::DatasetBar,       QLatin1String("bar"),       QLatin1String("bar")},
+  {    SerialStudio::DatasetGauge,     QLatin1String("gauge"),     QLatin1String("gauge")},
+  {  SerialStudio::DatasetCompass,   QLatin1String("compass"),   QLatin1String("compass")},
+  {SerialStudio::DatasetWaterfall, QLatin1String("waterfall"), QLatin1String("waterfall")},
+  {    SerialStudio::DatasetMeter,     QLatin1String("meter"),     QLatin1String("meter")},
+};
 
 //--------------------------------------------------------------------------------------------------
 // BusType
@@ -404,36 +423,6 @@ QString API::EnumLabels::identityTokenLabel(int value)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the wire slug of a dashboard layout pattern; Grid is the empty default.
- */
-QString API::EnumLabels::layoutPatternSlug(int value)
-{
-  return UI::Layouts::patternId(static_cast<UI::Layouts::Pattern>(value));
-}
-
-/**
- * @brief Returns the human-readable name of a dashboard layout pattern.
- */
-QString API::EnumLabels::layoutPatternLabel(int value)
-{
-  switch (static_cast<UI::Layouts::Pattern>(value)) {
-    case UI::Layouts::Pattern::MasterStack:
-      return QStringLiteral("Master + Stack");
-    case UI::Layouts::Pattern::MasterGrid:
-      return QStringLiteral("Master + Grid");
-    case UI::Layouts::Pattern::Row:
-      return QStringLiteral("Row");
-    case UI::Layouts::Pattern::Column:
-      return QStringLiteral("Column");
-    case UI::Layouts::Pattern::Spiral:
-      return QStringLiteral("Spiral");
-    case UI::Layouts::Pattern::Grid:
-      return QStringLiteral("Grid");
-  }
-  return QStringLiteral("Grid");
-}
-
-/**
  * @brief Returns a short slug for a GroupWidget value.
  */
 QString API::EnumLabels::groupWidgetSlug(int value)
@@ -555,26 +544,9 @@ QString API::EnumLabels::datasetWidgetLabel(int value)
 QString API::EnumLabels::datasetOptionsLabel(int value)
 {
   QStringList parts;
-  if (value & SerialStudio::DatasetPlot)
-    parts.append(QStringLiteral("plot"));
-
-  if (value & SerialStudio::DatasetFFT)
-    parts.append(QStringLiteral("FFT"));
-
-  if (value & SerialStudio::DatasetBar)
-    parts.append(QStringLiteral("bar"));
-
-  if (value & SerialStudio::DatasetGauge)
-    parts.append(QStringLiteral("gauge"));
-
-  if (value & SerialStudio::DatasetCompass)
-    parts.append(QStringLiteral("compass"));
-
-  if (value & SerialStudio::DatasetWaterfall)
-    parts.append(QStringLiteral("waterfall"));
-
-  if (value & SerialStudio::DatasetMeter)
-    parts.append(QStringLiteral("meter"));
+  for (const auto& option : kDatasetOptions)
+    if (value & option.bit)
+      parts.append(QString(option.label));
 
   if (parts.isEmpty())
     return QStringLiteral("generic");
@@ -653,84 +625,46 @@ QString API::EnumLabels::dashboardWidgetSlug(int value)
  */
 int API::EnumLabels::dashboardWidgetFromSlug(const QString& slug)
 {
-  const auto s = slug.trimmed().toLower();
-  if (s == QLatin1String("terminal"))
-    return SerialStudio::DashboardTerminal;
-
-  if (s == QLatin1String("datagrid") || s == QLatin1String("data-grid"))
-    return SerialStudio::DashboardDataGrid;
-
-  if (s == QLatin1String("multiplot") || s == QLatin1String("multi-plot"))
-    return SerialStudio::DashboardMultiPlot;
-
-  if (s == QLatin1String("accelerometer"))
-    return SerialStudio::DashboardAccelerometer;
-
-  if (s == QLatin1String("gyroscope"))
-    return SerialStudio::DashboardGyroscope;
-
-  if (s == QLatin1String("gps"))
-    return SerialStudio::DashboardGPS;
-
-  if (s == QLatin1String("plot3d") || s == QLatin1String("plot-3d"))
-    return SerialStudio::DashboardPlot3D;
-
-  if (s == QLatin1String("fft"))
-    return SerialStudio::DashboardFFT;
-
-  if (s == QLatin1String("led") || s == QLatin1String("ledpanel")
-      || s == QLatin1String("led-panel"))
-    return SerialStudio::DashboardLED;
-
-  if (s == QLatin1String("plot"))
-    return SerialStudio::DashboardPlot;
-
-  if (s == QLatin1String("bar"))
-    return SerialStudio::DashboardBar;
-
-  if (s == QLatin1String("gauge"))
-    return SerialStudio::DashboardGauge;
-
-  if (s == QLatin1String("compass"))
-    return SerialStudio::DashboardCompass;
-
-  if (s == QLatin1String("meter"))
-    return SerialStudio::DashboardMeter;
-
-  if (s == QLatin1String("clock"))
-    return SerialStudio::DashboardClock;
-
-  if (s == QLatin1String("stopwatch"))
-    return SerialStudio::DashboardStopwatch;
-
-  if (s == QLatin1String("webview") || s == QLatin1String("web-view"))
-    return SerialStudio::DashboardWebView;
-
-  if (s == QLatin1String("none"))
-    return SerialStudio::DashboardNoWidget;
-
-  if (s == QLatin1String("barpanel") || s == QLatin1String("bar-panel"))
-    return SerialStudio::DashboardBarPanel;
+  static const QHash<QString, int> kSlugMap = {
+    {        QStringLiteral("terminal"),        SerialStudio::DashboardTerminal},
+    {        QStringLiteral("datagrid"),        SerialStudio::DashboardDataGrid},
+    {       QStringLiteral("data-grid"),        SerialStudio::DashboardDataGrid},
+    {       QStringLiteral("multiplot"),       SerialStudio::DashboardMultiPlot},
+    {      QStringLiteral("multi-plot"),       SerialStudio::DashboardMultiPlot},
+    {   QStringLiteral("accelerometer"),   SerialStudio::DashboardAccelerometer},
+    {       QStringLiteral("gyroscope"),       SerialStudio::DashboardGyroscope},
+    {             QStringLiteral("gps"),             SerialStudio::DashboardGPS},
+    {          QStringLiteral("plot3d"),          SerialStudio::DashboardPlot3D},
+    {         QStringLiteral("plot-3d"),          SerialStudio::DashboardPlot3D},
+    {             QStringLiteral("fft"),             SerialStudio::DashboardFFT},
+    {             QStringLiteral("led"),             SerialStudio::DashboardLED},
+    {        QStringLiteral("ledpanel"),             SerialStudio::DashboardLED},
+    {       QStringLiteral("led-panel"),             SerialStudio::DashboardLED},
+    {            QStringLiteral("plot"),            SerialStudio::DashboardPlot},
+    {             QStringLiteral("bar"),             SerialStudio::DashboardBar},
+    {           QStringLiteral("gauge"),           SerialStudio::DashboardGauge},
+    {         QStringLiteral("compass"),         SerialStudio::DashboardCompass},
+    {           QStringLiteral("meter"),           SerialStudio::DashboardMeter},
+    {           QStringLiteral("clock"),           SerialStudio::DashboardClock},
+    {       QStringLiteral("stopwatch"),       SerialStudio::DashboardStopwatch},
+    {         QStringLiteral("webview"),         SerialStudio::DashboardWebView},
+    {        QStringLiteral("web-view"),         SerialStudio::DashboardWebView},
+    {            QStringLiteral("none"),        SerialStudio::DashboardNoWidget},
+    {        QStringLiteral("barpanel"),        SerialStudio::DashboardBarPanel},
+    {       QStringLiteral("bar-panel"),        SerialStudio::DashboardBarPanel},
 #ifdef BUILD_COMMERCIAL
-  if (s == QLatin1String("imageview") || s == QLatin1String("image-view"))
-    return SerialStudio::DashboardImageView;
-
-  if (s == QLatin1String("output-panel") || s == QLatin1String("outputpanel"))
-    return SerialStudio::DashboardOutputPanel;
-
-  if (s == QLatin1String("notification-log") || s == QLatin1String("notificationlog"))
-    return SerialStudio::DashboardNotificationLog;
-
-  if (s == QLatin1String("waterfall"))
-    return SerialStudio::DashboardWaterfall;
-
-  if (s == QLatin1String("painter"))
-    return SerialStudio::DashboardPainter;
+    {       QStringLiteral("imageview"),       SerialStudio::DashboardImageView},
+    {      QStringLiteral("image-view"),       SerialStudio::DashboardImageView},
+    {    QStringLiteral("output-panel"),     SerialStudio::DashboardOutputPanel},
+    {     QStringLiteral("outputpanel"),     SerialStudio::DashboardOutputPanel},
+    {QStringLiteral("notification-log"), SerialStudio::DashboardNotificationLog},
+    { QStringLiteral("notificationlog"), SerialStudio::DashboardNotificationLog},
+    {       QStringLiteral("waterfall"),       SerialStudio::DashboardWaterfall},
+    {         QStringLiteral("painter"),         SerialStudio::DashboardPainter},
 #endif
-  if (s == QLatin1String("extension"))
-    return SerialStudio::DashboardExtension;
-
-  return -1;
+    {       QStringLiteral("extension"),       SerialStudio::DashboardExtension},
+  };
+  return kSlugMap.value(slug.trimmed().toLower(), -1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -742,22 +676,10 @@ int API::EnumLabels::dashboardWidgetFromSlug(const QString& slug)
  */
 QString API::EnumLabels::datasetOptionSlug(int singleBitValue)
 {
-  switch (singleBitValue) {
-    case SerialStudio::DatasetPlot:
-      return QStringLiteral("plot");
-    case SerialStudio::DatasetFFT:
-      return QStringLiteral("fft");
-    case SerialStudio::DatasetBar:
-      return QStringLiteral("bar");
-    case SerialStudio::DatasetGauge:
-      return QStringLiteral("gauge");
-    case SerialStudio::DatasetCompass:
-      return QStringLiteral("compass");
-    case SerialStudio::DatasetWaterfall:
-      return QStringLiteral("waterfall");
-    case SerialStudio::DatasetMeter:
-      return QStringLiteral("meter");
-  }
+  for (const auto& option : kDatasetOptions)
+    if (option.bit == singleBitValue)
+      return QString(option.slug);
+
   return QString();
 }
 
@@ -767,26 +689,9 @@ QString API::EnumLabels::datasetOptionSlug(int singleBitValue)
 int API::EnumLabels::datasetOptionFromSlug(const QString& slug)
 {
   const auto s = slug.trimmed().toLower();
-  if (s == QLatin1String("plot"))
-    return SerialStudio::DatasetPlot;
-
-  if (s == QLatin1String("fft"))
-    return SerialStudio::DatasetFFT;
-
-  if (s == QLatin1String("bar"))
-    return SerialStudio::DatasetBar;
-
-  if (s == QLatin1String("gauge"))
-    return SerialStudio::DatasetGauge;
-
-  if (s == QLatin1String("compass"))
-    return SerialStudio::DatasetCompass;
-
-  if (s == QLatin1String("waterfall"))
-    return SerialStudio::DatasetWaterfall;
-
-  if (s == QLatin1String("meter"))
-    return SerialStudio::DatasetMeter;
+  for (const auto& option : kDatasetOptions)
+    if (s == option.slug)
+      return option.bit;
 
   return 0;
 }
@@ -797,26 +702,9 @@ int API::EnumLabels::datasetOptionFromSlug(const QString& slug)
 QStringList API::EnumLabels::datasetOptionsBitsToSlugs(int value)
 {
   QStringList out;
-  if (value & SerialStudio::DatasetPlot)
-    out.append(QStringLiteral("plot"));
-
-  if (value & SerialStudio::DatasetFFT)
-    out.append(QStringLiteral("fft"));
-
-  if (value & SerialStudio::DatasetBar)
-    out.append(QStringLiteral("bar"));
-
-  if (value & SerialStudio::DatasetGauge)
-    out.append(QStringLiteral("gauge"));
-
-  if (value & SerialStudio::DatasetCompass)
-    out.append(QStringLiteral("compass"));
-
-  if (value & SerialStudio::DatasetWaterfall)
-    out.append(QStringLiteral("waterfall"));
-
-  if (value & SerialStudio::DatasetMeter)
-    out.append(QStringLiteral("meter"));
+  for (const auto& option : kDatasetOptions)
+    if (value & option.bit)
+      out.append(QString(option.slug));
 
   return out;
 }

@@ -1400,13 +1400,4 @@ template<Concepts::Serializable T>
   return std::nullopt;
 }
 
-/**
- * @brief Validates a Frameable object's structure.
- */
-template<Concepts::Frameable T>
-[[nodiscard]] constexpr bool isValidFrame(const T& frame) noexcept
-{
-  return !frame.groups.empty();
-}
-
 }  // namespace DataModel

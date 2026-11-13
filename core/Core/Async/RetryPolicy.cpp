@@ -98,14 +98,6 @@ Async::RetryPolicy Async::RetryPolicy::initialConnect()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the geometric growth factor between consecutive attempts.
- */
-double Async::RetryPolicy::multiplier() const noexcept
-{
-  return m_multiplier;
-}
-
-/**
  * @brief Returns the total number of attempts allowed, the first one included.
  */
 int Async::RetryPolicy::maxAttempts() const noexcept

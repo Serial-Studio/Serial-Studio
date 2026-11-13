@@ -125,8 +125,7 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetAdd
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   const int type     = params.value(QStringLiteral("type")).toInt(0);
@@ -154,12 +153,10 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetDel
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(QStringLiteral("widgetId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: widgetId"));
+    return CommandResponse::makeMissingParam(id, "widgetId");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   const int widgetId = params.value(QStringLiteral("widgetId")).toInt();
@@ -191,12 +188,10 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetDup
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(QStringLiteral("widgetId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: widgetId"));
+    return CommandResponse::makeMissingParam(id, "widgetId");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   const int widgetId = params.value(QStringLiteral("widgetId")).toInt();
@@ -228,12 +223,10 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetGet
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(QStringLiteral("widgetId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: widgetId"));
+    return CommandResponse::makeMissingParam(id, "widgetId");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   const int widgetId = params.value(QStringLiteral("widgetId")).toInt();

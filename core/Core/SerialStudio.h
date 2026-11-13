@@ -332,14 +332,6 @@ enum class XAxisMode : quint8 {
 };
 
 /**
- * @brief Resolved X-axis policy: the render mode plus the X source dataset id (Dataset mode).
- */
-struct XAxisPolicy {
-  XAxisMode mode = XAxisMode::Time;  ///< Resolved render mode
-  int xDatasetId = -1;               ///< X source dataset uniqueId (Dataset mode; -1 otherwise)
-};
-
-/**
  * @brief What a group widget needs from its datasets (spec 0100 R15/R16): a dataset count range
  *        (@c maxCount -1 means unbounded) and the role tags the widget binds by, one entry per
  *        required role listing the tags it accepts. Widgets bind by tag, never by order.
@@ -373,11 +365,8 @@ struct GroupWidgetRequirement {
 
 [[nodiscard]] bool searchMatches(const QString& query, const QString& text);
 
-[[nodiscard]] QString hexToString(const QString& hex);
-[[nodiscard]] QString stringToHex(const QString& str);
 [[nodiscard]] QByteArray hexToBytes(const QString& data);
 [[nodiscard]] QString resolveEscapeSequences(const QString& str);
-[[nodiscard]] QString escapeControlCharacters(const QString& str);
 
 [[nodiscard]] QString normalizeIconPath(const QString& path);
 

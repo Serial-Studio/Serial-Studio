@@ -65,10 +65,7 @@ public:
   [[nodiscard]] bool live() const noexcept;
   [[nodiscard]] bool stale() const noexcept;
   [[nodiscard]] bool linked() const noexcept;
-  [[nodiscard]] quint64 epoch() const noexcept;
   [[nodiscard]] const QString& endpoint() const noexcept;
-  [[nodiscard]] const QString& lastError() const noexcept;
-  [[nodiscard]] const QString& lastErrorCode() const noexcept;
   [[nodiscard]] const QJsonObject& info() const noexcept;
 
 public slots:
@@ -118,8 +115,6 @@ private:
   QString m_host;
   QString m_token;
   QString m_endpoint;
-  QString m_lastError;
-  QString m_lastErrorCode;
   QString m_pendingId;
   QString m_pendingCommand;
   QJsonObject m_pendingParams;

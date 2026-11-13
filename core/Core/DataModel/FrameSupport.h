@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <QMap>
 #include <QStringList>
 #include <QVector>
 #include <vector>
@@ -55,6 +54,4 @@ struct ProContentSummary {
                                     const DataModel::Dataset& after);
 [[nodiscard]] bool groupEligibleForWorkspace(const DataModel::Group& g);
 [[nodiscard]] XAxisMode groupXAxisMode(const DataModel::Group& g);
-[[nodiscard]] XAxisPolicy resolveXAxisPolicy(const DataModel::Dataset& d,
-                                             const QMap<int, DataModel::Dataset>& datasets);
 }  // namespace SerialStudio

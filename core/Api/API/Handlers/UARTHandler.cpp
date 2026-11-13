@@ -231,10 +231,8 @@ void API::Handlers::UARTHandler::registerCommands()
 API::CommandResponse API::Handlers::UARTHandler::setDevice(const QString& id,
                                                            const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("device"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: device"));
-  }
+  if (!params.contains(QStringLiteral("device")))
+    return CommandResponse::makeMissingParam(id, "device");
 
   const QString device = params.value(QStringLiteral("device")).toString();
   if (device.isEmpty()) {
@@ -253,38 +251,55 @@ API::CommandResponse API::Handlers::UARTHandler::setDevice(const QString& id,
 }
 
 /**
+ * @brief Validate an index against a UART list, queue the setter and echo {index, name}.
+ */
+[[nodiscard]] static API::CommandResponse setListIndex(const QString& id,
+                                                       const QJsonObject& params,
+                                                       const char* index_key,
+                                                       const char* name_key,
+                                                       QStringList (IO::Drivers::UART::*list_fn)()
+                                                         const,
+                                                       void (IO::Drivers::UART::*setter)(quint8))
+{
+  if (!params.contains(QLatin1String(index_key)))
+    return API::CommandResponse::makeMissingParam(id, index_key);
+
+  auto* uart       = API::handlerContext().connectionManager.uart();
+  const int index  = params.value(QLatin1String(index_key)).toInt();
+  const auto names = (uart->*list_fn)();
+
+  if (index < 0 || index >= names.count()) {
+    return API::CommandResponse::makeError(id,
+                                           API::ErrorCode::InvalidParam,
+                                           QStringLiteral("Invalid %1: %2. Valid range: 0-%3")
+                                             .arg(QLatin1String(index_key))
+                                             .arg(index)
+                                             .arg(names.count() - 1));
+  }
+
+  QMetaObject::invokeMethod(
+    uart,
+    [uart, setter, index]() { (uart->*setter)(static_cast<quint8>(index)); },
+    Qt::AutoConnection);
+
+  QJsonObject result;
+  result[QLatin1String(index_key)] = index;
+  result[QLatin1String(name_key)]  = names.at(index);
+  return API::CommandResponse::makeSuccess(id, result);
+}
+
+/**
  * @brief Set serial port by index
  */
 API::CommandResponse API::Handlers::UARTHandler::setPortIndex(const QString& id,
                                                               const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("portIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: portIndex"));
-  }
-
-  auto& connectionManager = API::handlerContext().connectionManager;
-  const int portIndex     = params.value(QStringLiteral("portIndex")).toInt();
-  const auto& portList    = connectionManager.uart()->portList();
-
-  if (portIndex < 0 || portIndex >= portList.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid portIndex: %1. Valid range: 0-%2")
-                                        .arg(portIndex)
-                                        .arg(portList.count() - 1));
-  }
-
-  auto* uart = connectionManager.uart();
-  QMetaObject::invokeMethod(
-    uart,
-    [uart, portIndex]() { uart->setPortIndex(static_cast<quint8>(portIndex)); },
-    Qt::AutoConnection);
-
-  QJsonObject result;
-  result[QStringLiteral("portIndex")] = portIndex;
-  result[QStringLiteral("portName")]  = portList.at(portIndex);
-  return CommandResponse::makeSuccess(id, result);
+  return setListIndex(id,
+                      params,
+                      "portIndex",
+                      "portName",
+                      &IO::Drivers::UART::portList,
+                      &IO::Drivers::UART::setPortIndex);
 }
 
 /**
@@ -293,10 +308,8 @@ API::CommandResponse API::Handlers::UARTHandler::setPortIndex(const QString& id,
 API::CommandResponse API::Handlers::UARTHandler::setBaudRate(const QString& id,
                                                              const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("baudRate"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: baudRate"));
-  }
+  if (!params.contains(QStringLiteral("baudRate")))
+    return CommandResponse::makeMissingParam(id, "baudRate");
 
   const int baudRate = params.value(QStringLiteral("baudRate")).toInt();
   if (baudRate <= 0 || baudRate > kMaxBaudRate) {
@@ -322,33 +335,12 @@ API::CommandResponse API::Handlers::UARTHandler::setBaudRate(const QString& id,
 API::CommandResponse API::Handlers::UARTHandler::setParity(const QString& id,
                                                            const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("parityIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: parityIndex"));
-  }
-
-  auto& connectionManager = API::handlerContext().connectionManager;
-  const int parityIndex   = params.value(QStringLiteral("parityIndex")).toInt();
-  const auto& parityList  = connectionManager.uart()->parityList();
-
-  if (parityIndex < 0 || parityIndex >= parityList.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid parityIndex: %1. Valid range: 0-%2")
-                                        .arg(parityIndex)
-                                        .arg(parityList.count() - 1));
-  }
-
-  auto* uart = connectionManager.uart();
-  QMetaObject::invokeMethod(
-    uart,
-    [uart, parityIndex]() { uart->setParity(static_cast<quint8>(parityIndex)); },
-    Qt::AutoConnection);
-
-  QJsonObject result;
-  result[QStringLiteral("parityIndex")] = parityIndex;
-  result[QStringLiteral("parityName")]  = parityList.at(parityIndex);
-  return CommandResponse::makeSuccess(id, result);
+  return setListIndex(id,
+                      params,
+                      "parityIndex",
+                      "parityName",
+                      &IO::Drivers::UART::parityList,
+                      &IO::Drivers::UART::setParity);
 }
 
 /**
@@ -357,33 +349,12 @@ API::CommandResponse API::Handlers::UARTHandler::setParity(const QString& id,
 API::CommandResponse API::Handlers::UARTHandler::setDataBits(const QString& id,
                                                              const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("dataBitsIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: dataBitsIndex"));
-  }
-
-  auto& connectionManager  = API::handlerContext().connectionManager;
-  const int dataBitsIndex  = params.value(QStringLiteral("dataBitsIndex")).toInt();
-  const auto& dataBitsList = connectionManager.uart()->dataBitsList();
-
-  if (dataBitsIndex < 0 || dataBitsIndex >= dataBitsList.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid dataBitsIndex: %1. Valid range: 0-%2")
-                                        .arg(dataBitsIndex)
-                                        .arg(dataBitsList.count() - 1));
-  }
-
-  auto* uart = connectionManager.uart();
-  QMetaObject::invokeMethod(
-    uart,
-    [uart, dataBitsIndex]() { uart->setDataBits(static_cast<quint8>(dataBitsIndex)); },
-    Qt::AutoConnection);
-
-  QJsonObject result;
-  result[QStringLiteral("dataBitsIndex")] = dataBitsIndex;
-  result[QStringLiteral("dataBitsValue")] = dataBitsList.at(dataBitsIndex);
-  return CommandResponse::makeSuccess(id, result);
+  return setListIndex(id,
+                      params,
+                      "dataBitsIndex",
+                      "dataBitsValue",
+                      &IO::Drivers::UART::dataBitsList,
+                      &IO::Drivers::UART::setDataBits);
 }
 
 /**
@@ -392,33 +363,12 @@ API::CommandResponse API::Handlers::UARTHandler::setDataBits(const QString& id,
 API::CommandResponse API::Handlers::UARTHandler::setStopBits(const QString& id,
                                                              const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("stopBitsIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: stopBitsIndex"));
-  }
-
-  auto& connectionManager  = API::handlerContext().connectionManager;
-  const int stopBitsIndex  = params.value(QStringLiteral("stopBitsIndex")).toInt();
-  const auto& stopBitsList = connectionManager.uart()->stopBitsList();
-
-  if (stopBitsIndex < 0 || stopBitsIndex >= stopBitsList.count()) {
-    return CommandResponse::makeError(id,
-                                      ErrorCode::InvalidParam,
-                                      QStringLiteral("Invalid stopBitsIndex: %1. Valid range: 0-%2")
-                                        .arg(stopBitsIndex)
-                                        .arg(stopBitsList.count() - 1));
-  }
-
-  auto* uart = connectionManager.uart();
-  QMetaObject::invokeMethod(
-    uart,
-    [uart, stopBitsIndex]() { uart->setStopBits(static_cast<quint8>(stopBitsIndex)); },
-    Qt::AutoConnection);
-
-  QJsonObject result;
-  result[QStringLiteral("stopBitsIndex")] = stopBitsIndex;
-  result[QStringLiteral("stopBitsValue")] = stopBitsList.at(stopBitsIndex);
-  return CommandResponse::makeSuccess(id, result);
+  return setListIndex(id,
+                      params,
+                      "stopBitsIndex",
+                      "stopBitsValue",
+                      &IO::Drivers::UART::stopBitsList,
+                      &IO::Drivers::UART::setStopBits);
 }
 
 /**
@@ -427,34 +377,12 @@ API::CommandResponse API::Handlers::UARTHandler::setStopBits(const QString& id,
 API::CommandResponse API::Handlers::UARTHandler::setFlowControl(const QString& id,
                                                                 const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("flowControlIndex"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: flowControlIndex"));
-  }
-
-  auto& connectionManager     = API::handlerContext().connectionManager;
-  const int flowControlIndex  = params.value(QStringLiteral("flowControlIndex")).toInt();
-  const auto& flowControlList = connectionManager.uart()->flowControlList();
-
-  if (flowControlIndex < 0 || flowControlIndex >= flowControlList.count()) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QStringLiteral("Invalid flowControlIndex: %1. Valid range: 0-%2")
-        .arg(flowControlIndex)
-        .arg(flowControlList.count() - 1));
-  }
-
-  auto* uart = connectionManager.uart();
-  QMetaObject::invokeMethod(
-    uart,
-    [uart, flowControlIndex]() { uart->setFlowControl(static_cast<quint8>(flowControlIndex)); },
-    Qt::AutoConnection);
-
-  QJsonObject result;
-  result[QStringLiteral("flowControlIndex")] = flowControlIndex;
-  result[QStringLiteral("flowControlName")]  = flowControlList.at(flowControlIndex);
-  return CommandResponse::makeSuccess(id, result);
+  return setListIndex(id,
+                      params,
+                      "flowControlIndex",
+                      "flowControlName",
+                      &IO::Drivers::UART::flowControlList,
+                      &IO::Drivers::UART::setFlowControl);
 }
 
 /**
@@ -463,10 +391,8 @@ API::CommandResponse API::Handlers::UARTHandler::setFlowControl(const QString& i
 API::CommandResponse API::Handlers::UARTHandler::setDtrEnabled(const QString& id,
                                                                const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("dtrEnabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: dtrEnabled"));
-  }
+  if (!params.contains(QStringLiteral("dtrEnabled")))
+    return CommandResponse::makeMissingParam(id, "dtrEnabled");
 
   const bool dtrEnabled   = params.value(QStringLiteral("dtrEnabled")).toBool();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -485,10 +411,8 @@ API::CommandResponse API::Handlers::UARTHandler::setDtrEnabled(const QString& id
 API::CommandResponse API::Handlers::UARTHandler::setAutoReconnect(const QString& id,
                                                                   const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("autoReconnect"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: autoReconnect"));
-  }
+  if (!params.contains(QStringLiteral("autoReconnect")))
+    return CommandResponse::makeMissingParam(id, "autoReconnect");
 
   const bool autoReconnect = params.value(QStringLiteral("autoReconnect")).toBool();
   auto& connectionManager  = API::handlerContext().connectionManager;
@@ -535,10 +459,8 @@ static IO::Drivers::UART* liveUart(const QJsonObject& params, QString& error)
 API::CommandResponse API::Handlers::UARTHandler::setRtsEnabled(const QString& id,
                                                                const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("rtsEnabled"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: rtsEnabled"));
-  }
+  if (!params.contains(QStringLiteral("rtsEnabled")))
+    return CommandResponse::makeMissingParam(id, "rtsEnabled");
 
   const bool rtsEnabled   = params.value(QStringLiteral("rtsEnabled")).toBool();
   auto& connectionManager = API::handlerContext().connectionManager;
@@ -557,10 +479,8 @@ API::CommandResponse API::Handlers::UARTHandler::setRtsEnabled(const QString& id
 API::CommandResponse API::Handlers::UARTHandler::sendBreak(const QString& id,
                                                            const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("durationMs"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: durationMs"));
-  }
+  if (!params.contains(QStringLiteral("durationMs")))
+    return CommandResponse::makeMissingParam(id, "durationMs");
 
   const int durationMs = params.value(QStringLiteral("durationMs")).toInt(0);
   if (durationMs < 1 || durationMs > IO::kMaxBreakMs) {
@@ -594,10 +514,8 @@ API::CommandResponse API::Handlers::UARTHandler::sendBreak(const QString& id,
 API::CommandResponse API::Handlers::UARTHandler::setLiveBaudRate(const QString& id,
                                                                  const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("baudRate"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: baudRate"));
-  }
+  if (!params.contains(QStringLiteral("baudRate")))
+    return CommandResponse::makeMissingParam(id, "baudRate");
 
   const int baudRate = params.value(QStringLiteral("baudRate")).toInt();
   if (baudRate <= 0 || baudRate > kMaxBaudRate) {

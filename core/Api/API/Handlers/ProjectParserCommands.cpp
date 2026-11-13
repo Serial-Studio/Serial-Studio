@@ -376,10 +376,8 @@ void API::Handlers::ProjectParserCommands::registerConfigCommands()
 API::CommandResponse API::Handlers::ProjectParserCommands::parserSetCode(const QString& id,
                                                                          const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("code"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
-  }
+  if (!params.contains(QStringLiteral("code")))
+    return CommandResponse::makeMissingParam(id, "code");
 
   const QString code = params.value(QStringLiteral("code")).toString();
   const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
@@ -491,14 +489,27 @@ API::CommandResponse API::Handlers::ProjectParserCommands::parserGetCode(const Q
 }
 
 /**
+ * @brief Returns the project source with @p sourceId, or nullptr when there is none.
+ */
+[[nodiscard]] static const DataModel::Source* findSource(int sourceId)
+{
+  const auto& sources = DataModel::pipelineModules().projectModel.sources();
+  const auto it =
+    std::find_if(sources.begin(), sources.end(), [sourceId](const DataModel::Source& s) {
+      return s.sourceId == sourceId;
+    });
+
+  return it == sources.end() ? nullptr : &*it;
+}
+
+/**
  * @brief Set the scripting language for a frame parser source.
  */
 API::CommandResponse API::Handlers::ProjectParserCommands::parserSetLanguage(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("language")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: language"));
+    return CommandResponse::makeMissingParam(id, "language");
 
   const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
 
@@ -510,14 +521,9 @@ API::CommandResponse API::Handlers::ProjectParserCommands::parserSetLanguage(
       ErrorCode::InvalidParam,
       QStringLiteral("Invalid language: must be 0 (JavaScript), 1 (Lua) or 2 (Built-In)"));
 
-  auto& model         = DataModel::pipelineModules().projectModel;
-  const auto& sources = model.sources();
-  const auto it =
-    std::find_if(sources.begin(), sources.end(), [sourceId](const DataModel::Source& s) {
-      return s.sourceId == sourceId;
-    });
-
-  if (it == sources.end())
+  auto& model        = DataModel::pipelineModules().projectModel;
+  const auto* source = findSource(sourceId);
+  if (!source)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
 
@@ -545,20 +551,14 @@ API::CommandResponse API::Handlers::ProjectParserCommands::parserGetLanguage(
 {
   const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
 
-  auto& model         = DataModel::pipelineModules().projectModel;
-  const auto& sources = model.sources();
-  const auto it =
-    std::find_if(sources.begin(), sources.end(), [sourceId](const DataModel::Source& s) {
-      return s.sourceId == sourceId;
-    });
-
-  if (it == sources.end())
+  const auto* source = findSource(sourceId);
+  if (!source)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
 
   QJsonObject result;
   result[Keys::SourceId]             = sourceId;
-  result[QStringLiteral("language")] = it->frameParserLanguage;
+  result[QStringLiteral("language")] = source->frameParserLanguage;
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -585,8 +585,7 @@ API::CommandResponse API::Handlers::ProjectParserCommands::parserGetTemplateSche
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("template")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: template"));
+    return CommandResponse::makeMissingParam(id, "template");
 
   const QString template_id = params.value(QStringLiteral("template")).toString();
   const auto schema         = DataModel::CFrameParser::templateSchema(template_id);
@@ -606,23 +605,17 @@ API::CommandResponse API::Handlers::ProjectParserCommands::parserGetTemplateSche
 API::CommandResponse API::Handlers::ProjectParserCommands::parserGetTemplate(
   const QString& id, const QJsonObject& params)
 {
-  const int sourceId  = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
-  auto& model         = DataModel::pipelineModules().projectModel;
-  const auto& sources = model.sources();
-  const auto it =
-    std::find_if(sources.begin(), sources.end(), [sourceId](const DataModel::Source& s) {
-      return s.sourceId == sourceId;
-    });
-
-  if (it == sources.end())
+  const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
+  const auto* source = findSource(sourceId);
+  if (!source)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
 
   QJsonObject result;
   result[Keys::SourceId]             = sourceId;
-  result[QStringLiteral("language")] = it->frameParserLanguage;
-  result[QStringLiteral("template")] = it->frameParserTemplate;
-  result[QStringLiteral("params")]   = it->frameParserParams;
+  result[QStringLiteral("language")] = source->frameParserLanguage;
+  result[QStringLiteral("template")] = source->frameParserTemplate;
+  result[QStringLiteral("params")]   = source->frameParserParams;
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -633,18 +626,12 @@ API::CommandResponse API::Handlers::ProjectParserCommands::parserSetTemplate(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("template")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: template"));
+    return CommandResponse::makeMissingParam(id, "template");
 
-  const int sourceId  = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
-  auto& model         = DataModel::pipelineModules().projectModel;
-  const auto& sources = model.sources();
-  const auto it =
-    std::find_if(sources.begin(), sources.end(), [sourceId](const DataModel::Source& s) {
-      return s.sourceId == sourceId;
-    });
-
-  if (it == sources.end())
+  const int sourceId = params.contains(Keys::SourceId) ? params.value(Keys::SourceId).toInt() : 0;
+  auto& model        = DataModel::pipelineModules().projectModel;
+  const auto* source = findSource(sourceId);
+  if (!source)
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
 

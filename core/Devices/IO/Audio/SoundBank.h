@@ -58,7 +58,6 @@ public:
   SoundBank& operator=(SoundBank&&)      = delete;
   SoundBank& operator=(const SoundBank&) = delete;
 
-  [[nodiscard]] int deviceRate() const noexcept;
   [[nodiscard]] bool loaded(int slot) const noexcept;
   [[nodiscard]] const Sound* acquire(int slot) const noexcept;
 

@@ -129,36 +129,11 @@ bool API::MirrorClient::linked() const noexcept
 }
 
 /**
- * @brief Structure epoch currently held; every snapshot must carry it.
- */
-quint64 API::MirrorClient::epoch() const noexcept
-{
-  return m_epoch;
-}
-
-/**
  * @brief Human-readable host:port of the attached remote.
  */
 const QString& API::MirrorClient::endpoint() const noexcept
 {
   return m_endpoint;
-}
-
-/**
- * @brief Message of the last failure, empty when none has occurred since the last open().
- */
-const QString& API::MirrorClient::lastError() const noexcept
-{
-  return m_lastError;
-}
-
-/**
- * @brief Machine-readable code of the last failure; distinguishes refused, unauthorized,
- *        version-mismatch and unreachable for the attach dialog.
- */
-const QString& API::MirrorClient::lastErrorCode() const noexcept
-{
-  return m_lastErrorCode;
 }
 
 /**
@@ -187,16 +162,14 @@ void API::MirrorClient::open(const QString& host,
 
   close();
 
-  m_host          = host;
-  m_port          = port;
-  m_token         = token;
-  m_hz            = qBound(Mirror::kHzMin, hz, Mirror::kHzMax);
-  m_endpoint      = QStringLiteral("%1:%2").arg(host, QString::number(port));
-  m_attempt       = 0;
-  m_userClosed    = false;
-  m_lastError     = QString();
-  m_lastErrorCode = QString();
-  m_stage         = Stage::Connecting;
+  m_host       = host;
+  m_port       = port;
+  m_token      = token;
+  m_hz         = qBound(Mirror::kHzMin, hz, Mirror::kHzMax);
+  m_endpoint   = QStringLiteral("%1:%2").arg(host, QString::number(port));
+  m_attempt    = 0;
+  m_userClosed = false;
+  m_stage      = Stage::Connecting;
 
   m_socket.connectToHost(m_host, m_port);
 }
@@ -708,9 +681,6 @@ void API::MirrorClient::setStale(const bool value)
  */
 void API::MirrorClient::fail(const QString& code, const QString& message)
 {
-  m_lastErrorCode = code;
-  m_lastError     = message;
-
   const bool fatal = code == QLatin1String(Mirror::ErrorCode::VersionMismatch)
                   || code == QStringLiteral("MIRROR_UNAUTHORIZED")
                   || code == QLatin1String(Mirror::ErrorCode::ViewerLimit);

@@ -53,8 +53,6 @@ public:
   [[nodiscard]] static bool isFatalSerialError(QSerialPort::SerialPortError error) noexcept;
   static void appendBounded(QByteArray& buffer, const QByteArray& chunk, quint64& drops);
 
-  [[nodiscard]] quint64 bufferOverflows() const noexcept;
-
 protected:
   explicit SerialCanBackendBase(const QString& portName, qint32 baudRate, QObject* parent);
 

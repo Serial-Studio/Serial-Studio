@@ -25,6 +25,17 @@
 #include <QDebug>
 
 /**
+ * @brief Appends the native bytes of a value to the output buffer.
+ */
+template<typename T>
+static void appendRaw(QVector<quint8>& out, const T& value)
+{
+  const quint8* bytes = reinterpret_cast<const quint8*>(&value);
+  for (size_t b = 0; b < sizeof(T); ++b)
+    out.append(bytes[b]);
+}
+
+/**
  * @brief Packs a single CSV sample into native bytes for the given ma_format.
  */
 bool IO::Drivers::AudioPcm::packCsvSample(ma_format format,
@@ -52,9 +63,7 @@ bool IO::Drivers::AudioPcm::packCsvSample(ma_format format,
     }
 
     const qint16 sample = static_cast<qint16>(qBound(-32768, value, 32767));
-    const quint8* bytes = reinterpret_cast<const quint8*>(&sample);
-    out.append(bytes[0]);
-    out.append(bytes[1]);
+    appendRaw(out, sample);
     return true;
   }
 
@@ -79,12 +88,8 @@ bool IO::Drivers::AudioPcm::packCsvSample(ma_format format,
       return false;
     }
 
-    value               = qBound(-2147483647, value, 2147483647);
-    const quint8* bytes = reinterpret_cast<const quint8*>(&value);
-    out.append(bytes[0]);
-    out.append(bytes[1]);
-    out.append(bytes[2]);
-    out.append(bytes[3]);
+    value = qBound(-2147483647, value, 2147483647);
+    appendRaw(out, value);
     return true;
   }
 
@@ -95,11 +100,8 @@ bool IO::Drivers::AudioPcm::packCsvSample(ma_format format,
       return false;
     }
 
-    value               = qBound(-1.0f, value, 1.0f);
-    const quint8* bytes = reinterpret_cast<const quint8*>(&value);
-    for (size_t b = 0; b < sizeof(float); ++b)
-      out.append(bytes[b]);
-
+    value = qBound(-1.0f, value, 1.0f);
+    appendRaw(out, value);
     return true;
   }
 
@@ -125,10 +127,7 @@ bool IO::Drivers::AudioPcm::packNormalizedSample(ma_format format,
   sample = qBound(-1.0f, sample, 1.0f);
 
   if (format == ma_format_f32) {
-    const quint8* bytes = reinterpret_cast<const quint8*>(&sample);
-    for (size_t b = 0; b < sizeof(float); ++b)
-      out.append(bytes[b]);
-
+    appendRaw(out, sample);
     return true;
   }
 
@@ -138,10 +137,8 @@ bool IO::Drivers::AudioPcm::packNormalizedSample(ma_format format,
   }
 
   if (format == ma_format_s16) {
-    const qint16 value  = static_cast<qint16>(qRound(sample * 32767.0f));
-    const quint8* bytes = reinterpret_cast<const quint8*>(&value);
-    out.append(bytes[0]);
-    out.append(bytes[1]);
+    const qint16 value = static_cast<qint16>(qRound(sample * 32767.0f));
+    appendRaw(out, value);
     return true;
   }
 
@@ -154,12 +151,8 @@ bool IO::Drivers::AudioPcm::packNormalizedSample(ma_format format,
   }
 
   if (format == ma_format_s32) {
-    const auto value    = static_cast<qint32>(qRound(static_cast<double>(sample) * 2147483647.0));
-    const quint8* bytes = reinterpret_cast<const quint8*>(&value);
-    out.append(bytes[0]);
-    out.append(bytes[1]);
-    out.append(bytes[2]);
-    out.append(bytes[3]);
+    const auto value = static_cast<qint32>(qRound(static_cast<double>(sample) * 2147483647.0));
+    appendRaw(out, value);
     return true;
   }
 

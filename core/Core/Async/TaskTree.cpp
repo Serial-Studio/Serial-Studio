@@ -358,14 +358,6 @@ Async::TimeoutTask::~TimeoutTask()
 }
 
 /**
- * @brief Returns the deadline in milliseconds.
- */
-int Async::TimeoutTask::timeoutMsec() const noexcept
-{
-  return m_msec;
-}
-
-/**
  * @brief Arms the deadline before starting the child, so a child that completes synchronously
  *        still finds a timer to release.
  */

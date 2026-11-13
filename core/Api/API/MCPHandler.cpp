@@ -58,14 +58,6 @@ API::MCPHandler& API::MCPHandler::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Check if data appears to be an MCP message
- */
-bool API::MCPHandler::isMCPMessage(const QByteArray& data) const
-{
-  return MCP::isMCPMessage(data);
-}
-
-/**
  * @brief Process an incoming MCP message
  */
 QByteArray API::MCPHandler::processMessage(const QByteArray& data, const QString& sessionId)
@@ -327,10 +319,7 @@ API::MCP::MCPResponse API::MCPHandler::handleInitialize(const MCP::MCPRequest& r
 {
   auto& session = m_sessions[sessionId];
 
-  const auto clientInfo = request.params.value(QStringLiteral("clientInfo")).toObject();
-  session.clientName    = clientInfo.value(QStringLiteral("name")).toString();
-  session.clientVersion = clientInfo.value(QStringLiteral("version")).toString();
-  session.initialized   = true;
+  session.initialized = true;
 
   const auto offered = request.params.value(QStringLiteral("protocolVersion")).toString();
   QJsonObject result;

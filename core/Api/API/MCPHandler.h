@@ -39,8 +39,6 @@ public:
    */
   struct ClientSession {
     bool initialized = false;
-    QString clientName;
-    QString clientVersion;
   };
 
 private:
@@ -53,7 +51,6 @@ private:
 public:
   [[nodiscard]] static MCPHandler& instance();
 
-  [[nodiscard]] bool isMCPMessage(const QByteArray& data) const;
   [[nodiscard]] QByteArray processMessage(const QByteArray& data, const QString& sessionId);
 
   void clearSession(const QString& sessionId);

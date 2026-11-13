@@ -138,6 +138,20 @@ static void appendUnknownFieldsWarning(QJsonObject& result,
 }
 
 /**
+ * @brief Returns true and marks @p key consumed when @p params carries it.
+ */
+[[nodiscard]] static bool takeParam(const QJsonObject& params,
+                                    QSet<QString>& consumed,
+                                    const QString& key)
+{
+  if (!params.contains(key))
+    return false;
+
+  consumed.insert(key);
+  return true;
+}
+
+/**
  * @brief Applies the spec-0080 state binding (where a control reads the state it displays) under
  *        the same keys the project file uses, so a binding written here reads back through
  *        project.outputWidget.get and survives a save.
@@ -146,12 +160,8 @@ static void applyOutputStateFields(DataModel::OutputWidget& w,
                                    const QJsonObject& params,
                                    QSet<QString>& consumed)
 {
-  const auto take = [&](const QString& key) -> bool {
-    if (!params.contains(key))
-      return false;
-
-    consumed.insert(key);
-    return true;
+  const auto take = [&](const QString& key) {
+    return takeParam(params, consumed, key);
   };
 
   if (take(Keys::OutputStateSource))
@@ -193,12 +203,8 @@ static void applyOutputWidgetFields(DataModel::OutputWidget& w,
                                     const QJsonObject& params,
                                     QSet<QString>& consumed)
 {
-  const auto take = [&](const QString& key) -> bool {
-    if (!params.contains(key))
-      return false;
-
-    consumed.insert(key);
-    return true;
+  const auto take = [&](const QString& key) {
+    return takeParam(params, consumed, key);
   };
 
   if (take(QStringLiteral("title")))
@@ -446,8 +452,7 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::groupUpdate(const QSt
                                                                        const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   auto& project      = DataModel::pipelineModules().projectModel;
@@ -461,12 +466,8 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::groupUpdate(const QSt
   QSet<QString> consumed{QStringLiteral("groupId")};
   const auto identityKeyCount = consumed.size();
 
-  const auto take = [&](const QString& key) -> bool {
-    if (!params.contains(key))
-      return false;
-
-    consumed.insert(key);
-    return true;
+  const auto take = [&](const QString& key) {
+    return takeParam(params, consumed, key);
   };
 
   if (take(QStringLiteral("title"))) {
@@ -506,8 +507,7 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::datasetUpdate(const Q
                                                                          const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(Keys::DatasetId))
     return CommandResponse::makeError(
@@ -583,8 +583,7 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::actionUpdate(const QS
                                                                         const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("actionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: actionId"));
+    return CommandResponse::makeMissingParam(id, "actionId");
 
   const int actionId  = params.value(QStringLiteral("actionId")).toInt();
   auto& project       = DataModel::pipelineModules().projectModel;
@@ -598,12 +597,8 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::actionUpdate(const QS
   QSet<QString> consumed{QStringLiteral("actionId")};
   const auto identityKeyCount = consumed.size();
 
-  const auto take = [&](const QString& key) -> bool {
-    if (!params.contains(key))
-      return false;
-
-    consumed.insert(key);
-    return true;
+  const auto take = [&](const QString& key) {
+    return takeParam(params, consumed, key);
   };
 
   if (take(QStringLiteral("title"))) {
@@ -673,12 +668,10 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::outputWidgetUpdate(
   const QString& id, const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("groupId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
+    return CommandResponse::makeMissingParam(id, "groupId");
 
   if (!params.contains(QStringLiteral("widgetId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: widgetId"));
+    return CommandResponse::makeMissingParam(id, "widgetId");
 
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   const int widgetId = params.value(QStringLiteral("widgetId")).toInt();

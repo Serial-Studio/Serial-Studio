@@ -910,14 +910,6 @@ QStringList IO::Drivers::EthernetIp::tagTypeList()
 }
 
 /**
- * @brief Returns the configured tags in wire order.
- */
-const QVector<IO::Drivers::EipTag>& IO::Drivers::EthernetIp::tags() const noexcept
-{
-  return m_tags;
-}
-
-/**
  * @brief One-line session status for the pane, read from the live session when this instance is
  *        the UI-config one.
  */

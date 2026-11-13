@@ -24,6 +24,7 @@
 
 #  include "API/CommandRegistry.h"
 #  include "API/HandlerContext.h"
+#  include "API/SchemaBuilder.h"
 #  include "DataModel/ProjectModel.h"
 #  include "Sessions/DatabaseManager.h"
 #  include "Sessions/Export.h"
@@ -57,56 +58,36 @@ void API::Handlers::SessionsHandler::registerLifecycleCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  QJsonObject emptySchema;
-  emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
-  emptySchema[QStringLiteral("properties")] = QJsonObject();
-
   registry.registerCommand(
     QStringLiteral("sessions.getStatus"),
     QStringLiteral("Return the session-recording flags (exportEnabled, isOpen)"),
-    emptySchema,
+    API::emptySchema(),
     &getStatus);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("enabled")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("boolean")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Turn session recording on (true) or off (false)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("enabled")};
-    registry.registerCommand(QStringLiteral("sessions.setExportEnabled"),
-                             QStringLiteral("Turn session recording on/off (params: enabled)"),
-                             schema,
-                             &setExportEnabled);
-  }
+  registry.registerCommand(QStringLiteral("sessions.setExportEnabled"),
+                           QStringLiteral("Turn session recording on/off (params: enabled)"),
+                           API::makeSchema({
+                             {QStringLiteral("enabled"),
+                              QStringLiteral("boolean"),
+                              QStringLiteral("Turn session recording on (true) or off (false)")}
+  }),
+                           &setExportEnabled);
 
   registry.registerCommand(
     QStringLiteral("sessions.close"),
     QStringLiteral("Finalize and close the current session (no-op if none open)"),
-    emptySchema,
+    API::emptySchema(),
     &close);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("projectTitle")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {QStringLiteral("description"),
+  registry.registerCommand(
+    QStringLiteral("sessions.getDbPath"),
+    QStringLiteral("Return the canonical .db path for a given project title"),
+    API::makeSchema({
+      {QStringLiteral("projectTitle"),
+       QStringLiteral("string"),
        QStringLiteral("Project title used for the session .db path")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("projectTitle")};
-    registry.registerCommand(
-      QStringLiteral("sessions.getDbPath"),
-      QStringLiteral("Return the canonical .db path for a given project title"),
-      schema,
-      &getCanonicalDbPath);
-  }
+  }),
+    &getCanonicalDbPath);
 }
 
 /**
@@ -116,43 +97,28 @@ void API::Handlers::SessionsHandler::registerBrowsingCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  QJsonObject emptySchema;
-  emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
-  emptySchema[QStringLiteral("properties")] = QJsonObject();
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("filePath")] = QJsonObject{
-      {       QStringLiteral("type"),                                QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Absolute path to the .db file to open")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("filePath")};
-    registry.registerCommand(
-      QStringLiteral("sessions.openDatabase"),
-      QStringLiteral("Open a historian database file for browsing (params: filePath)"),
-      schema,
-      &openDatabase);
-  }
+  registry.registerCommand(
+    QStringLiteral("sessions.openDatabase"),
+    QStringLiteral("Open a historian database file for browsing (params: filePath)"),
+    API::makeSchema({
+      {QStringLiteral("filePath"),
+       QStringLiteral("string"),
+       QStringLiteral("Absolute path to the .db file to open")}
+  }),
+    &openDatabase);
 
   registry.registerCommand(
     QStringLiteral("sessions.list"),
     QStringLiteral("List all sessions stored in the currently open database"),
-    emptySchema,
+    API::emptySchema(),
     &list);
 
   {
-    QJsonObject props;
-    props[QStringLiteral("sessionId")] = QJsonObject{
-      {       QStringLiteral("type"),                         QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Session id (from sessions.list)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("sessionId")};
+    const auto schema = API::makeSchema({
+      {QStringLiteral("sessionId"),
+       QStringLiteral("integer"),
+       QStringLiteral("Session id (from sessions.list)")}
+    });
 
     registry.registerCommand(
       QStringLiteral("sessions.get"),
@@ -187,27 +153,16 @@ void API::Handlers::SessionsHandler::registerBrowsingCommands()
       &getVerification);
   }
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("sessionId")] = QJsonObject{
-      {       QStringLiteral("type"),    QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Session id")}
-    };
-    props[QStringLiteral("notes")] = QJsonObject{
-      {       QStringLiteral("type"),                          QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Free-form notes for the session")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("sessionId"), QStringLiteral("notes")};
-    registry.registerCommand(
-      QStringLiteral("sessions.setNotes"),
-      QStringLiteral("Set free-form notes on a stored session (params: sessionId, notes)"),
-      schema,
-      &setNotes);
-  }
+  registry.registerCommand(
+    QStringLiteral("sessions.setNotes"),
+    QStringLiteral("Set free-form notes on a stored session (params: sessionId, notes)"),
+    API::makeSchema({
+      {QStringLiteral("sessionId"),QStringLiteral("integer"),QStringLiteral("Session id")                           },
+      {    QStringLiteral("notes"),
+       QStringLiteral("string"),
+       QStringLiteral("Free-form notes for the session")}
+  }),
+    &setNotes);
 }
 
 /**
@@ -217,48 +172,36 @@ void API::Handlers::SessionsHandler::registerRegressionCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("sessionId")] = QJsonObject{
-      {       QStringLiteral("type"),                           QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Session id (exclusive with 'tag')")}
-    };
-    props[QStringLiteral("tag")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Regress every completed session carrying this tag (golden sweep)")}
-    };
-    props[QStringLiteral("projectPath")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Candidate project file path (default: current editor project)")}
-    };
-    props[QStringLiteral("projectJson")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Candidate project JSON content (alternative to projectPath)")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-
-    registry.registerCommand(
-      QStringLiteral("sessions.regress"),
-      QStringLiteral("Compare a stored session (or every session with a tag) against a "
-                     "candidate project in a child process (async; poll "
-                     "sessions.getRegression; params: sessionId | tag, projectPath?, "
-                     "projectJson?)"),
-      schema,
-      &regress);
-    registry.registerCommand(
-      QStringLiteral("sessions.getRegression"),
-      QStringLiteral("Return the running flag, last regression drift report, and sweep "
-                     "status (no params)"),
-      QJsonObject{
-        {QStringLiteral("type"), QStringLiteral("object")}
-    },
-      &getRegression);
-  }
+  registry.registerCommand(
+    QStringLiteral("sessions.regress"),
+    QStringLiteral("Compare a stored session (or every session with a tag) against a "
+                   "candidate project in a child process (async; poll "
+                   "sessions.getRegression; params: sessionId | tag, projectPath?, "
+                   "projectJson?)"),
+    API::makeSchema(
+      {
+  },
+      {{QStringLiteral("sessionId"),
+        QStringLiteral("integer"),
+        QStringLiteral("Session id (exclusive with 'tag')")},
+       {QStringLiteral("tag"),
+        QStringLiteral("string"),
+        QStringLiteral("Regress every completed session carrying this tag (golden sweep)")},
+       {QStringLiteral("projectPath"),
+        QStringLiteral("string"),
+        QStringLiteral("Candidate project file path (default: current editor project)")},
+       {QStringLiteral("projectJson"),
+        QStringLiteral("string"),
+        QStringLiteral("Candidate project JSON content (alternative to projectPath)")}}),
+    &regress);
+  registry.registerCommand(
+    QStringLiteral("sessions.getRegression"),
+    QStringLiteral("Return the running flag, last regression drift report, and sweep "
+                   "status (no params)"),
+    QJsonObject{
+      {QStringLiteral("type"), QStringLiteral("object")}
+  },
+    &getRegression);
 }
 
 /**
@@ -268,77 +211,41 @@ void API::Handlers::SessionsHandler::registerTagCommands()
 {
   static auto& registry = CommandRegistry::instance();
 
-  QJsonObject emptySchema;
-  emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
-  emptySchema[QStringLiteral("properties")] = QJsonObject();
-
   registry.registerCommand(QStringLiteral("sessions.listTags"),
                            QStringLiteral("List all tags defined in the open database"),
-                           emptySchema,
+                           API::emptySchema(),
                            &listTags);
 
-  {
-    QJsonObject props;
-    props[QStringLiteral("label")] = QJsonObject{
-      {       QStringLiteral("type"),    QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Tag label")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("label")};
-    registry.registerCommand(QStringLiteral("sessions.addTag"),
-                             QStringLiteral("Create a new tag (params: label)"),
-                             schema,
-                             &addTag);
-  }
+  registry.registerCommand(
+    QStringLiteral("sessions.addTag"),
+    QStringLiteral("Create a new tag (params: label)"),
+    API::makeSchema({
+      {QStringLiteral("label"), QStringLiteral("string"), QStringLiteral("Tag label")}
+  }),
+    &addTag);
+
+  registry.registerCommand(
+    QStringLiteral("sessions.deleteTag"),
+    QStringLiteral("Delete a tag by id (params: tagId)"),
+    API::makeSchema({
+      {QStringLiteral("tagId"), QStringLiteral("integer"), QStringLiteral("Tag id")}
+  }),
+    &deleteTag);
+
+  registry.registerCommand(
+    QStringLiteral("sessions.renameTag"),
+    QStringLiteral("Rename a tag (params: tagId, newLabel)"),
+    API::makeSchema({
+      {   QStringLiteral("tagId"), QStringLiteral("integer"),    QStringLiteral("Tag id")},
+      {QStringLiteral("newLabel"),  QStringLiteral("string"), QStringLiteral("New label")}
+  }),
+    &renameTag);
 
   {
-    QJsonObject delProps;
-    delProps[QStringLiteral("tagId")] = QJsonObject{
-      {       QStringLiteral("type"), QStringLiteral("integer")},
-      {QStringLiteral("description"),  QStringLiteral("Tag id")}
-    };
-    QJsonObject delSchema;
-    delSchema[QStringLiteral("type")]       = QStringLiteral("object");
-    delSchema[QStringLiteral("properties")] = delProps;
-    delSchema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("tagId")};
-    registry.registerCommand(QStringLiteral("sessions.deleteTag"),
-                             QStringLiteral("Delete a tag by id (params: tagId)"),
-                             delSchema,
-                             &deleteTag);
-
-    QJsonObject renProps                 = delProps;
-    renProps[QStringLiteral("newLabel")] = QJsonObject{
-      {       QStringLiteral("type"),    QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("New label")}
-    };
-    QJsonObject renSchema;
-    renSchema[QStringLiteral("type")]       = QStringLiteral("object");
-    renSchema[QStringLiteral("properties")] = renProps;
-    renSchema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("tagId"), QStringLiteral("newLabel")};
-    registry.registerCommand(QStringLiteral("sessions.renameTag"),
-                             QStringLiteral("Rename a tag (params: tagId, newLabel)"),
-                             renSchema,
-                             &renameTag);
-  }
-
-  {
-    QJsonObject props;
-    props[QStringLiteral("sessionId")] = QJsonObject{
-      {       QStringLiteral("type"),    QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Session id")}
-    };
-    props[QStringLiteral("tagId")] = QJsonObject{
-      {       QStringLiteral("type"), QStringLiteral("integer")},
-      {QStringLiteral("description"),  QStringLiteral("Tag id")}
-    };
-    QJsonObject schema;
-    schema[QStringLiteral("type")]       = QStringLiteral("object");
-    schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("sessionId"), QStringLiteral("tagId")};
+    const auto schema = API::makeSchema({
+      {QStringLiteral("sessionId"), QStringLiteral("integer"), QStringLiteral("Session id")},
+      {    QStringLiteral("tagId"), QStringLiteral("integer"),     QStringLiteral("Tag id")}
+    });
     registry.registerCommand(QStringLiteral("sessions.assignTag"),
                              QStringLiteral("Assign a tag to a session (params: sessionId, tagId)"),
                              schema,
@@ -382,8 +289,7 @@ API::CommandResponse API::Handlers::SessionsHandler::setExportEnabled(const QStr
                                                                       const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("enabled")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
+    return CommandResponse::makeMissingParam(id, "enabled");
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
   auto& exp          = API::handlerContext().sessionsExport;
@@ -420,8 +326,7 @@ API::CommandResponse API::Handlers::SessionsHandler::getCanonicalDbPath(const QS
                                                                         const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("projectTitle")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: projectTitle"));
+    return CommandResponse::makeMissingParam(id, "projectTitle");
 
   const auto title = params.value(QStringLiteral("projectTitle")).toString();
   const auto path  = Sessions::DatabaseManager::canonicalDbPath(title);
@@ -443,8 +348,7 @@ API::CommandResponse API::Handlers::SessionsHandler::openDatabase(const QString&
                                                                   const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("filePath")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: filePath"));
+    return CommandResponse::makeMissingParam(id, "filePath");
 
   const auto filePath = params.value(QStringLiteral("filePath")).toString();
   auto& db            = API::handlerContext().databaseManager;
@@ -486,8 +390,7 @@ API::CommandResponse API::Handlers::SessionsHandler::get(const QString& id,
                                                          const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("sessionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+    return CommandResponse::makeMissingParam(id, "sessionId");
 
   const int sessionId = params.value(QStringLiteral("sessionId")).toInt();
   auto& db            = API::handlerContext().databaseManager;
@@ -516,8 +419,7 @@ API::CommandResponse API::Handlers::SessionsHandler::deleteSession(const QString
                                                                    const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("sessionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+    return CommandResponse::makeMissingParam(id, "sessionId");
 
   const int sessionId = params.value(QStringLiteral("sessionId")).toInt();
   auto& db            = API::handlerContext().databaseManager;
@@ -548,12 +450,10 @@ API::CommandResponse API::Handlers::SessionsHandler::setNotes(const QString& id,
                                                               const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("sessionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+    return CommandResponse::makeMissingParam(id, "sessionId");
 
   if (!params.contains(QStringLiteral("notes")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: notes"));
+    return CommandResponse::makeMissingParam(id, "notes");
 
   const int sessionId = params.value(QStringLiteral("sessionId")).toInt();
   const auto notes    = params.value(QStringLiteral("notes")).toString();
@@ -574,8 +474,7 @@ API::CommandResponse API::Handlers::SessionsHandler::replay(const QString& id,
                                                             const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("sessionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+    return CommandResponse::makeMissingParam(id, "sessionId");
 
   const int sessionId = params.value(QStringLiteral("sessionId")).toInt();
   auto& db            = API::handlerContext().databaseManager;
@@ -602,8 +501,7 @@ API::CommandResponse API::Handlers::SessionsHandler::exportToCsv(const QString& 
                                                                  const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("sessionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+    return CommandResponse::makeMissingParam(id, "sessionId");
 
   const int sessionId = params.value(QStringLiteral("sessionId")).toInt();
   auto& db            = API::handlerContext().databaseManager;
@@ -622,8 +520,7 @@ API::CommandResponse API::Handlers::SessionsHandler::verify(const QString& id,
                                                             const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("sessionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+    return CommandResponse::makeMissingParam(id, "sessionId");
 
   auto& db = API::handlerContext().databaseManager;
   if (!db.isOpen())
@@ -657,8 +554,7 @@ API::CommandResponse API::Handlers::SessionsHandler::getVerification(const QStri
                                                                      const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("sessionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+    return CommandResponse::makeMissingParam(id, "sessionId");
 
   auto& db = API::handlerContext().databaseManager;
   if (!db.isOpen())
@@ -819,8 +715,7 @@ API::CommandResponse API::Handlers::SessionsHandler::addTag(const QString& id,
                                                             const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("label")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: label"));
+    return CommandResponse::makeMissingParam(id, "label");
 
   const auto label = params.value(QStringLiteral("label")).toString();
   auto& db         = API::handlerContext().databaseManager;
@@ -839,8 +734,7 @@ API::CommandResponse API::Handlers::SessionsHandler::deleteTag(const QString& id
                                                                const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("tagId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: tagId"));
+    return CommandResponse::makeMissingParam(id, "tagId");
 
   const int tagId = params.value(QStringLiteral("tagId")).toInt();
   auto& db        = API::handlerContext().databaseManager;
@@ -859,12 +753,10 @@ API::CommandResponse API::Handlers::SessionsHandler::renameTag(const QString& id
                                                                const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("tagId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: tagId"));
+    return CommandResponse::makeMissingParam(id, "tagId");
 
   if (!params.contains(QStringLiteral("newLabel")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: newLabel"));
+    return CommandResponse::makeMissingParam(id, "newLabel");
 
   const int tagId     = params.value(QStringLiteral("tagId")).toInt();
   const auto newLabel = params.value(QStringLiteral("newLabel")).toString();
@@ -885,12 +777,10 @@ API::CommandResponse API::Handlers::SessionsHandler::assignTag(const QString& id
                                                                const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("sessionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+    return CommandResponse::makeMissingParam(id, "sessionId");
 
   if (!params.contains(QStringLiteral("tagId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: tagId"));
+    return CommandResponse::makeMissingParam(id, "tagId");
 
   const int sessionId = params.value(QStringLiteral("sessionId")).toInt();
   const int tagId     = params.value(QStringLiteral("tagId")).toInt();
@@ -911,12 +801,10 @@ API::CommandResponse API::Handlers::SessionsHandler::removeTag(const QString& id
                                                                const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("sessionId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: sessionId"));
+    return CommandResponse::makeMissingParam(id, "sessionId");
 
   if (!params.contains(QStringLiteral("tagId")))
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: tagId"));
+    return CommandResponse::makeMissingParam(id, "tagId");
 
   const int sessionId = params.value(QStringLiteral("sessionId")).toInt();
   const int tagId     = params.value(QStringLiteral("tagId")).toInt();

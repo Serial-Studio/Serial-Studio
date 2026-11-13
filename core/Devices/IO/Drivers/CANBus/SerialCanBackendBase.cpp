@@ -117,15 +117,6 @@ void IO::Drivers::SerialCanBackendBase::appendBounded(QByteArray& buffer,
 }
 
 /**
- * @brief How many times the receive buffer was dropped for overrunning its ceiling; polled, never
- *        pushed (spec 0033).
- */
-quint64 IO::Drivers::SerialCanBackendBase::bufferOverflows() const noexcept
-{
-  return m_bufferOverflows;
-}
-
-/**
  * @brief Whether the port is usable for reads and writes.
  */
 bool IO::Drivers::SerialCanBackendBase::portIsOpen() const

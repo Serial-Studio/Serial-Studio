@@ -23,64 +23,7 @@
 
 #include <cstdint>
 #include <QDebug>
-
-//--------------------------------------------------------------------------------------------------
-// Endianess detection
-//--------------------------------------------------------------------------------------------------
-
-#if defined(_MSC_VER)
-#  include <stdlib.h>
-#  define IS_LITTLE_ENDIAN 1
-#elif defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__)
-#  define IS_LITTLE_ENDIAN (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
-#else
-#  include <endian.h>
-#  define IS_LITTLE_ENDIAN (__BYTE_ORDER == __LITTLE_ENDIAN)
-#endif
-
-//--------------------------------------------------------------------------------------------------
-// Endian-correct memory utilities for checksum formatting
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Copies data in big-endian format to a frame buffer.
- */
-static void big_endian_memcpy(uint8_t* frame, const void* data, size_t size)
-{
-  if (!frame || !data || size == 0) {
-    qWarning() << "big_endian_memcpy: invalid arguments";
-    return;
-  }
-
-  const uint8_t* raw_data = static_cast<const uint8_t*>(data);
-
-#if IS_LITTLE_ENDIAN
-  for (size_t i = 0; i < size; ++i)
-    frame[i] = raw_data[size - 1 - i];
-#else
-  memcpy(frame, raw_data, size);
-#endif
-}
-
-/**
- * @brief Copies data in little-endian format to a frame buffer.
- */
-static void little_endian_memcpy(uint8_t* frame, const void* data, size_t size)
-{
-  if (!frame || !data || size == 0) {
-    qWarning() << "little_endian_memcpy: invalid arguments";
-    return;
-  }
-
-  const uint8_t* raw_data = static_cast<const uint8_t*>(data);
-
-#if IS_LITTLE_ENDIAN
-  memcpy(frame, raw_data, size);
-#else
-  for (size_t i = 0; i < size; ++i)
-    frame[i] = raw_data[size - 1 - i];
-#endif
-}
+#include <QtEndian>
 
 //--------------------------------------------------------------------------------------------------
 // Checksum implementations
@@ -271,7 +214,7 @@ static QByteArray packByte(uint8_t v)
 static QByteArray packU16BE(uint16_t v)
 {
   uint8_t out[2];
-  big_endian_memcpy(out, &v, sizeof(v));
+  qToBigEndian(v, out);
   return QByteArray(reinterpret_cast<char*>(out), sizeof(out));
 }
 
@@ -281,7 +224,7 @@ static QByteArray packU16BE(uint16_t v)
 static QByteArray packU16LE(uint16_t v)
 {
   uint8_t out[2];
-  little_endian_memcpy(out, &v, sizeof(v));
+  qToLittleEndian(v, out);
   return QByteArray(reinterpret_cast<char*>(out), sizeof(out));
 }
 
@@ -291,7 +234,7 @@ static QByteArray packU16LE(uint16_t v)
 static QByteArray packU32BE(uint32_t v)
 {
   uint8_t out[4];
-  big_endian_memcpy(out, &v, sizeof(v));
+  qToBigEndian(v, out);
   return QByteArray(reinterpret_cast<char*>(out), sizeof(out));
 }
 

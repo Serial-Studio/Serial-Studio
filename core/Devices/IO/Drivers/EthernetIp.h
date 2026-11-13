@@ -193,7 +193,6 @@ public:
   [[nodiscard]] static QStringList tagTypeList();
   [[nodiscard]] static QStringList plcTypeLabels();
 
-  [[nodiscard]] const QVector<EipTag>& tags() const noexcept;
   [[nodiscard]] QJsonArray tagsJson() const;
   [[nodiscard]] QJsonArray wireSchema() const;
   [[nodiscard]] QJsonObject statusJson() const;

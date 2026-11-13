@@ -32,7 +32,6 @@ public:
   RetryPolicy();
   RetryPolicy(int max_attempts, int initial_delay_msec, int max_delay_msec, double multiplier);
 
-  [[nodiscard]] double multiplier() const noexcept;
   [[nodiscard]] int maxAttempts() const noexcept;
   [[nodiscard]] int maxDelayMsec() const noexcept;
   [[nodiscard]] int initialDelayMsec() const noexcept;

@@ -119,11 +119,8 @@ public:
   void close() override;
 
   [[nodiscard]] bool normalization() const noexcept;
-  [[nodiscard]] quint64 inputDrops() const noexcept;
-  [[nodiscard]] quint64 playbackUnderruns() const noexcept;
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isStreamCapable() const noexcept override;
-  [[nodiscard]] bool streamLaneActive() const noexcept;
   void setStreamLaneActive(bool active) noexcept;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;

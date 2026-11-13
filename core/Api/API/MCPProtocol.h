@@ -113,7 +113,6 @@ struct MCPRequest {
  * @brief Represents an MCP JSON-RPC 2.0 response.
  */
 struct MCPResponse {
-  QString jsonrpc;
   QVariant id;
   QJsonValue result;
   QJsonObject error;
@@ -148,9 +147,8 @@ struct MCPResponse {
   static MCPResponse makeSuccess(const QVariant& id, const QJsonValue& result)
   {
     MCPResponse resp;
-    resp.jsonrpc = QStringLiteral("2.0");
-    resp.id      = id;
-    resp.result  = result;
+    resp.id     = id;
+    resp.result = result;
     return resp;
   }
 
@@ -160,8 +158,7 @@ struct MCPResponse {
                                const QJsonValue& data = QJsonValue::Undefined)
   {
     MCPResponse resp;
-    resp.jsonrpc = QStringLiteral("2.0");
-    resp.id      = id;
+    resp.id = id;
 
     QJsonObject errorObj;
     errorObj[QStringLiteral("code")]    = code;
@@ -241,7 +238,6 @@ struct Resource {
 struct Prompt {
   QString name;
   QString description;
-  QJsonArray arguments;
 
   QJsonObject toJson() const
   {
@@ -249,9 +245,6 @@ struct Prompt {
     json[QStringLiteral("name")] = name;
     if (!description.isEmpty())
       json[QStringLiteral("description")] = description;
-
-    if (!arguments.isEmpty())
-      json[QStringLiteral("arguments")] = arguments;
 
     return json;
   }

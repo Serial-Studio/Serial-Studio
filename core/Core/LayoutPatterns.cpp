@@ -182,15 +182,6 @@
 }
 
 /**
- * @brief Moves a sub-layout into its place on the canvas.
- */
-static void translateAll(QVector<QRect>& rects, const int dx, const int dy)
-{
-  for (auto& rect : rects)
-    rect.translate(dx, dy);
-}
-
-/**
  * @brief Splits @a n widgets into one strip: equal shares along one axis, full extent across
  *        the other. Row and Column are this, and the master patterns stack their remainder
  *        with it.
@@ -247,9 +238,10 @@ static void translateAll(QVector<QRect>& rects, const int dx, const int dy)
 
   const auto region = vertical ? subEnv(env, rest, cross) : subEnv(env, cross, rest);
   auto remainder    = gridRemainder ? tileGrid(n - 1, region) : tileStrip(n - 1, region, !vertical);
-  translateAll(remainder,
-               vertical ? env.margin + primary + env.spacing : env.margin,
-               vertical ? env.margin : env.margin + primary + env.spacing);
+  const int dx      = vertical ? env.margin + primary + env.spacing : env.margin;
+  const int dy      = vertical ? env.margin : env.margin + primary + env.spacing;
+  for (auto& rect : remainder)
+    rect.translate(dx, dy);
 
   out.append(remainder);
   return out;

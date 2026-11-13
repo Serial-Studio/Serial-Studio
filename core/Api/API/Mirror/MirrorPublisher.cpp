@@ -175,22 +175,6 @@ bool API::MirrorPublisher::viewersAllowed() const
 }
 
 /**
- * @brief Current structure epoch; every snapshot carries it and a client drops any mismatch.
- */
-quint64 API::MirrorPublisher::epoch() const noexcept
-{
-  return m_epoch;
-}
-
-/**
- * @brief Whether the given API connection holds a mirror subscription.
- */
-bool API::MirrorPublisher::subscribed(const QString& sessionId) const
-{
-  return m_subscribers.contains(sessionId);
-}
-
-/**
  * @brief Rate this publisher can actually serve: the request, capped by the local UI tick that
  *        wakes it, so a client sizes its staleness watchdog against reality.
  */

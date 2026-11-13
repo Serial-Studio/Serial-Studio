@@ -169,8 +169,6 @@ public:
   TimeoutTask(Task* child, int msec, AsyncClock& clock, QObject* parent = nullptr);
   ~TimeoutTask() override;
 
-  [[nodiscard]] int timeoutMsec() const noexcept;
-
 protected:
   void doStart() override;
   void doCancel() override;

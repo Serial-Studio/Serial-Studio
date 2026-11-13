@@ -62,11 +62,6 @@ using BusMask = quint32;
 inline constexpr BusMask kBusNone = 0;
 
 /**
- * @brief Scope covering every declared bus, regardless of what the build supports.
- */
-inline constexpr BusMask kBusAll = (1u << kBusCount) - 1u;
-
-/**
  * @brief Verdict of one check. Pass produces no finding; Info states a pass worth stating.
  */
 enum class Verdict : int {

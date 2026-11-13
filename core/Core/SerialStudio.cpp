@@ -568,24 +568,6 @@ SerialStudio::DatasetWidget SerialStudio::datasetWidgetFromId(const QString& id)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Converts a hex-encoded string into a UTF-8 decoded string with visible escape sequences.
- */
-QString SerialStudio::hexToString(const QString& hex)
-{
-  QString raw = QString::fromUtf8(QByteArray::fromHex(QString(hex).remove(' ').toUtf8()));
-  return escapeControlCharacters(raw);
-}
-
-/**
- * @brief Converts a string containing escape sequences into a space-separated hexadecimal string.
- */
-QString SerialStudio::stringToHex(const QString& str)
-{
-  QString resolved = resolveEscapeSequences(str);
-  return QString::fromLatin1(resolved.toUtf8().toHex(' '));
-}
-
-/**
  * @brief Converts a hexadecimal string into a raw QByteArray.
  */
 QByteArray SerialStudio::hexToBytes(const QString& data)
@@ -665,23 +647,6 @@ QString SerialStudio::resolveEscapeSequences(const QString& str)
   }
 
   return escapedStr;
-}
-
-/**
- * @brief Escapes control characters in a string using C-style escape sequences.
- */
-QString SerialStudio::escapeControlCharacters(const QString& str)
-{
-  QString result = str;
-  result.replace(QStringLiteral("\\"), QStringLiteral("\\\\"));
-  result.replace(QStringLiteral("\a"), QStringLiteral("\\a"));
-  result.replace(QStringLiteral("\b"), QStringLiteral("\\b"));
-  result.replace(QStringLiteral("\f"), QStringLiteral("\\f"));
-  result.replace(QStringLiteral("\n"), QStringLiteral("\\n"));
-  result.replace(QStringLiteral("\r"), QStringLiteral("\\r"));
-  result.replace(QStringLiteral("\t"), QStringLiteral("\\t"));
-  result.replace(QStringLiteral("\v"), QStringLiteral("\\v"));
-  return result;
 }
 
 /**
@@ -788,42 +753,31 @@ SerialStudio::TextEncoding SerialStudio::textEncodingFromName(const QString& nam
   if (name.isEmpty())
     return EncUtf8;
 
-  const QString n = name.trimmed().toUpper();
-
-  if (n == QLatin1String("UTF-8") || n == QLatin1String("UTF8"))
-    return EncUtf8;
-
-  if (n == QLatin1String("UTF-16LE") || n == QLatin1String("UTF16LE"))
-    return EncUtf16LE;
-
-  if (n == QLatin1String("UTF-16BE") || n == QLatin1String("UTF16BE"))
-    return EncUtf16BE;
-
-  if (n == QLatin1String("ISO-8859-1") || n == QLatin1String("LATIN1")
-      || n == QLatin1String("LATIN-1"))
-    return EncLatin1;
-
-  if (n == QLatin1String("SYSTEM") || n == QLatin1String("LOCALE"))
-    return EncSystem;
-
-  if (n == QLatin1String("GBK") || n == QLatin1String("CP936"))
-    return EncGbk;
-
-  if (n == QLatin1String("GB18030"))
-    return EncGb18030;
-
-  if (n == QLatin1String("BIG5") || n == QLatin1String("BIG-5"))
-    return EncBig5;
-
-  if (n == QLatin1String("SHIFT_JIS") || n == QLatin1String("SHIFT-JIS")
-      || n == QLatin1String("SJIS") || n == QLatin1String("CP932"))
-    return EncShiftJis;
-
-  if (n == QLatin1String("EUC-JP") || n == QLatin1String("EUCJP"))
-    return EncEucJp;
-
-  if (n == QLatin1String("EUC-KR") || n == QLatin1String("EUCKR"))
-    return EncEucKr;
-
-  return EncUtf8;
+  static const QHash<QString, TextEncoding> kAliasMap = {
+    {     QStringLiteral("UTF-8"),     EncUtf8},
+    {      QStringLiteral("UTF8"),     EncUtf8},
+    {  QStringLiteral("UTF-16LE"),  EncUtf16LE},
+    {   QStringLiteral("UTF16LE"),  EncUtf16LE},
+    {  QStringLiteral("UTF-16BE"),  EncUtf16BE},
+    {   QStringLiteral("UTF16BE"),  EncUtf16BE},
+    {QStringLiteral("ISO-8859-1"),   EncLatin1},
+    {    QStringLiteral("LATIN1"),   EncLatin1},
+    {   QStringLiteral("LATIN-1"),   EncLatin1},
+    {    QStringLiteral("SYSTEM"),   EncSystem},
+    {    QStringLiteral("LOCALE"),   EncSystem},
+    {       QStringLiteral("GBK"),      EncGbk},
+    {     QStringLiteral("CP936"),      EncGbk},
+    {   QStringLiteral("GB18030"),  EncGb18030},
+    {      QStringLiteral("BIG5"),     EncBig5},
+    {     QStringLiteral("BIG-5"),     EncBig5},
+    { QStringLiteral("SHIFT_JIS"), EncShiftJis},
+    { QStringLiteral("SHIFT-JIS"), EncShiftJis},
+    {      QStringLiteral("SJIS"), EncShiftJis},
+    {     QStringLiteral("CP932"), EncShiftJis},
+    {    QStringLiteral("EUC-JP"),    EncEucJp},
+    {     QStringLiteral("EUCJP"),    EncEucJp},
+    {    QStringLiteral("EUC-KR"),    EncEucKr},
+    {     QStringLiteral("EUCKR"),    EncEucKr},
+  };
+  return kAliasMap.value(name.trimmed().toUpper(), EncUtf8);
 }
