@@ -229,6 +229,10 @@ static constexpr QLatin1StringView kAllowed[] = {
   QLatin1StringView("project.declaration.get"),
   QLatin1StringView("stream.getInfo"),
   QLatin1StringView("stream.getSources"),
+  QLatin1StringView("system.exec"),
+  QLatin1StringView("system.kill"),
+  QLatin1StringView("system.projectDir"),
+  QLatin1StringView("system.runningProcesses"),
   QLatin1StringView("ui.window.getLayout"),
   QLatin1StringView("ui.window.getStatus"),
   QLatin1StringView("ui.window.getWidgetSettings"),
@@ -421,7 +425,7 @@ static constexpr QLatin1StringView kDenied[] = {
   QLatin1StringView("sessions.setNotes"),
   QLatin1StringView("sessions.verify"),
 
-  // Assistant, extensions, process execution and the InfluxDB sink
+  // Assistant, extensions and the InfluxDB sink
   QLatin1StringView("assistant.checkpoint"),
   QLatin1StringView("assistant.dataset.resolve"),
   QLatin1StringView("assistant.listCheckpoints"),
@@ -447,10 +451,6 @@ static constexpr QLatin1StringView kDenied[] = {
   QLatin1StringView("influx.getStatus"),
   QLatin1StringView("influx.setConfig"),
   QLatin1StringView("influx.setEnabled"),
-  QLatin1StringView("system.exec"),
-  QLatin1StringView("system.kill"),
-  QLatin1StringView("system.projectDir"),
-  QLatin1StringView("system.runningProcesses"),
 
   // Project diagnostics, which quote project content
   QLatin1StringView("problems.list"),

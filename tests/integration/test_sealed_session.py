@@ -12,6 +12,15 @@ not through a project script's own apiCall, and not into any file the app writes
 skips unless the running app answers as a sealed session. Replaying the recording made here is
 a maintainer observation (players are not reachable from a sealed session).
 
+Helper programs (spec 0123). The marker package does not allow them, so its session must refuse
+the four system commands. The carried-helper test needs a second package: open
+tests/fixtures/deploy/helper.ssproj, export it from the Deploy dialog with Helper Programs on and
+helper.py added as a resource, then run it with launch consent already given:
+
+    SERIAL_STUDIO_API_AUTO_CONSENT=1 serial-studio --deployment helper.ssdeploy --api-server
+
+That test skips unless a package session's resources folder holding helper.py is on disk.
+
 Copyright (C) 2020-2026 Alex Spataru
 SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
@@ -236,3 +245,90 @@ def test_no_marker_reaches_disk(sealed, streaming):
                 continue
 
     assert not hits, hits
+
+
+# ----------------------------------------------------------------------
+# Spec 0123 -- helper programs and resources
+# ----------------------------------------------------------------------
+
+HELPER_COMMANDS = ("system.exec", "system.kill", "system.runningProcesses")
+
+
+def _session_is_alive(folder: Path) -> bool:
+    """True when the process named in the folder's session lock is still running."""
+    try:
+        pid = int((folder / ".session.lock").read_text(encoding="utf-8").split()[0])
+        os.kill(pid, 0)
+    except (OSError, ValueError, IndexError):
+        return False
+
+    return True
+
+
+def _resource_folders() -> list[Path]:
+    """Resource folders of live package sessions that hold the fixture helper."""
+    temp = Path(tempfile.gettempdir()).resolve()
+    return [
+        folder
+        for folder in sorted(temp.glob("SerialStudio-package-*"))
+        if (folder / "helper.py").is_file() and _session_is_alive(folder)
+    ]
+
+
+def test_helper_commands_are_refused_to_network_clients(sealed):
+    """No network client starts, lists or stops a program, or learns the resources folder."""
+    with pytest.raises(APIError) as refused:
+        sealed.command("system.projectDir")
+
+    assert refused.value.code == "SEALED_SESSION"
+    for name in HELPER_COMMANDS:
+        with pytest.raises(APIError) as script_only:
+            sealed.command(name, {"program": "python3", "processId": 1})
+
+        assert "control-script only" in script_only.value.message, name
+
+
+def test_marker_package_writes_no_resources(sealed):
+    """A package without helper programs leaves no resources folder holding its files."""
+    if _resource_folders():
+        pytest.skip("this session runs the helper package")
+
+    temp = Path(tempfile.gettempdir()).resolve()
+    for folder in temp.glob("SerialStudio-package-*"):
+        assert not any(
+            MARKER in path.read_bytes() for path in folder.rglob("*") if path.is_file()
+        )
+
+
+def test_carried_helper_runs_from_the_resources_folder(sealed, streaming):
+    """The control script starts the carried helper from the folder system.projectDir answered."""
+    folders = _resource_folders()
+    if not folders:
+        pytest.skip("not the helper package: see the module docstring")
+
+    folder = folders[-1]
+    record_path = folder / "helper-ran.json"
+    deadline = time.monotonic() + 15.0
+    while time.monotonic() < deadline and not record_path.is_file():
+        time.sleep(0.2)
+
+    assert record_path.is_file(), "the helper never ran"
+    record = json.loads(record_path.read_text(encoding="utf-8"))
+    assert Path(record["folder"]) == folder
+    assert Path(record["cwd"]) == folder
+    assert Path(record["directory"]).resolve() == folder
+    assert record["packageDirectory"], "the package's own folder was not reported"
+    assert Path(record["packageDirectory"]).resolve() != folder
+
+
+def test_resources_hold_only_what_the_author_listed(sealed):
+    """Only resources and the session lock reach the folder: no project, script or certificate."""
+    folders = _resource_folders()
+    if not folders:
+        pytest.skip("not the helper package: see the module docstring")
+
+    names = {path.name for path in folders[-1].rglob("*") if path.is_file()}
+    assert names <= {"helper.py", "helper-ran.json", ".session.lock"}, names
+    for path in folders[-1].rglob("*"):
+        if path.is_file() and path.name != ".session.lock":
+            assert MARKER not in path.read_bytes()
