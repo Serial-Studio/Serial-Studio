@@ -336,6 +336,7 @@ public:
 
 #ifdef BUILD_COMMERCIAL
   [[nodiscard]] QString deploymentPath() const;
+  void setLaunchedDeployment(const QString& path);
   void attachDeployment(DeploymentSession* session);
 
   void applyThemeOverride();
@@ -377,6 +378,7 @@ private:
 
 #ifdef BUILD_COMMERCIAL
   QString m_deploymentPath;
+  QString m_launchedDeployment;
   RuntimeOptions m_packageOptions;
   DeploymentSession* m_deployment;
   bool m_packageOptionsAdopted;

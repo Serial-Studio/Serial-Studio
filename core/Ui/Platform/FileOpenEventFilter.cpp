@@ -78,9 +78,42 @@ static void openInNewProcess(const QStringList& arguments, const bool quitIfCold
 namespace Platform {
 
 /**
+ * @brief Constructs a filter that acts on file-open events as they arrive.
+ */
+FileOpenEventFilter::FileOpenEventFilter(QObject* parent) : QObject(parent), m_capturing(false) {}
+
+/**
+ * @brief Starts recording file-open events instead of acting on them. main() spins the event
+ *        loop once before the composition root, when nothing the handlers reach exists yet.
+ */
+void FileOpenEventFilter::beginStartupCapture() noexcept
+{
+  m_capturing = true;
+  m_startupFile.clear();
+}
+
+/**
+ * @brief Ends the capture and returns the package the app was launched to open, or empty. A
+ *        project file caught meanwhile is opened through the normal queued path, which runs once
+ *        the event loop starts and the session owns its modules.
+ */
+QString FileOpenEventFilter::endStartupCapture()
+{
+  m_capturing     = false;
+  const auto file = m_startupFile;
+  m_startupFile.clear();
+  if (file.isEmpty() || file.endsWith(QStringLiteral(".ssdeploy"), Qt::CaseInsensitive))
+    return file;
+
+  QMetaObject::invokeMethod(qApp, [file] { openProjectFile(file); }, Qt::QueuedConnection);
+  return {};
+}
+
+/**
  * @brief Queues file-open events onto the event loop: the filter is installed before the root, and
  *        the first loop spin is past it (spec 0039 M2). A .ssdeploy always opens in its own sealed
- *        process, and a sealed process forwards a .ssproj to a new one (spec 0096).
+ *        process, and a sealed process forwards a .ssproj to a new one (spec 0096). During the
+ *        startup capture the file is only recorded.
  */
 bool FileOpenEventFilter::eventFilter(QObject* obj, QEvent* event)
 {
@@ -88,6 +121,13 @@ bool FileOpenEventFilter::eventFilter(QObject* obj, QEvent* event)
     return QObject::eventFilter(obj, event);
 
   const QString path = static_cast<QFileOpenEvent*>(event)->file();
+  if (m_capturing) {
+    if (m_startupFile.isEmpty())
+      m_startupFile = path;
+
+    return true;
+  }
+
 #ifdef BUILD_COMMERCIAL
   if (path.endsWith(QStringLiteral(".ssdeploy"), Qt::CaseInsensitive)) {
     const QStringList arguments = {QStringLiteral("--deployment"), path};

@@ -1023,7 +1023,17 @@ QString CLI::deploymentPath() const
 }
 
 /**
- * @brief Resolves the package to open: --deployment, or a positional *.ssdeploy (double-click).
+ * @brief Names the package the operating system launched the app to open (a double-click on
+ *        macOS arrives as a file-open event, not an argument). Set before process().
+ */
+void CLI::setLaunchedDeployment(const QString& path)
+{
+  m_launchedDeployment = path;
+}
+
+/**
+ * @brief Resolves the package to open: --deployment, a positional *.ssdeploy, or the package
+ *        the app was launched to open.
  */
 QString CLI::resolveDeploymentPath() const
 {
@@ -1035,7 +1045,7 @@ QString CLI::resolveDeploymentPath() const
       && positional.first().endsWith(QStringLiteral(".ssdeploy"), Qt::CaseInsensitive))
     return positional.first();
 
-  return {};
+  return m_launchedDeployment;
 }
 
 /**

@@ -28,14 +28,23 @@
 namespace Platform {
 
 /**
- * @brief Event filter that loads .ssproj files dropped onto the running app.
+ * @brief Event filter that loads .ssproj files dropped onto the running app. During the startup
+ *        capture it only records the file the app was launched to open, so main() can open a
+ *        package in this process before any window exists.
  */
 class FileOpenEventFilter : public QObject {
 public:
-  using QObject::QObject;
+  explicit FileOpenEventFilter(QObject* parent = nullptr);
+
+  void beginStartupCapture() noexcept;
+  [[nodiscard]] QString endStartupCapture();
 
 protected:
   bool eventFilter(QObject* obj, QEvent* event) override;
+
+private:
+  bool m_capturing;
+  QString m_startupFile;
 };
 
 /**

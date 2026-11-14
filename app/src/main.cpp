@@ -180,6 +180,26 @@ static int runConfiguredSession(QApplication& app,
   return status;
 }
 
+#if defined(BUILD_COMMERCIAL) && defined(Q_OS_MACOS)
+/**
+ * @brief The package a Finder double-click launched the app to open, or empty. macOS delivers it
+ *        as a file-open event, so a bare launch spins the event loop a few times before any
+ *        window is built: the package then opens in this process and no main window flashes.
+ */
+static QString launchedPackage(QApplication& app, Platform::FileOpenEventFilter& filter)
+{
+  constexpr int kStartupEventPasses = 3;
+  if (app.arguments().size() > 1)
+    return {};
+
+  filter.beginStartupCapture();
+  for (int i = 0; i < kStartupEventPasses; ++i)
+    app.processEvents(QEventLoop::ExcludeUserInputEvents);
+
+  return filter.endStartupCapture();
+}
+#endif
+
 /**
  * @brief Runs the whole application lifecycle inside one QApplication scope: QApplication reads
  *        argv for its entire lifetime, so main() may free the adjusted argv only after this
@@ -201,6 +221,10 @@ static int runApplication(int argc, char** argv, bool headless, const QString& s
   configureApplicationStyle(app);
 
   Misc::CLI cli;
+#if defined(BUILD_COMMERCIAL) && defined(Q_OS_MACOS)
+  cli.setLaunchedDeployment(launchedPackage(app, fileOpenFilter));
+#endif
+
   switch (cli.process(app)) {
     case Misc::CLI::ProcessResult::ExitSuccess:
       return EXIT_SUCCESS;
