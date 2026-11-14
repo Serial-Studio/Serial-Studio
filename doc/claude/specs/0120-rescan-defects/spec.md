@@ -142,7 +142,7 @@ at most once, and never once per API call.** No fix here adds a prompt.
 - [ ] **AC2** — A ctest suite pins the script command policy (R10, R11). Each refused command is
   refused for script origin and allowed otherwise. Saving to the project's own path is allowed;
   saving to another path is refused, as is saving to a path when the project has no file yet.
-- [ ] **AC3** — A pytest integration test loads a project whose control script tries a refused
+- [x] **AC3** — A pytest integration test loads a project whose control script tries a refused
   command and a save to another path, records both results in a data table, and the test reads
   them back. Both are refused and no file is created (R10). The same suite confirms that a remote
   client's call to those commands behaves as before (R11).

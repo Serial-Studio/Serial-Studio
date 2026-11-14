@@ -363,28 +363,31 @@ updated: 2026-11-03
   carries the copy.
 - **Deps:** T1 to T13
 - **Executor:** maintainer.
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there:
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
+- [x] Every acceptance criterion in `spec.md` is met and checked off there:
   - AC1 by T1 (failing first), then T2 and T4;
   - AC2 by T6, T7 and T9;
   - AC3 by T7 and T9;
   - AC4 by T8 and T9;
   - AC5 by T11 to T14.
-- [ ] `python3 scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `python3 scripts/syntax-check.py` ran on every edited C++ file; any SKIP is named in the
+- [x] `python3 scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python3 scripts/syntax-check.py` ran on every edited C++ file; any SKIP is named in the
   handoff as unverified.
-- [ ] `qt-cpp-review` run on the C++ diff (T2 to T8); findings addressed or noted.
-- [ ] Hotpath untouched by construction: no pipeline file, no cached flag, no per-frame hop.
+- [x] `qt-cpp-review` run on the C++ diff (T2 to T8); findings addressed or noted.
+- [x] Hotpath untouched by construction: no pipeline file, no cached flag, no per-frame hop.
   `--benchmark-hotpath` is not required, and the handoff says so.
-- [ ] Maintainer-run checks identified (T14). The agent-runnable ones ran:
+- [x] Maintainer-run checks identified (T14). The agent-runnable ones ran:
   `pytest tests/unit/test_mcp_bridge.py`, the `test_mcp.py` collect-only, and
   `pytest tests/scripts/`.
-- [ ] `python3 scripts/sanitize-commit.py` run before each commit; `layer-verify.py` and the
+- [x] `python3 scripts/sanitize-commit.py` run before each commit; `layer-verify.py` and the
   singleton census unchanged.
-- [ ] Diff is *what was asked, and only that*: no `api-auth` file, no handler, no
+- [x] Diff is *what was asked, and only that*: no `api-auth` file, no handler, no
   `command_safety.json`, no generated surface touched, and the unauthenticated-broadcast fix
   is not in this diff.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

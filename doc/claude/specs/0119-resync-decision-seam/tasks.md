@@ -152,11 +152,14 @@ lines disappear in the extraction, so each row names the equivalent one-line edi
 ### AC5, AC6, AC8
 
 - [ ] AC5: `--benchmark-hotpath` holds on every CI leg; local before and after stay within noise.
-- [ ] AC6: the integration suite passes on all four CI legs.
+- [x] AC6: the integration suite passes on all four CI legs.
 - [ ] AC8: `test_live_resync.py` passes on the CI legs. Confirm on the first run that the edit
   raises no confirm prompt.
 
 ## Definition of Done
+
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
 
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).

@@ -489,19 +489,22 @@ Six review lenses ran on the C++ diff. Lint found nothing. The valid findings we
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC11 per T18:
       the unit equivalence plus the maintainer's observation).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files, including the
+- [x] `python scripts/code-verify.py --check` is clean on all changed files, including the
       new `lock-memory-scope`.
-- [ ] `scripts/syntax-check.py` passed on every edited C++ file, or each SKIP is stated.
+- [x] `scripts/syntax-check.py` passed on every edited C++ file, or each SKIP is stated.
 - [ ] `qt-cpp-review` has run on the C++ diff (done, see "Review fixes" above) and
       `qt-qml-review` on the QML (not yet run). Findings are addressed or noted.
 - [ ] `--benchmark-hotpath` passes all nine gates, with the dashboard ingest ratio no worse
       than the T0 baseline.
-- [ ] The `pytest` targets ran or are listed for the maintainer: `test_plot_pressure.py`,
+- [x] The `pytest` targets ran or are listed for the maintainer: `test_plot_pressure.py`,
       `test_dashboard_configuration.py`, `test_replay_timeline.py`, `test_dashboard_lanes.py`
       and the audio rig.
-- [ ] `python scripts/sanitize-commit.py` has run.
+- [x] `python scripts/sanitize-commit.py` has run.
 - [ ] The diff is what was asked and only that. No foreign files are touched, including the
       untracked `0096-deployment-packages/`.
 - [ ] `spec.md` status is set to `done`.

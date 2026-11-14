@@ -1,7 +1,7 @@
 ---
 spec: 0108-dataset-formats-and-labels
 title: Dataset Value Formats and Labels
-status: approved     # approved 2026-11-02: scale and offset free, integer label keys, number when unlisted
+status: in-progress  # approved 2026-11-02: scale and offset free, integer label keys, number when unlisted
 approved: 2026-11-02
 created: 2026-11-02
 author: Alex Spataru
@@ -112,12 +112,12 @@ only show it by moving that meaning into a second program.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — A unit test decodes fixed-point and bit-field cases bit-exactly, including
+- [x] **AC1** — A unit test decodes fixed-point and bit-field cases bit-exactly, including
   signed widths, the full-width field and the top bit, and refuses an out-of-range declaration.
 - [ ] **AC2** — An integration test over the API loads a project with a labelled dataset and
   reads back the numeric value and the label text for a known frame; the plot's curve list
   still includes the dataset.
-- [ ] **AC3** — An integration test saves and reloads a project using every format and compares
+- [x] **AC3** — An integration test saves and reloads a project using every format and compares
   the round trip; a project without the keys round-trips byte-identical to today.
 - [ ] **AC4** — Importing the CAN Bus example's DBC yields a label table for the gear signal, a
   transform holding only the shared data-table read, and the signal enabled for plotting

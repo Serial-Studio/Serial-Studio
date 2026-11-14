@@ -107,11 +107,11 @@ them without a running pipeline, a project model and a widget registry.
   suite, and records the failure; the assistant does not build.
 - [ ] **AC5** — `--benchmark-hotpath` holds its CI gate on every leg, and the per-tier numbers
   from the maintainer's local run before and after stay within run-to-run noise.
-- [ ] **AC6** — The existing integration suite passes unchanged on all four CI legs, now that a
+- [x] **AC6** — The existing integration suite passes unchanged on all four CI legs, now that a
   pytest failure reddens the run.
 - [x] **AC7** — Neither of the two god translation units grows: the TU census is not re-seeded
   upward for them.
-- [ ] **AC8** — An integration test (commercial build, which CI's test legs run) connects a
+- [x] **AC8** — An integration test (commercial build, which CI's test legs run) connects a
   two-source session, makes a layout-neutral project edit through the API, and forces a
   synthetic refresh before either source's next frame. The dashboard's widget count settles
   back to its pre-edit value within a deadline and then stays constant over an observation

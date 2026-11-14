@@ -347,12 +347,15 @@ Changes from `plan.md`, all smaller than planned or additive:
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [ ] `qt-cpp-review` and `qt-qml-review` run on the diff; findings addressed or noted.
-- [ ] Hotpath not touched, so `--benchmark-hotpath` is not required.
-- [ ] `pytest scripts/tests/` passes, and the maintainer has run the listed ctest suites.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] `reuse lint` passes, and no Icons8 art remains in the public tree.
+- [x] Hotpath not touched, so `--benchmark-hotpath` is not required.
+- [x] `pytest scripts/tests/` passes, and the maintainer has run the listed ctest suites.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] `reuse lint` passes, and no Icons8 art remains in the public tree.
 - [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
 - [ ] `spec.md` status set to `done`.

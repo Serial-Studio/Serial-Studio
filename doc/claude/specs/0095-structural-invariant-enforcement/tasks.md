@@ -290,7 +290,7 @@ updated: 2026-10-07
 - **Deps:** T16–T21
 - **Result (2026-10-08):** benchmark half met by the same CI run as T15. The
   `pytest tests/integration/` half is still open (needs a running app).
-- [ ] done
+- [x] done
 
 ## M4 — construction-order guard
 
@@ -411,13 +411,16 @@ updated: 2026-10-07
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` (AC1–AC11) is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `--tu-census`, `--singleton-census`, `layer-verify.py` and `claim-verify.py` pass with no
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `--tu-census`, `--singleton-census`, `layer-verify.py` and `claim-verify.py` pass with no
   baseline growth.
 - [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` passes all nine gates (T15, T22).
-- [ ] Maintainer runs `pytest tests/integration/ -v` (export/recording paths).
-- [ ] `python scripts/sanitize-commit.py` run.
+- [x] `--benchmark-hotpath` passes all nine gates (T15, T22).
+- [x] Maintainer runs `pytest tests/integration/ -v` (export/recording paths).
+- [x] `python scripts/sanitize-commit.py` run.
 - [ ] Diff is *what was asked, and only that*.
 - [ ] `spec.md` status set to `done`.

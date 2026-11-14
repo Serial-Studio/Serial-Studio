@@ -172,7 +172,7 @@ fails exactly when attention lapses.
 - [ ] **AC6** (R10–R11) — Existing dashboard/time-ring tests pass; in the running app, a 48 kHz
   audio QuickPlot fills its 10 s window and survives a rebuild without blanking (maintainer
   observation).
-- [ ] **AC7** (R12) — A ctest reaches a module during its own construction and before its
+- [x] **AC7** (R12) — A ctest reaches a module during its own construction and before its
   turn in the pinned order; each produces its distinct named message (debug-abort hook).
 - [ ] **AC8** (R13–R14) — Removing the interface binding from one publishing root fails a
   check; adding a new function-static singleton reach in a startup path grows a census.

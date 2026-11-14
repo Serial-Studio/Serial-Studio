@@ -135,12 +135,12 @@ it is free. That fixes the order of work: this spec lands before the registry PR
 - [ ] **AC6 (R5, R10)** — In the Project Editor, a dataset shows no LED section; a group set to
       LED Panel shows the threshold field on a member without bands and hides it once bands
       exist; the add-widget dialog lists LED Panel among group widgets.
-- [ ] **AC7 (R11)** — `documentation-verify.py` and `term-verify.py` pass; a search of
+- [x] **AC7 (R11)** — `documentation-verify.py` and `term-verify.py` pass; a search of
       `doc/help`, the assistant corpus and the firmware README for the removed checkbox label
       and key returns nothing except the migration note.
-- [ ] **AC8 (R9)** — The gRPC descriptor diff shows the dataset field number reserved, no field
+- [x] **AC8 (R9)** — The gRPC descriptor diff shows the dataset field number reserved, no field
       renumbered; the generated-surface check in CI passes.
-- [ ] **AC9** — `--benchmark-hotpath` is unchanged: the change touches project structure and
+- [x] **AC9** — `--benchmark-hotpath` is unchanged: the change touches project structure and
       widget assembly, never the per-frame path.
 
 ## Constraints & Invariants

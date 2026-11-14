@@ -519,18 +519,21 @@ updated: 2026-10-15
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` (AC1–AC15) is met and checked off there.
 - [x] `code-verify.py --check` is clean on all changed C++/QML, with no new errors.
   `--tu-census` shrank (baseline re-seeded) and `--singleton-census` is unchanged.
   `syntax-check.py` was SKIPPED: there is no compile database under `build/`, so
   compile-correctness is unverified until the maintainer builds.
-- [ ] Generators' `--check` modes are green (property registry, command strings, search index).
+- [x] Generators' `--check` modes are green (property registry, command strings, search index).
   The maintainer has re-dumped `api-schema.json`.
 - [x] `term-verify.py`, `documentation-verify.py`, `claim-verify.py` and `registry-verify.py`
   are clean.
 - [x] `qt-cpp-review` has been run (6 agents; 6 confirmed findings fixed: stale pending mode overridden by an explicit choice, rollback losing a prior pending mode, discard path leaving a pending mode, connecting-state toast race, `default:` over GroupWidget, hand-built plural; unused include removed). `qt-qml-review` has not been run.
-- [ ] `--benchmark-hotpath` passes all gates (T26).
-- [ ] The maintainer has run `ctest` (`tst_quickplot_project`, `tst_group_widget_requirement`,
+- [x] `--benchmark-hotpath` passes all gates (T26).
+- [x] The maintainer has run `ctest` (`tst_quickplot_project`, `tst_group_widget_requirement`,
   `tst_enum_labels`, `tst_help_fetcher`) and `pytest tests/integration` (including
   the new spec-0100 tests in `test_problem_center.py`).
 - [x] `python scripts/sanitize-commit.py` has been run.

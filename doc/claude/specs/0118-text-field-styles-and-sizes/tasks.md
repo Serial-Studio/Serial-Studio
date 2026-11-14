@@ -196,11 +196,14 @@ updated: 2026-11-10
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath untouched (no `--benchmark-hotpath` run needed).
-- [ ] `pytest tests/integration/test_output_text_field_styles.py` identified for the maintainer.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Hotpath untouched (no `--benchmark-hotpath` run needed).
+- [x] `pytest tests/integration/test_output_text_field_styles.py` identified for the maintainer.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
 - [ ] `spec.md` status set to `done`.

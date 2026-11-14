@@ -1,7 +1,7 @@
 ---
 spec: 0111-device-declaration-library
 title: Device Declarations and the Firmware Library
-status: approved     # approved 2026-11-02: main repo + CI publish, MIT, Quick Plot-only request, full scope incl. binary; amended 2026-11-03 (plan amendments 1-9)
+status: in-progress  # approved 2026-11-02: main repo + CI publish, MIT, Quick Plot-only request, full scope incl. binary; amended 2026-11-03 (plan amendments 1-9)
 approved: 2026-11-02
 amended: 2026-11-03
 created: 2026-11-02
@@ -154,16 +154,16 @@ tool for the second week.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — An integration test drives the Python library over a loopback network Device,
+- [x] **AC1** — An integration test drives the Python library over a loopback network Device,
   reads the dashboard structure back over the API and finds the declared groups, widgets,
   titles, units and ranges. A unit test builds the Save as Project document from the same
   declaration and frames and finds that it parses the stream, boot declaration included, to
   the live values. (Amended 2026-11-03: Save as Project runs through a file dialog the API
   cannot drive.)
-- [ ] **AC2** — A unit test feeds a malformed, an oversized and an unknown-version declaration
+- [x] **AC2** — A unit test feeds a malformed, an oversized and an unknown-version declaration
   and observes no rebuild; feeds the same declaration twice and observes one build; feeds a
   changed one and observes a second build.
-- [ ] **AC3** — An integration test loads a project, sends a differing declaration and observes
+- [x] **AC3** — An integration test loads a project, sends a differing declaration and observes
   a notification with no change to the loaded project; adopting it opens the declared project
   as an unsaved project.
 - [ ] **AC4** — An integration test disconnects and reconnects with the Python library declaring
@@ -174,16 +174,16 @@ tool for the second week.
 - [ ] **AC6** — Maintainer observation: the declared MPU6050 sketch on an Uno builds the same
   three-group dashboard the example project file produces, and the compiler's RAM report stays
   under half the Uno's RAM.
-- [ ] **AC7** — The hotpath gate (`--benchmark-hotpath`) reports no regression; the declaration
+- [x] **AC7** — The hotpath gate (`--benchmark-hotpath`) reports no regression; the declaration
   is handled on the text-line path and frames are unchanged.
 - [ ] **AC8** — A declaration line sent to the first release carrying spec 0106 shows in the
   console and leaves the Quick Plot dashboard unchanged, and a unit test proves every reference
   declaration yields no number under each of spec 0106's line formats. (Amended 2026-11-03:
   v4.2.1 predates spec 0106.)
-- [ ] **AC9** — The registry gate fails when a property is added to the wire format without
+- [x] **AC9** — The registry gate fails when a property is added to the wire format without
   being in the dataset registry, when one is added to the registry without a wire form, or
   when the declaration manifest names a key the project format does not have.
-- [ ] **AC10** — An integration test declares a binary layout through the Python library, sends
+- [x] **AC10** — An integration test declares a binary layout through the Python library, sends
   packed frames, and reads back the same titles, units and values the text variant produced.
 
 ## Constraints & Invariants

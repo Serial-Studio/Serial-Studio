@@ -288,7 +288,7 @@ action can be checked for parity against its command.
   in the history than the retention bound, only the most recent ones are sent verbatim and the
   rest as placeholders; a capture larger than the size bound is downscaled before encoding.
   (R25)
-- [ ] **AC16** — GUI-driving tests carry their own pytest marker and run in the integration
+- [x] **AC16** — GUI-driving tests carry their own pytest marker and run in the integration
   tier; the first task of the plan is a spike proving click, key and screenshot on the
   offscreen platform, and the marker lets a machine without a presented frame skip them. (R6,
   R7)

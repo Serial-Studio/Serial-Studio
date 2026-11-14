@@ -351,15 +351,18 @@ updated: 2026-11-03
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1 by T19 and T20;
   AC2 by T19; AC3 by T5 and T19; AC4 by T20; AC5 by T15 and T19).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
   `--tu-census --check` and `--singleton-census --check` do not grow.
-- [ ] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP named in the handoff.
+- [x] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP named in the handoff.
 - [ ] `qt-cpp-review` on T1 to T8 and T12 to T14; `qt-qml-review` on T9 to T11.
-- [ ] Hotpath not touched; no benchmark run required.
-- [ ] Relevant `pytest` targets identified for the maintainer: `tests/integration/
+- [x] Hotpath not touched; no benchmark run required.
+- [x] Relevant `pytest` targets identified for the maintainer: `tests/integration/
   test_output_write_limits.py`, `test_output_widgets.py`, `test_output_state_feedback.py`.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that*: no foreign files, no `.ts` edited by hand.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that*: no foreign files, no `.ts` edited by hand.
 - [ ] `spec.md` status set to `done`.

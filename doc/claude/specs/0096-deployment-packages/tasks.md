@@ -546,6 +546,9 @@ Files touched outside the plan's list:
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] AC1–AC13 in `spec.md` are met and checked off there (AC8–AC11 and AC13 by maintainer
       observation; AC5 and AC7 by the maintainer's pytest run).
 - [x] `python3 scripts/code-verify.py --check` is clean on all changed files (no new errors).
@@ -558,11 +561,11 @@ Files touched outside the plan's list:
       except `registry-verify`'s mirror-wire digest: the seal check changed `rebuildStructure`'s
       text, not the wire. Re-seeding without a version bump is the maintainer's call.)
 - [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` gates unchanged (AC12). The hotpath is not touched; this confirms
+- [x] `--benchmark-hotpath` gates unchanged (AC12). The hotpath is not touched; this confirms
       it.
 - [x] Maintainer pytest targets identified: `tests/integration/test_sealed_session.py`.
 - [x] The T9 gate was named to the maintainer with its failure modes before it landed.
-- [ ] `python3 scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] `python3 scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [ ] Diff is *what was asked, and only that*: no scope creep, no foreign files touched. The
       pre-existing gaps (MSIX/AppImage `.ssproj` association, Setup-pane password capture) are
       named, not fixed.

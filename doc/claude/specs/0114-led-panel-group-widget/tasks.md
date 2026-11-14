@@ -441,6 +441,9 @@ for the file count. One `sanitize-commit.py` run, one `commit-batch.py` plan wit
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC2, AC4, AC9 and
       the ctest ACs await the maintainer's build and are listed in TODO.md).
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).

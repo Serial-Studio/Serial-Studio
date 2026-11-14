@@ -107,7 +107,7 @@ those files, they have to carry something to run.
 - [x] **AC1** — One CI run on master, URL recorded below, shows every proof step green:
       Linux x64, Linux arm64, macOS native, macOS under Rosetta, Windows install, run and
       uninstall (R1–R4, R6). Hardening run 41328800884 (2026-11-01): all four steps green.
-- [ ] **AC2** — `pytest scripts/tests/test_ci_workflow.py` passes and contains the pin from
+- [x] **AC2** — `pytest scripts/tests/test_ci_workflow.py` passes and contains the pin from
       R7; editing the workflow to drop one proof step, mark it non-blocking or move it after
       its upload makes that test fail (R5, R7). Tried by hand 2026-10-31: each of the three
       mutations fails the suite.

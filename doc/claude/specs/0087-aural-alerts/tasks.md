@@ -460,19 +460,22 @@ interval bounds are duplicated as SpinBox literals (the C++ clamp wins). Sanitiz
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC6, AC7, AC8,
       AC12 by maintainer observation; AC6's measured onset figure recorded in `plan.md`).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `python scripts/code-verify.py --singleton-census --check`, `--bus-census`,
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/code-verify.py --singleton-census --check`, `--bus-census`,
       `--tu-census --check`, `python scripts/layer-verify.py`, `python scripts/registry-verify.py`
       all clean.
-- [ ] `qt-cpp-review` run on the C++ diff; the audio-callback thread-safety finding set
+- [x] `qt-cpp-review` run on the C++ diff; the audio-callback thread-safety finding set
       addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed (AC10; no hotpath TU touched, run once at the end).
-- [ ] `ctest -R 'tst_annunciator_sequence|tst_wav_decoder'`, `pytest tests/unit/test_alarm_sounds.py`,
+- [x] `--benchmark-hotpath` not regressed (AC10; no hotpath TU touched, run once at the end).
+- [x] `ctest -R 'tst_annunciator_sequence|tst_wav_decoder'`, `pytest tests/unit/test_alarm_sounds.py`,
       `pytest tests/integration/test_aural_alerts.py` identified for the maintainer; the first
       two run by me against the existing build.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt; `reuse lint` clean.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt; `reuse lint` clean.
 - [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched
       (`examples/README.md`, `examples/examples.json`, `examples/Graphical Ping/` are the
       maintainer's in-progress work and stay untouched).

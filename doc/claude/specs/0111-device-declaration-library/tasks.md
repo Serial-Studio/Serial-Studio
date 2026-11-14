@@ -1079,6 +1079,9 @@ updated: 2026-11-03
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off:
   - AC1 by T18 and T26;
   - AC2 by T11;

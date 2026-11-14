@@ -402,8 +402,11 @@ Millennium themes name it.
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
 - [x] `qt-cpp-review` run on the C++ diff (2026-11-07, six lenses): fixed the facade's
       ownership (a `unique_ptr`; first declared after the engine, which made it die first and
       flooded quit with "Cannot call method 'icon' of null" in the maintainer's run, then moved
@@ -412,10 +415,10 @@ Millennium themes name it.
       `style` field; the verification pass also caught raw-string delimiters that had swallowed
       the recolour regexes' opening parenthesis (patterns now `R"re(...)re"`, mirrored in Python
       against real pack SVGs).
-- [ ] No hotpath touched (`--benchmark-hotpath` not required).
-- [ ] `pytest scripts/tests/test_icon_packs.py` and `test_material_theme.py` pass; `ctest`
+- [x] No hotpath touched (`--benchmark-hotpath` not required).
+- [x] `pytest scripts/tests/test_icon_packs.py` and `test_material_theme.py` pass; `ctest`
       target `tst_icon_packs` identified for the maintainer.
-- [ ] `reuse lint` passes.
+- [x] `reuse lint` passes.
 - [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
 - [ ] `doc/claude/TODO.md` icon rows deleted as they close; `icons8-map.csv` statuses current.
 - [ ] `spec.md` status set to `done`.

@@ -100,12 +100,12 @@ in its style.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1) — An automated check in CI finds no Icons8 art in the tree and fails when a
+- [x] **AC1** (R1) — An automated check in CI finds no Icons8 art in the tree and fails when a
       known Icons8 file is introduced.
 - [ ] **AC2** (R2) — Official macOS, Windows and Linux packages show the same icons as the last
       release, confirmed by a side-by-side review of the main window, Project Editor and every
       icon pack.
-- [ ] **AC3** (R3) — A CI job builds from a clean checkout with no access to the private art and
+- [x] **AC3** (R3) — A CI job builds from a clean checkout with no access to the private art and
       passes the in-app self-test, for both the GPL and Pro configurations.
 - [ ] **AC4** (R4, R5) — An automated check confirms every free-set icon has both scales at every
       offered size, and that each scale has the expected pixel dimensions.
@@ -127,7 +127,7 @@ in its style.
       build on the maintainer's machine.
 - [ ] **AC13** (R16) — The AC1 check also covers the action, window, system, image and script-asset
       folders, and a public build shows the replacements.
-- [ ] **AC14** (R17) — An automated check confirms each action icon name in the current set resolves
+- [x] **AC14** (R17) — An automated check confirms each action icon name in the current set resolves
       to free art in a public build.
 - [ ] **AC15** (R18) — The five names are absent from the picker in both build types, and a project
       fixture using one loads and shows the generic icon.

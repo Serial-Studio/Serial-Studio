@@ -231,6 +231,9 @@ updated: 2026-11-12
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met or handed to the maintainer, and checked off
   there.
 - [x] `code-verify.py --check` and `syntax-check.py` are clean on all changed files.

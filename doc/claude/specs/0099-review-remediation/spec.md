@@ -233,7 +233,7 @@ the current code first.
 - [x] **AC10** — `findings.md` lists all 47 ids; 44 `fixed` (with verification; f5-PLC fixed partial
       with its remainder deferred) and 3 `deferred` with reasons (pipeline-core:f5 span-lane,
       devices-protocols:f2 ZMODEM backpressure, devices-protocols:f6 gs_usb). None unaccounted.
-- [ ] **AC11** — `--benchmark-hotpath` passes its gates unchanged, and `pytest tests/integration/`
+- [x] **AC11** — `--benchmark-hotpath` passes its gates unchanged, and `pytest tests/integration/`
       is as green as before. **MAINTAINER-GATED: cannot build/benchmark/run the app here.**
 
 > **Status note (2026-10-14):** the implementable scope has landed and is static-clean

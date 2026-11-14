@@ -1,7 +1,7 @@
 ---
 spec: 0102-mcp-native-transport
 title: MCP Session Hygiene
-status: approved     # draft -> approved -> in-progress -> done | shelved
+status: done         # draft -> approved -> in-progress -> done | shelved (2026-11-14)
 created: 2026-10-19
 author: Alex Spataru
 ---
@@ -77,20 +77,20 @@ wrong in three ways that a conforming host notices.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — pytest (integration, with the suite's frame-producing fixture active): for five
+- [x] **AC1** — pytest (integration, with the suite's frame-producing fixture active): for five
   seconds after `initialize`, an MCP session receives only JSON-RPC messages, while a plain TCP
   session opened at the same time still receives frame broadcasts. (R1)
-- [ ] **AC2** — pytest: on an MCP session, a `tools/call` of a command that would subscribe the
+- [x] **AC2** — pytest: on an MCP session, a `tools/call` of a command that would subscribe the
   connection to a push stream returns a tool result flagged as an error, and the session still
   receives only JSON-RPC messages for the next five seconds. (R1)
-- [ ] **AC3** — pytest: a baud-rate call with a string argument returns a successful JSON-RPC
+- [x] **AC3** — pytest: a baud-rate call with a string argument returns a successful JSON-RPC
   response whose result is flagged as an error and names the parameter and the received type; a
   call refused by the remote gate returns the same shape; an unknown tool, a missing name and an
   uninitialized session still return JSON-RPC errors. The existing error tests are rewritten to
   this shape. (R2)
-- [ ] **AC4** — pytest: the `initialize` capabilities do not claim resource subscription, and a
+- [x] **AC4** — pytest: the `initialize` capabilities do not claim resource subscription, and a
   `resources/subscribe` request gets a JSON-RPC error. (R3)
-- [ ] **AC5** — The MCP integration suite is green with only the error-shape tests changed; the
+- [x] **AC5** — The MCP integration suite is green with only the error-shape tests changed; the
   non-destructive integration suite is green; documentation, terminology and claim verifiers
   pass. (R4)
 

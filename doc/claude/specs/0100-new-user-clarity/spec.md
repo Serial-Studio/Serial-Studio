@@ -250,18 +250,18 @@ leaves no slack for an onboarding that loses people before their first plot.
   maintainer walkthrough, a known CSV stream gives the same values in Quick Plot and after
   Save as Project + reconnect, and the saved project connects in an unlicensed session.
   *(Amended 2026-10-15: no new API command is added just for testing.)*
-- [ ] **AC6** (R10) — No remaining occurrence of the "aligning datasets in time" wording in the
+- [x] **AC6** (R10) — No remaining occurrence of the "aligning datasets in time" wording in the
   repo's user-facing and generated surfaces (grep). The generator checks stay green.
 - [ ] **AC7** (R11) — The parser test with a 2-value sample against a project with indices 1–3
   shows index 3's dataset flagged.
 - [ ] **AC8** (R12, R16) — Integration test: a stream that yields fewer values than the highest
   index raises the new Problem Center finding. A composite widget with the wrong dataset count
   raises its finding. Both clear when fixed.
-- [ ] **AC9** (R12) — `--benchmark-hotpath` passes all gates with no regression outside the
+- [x] **AC9** (R12) — `--benchmark-hotpath` passes all gates with no regression outside the
   historical noise band.
 - [ ] **AC10** (R15, R14) — Maintainer walkthrough: Accelerometer group with 2 datasets shows
   the requirement and the warning. A transform without `value` shows the computed explanation.
-- [ ] **AC11** (R17, R18) — A term audit over QML strings, the help manual, examples READMEs and
+- [x] **AC11** (R17, R18) — A term audit over QML strings, the help manual, examples READMEs and
   the assistant corpus finds no banned synonyms outside code spans and the explained-once
   locations. The audit should be scripted so it can re-run.
 - [ ] **AC12** (R19–R21) — Maintainer check on macOS/Linux and Windows of the port label. Review

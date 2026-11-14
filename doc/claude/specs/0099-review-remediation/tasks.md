@@ -506,6 +506,9 @@ updated: 2026-10-14
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [x] Every finding in `findings.md` ends `fixed` (verification recorded) or `deferred` (reason) —
       spec AC10. 44 fixed (one, f5-PLC, fixed partial with the remainder deferred) + 3 deferred
       (pipeline-core:f5, devices-protocols:f2, devices-protocols:f6).
@@ -527,7 +530,7 @@ updated: 2026-10-14
       `closing` flag on ConnectionState now drops post-close bytes. Also: f10 Historian export now
       checks mid-loop SQL read errors; f1 batch route gated on `groupId<0` so a single-dataset
       dialog in multi-view commits to its captured dataset; PipelineHost @brief corrected for f8.
-- [ ] `--benchmark-hotpath` not regressed — **MAINTAINER-GATED** (cannot build/benchmark here).
+- [x] `--benchmark-hotpath` not regressed — **MAINTAINER-GATED** (cannot build/benchmark here).
       Run after Theme A (T7/T8 FrameParser/ScriptApiCall) and the Theme B/D hotpath-adjacent tasks
       (T9 CANBus, T16 PlaybackRing, T21 stream-lane ack-on-drain pool-pinning).
 - [ ] Maintainer run list handed over (ctest suites + integration tests in the Verify lines;

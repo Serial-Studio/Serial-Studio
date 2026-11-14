@@ -216,9 +216,9 @@ its actual data.
     sample, wherever rate × window is under the ceiling. Above it, it matches today's
     min/max decimation.
   - Allocated bytes are ≤ 1.25× the retained need.
-- [ ] **AC2 (R1) — unit tier.** A rate step up mid-run grows the ring with no lost samples.
+- [x] **AC2 (R1) — unit tier.** A rate step up mid-run grows the ring with no lost samples.
   A step down keeps history and does not shrink.
-- [ ] **AC3 (R4) — unit tier.** Sweep off holds zero sweep bytes. Turning it on allocates
+- [x] **AC3 (R4) — unit tier.** Sweep off holds zero sweep bytes. Turning it on allocates
   sweep storage, and turning it off releases it. Today's sweep tests pass unchanged.
 - [x] **AC4 (R6, R15) — CI check.** A structural check fails if any dashboard display
   storage requests pinned memory.
@@ -232,7 +232,7 @@ its actual data.
 - [ ] **AC7 (R2, audio) — Scenario A.** After 15 s of streaming, each channel's retained
   history holds rate × window (+ headroom) samples, and the narrowest zoom shows individual
   samples matching the loopback signal.
-- [ ] **AC8 (R9) — unit tier.** A stroke segment emits the same vertex and index count at
+- [x] **AC8 (R9) — unit tier.** A stroke segment emits the same vertex and index count at
   every turn angle (straight, 90°, 180°). A dense min/max envelope at W columns emits
   ≤ 8·W stroke vertices, and the fill stays ≤ its current per-column bound.
 - [ ] **AC9 (R10, R12, R14) — profile run.** In Scenario P under `sample`:

@@ -229,7 +229,7 @@ different problem and is out of scope.
       reports Warning as the sounding priority; acknowledge only the Warning point; state
       reports Caution as sounding; silence; a new Caution point flips the sounding flag back
       on.
-- [ ] **AC3 (R8, R9)** — A pytest unit under the pure-Python tier reads every bundled WAV,
+- [x] **AC3 (R8, R9)** — A pytest unit under the pure-Python tier reads every bundled WAV,
       checks format (48 kHz, 16-bit, mono, under 5 s) and counts pulses by envelope
       detection: 1 for Warning (a sustained tone, maintainer choice 2026-09-28; was 10), 3 for
       Caution, 1 for Advisory, 2 for Ringback; the pulse
@@ -254,7 +254,7 @@ different problem and is out of scope.
 - [ ] **AC9 (R18, R19)** — Integration test: opening an example project with bands reports
       no points and no sounding state; disconnecting during an active alert reports all
       points Normal and no ringback under sequence R.
-- [ ] **AC10 (R21)** — `--benchmark-hotpath` passes every tier at the same floor as before
+- [x] **AC10 (R21)** — `--benchmark-hotpath` passes every tier at the same floor as before
       the change.
 - [ ] **AC11 (R14 channel map)** — Integration test through the project API: map channel
       `Engine` to a Warning file and a Caution file, post Critical and Warning notifications on

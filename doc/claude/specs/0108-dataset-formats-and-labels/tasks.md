@@ -551,24 +551,27 @@ updated: 2026-11-03
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 The whole-feature gate, checked once every task is complete.
 
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1 by T5; AC2,
   AC3 and AC5 by T22 with T19; AC4 by T20; AC6 by T8 and T26; AC7 by T21 and T26).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
   hotpath rules are blockers on T6 and T7.
 - [ ] `qt-cpp-review` run on the C++ diff (T1, T4, T6, T7, T9, T11 to T14, T18, T19, T20);
   findings addressed or noted. `qt-qml-review` on T15 and T17.
 - [ ] `ss-hotpath` invoked before T6 and T7; `--benchmark-hotpath` run by the maintainer with
   the nine gates unchanged and the decoded row recorded.
-- [ ] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP named in the
+- [x] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP named in the
   handoff as unverified.
-- [ ] Relevant `pytest` targets identified for the maintainer to run: `tests/integration/
+- [x] Relevant `pytest` targets identified for the maintainer to run: `tests/integration/
   test_dataset_formats.py`, `test_property_registry.py`, `test_frame_parsing.py`;
   `tests/scripts/test_cpp_regressions.py` runnable here.
-- [ ] `python scripts/sanitize-commit.py` run before each commit; `generate-property-registry.py
+- [x] `python scripts/sanitize-commit.py` run before each commit; `generate-property-registry.py
   --check`, `registry-verify.py` and the corpus lint clean; `--check-snapshot` strict after
   the maintainer's dump.
-- [ ] Diff is *what was asked, and only that*: no generated artifact hand-edited, no Modbus
+- [x] Diff is *what was asked, and only that*: no generated artifact hand-edited, no Modbus
   importer change, no security-sensitive surface touched, no file outside the plan's table.
 - [ ] `spec.md` status set to `done`.

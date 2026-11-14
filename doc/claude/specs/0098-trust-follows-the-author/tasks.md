@@ -654,19 +654,22 @@ Open, for the maintainer to decide (not changed; each a decision already made or
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` (AC1–AC11) is met and checked off there; the
       runtime ones are marked pending the maintainer's build and run.
-- [ ] `python3 scripts/code-verify.py --check` is clean on all changed files (no new errors),
+- [x] `python3 scripts/code-verify.py --check` is clean on all changed files (no new errors),
       with `--tu-census --check`, `--singleton-census --check` and `layer-verify.py` clean.
-- [ ] `syntax-check.py` passes on every edited or new TU, and each SKIP is named at handoff.
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `syntax-check.py` passes on every edited or new TU, and each SKIP is named at handoff.
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
 - [ ] `--benchmark-hotpath` not regressed against the spec-0097 T0 table (AC10, the maintainer
       runs it).
 - [ ] The maintainer's run list is handed over: the new ctest suites,
       `tests/security/test_caller_code_inert.py`, `test_project_load_consent.py` and
       `test_process_launch_consent.py` (headless, no AUTO_CONSENT),
       `test_remote_dispatch_gate.py`, then `pytest tests/integration/ -v` (AC8).
-- [ ] `python3 scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] `python3 scripts/sanitize-commit.py` run; working tree clean of lint debt.
 - [ ] The diff is *what was asked, and only that*: no foreign files touched, and every
       protected-surface change was named with its failure modes before it landed.
 - [ ] `spec.md` status set to `done`.

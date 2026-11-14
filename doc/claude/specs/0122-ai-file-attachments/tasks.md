@@ -100,6 +100,9 @@ updated: 2026-11-13
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there. AC1, AC5 and AC6
       need the running app and real keys; AC2, AC3, AC4, AC7 and AC8 need a build with tests.
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).

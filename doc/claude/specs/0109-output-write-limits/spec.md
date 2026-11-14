@@ -1,7 +1,7 @@
 ---
 spec: 0109-output-write-limits
 title: Output Control Write Limits
-status: approved     # approved 2026-11-02: refuse with the range shown, Step quantisation off by default
+status: in-progress  # approved 2026-11-02: refuse with the range shown, Step quantisation off by default
 approved: 2026-11-02
 amended: 2026-11-03
 created: 2026-11-02
@@ -95,14 +95,14 @@ is the last place a wrong number can be stopped, and today it does not try.
 - [ ] **AC1** — An integration test drives a Number text field through the driving surface with
   a value above Max and observes, on a loopback network Device, that no bytes arrive and the
   control reports a refusal; an in-range value arrives once, quantised to Step.
-- [ ] **AC2** — An integration test reads a project with a Number field back over the API and
+- [x] **AC2** — An integration test reads a project with a Number field back over the API and
   finds kind, Min, Max, Step and units in the control's description.
-- [ ] **AC3** — A project round trip keeps a Text field as Text and a Number field as Number;
+- [x] **AC3** — A project round trip keeps a Text field as Text and a Number field as Number;
   a pre-spec project loads with no change to its serialised form on save.
 - [ ] **AC4** — Maintainer observation: typing `250` into a 0 to 100 Number field shows the
   range beside the control and the device receives nothing; the arrow keys nudge the slider by
   one Step.
-- [ ] **AC5** — The manual's transmit examples contain no range clamp that the control performs.
+- [x] **AC5** — The manual's transmit examples contain no range clamp that the control performs.
 
 ## Constraints & Invariants
 

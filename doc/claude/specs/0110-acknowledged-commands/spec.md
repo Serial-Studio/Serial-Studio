@@ -1,7 +1,7 @@
 ---
 spec: 0110-acknowledged-commands
 title: Acknowledged Commands
-status: approved     # approved 2026-11-02: reply datasets, per-control integer token, no notification
+status: in-progress  # approved 2026-11-02: reply datasets, per-control integer token, no notification
 approved: 2026-11-02
 amended: 2026-11-03
 created: 2026-11-02
@@ -110,20 +110,20 @@ refused.
   receives the control's payload, extracts the token and replies in a frame; the control reads
   acknowledged over the API. The same test replies with a non-zero code and a message and reads
   refused with that message; and does not reply and reads unanswered after the timeout.
-- [ ] **AC2** — A unit test feeds a reply carrying the previous token after a second send and
+- [x] **AC2** — A unit test feeds a reply carrying the previous token after a second send and
   confirms the control stays outstanding for the newer one.
 - [ ] **AC3** — An integration test binds both a reply source and a state source and observes
   acknowledged followed by the settled state, and refused followed by the reported state.
-- [ ] **AC4** — A project round trip keeps the reply configuration; a pre-spec project loads
+- [x] **AC4** — A project round trip keeps the reply configuration; a pre-spec project loads
   with every control unbound.
 - [ ] **AC5** — Maintainer observation with the example sketch on a board: pressing the button
   shows acknowledged; sending a value the sketch refuses shows the sketch's reason on the
   control.
-- [ ] **AC6** — The hotpath gate (`--benchmark-hotpath`) reports no regression; reply datasets
+- [x] **AC6** — The hotpath gate (`--benchmark-hotpath`) reports no regression; reply datasets
   are ordinary datasets on the acquisition pipeline.
 - [ ] **AC7** — An integration test acts on a state-bound control, stops the device sending
   entirely, and reads the control no longer waiting within the window plus one second.
-- [ ] **AC8** — A unit test opens the window, reports the requested state, and confirms the
+- [x] **AC8** — A unit test opens the window, reports the requested state, and confirms the
   control stops waiting before the window ends; a report of any other state leaves it waiting.
 
 ## Constraints & Invariants

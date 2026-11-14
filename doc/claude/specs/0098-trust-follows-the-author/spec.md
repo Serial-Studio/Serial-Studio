@@ -184,15 +184,15 @@ trust. Code a caller supplies runs only with the caller's own permissions.
       to reach the API and leave marker effects. A viewer attaches, and no marker effect occurs on
       the viewer. Maintainer observation: the viewer draws the Canvas widget and every data
       widget as before.
-- [ ] **AC7** (R1, R3) — Unit tier, in CI: a sweep over every registered command fails when one has
+- [x] **AC7** (R1, R3) — Unit tier, in CI: a sweep over every registered command fails when one has
       no classification, and a synthetic unclassified command is refused to a remote client.
 - [ ] **AC8** (goals, compatibility) — `pytest tests/integration/` is as green as before, and its
       data-read, dashboard and device-control flows meet no new prompt.
       `SERIAL_STUDIO_API_AUTO_CONSENT=1` still grants every gate for headless runs.
-- [ ] **AC9** (R12) — The API reference and the remote dashboard page carry the statements in R12,
+- [x] **AC9** (R12) — The API reference and the remote dashboard page carry the statements in R12,
       and `documentation-verify.py` reports no new findings on them.
-- [ ] **AC10** — `--benchmark-hotpath` passes its gates unchanged.
-- [ ] **AC11** (R13) — Unit tier: with launch consent granted for the open project, a remote
+- [x] **AC10** — `--benchmark-hotpath` passes its gates unchanged.
+- [x] **AC11** (R13) — Unit tier: with launch consent granted for the open project, a remote
       script change clears it, and the next launch reports that consent is required. After the
       consent is granted again, a second remote change in the same session leaves it granted.
 

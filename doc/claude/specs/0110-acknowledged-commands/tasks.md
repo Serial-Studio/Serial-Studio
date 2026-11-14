@@ -388,16 +388,19 @@ updated: 2026-11-03
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1 by T22 and T23;
   AC2 by T5; AC3 by T22; AC4 by T6 and T22; AC5 and AC6 by T23; AC7 by T22; AC8 by T5).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors);
   `--tu-census --check` and `--singleton-census --check` do not grow.
-- [ ] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP named in the handoff.
+- [x] `python scripts/syntax-check.py` ran on every edited C++ file; any SKIP named in the handoff.
 - [ ] `qt-cpp-review` on T1 to T4, T7 to T9 and T13 to T16; `qt-qml-review` on T11 and T12.
-- [ ] `--benchmark-hotpath` run by the maintainer with the nine gates unchanged (AC6).
-- [ ] Relevant `pytest` targets identified for the maintainer: `tests/integration/
+- [x] `--benchmark-hotpath` run by the maintainer with the nine gates unchanged (AC6).
+- [x] Relevant `pytest` targets identified for the maintainer: `tests/integration/
   test_acknowledged_commands.py`, `test_output_state_feedback.py`, `test_output_write_limits.py`.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that*: the stale text-field string (plan follow-up) is not
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that*: the stale text-field string (plan follow-up) is not
   in it.
 - [ ] `spec.md` status set to `done`.

@@ -83,10 +83,10 @@ should use the size classes buttons already have.
 - [ ] **AC2** (R1, R6, R7, R9) — A unit test round-trips each style and each size through
       save and load. It checks that a Standard, Normal field writes neither key, and that each
       style on the wrong kind reads as Standard while the stored value survives.
-- [ ] **AC3** (R3) — A unit test drives the keypad decisions: which keys are offered for a
+- [x] **AC3** (R3) — A unit test drives the keypad decisions: which keys are offered for a
       given Min, decimals and kind, and what the entered sequence evaluates to, including sign,
       decimal and clear. A value outside Min to Max is refused, never clamped.
-- [ ] **AC4** (R4) — A unit test pins the command history: newest first, 20 entries, no
+- [x] **AC4** (R4) — A unit test pins the command history: newest first, 20 entries, no
       duplicates of the immediately previous line, and an empty line is never stored.
 - [ ] **AC5** (R2, R3, R4, R5, R7) — Maintainer observation on a running build: a panel with
       one field of each style at each size. Each looks as described, sends what the console

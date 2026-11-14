@@ -103,11 +103,14 @@ updated: 2026-10-30
 
 ## Definition of Done
 
+Boxes ticked on 2026-11-14 rest on CI run 43499129979 at `9d1f571bc` and on read-only checks of
+the tree. A sanitize box rests on that run's lint job, not on a local sanitize run.
+
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python -m pytest scripts/tests/test_ci_workflow.py -q` passes.
-- [ ] Each workflow commit carried only `ci.yml`, the shape test and `doc/`
+- [x] `python -m pytest scripts/tests/test_ci_workflow.py -q` passes.
+- [x] Each workflow commit carried only `ci.yml`, the shape test and `doc/`
       (`python scripts/commit-shape.py --range` clean on each).
 - [ ] No C++ or CMake file touched; `app/CMakeLists.txt` and `CLI.*` unchanged.
-- [ ] `python scripts/sanitize-commit.py` run before each commit; working tree clean.
+- [x] `python scripts/sanitize-commit.py` run before each commit; working tree clean.
 - [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
 - [ ] `spec.md` status set to `done`.

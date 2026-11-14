@@ -88,10 +88,10 @@ the providers' own chat products.
 - [ ] **AC6** — In the running app: chips show name, kind and size; removing a chip and then
       asking the assistant to read that path is refused; the sent bubble lists the attachment
       and shows no path (R3, R4).
-- [ ] **AC7** — A unit test of the history budget: a turn carrying a 5 MB attachment is counted
+- [x] **AC7** — A unit test of the history budget: a turn carrying a 5 MB attachment is counted
       by the attachment's own estimate, not by its encoded length, and is kept when the window
       allows (R6).
-- [ ] **AC8** — The existing assistant unit suites and the app-free pytest tiers pass.
+- [x] **AC8** — The existing assistant unit suites and the app-free pytest tiers pass.
 
 ## Constraints & Invariants
 

@@ -64,7 +64,8 @@ Only phase 1 is specified here; the format must leave room for phase 2.
   the sealed artifact built from it (maintainer decision, 2026-10-13).
 - Turning a package back into an editable project. Export is one-way; the author keeps the
   `.ssproj`.
-- Bundling programs that the Process driver launches.
+- Bundling programs that the Process driver launches. (Spec 0123 later let a package carry
+  helper files for the control script's `system.exec`, as an option that is off by default.)
 - Sealing ordinary runtime sessions started from a project file. The sealed behavior applies
   only to sessions opened from a package.
 - Re-parsing tools (session verify and regress) working on recordings made from a package.
@@ -160,16 +161,16 @@ Only phase 1 is specified here; the format must leave room for phase 2.
       Canvas code, a dataset title and an excluded MQTT password never appears in the package
       bytes. The same password marked "include" decodes back correctly, and the warning
       appears in the dialog.
-- [ ] **AC3** (R10) — Unit tier: truncating a small package at every offset, flipping single bits
+- [x] **AC3** (R10) — Unit tier: truncating a small package at every offset, flipping single bits
       across the file, and declaring oversized lengths are all refused without a crash and
       within fixed time and memory limits (sanitizer build in the ctest tier).
-- [ ] **AC4** (R11, R6) — Unit tier: a package declaring a minimum version above the running app
+- [x] **AC4** (R11, R6) — Unit tier: a package declaring a minimum version above the running app
       is refused, with the version named. A package carrying an unknown reserved section that
       phase 2 will use still opens. A package over 64 MiB is refused at export and at open.
 - [ ] **AC5** (R14) — Integration (pytest, the app running a package): every command in the
       project-content class, sent over the API and through a script's API call, is refused. Live
       data and dashboard reads still succeed.
-- [ ] **AC6** (R15) — A check enumerating every registered command fails when any command has no
+- [x] **AC6** (R15) — A check enumerating every registered command fails when any command has no
       package-session classification. The check runs in CI.
 - [ ] **AC7** (R16, R17) — With the marker project running as a package and session export on, a
       search of the app data folders (backups, settings, historian database, temp) finds the
@@ -184,7 +185,7 @@ Only phase 1 is specified here; the format must leave room for phase 2.
       shortcut fail to open any surface listed in R13.
 - [ ] **AC11** (R18) — Maintainer: with a user-installed extension present on the machine, a
       package session does not load it, and the bundled extension loads after consent.
-- [ ] **AC12** — `--benchmark-hotpath` passes its gates unchanged.
+- [x] **AC12** — `--benchmark-hotpath` passes its gates unchanged.
 - [ ] **AC13** (R7, R19) — Maintainer: a package opened with a port override connects to that
       port, and a conflicting non-bus option is ignored. A project shortcut made in the
       dialog's project-shortcut mode behaves exactly as today.

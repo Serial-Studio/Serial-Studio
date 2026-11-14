@@ -118,7 +118,7 @@ unlicensed project with Pro content does not run degraded. It does not run.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1) — A unit test over the content rule: blank and whitespace-only transform
+- [x] **AC1** (R1) — A unit test over the content rule: blank and whitespace-only transform
       code do not count, non-blank code does, one user table does, custom workspaces alone
       do not. `ctest`.
 - [ ] **AC2** (R2, R9) — With the running app unentitled, loading a project with one
@@ -149,7 +149,7 @@ unlicensed project with Pro content does not run degraded. It does not run.
       machine shows the reason and no prompt. Maintainer observation.
 - [ ] **AC12** (R4) — A GPL build refuses the same connect and shows its Pro notice.
       Maintainer observation on a GPL build.
-- [ ] **AC13** — `--benchmark-hotpath` gates unchanged.
+- [x] **AC13** — `--benchmark-hotpath` gates unchanged.
 - [ ] **AC15** (R2) — Unentitled, a free project connected over TCP ends its session when
       `project.loadJson` brings in a transform (source saved without connection settings, so
       no device rebuild runs); entitled, the session stays up. `pytest`
@@ -157,7 +157,7 @@ unlicensed project with Pro content does not run degraded. It does not run.
       Remove Transform, Connect, Undo ends the session with the explained prompt.
 - [ ] **AC16** (R4, R8) — On a fresh profile, a TCP project with one transform connects on
       the first click after the trial is accepted (no second click). Maintainer observation.
-- [ ] **AC14** (R12) — `documentation-verify.py` and `claim-verify.py` clean on the changed
+- [x] **AC14** (R12) — `documentation-verify.py` and `claim-verify.py` clean on the changed
       docs; the licensing consumer inventory records this spec as superseding the 2026-10-04
       ruling.
 
