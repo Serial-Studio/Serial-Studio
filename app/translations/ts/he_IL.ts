@@ -450,41 +450,41 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="127"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="145"/>
         <source>No program specified</source>
         <translation>לא צוין תוכנית</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="131"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="149"/>
         <source>This project's script wants to run:
 %1</source>
         <translation>הסקריפט של הפרויקט רוצה להריץ:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="135"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="153"/>
         <source>Launching programs needs the user's consent; a prompt was shown</source>
         <translation>הפעלת תוכניות דורשת הסכמת המשתמש; הוצגה הודעה</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="140"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="158"/>
         <source>Launching programs was denied by the user</source>
         <translation>הפעלת תוכניות נדחתה על ידי המשתמש</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="146"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="164"/>
         <source>Program "%1" not found in PATH</source>
         <translation>תוכנית "%1" לא נמצאה ב-PATH</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="218"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="236"/>
         <source>This project's Process I/O source wants to run:
 %1</source>
         <translation>מקור Process I/O של פרויקט זה רוצה להריץ:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="221"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="239"/>
         <source>in %1</source>
         <translation>ב־%1</translation>
     </message>
@@ -2632,74 +2632,109 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>צלילי ערוץ התראות</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="100"/>
         <source>Select Sound File</source>
         <translation>בחירת קובץ שמע</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="102"/>
         <source>WAV audio (*.wav)</source>
         <translation>שמע WAV (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="102"/>
         <source>All files (*)</source>
         <translation>כל הקבצים (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="127"/>
-        <source>(app default)</source>
-        <translation>(ברירת מחדל של האפליקציה)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="156"/>
-        <source>Choose the sounds this channel plays. A Critical notification plays the Warning sound, a Warning notification the Caution sound, and an Info notification the Advisory sound. Empty cells use the sounds from Preferences.</source>
-        <translation>בחר את הצלילים שערוץ זה מנגן. התראה קריטית מנגנת את צליל האזהרה, התראת אזהרה את צליל הזהירות, והתראת מידע את צליל הייעוץ. תאים ריקים משתמשים בצלילים מההעדפות.</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="167"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="233"/>
         <source>Channel</source>
         <translation>ערוץ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="173"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="240"/>
         <source>Warning</source>
         <translation>אזהרה</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="179"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="247"/>
         <source>Caution</source>
         <translation>זהירות</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="185"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="254"/>
         <source>Advisory</source>
         <translation>ייעוץ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="230"/>
-        <source>Channel name</source>
-        <translation>שם ערוץ</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="246"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="328"/>
         <source>Remove this channel.</source>
         <translation>הסר ערוץ זה.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="202"/>
         <source>Add Channel</source>
         <translation>הוסף ערוץ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="269"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="129"/>
+        <source>From Preferences</source>
+        <translation>מהעדפות</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="141"/>
+        <source>Choose a WAV file.</source>
+        <translation>בחר קובץ WAV.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="170"/>
+        <source>Give a notification channel its own alert sounds. For example, notifications sent to the "Engine" channel can play a horn instead of the standard tone.</source>
+        <translation>תן לערוץ התראה שלו צלילי התראה משלו. לדוגמה, התראות שנשלחות לערוץ "Engine" יכולות להשמיע קרן במקום הטון הסטנדרטי.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="187"/>
+        <source>Channels</source>
+        <translation>ערוצים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="206"/>
+        <source>Add a row for another channel.</source>
+        <translation>הוסף שורה לערוץ נוסף.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="311"/>
+        <source>For example, Engine</source>
+        <translation>לדוגמה, Engine</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="346"/>
+        <source>No channels yet. Click Add Channel to give one its own sounds.</source>
+        <translation>אין ערוצים עדיין. לחץ על הוסף ערוץ כדי לתת לאחד צלילים משלו.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="359"/>
+        <source>A Critical notification plays the Warning sound, a Warning notification the Caution sound, and an Info notification the Advisory sound. A sound left empty uses the one from Preferences.</source>
+        <translation>התראה Critical משמיעה את צליל ה-Warning, התראה Warning משמיעה את צליל ה-Caution, והתראה Info משמיעה את צליל ה-Advisory. צליל שנותר ריק משתמש בזה מהעדפות.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="380"/>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="383"/>
+        <source>Discard changes.</source>
+        <translation>ביטול השינויים.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="392"/>
         <source>Apply</source>
         <translation>החל</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="396"/>
+        <source>Save the channel sounds to this project.</source>
+        <translation>שמור את צלילי הערוץ לפרויקט זה.</translation>
     </message>
 </context>
 <context>
@@ -6004,22 +6039,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>ערך</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Resume</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <source>Awaiting data…</source>
         <translation>ממתין לנתונים…</translation>
     </message>
@@ -7410,8 +7445,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>וולט, אמפר וכו׳</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <source>Automatic</source>
         <translation>אוטומטי</translation>
     </message>
@@ -8709,32 +8744,41 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 <context>
     <name>DeploymentSession</name>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="177"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="182"/>
         <source>The deployment package "%1" could not be found or opened.</source>
         <translation>לא ניתן למצוא או לפתוח את חבילת הפריסה "%1".</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="293"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="278"/>
+        <source>The files this deployment package needs could not be written to this computer.
+
+%1</source>
+        <translation>לא ניתן היה לכתוב את הקבצים שחבילת הפריסה הזו צריכה לכמחשב זה.
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="352"/>
         <source>Cannot open deployment package</source>
         <translation>לא ניתן לפתוח חבילת פריסה</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="305"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="364"/>
         <source>This deployment package is larger than 64 MiB.</source>
         <translation>חבילת פריסה זו גדולה מ-64 MiB.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="308"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="367"/>
         <source>This file is not a Serial Studio deployment package.</source>
         <translation>קובץ זה אינו חבילת פריסה של Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="311"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="370"/>
         <source>This deployment package needs Serial Studio %1 or later.</source>
         <translation>חבילת פריסה זו דורשת Serial Studio %1 או גרסה חדשה יותר.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="319"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="378"/>
         <source>This deployment package is damaged or was changed after it was exported.</source>
         <translation>חבילת פריסה זו פגומה או שונתה לאחר ייצוא.</translation>
     </message>
@@ -10310,22 +10354,22 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>טבלת משתנים המוגדרת בפרויקט זה</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="700"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="701"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>להסיר הפניה אחת לווידג'ט שקבוצת היעד או מערך הנתונים שלו אינם קיימים עוד?</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="701"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="702"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>להסיר %1 הפניות לווידג'טים שקבוצות היעד או מערכי הנתונים שלהם אינם קיימים עוד?</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="707"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>פעולה זו תשפיע רק על מיקום האריחים במרחב העבודה; לא נמחקות קבוצות, מערכי נתונים או נתונים.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="709"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="710"/>
         <source>Clean Up Workspaces</source>
         <translation>ניקוי מרחבי עבודה</translation>
     </message>
@@ -18136,84 +18180,89 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>Misc::DeploymentPackager</name>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="353"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="383"/>
         <source>%1 (its name cannot be carried in a package)</source>
         <translation>%1 (לא ניתן להעביר את שמו בחבילה)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="551"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="621"/>
         <source>Widget extension "%1"</source>
         <translation>הרחבת Widget "%1"</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="571"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="641"/>
         <source>Widget extension "%1" has more than %2 files</source>
         <translation>הרחבת Widget "%1" מכילה יותר מ-%2 קבצים</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="596"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="666"/>
         <source>%1: private key</source>
         <translation>%1: מפתח פרטי</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="615"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="685"/>
         <source>MQTT publisher: private key</source>
         <translation>מפרסם MQTT: מפתח פרטי</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="662"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="732"/>
         <source>MQTT publisher: %1</source>
         <translation>מפרסם MQTT: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="691"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="761"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="714"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="784"/>
         <source>Process %1: %2</source>
         <translation>תהליך %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="721"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="791"/>
         <source>Web page: %1</source>
         <translation>דף אינטרנט: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="794"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="817"/>
+        <source>%1 (more than %2 files)</source>
+        <translation>%1 (יותר מ-%2 קבצים)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="911"/>
         <source>The icon "%1" could not be read as an image.</source>
         <translation>לא ניתן היה לקרוא את הסמל "%1" כתמונה.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="803"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="920"/>
         <source>"%1" could not be read, or the package would exceed 64 MiB.</source>
         <translation>לא ניתן לקרוא את "%1", או החבילה תחרוג מ-64 MiB.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="809"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="926"/>
         <source>"%1" could not be read completely.</source>
         <translation>לא ניתן לקרוא את "%1" לחלוטין.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="830"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="947"/>
         <source>Exporting a package needs a Pro license or the trial.</source>
         <translation>ייצוא חבילה דורש רישיון Pro או Trial.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="835"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="952"/>
         <source>Save the project before exporting a package.</source>
         <translation>שמור את הפרויקט לפני ייצוא חבילה.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="840"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="957"/>
         <source>These referenced files are missing:
 %1</source>
         <translation>קבצים מreferenced אלה חסרים:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="864"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="981"/>
         <source>The package could not be written to "%1".</source>
         <translation>לא ניתן היה לכתוב את החבילה אל "%1".</translation>
     </message>
@@ -18630,8 +18679,8 @@ Would you like to open the download page?</source>
         <translation>לא ניתן ליצור את מבנה התיקיות של bundle מסוג .app.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>כותב קיצורי דרך של Windows אינו זמין בפלטפורמה זו.</translation>
     </message>
@@ -18662,8 +18711,8 @@ Would you like to open the download page?</source>
         <translation>שמירת קובץ .lnk נכשלה (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>כותב קיצורי דרך של macOS אינו זמין בפלטפורמה זו.</translation>
     </message>
@@ -19365,39 +19414,39 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <source>Bytes per value</source>
         <translation>בתים לערך</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>מספר הבתים המשולבים לכל ערך ערוץ.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="312"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>סדר בתים</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>סדר בתים המשמש בעת שילוב ערכים רב-בתיים.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <source>Signed values</source>
         <translation>ערכים מסומנים</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>מפרש כל ערך כמספר מסומן בשיטת משלים-לשניים.</translation>
     </message>
@@ -19412,9 +19461,9 @@ Add groups above to poll multiple register types.</source>
         <translation>ערכי תגית:אינדקס מופרדים בפסיקים, למשל 1:0,2:1,3:2. תגיות יכולות להיות עשרוניות או הקסדצימליות עם קידומת 0x.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>אימות Checksum</translation>
     </message>
@@ -19700,8 +19749,8 @@ Add groups above to poll multiple register types.</source>
         <translation>שמות פרמטרים מופרדים בפסיקים. מיקום כל מפתח קובע את אינדקס הערוץ שלו.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="369"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <source>Fields (in channel order)</source>
         <translation>שדות (בסדר ערוצים)</translation>
     </message>
@@ -21720,8 +21769,8 @@ Reload it?</source>
         <translation>למחוק את וידג'ט הפלט "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>לא ניתן לבטל פעולה זו. להמשיך?</translation>
     </message>
@@ -22048,17 +22097,17 @@ Reload it?</source>
         <translation>פרופיל סביבת עבודה חדש</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="97"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="393"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="421"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="449"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="472"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="799"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="825"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
         <source>Name:</source>
         <translation>שם:</translation>
     </message>
@@ -22269,15 +22318,15 @@ Reload it?</source>
         <translation>שנה נתיב זרם</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="385"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="801"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>Workspace</source>
         <translation>סביבת עבודה</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>New Workspace</source>
         <translation>סביבת עבודה חדשה</translation>
     </message>
@@ -22393,15 +22442,15 @@ Reload it?</source>
         <translation>העבר טבלה</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>New Variables Table</source>
         <translation>טבלת משתנים חדשה</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>Variables Table</source>
         <translation>טבלת משתנים</translation>
     </message>
@@ -22952,8 +23001,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="554"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>מנתח מסגרות מושבת</translation>
     </message>
@@ -23019,8 +23068,8 @@ Serial Studio יכול לשכתב את האופרטורים הלא נתמכים 
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="752"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>פונקציית Parse חסרה</translation>
     </message>
@@ -23036,8 +23085,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="815"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>שגיאת זמן ריצה בפונקציית Parse</translation>
     </message>
@@ -26125,53 +26174,53 @@ Add absolute addresses above to poll the controller.</source>
         <translation>פריסה חדשה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="227"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="250"/>
         <source>Choose an Icon</source>
         <translation>בחר סמל</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="195"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="243"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="266"/>
         <source>Save Deployment</source>
         <translation>שמור פריסה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="330"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="353"/>
         <source>General</source>
         <translation>כללי</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="336"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="359"/>
         <source>Taskbar</source>
         <translation>שורת משימות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="342"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="365"/>
         <source>Logging</source>
         <translation>רישום</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="489"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="512"/>
         <source>Identity</source>
         <translation>זהות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="552"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="575"/>
         <source>Click to choose an icon</source>
         <translation>לחץ לבחירת סמל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="534"/>
         <source>Deployment Name</source>
         <translation>שם פריסה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="558"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="581"/>
         <source>Change Icon…</source>
         <translation>שנה סמל…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="439"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="462"/>
         <source>Project</source>
         <translation>פרויקט</translation>
     </message>
@@ -26216,273 +26265,315 @@ Add absolute addresses above to poll the controller.</source>
         <translation>כל הקבצים (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="348"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="228"/>
+        <source>Add Resource Files</source>
+        <translation>הוסף קבצי משאבים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="239"/>
+        <source>Add Resource Folder</source>
+        <translation>הוסף תיקיית משאבים</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="371"/>
         <source>Contents</source>
         <translation>תוכן</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="407"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="430"/>
         <source>Output</source>
         <translation>פלט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="422"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="445"/>
         <source>Format</source>
         <translation>עיצוב</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="431"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="454"/>
         <source>Deployment package (.ssdeploy)</source>
         <translation>חבילת פריסה (.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="432"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="455"/>
         <source>Shortcut to the project file</source>
         <translation>קיצור דרך לקובץ הפרויקט</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="472"/>
         <source>Choose a project file to begin</source>
         <translation>בחר קובץ פרויקט כדי להתחיל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="469"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="492"/>
         <source>Desktop Shortcut</source>
         <translation>קיצור דרך לשולחן העבודה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="504"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="527"/>
         <source>Name</source>
         <translation>שם</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="516"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="539"/>
         <source>Icon</source>
         <translation>סמל</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="578"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
         <source>Behavior</source>
         <translation>התנהגות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="593"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="616"/>
         <source>Theme</source>
         <translation>ערכת נושא</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
         <source>Same as Serial Studio</source>
         <translation>זהה ל-Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="613"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
         <source>Fullscreen</source>
         <translation>מסך מלא</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="647"/>
         <source>Actions Panel</source>
         <translation>לוח פעולות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="866"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="659"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="889"/>
         <source>File Transmission</source>
         <translation>שידור קובץ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="677"/>
         <source>Opens straight to the live dashboard, with no toolbar, no setup pane, and no way to view or export the project. Serial Studio quits when the device disconnects.</source>
         <translation>נפתח ישירות ללוח המחוונים הלייב, ללא סרגל כלים, ללא חלונית הגדרות, וללא אפשרות להציג או לייצא את הפרויקט. Serial Studio יסגר כאשר ההתקן מתנתק.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="657"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="680"/>
         <source>Opens the project straight to the live dashboard, with no toolbar or setup pane. Serial Studio quits when the device disconnects.</source>
         <translation>נפתח את הפרויקט ישירות ללוח המחוונים הלייב, ללא סרגל כלים או חלונית הגדרות. Serial Studio יסגר כאשר ההתקן מתנתק.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="701"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
         <source>Visibility</source>
         <translation>נראות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="716"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="739"/>
         <source>Mode</source>
         <translation>מצב</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="723"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="746"/>
         <source>Always shown</source>
         <translation>מוצג תמיד</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="747"/>
         <source>Auto-hide</source>
         <translation>הסתרה אוטומטית</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="725"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="748"/>
         <source>Hidden</source>
         <translation>מוסתר</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="733"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="756"/>
         <source>Search Bar</source>
         <translation>סרגל חיפוש</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="755"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="778"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>הסתרת סרגל המשימות מסירה את כפתורי מזעור/הגדלה/סגירה של החלון ומאלצת פריסה אוטומטית, כך ש-Dashboard תמיד ממלא את השטח הזמין.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="759"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="782"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>סרגל המשימות מופיע כאשר המשתמש מזיז את הסמן לקצה התחתון.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="761"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="784"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>סרגל המשימות נראה באופן קבוע בתחתית ה-Dashboard.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="774"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="797"/>
         <source>Pinned Buttons</source>
         <translation>כפתורים מוצמדים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="791"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="814"/>
         <source>Console</source>
         <translation>קונסול</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="806"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="829"/>
         <source>Notifications</source>
         <translation>התראות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="821"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="844"/>
         <source>Clock</source>
         <translation>שעון</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="836"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="859"/>
         <source>Stopwatch</source>
         <translation>שעון עצר</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="851"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="874"/>
         <source>Pause</source>
         <translation>השהה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="917"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="940"/>
         <source>Recorders</source>
         <translation>מקליטים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="932"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="955"/>
         <source>CSV File</source>
         <translation>קובץ CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="943"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="966"/>
         <source>MDF4 File</source>
         <translation>קובץ MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="954"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="977"/>
         <source>Historian</source>
         <translation>היסטוריון</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="965"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="988"/>
         <source>Console Log</source>
         <translation>יומן קונסול</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="982"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1005"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>הקלטות נשמרות בתיקיית עבודה של Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1027"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1050"/>
         <source>Carried Files</source>
         <translation>קבצים מצורפים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1036"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1059"/>
         <source>%1 in total</source>
         <translation>%1 בסה"כ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1070"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1093"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1204"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1091"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1114"/>
         <source>Add images a Canvas script loads at run time.</source>
         <translation>הוסף תמונות שסקריפט Canvas טוען בזמן ריצה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1118"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1230"/>
         <source>Add Files…</source>
         <translation>הוסף קבצים…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1107"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1135"/>
+        <source>Helper Programs</source>
+        <translation>תוכניות עזר</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1167"/>
+        <source>The project's control script can start programs on the operator's computer, such as a simulator. Serial Studio asks the operator once before the first one starts. Resources are copied to the operator's disk while the package runs, and can be read there.</source>
+        <translation>סקריפט הבקרה של הפרויקט יכול להפעיל תוכניות במחשב של המפעיל, כגון סימולטור. Serial Studio שואל את המפעיל פעם אחת לפני שהראשונה מתחילה. משאבים מועתקים לדיסק של המפעיל בזמן הפעלת החבילה, וניתן לקרוא אותם שם.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1171"/>
+        <source>Turn this on to let the project's control script start programs on the operator's computer, such as a simulator.</source>
+        <translation>הפעל זאת כדי לאפשר לסקריפט הבקרה של הפרויקט להפעיל תוכניות במחשב של המפעיל, כגון סימולטור.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1195"/>
+        <source>%1 files, %2</source>
+        <translation>%1 קבצים, %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1225"/>
+        <source>Add the files and folders the programs need. They must be inside the project's folder.</source>
+        <translation>הוסף את הקבצים והתיקיות שהתוכניות זקוקות להן. הם חייבים להיות בתוך תיקיית הפרויקט.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1238"/>
+        <source>Add Folder…</source>
+        <translation>הוסף תיקייה…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1251"/>
         <source>Missing Files</source>
         <translation>קבצים חסרים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1144"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1288"/>
         <source>Export is blocked until these files exist.</source>
         <translation>הייצוא חסום עד שקבצים אלה יהיו קיימים.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1152"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1296"/>
         <source>External Dependencies</source>
         <translation>תלויות חיצוניות</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1189"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1333"/>
         <source>The target machine must provide these.</source>
         <translation>המכונה היעד חייבת לספק אלה.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1198"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1342"/>
         <source>Credentials and Private Keys</source>
         <translation>אישורים ומפתחות פרטיים</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1229"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1373"/>
         <source>Packages are encoded, not encrypted. Anyone with the file can recover the items you include.</source>
         <translation>החבילות מקודדות, לא מוצפנות. כל מי שיש לו את הקובץ יכול להחזיר את הפריטים שאתה כולל.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1263"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1407"/>
         <source>Saved %1</source>
         <translation>שמור %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1273"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1417"/>
         <source>Open Package</source>
         <translation>פתח חבילה</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1429"/>
         <source>Cancel</source>
         <translation>ביטול</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1429"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1290"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1434"/>
         <source>Save</source>
         <translation>שמור</translation>
     </message>

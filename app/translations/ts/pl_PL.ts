@@ -450,41 +450,41 @@ Każda akcja urządzenia nadal wymaga wyraźnej zgody dla każdego wywołania w 
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="127"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="145"/>
         <source>No program specified</source>
         <translation>Nie określono programu</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="131"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="149"/>
         <source>This project's script wants to run:
 %1</source>
         <translation>Skrypt tego projektu chce uruchomić:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="135"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="153"/>
         <source>Launching programs needs the user's consent; a prompt was shown</source>
         <translation>Uruchamianie programów wymaga zgody użytkownika; wyświetlono monit</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="140"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="158"/>
         <source>Launching programs was denied by the user</source>
         <translation>Uruchamianie programów zostało odrzucone przez użytkownika</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="146"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="164"/>
         <source>Program "%1" not found in PATH</source>
         <translation>Program „%1" nie został znaleziony w PATH</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="218"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="236"/>
         <source>This project's Process I/O source wants to run:
 %1</source>
         <translation>Źródło Process I/O tego projektu chce uruchomić:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="221"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="239"/>
         <source>in %1</source>
         <translation>w %1</translation>
     </message>
@@ -2632,74 +2632,109 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
         <translation>Dźwięki Kanałów Powiadomień</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="100"/>
         <source>Select Sound File</source>
         <translation>Wybierz Plik Dźwiękowy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="102"/>
         <source>WAV audio (*.wav)</source>
         <translation>Dźwięk WAV (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="102"/>
         <source>All files (*)</source>
         <translation>Wszystkie pliki (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="127"/>
-        <source>(app default)</source>
-        <translation>(domyślne aplikacji)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="156"/>
-        <source>Choose the sounds this channel plays. A Critical notification plays the Warning sound, a Warning notification the Caution sound, and an Info notification the Advisory sound. Empty cells use the sounds from Preferences.</source>
-        <translation>Wybierz dźwięki odtwarzane przez ten kanał. Powiadomienie Critical odtwarza dźwięk Warning, powiadomienie Warning dźwięk Caution, a powiadomienie Info dźwięk Advisory. Puste komórki używają dźwięków z Preferencji.</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="167"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="233"/>
         <source>Channel</source>
         <translation>Kanał</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="173"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="240"/>
         <source>Warning</source>
         <translation>Ostrzeżenie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="179"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="247"/>
         <source>Caution</source>
         <translation>Uwaga</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="185"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="254"/>
         <source>Advisory</source>
         <translation>Advisory</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="230"/>
-        <source>Channel name</source>
-        <translation>Nazwa kanału</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="246"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="328"/>
         <source>Remove this channel.</source>
         <translation>Usuń ten kanał.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="202"/>
         <source>Add Channel</source>
         <translation>Dodaj Kanał</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="269"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="129"/>
+        <source>From Preferences</source>
+        <translation>Z Preferencji</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="141"/>
+        <source>Choose a WAV file.</source>
+        <translation>Wybierz plik WAV.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="170"/>
+        <source>Give a notification channel its own alert sounds. For example, notifications sent to the "Engine" channel can play a horn instead of the standard tone.</source>
+        <translation>Przypisz kanałowi powiadomień własne dźwięki alertu. Na przykład powiadomienia wysłane do kanału „Engine" mogą odtwarzać sygnał zamiast standardowego tonu.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="187"/>
+        <source>Channels</source>
+        <translation>Kanały</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="206"/>
+        <source>Add a row for another channel.</source>
+        <translation>Dodaj wiersz dla innego kanału.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="311"/>
+        <source>For example, Engine</source>
+        <translation>Na przykład: Engine</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="346"/>
+        <source>No channels yet. Click Add Channel to give one its own sounds.</source>
+        <translation>Brak kanałów. Kliknij Dodaj kanał, aby przypisać mu własne dźwięki.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="359"/>
+        <source>A Critical notification plays the Warning sound, a Warning notification the Caution sound, and an Info notification the Advisory sound. A sound left empty uses the one from Preferences.</source>
+        <translation>Powiadomienie Critical odtwarza dźwięk Warning, powiadomienie Warning odtwarza dźwięk Caution, a powiadomienie Info odtwarza dźwięk Advisory. Pusty dźwięk używa tego z Preferencji.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="380"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="383"/>
+        <source>Discard changes.</source>
+        <translation>Odrzuć zmiany.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="392"/>
         <source>Apply</source>
         <translation>Zastosuj</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="396"/>
+        <source>Save the channel sounds to this project.</source>
+        <translation>Zapisz dźwięki kanału do tego projektu.</translation>
     </message>
 </context>
 <context>
@@ -6004,22 +6039,22 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
         <translation>Wartość</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Resume</source>
         <translation>Wznów</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <source>Awaiting data…</source>
         <translation>Oczekiwanie na dane…</translation>
     </message>
@@ -7380,8 +7415,8 @@ Dodać %4 zbiorów danych używając domyślnych wartości szablonu?</translatio
         <translation>Ukryj na Pulpicie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <source>Automatic</source>
         <translation>Automatyczny</translation>
     </message>
@@ -8709,32 +8744,41 @@ Włącz go tylko dla skryptów, którym ufasz i które wcześniej przetestowałe
 <context>
     <name>DeploymentSession</name>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="177"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="182"/>
         <source>The deployment package "%1" could not be found or opened.</source>
         <translation>Nie można znaleźć lub otworzyć pakietu wdrożeniowego „%1".</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="293"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="278"/>
+        <source>The files this deployment package needs could not be written to this computer.
+
+%1</source>
+        <translation>Nie można było zapisać plików wymaganych przez ten pakiet wdrożenia na tym komputerze.
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="352"/>
         <source>Cannot open deployment package</source>
         <translation>Nie można otworzyć pakietu wdrożeniowego</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="305"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="364"/>
         <source>This deployment package is larger than 64 MiB.</source>
         <translation>Ten pakiet wdrożeniowy jest większy niż 64 MiB.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="308"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="367"/>
         <source>This file is not a Serial Studio deployment package.</source>
         <translation>Ten plik nie jest pakietem wdrożeniowym Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="311"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="370"/>
         <source>This deployment package needs Serial Studio %1 or later.</source>
         <translation>Ten pakiet wdrożeniowy wymaga Serial Studio %1 lub nowszej wersji.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="319"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="378"/>
         <source>This deployment package is damaged or was changed after it was exported.</source>
         <translation>Ten pakiet wdrożeniowy jest uszkodzony lub został zmieniony po wyeksportowaniu.</translation>
     </message>
@@ -10310,22 +10354,22 @@ Włącz go tylko dla skryptów, którym ufasz i które wcześniej przetestowałe
         <translation>Tabela zmiennych zdefiniowana w tym projekcie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="700"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="701"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>Usunąć 1 odniesienie widgetu, którego docelowa grupa lub zbiór danych już nie istnieje?</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="701"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="702"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>Usunąć %1 odniesień widgetów, których docelowe grupy lub zbiory danych już nie istnieją?</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="707"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>Wpłynie to tylko na rozmieszczenie kafelków w obszarze roboczym; żadne grupy, zbiory danych ani dane nie zostaną usunięte.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="709"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="710"/>
         <source>Clean Up Workspaces</source>
         <translation>Wyczyść Obszary Robocze</translation>
     </message>
@@ -18137,84 +18181,89 @@ Dziękujemy ponownie za wsparcie Serial Studio!</translation>
 <context>
     <name>Misc::DeploymentPackager</name>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="353"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="383"/>
         <source>%1 (its name cannot be carried in a package)</source>
         <translation>%1 (jego nazwa nie może być zawarta w pakiecie)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="551"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="621"/>
         <source>Widget extension "%1"</source>
         <translation>Rozszerzenie widgetu „%1"</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="571"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="641"/>
         <source>Widget extension "%1" has more than %2 files</source>
         <translation>Rozszerzenie widgetu „%1" zawiera więcej niż %2 plików</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="596"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="666"/>
         <source>%1: private key</source>
         <translation>%1: Klucz Prywatny</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="615"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="685"/>
         <source>MQTT publisher: private key</source>
         <translation>Wydawca MQTT: Klucz Prywatny</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="662"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="732"/>
         <source>MQTT publisher: %1</source>
         <translation>Wydawca MQTT: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="691"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="761"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="714"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="784"/>
         <source>Process %1: %2</source>
         <translation>Proces %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="721"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="791"/>
         <source>Web page: %1</source>
         <translation>Strona internetowa: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="794"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="817"/>
+        <source>%1 (more than %2 files)</source>
+        <translation>%1 (więcej niż %2 plików)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="911"/>
         <source>The icon "%1" could not be read as an image.</source>
         <translation>Nie można odczytać ikony „%1" jako obrazu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="803"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="920"/>
         <source>"%1" could not be read, or the package would exceed 64 MiB.</source>
         <translation>„%1" nie można było odczytać, lub pakiet przekroczyłby 64 MiB.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="809"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="926"/>
         <source>"%1" could not be read completely.</source>
         <translation>„%1" nie można było odczytać całkowicie.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="830"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="947"/>
         <source>Exporting a package needs a Pro license or the trial.</source>
         <translation>Eksportowanie pakietu wymaga licencji Pro lub wersji próbnej.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="835"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="952"/>
         <source>Save the project before exporting a package.</source>
         <translation>Zapisz projekt przed eksportowaniem pakietu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="840"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="957"/>
         <source>These referenced files are missing:
 %1</source>
         <translation>Te pliki, do których się odwołuje, są niedostępne:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="864"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="981"/>
         <source>The package could not be written to "%1".</source>
         <translation>Nie można było zapisać pakietu do „%1".</translation>
     </message>
@@ -18631,8 +18680,8 @@ Czy chcesz otworzyć stronę pobierania?</translation>
         <translation>Nie można zapisać Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Moduł zapisu skrótów Windows nie jest dostępny na tej platformie.</translation>
     </message>
@@ -18663,8 +18712,8 @@ Czy chcesz otworzyć stronę pobierania?</translation>
         <translation>Zapisywanie pliku .lnk nie powiodło się (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Moduł zapisu skrótów macOS nie jest dostępny na tej platformie.</translation>
     </message>
@@ -19366,39 +19415,39 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <source>Bytes per value</source>
         <translation>Bajtów na wartość</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Liczba bajtów łączonych w każdą wartość kanału.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="312"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>Kolejność Bajtów</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Kolejność bajtów używana przy łączeniu wartości wielobajtowych.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <source>Signed values</source>
         <translation>Wartości ze znakiem</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Interpretuje każdą wartość jako liczbę ze znakiem w kodzie uzupełnień do dwóch.</translation>
     </message>
@@ -19413,9 +19462,9 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Wpisy tag:indeks oddzielone przecinkami, np. 1:0,2:1,3:2. Tagi mogą być dziesiętne lub szesnastkowe z prefiksem 0x.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Waliduj sumę kontrolną</translation>
     </message>
@@ -19701,8 +19750,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Nazwy parametrów rozdzielone przecinkami. Pozycja każdego klucza określa jego indeks kanału.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="369"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <source>Fields (in channel order)</source>
         <translation>Pola (w kolejności kanałów)</translation>
     </message>
@@ -21721,8 +21770,8 @@ Przeładować go?</translation>
         <translation>Czy chcesz usunąć widget wyjściowy "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Tej operacji nie można cofnąć. Czy chcesz kontynuować?</translation>
     </message>
@@ -22049,17 +22098,17 @@ Przeładować go?</translation>
         <translation>Nowy Profil Obszaru Roboczego</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="97"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="393"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="421"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="449"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="472"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="799"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="825"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
         <source>Name:</source>
         <translation>Nazwa:</translation>
     </message>
@@ -22270,15 +22319,15 @@ Przeładować go?</translation>
         <translation>Zmień Tor Strumienia</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="385"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="801"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>Workspace</source>
         <translation>Obszar Roboczy</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>New Workspace</source>
         <translation>Nowy Obszar Roboczy</translation>
     </message>
@@ -22394,15 +22443,15 @@ Przeładować go?</translation>
         <translation>Przenieś Tabelę</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>New Variables Table</source>
         <translation>Nowa Tabela Zmiennych</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>Variables Table</source>
         <translation>Tabela Zmiennych</translation>
     </message>
@@ -22885,8 +22934,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="554"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Parser Ramek Wyłączony</translation>
     </message>
@@ -22952,8 +23001,8 @@ Serial Studio może przepisać nieobsługiwane operatory jako wywołania bit.* i
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="752"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Brak Funkcji Parse</translation>
     </message>
@@ -22969,8 +23018,8 @@ Upewnij się, że kod zawiera:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="815"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Błąd Wykonania Funkcji Parse</translation>
     </message>
@@ -26124,7 +26173,7 @@ Dodaj adresy bezwzględne powyżej, aby odpytać sterownik.</translation>
 <context>
     <name>ShortcutGenerator</name>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="227"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="250"/>
         <source>Choose an Icon</source>
         <translation>Wybierz Ikonę</translation>
     </message>
@@ -26160,7 +26209,7 @@ Dodaj adresy bezwzględne powyżej, aby odpytać sterownik.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="195"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="243"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="266"/>
         <source>Save Deployment</source>
         <translation>Zapisz Wdrożenie</translation>
     </message>
@@ -26180,313 +26229,355 @@ Dodaj adresy bezwzględne powyżej, aby odpytać sterownik.</translation>
         <translation>Wszystkie pliki (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="330"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="228"/>
+        <source>Add Resource Files</source>
+        <translation>Dodaj Pliki Zasobów</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="239"/>
+        <source>Add Resource Folder</source>
+        <translation>Dodaj Folder Zasobów</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="353"/>
         <source>General</source>
         <translation>Ogólne</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="336"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="359"/>
         <source>Taskbar</source>
         <translation>Pasek Zadań</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="342"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="365"/>
         <source>Logging</source>
         <translation>Rejestrowanie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="348"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="371"/>
         <source>Contents</source>
         <translation>Zawartość</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="407"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="430"/>
         <source>Output</source>
         <translation>Wyjście</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="422"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="445"/>
         <source>Format</source>
         <translation>Formatuj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="431"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="454"/>
         <source>Deployment package (.ssdeploy)</source>
         <translation>Pakiet wdrożenia (.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="432"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="455"/>
         <source>Shortcut to the project file</source>
         <translation>Skrót do pliku projektu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="469"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="492"/>
         <source>Desktop Shortcut</source>
         <translation>Skrót Pulpitu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="489"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="512"/>
         <source>Identity</source>
         <translation>Tożsamość</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="504"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="527"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="516"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="539"/>
         <source>Icon</source>
         <translation>Ikona</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="552"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="575"/>
         <source>Click to choose an icon</source>
         <translation>Kliknij, aby wybrać ikonę</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="677"/>
         <source>Opens straight to the live dashboard, with no toolbar, no setup pane, and no way to view or export the project. Serial Studio quits when the device disconnects.</source>
         <translation>Otwiera pulpit nawigacyjny na żywo bez paska narzędzi, panelu konfiguracji i możliwości wyświetlania lub eksportowania projektu. Serial Studio zamyka się po rozłączeniu urządzenia.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="657"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="680"/>
         <source>Opens the project straight to the live dashboard, with no toolbar or setup pane. Serial Studio quits when the device disconnects.</source>
         <translation>Otwiera projekt bezpośrednio na pulpit nawigacyjny na żywo bez paska narzędzi lub panelu konfiguracji. Serial Studio zamyka się po rozłączeniu urządzenia.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1027"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1050"/>
         <source>Carried Files</source>
         <translation>Pliki Dołączone</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1036"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1059"/>
         <source>%1 in total</source>
         <translation>%1 łącznie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1070"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1093"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1204"/>
         <source>Remove</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1091"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1114"/>
         <source>Add images a Canvas script loads at run time.</source>
         <translation>Dodaj obrazy ładowane przez skrypt Canvas w czasie wykonywania.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1118"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1230"/>
         <source>Add Files…</source>
         <translation>Dodaj Pliki…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1107"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1135"/>
+        <source>Helper Programs</source>
+        <translation>Programy Pomocnicze</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1167"/>
+        <source>The project's control script can start programs on the operator's computer, such as a simulator. Serial Studio asks the operator once before the first one starts. Resources are copied to the operator's disk while the package runs, and can be read there.</source>
+        <translation>Skrypt sterowania projektu może uruchamiać programy na komputerze operatora, takie jak symulator. Serial Studio pyta operatora raz przed uruchomieniem pierwszego z nich. Zasoby są kopiowane na dysk operatora podczas uruchamiania pakietu i mogą być tam odczytywane.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1171"/>
+        <source>Turn this on to let the project's control script start programs on the operator's computer, such as a simulator.</source>
+        <translation>Włącz tę opcję, aby umożliwić skryptowi sterowania projektu uruchamianie programów na komputerze operatora, takich jak symulator.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1195"/>
+        <source>%1 files, %2</source>
+        <translation>%1 plików, %2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1225"/>
+        <source>Add the files and folders the programs need. They must be inside the project's folder.</source>
+        <translation>Dodaj pliki i foldery, które są potrzebne programom. Muszą się znajdować w folderze projektu.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1238"/>
+        <source>Add Folder…</source>
+        <translation>Dodaj Folder…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1251"/>
         <source>Missing Files</source>
         <translation>Brakujące Pliki</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1144"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1288"/>
         <source>Export is blocked until these files exist.</source>
         <translation>Eksport jest zablokowany do czasu istnienia tych plików.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1152"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1296"/>
         <source>External Dependencies</source>
         <translation>Zależności Zewnętrzne</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1189"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1333"/>
         <source>The target machine must provide these.</source>
         <translation>Maszyna docelowa musi je zapewnić.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1198"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1342"/>
         <source>Credentials and Private Keys</source>
         <translation>Poświadczenia i Klucze Prywatne</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1229"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1373"/>
         <source>Packages are encoded, not encrypted. Anyone with the file can recover the items you include.</source>
         <translation>Pakiety są kodowane, nie szyfrowane. Każdy posiadający plik może odzyskać zawarte elementy.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1263"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1407"/>
         <source>Saved %1</source>
         <translation>Zapisano %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1273"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1417"/>
         <source>Open Package</source>
         <translation>Otwórz Pakiet</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="534"/>
         <source>Deployment Name</source>
         <translation>Nazwa Wdrożenia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="593"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="616"/>
         <source>Theme</source>
         <translation>Motyw</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
         <source>Same as Serial Studio</source>
         <translation>Taki sam jak Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="647"/>
         <source>Actions Panel</source>
         <translation>Panel Akcji</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="866"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="659"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="889"/>
         <source>File Transmission</source>
         <translation>Transmisja Pliku</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="701"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
         <source>Visibility</source>
         <translation>Widoczność</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="716"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="739"/>
         <source>Mode</source>
         <translation>Tryb</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="723"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="746"/>
         <source>Always shown</source>
         <translation>Zawsze Widoczny</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="747"/>
         <source>Auto-hide</source>
         <translation>Automatyczne Ukrywanie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="725"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="748"/>
         <source>Hidden</source>
         <translation>Ukryty</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="733"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="756"/>
         <source>Search Bar</source>
         <translation>Pasek Wyszukiwania</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="755"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="778"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>Ukrycie paska zadań usuwa przyciski minimalizacji/maksymalizacji/zamykania okna i wymusza automatyczny układ, dzięki czemu pulpit zawsze wypełnia dostępny obszar.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="759"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="782"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>Pasek zadań wysuwa się, gdy użytkownik przesunie kursor w pobliże dolnej krawędzi.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="761"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="784"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>Pasek zadań jest stale widoczny u dołu pulpitu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="774"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="797"/>
         <source>Pinned Buttons</source>
         <translation>Przypięte Przyciski</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="791"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="814"/>
         <source>Console</source>
         <translation>Konsola</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="806"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="829"/>
         <source>Notifications</source>
         <translation>Powiadomienia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="821"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="844"/>
         <source>Clock</source>
         <translation>Zegar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="836"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="859"/>
         <source>Stopwatch</source>
         <translation>Stoper</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="851"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="874"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="954"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="977"/>
         <source>Historian</source>
         <translation>Historyk</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="982"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1005"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>Nagrania są zapisywane w folderze roboczym Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="558"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="581"/>
         <source>Change Icon…</source>
         <translation>Zmień Ikonę…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="439"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="462"/>
         <source>Project</source>
         <translation>Projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="472"/>
         <source>Choose a project file to begin</source>
         <translation>Wybierz plik projektu, aby rozpocząć</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="578"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
         <source>Behavior</source>
         <translation>Zachowanie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="613"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
         <source>Fullscreen</source>
         <translation>Pełny Ekran</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="917"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="940"/>
         <source>Recorders</source>
         <translation>Rejestratory</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="932"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="955"/>
         <source>CSV File</source>
         <translation>Plik CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="943"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="966"/>
         <source>MDF4 File</source>
         <translation>Plik MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="965"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="988"/>
         <source>Console Log</source>
         <translation>Dziennik Konsoli</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1429"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1429"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1290"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1434"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>

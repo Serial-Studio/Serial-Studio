@@ -450,41 +450,41 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="127"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="145"/>
         <source>No program specified</source>
         <translation>プログラムが指定されていません</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="131"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="149"/>
         <source>This project's script wants to run:
 %1</source>
         <translation>このプロジェクトのスクリプトが次のプログラムを実行しようとしています：
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="135"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="153"/>
         <source>Launching programs needs the user's consent; a prompt was shown</source>
         <translation>プログラム起動にはユーザーの同意が必要です；プロンプトが表示されました</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="140"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="158"/>
         <source>Launching programs was denied by the user</source>
         <translation>プログラム起動がユーザーによって拒否されました</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="146"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="164"/>
         <source>Program "%1" not found in PATH</source>
         <translation>プログラム "%1" がPATHに見つかりません</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="218"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="236"/>
         <source>This project's Process I/O source wants to run:
 %1</source>
         <translation>このプロジェクトのプロセス I/O ソースが次のプログラムを実行しようとしています：
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="221"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="239"/>
         <source>in %1</source>
         <translation>%1 内</translation>
     </message>
@@ -2632,74 +2632,109 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>通知チャンネルサウンド</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="100"/>
         <source>Select Sound File</source>
         <translation>サウンドファイルを選択</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="102"/>
         <source>WAV audio (*.wav)</source>
         <translation>WAVオーディオ (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="102"/>
         <source>All files (*)</source>
         <translation>すべてのファイル (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="127"/>
-        <source>(app default)</source>
-        <translation>(アプリのデフォルト)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="156"/>
-        <source>Choose the sounds this channel plays. A Critical notification plays the Warning sound, a Warning notification the Caution sound, and an Info notification the Advisory sound. Empty cells use the sounds from Preferences.</source>
-        <translation>このチャンネルが再生するサウンドを選択します。Critical通知はWarningサウンドを再生し、Warning通知はCautionサウンドを、Info通知はAdvisoryサウンドを再生します。空のセルは環境設定のサウンドを使用します。</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="167"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="233"/>
         <source>Channel</source>
         <translation>チャンネル</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="173"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="240"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="179"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="247"/>
         <source>Caution</source>
         <translation>注意</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="185"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="254"/>
         <source>Advisory</source>
         <translation>Advisory</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="230"/>
-        <source>Channel name</source>
-        <translation>チャンネル名</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="246"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="328"/>
         <source>Remove this channel.</source>
         <translation>このチャンネルを削除します。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="202"/>
         <source>Add Channel</source>
         <translation>チャンネルを追加</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="269"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="129"/>
+        <source>From Preferences</source>
+        <translation>環境設定から</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="141"/>
+        <source>Choose a WAV file.</source>
+        <translation>WAVファイルを選択してください。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="170"/>
+        <source>Give a notification channel its own alert sounds. For example, notifications sent to the "Engine" channel can play a horn instead of the standard tone.</source>
+        <translation>通知チャネルに独自のアラート音を設定します。例えば、"Engine"チャネルに送信された通知はホーン音を再生できます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="187"/>
+        <source>Channels</source>
+        <translation>チャンネル</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="206"/>
+        <source>Add a row for another channel.</source>
+        <translation>別のチャネルの行を追加</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="311"/>
+        <source>For example, Engine</source>
+        <translation>例：Engine</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="346"/>
+        <source>No channels yet. Click Add Channel to give one its own sounds.</source>
+        <translation>チャネルがまだありません。チャネルを追加して独自の音を設定してください。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="359"/>
+        <source>A Critical notification plays the Warning sound, a Warning notification the Caution sound, and an Info notification the Advisory sound. A sound left empty uses the one from Preferences.</source>
+        <translation>Critical通知はWarning音を、Warning通知はCaution音を、Info通知はAdvisory音を再生します。音が空の場合は環境設定のものが使用されます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="380"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="383"/>
+        <source>Discard changes.</source>
+        <translation>変更を破棄</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="392"/>
         <source>Apply</source>
         <translation>適用</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="396"/>
+        <source>Save the channel sounds to this project.</source>
+        <translation>チャネル音をこのプロジェクトに保存</translation>
     </message>
 </context>
 <context>
@@ -6004,22 +6039,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>値</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Resume</source>
         <translation>再開</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <source>Awaiting data…</source>
         <translation>データ待機中…</translation>
     </message>
@@ -7380,8 +7415,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>ダッシュボードで非表示</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <source>Automatic</source>
         <translation>自動</translation>
     </message>
@@ -8709,32 +8744,41 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 <context>
     <name>DeploymentSession</name>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="177"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="182"/>
         <source>The deployment package "%1" could not be found or opened.</source>
         <translation>デプロイメント パッケージ "%1" が見つからないか、開けません。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="293"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="278"/>
+        <source>The files this deployment package needs could not be written to this computer.
+
+%1</source>
+        <translation>このデプロイメントパッケージに必要なファイルをこのコンピュータに書き込めませんでした。
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="352"/>
         <source>Cannot open deployment package</source>
         <translation>デプロイメント パッケージを開けません</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="305"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="364"/>
         <source>This deployment package is larger than 64 MiB.</source>
         <translation>このデプロイメント パッケージは 64 MiB を超えています。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="308"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="367"/>
         <source>This file is not a Serial Studio deployment package.</source>
         <translation>このファイルは Serial Studio デプロイメント パッケージではありません。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="311"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="370"/>
         <source>This deployment package needs Serial Studio %1 or later.</source>
         <translation>このデプロイメント パッケージには Serial Studio %1 以降が必要です。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/DeploymentSession.cpp" line="319"/>
+        <location filename="../../src/Misc/DeploymentSession.cpp" line="378"/>
         <source>This deployment package is damaged or was changed after it was exported.</source>
         <translation>このデプロイメント パッケージが破損しているか、エクスポート後に変更されました。</translation>
     </message>
@@ -10310,22 +10354,22 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation>このプロジェクトで定義されたVariablesテーブル</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="700"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="701"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>対象グループまたはデータセットが存在しなくなった1個のウィジェット参照を削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="701"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="702"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>対象グループまたはデータセットが存在しなくなった%1個のウィジェット参照を削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="707"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>これはワークスペースのタイル配置にのみ影響します。グループ、データセット、データは削除されません。</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="709"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="710"/>
         <source>Clean Up Workspaces</source>
         <translation>ワークスペースをクリーンアップ</translation>
     </message>
@@ -18135,84 +18179,89 @@ Serial Studioをサポートいただき、改めてありがとうございま�
 <context>
     <name>Misc::DeploymentPackager</name>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="353"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="383"/>
         <source>%1 (its name cannot be carried in a package)</source>
         <translation>%1 (パッケージに名前を含めることができません)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="551"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="621"/>
         <source>Widget extension "%1"</source>
         <translation>ウィジェット拡張機能 "%1"</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="571"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="641"/>
         <source>Widget extension "%1" has more than %2 files</source>
         <translation>ウィジェット拡張機能 "%1" は %2 個を超えるファイルを含んでいます</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="596"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="666"/>
         <source>%1: private key</source>
         <translation>%1: 秘密鍵</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="615"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="685"/>
         <source>MQTT publisher: private key</source>
         <translation>MQTTパブリッシャー: 秘密鍵</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="662"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="732"/>
         <source>MQTT publisher: %1</source>
         <translation>MQTTパブリッシャー: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="691"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="761"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="714"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="784"/>
         <source>Process %1: %2</source>
         <translation>プロセス %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="721"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="791"/>
         <source>Web page: %1</source>
         <translation>ウェブページ: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="794"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="817"/>
+        <source>%1 (more than %2 files)</source>
+        <translation>%1（%2個を超えるファイル）</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="911"/>
         <source>The icon "%1" could not be read as an image.</source>
         <translation>アイコン "%1" を画像として読み込むことができませんでした。</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="803"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="920"/>
         <source>"%1" could not be read, or the package would exceed 64 MiB.</source>
         <translation>"%1"を読み取れませんでした。またはパッケージが64 MiBを超えます。</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="809"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="926"/>
         <source>"%1" could not be read completely.</source>
         <translation>"%1"を完全に読み取れませんでした。</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="830"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="947"/>
         <source>Exporting a package needs a Pro license or the trial.</source>
         <translation>パッケージをエクスポートするにはProライセンスまたはトライアルが必要です。</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="835"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="952"/>
         <source>Save the project before exporting a package.</source>
         <translation>パッケージをエクスポートする前にプロジェクトを保存してください。</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="840"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="957"/>
         <source>These referenced files are missing:
 %1</source>
         <translation>参照されているファイルが見つかりません:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="864"/>
+        <location filename="../../../core/Ui/Misc/DeploymentPackager.cpp" line="981"/>
         <source>The package could not be written to "%1".</source>
         <translation>パッケージを"%1"に書き込めませんでした。</translation>
     </message>
@@ -18629,8 +18678,8 @@ Would you like to open the download page?</source>
         <translation>Info.plistを書き込めませんでした: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windowsショートカット作成機能はこのプラットフォームでは利用できません。</translation>
     </message>
@@ -18661,8 +18710,8 @@ Would you like to open the download page?</source>
         <translation>.lnkファイルの保存に失敗しました（HRESULT 0x%1）。</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOSショートカット作成機能はこのプラットフォームでは利用できません。</translation>
     </message>
@@ -19364,39 +19413,39 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <source>Bytes per value</source>
         <translation>値あたりのバイト数</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>各チャンネル値に結合されるバイト数。</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="312"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>エンディアン</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>マルチバイト値を結合する際に使用されるバイトオーダー。</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <source>Signed values</source>
         <translation>符号付き値</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>各値を2の補数符号付きとして解釈します。</translation>
     </message>
@@ -19411,9 +19460,9 @@ Add groups above to poll multiple register types.</source>
         <translation>カンマ区切りのタグ:インデックスエントリ（例: 1:0,2:1,3:2）。タグは10進数または0xプレフィックス付き16進数で指定できます。</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>チェックサムを検証</translation>
     </message>
@@ -19699,8 +19748,8 @@ Add groups above to poll multiple register types.</source>
         <translation>カンマ区切りのパラメータ名。各キーの位置がチャンネルインデックスを設定します。</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="369"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <source>Fields (in channel order)</source>
         <translation>フィールド(チャンネル順)</translation>
     </message>
@@ -21719,8 +21768,8 @@ Reload it?</source>
         <translation>出力ウィジェット「%1」を削除しますか？</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>この操作は元に戻せません。続行しますか?</translation>
     </message>
@@ -22047,17 +22096,17 @@ Reload it?</source>
         <translation>新規ワークスペースプロファイル</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="97"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="393"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="421"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="449"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="472"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="799"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="825"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
         <source>Name:</source>
         <translation>名前:</translation>
     </message>
@@ -22268,15 +22317,15 @@ Reload it?</source>
         <translation>ストリームレーンを変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="385"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="801"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>Workspace</source>
         <translation>ワークスペース</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>New Workspace</source>
         <translation>新規ワークスペース</translation>
     </message>
@@ -22392,15 +22441,15 @@ Reload it?</source>
         <translation>テーブルを移動</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>New Variables Table</source>
         <translation>新規変数テーブル</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>Variables Table</source>
         <translation>変数テーブル</translation>
     </message>
@@ -22881,8 +22930,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="554"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>フレームパーサーが無効化されました</translation>
     </message>
@@ -22948,8 +22997,8 @@ Serial Studio はサポートされていない演算子を bit.* 呼び出し�
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="752"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Parse関数が見つかりません</translation>
     </message>
@@ -22965,8 +23014,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="815"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse関数ランタイムエラー</translation>
     </message>
@@ -26116,7 +26165,7 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>ShortcutGenerator</name>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="227"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="250"/>
         <source>Choose an Icon</source>
         <translation>アイコンを選択</translation>
     </message>
@@ -26152,7 +26201,7 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="195"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="243"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="266"/>
         <source>Save Deployment</source>
         <translation>デプロイメントを保存</translation>
     </message>
@@ -26172,313 +26221,355 @@ Add absolute addresses above to poll the controller.</source>
         <translation>すべてのファイル (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="330"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="228"/>
+        <source>Add Resource Files</source>
+        <translation>リソースファイルを追加</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="239"/>
+        <source>Add Resource Folder</source>
+        <translation>リソースフォルダーを追加</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="353"/>
         <source>General</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="336"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="359"/>
         <source>Taskbar</source>
         <translation>タスクバー</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="342"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="365"/>
         <source>Logging</source>
         <translation>ログ記録</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="348"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="371"/>
         <source>Contents</source>
         <translation>内容</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="407"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="430"/>
         <source>Output</source>
         <translation>出力</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="422"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="445"/>
         <source>Format</source>
         <translation>フォーマット</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="431"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="454"/>
         <source>Deployment package (.ssdeploy)</source>
         <translation>デプロイメントパッケージ (.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="432"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="455"/>
         <source>Shortcut to the project file</source>
         <translation>プロジェクトファイルへのショートカット</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="469"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="492"/>
         <source>Desktop Shortcut</source>
         <translation>デスクトップショートカット</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="489"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="512"/>
         <source>Identity</source>
         <translation>識別情報</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="504"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="527"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="516"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="539"/>
         <source>Icon</source>
         <translation>アイコン</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="552"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="575"/>
         <source>Click to choose an icon</source>
         <translation>クリックしてアイコンを選択</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="677"/>
         <source>Opens straight to the live dashboard, with no toolbar, no setup pane, and no way to view or export the project. Serial Studio quits when the device disconnects.</source>
         <translation>ライブダッシュボードに直接開きます。ツールバー、セットアップペイン、プロジェクトの表示またはエクスポート機能はありません。デバイスが切断されると Serial Studio は終了します。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="657"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="680"/>
         <source>Opens the project straight to the live dashboard, with no toolbar or setup pane. Serial Studio quits when the device disconnects.</source>
         <translation>プロジェクトをライブダッシュボードに直接開きます。ツールバーやセットアップペインはありません。デバイスが切断されると Serial Studio は終了します。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1027"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1050"/>
         <source>Carried Files</source>
         <translation>同梱ファイル</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1036"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1059"/>
         <source>%1 in total</source>
         <translation>合計 %1 個</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1070"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1093"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1204"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1091"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1114"/>
         <source>Add images a Canvas script loads at run time.</source>
         <translation>Canvas スクリプトが実行時に読み込む画像を追加します。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1095"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1118"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1230"/>
         <source>Add Files…</source>
         <translation>ファイルを追加…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1107"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1135"/>
+        <source>Helper Programs</source>
+        <translation>ヘルパープログラム</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1167"/>
+        <source>The project's control script can start programs on the operator's computer, such as a simulator. Serial Studio asks the operator once before the first one starts. Resources are copied to the operator's disk while the package runs, and can be read there.</source>
+        <translation>プロジェクトの制御スクリプトは、オペレーターのコンピューター上でシミュレーターなどのプログラムを起動できます。Serial Studio はパッケージの実行中にリソースをオペレーターのディスクにコピーし、最初のプログラムが起動される前にオペレーターに一度確認します。リソースはそこから読み取ることができます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1171"/>
+        <source>Turn this on to let the project's control script start programs on the operator's computer, such as a simulator.</source>
+        <translation>プロジェクトの制御スクリプトがオペレーターのコンピューター上でシミュレーターなどのプログラムを起動できるようにするには、これをオンにします。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1195"/>
+        <source>%1 files, %2</source>
+        <translation>%1 個のファイル、%2</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1225"/>
+        <source>Add the files and folders the programs need. They must be inside the project's folder.</source>
+        <translation>プログラムが必要とするファイルとフォルダーを追加します。プロジェクトのフォルダー内に配置する必要があります。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1238"/>
+        <source>Add Folder…</source>
+        <translation>フォルダーを追加…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1251"/>
         <source>Missing Files</source>
         <translation>見つからないファイル</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1144"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1288"/>
         <source>Export is blocked until these files exist.</source>
         <translation>これらのファイルが存在するまでエクスポートはブロックされます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1152"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1296"/>
         <source>External Dependencies</source>
         <translation>外部依存関係</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1189"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1333"/>
         <source>The target machine must provide these.</source>
         <translation>ターゲットマシンがこれらを提供する必要があります。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1198"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1342"/>
         <source>Credentials and Private Keys</source>
         <translation>認証情報と秘密鍵</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1229"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1373"/>
         <source>Packages are encoded, not encrypted. Anyone with the file can recover the items you include.</source>
         <translation>パッケージは暗号化されていません。ファイルを持つ誰もが含まれるアイテムを復元できます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1263"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1407"/>
         <source>Saved %1</source>
         <translation>%1 を保存しました</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1273"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1417"/>
         <source>Open Package</source>
         <translation>パッケージを開く</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="534"/>
         <source>Deployment Name</source>
         <translation>デプロイメント名</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="593"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="616"/>
         <source>Theme</source>
         <translation>テーマ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
         <source>Same as Serial Studio</source>
         <translation>Serial Studioと同じ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="647"/>
         <source>Actions Panel</source>
         <translation>アクションパネル</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="866"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="659"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="889"/>
         <source>File Transmission</source>
         <translation>ファイル転送</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="701"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
         <source>Visibility</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="716"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="739"/>
         <source>Mode</source>
         <translation>モード</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="723"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="746"/>
         <source>Always shown</source>
         <translation>常に表示</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="747"/>
         <source>Auto-hide</source>
         <translation>自動的に隠す</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="725"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="748"/>
         <source>Hidden</source>
         <translation>非表示</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="733"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="756"/>
         <source>Search Bar</source>
         <translation>検索バー</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="755"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="778"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>タスクバーを非表示にすると、ウィンドウの最小化/最大化/閉じるボタンが削除され、自動レイアウトが強制されるため、ダッシュボードは常に利用可能な領域全体を占めます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="759"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="782"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>カーソルを画面下端付近に移動すると、タスクバーがスライドインします。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="761"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="784"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>タスクバーはダッシュボードの下部に常に表示されます。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="774"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="797"/>
         <source>Pinned Buttons</source>
         <translation>ピン留めされたボタン</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="791"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="814"/>
         <source>Console</source>
         <translation>コンソール</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="806"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="829"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="821"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="844"/>
         <source>Clock</source>
         <translation>時計</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="836"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="859"/>
         <source>Stopwatch</source>
         <translation>ストップウォッチ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="851"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="874"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="954"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="977"/>
         <source>Historian</source>
         <translation>ヒストリアン</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="982"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1005"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>記録はSerial Studioワークスペースフォルダに保存されます</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="558"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="581"/>
         <source>Change Icon…</source>
         <translation>アイコンを変更…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="439"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="462"/>
         <source>Project</source>
         <translation>プロジェクト</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="472"/>
         <source>Choose a project file to begin</source>
         <translation>プロジェクトファイルを選択して開始</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="578"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
         <source>Behavior</source>
         <translation>動作</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="613"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
         <source>Fullscreen</source>
         <translation>フルスクリーン</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="917"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="940"/>
         <source>Recorders</source>
         <translation>レコーダー</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="932"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="955"/>
         <source>CSV File</source>
         <translation>CSVファイル</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="943"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="966"/>
         <source>MDF4 File</source>
         <translation>MDF4ファイル</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="965"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="988"/>
         <source>Console Log</source>
         <translation>コンソールログ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1429"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1429"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1290"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1434"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
