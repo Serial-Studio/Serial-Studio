@@ -109,6 +109,7 @@ public:
 
 public:
   [[nodiscard]] static const RemoteDispatchScope* active() noexcept;
+  [[nodiscard]] bool gated() const noexcept;
   [[nodiscard]] std::optional<CommandResponse> authorize(const QString& id,
                                                          const QString& name,
                                                          const QJsonObject& params) const;

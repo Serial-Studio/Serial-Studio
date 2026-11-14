@@ -316,6 +316,15 @@ const API::RemoteDispatchScope* API::RemoteDispatchScope::active() noexcept
 }
 
 /**
+ * @brief Whether this scope carries a gate, which only a remote entry point installs; a script
+ *        or the app's own dispatch opens a trusted scope with none.
+ */
+bool API::RemoteDispatchScope::gated() const noexcept
+{
+  return static_cast<bool>(m_gate);
+}
+
+/**
  * @brief Runs the gate; an empty gate is a trusted scope and allows everything.
  */
 std::optional<API::CommandResponse> API::RemoteDispatchScope::authorize(
