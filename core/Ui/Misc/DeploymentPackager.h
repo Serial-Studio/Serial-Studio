@@ -41,7 +41,8 @@ namespace Misc {
 /**
  * @brief Builds a deployment package from the open project (spec 0096): the files it references,
  *        the external dependencies it cannot carry, and the credentials and private keys the
- *        author may include one by one. Packages are encoded, not encrypted.
+ *        author may include one by one. Packages are encoded, not encrypted. With helper
+ *        programs allowed (spec 0123) it also carries the author's resources.
  */
 class DeploymentPackager : public QObject {
   // clang-format off
@@ -64,6 +65,13 @@ class DeploymentPackager : public QObject {
   Q_PROPERTY(QVariantList carriedFiles
              READ carriedFiles
              NOTIFY contentsChanged)
+  Q_PROPERTY(QVariantList resources
+             READ resources
+             NOTIFY contentsChanged)
+  Q_PROPERTY(bool helperPrograms
+             READ helperPrograms
+             WRITE setHelperPrograms
+             NOTIFY contentsChanged)
   Q_PROPERTY(bool anySecretIncluded
              READ anySecretIncluded
              NOTIFY inclusionChanged)
@@ -85,12 +93,17 @@ public:
   [[nodiscard]] QString projectFolder() const;
   [[nodiscard]] QStringList missingFiles() const;
   [[nodiscard]] QVariantList carriedFiles() const;
+  [[nodiscard]] QVariantList resources() const;
+  [[nodiscard]] bool helperPrograms() const;
   [[nodiscard]] bool anySecretIncluded() const;
 
 public slots:
   void refresh();
   void addExtraFiles(const QStringList& urls);
   void removeExtraFile(const QString& carriedPath);
+  void setHelperPrograms(bool enabled);
+  void addResources(const QStringList& urls);
+  void removeResource(const QString& source);
   void setSecretIncluded(int index, bool included);
   void exportPackage(const QString& outputPath, const QVariantMap& options);
 
@@ -113,6 +126,7 @@ private:
   void collectSounds();
   void collectSecrets();
   void collectExternals();
+  void collectResources();
   void collectExtensions();
   void collectCertificates();
   void collectCanvasImages();
@@ -137,12 +151,15 @@ private:
 
 private:
   qint64 m_estimatedSize;
+  bool m_helperPrograms;
   QString m_folder;
   QString m_projectPath;
   QJsonObject m_project;
   QStringList m_missing;
   QStringList m_externals;
   QStringList m_extraFiles;
+  QStringList m_resources;
+  QVariantList m_resourceRows;
   QList<Secret> m_secrets;
   QMap<QString, QString> m_files;
   QHash<QString, QString> m_carriedBySource;

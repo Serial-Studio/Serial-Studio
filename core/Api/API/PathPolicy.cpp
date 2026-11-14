@@ -139,7 +139,8 @@ static QString normalizedPath(const QString& path, bool allowNonexistent)
 /**
  * @brief Validate a file path against the API allowlist, if configured. A sealed session refuses
  *        every Qt resource path first, so no allowlist widening can read a package's files back
- *        out (spec 0096).
+ *        out (spec 0096), and every path inside the folder its resources were written to (spec
+ *        0123), which sits under the default temp root.
  */
 bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
 {
@@ -163,16 +164,24 @@ bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
   if (targetPath.isEmpty())
     return false;
 
+#ifdef Q_OS_WIN
+  const Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
+#else
+  const Qt::CaseSensitivity sensitivity = Qt::CaseSensitive;
+#endif
+
+  const auto& resources = Core::Runtime::sealedHelpers().resourceFolder;
+  if (Core::Runtime::sealed() && !resources.isEmpty()) {
+    const QString sealedRoot = normalizedPath(resources, true);
+    if (sealedRoot.isEmpty() || targetPath.compare(sealedRoot, Qt::CaseInsensitive) == 0
+        || targetPath.startsWith(sealedRoot + QLatin1Char('/'), Qt::CaseInsensitive))
+      return false;
+  }
+
   for (const auto& root : std::as_const(roots)) {
     const QString rootPath = normalizedPath(root.trimmed(), true);
     if (rootPath.isEmpty())
       continue;
-
-#ifdef Q_OS_WIN
-    const Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
-#else
-    const Qt::CaseSensitivity sensitivity = Qt::CaseSensitive;
-#endif
 
     if (targetPath.compare(rootPath, sensitivity) == 0)
       return true;

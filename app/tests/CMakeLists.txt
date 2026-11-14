@@ -1089,6 +1089,23 @@ if(TARGET tst_deploy_resource_tree)
 endif()
 
 #
+# Package resources (spec 0123): a resource is carried at its path relative to the project
+# folder, only resource entries reach disk and none can leave the session's folder, a leftover
+# folder is swept while a live one is kept, and once sealed no API path reaches the resources.
+#
+ss_add_unit_test(tst_package_resources
+  SOURCES tst_package_resources.cpp
+          ${SS_CORE_SRC}/Core/Deploy/PackageCodec.cpp
+          ${SS_CORE_SRC}/Core/Deploy/ResourceExtractor.cpp
+          ${SS_CORE_SRC}/Api/API/PathPolicy.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+if(TARGET tst_package_resources)
+  target_compile_definitions(tst_package_resources PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
 # SparkplugPayload.{h,cpp} (spec 0073) is the hand-rolled Sparkplug B v1.0 protobuf codec the MQTT
 # session layer decodes broker traffic with. The bytes arrive from the network, so the suite is
 # where the bounds checks and the fixed caps are proven; no protobuf runtime is linked and the TU

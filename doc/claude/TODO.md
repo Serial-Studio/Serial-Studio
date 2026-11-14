@@ -72,8 +72,6 @@ With a current build:
   `tst_resync_decisions`, and record the failure. AC5: `--benchmark-hotpath` before and after.
 - [ ] The tests marked `gui`, which CI deselects: specs 0109 (T19), 0110 (T22) and 0120 (AC5,
   `tests/integration/test_message_box.py`).
-- [ ] Spec 0120: run `tests/integration/test_script_command_policy.py` and the runtime cases of
-  `test_message_box.py` against a current build; neither has run yet.
 - [ ] Regenerate the `.ts` files with the translation tool now passing `-no-obsolete` (spec 0120
   R16), which drops about 2,050 dead strings per language.
 - [ ] `tests/integration/test_uart_sequence.py` with `socat` installed: CI has none, so four of
@@ -107,3 +105,9 @@ Outside this repository:
 - [ ] Spec 0112 T18: the macOS and Linux runs and the recorded portal result.
 - [ ] `updates.json`: move `windows-msix` to 4.2.1 once the Store certifies it (pending since
   2026-10-28).
+- [ ] Spec 0123 (package resources): nothing has run yet. Build, then run
+  `ctest -R "tst_package_resources|tst_launch_consent|tst_sealed_policy_registry"`. Export
+  `tests/fixtures/deploy/helper.ssproj` with Helper Programs on and `helper.py` as a resource,
+  and run `tests/integration/test_sealed_session.py` against it and against the marker package.
+  Check a plain launch and a double-clicked `.ssdeploy` on macOS (the startup event pass in
+  `main.cpp`). The new dialog strings need translation and the help search index a rebuild.

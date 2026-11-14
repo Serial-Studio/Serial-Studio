@@ -172,6 +172,8 @@ if(BUILD_COMMERCIAL)
     Deploy/PackageFormat.h
     Deploy/PackageCodec.h
     Deploy/PackageCodec.cpp
+    Deploy/ResourceExtractor.h
+    Deploy/ResourceExtractor.cpp
     Deploy/ResourceTree.h
     Deploy/ResourceTree.cpp
   )

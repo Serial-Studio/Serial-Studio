@@ -66,6 +66,8 @@ inline constexpr int kMaxSkipDepth              = 8;
 inline constexpr QLatin1StringView kMountRootPrefix{":/ssdeploy-"};
 inline constexpr QLatin1StringView kMountId{"package"};
 inline constexpr QLatin1StringView kMountRoot{":/ssdeploy-package"};
+inline constexpr QLatin1StringView kResourceDir{"resources/"};
+inline constexpr qsizetype kMaxResourceFiles     = 2048;
 // clang-format on
 
 namespace HeaderKey {
@@ -112,6 +114,7 @@ inline constexpr QLatin1StringView kTaskbarMode{"taskbarMode"};
 inline constexpr QLatin1StringView kTaskbarButtons{"taskbarButtons"};
 inline constexpr QLatin1StringView kTaskbarSearch{"taskbarSearch"};
 inline constexpr QLatin1StringView kTheme{"theme"};
+inline constexpr QLatin1StringView kHelperPrograms{"helperPrograms"};
 }  // namespace OptionKey
 
 }  // namespace Deploy

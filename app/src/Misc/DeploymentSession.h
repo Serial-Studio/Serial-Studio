@@ -27,7 +27,9 @@
 #  include <QString>
 
 #  include "Core/Deploy/PackageCodec.h"
+#  include "Core/Deploy/ResourceExtractor.h"
 #  include "Core/Deploy/ResourceTree.h"
+#  include "Core/Runtime.h"
 #  include "Misc/CLI.h"
 
 namespace Misc {
@@ -35,7 +37,8 @@ namespace Misc {
 /**
  * @brief Opens a deployment package for the composition root (spec 0096): open() runs before the
  *        root and seals the process, loadProject() runs at the CLI project step. The object lives
- *        in runApplication's frame, so its mounted files outlive every reader.
+ *        in runApplication's frame, so its mounted files outlive every reader, and the resources
+ *        folder of a package that starts helper programs (spec 0123) is removed when it ends.
  */
 class DeploymentSession {
 public:
@@ -57,6 +60,9 @@ public:
 private:
   void applyIdentity() const;
   void applyCredentials();
+  [[nodiscard]] bool prepareHelpers(const QString& path,
+                                    const QByteArray& bytes,
+                                    Core::Runtime::SealedHelpers& helpers);
 
   static void configureQmlCache();
   static void showRefusal(const QString& message);
@@ -66,6 +72,7 @@ private:
   bool m_open;
   Deploy::Package m_package;
   Deploy::ResourceTree m_tree;
+  Deploy::ResourceExtractor m_resources;
 };
 
 }  // namespace Misc

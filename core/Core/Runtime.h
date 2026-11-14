@@ -31,11 +31,26 @@
  *        and never a construction. The seal (spec 0096) marks a process that opened a deployment
  *        package: it is one-way, so every project-content exit can trust it for the process life,
  *        and it records where the package's files are mounted and which folder they came from.
+ *        A package whose author allowed helper programs (spec 0123) also records where its
+ *        resources were written, where the package file sits and which package it is.
  *        The operator project (spec 0098) is the one a headless run named on its command line,
  *        whose program launches the operator consented to by naming it.
  */
 
 namespace Core::Runtime {
+
+/**
+ * @brief What a sealed session needs to start the package's helper programs (spec 0123). The
+ *        default value is a package that starts none.
+ */
+struct SealedHelpers {
+  bool enabled = false;
+  QString identity;
+  QString packagePath;
+  QString packageFolder;
+  QString resourceFolder;
+};
+
 [[nodiscard]] bool benchmarkActive() noexcept;
 void setBenchmarkActive(bool active) noexcept;
 [[nodiscard]] int sessionId() noexcept;
@@ -43,7 +58,10 @@ void setSessionId(int id) noexcept;
 [[nodiscard]] bool sealed() noexcept;
 [[nodiscard]] const QString& sealedMountRoot() noexcept;
 [[nodiscard]] const QString& sealedProjectFolder() noexcept;
-void seal(const QString& mountRoot, const QString& projectFolder) noexcept;
+[[nodiscard]] const SealedHelpers& sealedHelpers() noexcept;
+void seal(const QString& mountRoot,
+          const QString& projectFolder,
+          const SealedHelpers& helpers = SealedHelpers()) noexcept;
 [[nodiscard]] const QString& operatorProject() noexcept;
 void setOperatorProject(const QString& projectPath) noexcept;
 }  // namespace Core::Runtime

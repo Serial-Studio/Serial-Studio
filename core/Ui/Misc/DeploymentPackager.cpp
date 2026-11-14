@@ -41,6 +41,7 @@
 #  include "Core/AppInfo.h"
 #  include "Core/DataModel/FrameKeys.h"
 #  include "Core/Deploy/PackageFormat.h"
+#  include "Core/Deploy/ResourceExtractor.h"
 #  include "Core/License.h"
 #  include "Core/Services.h"
 #  include "Core/SSAssert.h"
@@ -181,7 +182,8 @@ static void collectExtensionIds(const QJsonValue& value, QSet<QString>& ids, con
 /**
  * @brief Constructs an empty packager; refresh() scans the open project.
  */
-Misc::DeploymentPackager::DeploymentPackager(QObject* parent) : QObject(parent), m_estimatedSize(0)
+Misc::DeploymentPackager::DeploymentPackager(QObject* parent)
+  : QObject(parent), m_estimatedSize(0), m_helperPrograms(false)
 {}
 
 /**
@@ -234,20 +236,42 @@ QStringList Misc::DeploymentPackager::missingFiles() const
 
 /**
  * @brief Carried files as {path, source, size, extra} rows, sorted by their path inside the
- *        package; extra marks a file the author added by hand.
+ *        package; extra marks a file the author added by hand. Resources are listed apart.
  */
 QVariantList Misc::DeploymentPackager::carriedFiles() const
 {
   QVariantList rows;
-  for (auto it = m_files.begin(); it != m_files.end(); ++it)
+  for (auto it = m_files.begin(); it != m_files.end(); ++it) {
+    if (Deploy::ResourceExtractor::isResourceEntry(it.key()))
+      continue;
+
     rows.append(QVariantMap{
       {  QStringLiteral("path"),                          it.key()},
       {QStringLiteral("source"),                        it.value()},
       {  QStringLiteral("size"),      QFileInfo(it.value()).size()},
       { QStringLiteral("extra"), m_extraFiles.contains(it.value())}
     });
+  }
 
   return rows;
+}
+
+/**
+ * @brief The author's resources as {path, source, size, files} rows: one per chosen file or
+ *        folder, with the path relative to the project folder. Empty while helper programs are
+ *        off, because nothing is carried then.
+ */
+QVariantList Misc::DeploymentPackager::resources() const
+{
+  return m_resourceRows;
+}
+
+/**
+ * @brief Whether the package may start helper programs and carries resources (spec 0123).
+ */
+bool Misc::DeploymentPackager::helperPrograms() const
+{
+  return m_helperPrograms;
 }
 
 /**
@@ -272,6 +296,11 @@ void Misc::DeploymentPackager::refresh()
   auto& projectModel = DataModel::pipelineModules().projectModel;
   const auto path    = projectModel.jsonFilePath();
 
+  if (path != m_projectPath) {
+    m_resources.clear();
+    m_helperPrograms = false;
+  }
+
   QSet<QString> included;
   if (path == m_projectPath) {
     for (const auto& secret : std::as_const(m_secrets))
@@ -295,6 +324,7 @@ void Misc::DeploymentPackager::refresh()
   collectCertificates();
   collectSecrets();
   collectExternals();
+  collectResources();
 
   for (auto& secret : m_secrets)
     secret.included = included.contains(secretIdentity(secret));
@@ -377,6 +407,46 @@ void Misc::DeploymentPackager::addExtraFiles(const QStringList& urls)
 void Misc::DeploymentPackager::removeExtraFile(const QString& carriedPath)
 {
   m_extraFiles.removeAll(m_files.value(carriedPath));
+  refresh();
+}
+
+/**
+ * @brief Lets the package start helper programs, or not (spec 0123). Off is the default and
+ *        carries no resource, so such a package behaves as packages always have.
+ */
+void Misc::DeploymentPackager::setHelperPrograms(const bool enabled)
+{
+  if (m_helperPrograms == enabled)
+    return;
+
+  m_helperPrograms = enabled;
+  refresh();
+}
+
+/**
+ * @brief Adds files or folders as resources; only ones inside the project folder, because a
+ *        resource is written back at its path relative to that folder.
+ */
+void Misc::DeploymentPackager::addResources(const QStringList& urls)
+{
+  const auto folder = QFileInfo(m_folder).canonicalFilePath();
+  for (const auto& url : urls) {
+    const QFileInfo info(localPath(url));
+    const auto path = info.canonicalFilePath();
+    if (!folder.isEmpty() && !info.isSymLink() && path.startsWith(folder + QLatin1Char('/'))
+        && !m_resources.contains(path))
+      m_resources.append(path);
+  }
+
+  refresh();
+}
+
+/**
+ * @brief Drops a resource the author added; @p source is the row's file or folder.
+ */
+void Misc::DeploymentPackager::removeResource(const QString& source)
+{
+  m_resources.removeAll(source);
   refresh();
 }
 
@@ -722,6 +792,52 @@ void Misc::DeploymentPackager::collectExternals()
   }
 }
 
+/**
+ * @brief Carries the author's resources under resources/ while helper programs are allowed (spec
+ *        0123). A folder stands for every regular file under it; one that left the project
+ *        folder is forgotten, and one too large or with an uncarriable name blocks the export
+ *        but keeps its row, so the author can remove it.
+ */
+void Misc::DeploymentPackager::collectResources()
+{
+  const auto folder = QFileInfo(m_folder).canonicalFilePath() + QLatin1Char('/');
+  m_resources.removeIf([&folder](const QString& path) {
+    return folder.size() <= 1 || !path.startsWith(folder) || !QFileInfo::exists(path);
+  });
+
+  m_resourceRows.clear();
+  if (!m_helperPrograms)
+    return;
+
+  for (const auto& chosen : std::as_const(m_resources)) {
+    const auto files  = Deploy::ResourceExtractor::filesUnder(chosen);
+    const bool tooBig = files.size() > Deploy::kMaxResourceFiles;
+    if (tooBig)
+      m_missing.append(
+        tr("%1 (more than %2 files)").arg(chosen, QString::number(Deploy::kMaxResourceFiles)));
+
+    qint64 size = 0;
+    for (const auto& file : files) {
+      if (tooBig)
+        break;
+
+      const auto carried = Deploy::ResourceExtractor::entryPathFor(m_folder, file);
+      if (!admitCarriedPath(carried, file))
+        continue;
+
+      m_files.insert(carried, file);
+      size += QFileInfo(file).size();
+    }
+
+    m_resourceRows.append(QVariantMap{
+      {  QStringLiteral("path"), chosen.mid(folder.size())},
+      {QStringLiteral("source"),                    chosen},
+      {  QStringLiteral("size"),                      size},
+      { QStringLiteral("files"),              files.size()}
+    });
+  }
+}
+
 //--------------------------------------------------------------------------------------------------
 // Export
 //--------------------------------------------------------------------------------------------------
@@ -781,12 +897,13 @@ bool Misc::DeploymentPackager::buildPackage(const QVariantMap& options,
   QMap<QString, QString> files = m_files;
   const auto project           = packagedProject(files);
 
-  package.minAppVersion          = QStringLiteral(APP_VERSION);
-  package.writerVersion          = QStringLiteral(APP_VERSION);
-  package.project                = QJsonDocument(project).toJson(QJsonDocument::Compact);
-  package.manifest.title         = options.value(QStringLiteral("title")).toString().trimmed();
-  package.manifest.icon          = iconBytes(iconPath);
-  package.manifest.options       = runtimeOptions(options);
+  package.minAppVersion    = QStringLiteral(APP_VERSION);
+  package.writerVersion    = QStringLiteral(APP_VERSION);
+  package.project          = QJsonDocument(project).toJson(QJsonDocument::Compact);
+  package.manifest.title   = options.value(QStringLiteral("title")).toString().trimmed();
+  package.manifest.icon    = iconBytes(iconPath);
+  package.manifest.options = runtimeOptions(options);
+  package.manifest.options.insert(Deploy::OptionKey::kHelperPrograms, m_helperPrograms);
   package.manifest.projectFolder = m_folder;
   package.manifest.externals     = m_externals;
 

@@ -86,6 +86,7 @@ private slots:
   void operatorProjectStartsGranted();
   void autoConsentIsNeverCleared();
   void keyFormatIsUnchanged();
+  void packageConsentIsPerPackage();
 
 private:
   LaunchPrompter m_prompter;
@@ -229,6 +230,42 @@ void TstLaunchConsent::keyFormatIsUnchanged()
   const auto key = API::LaunchConsent::keyFor(QStringLiteral("/a/b/../c.ssproj"));
   QVERIFY(key.startsWith(QStringLiteral("API/ScriptExecConsent/")));
   QCOMPARE(key, API::LaunchConsent::keyFor(QStringLiteral("/a/c.ssproj")));
+}
+
+/**
+ * @brief Spec 0123 AC8: a package session binds the consent to the package's identity. It asks
+ *        once, the answer persists for that identity, a different package asks again, and the
+ *        operator's command-line rule never grants a package.
+ */
+void TstLaunchConsent::packageConsentIsPerPackage()
+{
+  QSettings settings;
+  const auto first  = QStringLiteral("ssdeploy:") + QString(64, QLatin1Char('a'));
+  const auto second = QStringLiteral("ssdeploy:") + QString(64, QLatin1Char('b'));
+  QVERIFY(API::LaunchConsent::keyFor(first) != API::LaunchConsent::keyFor(second));
+
+  {
+    API::LaunchConsent consent(settings);
+    consent.setOperatorConsentedPath(QStringLiteral("/srv/plant/line.ssdeploy"));
+    consent.bindProject(first);
+    QVERIFY(!consent.isGranted());
+    QCOMPARE(consent.authorize(QStringLiteral("run")), API::ConsentVerdict::ConsentRequired);
+
+    m_prompter.answer = Core::Prompt::Yes;
+    QCoreApplication::processEvents();
+    QCOMPARE(m_prompter.prompts, 1);
+    QCOMPARE(consent.authorize(QStringLiteral("run")), API::ConsentVerdict::Allowed);
+    QCOMPARE(consent.authorize(QStringLiteral("run again")), API::ConsentVerdict::Allowed);
+    QCOMPARE(m_prompter.prompts, 1);
+  }
+
+  API::LaunchConsent later(settings);
+  later.bindProject(first);
+  QVERIFY(later.isGranted());
+
+  later.bindProject(second);
+  QVERIFY(!later.isGranted());
+  QCOMPARE(later.authorize(QStringLiteral("run")), API::ConsentVerdict::ConsentRequired);
 }
 
 QTEST_GUILESS_MAIN(TstLaunchConsent)

@@ -106,6 +106,7 @@ Use packages to hand a dashboard to someone else, such as a customer, a test lab
 In package mode the dialog adds a **Contents** tab:
 
 - **Carried Files.** Every file the package will carry, with its size. Canvas images are found by scanning the Canvas code for image file names. Use **Add Files…** for images whose path the code builds while it runs; they must sit inside the project folder.
+- **Helper Programs.** Off by default. Turn it on when the project's control script starts a program, such as a simulator, and add the files and folders that program needs as resources. See [Helper programs](#helper-programs).
 - **External Dependencies.** Things the package cannot carry, such as programs the Process driver launches or web pages. The target machine must provide them.
 - **Missing Files.** Referenced files that no longer exist. Export stays blocked until they are back.
 - **Credentials and Private Keys.** Each password and private key the project uses, all excluded by default. Tick an item to carry it inside the package; the dialog then reminds you that anyone with the file can recover it. Excluded items are entered by the operator on first connect, through the same recovery dialog runtime mode always shows, and stay on that machine as usual.
@@ -124,13 +125,32 @@ A package always opens in a new window, so the window you are working in is left
 
 A damaged package, or one changed after export, is refused with a message, and so is a package larger than 64 MiB. A package made by a newer version of Serial Studio names the version it needs.
 
+### Helper programs
+
+A project's control script can start a helper program with `system.exec`, for example a Python simulator that feeds the dashboard. A package refuses this unless you turn on **Helper Programs** in the Contents tab before exporting.
+
+With the option on:
+
+- The control script can call `system.projectDir`, `system.exec`, `system.kill` and `system.runningProcesses`, as it does when the project file is open. Clients connected over the API, gRPC or MCP still cannot.
+- **Resources** are the files and folders the program needs. Add them with **Add Files…** or **Add Folder…**; they must sit inside the project's folder. When the package opens, Serial Studio copies them to a private temporary folder, keeping each path relative to the project's folder, and removes the folder when the session ends.
+- `system.projectDir` answers with that folder in `directory`, so a script that builds the path as `directory + "/Simulator.py"` works without changes. A package with no resources answers with the folder that holds the `.ssdeploy` file, which lets you keep a large program next to the package instead of inside it. `packageDirectory` always names the folder that holds the package.
+- The first time the package tries to start a program, Serial Studio asks the operator and shows the program and its arguments. The answer is remembered for that exact package. A package you export again is a different package, so the operator is asked once more.
+
+Things to know before you rely on it:
+
+- Resources are ordinary files on the operator's disk while the package runs. Anyone using that machine can read them, so do not add anything you want kept private.
+- The interpreter is not carried. A Python helper needs Python, and its packages, on the target machine.
+- A carried file does not keep its executable permission. Start it through its interpreter (`python3 helper.py`), not directly.
+- A program kept next to the package is not checked. Whoever can write to that folder decides what runs, so open such a package from a folder you control, not from a shared download folder.
+- On an unattended machine nobody can answer the question. Set `SERIAL_STUDIO_API_AUTO_CONSENT=1` in that machine's environment to allow program launches there.
+
 ### Sealed sessions
 
 In Serial Studio Pro, a session opened from a `.ssdeploy` package is **sealed**: the operator can run the dashboard but cannot read, save, export or edit the project through any part of the app.
 - The Project Editor, Preferences, Macros, the Problem Center, the AI assistant, the players, the Extension Manager and the Deploy dialog are unreachable, including from the command palette and keyboard shortcuts. A sealed session cannot re-export a package, so keep the source project.
-- API, gRPC and MCP commands that would return or change the project answer `SEALED_SESSION`. Live data, device control, exports, alarms and window layout keep working, so integrations that read data still run. The same rule applies to the project's own scripts when they call the API.
+- API, gRPC and MCP commands that would return or change the project answer `SEALED_SESSION`. Live data, device control, exports, alarms and window layout keep working, so integrations that read data still run. The same rule applies to the project's own scripts when they call the API. The commands that start helper programs are refused too, unless the package was exported with **Helper Programs** on.
 - Live frames and mirror viewers carry the layout and values but no script source, so Canvas widgets appear as placeholders on a mirror viewer.
-- Nothing from the package is written to disk in readable form. There are no backups, no project autosave and no copy in the settings. Historian recordings keep what replay needs but not the scripts, so Canvas widgets replay as placeholders and **Verify** and **Regress** report the recording as sealed.
+- Nothing from the package is written to disk in readable form, except the resources of a package exported with **Helper Programs** on. There are no backups, no project autosave and no copy in the settings. Historian recordings keep what replay needs but not the scripts, so Canvas widgets replay as placeholders and **Verify** and **Regress** report the recording as sealed.
 - Only the widget extensions inside the package load; extensions installed on the machine do not. The usual extension consent prompt appears the first time.
 
 ## Licensing

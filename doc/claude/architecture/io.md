@@ -541,7 +541,11 @@ A process that opened a deployment package (`--deployment`, or a double-clicked 
 composition root, and `Core::Runtime::sealed()` never reverts. The package's files are served from
 an in-memory Qt resource tree at `:/ssdeploy-package` (`Deploy::ResourceTree`), so alarm sounds,
 Canvas images, certificates and bundled extensions read through the `:/` paths they already accept
-and nothing is extracted to disk. The rules a change must keep:
+and nothing is extracted to disk, with one exception: a package whose author turned on helper
+programs (spec 0123, the `helperPrograms` option, off by default) has its `resources/` entries
+written to a private temp folder by `Deploy::ResourceExtractor` before the seal, and the seal
+records that folder, the package's folder and the package's digest in
+`Core::Runtime::sealedHelpers()`. The rules a change must keep:
 
 - **Every registered API command is classified** in `API::SealedPolicy` (allowed or denied).
   `CommandRegistry::execute` refuses an unlisted name with `SEALED_SESSION` before the remote/Trusted
@@ -557,7 +561,13 @@ and nothing is extracted to disk. The rules a change must keep:
   sealed load, saves and autosave refuse, `AppState::restoreLastProject` returns early, and
   `BackupManager::snapshot` does nothing.
 - **Only code from the package runs**: `WidgetExtensions` scans the mount instead of the user's
-  extension folder, `PluginRunner` launches nothing, the assistant starts no turn.
+  extension folder, `PluginRunner` launches nothing, the assistant starts no turn. The four
+  `system.*` process commands sit in the allowed table but `SystemHandler` refuses them unless
+  `sealedHelpers().enabled`; launch consent is then keyed on the package digest
+  (`ProcessLauncher`'s `consentTarget`), so no package starts granted.
+- **Only `resources/` entries reach disk, and no API path reaches them**: `DeploymentSession`
+  takes them out of the file list before the mount, and `API::isPathAllowed` refuses every path
+  inside the resources folder. Enforced: ctest:tst_package_resources.
 - **Included credentials stay in memory**: they are applied inside a
   `MQTT::CredentialVault::TransientScope`, whose slots never reach the settings file.
 - **A live session never seals itself**: opening a package from the UI (the open dialog, a drop,

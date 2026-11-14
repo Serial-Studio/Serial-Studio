@@ -222,6 +222,29 @@ Widgets.SmartDialog {
   }
 
   FileDialog {
+    id: resourceFilesPicker
+
+    fileMode: FileDialog.OpenFiles
+    title: qsTr("Add Resource Files")
+    currentFolder: root.folderUrl(root.packager.projectFolder)
+    onAccepted: {
+      const files = selectedFiles.map(f => f.toString())
+      Qt.callLater(() => root.packager.addResources(files))
+    }
+  }
+
+  FolderDialog {
+    id: resourceFolderPicker
+
+    title: qsTr("Add Resource Folder")
+    currentFolder: root.folderUrl(root.packager.projectFolder)
+    onAccepted: {
+      const folder = selectedFolder.toString()
+      Qt.callLater(() => root.packager.addResources([folder]))
+    }
+  }
+
+  FileDialog {
     id: iconPicker
 
     title: qsTr("Choose an Icon")
@@ -1096,6 +1119,127 @@ Widgets.SmartDialog {
                 font: Cpp_Misc_CommonFonts.uiFont
                 onClicked: extraFilesPicker.open()
                 Layout.alignment: Qt.AlignVCenter
+              }
+            }
+
+            //
+            // Section: Helper programs and the resources they need (spec 0123)
+            //
+            RowLayout {
+              spacing: 8
+              Layout.topMargin: 8
+              Layout.fillWidth: true
+
+              Label {
+                Layout.fillWidth: true
+                text: qsTr("Helper Programs")
+                font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+                color: Cpp_ThemeManager.colors["pane_section_label"]
+                Component.onCompleted: font.capitalization = Font.AllUppercase
+              }
+
+              Widgets.Toggle {
+                id: helperPrograms
+
+                Layout.rightMargin: -8
+                Layout.alignment: Qt.AlignVCenter
+                objectName: "shortcutGenerator.helperPrograms"
+                onToggled: root.packager.setHelperPrograms(checked)
+
+                Binding on checked {
+                  value: root.packager.helperPrograms
+                }
+              }
+            } Rectangle {
+              implicitHeight: 1
+              Layout.fillWidth: true
+              color: Cpp_ThemeManager.colors["groupbox_border"]
+            } Item {
+              implicitHeight: 2
+            }
+
+            Label {
+              Layout.fillWidth: true
+              wrapMode: Label.Wrap
+              font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+              color: Cpp_ThemeManager.colors["placeholder_text"]
+              text: helperPrograms.checked
+                    ? qsTr("The project's control script can start programs on the operator's "
+                           + "computer, such as a simulator. Serial Studio asks the operator "
+                           + "once before the first one starts. Resources are copied to the "
+                           + "operator's disk while the package runs, and can be read there.")
+                    : qsTr("Turn this on to let the project's control script start programs "
+                           + "on the operator's computer, such as a simulator.")
+            }
+
+            ListFrame {
+              visible: helperPrograms.checked && root.packager.resources.length > 0
+
+              Repeater {
+                model: root.packager.resources
+
+                delegate: ListRow {
+                  required property var modelData
+
+                  Label {
+                    text: modelData.path
+                    Layout.fillWidth: true
+                    elide: Label.ElideMiddle
+                    color: Cpp_ThemeManager.colors["text"]
+                  }
+
+                  Label {
+                    color: Cpp_ThemeManager.colors["placeholder_text"]
+                    text: modelData.files === 1
+                          ? root.formatSize(modelData.size)
+                          : qsTr("%1 files, %2").arg(modelData.files)
+                                                .arg(root.formatSize(modelData.size))
+                  }
+
+                  Widgets.IconButton {
+                    flat: true
+                    iconSize: 12
+                    implicitWidth: 20
+                    background: Item {}
+                    ToolTip.text: qsTr("Remove")
+                    Layout.alignment: Qt.AlignVCenter
+                    icon.source: "qrc:/icons/buttons/close.svg"
+                    objectName: "shortcutGenerator.removeResource"
+                    onClicked: root.packager.removeResource(modelData.source)
+                  }
+                }
+              }
+            }
+
+            RowLayout {
+              spacing: 8
+              Layout.topMargin: 2
+              Layout.fillWidth: true
+              visible: helperPrograms.checked
+
+              Label {
+                Layout.fillWidth: true
+                wrapMode: Label.Wrap
+                font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+                color: Cpp_ThemeManager.colors["placeholder_text"]
+                text: qsTr("Add the files and folders the programs need. They must be inside "
+                           + "the project's folder.")
+              }
+
+              Widgets.PushButton {
+                text: qsTr("Add Files…")
+                font: Cpp_Misc_CommonFonts.uiFont
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: resourceFilesPicker.open()
+                objectName: "shortcutGenerator.addResourceFiles"
+              }
+
+              Widgets.PushButton {
+                text: qsTr("Add Folder…")
+                font: Cpp_Misc_CommonFonts.uiFont
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: resourceFolderPicker.open()
+                objectName: "shortcutGenerator.addResourceFolder"
               }
             }
 

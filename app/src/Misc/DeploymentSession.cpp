@@ -26,7 +26,10 @@
 
 #  include <algorithm>
 #  include <QCoreApplication>
+#  include <QCryptographicHash>
+#  include <QDir>
 #  include <QFile>
+#  include <QFileInfo>
 #  include <QGuiApplication>
 #  include <QIcon>
 #  include <QJsonArray>
@@ -54,6 +57,7 @@
 
 static const QStringList kPublisherSecrets = {
   QStringLiteral("username"), QStringLiteral("password"), QStringLiteral("keyPassphrase")};
+static constexpr int kLeftoverMinimumAgeSeconds = 60;
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -165,7 +169,8 @@ Misc::RuntimeOptions Misc::DeploymentSession::runtimeOptions() const
 /**
  * @brief Before the composition root: reads and decodes the package within the 64 MiB cap, then
  *        mounts its files and seals the process. Any refusal shows why and returns false; nothing
- *        from a refused package is kept, and no singleton is reached.
+ *        from a refused package is kept, and no singleton is reached. Resources are written to
+ *        disk first, and only for a package whose author allowed helper programs (spec 0123).
  */
 bool Misc::DeploymentSession::open(const QString& path)
 {
@@ -180,24 +185,31 @@ bool Misc::DeploymentSession::open(const QString& path)
     return false;
   }
 
-  auto result = Deploy::decode(file.read(Deploy::kMaxPackageBytes + 1),
-                               QVersionNumber::fromString(QStringLiteral(APP_VERSION)));
+  const auto bytes = file.read(Deploy::kMaxPackageBytes + 1);
+  auto result      = Deploy::decode(bytes, QVersionNumber::fromString(QStringLiteral(APP_VERSION)));
   if (result.status != Deploy::DecodeStatus::Ok) {
     qWarning() << "[DeploymentSession] Refused" << path << "-" << result.detail;
     showRefusal(refusalMessage(result));
     return false;
   }
 
-  m_package          = std::move(result.package);
+  m_package = std::move(result.package);
+  Core::Runtime::SealedHelpers helpers;
+  if (!prepareHelpers(path, bytes, helpers)) {
+    m_package = Deploy::Package();
+    return false;
+  }
+
   const bool mounted = m_tree.mount(m_package.files, QString(Deploy::kMountId));
   m_package.files    = QList<Deploy::FileEntry>();
   if (!mounted) {
     m_package = Deploy::Package();
+    m_resources.remove();
     showRefusal(refusalMessage(Deploy::DecodeResult()));
     return false;
   }
 
-  Core::Runtime::seal(m_tree.root(), m_package.manifest.projectFolder);
+  Core::Runtime::seal(m_tree.root(), m_package.manifest.projectFolder, helpers);
   configureQmlCache();
   applyIdentity();
 
@@ -233,6 +245,53 @@ bool Misc::DeploymentSession::loadProject()
 //--------------------------------------------------------------------------------------------------
 // Helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Takes the resource entries out of the carried files, so they never enter the in-memory
+ *        mount, and writes them to this session's folder when the package's author allowed helper
+ *        programs (spec 0123); without that option nothing is written. The identity is the digest
+ *        of the package's bytes, so launch consent never carries to a changed package.
+ */
+bool Misc::DeploymentSession::prepareHelpers(const QString& path,
+                                             const QByteArray& bytes,
+                                             Core::Runtime::SealedHelpers& helpers)
+{
+  SS_ASSERT(!m_open, return false);
+  SS_ASSERT(!bytes.isEmpty(), return false);
+
+  QList<Deploy::FileEntry> resources;
+  for (const auto& entry : std::as_const(m_package.files))
+    if (Deploy::ResourceExtractor::isResourceEntry(entry.path))
+      resources.append(entry);
+
+  m_package.files.removeIf([](const Deploy::FileEntry& entry) {
+    return Deploy::ResourceExtractor::isResourceEntry(entry.path);
+  });
+
+  Deploy::ResourceExtractor::sweepStale(QDir::tempPath(), kLeftoverMinimumAgeSeconds);
+  if (!m_package.manifest.options.value(Deploy::OptionKey::kHelperPrograms).toBool(false))
+    return true;
+
+  QString error;
+  if (!resources.isEmpty() && !m_resources.extract(resources, QDir::tempPath(), error)) {
+    qWarning() << "[DeploymentSession] Resources refused:" << error;
+    showRefusal(QCoreApplication::translate(
+                  "DeploymentSession",
+                  "The files this deployment package needs could not be written to this "
+                  "computer.\n\n%1")
+                  .arg(error));
+    return false;
+  }
+
+  const QFileInfo info(path);
+  helpers.enabled        = true;
+  helpers.packagePath    = info.absoluteFilePath();
+  helpers.packageFolder  = info.absolutePath();
+  helpers.resourceFolder = m_resources.folder();
+  helpers.identity =
+    QString::fromLatin1(QCryptographicHash::hash(bytes, QCryptographicHash::Sha256).toHex());
+  return true;
+}
 
 /**
  * @brief Gives the process the package's name and icon, before any window reads them.

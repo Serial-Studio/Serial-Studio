@@ -56,6 +56,24 @@ static constexpr bool kPathFirst = false;
 #endif
 
 /**
+ * @brief What the launch consent is remembered under. A project session uses the project file; a
+ *        package session (spec 0123) uses the package's identity, so the answer holds for that
+ *        exact package and a changed one asks again. A package that starts no helper programs
+ *        has no identity and keeps a session-only answer.
+ */
+[[nodiscard]] static QString consentTarget(const QString& projectPath)
+{
+  if (!Core::Runtime::sealed())
+    return projectPath;
+
+  const auto& helpers = Core::Runtime::sealedHelpers();
+  if (!helpers.enabled || helpers.identity.isEmpty())
+    return QString();
+
+  return QStringLiteral("ssdeploy:") + helpers.identity;
+}
+
+/**
  * @brief Constructs the launcher with an empty process table and an unbound consent (no project
  *        yet); LaunchConsent applies the headless override.
  */
@@ -89,7 +107,7 @@ void API::ProcessLauncher::setupExternalConnections()
 
   m_lastProjectPath = m_projectModel->jsonFilePath();
   m_consent.setOperatorConsentedPath(Core::Runtime::operatorProject());
-  m_consent.bindProject(m_lastProjectPath);
+  m_consent.bindProject(consentTarget(m_lastProjectPath));
   IO::setLaunchAuthorizer(this);
 
   connect(&m_consent,
@@ -453,5 +471,5 @@ void API::ProcessLauncher::onProjectFileChanged()
   m_reconnectOnGrant = false;
   killAll();
 
-  m_consent.bindProject(path);
+  m_consent.bindProject(consentTarget(path));
 }

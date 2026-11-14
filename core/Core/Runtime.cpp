@@ -31,6 +31,7 @@ static std::atomic<bool> s_sealed{false};
 static QString s_sealedMountRoot;
 static QString s_sealedProjectFolder;
 static QString s_operatorProject;
+static Core::Runtime::SealedHelpers s_sealedHelpers;
 
 /**
  * @brief Whether the headless hotpath benchmark is feeding frames; the benchmark is
@@ -92,11 +93,22 @@ const QString& Core::Runtime::sealedProjectFolder() noexcept
 }
 
 /**
+ * @brief The package's helper-program record (spec 0123); its default value, with enabled false,
+ *        when unsealed or when the author did not allow helper programs.
+ */
+const Core::Runtime::SealedHelpers& Core::Runtime::sealedHelpers() noexcept
+{
+  return s_sealedHelpers;
+}
+
+/**
  * @brief Seals the process for its whole life. There is no unseal: every exit that refuses project
  *        content relies on the answer never changing once it has been read. The first call wins;
  *        the paths are written before the release store, so a reader that sees the seal sees them.
  */
-void Core::Runtime::seal(const QString& mountRoot, const QString& projectFolder) noexcept
+void Core::Runtime::seal(const QString& mountRoot,
+                         const QString& projectFolder,
+                         const SealedHelpers& helpers) noexcept
 {
   SS_ASSERT_LOG(!mountRoot.isEmpty());
   if (s_sealed.load(std::memory_order_acquire))
@@ -104,6 +116,7 @@ void Core::Runtime::seal(const QString& mountRoot, const QString& projectFolder)
 
   s_sealedMountRoot     = mountRoot;
   s_sealedProjectFolder = projectFolder;
+  s_sealedHelpers       = helpers;
   s_sealed.store(true, std::memory_order_release);
 }
 

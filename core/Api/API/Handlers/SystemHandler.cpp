@@ -21,6 +21,7 @@
 
 #include "API/Handlers/SystemHandler.h"
 
+#include <optional>
 #include <QDir>
 #include <QFileInfo>
 #include <QJsonArray>
@@ -28,8 +29,65 @@
 #include "API/CommandRegistry.h"
 #include "API/ProcessLauncher.h"
 #include "API/SchemaBuilder.h"
+#include "Core/Runtime.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+
+//--------------------------------------------------------------------------------------------------
+// Package sessions (spec 0123)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The refusal a package session gives a helper-program command: always, unless the
+ *        package's author allowed helper programs, and to a remote caller when @p scriptOnly is
+ *        set, so a network client never learns where the resources were written.
+ */
+[[nodiscard]] static std::optional<API::CommandResponse> sealedRefusal(const QString& id,
+                                                                       const bool scriptOnly)
+{
+  if (!Core::Runtime::sealed())
+    return std::nullopt;
+
+  const auto* scope = API::RemoteDispatchScope::active();
+  const bool remote = scriptOnly && scope != nullptr && scope->gated();
+  if (Core::Runtime::sealedHelpers().enabled && !remote)
+    return std::nullopt;
+
+  return API::CommandResponse::makeError(
+    id,
+    QString::fromLatin1(API::ErrorCode::SealedSession),
+    QStringLiteral("Helper programs are not available in this deployment package session"));
+}
+
+/**
+ * @brief Where a package session's helpers live: the resources folder when the package carries
+ *        resources, otherwise the folder that holds the package file.
+ */
+[[nodiscard]] static const QString& sealedHelperFolder()
+{
+  const auto& helpers = Core::Runtime::sealedHelpers();
+  return helpers.resourceFolder.isEmpty() ? helpers.packageFolder : helpers.resourceFolder;
+}
+
+/**
+ * @brief Answers system.projectDir in a package session: the helper folder as the directory, the
+ *        package file as the file, and the package file's own folder under packageDirectory.
+ */
+[[nodiscard]] static API::CommandResponse sealedProjectDir(const QString& id)
+{
+  const auto& helpers = Core::Runtime::sealedHelpers();
+
+  QJsonObject result;
+  result[QStringLiteral("directory")]        = QDir::toNativeSeparators(sealedHelperFolder());
+  result[QStringLiteral("filePath")]         = QDir::toNativeSeparators(helpers.packagePath);
+  result[QStringLiteral("fileName")]         = QFileInfo(helpers.packagePath).fileName();
+  result[QStringLiteral("packageDirectory")] = QDir::toNativeSeparators(helpers.packageFolder);
+  return API::CommandResponse::makeSuccess(id, result);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Commands
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the directory, file path, and file name of the loaded project.
@@ -38,6 +96,12 @@ API::CommandResponse API::Handlers::SystemHandler::projectDir(const QString& id,
                                                               const QJsonObject& params)
 {
   Q_UNUSED(params)
+
+  if (auto refusal = sealedRefusal(id, true))
+    return *refusal;
+
+  if (Core::Runtime::sealed())
+    return sealedProjectDir(id);
 
   auto& projectModel = DataModel::pipelineModules().projectModel;
   const auto& path   = projectModel.jsonFilePath();
@@ -61,6 +125,9 @@ API::CommandResponse API::Handlers::SystemHandler::projectDir(const QString& id,
 API::CommandResponse API::Handlers::SystemHandler::exec(const QString& id,
                                                         const QJsonObject& params)
 {
+  if (auto refusal = sealedRefusal(id, false))
+    return *refusal;
+
   const auto program = params.value(QStringLiteral("program")).toString();
   if (program.isEmpty())
     return CommandResponse::makeError(
@@ -71,6 +138,9 @@ API::CommandResponse API::Handlers::SystemHandler::exec(const QString& id,
     arguments.append(arg.toString());
 
   auto workingDir = params.value(QStringLiteral("workingDir")).toString();
+  if (workingDir.isEmpty() && Core::Runtime::sealed())
+    workingDir = sealedHelperFolder();
+
   if (workingDir.isEmpty()) {
     auto& projectModel      = DataModel::pipelineModules().projectModel;
     const auto& projectPath = projectModel.jsonFilePath();
@@ -101,6 +171,9 @@ API::CommandResponse API::Handlers::SystemHandler::exec(const QString& id,
 API::CommandResponse API::Handlers::SystemHandler::kill(const QString& id,
                                                         const QJsonObject& params)
 {
+  if (auto refusal = sealedRefusal(id, false))
+    return *refusal;
+
   if (!params.contains(QStringLiteral("processId")))
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing 'processId'"));
@@ -122,6 +195,9 @@ API::CommandResponse API::Handlers::SystemHandler::runningProcesses(const QStrin
                                                                     const QJsonObject& params)
 {
   Q_UNUSED(params)
+
+  if (auto refusal = sealedRefusal(id, false))
+    return *refusal;
 
   static auto& processLauncher = ProcessLauncher::instance();
 
