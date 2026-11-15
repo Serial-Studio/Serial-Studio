@@ -1164,11 +1164,11 @@ Widgets.SmartDialog {
               font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
               color: Cpp_ThemeManager.colors["placeholder_text"]
               text: helperPrograms.checked
-                    ? qsTr("The project's control script can start programs on the operator's "
+                    ? qsTr("The project's Control Loop can start programs on the operator's "
                            + "computer, such as a simulator. Serial Studio asks the operator "
                            + "once before the first one starts. Resources are copied to the "
                            + "operator's disk while the package runs, and can be read there.")
-                    : qsTr("Turn this on to let the project's control script start programs "
+                    : qsTr("Turn this on to let the project's Control Loop start programs "
                            + "on the operator's computer, such as a simulator.")
             }
 

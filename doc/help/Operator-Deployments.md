@@ -106,7 +106,7 @@ Use packages to hand a dashboard to someone else, such as a customer, a test lab
 In package mode the dialog adds a **Contents** tab:
 
 - **Carried Files.** Every file the package will carry, with its size. Canvas images are found by scanning the Canvas code for image file names. Use **Add Files…** for images whose path the code builds while it runs; they must sit inside the project folder.
-- **Helper Programs.** Off by default. Turn it on when the project's control script starts a program, such as a simulator, and add the files and folders that program needs as resources. See [Helper programs](#helper-programs).
+- **Helper Programs.** Off by default. Turn it on when the project's Control Loop starts a program, such as a simulator, and add the files and folders that program needs as resources. See [Helper programs](#helper-programs).
 - **External Dependencies.** Things the package cannot carry, such as programs the Process driver launches or web pages. The target machine must provide them.
 - **Missing Files.** Referenced files that no longer exist. Export stays blocked until they are back.
 - **Credentials and Private Keys.** Each password and private key the project uses, all excluded by default. Tick an item to carry it inside the package; the dialog then reminds you that anyone with the file can recover it. Excluded items are entered by the operator on first connect, through the same recovery dialog runtime mode always shows, and stay on that machine as usual.
@@ -127,11 +127,11 @@ A damaged package, or one changed after export, is refused with a message, and s
 
 ### Helper programs
 
-A project's control script can start a helper program with `system.exec`, for example a Python simulator that feeds the dashboard. A package refuses this unless you turn on **Helper Programs** in the Contents tab before exporting.
+A project's Control Loop can start a helper program with `system.exec`, for example a Python simulator that feeds the dashboard. A package refuses this unless you turn on **Helper Programs** in the Contents tab before exporting.
 
 With the option on:
 
-- The control script can call `system.projectDir`, `system.exec`, `system.kill` and `system.runningProcesses`, as it does when the project file is open. Clients connected over the API, gRPC or MCP still cannot.
+- The Control Loop can call `system.projectDir`, `system.exec`, `system.kill` and `system.runningProcesses`, as it does when the project file is open. Clients connected over the API, gRPC or MCP still cannot.
 - **Resources** are the files and folders the program needs. Add them with **Add Files…** or **Add Folder…**; they must sit inside the project's folder. When the package opens, Serial Studio copies them to a private temporary folder, keeping each path relative to the project's folder, and removes the folder when the session ends.
 - `system.projectDir` answers with that folder in `directory`, so a script that builds the path as `directory + "/Simulator.py"` works without changes. A package with no resources answers with the folder that holds the `.ssdeploy` file, which lets you keep a large program next to the package instead of inside it. `packageDirectory` always names the folder that holds the package.
 - The first time the package tries to start a program, Serial Studio asks the operator and shows the program and its arguments. The answer is remembered for that exact package. A package you export again is a different package, so the operator is asked once more.
