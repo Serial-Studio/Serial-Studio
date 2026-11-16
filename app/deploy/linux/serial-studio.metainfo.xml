@@ -57,8 +57,8 @@
 		<color type="primary" scheme_preference="dark">#244263</color>
 	</branding>
 	<releases>
-    <release version="4.2.3" date="2026-11-16">
-      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.2.3</url>
+    <release version="4.2.2" date="2026-11-16">
+      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.2.2</url>
 		  <description>
 			  <p>Feature update: icon packs and material themes with panel-hardware output controls, device declarations with a firmware library for Python, C and Arduino, value formats and labels for datasets, UART connection sequences and fixed-length framing, write limits and acknowledged commands for outputs, and file attachments in the AI assistant.</p>
 		  </description>
