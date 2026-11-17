@@ -118,7 +118,7 @@ InstrumentBase {
     clip: true
     interactive: true
     anchors.fill: parent
-    anchors.bottomMargin: pageIndicator.height + 4
+    anchors.bottomMargin: swipePages.height + 4
 
     //
     // PAGE 0: Analog compass rose
@@ -609,36 +609,11 @@ InstrumentBase {
   }
 
   //
-  // Page indicator
+  // Page dots and per-widget page persistence
   //
-  PageIndicator {
-    id: pageIndicator
-
-    interactive: true
-    count: swipeView.count
-    anchors.bottomMargin: 4
-    anchors.bottom: parent.bottom
-    currentIndex: swipeView.currentIndex
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    delegate: Rectangle {
-      required property int index
-      implicitWidth: 8
-      implicitHeight: 8
-      radius: width / 2
-      antialiasing: true
-      color: Cpp_ThemeManager.colors["widget_text"]
-      opacity: index === pageIndicator.currentIndex ? 0.95 : 0.40
-      Behavior on opacity { NumberAnimation { duration: 120 } }
-    }
-
-    onCurrentIndexChanged: {
-      if (swipeView.currentIndex !== currentIndex)
-        swipeView.currentIndex = currentIndex
-    }
-  }
-
   SwipePages {
+    id: swipePages
+
     view: swipeView
     widgetId: root.widgetId
   }

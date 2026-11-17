@@ -3,23 +3,19 @@
   "regenerate": "python scripts/code-verify.py --dup-census --accept",
   "window_lines": 10,
   "pair_threshold": 40,
-  "shared": 1270,
+  "shared": 906,
   "pairs": {
     "app/qml/Widgets/Dashboard/MultiPlot.qml | app/qml/Widgets/Dashboard/Plot.qml": 143,
-    "app/qml/Widgets/Dashboard/Clock.qml | app/qml/Widgets/Dashboard/Compass.qml": 126,
-    "app/qml/Widgets/Dashboard/Gauge.qml | app/qml/Widgets/Dashboard/Meter.qml": 115,
-    "app/qml/Widgets/Dashboard/Compass.qml | app/qml/Widgets/Dashboard/Gauge.qml": 112,
-    "app/qml/Widgets/Dashboard/Clock.qml | app/qml/Widgets/Dashboard/Gauge.qml": 110,
+    "app/qml/Widgets/Dashboard/Clock.qml | app/qml/Widgets/Dashboard/Compass.qml": 115,
+    "app/qml/Widgets/Dashboard/Compass.qml | app/qml/Widgets/Dashboard/Gauge.qml": 96,
+    "app/qml/Widgets/Dashboard/Clock.qml | app/qml/Widgets/Dashboard/Gauge.qml": 92,
     "core/Api/API/CommandCapabilities.cpp | core/Api/API/SealedPolicy.cpp": 87,
-    "app/qml/Widgets/Dashboard/Bar.qml | app/qml/Widgets/Dashboard/Gauge.qml": 84,
-    "app/qml/Widgets/Dashboard/Bar.qml | app/qml/Widgets/Dashboard/Meter.qml": 81,
     "app/qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml | app/qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml": 77,
-    "app/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml | app/qml/MainWindow/Panes/Setup.qml": 58,
+    "app/qml/Widgets/Dashboard/Gauge.qml | app/qml/Widgets/Dashboard/Meter.qml": 60,
     "app/qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml | app/qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml": 53,
     "app/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml | app/qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml": 48,
     "app/qml/Widgets/Dashboard/FFTPlot.qml | app/qml/Widgets/Dashboard/Plot.qml": 48,
     "app/qml/ProjectEditor/Views/GroupsView.qml | app/qml/ProjectEditor/Views/WorkspacesView.qml": 45,
-    "app/qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml | app/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml": 42,
-    "app/qml/Widgets/Dashboard/Compass.qml | app/qml/Widgets/Dashboard/Meter.qml": 41
+    "app/qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml | app/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml": 42
   }
 }

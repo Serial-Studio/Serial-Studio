@@ -53,7 +53,6 @@ public:
   ReplaySynthesis& operator=(const ReplaySynthesis&) = delete;
 
   [[nodiscard]] bool injecting() const noexcept;
-  [[nodiscard]] ReplayRowValues buildFrameAt(qint64 timestampNs);
 
   void clear();
   void replayFrameAt(qint64 timestampNs);

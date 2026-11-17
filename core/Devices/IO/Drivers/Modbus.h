@@ -216,7 +216,6 @@ protected:
 private:
   void doClose();
   void connectClient();
-  void handleDialSetback();
   void wireConfigurationSignals();
   void advanceAfterFailedPoll();
   void failDial(const QString& error);

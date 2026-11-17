@@ -197,6 +197,22 @@ void IO::Drivers::Iec104::applyProtocolParameters()
 }
 
 /**
+ * @brief Body of the five window and timeout setters: stores a changed value, lets the state
+ *        machine clamp it and persists the clamped result.
+ */
+void IO::Drivers::Iec104::changeProtocolParameter(int& member, const int value, const char* key)
+{
+  if (member == value)
+    return;
+
+  member = value;
+  applyProtocolParameters();
+  persistSetting(m_settings, key, member);
+
+  Q_EMIT protocolParametersChanged();
+}
+
+/**
  * @brief Points this UI-config instance at the per-source instance that owns the live session, so
  *        the pane and the API read the counters and the discovered points of the running link.
  */
@@ -877,14 +893,6 @@ int IO::Drivers::Iec104::pointCount() const
 }
 
 /**
- * @brief Returns the discovered points in wire order.
- */
-const QVector<IO::Drivers::Iec104Point>& IO::Drivers::Iec104::points() const noexcept
-{
-  return pointTable();
-}
-
-/**
  * @brief The channel name a point takes on the dashboard. The information object address is the
  *        only identity a station publishes, so it is the name.
  */
@@ -909,22 +917,6 @@ QString IO::Drivers::Iec104::statusText() const
     return tr("Starting data transfer…");
 
   return tr("Monitoring %1 point(s) from station %2").arg(m_points.size()).arg(m_commonAddress);
-}
-
-/**
- * @brief Human-readable row for the pane's point list.
- */
-QString IO::Drivers::Iec104::pointInfo(const int index) const
-{
-  const auto& table = pointTable();
-  if (index < 0 || index >= table.size())
-    return {};
-
-  const auto& point = table.at(index);
-  return QStringLiteral("%1 (TI %2) %3")
-    .arg(pointName(point))
-    .arg(point.typeId)
-    .arg(OpcUaWire::codeFromType(wireTypeFor(point.kind)));
 }
 
 /**
@@ -1042,14 +1034,7 @@ void IO::Drivers::Iec104::setCommonAddress(const int address)
  */
 void IO::Drivers::Iec104::setWindowK(const int k)
 {
-  if (m_windowK == k)
-    return;
-
-  m_windowK = k;
-  applyProtocolParameters();
-  persistSetting(m_settings, "Iec104Driver/windowK", m_windowK);
-
-  Q_EMIT protocolParametersChanged();
+  changeProtocolParameter(m_windowK, k, "Iec104Driver/windowK");
 }
 
 /**
@@ -1057,14 +1042,7 @@ void IO::Drivers::Iec104::setWindowK(const int k)
  */
 void IO::Drivers::Iec104::setWindowW(const int w)
 {
-  if (m_windowW == w)
-    return;
-
-  m_windowW = w;
-  applyProtocolParameters();
-  persistSetting(m_settings, "Iec104Driver/windowW", m_windowW);
-
-  Q_EMIT protocolParametersChanged();
+  changeProtocolParameter(m_windowW, w, "Iec104Driver/windowW");
 }
 
 /**
@@ -1072,14 +1050,7 @@ void IO::Drivers::Iec104::setWindowW(const int w)
  */
 void IO::Drivers::Iec104::setTimeoutT1(const int ms)
 {
-  if (m_timeoutT1 == ms)
-    return;
-
-  m_timeoutT1 = ms;
-  applyProtocolParameters();
-  persistSetting(m_settings, "Iec104Driver/timeoutT1", m_timeoutT1);
-
-  Q_EMIT protocolParametersChanged();
+  changeProtocolParameter(m_timeoutT1, ms, "Iec104Driver/timeoutT1");
 }
 
 /**
@@ -1087,14 +1058,7 @@ void IO::Drivers::Iec104::setTimeoutT1(const int ms)
  */
 void IO::Drivers::Iec104::setTimeoutT2(const int ms)
 {
-  if (m_timeoutT2 == ms)
-    return;
-
-  m_timeoutT2 = ms;
-  applyProtocolParameters();
-  persistSetting(m_settings, "Iec104Driver/timeoutT2", m_timeoutT2);
-
-  Q_EMIT protocolParametersChanged();
+  changeProtocolParameter(m_timeoutT2, ms, "Iec104Driver/timeoutT2");
 }
 
 /**
@@ -1102,14 +1066,7 @@ void IO::Drivers::Iec104::setTimeoutT2(const int ms)
  */
 void IO::Drivers::Iec104::setTimeoutT3(const int ms)
 {
-  if (m_timeoutT3 == ms)
-    return;
-
-  m_timeoutT3 = ms;
-  applyProtocolParameters();
-  persistSetting(m_settings, "Iec104Driver/timeoutT3", m_timeoutT3);
-
-  Q_EMIT protocolParametersChanged();
+  changeProtocolParameter(m_timeoutT3, ms, "Iec104Driver/timeoutT3");
 }
 
 /**

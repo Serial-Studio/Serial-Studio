@@ -60,9 +60,6 @@ public:
                   bool redial);
   void reportRecovered(Core::Bus::MessageBus* bus);
 
-  [[nodiscard]] bool armed() const;
-  [[nodiscard]] static int intervalMs() noexcept;
-
 private:
   QString m_raisedTitle;
   QTimer m_timer;

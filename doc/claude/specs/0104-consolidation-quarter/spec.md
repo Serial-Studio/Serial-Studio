@@ -110,9 +110,11 @@ census reads 803, which replaces the audit's 802 (amended 2026-10-30).
 6. **R6 — Suppressions reasoned or removed.** Lint suppression sites 171 → at most 86, and
    every remaining site carries a one-clause reason on the suppression line; bare
    suppressions (152 today) reach zero.
-7. **R7 — Singleton reach down.** Singleton reach sites 803 → at most 600, with
+7. **R7 — Singleton reach down.** Singleton reach sites 803 → at most 756 (amended 2026-11-17
+   from 600: spec 0124 confirmed 45 convertible sites), with
    cross-library reaches staying at zero.
-8. **R8 — Ledger closed down.** Open mistakes-ledger rows 51 → at most 20. Each row that
+8. **R8 — Ledger closed down.** Open mistakes-ledger rows 51 → at most 44 (amended 2026-11-17
+   from 20: spec 0124 found seven rows a present check fully covers). Each row that
    leaves the open set is either codified by a check that exists in the tree, or deleted in a
    commit whose message says why the class no longer applies. The ledger ratchet is re-seeded
    only downward.
@@ -154,9 +156,9 @@ census reads 803, which replaces the audit's 802 (amended 2026-10-30).
 - [ ] **AC3** — A suppression count over the first-party tree reports at most 86 sites and
       zero without a reason, and the number is held by a checked-in baseline the lint job
       reads (R6).
-- [ ] **AC4** — The singleton census check passes with a baseline at or below 600 sites and
+- [ ] **AC4** — The singleton census check passes with a baseline at or below 756 sites and
       zero cross-library reaches (R7).
-- [ ] **AC5** — The ledger ratchet check passes with a baseline at or below 20 open rows, and
+- [ ] **AC5** — The ledger ratchet check passes with a baseline at or below 44 open rows, and
       `git log` over the quarter shows no upward re-seed of any ratchet baseline (R8).
 - [x] **AC6** — Each of the four package jobs in CI contains a step that runs the uploaded
       artifact's self-test, pinned by the workflow test suite, and the macOS step runs both
@@ -223,7 +225,7 @@ census reads 803, which replaces the audit's 802 (amended 2026-10-30).
 
 None open. The draft's five questions were decided by the maintainer on 2026-10-28 and are
 folded into the requirements above: the share is two-thirds in November and half after (R1);
-the singleton target stays at 600 because halving took three months last time (R7); the
+the singleton target stayed at 600 until spec 0124 measured it (R7, amended 2026-11-17); the
 line budget allows five percent net growth by the review rather than net zero (R13); 4.3.0
 marks the exit and 4.2.x point releases continue (R15); the one-hop document total becomes
 a downward-only hard gate (R10).

@@ -114,7 +114,6 @@ protected:
 
 private:
   void createDatabase(const DataModel::Frame& frame);
-  void createSchema(QSqlQuery& q);
   void insertSession(const DataModel::Frame& frame, const QDateTime& dt);
   void writeColumnDefs(const DataModel::Frame& frame);
   void storeProjectMetadata(const DataModel::Frame& frame);

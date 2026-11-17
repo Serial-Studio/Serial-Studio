@@ -141,7 +141,8 @@ void Sessions::DatabaseWorker::openDatabase(const QString& filePath)
   pragma.exec("PRAGMA journal_mode=WAL");
   pragma.exec("PRAGMA busy_timeout=5000");
 
-  ensureSchemaInternal();
+  QSqlQuery schema(m_db);
+  Sessions::DatabaseManager::createSchema(schema);
   refreshSessionListInternal();
   refreshTagListInternal();
   refreshLockStateInternal();
@@ -1144,18 +1145,6 @@ void Sessions::DatabaseWorker::refreshLockStateInternal()
     m_passwordHash = q.value(0).toString();
 
   m_locked = !m_passwordHash.isEmpty();
-}
-
-/**
- * @brief Runs the shared CREATE TABLE IF NOT EXISTS block.
- */
-void Sessions::DatabaseWorker::ensureSchemaInternal()
-{
-  if (!m_db.isOpen())
-    return;
-
-  QSqlQuery q(m_db);
-  Sessions::DatabaseManager::createSchema(q);
 }
 
 /**

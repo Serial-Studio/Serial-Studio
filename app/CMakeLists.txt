@@ -402,6 +402,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/DashboardToolButton.qml
   qml/Widgets/Dashboard/BarPanel.qml
   qml/Widgets/Dashboard/DataGrid.qml
+  qml/Widgets/Dashboard/DigitalPage.qml
   qml/Widgets/Dashboard/DatasetWidgetButtons.qml
   qml/Widgets/Dashboard/ExtensionPlaceholder.qml
   qml/Widgets/Dashboard/ExtensionWidgetSettings.qml
@@ -424,6 +425,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/WidgetTitleBar.qml
   qml/Widgets/Dashboard/WidgetToolbar.qml
   qml/Widgets/Dashboard/ValueFormat.js
+  qml/Widgets/ApiStatusIndicator.qml
   qml/Widgets/BigButton.qml
   qml/Widgets/BoundField.qml
   qml/Widgets/CommandMenu.qml

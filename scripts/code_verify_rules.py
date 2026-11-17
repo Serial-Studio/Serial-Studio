@@ -3097,6 +3097,7 @@ _FONT_PIXEL_OK_FILES = frozenset(
         "MultiPlot.qml",
         "Bar.qml",
         "Clock.qml",
+        "DigitalPage.qml",
         "Gauge.qml",
         "Meter.qml",
         "Compass.qml",

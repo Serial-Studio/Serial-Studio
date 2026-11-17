@@ -104,20 +104,3 @@ void IO::Drivers::ModbusRedial::reportRecovered(Core::Bus::MessageBus* bus)
 
   m_raisedTitle.clear();
 }
-
-/**
- * @brief Whether a re-dial is scheduled.
- */
-bool IO::Drivers::ModbusRedial::armed() const
-{
-  return m_timer.isActive();
-}
-
-/**
- * @brief The wait before a re-dial: slow enough that a server which is simply absent sees one
- *        connection attempt every ten seconds, never a retry storm.
- */
-int IO::Drivers::ModbusRedial::intervalMs() noexcept
-{
-  return kRedialIntervalMs;
-}

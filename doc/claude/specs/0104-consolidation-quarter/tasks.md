@@ -33,14 +33,14 @@ updated: 2026-10-30
 |----|-------|------|-------|--------|-------|---------------------------------|
 | C1 | Ship-artifact proof | [0107](../0107-ship-artifact-proof/spec.md) | Nov wk 1–2 | hardened and gating (2026-11-01); its R8 budget decision on the macOS leg open | `ship` | 4 → 0 → 0 |
 | C0 | Quality score + five censuses | — | Nov wk 1 | not born | all | lenient 0.0 → 0.1 → 100 |
-| C5 | AI-facing budget hard gate + overview | — | Nov wk 2 | not born | AC9 | one-hop 53,503 → 53,850 → below |
+| C5 | AI-facing budget hard gate + overview | — | Nov wk 2 | not born | AC9 | one-hop 53,503 → 62,815 on 2026-11-17 → below; about 62,150 measured reachable (spec 0124) |
 | C2 | Archive + issue triage | — | Nov wk 2 | not born | `specs` | 15 → 15 → 0 |
-| C3-A | TU excess, the 9 cold files | — | Nov wk 3–4 | not born | `tu` | 2,641 → 2,627 → 1,694 |
-| C4 | Suppressions reasoned or removed | — | Nov–Dec | not born | `supp`, `bare` | 171/152 → 171/152 → 86/0 |
-| C6 | Dashboard widget dedup | — | Dec | not born | `dup` | 1,730 → 1,728 → ≈ 980 |
-| C8 | Ledger + test-tier debt | — | Dec | not born | `ledger`, `skips` | 51/36 → 51/36 → 20/10 |
-| C9 | Singleton static-cache conversion | — | Dec–Jan | not born | `singleton` | 803 → 803 → 600 |
-| C7 | Second dedup family | 0121 (folder views only) | Jan | folder views in tree, rest not born | `dup` | ≈ 980 → 1,270 on 2026-11-13, before C6 → 865 |
+| C3-A | TU excess, the 9 cold files | — | Nov wk 3–4 | not born | `tu` | 2,641 → 2,474 on 2026-11-17 → 1,694; the 7 cold files hold 801, deletion reaches about 760, the rest needs splits (spec 0124) |
+| C4 | Suppressions reasoned or removed | — | Nov–Dec | not born | `supp`, `bare` | 171/152 → 173/154 on 2026-11-17 → 86/0; reachable count contested (spec 0124) |
+| C6 | Dashboard widget dedup | — | Dec | not born | `dup` | 1,730 → 906 on 2026-11-17 (spec 0124: digital page, page dots) → ≈ 980 |
+| C8 | Ledger + test-tier debt | — | Dec | not born | `ledger`, `skips` | 51/36 → 44/36 on 2026-11-17 (spec 0124) → 44/10; ledger target amended from 20, about 33 would take 270 added lines |
+| C9 | Singleton static-cache conversion | — | Dec–Jan | not born | `singleton` | 803 → 801 → 756; target amended from 600 on 2026-11-17, 45 handler sites confirmed convertible (spec 0124) |
+| C7 | Second dedup family | 0121 (folder views only) | Jan | folder views in tree, rest not born | `dup` | ≈ 980 → 906 on 2026-11-17 (spec 0124: API status indicator) → 865 |
 | C3-B | TU excess, `Dashboard.cpp` + `FrameBuilder.cpp` | — | Jan | not born | `tu` | 1,694 → — → 0 |
 
 ## Tasks
@@ -139,6 +139,10 @@ updated: 2026-10-30
 - [ ] done
 
 ### T8 — C3-A: the nine cold TU splits, implemented
+
+> Stale since 2026-11-13: the one-class-one-file-pair rule bans the facade-plus-members split
+> this task describes, and seven cold files remain, not nine. Deletion alone moves none of them
+> under the limit; whether the zero-excess target stands is open (spec 0124, Open Questions).
 
 - **Files:** `doc/claude/specs/NNNN-tu-excess-to-zero/`, `WorkspacesHandler.cpp`,
   `ExtensionManager.cpp`, `Modbus.cpp`, `Audio.cpp`, `MQTT.cpp`, `Publisher.cpp`,

@@ -109,7 +109,6 @@ public:
   [[nodiscard]] int frameCount() const;
   [[nodiscard]] int framePosition() const;
   [[nodiscard]] double progress() const;
-  [[nodiscard]] QString filename() const;
   [[nodiscard]] const QString& timestamp() const;
 
   void shutdown();

@@ -39,6 +39,19 @@ Q_LOGGING_CATEGORY(lcMqttSub, "serialstudio.mqtt.subscriber", QtCriticalMsg)
 
 static constexpr int kMqttDialDeadlineMs = 15000;
 
+/**
+ * @brief Position of @p value in a label-ordered option map, or the map's size when absent.
+ */
+template<typename T>
+[[nodiscard]] static quint8 indexOfValue(const QMap<QString, T>& map, const T& value) noexcept
+{
+  quint8 index = 0;
+  for (auto i = map.begin(); i != map.end() && i.value() != value; ++i)
+    ++index;
+
+  return index;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
@@ -341,15 +354,7 @@ quint16 IO::Drivers::MQTT::keepAlive() const noexcept
  */
 quint8 IO::Drivers::MQTT::mqttVersion() const noexcept
 {
-  quint8 index = 0;
-  for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i) {
-    if (i.value() == m_protocolVersion)
-      break;
-
-    ++index;
-  }
-
-  return index;
+  return indexOfValue(m_mqttVersions, m_protocolVersion);
 }
 
 /**
@@ -357,15 +362,7 @@ quint8 IO::Drivers::MQTT::mqttVersion() const noexcept
  */
 quint8 IO::Drivers::MQTT::sslProtocol() const noexcept
 {
-  quint8 index = 0;
-  for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i) {
-    if (i.value() == m_sslConfiguration.protocol())
-      break;
-
-    ++index;
-  }
-
-  return index;
+  return indexOfValue(m_sslProtocols, m_sslConfiguration.protocol());
 }
 
 /**
@@ -373,15 +370,7 @@ quint8 IO::Drivers::MQTT::sslProtocol() const noexcept
  */
 quint8 IO::Drivers::MQTT::peerVerifyMode() const noexcept
 {
-  quint8 index = 0;
-  for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i) {
-    if (i.value() == m_sslConfiguration.peerVerifyMode())
-      break;
-
-    ++index;
-  }
-
-  return index;
+  return indexOfValue(m_peerVerifyModes, m_sslConfiguration.peerVerifyMode());
 }
 
 /**

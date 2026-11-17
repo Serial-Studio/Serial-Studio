@@ -212,13 +212,7 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 
   hid_set_nonblocking(m_handle, 0);
 
-  const uint16_t up = m_deviceUsagePages.value(m_deviceIndex, 0);
-  const uint16_t u  = m_deviceUsages.value(m_deviceIndex, 0);
-  m_usagePage = up
-                ? QStringLiteral("0x") + QString::number(up, 16).rightJustified(4, QLatin1Char('0'))
-                : QString();
-  m_usage = u ? QStringLiteral("0x") + QString::number(u, 16).rightJustified(4, QLatin1Char('0'))
-              : QString();
+  updateHidUsageCache();
   Q_EMIT deviceInfoChanged();
 
   m_running = true;
@@ -282,13 +276,7 @@ void IO::Drivers::HID::setDeviceIndex(const int index)
     m_deviceIndex = index;
     persistSetting(m_settings, "HID/deviceIndex", index);
 
-    const uint16_t up = m_deviceUsagePages.value(index, 0);
-    const uint16_t u  = m_deviceUsages.value(index, 0);
-    m_usagePage =
-      up ? QStringLiteral("0x") + QString::number(up, 16).rightJustified(4, QLatin1Char('0'))
-         : QString();
-    m_usage = u ? QStringLiteral("0x") + QString::number(u, 16).rightJustified(4, QLatin1Char('0'))
-                : QString();
+    updateHidUsageCache();
 
     Q_EMIT deviceIndexChanged();
     Q_EMIT deviceInfoChanged();

@@ -20,10 +20,11 @@
  */
 
 import QtQuick
+import QtQuick.Controls
 
 //
-// Per-widget swipe-page persistence (spec 0075 G5); the "page" key under the widget's own id is
-// unchanged, so a dashboard laid out by an older build reopens on the page it was left on.
+// Page dots and per-widget swipe-page persistence (spec 0075 G5); the "page" key under the widget's
+// own id is unchanged, so a dashboard laid out by an older build reopens on the page it was left on.
 //
 Item {
   id: root
@@ -31,7 +32,11 @@ Item {
   required property var view
   required property string widgetId
 
-  visible: false
+  anchors.bottomMargin: 4
+  anchors.bottom: parent.bottom
+  implicitWidth: dots.implicitWidth
+  implicitHeight: dots.implicitHeight
+  anchors.horizontalCenter: parent.horizontalCenter
 
   //
   // Suppresses the page auto-save while restore assigns the persisted index
@@ -59,6 +64,30 @@ Item {
 
       Cpp_JSON_ProjectModel.saveWidgetSetting(
             root.widgetId, "page", root.view.currentIndex)
+    }
+  }
+
+  PageIndicator {
+    id: dots
+
+    interactive: true
+    count: root.view.count
+    currentIndex: root.view.currentIndex
+
+    delegate: Rectangle {
+      required property int index
+      implicitWidth: 8
+      implicitHeight: 8
+      radius: width / 2
+      antialiasing: true
+      color: Cpp_ThemeManager.colors["widget_text"]
+      opacity: index === dots.currentIndex ? 0.95 : 0.40
+      Behavior on opacity { NumberAnimation { duration: 120 } }
+    }
+
+    onCurrentIndexChanged: {
+      if (root.view.currentIndex !== currentIndex)
+        root.view.currentIndex = currentIndex
     }
   }
 }

@@ -157,14 +157,11 @@ public:
   [[nodiscard]] int pointCount() const;
   [[nodiscard]] QString statusText() const;
 
-  [[nodiscard]] const QVector<Iec104Point>& points() const noexcept;
   [[nodiscard]] QJsonArray pointsJson() const;
   [[nodiscard]] QJsonArray wireSchema() const;
   [[nodiscard]] QJsonObject statusJson() const;
   [[nodiscard]] QJsonObject buildProject() const;
   [[nodiscard]] bool loadGeneratedProject();
-
-  [[nodiscard]] Q_INVOKABLE QString pointInfo(const int index) const;
 
 public slots:
   void generateProject();
@@ -193,6 +190,7 @@ private:
   void savePoints();
   void reserveFrame();
   void applyProtocolParameters();
+  void changeProtocolParameter(int& member, const int value, const char* key);
   void adoptDiscoveredPoints();
   void drainReceiveBuffer(qint64 nowMs);
   void handleUnnumbered(Iec104Proto::UFunction function, qint64 nowMs);

@@ -129,7 +129,6 @@ Item {
   //
   function formatValue(val) { return ValueFormat.formatValue(model, val) }
   function formatTickValue(val) { return ValueFormat.formatTickValue(model, val) }
-  function getPaddedText(val) { return ValueFormat.getPaddedText(model, val) }
   function getPaddedFormattedText(val) { return ValueFormat.getPaddedFormattedText(model, val) }
 
   //
@@ -158,7 +157,7 @@ Item {
     clip: true
     interactive: true
     anchors.fill: parent
-    anchors.bottomMargin: pageIndicator.height + 4
+    anchors.bottomMargin: swipePages.height + 4
 
     //
     // PAGE 0: Analog bar
@@ -643,151 +642,21 @@ Item {
     //
     // PAGE 1: Big digital readout
     //
-    Item {
-      id: digitalPage
-
-      clip: true
-      visible: opacity > 0
+    DigitalPage {
+      model: root.model
+      accent: root.color
+      title: root.displayTitle
+      titleFrozenOut: root.titleFrozenOut
       opacity: SwipeView.isCurrentItem ? 1.0 : 0.0
-      Behavior on opacity { NumberAnimation { duration: 150 } }
-
-      TextMetrics {
-        id: bigValueMetrics
-
-        font.bold: true
-        font.pixelSize: 100
-        font.family: Cpp_Misc_CommonFonts.monoFont.family
-        text: {
-          const a = root.formatValue(root.model.minValue)
-          const b = root.formatValue(root.model.maxValue)
-          const longer = a.length >= b.length ? a : b
-          return longer + (root.model.units.length > 0 ? " " + root.model.units : "")
-        }
-      }
-
-      readonly property real availableW: Math.max(0, width  - 32)
-      readonly property real availableH: Math.max(0, height - 64)
-      readonly property real bigValueFontPx: {
-        const metricsW = Math.max(8, bigValueMetrics.width)
-        const widthFit  = (digitalPage.availableW * 0.85 / metricsW) * bigValueMetrics.font.pixelSize
-        const heightFit = digitalPage.availableH * 0.50
-        return Math.max(20, Math.min(160, widthFit, heightFit))
-      }
-
-      Rectangle {
-        id: digitalBox
-
-        radius: 4
-        antialiasing: true
-        anchors.centerIn: parent
-        border.width: 1
-        border.color: root.model.alarmTriggered
-                      ? Qt.darker(Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity), 1.20)
-                      : Qt.darker(root.color, 1.30)
-        width: Math.min(parent.width - 16, digitalColumn.implicitWidth + 32)
-        height: Math.min(parent.height - 16, digitalColumn.implicitHeight + 24)
-        color: digitalBox.targetColor
-
-        Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
-
-        readonly property color targetColor: digitalFlash.filled
-                                             ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
-                                             : Cpp_ThemeManager.colors["console_base"]
-
-        AlarmFlash {
-          id: digitalFlash
-
-          hasData: root.model.hasData
-          triggered: root.model.alarmTriggered
-          severity: root.model.activeBandSeverity
-        }
-
-        Column {
-          id: digitalColumn
-
-          spacing: 6
-          anchors.centerIn: parent
-
-          Text {
-            id: bigValueText
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: Math.min(implicitWidth, digitalPage.width - 32)
-            elide: Text.ElideRight
-            horizontalAlignment: Text.AlignHCenter
-            text: getPaddedText(root.model.value)
-            font.family: Cpp_Misc_CommonFonts.monoFont.family
-            font.bold: true
-            font.pixelSize: digitalPage.bigValueFontPx
-            color: digitalFlash.filled
-                   ? digitalFlash.ink
-                   : (root.model.alarmTriggered
-                      ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
-                      : root.color)
-            Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
-          }
-
-          Text {
-            opacity: 0.80
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: Math.min(implicitWidth, digitalPage.width - 32)
-            elide: Text.ElideRight
-            horizontalAlignment: Text.AlignHCenter
-            text: root.displayTitle
-            visible: root.displayTitle.length > 0 && !root.titleFrozenOut
-            color: digitalFlash.filled
-                   ? digitalFlash.ink
-                   : (root.model.alarmTriggered
-                      ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
-                      : root.color)
-            font.family: Cpp_Misc_CommonFonts.monoFont.family
-            font.pixelSize: bigValueText.font.pixelSize * 0.30
-            Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
-          }
-        }
-      }
-
-      HdrBoost {
-        target: digitalBox
-        anchors.fill: digitalBox
-        active: digitalFlash.filled && digitalFlash.hasData
-        boost: digitalFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrFlashIntensity
-                                     : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
-      }
     }
   }
 
   //
-  // Page indicator
+  // Page dots and per-widget page persistence
   //
-  PageIndicator {
-    id: pageIndicator
-
-    interactive: true
-    count: swipeView.count
-    anchors.bottomMargin: 4
-    anchors.bottom: parent.bottom
-    currentIndex: swipeView.currentIndex
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    delegate: Rectangle {
-      required property int index
-      implicitWidth: 8
-      implicitHeight: 8
-      radius: width / 2
-      antialiasing: true
-      color: Cpp_ThemeManager.colors["widget_text"]
-      opacity: index === pageIndicator.currentIndex ? 0.95 : 0.40
-      Behavior on opacity { NumberAnimation { duration: 120 } }
-    }
-
-    onCurrentIndexChanged: {
-      if (swipeView.currentIndex !== currentIndex)
-        swipeView.currentIndex = currentIndex
-    }
-  }
-
   SwipePages {
+    id: swipePages
+
     view: swipeView
     widgetId: root.widgetId
   }

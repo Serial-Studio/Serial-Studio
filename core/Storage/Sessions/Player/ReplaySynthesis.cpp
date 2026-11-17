@@ -87,16 +87,8 @@ void Sessions::ReplaySynthesis::anchorSteadyBase(double rowSeconds)
  */
 void Sessions::ReplaySynthesis::replayFrameAt(qint64 timestampNs)
 {
-  const auto frame = buildFrameAt(timestampNs);
+  const auto frame = m_reader.readFrameValues(timestampNs, m_layout);
   injectFrame(frame, timestampNs);
-}
-
-/**
- * @brief Reads the replayed cells for @p timestampNs, plus the sources they belong to.
- */
-Sessions::ReplayRowValues Sessions::ReplaySynthesis::buildFrameAt(qint64 timestampNs)
-{
-  return m_reader.readFrameValues(timestampNs, m_layout);
 }
 
 /**

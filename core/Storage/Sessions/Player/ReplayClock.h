@@ -31,7 +31,6 @@ public:
   explicit ReplayClock();
 
   [[nodiscard]] double baseRowSeconds() const noexcept;
-  [[nodiscard]] std::chrono::steady_clock::time_point base() const noexcept;
   [[nodiscard]] std::chrono::steady_clock::time_point timestampFor(qint64 timestampNs) const;
 
   void anchor(double rowSeconds);

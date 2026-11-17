@@ -1144,7 +1144,10 @@ void IO::Drivers::Modbus::onReadReady()
 }
 
 /**
- * @brief Handles Modbus device state changes by starting/stopping the poll timer.
+ * @brief Handles Modbus device state changes by starting/stopping the poll timer. A dial that
+ *        falls back to UnconnectedState is a real failure for both protocols (the endpoint
+ *        pre-probe already waited out any server-bind race): failDial() reports it once and arms
+ *        the slow TCP re-dial, never a fast retry.
  */
 void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
 {
@@ -1164,26 +1167,13 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
       m_pollTimer->stop();
 
     if (m_connecting)
-      handleDialSetback();
+      failDial(m_device->errorString());
     else
       m_redial.reportDrop(
         messageBus(), m_dialTarget, m_device->errorString(), m_protocolIndex == 1);
   }
 
   Q_EMIT configurationChanged();
-}
-
-/**
- * @brief Fails a dial whose attempt fell back to UnconnectedState. The endpoint pre-probe has
- *        already waited out any server-bind race, so a setback here is a real failure for both
- *        protocols: report once; failDial() then arms the slow TCP re-dial, never a fast retry.
- */
-void IO::Drivers::Modbus::handleDialSetback()
-{
-  if (!m_connecting)
-    return;
-
-  failDial(m_device ? m_device->errorString() : QString());
 }
 
 /**

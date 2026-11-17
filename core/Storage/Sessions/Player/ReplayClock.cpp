@@ -29,14 +29,6 @@ double Sessions::ReplayClock::baseRowSeconds() const noexcept
 }
 
 /**
- * @brief Returns the steady-clock instant the anchor was taken at.
- */
-std::chrono::steady_clock::time_point Sessions::ReplayClock::base() const noexcept
-{
-  return m_base;
-}
-
-/**
  * @brief Steady timestamp for @p timestampNs: the anchor advanced by the recorded delta.
  */
 std::chrono::steady_clock::time_point Sessions::ReplayClock::timestampFor(qint64 timestampNs) const

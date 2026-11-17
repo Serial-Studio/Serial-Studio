@@ -248,17 +248,6 @@ double Sessions::Player::progress() const
 }
 
 /**
- * @brief Returns the short filename of the loaded database.
- */
-QString Sessions::Player::filename() const
-{
-  if (!m_filePath.isEmpty())
-    return QFileInfo(m_filePath).fileName();
-
-  return QString();
-}
-
-/**
  * @brief Returns the formatted timestamp of the current frame.
  */
 const QString& Sessions::Player::timestamp() const

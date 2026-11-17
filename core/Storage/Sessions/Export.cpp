@@ -379,7 +379,7 @@ void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
   pragma.exec("PRAGMA synchronous=NORMAL");
   pragma.exec("PRAGMA busy_timeout=5000");
 
-  createSchema(pragma);
+  DatabaseManager::createSchema(pragma);
 
   insertSession(frame, dt);
   if (m_sessionId < 0) [[unlikely]] {
@@ -398,14 +398,6 @@ void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
 
   m_dbOpen = true;
   Q_EMIT resourceOpenChanged();
-}
-
-/**
- * @brief Delegates to DatabaseManager::createSchema for a single source of truth.
- */
-void Sessions::ExportWorker::createSchema(QSqlQuery& q)
-{
-  DatabaseManager::createSchema(q);
 }
 
 /**

@@ -118,7 +118,6 @@ private:
   void refreshSessionListInternal();
   void refreshTagListInternal();
   void refreshLockStateInternal();
-  void ensureSchemaInternal();
 
   [[nodiscard]] QVariantList tagsForSession(int sessionId);
   [[nodiscard]] static QString formatDateForDisplay(const QString& isoDate);

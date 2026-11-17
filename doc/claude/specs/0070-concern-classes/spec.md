@@ -23,7 +23,7 @@ boundary -- a class that owns its state, or a namespace of free functions that o
 ## What the evidence says
 
 Two matrices were built over the 0069 decomposition
-(`decomposition-guide.md`, `decomposition-data.json`):
+(`decomposition-guide.md`):
 
 - **Member usage** -- which concern touches which data member.
 - **Call coupling** -- which facade methods each concern calls.
