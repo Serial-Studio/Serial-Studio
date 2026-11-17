@@ -254,7 +254,7 @@ class Sandbox:
     def baseline(self) -> None:
         self.control_before = self._control_code()
         self.marker_before = self._marker_size()
-        self.table_before = self._read_register() if self.has_table else None
+        self.table_before = self._settled_register() if self.has_table else None
         self.notifications_before = self._notification_count()
 
     # -- observations -------------------------------------------------------

@@ -144,17 +144,23 @@ void TstSimpleCrypt::missingKeyIsReported()
 
 /**
  * @brief Two encryptions of the same plaintext differ, so a settings file does not reveal that
- *        two providers share a key.
+ *        two providers share a key. The variation is one random byte, so a single pair matches
+ *        1 time in 256; the check takes several encryptions and needs one that differs.
  */
 void TstSimpleCrypt::repeatedEncryptionProducesDifferentCiphertext()
 {
-  auto crypt        = makeCrypt(0x4444444444444444ULL);
-  const auto first  = crypt.encryptToString(QStringLiteral("same-input"));
-  const auto second = crypt.encryptToString(QStringLiteral("same-input"));
-
+  auto crypt       = makeCrypt(0x4444444444444444ULL);
+  const auto first = crypt.encryptToString(QStringLiteral("same-input"));
   QVERIFY(!first.isEmpty());
-  QVERIFY(first != second);
-  QCOMPARE(crypt.decryptToString(first), crypt.decryptToString(second));
+
+  bool differs = false;
+  for (int i = 0; i < 16 && !differs; ++i) {
+    const auto next = crypt.encryptToString(QStringLiteral("same-input"));
+    QCOMPARE(crypt.decryptToString(next), crypt.decryptToString(first));
+    differs = next != first;
+  }
+
+  QVERIFY(differs);
 }
 
 QTEST_APPLESS_MAIN(TstSimpleCrypt)

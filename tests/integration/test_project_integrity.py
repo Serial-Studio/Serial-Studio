@@ -379,7 +379,10 @@ def test_corrupt_external_write_keeps_document_attached(
 
     snapshot = _wait_for_modified(api_client)
     assert snapshot["filePath"] == str(path)
-    assert snapshot["modified"] is True
+    on_disk = path.read_text(encoding="utf-8", errors="replace")[:40]
+    assert (
+        snapshot["modified"] is True
+    ), f"the external write was never reported; the file now starts with {on_disk!r}"
 
     _save_to(api_client, path)
     assert json.loads(path.read_text())["title"] == "ExternalWrite"

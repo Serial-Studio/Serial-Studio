@@ -336,6 +336,9 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
   if (m_windows.contains(win))
   {
     NSWindow *tracked = nsWindowOf(win);
+    if (!tracked)
+      return;
+
     if (lostIntegratedTitlebar(tracked))
       applyMacOSWindowStyleToNSWindow(tracked, color);
 
