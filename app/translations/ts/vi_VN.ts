@@ -5833,7 +5833,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="306"/>
         <source>Dashboard %1</source>
         <translation>Bảng Điều Khiển %1</translation>
     </message>
@@ -6039,22 +6039,22 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Giá Trị</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Pause</source>
         <translation>Tạm Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Resume</source>
         <translation>Tiếp Tục</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <source>Awaiting data…</source>
         <translation>Đang chờ dữ liệu…</translation>
     </message>
@@ -7445,8 +7445,8 @@ Thêm %4 dataset sử dụng giá trị mặc định của mẫu?</translation>
         <translation>Volt, Ampe, v.v.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <source>Automatic</source>
         <translation>Tự Động</translation>
     </message>
@@ -11264,7 +11264,7 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="255"/>
         <source>The widget could not be created.</source>
         <translation>Không thể tạo widget.</translation>
     </message>
@@ -17747,37 +17747,37 @@ Cảm ơn bạn một lần nữa vì đã ủng hộ Serial Studio!</translatio
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="218"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="225"/>
         <source>Console Only Mode</source>
         <translation>Chế Độ Chỉ Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="221"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
         <source>Quick Plot Mode</source>
         <translation>Chế Độ Vẽ Đồ Thị Nhanh</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="235"/>
         <source>Empty Project</source>
         <translation>Dự Án Trống</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="701"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="708"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="709"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="716"/>
         <source>Waiting for data…</source>
         <translation>Đang chờ dữ liệu…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="710"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="717"/>
         <source>Connecting to device…</source>
         <translation>Đang kết nối với thiết bị…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
         <source>Command Palette</source>
         <translation>Bảng Lệnh</translation>
     </message>
@@ -18678,8 +18678,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Không thể tạo cấu trúc thư mục bundle .app.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Trình ghi lối tắt Windows không khả dụng trên nền tảng này.</translation>
     </message>
@@ -18710,8 +18710,8 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Lưu tệp .lnk thất bại (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Trình tạo lối tắt macOS không khả dụng trên nền tảng này.</translation>
     </message>
@@ -19413,39 +19413,39 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <source>Bytes per value</source>
         <translation>Số byte trên mỗi giá trị</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Số byte được kết hợp thành mỗi giá trị kênh.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="312"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>Thứ Tự Byte</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Thứ tự byte được sử dụng khi kết hợp các giá trị nhiều byte.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <source>Signed values</source>
         <translation>Giá trị có dấu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Diễn giải mỗi giá trị dưới dạng số có dấu bù hai.</translation>
     </message>
@@ -19460,9 +19460,9 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Các mục tag:index phân tách bằng dấu phẩy, ví dụ 1:0,2:1,3:2. Thẻ có thể là số thập phân hoặc số hex có tiền tố 0x.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Xác thực checksum</translation>
     </message>
@@ -19748,8 +19748,8 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Tên tham số phân tách bằng dấu phẩy. Vị trí của mỗi khóa xác định chỉ số kênh của nó.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="369"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <source>Fields (in channel order)</source>
         <translation>Trường (theo thứ tự kênh)</translation>
     </message>
@@ -21768,8 +21768,8 @@ Tải lại tệp?</translation>
         <translation>Bạn có muốn xóa widget đầu ra "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Hành động này không thể hoàn tác. Bạn có muốn tiếp tục không?</translation>
     </message>
@@ -22096,17 +22096,17 @@ Tải lại tệp?</translation>
         <translation>Hồ Sơ Không Gian Làm Việc Mới</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="97"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="393"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="421"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="449"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="472"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="799"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="825"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
         <source>Name:</source>
         <translation>Tên:</translation>
     </message>
@@ -22317,15 +22317,15 @@ Tải lại tệp?</translation>
         <translation>Thay Đổi Làn Luồng</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="385"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="801"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>Workspace</source>
         <translation>Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>New Workspace</source>
         <translation>Không Gian Làm Việc Mới</translation>
     </message>
@@ -22441,15 +22441,15 @@ Tải lại tệp?</translation>
         <translation>Di Chuyển Bảng</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>New Variables Table</source>
         <translation>Bảng Biến Mới</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>Variables Table</source>
         <translation>Bảng Biến</translation>
     </message>
@@ -22854,12 +22854,12 @@ Tải lại tệp?</translation>
         <translation>Cảnh Báo</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="982"/>
+        <location filename="../../src/Misc/CLI.cpp" line="997"/>
         <source>Project file not found</source>
         <translation>Không tìm thấy tệp dự án</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="983"/>
+        <location filename="../../src/Misc/CLI.cpp" line="998"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -22868,17 +22868,17 @@ Tải lại tệp?</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="986"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1001"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Bạn có muốn xóa lối tắt này không?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="990"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1005"/>
         <source>Delete Shortcut</source>
         <translation>Xóa Lối Tắt</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="992"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1007"/>
         <source>Quit</source>
         <translation>Thoát</translation>
     </message>
@@ -22999,8 +22999,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="554"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Bộ Phân Tích Frame Đã Tắt</translation>
     </message>
@@ -23066,8 +23066,8 @@ Serial Studio có thể viết lại các toán tử không được hỗ trợ 
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="752"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Thiếu Hàm Parse</translation>
     </message>
@@ -23083,8 +23083,8 @@ Vui lòng đảm bảo mã của bạn bao gồm:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="815"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Lỗi Runtime Hàm Parse</translation>
     </message>

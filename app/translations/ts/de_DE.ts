@@ -5833,7 +5833,7 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="306"/>
         <source>Dashboard %1</source>
         <translation>Dashboard %1</translation>
     </message>
@@ -6039,22 +6039,22 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation>Wert</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Pause</source>
         <translation>Pausieren</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <source>Awaiting data…</source>
         <translation>Warte auf Daten…</translation>
     </message>
@@ -7415,8 +7415,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Im Dashboard ausblenden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <source>Automatic</source>
         <translation>Automatisch</translation>
     </message>
@@ -11264,7 +11264,7 @@ Fügen Sie oben Controller-Tags hinzu, um sie abzufragen.</translation>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="255"/>
         <source>The widget could not be created.</source>
         <translation>Das Widget konnte nicht erstellt werden.</translation>
     </message>
@@ -17748,37 +17748,37 @@ Vielen Dank für Ihre Unterstützung von Serial Studio!</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="218"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="225"/>
         <source>Console Only Mode</source>
         <translation>Nur-konsole-modus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="221"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
         <source>Quick Plot Mode</source>
         <translation>Schnelldiagramm-modus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="235"/>
         <source>Empty Project</source>
         <translation>Leeres Projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="701"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="708"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="709"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="716"/>
         <source>Waiting for data…</source>
         <translation>Warte auf Daten…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="710"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="717"/>
         <source>Connecting to device…</source>
         <translation>Verbinde mit Gerät…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
         <source>Command Palette</source>
         <translation>Befehlspalette</translation>
     </message>
@@ -18679,8 +18679,8 @@ Download-Seite öffnen?</translation>
         <translation>Info.plist konnte nicht geschrieben werden: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows-Verknüpfungsschreiber ist auf dieser Plattform nicht verfügbar.</translation>
     </message>
@@ -18711,8 +18711,8 @@ Download-Seite öffnen?</translation>
         <translation>Speichern der .lnk-Datei fehlgeschlagen (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS-Verknüpfungsschreiber ist auf dieser Plattform nicht verfügbar.</translation>
     </message>
@@ -19414,39 +19414,39 @@ Fügen Sie oben Gruppen hinzu, um mehrere Registertypen abzufragen.</translation
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <source>Bytes per value</source>
         <translation>Bytes pro Wert</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Anzahl der Bytes, die zu jedem Kanalwert kombiniert werden.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="312"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>Byte-reihenfolge</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Byte-Reihenfolge beim Kombinieren von Mehrbytwerten.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <source>Signed values</source>
         <translation>Vorzeichenbehaftete Werte</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Interpretiert jeden Wert als vorzeichenbehaftetes Zweierkomplement.</translation>
     </message>
@@ -19461,9 +19461,9 @@ Fügen Sie oben Gruppen hinzu, um mehrere Registertypen abzufragen.</translation
         <translation>Kommagetrennte Tag:Index-Einträge, z. B. 1:0,2:1,3:2. Tags können dezimal oder mit 0x-Präfix hexadezimal sein.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Prüfsumme validieren</translation>
     </message>
@@ -19749,8 +19749,8 @@ Fügen Sie oben Gruppen hinzu, um mehrere Registertypen abzufragen.</translation
         <translation>Kommagetrennte Parameternamen. Die Position jedes Schlüssels legt seinen Kanalindex fest.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="369"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <source>Fields (in channel order)</source>
         <translation>Felder (in Kanalreihenfolge)</translation>
     </message>
@@ -21769,8 +21769,8 @@ Neu laden?</translation>
         <translation>Ausgabe-Widget „%1" löschen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?</translation>
     </message>
@@ -22097,17 +22097,17 @@ Neu laden?</translation>
         <translation>Neues Arbeitsbereichsprofil</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="97"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="393"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="421"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="449"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="472"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="799"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="825"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
@@ -22318,15 +22318,15 @@ Neu laden?</translation>
         <translation>Stream-lane Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="385"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="801"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>Workspace</source>
         <translation>Arbeitsbereich</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>New Workspace</source>
         <translation>Neuer Arbeitsbereich</translation>
     </message>
@@ -22442,15 +22442,15 @@ Neu laden?</translation>
         <translation>Tabelle Verschieben</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>New Variables Table</source>
         <translation>Neue Variablentabelle</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>Variables Table</source>
         <translation>Variablentabelle</translation>
     </message>
@@ -22932,8 +22932,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="554"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Deaktiviert</translation>
     </message>
@@ -22999,8 +22999,8 @@ Serial Studio kann die nicht unterstützten Operatoren als bit.*-Aufrufe umschre
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="752"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Fehlende Parse-funktion</translation>
     </message>
@@ -23016,8 +23016,8 @@ Bitte stellen Sie sicher, dass Ihr Code Folgendes enthält:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="815"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Laufzeitfehler der Parse-funktion</translation>
     </message>
@@ -23173,12 +23173,12 @@ Der Trennzeichen-Parameter wird nicht mehr benötigt.</translation>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="982"/>
+        <location filename="../../src/Misc/CLI.cpp" line="997"/>
         <source>Project file not found</source>
         <translation>Projektdatei nicht gefunden</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="983"/>
+        <location filename="../../src/Misc/CLI.cpp" line="998"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -23187,17 +23187,17 @@ Der Trennzeichen-Parameter wird nicht mehr benötigt.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="986"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1001"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Soll diese Verknüpfung gelöscht werden?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="990"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1005"/>
         <source>Delete Shortcut</source>
         <translation>Verknüpfung Löschen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="992"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1007"/>
         <source>Quit</source>
         <translation>Beenden</translation>
     </message>

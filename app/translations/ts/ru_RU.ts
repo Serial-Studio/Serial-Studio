@@ -5833,7 +5833,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="306"/>
         <source>Dashboard %1</source>
         <translation>Панель %1</translation>
     </message>
@@ -6039,22 +6039,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="107"/>
         <source>Resume</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="322"/>
         <source>Awaiting data…</source>
         <translation>Ожидание данных…</translation>
     </message>
@@ -7415,8 +7415,8 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Скрыть на Панели</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputValueRows.cpp" line="309"/>
         <source>Automatic</source>
         <translation>Автоматически</translation>
     </message>
@@ -11264,7 +11264,7 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="255"/>
         <source>The widget could not be created.</source>
         <translation>Не удалось создать виджет.</translation>
     </message>
@@ -17749,37 +17749,37 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="218"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="225"/>
         <source>Console Only Mode</source>
         <translation>Режим Только Консоль</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="221"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
         <source>Quick Plot Mode</source>
         <translation>Режим Быстрых Графиков</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="235"/>
         <source>Empty Project</source>
         <translation>Пустой Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="701"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="708"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="709"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="716"/>
         <source>Waiting for data…</source>
         <translation>Ожидание данных…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="710"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="717"/>
         <source>Connecting to device…</source>
         <translation>Подключение к устройству…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
         <source>Command Palette</source>
         <translation>Палитра Команд</translation>
     </message>
@@ -18680,8 +18680,8 @@ Would you like to open the download page?</source>
         <translation>Не удалось записать Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Средство создания ярлыков Windows недоступно на этой платформе.</translation>
     </message>
@@ -18712,8 +18712,8 @@ Would you like to open the download page?</source>
         <translation>Сбой сохранения файла .lnk (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Средство создания ярлыков macOS недоступно на этой платформе.</translation>
     </message>
@@ -19415,39 +19415,39 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <source>Bytes per value</source>
         <translation>Байт на значение</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Количество байт, объединяемых в каждое значение канала.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp" line="312"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>Порядок Байтов</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Порядок байтов, используемый при объединении многобайтовых значений.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <source>Signed values</source>
         <translation>Знаковые значения</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Интерпретирует каждое значение как знаковое в дополнительном коде.</translation>
     </message>
@@ -19462,9 +19462,9 @@ Add groups above to poll multiple register types.</source>
         <translation>Записи тег:индекс через запятую, например 1:0,2:1,3:2. Теги могут быть десятичными или шестнадцатеричными с префиксом 0x.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Проверить контрольную сумму</translation>
     </message>
@@ -19750,8 +19750,8 @@ Add groups above to poll multiple register types.</source>
         <translation>Имена параметров, разделённые запятыми. Позиция каждого ключа задаёт его индекс канала.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="369"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
         <source>Fields (in channel order)</source>
         <translation>Поля (в порядке каналов)</translation>
     </message>
@@ -21770,8 +21770,8 @@ Reload it?</source>
         <translation>Удалить виджет вывода "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="113"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Это действие невозможно отменить. Продолжить?</translation>
     </message>
@@ -22098,17 +22098,17 @@ Reload it?</source>
         <translation>Новый Профиль Рабочего Пространства</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="97"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="393"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="421"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="449"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="472"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="799"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="825"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="88"/>
         <source>Name:</source>
         <translation>Название:</translation>
     </message>
@@ -22319,15 +22319,15 @@ Reload it?</source>
         <translation>Изменить Полосу Потока</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="385"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="801"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>Workspace</source>
         <translation>Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="552"/>
         <source>New Workspace</source>
         <translation>Новое Рабочее Пространство</translation>
     </message>
@@ -22443,15 +22443,15 @@ Reload it?</source>
         <translation>Переместить Таблицу</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>New Variables Table</source>
         <translation>Новая Таблица Переменных</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="979"/>
         <source>Variables Table</source>
         <translation>Таблица Переменных</translation>
     </message>
@@ -22934,8 +22934,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="554"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Парсер Кадров Отключён</translation>
     </message>
@@ -23001,8 +23001,8 @@ Serial Studio может переписать неподдерживаемые �
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="752"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Отсутствует Функция Parse</translation>
     </message>
@@ -23018,8 +23018,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="815"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Ошибка Выполнения Функции Parse</translation>
     </message>
@@ -23175,12 +23175,12 @@ function parse(%1) { ... }
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="982"/>
+        <location filename="../../src/Misc/CLI.cpp" line="997"/>
         <source>Project file not found</source>
         <translation>Файл проекта не найден</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="983"/>
+        <location filename="../../src/Misc/CLI.cpp" line="998"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -23189,17 +23189,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="986"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1001"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Удалить этот ярлык?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="990"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1005"/>
         <source>Delete Shortcut</source>
         <translation>Удалить Ярлык</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="992"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1007"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
