@@ -166,7 +166,12 @@ Widgets.SmartWindow {
       dashboard.loadLayout()
     }
 
-    if (typeof CLI_START_FULLSCREEN !== "undefined" && CLI_START_FULLSCREEN)
+    if (root.kioskMode) {
+      Cpp_NativeWindow.setKioskLock(true)
+      root.showKiosk(null)
+    }
+
+    else if (typeof CLI_START_FULLSCREEN !== "undefined" && CLI_START_FULLSCREEN)
       root.showFullScreen()
     else
       root.displayWindow()
@@ -202,7 +207,9 @@ Widgets.SmartWindow {
           && CLI_HIDE_TOOLBAR)
         mainWindow.toolbarVisible = false
 
-      if (typeof CLI_START_FULLSCREEN !== "undefined" && CLI_START_FULLSCREEN)
+      if (!root.kioskFill
+          && typeof CLI_START_FULLSCREEN !== "undefined"
+          && CLI_START_FULLSCREEN)
         mainWindow.showFullScreen()
     }
   }

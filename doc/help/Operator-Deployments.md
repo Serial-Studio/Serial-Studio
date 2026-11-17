@@ -212,6 +212,7 @@ Flags marked (Pro) exist only in commercial builds; a GPL build rejects the whol
 | `--no-taskbar-search` | Hide the taskbar search bar in runtime mode (Pro). |
 | `--profile <name>`  | Open the project under the named [workspace profile](Project-Editor.md#workspace-profiles). |
 | `-f, --fullscreen`  | Launch the dashboard full-screen. Available in GPL builds. |
+| `--kiosk`           | Kiosk display in runtime mode (Pro), in place of `--fullscreen`: borderless windows that fill their screens, external windows on other screens included, and on macOS no Dock, menu bar, app switching or Force Quit while Serial Studio is frontmost. Command line only; a deployment package does not carry it. See the [CLI reference](Command-Line-Interface.md). |
 | `--no-toolbar`      | Hide the toolbar without enabling runtime behaviour (Pro). Useful for embedded HMIs that have their own chrome. |
 | `--csv-export`      | Pre-arm CSV export (Pro). |
 | `--mdf-export`      | Pre-arm MDF4 export (Pro). |

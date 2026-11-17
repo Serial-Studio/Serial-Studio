@@ -210,6 +210,15 @@ void NativeWindow::setCsdEnabled(bool enabled)
  */
 void NativeWindow::installMacOSQuitInterceptor() {}
 
+/**
+ * @brief No-op off macOS: the kiosk lock (--kiosk) hides the Dock and menu bar through AppKit,
+ *        and the other desktops have no per-application equivalent.
+ */
+void NativeWindow::setKioskLock(bool enabled)
+{
+  Q_UNUSED(enabled)
+}
+
 //--------------------------------------------------------------------------------------------------
 // Window management
 //--------------------------------------------------------------------------------------------------

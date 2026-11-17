@@ -43,6 +43,9 @@ Window {
   // Toggle real OS fullscreen, remembering prior visibility for restore
   //
   function toggleFullScreen() {
+    if (root.kioskFill)
+      return
+
     if (root.visibility === Window.FullScreen) {
       if (root.preFullscreenVisibility === Window.Maximized)
         root.showMaximized()
@@ -52,6 +55,53 @@ Window {
       root.preFullscreenVisibility = root.visibility
       root.showFullScreen()
     }
+  }
+
+  //
+  // Kiosk display (--kiosk): a window that fills its screen without a frame. kioskGeometry is
+  // the screen it took, so an external window saved on that same screen stays a floating one.
+  //
+  property bool kioskFill: false
+  property rect kioskGeometry: Qt.rect(0, 0, 0, 0)
+  readonly property bool kioskMode: typeof CLI_KIOSK !== "undefined" && CLI_KIOSK
+
+  //
+  // Geometry of the screen holding a point; by position, not by name, since two monitors of
+  // the same model report the same name
+  //
+  function screenGeometryAt(px, py) {
+    for (let i = 0; i < Cpp_ScreenList.length; ++i) {
+      let g = Cpp_ScreenList[i].geometry
+      if (px >= g.x && px < g.x + g.width && py >= g.y && py < g.y + g.height)
+        return g
+    }
+
+    return Cpp_PrimaryScreen.geometry
+  }
+
+  //
+  // Fills the screen under the window's saved position. Returns false with nothing done
+  // outside kiosk mode, or when that screen is the one `taken` already fills.
+  //
+  function showKiosk(taken) {
+    if (!root.kioskMode)
+      return false
+
+    const g = root.screenGeometryAt(root.x + root.width / 2, root.y + root.height / 2)
+    if (taken && taken.width > 0 && taken.x === g.x && taken.y === g.y)
+      return false
+
+    root.kioskFill = true
+    root.kioskGeometry = Qt.rect(g.x, g.y, g.width, g.height)
+    root.flags = Qt.Window | Qt.FramelessWindowHint
+    root.x = g.x
+    root.y = g.y
+    root.width = g.width
+    root.height = g.height
+    root.showNormal()
+    root.raise()
+    root.requestActivate()
+    return true
   }
 
   //
@@ -199,6 +249,7 @@ Window {
       if (root.visibility === Window.Maximized) {
         root.isMaximized = true
       } else if (root.isMaximized
+                 && !root.kioskFill
                  && root.visibility !== Window.Minimized
                  && root.visibility !== Window.FullScreen) {
         root.isMaximized = false
@@ -220,6 +271,7 @@ Window {
     repeat: false
     onTriggered: {
       if (!root.isMaximized && root.visible
+          && !root.kioskFill
           && root.visibility !== Window.Maximized
           && root.visibility !== Window.FullScreen) {
         root.previousX = root.x
@@ -240,10 +292,10 @@ Window {
 
   //
   // Close shortcut; yields to an open command palette in this window, whose own Cmd+W/Ctrl+W
-  // handler would otherwise turn the sequence into an ambiguous no-op for both.
+  // handler would otherwise turn the sequence into an ambiguous no-op for both; off on a kiosk
   //
   Shortcut {
-    enabled: !root.paletteOpen
+    enabled: !root.paletteOpen && !root.kioskFill
     sequences: [StandardKey.Close]
     onActivated: root.close()
   }

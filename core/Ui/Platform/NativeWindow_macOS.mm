@@ -23,6 +23,7 @@
 #include "Misc/ThemeManager.h"
 
 #include <QColor>
+#include <QDebug>
 #include <QGuiApplication>
 #include <QHash>
 #include <QWindow>
@@ -135,6 +136,36 @@ void NativeWindow::installMacOSQuitInterceptor()
 }
 
 /**
+ * @brief Kiosk lock (--kiosk): hides the Dock and the menu bar and disables app switching, Force
+ * Quit, Hide, the Apple menu and logout while this application is frontmost; AppKit rejects an
+ * invalid option set with an exception, which must not take an operator session down.
+ */
+void NativeWindow::setKioskLock(bool enabled)
+{
+  if (QGuiApplication::platformName() != QStringLiteral("cocoa"))
+    return;
+
+  NSApplicationPresentationOptions options = NSApplicationPresentationDefault;
+  if (enabled)
+    options = NSApplicationPresentationHideDock | NSApplicationPresentationHideMenuBar
+            | NSApplicationPresentationDisableAppleMenu
+            | NSApplicationPresentationDisableProcessSwitching
+            | NSApplicationPresentationDisableForceQuit
+            | NSApplicationPresentationDisableSessionTermination
+            | NSApplicationPresentationDisableHideApplication;
+
+  @try
+  {
+    [NSApp setPresentationOptions:options];
+  }
+  @catch (NSException *exception)
+  {
+    qWarning() << "[NativeWindow] Kiosk lock rejected:"
+               << QString::fromNSString([exception reason]);
+  }
+}
+
+/**
  * @brief Retrieves the height of the title bar; must never force platform-window creation,
  * since materializing a hidden dialog centers it over its still-unpolished transient parent
  * and Cocoa then warns about an off-screen position.
@@ -148,6 +179,9 @@ int NativeWindow::titlebarHeight(QObject *window)
   NSWindow *w = nsWindowOf(win);
   if (!w)
     return 32;
+
+  if (!([w styleMask] & NSWindowStyleMaskTitled))
+    return 0;
 
   if (([w styleMask] & NSWindowStyleMaskFullScreen))
     return 0;
@@ -230,12 +264,19 @@ static void applyMacOSWindowAppearance(NSWindow *w, const QString &requested)
 }
 
 /**
- * @brief Applies the integrated-titlebar style to a raw NSWindow.
+ * @brief Applies the integrated-titlebar style to a raw NSWindow; a borderless window (a kiosk
+ * surface) has no titlebar to integrate and only gets its appearance pinned.
  */
 static void applyMacOSWindowStyleToNSWindow(NSWindow *w, const QString &color)
 {
   if (!w)
     return;
+
+  if (!([w styleMask] & NSWindowStyleMaskTitled))
+  {
+    applyMacOSWindowAppearance(w, color);
+    return;
+  }
 
   [w setStyleMask:([w styleMask] | NSWindowStyleMaskFullSizeContentView)];
   [w setTitlebarAppearsTransparent:YES];
@@ -260,9 +301,27 @@ static void applyMacOSWindowStyle(QWindow *win, const QString &color)
 }
 
 /**
+ * @brief True when a titled window outside fullscreen no longer carries the full-size content
+ * view: Qt rebuilds the style mask from the window hints on every flags write (a pop-out gaining
+ * stay-on-top under a fullscreen dashboard), which drops the integrated titlebar.
+ */
+static bool lostIntegratedTitlebar(NSWindow *w)
+{
+  if (!w)
+    return false;
+
+  const NSWindowStyleMask mask = [w styleMask];
+  if (!(mask & NSWindowStyleMaskTitled) || (mask & NSWindowStyleMaskFullScreen))
+    return false;
+
+  return !(mask & NSWindowStyleMaskFullSizeContentView);
+}
+
+/**
  * @brief Initializes the native window customization for macOS; for a window that is already
  * tracked only the appearance is refreshed, because re-running setStyleMask resets the
- * NSWindow first responder, dropping keyboard focus from the active text field.
+ * NSWindow first responder, dropping keyboard focus from the active text field. The one
+ * exception is a tracked window whose integrated titlebar a flags write has just dropped.
  */
 void NativeWindow::addWindow(QObject *window, const QString &color)
 {
@@ -276,7 +335,13 @@ void NativeWindow::addWindow(QObject *window, const QString &color)
   m_colors.insert(win, color);
   if (m_windows.contains(win))
   {
-    applyMacOSWindowAppearance(nsWindowOf(win), color);
+    NSWindow *tracked = nsWindowOf(win);
+    if (lostIntegratedTitlebar(tracked))
+      applyMacOSWindowStyleToNSWindow(tracked, color);
+
+    else
+      applyMacOSWindowAppearance(tracked, color);
+
     return;
   }
 

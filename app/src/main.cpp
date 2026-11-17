@@ -96,6 +96,7 @@ static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
 
   const auto ctx = moduleManager.engine().rootContext();
   ctx->setContextProperty("CLI_START_FULLSCREEN", cli.fullscreen());
+  ctx->setContextProperty("CLI_KIOSK", cli.kiosk());
   ctx->setContextProperty("CLI_HIDE_TOOLBAR", cli.hideToolbar());
   ctx->setContextProperty("CLI_RUNTIME_MODE", cli.runtimeMode());
   ctx->setContextProperty("CLI_DEPLOYMENT_TITLE", cli.deploymentTitle());

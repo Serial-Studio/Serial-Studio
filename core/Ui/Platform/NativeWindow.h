@@ -59,6 +59,7 @@ public slots:
   void removeWindow(QObject* window);
   void addWindow(QObject* window, const QString& color = "");
   void setCsdEnabled(bool enabled);
+  void setKioskLock(bool enabled);
 
 private slots:
   void onThemeChanged();

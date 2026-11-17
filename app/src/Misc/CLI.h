@@ -165,6 +165,11 @@ struct CliOptions {
   QCommandLineOption noToolbarOpt{"no-toolbar", "Hides the main window toolbar at startup (Pro)"};
   QCommandLineOption runtimeOpt{"runtime",
                                 "Operator runtime mode: hides toolbar, quits on disconnect (Pro)"};
+  QCommandLineOption kioskOpt{
+    "kiosk",
+    "Kiosk display for --runtime: the main window and every external window on another screen "
+    "fill their screen without a frame; on macOS the Dock, the menu bar, app switching and "
+    "Force Quit are disabled while Serial Studio is frontmost (Pro)"};
   QCommandLineOption shortcutPathOpt{
     "shortcut-path", "Path of the shortcut that launched this process (Pro)", "path"};
   QCommandLineOption deploymentOpt{
@@ -320,6 +325,7 @@ public:
   [[nodiscard]] ProcessResult runPostRootSelfTests(QQmlEngine& engine);
 
   [[nodiscard]] bool fullscreen() const noexcept;
+  [[nodiscard]] bool kiosk() const noexcept;
   [[nodiscard]] bool runtimeMode() const noexcept;
   [[nodiscard]] bool hideToolbar() const noexcept;
   [[nodiscard]] bool apiServerEnabled() const;

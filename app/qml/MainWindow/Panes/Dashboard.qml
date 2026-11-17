@@ -97,11 +97,12 @@ Item {
   property var extWindows: []
 
   //
-  // True while the main window or any external dashboard is fullscreen; drives the stay-on-top
-  // flag on every pop-out widget/tool window so they are not hidden behind the fullscreen surface
+  // True while the main window or any external dashboard is fullscreen or a kiosk surface; drives
+  // the stay-on-top flag on every pop-out widget/tool window so they are not hidden behind it
   //
   property bool externalFullscreenActive: false
   readonly property bool anyDashboardFullscreen: mainWindow.visibility === Window.FullScreen
+                                                 || mainWindow.kioskFill
                                                  || externalFullscreenActive
 
   function updateExternalFullscreen() {
@@ -209,7 +210,8 @@ Item {
       if (!w || !w.extTaskBar)
         continue
 
-      var normal = w.visibility !== Window.Maximized
+      var normal = !w.kioskFill
+                   && w.visibility !== Window.Maximized
                    && w.visibility !== Window.FullScreen
                    && w.visibility !== Window.Minimized
       var ws = w.extTaskBar.activeGroupId
@@ -226,7 +228,8 @@ Item {
         "h": Math.round(normal ? w.height : w.previousHeight),
         "maximized": w.isMaximized,
         "minimized": w.visibility === Window.Minimized,
-        "fullscreen": w.visibility === Window.FullScreen
+        "fullscreen": w.kioskFill ? (w.record && w.record.fullscreen === true)
+                                  : (w.visibility === Window.FullScreen)
       })
     }
 
@@ -498,12 +501,17 @@ Item {
           }
         }
 
-        _extWindow.displayWindow()
+        if (_extWindow.showKiosk(mainWindow.kioskGeometry))
+          _extWindow.titlebarHeight = 0
 
-        if (rec.fullscreen === true)
-          _extWindow.showFullScreen()
-        else if (rec.minimized === true)
-          _extWindow.showMinimized()
+        else {
+          _extWindow.displayWindow()
+
+          if (rec.fullscreen === true)
+            _extWindow.showFullScreen()
+          else if (rec.minimized === true)
+            _extWindow.showMinimized()
+        }
 
         if (rec.workspace !== undefined && rec.workspace >= 0) {
           _extWindow.targetWorkspace = rec.workspace

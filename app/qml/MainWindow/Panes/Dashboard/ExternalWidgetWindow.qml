@@ -74,22 +74,24 @@ Widgets.SmartWindow {
   // Restated on every flags write, since rewriting flags rebuilds the native frame from the
   // hints alone; Qt.CustomizeWindowHint stays out, or CSD/Win32 switch to explicit-hint mode.
   //
-  readonly property int chromeFlags: Qt.Window
-                                     | Qt.WindowTitleHint
-                                     | Qt.WindowSystemMenuHint
-                                     | Qt.WindowMinMaxButtonsHint
-                                     | Qt.WindowCloseButtonHint
+  readonly property int chromeFlags: window.kioskFill
+                                     ? Qt.Window | Qt.FramelessWindowHint
+                                     : Qt.Window
+                                       | Qt.WindowTitleHint
+                                       | Qt.WindowSystemMenuHint
+                                       | Qt.WindowMinMaxButtonsHint
+                                       | Qt.WindowCloseButtonHint
 
   flags: window.chromeFlags
 
   //
   // Driven by the owning canvas: keep this pop-out above a fullscreen dashboard so it is not
-  // hidden behind it. Platform bits (the CSD frameless hint) survive, native styling re-applies.
+  // hidden behind it (never one filling its own kiosk screen). Platform bits survive.
   //
   property bool stayOnTop: false
   onStayOnTopChanged: {
     let updated = window.flags | window.chromeFlags
-    if (stayOnTop)
+    if (stayOnTop && !window.kioskFill)
       updated |= Qt.WindowStaysOnTopHint
     else
       updated &= ~Qt.WindowStaysOnTopHint
@@ -382,7 +384,11 @@ Widgets.SmartWindow {
       LayoutMirroring.enabled: false
       LayoutMirroring.childrenInherit: true
       Component.onCompleted: {
-        window.displayWindow()
+        if (window.showKiosk(mainWindow.kioskGeometry))
+          window.titlebarHeight = 0
+        else
+          window.displayWindow()
+
         widgetLoader.createObject(this, {windowRoot: window})
       }
     }

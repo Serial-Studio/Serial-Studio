@@ -208,6 +208,7 @@ void CLI::registerCommercialOptions()
 #ifdef BUILD_COMMERCIAL
   m_parser.addOption(m_opts.noToolbarOpt);
   m_parser.addOption(m_opts.runtimeOpt);
+  m_parser.addOption(m_opts.kioskOpt);
   m_parser.addOption(m_opts.shortcutPathOpt);
   m_parser.addOption(m_opts.deploymentOpt);
   m_parser.addOption(m_opts.csvExportOpt);
@@ -689,6 +690,20 @@ bool CLI::fullscreen() const noexcept
 #endif
 
   return m_parser.isSet(m_opts.fullscreenOpt);
+}
+
+/**
+ * @brief Returns true if --kiosk was passed in operator runtime mode; outside it the flag is
+ *        ignored, since a kiosk around the editing interface would lock the user in with no
+ *        disconnect-to-quit way out. A deployment package does not carry it: the launcher decides.
+ */
+bool CLI::kiosk() const noexcept
+{
+#ifdef BUILD_COMMERCIAL
+  return runtimeMode() && m_parser.isSet(m_opts.kioskOpt);
+#else
+  return false;
+#endif
 }
 
 /**
