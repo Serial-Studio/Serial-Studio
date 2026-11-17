@@ -1272,6 +1272,39 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
 </context>
 <context>
+    <name>ApiStatusIndicator</name>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="99"/>
+        <source>Remote %1 - Stale</source>
+        <translation>远程 %1 - 陈旧</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="102"/>
+        <source>Remote %1 - Live</source>
+        <translation>远程 %1 - 实时</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="104"/>
+        <source>Remote %1 - No Data</source>
+        <translation>远程 %1 - 无数据</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="108"/>
+        <source>API Server Off</source>
+        <translation>API 服务器已关闭</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="111"/>
+        <source>API Server Active (%1)</source>
+        <translation>API 服务器活跃 (%1)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="113"/>
+        <source>API Server Ready</source>
+        <translation>API 服务器就绪</translation>
+    </message>
+</context>
+<context>
     <name>AppCommandBindings</name>
     <message>
         <location filename="../../qml/Commands/AppCommandBindings.qml" line="204"/>
@@ -5912,42 +5945,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardLayout</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="38"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="37"/>
         <source>Dashboard</source>
         <translation>仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="250"/>
-        <source>Remote %1 - Stale</source>
-        <translation>远程 %1 - 过期</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="253"/>
-        <source>Remote %1 - Live</source>
-        <translation>远程 %1 - 实时</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="255"/>
-        <source>Remote %1 - No Data</source>
-        <translation>远程 %1 - 无数据</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="262"/>
-        <source>API Server Active (%1)</source>
-        <translation>API 服务器活动 (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="264"/>
-        <source>API Server Ready</source>
-        <translation>API 服务器就绪</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="259"/>
-        <source>API Server Off</source>
-        <translation>API 服务器关闭</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="676"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="584"/>
         <source>Command Palette</source>
         <translation>命令面板</translation>
     </message>
@@ -13386,22 +13389,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>打开"%1"失败</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="313"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="301"/>
         <source>HID Device Error</source>
         <translation>HID 设备错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="314"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="302"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>HID 设备已断开连接或遇到严重读取错误。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="446"/>
         <source>Select Device</source>
         <translation>选择设备</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="600"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="588"/>
         <source>HID Device</source>
         <translation>HID 设备</translation>
     </message>
@@ -13409,145 +13412,145 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="374"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="390"/>
         <source>The connection is not configured: check the host and the port</source>
         <translation>连接未配置:请检查主机和端口</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="427"/>
         <source>IEC 104 Connection Failed</source>
         <translation>IEC 104 连接失败</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="412"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="428"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>无法连接到 %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="487"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="503"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>站点发送的数据超过接收缓冲区容量</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="526"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="542"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>站点发送了此链路无法解码的帧</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="680"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="696"/>
         <source>The station did not answer within t1</source>
         <translation>站点在 t1 时间内未响应</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="784"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="800"/>
         <source>IEC 104 Connection Lost</source>
         <translation>IEC 104 连接丢失</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="906"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="914"/>
         <source>Not connected</source>
         <translation>未连接</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="909"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="917"/>
         <source>Starting data transfer…</source>
         <translation>正在开始数据传输…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="911"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="919"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>正在监控站点 %2 的 %1 个数据点</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1185"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1142"/>
         <source>Host</source>
         <translation>主机</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1192"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1149"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1158"/>
         <source>Common Address</source>
         <translation>公共地址</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Send Window (k)</source>
         <translation>发送窗口 (k)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Ack Window (w)</source>
         <translation>确认窗口 (w)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1226"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1183"/>
         <source>Timeout t%1 (ms)</source>
         <translation>超时 t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1349"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1306"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>IEC 60870-5-104 项目</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1354"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1311"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1385"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1342"/>
         <source>Status Points</source>
         <translation>状态点</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Counters</source>
         <translation>计数器</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Measurements</source>
         <translation>测量值</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1419"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1446"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1376"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1403"/>
         <source>Failed to load generated project</source>
         <translation>加载生成的项目失败</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1420"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1447"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1377"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1404"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>无法加载生成的项目 JSON。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1435"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1392"/>
         <source>No points discovered</source>
         <translation>未发现数据点</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1436"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1393"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>连接到站点并等待查询完成后再生成项目。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1438"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1458"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1415"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>IEC 60870-5-104 项目生成器</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1455"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1412"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>已成功生成包含 %1 个数据集的项目。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1456"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1413"/>
         <source>The project editor is now open for customization.</source>
         <translation>项目编辑器现已打开以供自定义。</translation>
     </message>
@@ -13555,117 +13558,117 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="79"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="81"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="82"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="83"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 或更高版本</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="84"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 或更高版本</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="85"/>
         <source>Any Protocol</source>
         <translation>任意协议</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="86"/>
         <source>Secure Protocols Only</source>
         <translation>仅安全协议</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="88"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="76"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="89"/>
         <source>Query Peer</source>
         <translation>查询对等方</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="90"/>
         <source>Verify Peer</source>
         <translation>验证对等方</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="91"/>
         <source>Auto Verify Peer</source>
         <translation>自动验证对等方</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="140"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="153"/>
         <source>MQTT Connection Failed</source>
         <translation>MQTT 连接失败</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="171"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="184"/>
         <source>The broker did not answer within %1 seconds</source>
         <translation>代理在 %1 秒内未响应</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="237"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="250"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT 功能需要商业许可证</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="238"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="251"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>订阅 MQTT 代理仅在拥有有效的 Serial Studio 许可证或激活的试用期时可用。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="498"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="487"/>
         <source>Use System Database</source>
         <translation>使用系统数据库</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="499"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="488"/>
         <source>Load From Folder…</source>
         <translation>从文件夹加载…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="532"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="521"/>
         <source>Select PEM Certificates Directory</source>
         <translation>选择 PEM 证书目录</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="847"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="836"/>
         <source>Hostname</source>
         <translation>主机名</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="843"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="863"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="852"/>
         <source>Topic Filter</source>
         <translation>主题过滤器</translation>
     </message>
@@ -13680,212 +13683,212 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Sparkplug 组 ID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="861"/>
         <source>Client ID</source>
         <translation>客户端 ID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="879"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="868"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="875"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="893"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="882"/>
         <source>MQTT Version</source>
         <translation>MQTT 版本</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="901"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="890"/>
         <source>Clean Session</source>
         <translation>清除会话</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="908"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="897"/>
         <source>Keep Alive (s)</source>
         <translation>保持连接 (秒)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="906"/>
         <source>Auto Keep Alive</source>
         <translation>自动保持连接</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="934"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="923"/>
         <source>SSL/TLS Enabled</source>
         <translation>启用 SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="944"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="933"/>
         <source>SSL Protocol</source>
         <translation>SSL 协议</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="952"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="941"/>
         <source>Peer Verify Mode</source>
         <translation>对等方验证模式</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="960"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="949"/>
         <source>Peer Verify Depth</source>
         <translation>对等方验证深度</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="969"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="958"/>
         <source>Client Certificate (PEM)</source>
         <translation>客户端证书(PEM)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="976"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="965"/>
         <source>Private Key (PEM)</source>
         <translation>私钥(PEM)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="983"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="972"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN(通过端口 443 的 MQTT)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="991"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="980"/>
         <source>ALPN Protocol</source>
         <translation>ALPN 协议</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1146"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1135"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>Broker 在尝试期间关闭了连接</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1141"/>
         <source>The connection could not be re-established</source>
         <translation>无法重新建立连接</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1162"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1151"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTT 订阅错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1163"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>订阅主题"%1"失败。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1417"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1406"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTT 客户端证书错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1434"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1423"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>PEM 文件 (*.pem *.crt *.cer *.key);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1460"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1449"/>
         <source>Select Client Certificate</source>
         <translation>选择客户端证书</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1468"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1457"/>
         <source>Select Private Key</source>
         <translation>选择私钥</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1190"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1179"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>MQTT 协议版本无效</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1180"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>代理服务器拒绝了配置的 MQTT 协议版本。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1194"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1183"/>
         <source>Client ID Rejected</source>
         <translation>客户端 ID 被拒绝</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1184"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>代理服务器拒绝了客户端 ID。请尝试使用其他标识符。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1198"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1187"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT 服务器不可用</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1188"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>代理服务器当前不可用。请稍后重试。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
         <source>Authentication Error</source>
         <translation>身份验证错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1192"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>代理服务器拒绝了提供的凭据。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1206"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
         <source>Authorization Error</source>
         <translation>授权错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1207"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1196"/>
         <source>Account lacks permission for this operation.</source>
         <translation>账户缺少此操作的权限。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1210"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
         <source>Network or Transport Error</source>
         <translation>网络或传输错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1211"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1200"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>连接代理服务器时发生网络/传输层问题。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1214"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>已配置客户端证书:请验证其与私钥匹配并已在代理服务器上激活。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1219"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1208"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT 协议违规</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1220"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1209"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>代理服务器报告协议违规并关闭了连接。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1223"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1212"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1224"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1213"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>发生了 MQTT 5 协议级错误。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1227"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1216"/>
         <source>MQTT Error</source>
         <translation>MQTT 错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1228"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1217"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>发生了意外的 MQTT 错误。</translation>
     </message>
@@ -14080,67 +14083,67 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>项目编辑器现已打开以供自定义。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1192"/>
         <source>Error code: %1</source>
         <translation>错误代码:%1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1204"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1194"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus 通信错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1203"/>
         <source>Select Port</source>
         <translation>选择端口</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1305"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1295"/>
         <source>Protocol</source>
         <translation>协议</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1313"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1303"/>
         <source>Slave Address</source>
         <translation>从站地址</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1322"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1312"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1340"/>
         <source>Host / IP</source>
         <translation>主机 / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1357"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1347"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1372"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1362"/>
         <source>Serial Port</source>
         <translation>串口</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1380"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1370"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1378"/>
         <source>Parity</source>
         <translation>校验位</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1386"/>
         <source>Data Bits</source>
         <translation>数据位</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1394"/>
         <source>Stop Bits</source>
         <translation>停止位</translation>
     </message>
@@ -24806,42 +24809,42 @@ Add absolute addresses above to poll the controller.</source>
         <translation>此文件不是 Serial Studio Historian 数据库。</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="211"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="277"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="394"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="465"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="490"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="518"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="558"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="852"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="935"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="212"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="278"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="395"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="466"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="519"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="559"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="853"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="936"/>
         <source>Database not open</source>
         <translation>数据库未打开</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="220"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="221"/>
         <source>This session is being recorded</source>
         <translation>此会话正在录制</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="314"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="337"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="315"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="338"/>
         <source>Database not open or empty label</source>
         <translation>数据库未打开或标签为空</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="439"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="440"/>
         <source>Invalid label</source>
         <translation>无效标签</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="706"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="805"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="707"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="806"/>
         <source>Cancelled</source>
         <translation>已取消</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="947"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="948"/>
         <source>Could not load session data</source>
         <translation>无法加载会话数据</translation>
     </message>
@@ -25086,63 +25089,63 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="329"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="318"/>
         <source>Open Session File</source>
         <translation>打开会话文件</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="331"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="320"/>
         <source>Session files (*.db)</source>
         <translation>会话文件 (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="420"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="409"/>
         <source>Device Connection Active</source>
         <translation>设备连接活动</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="421"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="410"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>要使用此功能,必须断开与设备的连接。是否继续?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="463"/>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="452"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="479"/>
         <source>Cannot open session file</source>
         <translation>无法打开会话文件</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="464"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="453"/>
         <source>Unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="472"/>
         <source>No project data</source>
         <translation>无项目数据</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="473"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>此会话不包含嵌入的项目文件 — 仪表板回退到快速绘图布局。</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="480"/>
         <source>Check file permissions and try again.</source>
         <translation>检查文件权限并重试。</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="641"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="630"/>
         <source>Sessions</source>
         <translation>会话</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="643"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="632"/>
         <source>Recording uses an older copy of the project</source>
         <translation>录制使用的是项目的旧版本</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="633"/>
         <source>This dashboard comes from the recording, and the project file has changed since it was recorded. Close the recording to return to the current project.</source>
         <translation>此仪表板来自录制；项目文件在录制后已更改。关闭录制以返回当前项目。</translation>
     </message>
@@ -26022,142 +26025,112 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Setup</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="35"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="34"/>
         <source>Device Setup</source>
         <translation>设备设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
-        <source>API Server Active (%1)</source>
-        <translation>API 服务器活动 (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="147"/>
-        <source>API Server Ready</source>
-        <translation>API 服务器就绪</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="142"/>
-        <source>API Server Off</source>
-        <translation>API 服务器关闭</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="133"/>
-        <source>Remote %1 - Stale</source>
-        <translation>远程 %1 - 过时</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="136"/>
-        <source>Remote %1 - Live</source>
-        <translation>远程 %1 - 实时</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="138"/>
-        <source>Remote %1 - No Data</source>
-        <translation>远程 %1 - 无数据</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="94"/>
         <source>Operation Mode</source>
         <translation>操作模式</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="108"/>
         <source>Console Only (No Parsing)</source>
         <translation>仅控制台(不解析)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="202"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="110"/>
         <source>Shows incoming data as text or hex. Nothing is parsed or plotted.</source>
         <translation>将传入数据显示为文本或十六进制。不进行任何解析或绘图。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="122"/>
         <source>Quick Plot (Auto-Detected Format)</source>
         <translation>快速绘图（自动检测格式）</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="125"/>
         <source>Plots every line the device sends. Values separated by commas, tabs, or spaces, name and value pairs, units, and one-line JSON are detected automatically.</source>
         <translation>绘制设备发送的每一行。自动检测以逗号、制表符或空格分隔的值、名称和值对、单位和单行JSON。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
         <source>Parse via Project File</source>
         <translation>通过项目文件解析</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="240"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="148"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>从项目编辑器中创建的项目构建仪表板。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="167"/>
         <source>Change Project File (%1)</source>
         <translation>更改项目文件 (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="168"/>
         <source>Select Project File</source>
         <translation>选择项目文件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="179"/>
         <source>Use Device Dashboard</source>
         <translation>使用设备仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="188"/>
         <source>Keep Project</source>
         <translation>保留项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="298"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="206"/>
         <source>Data Export</source>
         <translation>数据导出</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
         <source>CSV Spreadsheet</source>
         <translation>CSV 电子表格</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="254"/>
         <source>Historian Database</source>
         <translation>历史记录器数据库</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="432"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="340"/>
         <source>Connection: %1</source>
         <translation>连接：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="527"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="435"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>每个设备都有自己的连接设置。在项目编辑器的"数据源"选项卡中配置它们。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="275"/>
         <source>MDF4 Recording</source>
         <translation>MDF4 记录</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="293"/>
         <source>Console Log</source>
         <translation>控制台日志</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="501"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="409"/>
         <source>Multi-Device Project</source>
         <translation>多设备项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="514"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="422"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>此项目从 %1 个独立设备流式传输数据。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="548"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="456"/>
         <source>Open Project Editor</source>
         <translation>打开项目编辑器</translation>
     </message>

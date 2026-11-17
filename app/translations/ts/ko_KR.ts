@@ -1272,6 +1272,39 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
 </context>
 <context>
+    <name>ApiStatusIndicator</name>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="99"/>
+        <source>Remote %1 - Stale</source>
+        <translation>원격 %1 - 오래됨</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="102"/>
+        <source>Remote %1 - Live</source>
+        <translation>원격 %1 - 실시간</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="104"/>
+        <source>Remote %1 - No Data</source>
+        <translation>원격 %1 - 데이터 없음</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="108"/>
+        <source>API Server Off</source>
+        <translation>API 서버 꺼짐</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="111"/>
+        <source>API Server Active (%1)</source>
+        <translation>API 서버 활성 (%1)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="113"/>
+        <source>API Server Ready</source>
+        <translation>API 서버 준비됨</translation>
+    </message>
+</context>
+<context>
     <name>AppCommandBindings</name>
     <message>
         <location filename="../../qml/Commands/AppCommandBindings.qml" line="204"/>
@@ -5912,42 +5945,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardLayout</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="38"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="37"/>
         <source>Dashboard</source>
         <translation>대시보드</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="250"/>
-        <source>Remote %1 - Stale</source>
-        <translation>원격 %1 - 오래됨</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="253"/>
-        <source>Remote %1 - Live</source>
-        <translation>원격 %1 - 실시간</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="255"/>
-        <source>Remote %1 - No Data</source>
-        <translation>원격 %1 - 데이터 없음</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="262"/>
-        <source>API Server Active (%1)</source>
-        <translation>API 서버 활성 (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="264"/>
-        <source>API Server Ready</source>
-        <translation>API 서버 준비됨</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="259"/>
-        <source>API Server Off</source>
-        <translation>API 서버 꺼짐</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="676"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="584"/>
         <source>Command Palette</source>
         <translation>명령 팔레트</translation>
     </message>
@@ -13386,22 +13389,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>"%1" 열기 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="313"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="301"/>
         <source>HID Device Error</source>
         <translation>HID 장치 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="314"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="302"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>HID 장치의 연결이 끊어졌거나 치명적인 읽기 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="446"/>
         <source>Select Device</source>
         <translation>장치 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="600"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="588"/>
         <source>HID Device</source>
         <translation>HID 장치</translation>
     </message>
@@ -13409,145 +13412,145 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="374"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="390"/>
         <source>The connection is not configured: check the host and the port</source>
         <translation>연결이 구성되지 않았습니다: 호스트와 포트를 확인하세요</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="427"/>
         <source>IEC 104 Connection Failed</source>
         <translation>IEC 104 연결 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="412"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="428"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>%1:%2에 연결할 수 없습니다 (%3)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="487"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="503"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>스테이션이 수신 버퍼 용량을 초과하는 데이터를 전송했습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="526"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="542"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>스테이션이 이 링크에서 디코딩할 수 없는 프레임을 전송했습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="680"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="696"/>
         <source>The station did not answer within t1</source>
         <translation>스테이션이 t1 시간 내에 응답하지 않았습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="784"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="800"/>
         <source>IEC 104 Connection Lost</source>
         <translation>IEC 104 연결 끊김</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="906"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="914"/>
         <source>Not connected</source>
         <translation>연결되지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="909"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="917"/>
         <source>Starting data transfer…</source>
         <translation>데이터 전송 시작 중…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="911"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="919"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>스테이션 %2에서 %1개 포인트 모니터링 중</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1185"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1142"/>
         <source>Host</source>
         <translation>호스트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1192"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1149"/>
         <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1158"/>
         <source>Common Address</source>
         <translation>공통 주소</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Send Window (k)</source>
         <translation>송신 윈도우 (k)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Ack Window (w)</source>
         <translation>확인 윈도우 (w)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1226"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1183"/>
         <source>Timeout t%1 (ms)</source>
         <translation>타임아웃 t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1349"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1306"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>IEC 60870-5-104 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1354"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1311"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1385"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1342"/>
         <source>Status Points</source>
         <translation>상태 포인트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Counters</source>
         <translation>카운터</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Measurements</source>
         <translation>측정값</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1419"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1446"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1376"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1403"/>
         <source>Failed to load generated project</source>
         <translation>생성된 프로젝트 로드 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1420"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1447"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1377"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1404"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>생성된 프로젝트 JSON을 로드할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1435"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1392"/>
         <source>No points discovered</source>
         <translation>검색된 포인트 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1436"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1393"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>프로젝트를 생성하기 전에 스테이션에 연결하고 조회가 완료될 때까지 기다리십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1438"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1458"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1415"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>IEC 60870-5-104 프로젝트 생성기</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1455"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1412"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>%1개의 데이터셋으로 프로젝트를 성공적으로 생성했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1456"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1413"/>
         <source>The project editor is now open for customization.</source>
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
@@ -13555,117 +13558,117 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="79"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="81"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="82"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="83"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 이상</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="84"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 이상</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="85"/>
         <source>Any Protocol</source>
         <translation>모든 프로토콜</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="86"/>
         <source>Secure Protocols Only</source>
         <translation>보안 프로토콜만</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="88"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="76"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="89"/>
         <source>Query Peer</source>
         <translation>피어 조회</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="90"/>
         <source>Verify Peer</source>
         <translation>피어 검증</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="91"/>
         <source>Auto Verify Peer</source>
         <translation>피어 자동 검증</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="140"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="153"/>
         <source>MQTT Connection Failed</source>
         <translation>MQTT 연결 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="171"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="184"/>
         <source>The broker did not answer within %1 seconds</source>
         <translation>브로커가 %1초 이내에 응답하지 않았습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="237"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="250"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT 기능은 상용 라이선스가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="238"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="251"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>MQTT 브로커 구독은 유효한 Serial Studio 라이선스 또는 활성 평가판이 있어야 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="498"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="487"/>
         <source>Use System Database</source>
         <translation>시스템 데이터베이스 사용</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="499"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="488"/>
         <source>Load From Folder…</source>
         <translation>폴더에서 불러오기…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="532"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="521"/>
         <source>Select PEM Certificates Directory</source>
         <translation>PEM 인증서 디렉터리 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="847"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="836"/>
         <source>Hostname</source>
         <translation>호스트명</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="843"/>
         <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="863"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="852"/>
         <source>Topic Filter</source>
         <translation>토픽 필터</translation>
     </message>
@@ -13680,212 +13683,212 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Sparkplug 그룹 ID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="861"/>
         <source>Client ID</source>
         <translation>클라이언트 ID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="879"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="868"/>
         <source>Username</source>
         <translation>사용자 이름</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="875"/>
         <source>Password</source>
         <translation>비밀번호</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="893"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="882"/>
         <source>MQTT Version</source>
         <translation>MQTT 버전</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="901"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="890"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="908"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="897"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (초)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="906"/>
         <source>Auto Keep Alive</source>
         <translation>자동 Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="934"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="923"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS 활성화</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="944"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="933"/>
         <source>SSL Protocol</source>
         <translation>SSL 프로토콜</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="952"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="941"/>
         <source>Peer Verify Mode</source>
         <translation>피어 검증 모드</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="960"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="949"/>
         <source>Peer Verify Depth</source>
         <translation>피어 검증 깊이</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="969"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="958"/>
         <source>Client Certificate (PEM)</source>
         <translation>클라이언트 인증서 (PEM)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="976"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="965"/>
         <source>Private Key (PEM)</source>
         <translation>개인 키 (PEM)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="983"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="972"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (포트 443을 통한 MQTT)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="991"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="980"/>
         <source>ALPN Protocol</source>
         <translation>ALPN 프로토콜</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1146"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1135"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>시도 중 브로커가 연결을 종료했습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1141"/>
         <source>The connection could not be re-established</source>
         <translation>연결을 다시 설정할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1162"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1151"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTT 구독 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1163"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>토픽 "%1" 구독 실패.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1417"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1406"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTT 클라이언트 인증서 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1434"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1423"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>PEM 파일 (*.pem *.crt *.cer *.key);;모든 파일 (*)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1460"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1449"/>
         <source>Select Client Certificate</source>
         <translation>클라이언트 인증서 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1468"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1457"/>
         <source>Select Private Key</source>
         <translation>개인 키 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1190"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1179"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>유효하지 않은 MQTT 프로토콜 버전</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1180"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>브로커가 설정된 MQTT 프로토콜 버전을 거부했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1194"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1183"/>
         <source>Client ID Rejected</source>
         <translation>클라이언트 ID 거부됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1184"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>브로커가 클라이언트 ID를 거부했습니다. 다른 식별자를 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1198"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1187"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT 서버 사용 불가</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1188"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>브로커를 현재 사용할 수 없습니다. 나중에 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
         <source>Authentication Error</source>
         <translation>인증 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1192"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>제공된 자격 증명이 브로커에 의해 거부되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1206"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
         <source>Authorization Error</source>
         <translation>권한 부여 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1207"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1196"/>
         <source>Account lacks permission for this operation.</source>
         <translation>계정에 이 작업을 수행할 권한이 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1210"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
         <source>Network or Transport Error</source>
         <translation>네트워크 또는 전송 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1211"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1200"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>브로커에 연결하는 동안 네트워크/전송 계층 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1214"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>클라이언트 인증서가 구성되었습니다: 개인 키와 일치하는지, 브로커에서 활성화되었는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1219"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1208"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTT 프로토콜 위반</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1220"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1209"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>브로커가 프로토콜 위반을 보고하고 연결을 종료했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1223"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1212"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1224"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1213"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>MQTT 5 프로토콜 수준 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1227"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1216"/>
         <source>MQTT Error</source>
         <translation>MQTT 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1228"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1217"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>예기치 않은 MQTT 오류가 발생했습니다.</translation>
     </message>
@@ -14080,67 +14083,67 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1192"/>
         <source>Error code: %1</source>
         <translation>오류 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1204"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1194"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus 통신 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1203"/>
         <source>Select Port</source>
         <translation>포트 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1305"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1295"/>
         <source>Protocol</source>
         <translation>프로토콜</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1313"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1303"/>
         <source>Slave Address</source>
         <translation>슬레이브 주소</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1322"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1312"/>
         <source>Poll Interval (ms)</source>
         <translation>폴링 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1340"/>
         <source>Host / IP</source>
         <translation>호스트 / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1357"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1347"/>
         <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1372"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1362"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1380"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1370"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1378"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1386"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1394"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
@@ -24806,42 +24809,42 @@ Add absolute addresses above to poll the controller.</source>
         <translation>이 파일은 Serial Studio Historian 데이터베이스가 아닙니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="211"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="277"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="394"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="465"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="490"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="518"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="558"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="852"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="935"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="212"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="278"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="395"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="466"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="519"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="559"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="853"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="936"/>
         <source>Database not open</source>
         <translation>데이터베이스가 열려 있지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="220"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="221"/>
         <source>This session is being recorded</source>
         <translation>이 세션이 기록 중입니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="314"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="337"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="315"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="338"/>
         <source>Database not open or empty label</source>
         <translation>데이터베이스가 열려 있지 않거나 레이블이 비어 있음</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="439"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="440"/>
         <source>Invalid label</source>
         <translation>잘못된 레이블</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="706"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="805"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="707"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="806"/>
         <source>Cancelled</source>
         <translation>취소됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="947"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="948"/>
         <source>Could not load session data</source>
         <translation>세션 데이터를 불러올 수 없음</translation>
     </message>
@@ -25086,63 +25089,63 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="329"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="318"/>
         <source>Open Session File</source>
         <translation>세션 파일 열기</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="331"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="320"/>
         <source>Session files (*.db)</source>
         <translation>세션 파일 (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="420"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="409"/>
         <source>Device Connection Active</source>
         <translation>장치 연결 활성화됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="421"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="410"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>이 기능을 사용하려면 장치 연결을 해제해야 합니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="463"/>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="452"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="479"/>
         <source>Cannot open session file</source>
         <translation>세션 파일을 열 수 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="464"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="453"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="472"/>
         <source>No project data</source>
         <translation>프로젝트 데이터 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="473"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>이 세션에는 내장된 프로젝트 파일이 없습니다 — 대시보드가 빠른 플롯 레이아웃으로 대체됩니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="480"/>
         <source>Check file permissions and try again.</source>
         <translation>파일 권한을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="641"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="630"/>
         <source>Sessions</source>
         <translation>세션</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="643"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="632"/>
         <source>Recording uses an older copy of the project</source>
         <translation>녹화에서 사용된 프로젝트가 이전 버전입니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="633"/>
         <source>This dashboard comes from the recording, and the project file has changed since it was recorded. Close the recording to return to the current project.</source>
         <translation>이 대시보드는 녹화에서 가져온 것이며, 프로젝트 파일은 녹화된 이후 변경되었습니다. 현재 프로젝트로 돌아가려면 녹화를 닫으십시오.</translation>
     </message>
@@ -26022,142 +26025,112 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Setup</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="35"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="34"/>
         <source>Device Setup</source>
         <translation>장치 설정</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
-        <source>API Server Active (%1)</source>
-        <translation>API 서버 활성 (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="147"/>
-        <source>API Server Ready</source>
-        <translation>API 서버 준비됨</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="142"/>
-        <source>API Server Off</source>
-        <translation>API 서버 꺼짐</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="133"/>
-        <source>Remote %1 - Stale</source>
-        <translation>원격 %1 - 오래됨</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="136"/>
-        <source>Remote %1 - Live</source>
-        <translation>원격 %1 - 실시간</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="138"/>
-        <source>Remote %1 - No Data</source>
-        <translation>원격 %1 - 데이터 없음</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="94"/>
         <source>Operation Mode</source>
         <translation>작동 모드</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="108"/>
         <source>Console Only (No Parsing)</source>
         <translation>콘솔 전용 (파싱 없음)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="202"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="110"/>
         <source>Shows incoming data as text or hex. Nothing is parsed or plotted.</source>
         <translation>들어오는 데이터를 텍스트 또는 16진수로 표시합니다. 파싱되거나 플롯되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="122"/>
         <source>Quick Plot (Auto-Detected Format)</source>
         <translation>빠른 플롯 (자동 감지 형식)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="125"/>
         <source>Plots every line the device sends. Values separated by commas, tabs, or spaces, name and value pairs, units, and one-line JSON are detected automatically.</source>
         <translation>장치가 전송하는 모든 줄을 플롯합니다. 쉼표, 탭 또는 공백으로 구분된 값, name:value 쌍, 단위 및 한 줄 JSON이 자동으로 감지됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
         <source>Parse via Project File</source>
         <translation>프로젝트 파일을 통한 파싱</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="240"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="148"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>프로젝트 편집기에서 만든 프로젝트로부터 대시보드를 구성합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="167"/>
         <source>Change Project File (%1)</source>
         <translation>프로젝트 파일 변경 (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="168"/>
         <source>Select Project File</source>
         <translation>프로젝트 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="179"/>
         <source>Use Device Dashboard</source>
         <translation>기기 대시보드 사용</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="188"/>
         <source>Keep Project</source>
         <translation>프로젝트 유지</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="298"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="206"/>
         <source>Data Export</source>
         <translation>데이터 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
         <source>CSV Spreadsheet</source>
         <translation>CSV 스프레드시트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="254"/>
         <source>Historian Database</source>
         <translation>히스토리안 데이터베이스</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="432"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="340"/>
         <source>Connection: %1</source>
         <translation>연결: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="527"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="435"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>각 장치는 고유한 연결 설정을 가집니다. 프로젝트 편집기의 장치 탭에서 구성하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="275"/>
         <source>MDF4 Recording</source>
         <translation>MDF4 기록</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="293"/>
         <source>Console Log</source>
         <translation>콘솔 로그</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="501"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="409"/>
         <source>Multi-Device Project</source>
         <translation>다중 장치 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="514"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="422"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>이 프로젝트는 %1개의 독립 장치에서 데이터를 스트리밍합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="548"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="456"/>
         <source>Open Project Editor</source>
         <translation>프로젝트 편집기 열기</translation>
     </message>

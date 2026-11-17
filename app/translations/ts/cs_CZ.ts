@@ -1272,6 +1272,39 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
 </context>
 <context>
+    <name>ApiStatusIndicator</name>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="99"/>
+        <source>Remote %1 - Stale</source>
+        <translation>Vzdálený %1 - Zastaralá</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="102"/>
+        <source>Remote %1 - Live</source>
+        <translation>Vzdálený %1 - Živě</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="104"/>
+        <source>Remote %1 - No Data</source>
+        <translation>Vzdálený %1 - Žádná Data</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="108"/>
+        <source>API Server Off</source>
+        <translation>API Server Vypnut</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="111"/>
+        <source>API Server Active (%1)</source>
+        <translation>API Server Aktivní (%1)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="113"/>
+        <source>API Server Ready</source>
+        <translation>API Server Připraven</translation>
+    </message>
+</context>
+<context>
     <name>AppCommandBindings</name>
     <message>
         <location filename="../../qml/Commands/AppCommandBindings.qml" line="204"/>
@@ -5912,42 +5945,12 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>DashboardLayout</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="38"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="37"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="250"/>
-        <source>Remote %1 - Stale</source>
-        <translation>Vzdálený %1 - Zastaralý</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="253"/>
-        <source>Remote %1 - Live</source>
-        <translation>Vzdálený %1 - Živý</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="255"/>
-        <source>Remote %1 - No Data</source>
-        <translation>Vzdálený %1 - Žádná Data</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="262"/>
-        <source>API Server Active (%1)</source>
-        <translation>API Server Aktivní (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="264"/>
-        <source>API Server Ready</source>
-        <translation>API Server Připraven</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="259"/>
-        <source>API Server Off</source>
-        <translation>API Server Vypnut</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="676"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="584"/>
         <source>Command Palette</source>
         <translation>Paleta Příkazů</translation>
     </message>
@@ -13388,22 +13391,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Nepodařilo se otevřít "%1"</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="313"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="301"/>
         <source>HID Device Error</source>
         <translation>Chyba Zařízení HID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="314"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="302"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>Zařízení HID bylo odpojeno nebo došlo k závažné chybě čtení.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="446"/>
         <source>Select Device</source>
         <translation>Vybrat Zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="600"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="588"/>
         <source>HID Device</source>
         <translation>Zařízení HID</translation>
     </message>
@@ -13411,145 +13414,145 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="374"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="390"/>
         <source>The connection is not configured: check the host and the port</source>
         <translation>Připojení není nakonfigurováno: zkontrolujte hostitele a port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="427"/>
         <source>IEC 104 Connection Failed</source>
         <translation>Připojení IEC 104 Selhalo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="412"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="428"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>Nelze se připojit k %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="487"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="503"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>Stanice odeslala více dat, než vyrovnávací paměť pro příjem pojme</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="526"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="542"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>Stanice odeslala rámec, který toto spojení nedokázalo dekódovat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="680"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="696"/>
         <source>The station did not answer within t1</source>
         <translation>Stanice neodpověděla v rámci t1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="784"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="800"/>
         <source>IEC 104 Connection Lost</source>
         <translation>Připojení IEC 104 Ztraceno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="906"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="914"/>
         <source>Not connected</source>
         <translation>Nepřipojeno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="909"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="917"/>
         <source>Starting data transfer…</source>
         <translation>Zahajování přenosu dat…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="911"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="919"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>Monitorování %1 bodu/bodů ze stanice %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1185"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1142"/>
         <source>Host</source>
         <translation>Hostitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1192"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1149"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1158"/>
         <source>Common Address</source>
         <translation>Společná Adresa</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Send Window (k)</source>
         <translation>Okno Odesílání (k)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Ack Window (w)</source>
         <translation>Okno Potvrzení (w)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1226"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1183"/>
         <source>Timeout t%1 (ms)</source>
         <translation>Časový Limit t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1349"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1306"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>Projekt IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1354"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1311"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1385"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1342"/>
         <source>Status Points</source>
         <translation>Stavové Body</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Counters</source>
         <translation>Čítače</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Measurements</source>
         <translation>Měření</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1419"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1446"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1376"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1403"/>
         <source>Failed to load generated project</source>
         <translation>Nepodařilo se načíst vygenerovaný projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1420"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1447"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1377"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1404"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Vygenerovaný JSON projektu se nepodařilo načíst.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1435"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1392"/>
         <source>No points discovered</source>
         <translation>Nebyly objeveny žádné body</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1436"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1393"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>Připojte se ke stanici a nechte dotazování dokončit před vygenerováním projektu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1438"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1458"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1415"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>Generátor Projektu IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1455"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1412"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Projekt s %1 datovými sadami byl úspěšně vygenerován.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1456"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1413"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editor projektu je nyní otevřen pro přizpůsobení.</translation>
     </message>
@@ -13557,117 +13560,117 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="79"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="81"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="82"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="83"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 nebo Novější</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="84"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 nebo Novější</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="85"/>
         <source>Any Protocol</source>
         <translation>Jakýkoliv Protokol</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="86"/>
         <source>Secure Protocols Only</source>
         <translation>Pouze Zabezpečené Protokoly</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="88"/>
         <source>None</source>
         <translation>Žádné</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="76"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="89"/>
         <source>Query Peer</source>
         <translation>Dotázat Protějšek</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="90"/>
         <source>Verify Peer</source>
         <translation>Ověřit Protějšek</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="91"/>
         <source>Auto Verify Peer</source>
         <translation>Automaticky Ověřit Protějšek</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="140"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="153"/>
         <source>MQTT Connection Failed</source>
         <translation>Připojení MQTT Selhalo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="171"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="184"/>
         <source>The broker did not answer within %1 seconds</source>
         <translation>Broker neodpověděl do %1 sekund</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="237"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="250"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>Funkce MQTT Vyžaduje Komerční Licenci</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="238"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="251"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Přihlášení k MQTT brokeru je dostupné pouze s platnou licencí Serial Studio nebo aktivní zkušební verzí.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="498"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="487"/>
         <source>Use System Database</source>
         <translation>Použít Systémovou Databázi</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="499"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="488"/>
         <source>Load From Folder…</source>
         <translation>Načíst Ze Složky…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="532"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="521"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Vybrat Adresář Certifikátů PEM</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="847"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="836"/>
         <source>Hostname</source>
         <translation>Název Hostitele</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="843"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="863"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="852"/>
         <source>Topic Filter</source>
         <translation>Filtr Tématu</translation>
     </message>
@@ -13682,212 +13685,212 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>ID Skupiny Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="861"/>
         <source>Client ID</source>
         <translation>ID Klienta</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="879"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="868"/>
         <source>Username</source>
         <translation>Uživatelské Jméno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="875"/>
         <source>Password</source>
         <translation>Heslo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="893"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="882"/>
         <source>MQTT Version</source>
         <translation>Verze MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="901"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="890"/>
         <source>Clean Session</source>
         <translation>Vyčistit Relaci</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="908"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="897"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="906"/>
         <source>Auto Keep Alive</source>
         <translation>Automatický Keep Alive</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="934"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="923"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Povoleno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="944"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="933"/>
         <source>SSL Protocol</source>
         <translation>Protokol SSL</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="952"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="941"/>
         <source>Peer Verify Mode</source>
         <translation>Režim Ověření Protějšku</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="960"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="949"/>
         <source>Peer Verify Depth</source>
         <translation>Hloubka Ověření Protějšku</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="969"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="958"/>
         <source>Client Certificate (PEM)</source>
         <translation>Klientský Certifikát (PEM)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="976"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="965"/>
         <source>Private Key (PEM)</source>
         <translation>Soukromý Klíč (PEM)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="983"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="972"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT přes port 443)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="991"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="980"/>
         <source>ALPN Protocol</source>
         <translation>ALPN Protokol</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1146"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1135"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>Broker ukončil připojení během pokusu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1141"/>
         <source>The connection could not be re-established</source>
         <translation>Připojení nelze obnovit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1162"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1151"/>
         <source>MQTT Subscription Error</source>
         <translation>Chyba Odběru MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1163"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Nepodařilo se odebírat téma "%1".</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1417"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1406"/>
         <source>MQTT Client Certificate Error</source>
         <translation>Chyba Klientského Certifikátu MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1434"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1423"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>Soubory PEM (*.pem *.crt *.cer *.key);;Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1460"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1449"/>
         <source>Select Client Certificate</source>
         <translation>Vybrat Certifikát Klienta</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1468"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1457"/>
         <source>Select Private Key</source>
         <translation>Vybrat Soukromý Klíč</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1190"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1179"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Neplatná Verze Protokolu MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1180"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Broker odmítl nakonfigurovanou verzi protokolu MQTT.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1194"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1183"/>
         <source>Client ID Rejected</source>
         <translation>ID Klienta Odmítnuto</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1184"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Broker odmítl ID klienta. Zkuste jiný identifikátor.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1198"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1187"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTT Server Nedostupný</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1188"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Broker je momentálně nedostupný. Opakujte akci později.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
         <source>Authentication Error</source>
         <translation>Chyba Autentizace</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1192"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Poskytnuté přihlašovací údaje byly brokerem odmítnuty.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1206"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
         <source>Authorization Error</source>
         <translation>Chyba Autorizace</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1207"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1196"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Účet nemá oprávnění pro tuto operaci.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1210"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
         <source>Network or Transport Error</source>
         <translation>Chyba Sítě nebo Transportní Vrstvy</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1211"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1200"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Problém síťové/transportní vrstvy při připojování k brokeru.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1214"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>Certifikát klienta je nakonfigurován: ověřte, že odpovídá soukromému klíči a je aktivován na brokeru.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1219"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1208"/>
         <source>MQTT Protocol Violation</source>
         <translation>Porušení Protokolu MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1220"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1209"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>Broker nahlásil porušení protokolu a ukončil spojení.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1223"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1212"/>
         <source>MQTT 5 Error</source>
         <translation>Chyba MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1224"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1213"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>Došlo k chybě protokolu MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1227"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1216"/>
         <source>MQTT Error</source>
         <translation>Chyba MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1228"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1217"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>Došlo k neočekávané chybě MQTT.</translation>
     </message>
@@ -14082,67 +14085,67 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Editor projektu je nyní otevřen pro přizpůsobení.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1192"/>
         <source>Error code: %1</source>
         <translation>Kód chyby: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1204"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1194"/>
         <source>Modbus Communication Error</source>
         <translation>Chyba Komunikace Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1203"/>
         <source>Select Port</source>
         <translation>Vybrat Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1305"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1295"/>
         <source>Protocol</source>
         <translation>Protokol</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1313"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1303"/>
         <source>Slave Address</source>
         <translation>Adresa Slave</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1322"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1312"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Dotazování (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1340"/>
         <source>Host / IP</source>
         <translation>Host / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1357"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1347"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1372"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1362"/>
         <source>Serial Port</source>
         <translation>Sériový Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1380"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1370"/>
         <source>Baud Rate</source>
         <translation>Přenosová Rychlost</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1378"/>
         <source>Parity</source>
         <translation>Parita</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1386"/>
         <source>Data Bits</source>
         <translation>Datové Bity</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1394"/>
         <source>Stop Bits</source>
         <translation>Stop Bity</translation>
     </message>
@@ -24814,42 +24817,42 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation>Tento soubor není databáze Serial Studio Historian.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="211"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="277"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="394"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="465"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="490"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="518"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="558"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="852"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="935"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="212"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="278"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="395"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="466"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="519"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="559"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="853"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="936"/>
         <source>Database not open</source>
         <translation>Databáze není otevřena</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="220"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="221"/>
         <source>This session is being recorded</source>
         <translation>Tato relace se právě zaznamenává</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="314"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="337"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="315"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="338"/>
         <source>Database not open or empty label</source>
         <translation>Databáze není otevřena nebo prázdný popisek</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="439"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="440"/>
         <source>Invalid label</source>
         <translation>Neplatný popisek</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="706"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="805"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="707"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="806"/>
         <source>Cancelled</source>
         <translation>Zrušeno</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="947"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="948"/>
         <source>Could not load session data</source>
         <translation>Nelze načíst data relace</translation>
     </message>
@@ -25094,63 +25097,63 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="329"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="318"/>
         <source>Open Session File</source>
         <translation>Otevřít Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="331"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="320"/>
         <source>Session files (*.db)</source>
         <translation>Soubory relací (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="420"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="409"/>
         <source>Device Connection Active</source>
         <translation>Aktivní Připojení k Zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="421"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="410"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Pro použití této funkce je nutné odpojit zařízení. Chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="463"/>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="452"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="479"/>
         <source>Cannot open session file</source>
         <translation>Nelze Otevřít Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="464"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="453"/>
         <source>Unknown error</source>
         <translation>Neznámá chyba</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="472"/>
         <source>No project data</source>
         <translation>Žádná data projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="473"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Tato relace neobsahuje vložený soubor projektu — dashboard se vrací k rychlému rozložení grafů.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="480"/>
         <source>Check file permissions and try again.</source>
         <translation>Zkontrolujte oprávnění souboru a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="641"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="630"/>
         <source>Sessions</source>
         <translation>Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="643"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="632"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Záznam používá starší kopii projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="633"/>
         <source>This dashboard comes from the recording, and the project file has changed since it was recorded. Close the recording to return to the current project.</source>
         <translation>Tento řídicí panel pochází ze záznamu a soubor projektu se od jeho nahrání změnil. Zavřete záznam a vraťte se k aktuálnímu projektu.</translation>
     </message>
@@ -26030,142 +26033,112 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
 <context>
     <name>Setup</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="35"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="34"/>
         <source>Device Setup</source>
         <translation>Nastavení Zařízení</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
-        <source>API Server Active (%1)</source>
-        <translation>API Server Aktivní (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="147"/>
-        <source>API Server Ready</source>
-        <translation>API Server Připraven</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="142"/>
-        <source>API Server Off</source>
-        <translation>API Server Vypnut</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="133"/>
-        <source>Remote %1 - Stale</source>
-        <translation>Vzdálený %1 - Zastaralý</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="136"/>
-        <source>Remote %1 - Live</source>
-        <translation>Vzdálené %1 - Živě</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="138"/>
-        <source>Remote %1 - No Data</source>
-        <translation>Vzdálené %1 - Žádná Data</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="94"/>
         <source>Operation Mode</source>
         <translation>Režim Provozu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="108"/>
         <source>Console Only (No Parsing)</source>
         <translation>Pouze Konzole (Bez Parsování)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="202"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="110"/>
         <source>Shows incoming data as text or hex. Nothing is parsed or plotted.</source>
         <translation>Zobrazuje příchozí data jako text nebo hex. Nic se neparsuje ani nevykresluje.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="122"/>
         <source>Quick Plot (Auto-Detected Format)</source>
         <translation>Rychlý Graf (Automaticky Detekovaný Formát)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="125"/>
         <source>Plots every line the device sends. Values separated by commas, tabs, or spaces, name and value pairs, units, and one-line JSON are detected automatically.</source>
         <translation>Vykresluje každý řádek, který zařízení odešle. Hodnoty oddělené čárkami, tabulátory nebo mezerami, páry název a hodnota, jednotky a jednořádkový JSON jsou automaticky detekovány.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
         <source>Parse via Project File</source>
         <translation>Parsovat Pomocí Souboru Projektu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="240"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="148"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>Vytvoří dashboard z projektu vytvořeného v Editoru Projektu.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="167"/>
         <source>Change Project File (%1)</source>
         <translation>Změnit Soubor Projektu (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="168"/>
         <source>Select Project File</source>
         <translation>Vybrat Soubor Projektu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="179"/>
         <source>Use Device Dashboard</source>
         <translation>Použít Dashboard Zařízení</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="188"/>
         <source>Keep Project</source>
         <translation>Zachovat Projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="298"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="206"/>
         <source>Data Export</source>
         <translation>Export Dat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
         <source>CSV Spreadsheet</source>
         <translation>Tabulka CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="254"/>
         <source>Historian Database</source>
         <translation>Databáze Historiku</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="432"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="340"/>
         <source>Connection: %1</source>
         <translation>Připojení: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="527"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="435"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>Každé zařízení má vlastní nastavení připojení. Nakonfigurujte je v Editoru Projektu na kartě Zařízení.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="275"/>
         <source>MDF4 Recording</source>
         <translation>Záznam MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="293"/>
         <source>Console Log</source>
         <translation>Protokol Konzole</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="501"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="409"/>
         <source>Multi-Device Project</source>
         <translation>Projekt s Více Zařízeními</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="514"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="422"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>Tento projekt streamuje data z %1 nezávislých zařízení.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="548"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="456"/>
         <source>Open Project Editor</source>
         <translation>Otevřít Editor Projektu</translation>
     </message>

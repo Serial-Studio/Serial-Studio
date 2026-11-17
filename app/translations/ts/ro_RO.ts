@@ -1272,6 +1272,39 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
     </message>
 </context>
 <context>
+    <name>ApiStatusIndicator</name>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="99"/>
+        <source>Remote %1 - Stale</source>
+        <translation>Telecomandă %1 - Învechit</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="102"/>
+        <source>Remote %1 - Live</source>
+        <translation>Telecomandă %1 - Activ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="104"/>
+        <source>Remote %1 - No Data</source>
+        <translation>Telecomandă %1 - Fără Date</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="108"/>
+        <source>API Server Off</source>
+        <translation>Server API Dezactivat</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="111"/>
+        <source>API Server Active (%1)</source>
+        <translation>Server API Activ (%1)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="113"/>
+        <source>API Server Ready</source>
+        <translation>Server API Gata</translation>
+    </message>
+</context>
+<context>
     <name>AppCommandBindings</name>
     <message>
         <location filename="../../qml/Commands/AppCommandBindings.qml" line="204"/>
@@ -5912,42 +5945,12 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 <context>
     <name>DashboardLayout</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="38"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="37"/>
         <source>Dashboard</source>
         <translation>Tablou de Bord</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="250"/>
-        <source>Remote %1 - Stale</source>
-        <translation>La Distanță %1 - Învechit</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="253"/>
-        <source>Remote %1 - Live</source>
-        <translation>La Distanță %1 - Live</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="255"/>
-        <source>Remote %1 - No Data</source>
-        <translation>Dispozitiv la Distanță %1 - Fără Date</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="262"/>
-        <source>API Server Active (%1)</source>
-        <translation>Server API Activ (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="264"/>
-        <source>API Server Ready</source>
-        <translation>Server API Pregătit</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="259"/>
-        <source>API Server Off</source>
-        <translation>Server API Oprit</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="676"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="584"/>
         <source>Command Palette</source>
         <translation>Paletă Comenzi</translation>
     </message>
@@ -13388,22 +13391,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Eșec la deschiderea "%1"</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="313"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="301"/>
         <source>HID Device Error</source>
         <translation>Eroare Dispozitiv HID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="314"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="302"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>Dispozitivul HID a fost deconectat sau a întâmpinat o eroare fatală de citire.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="446"/>
         <source>Select Device</source>
         <translation>Selectează Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="600"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="588"/>
         <source>HID Device</source>
         <translation>Dispozitiv HID</translation>
     </message>
@@ -13411,145 +13414,145 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="374"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="390"/>
         <source>The connection is not configured: check the host and the port</source>
         <translation>Conexiunea nu este configurată: verificați host-ul și portul</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="427"/>
         <source>IEC 104 Connection Failed</source>
         <translation>Conexiune IEC 104 Eșuată</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="412"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="428"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>Nu se poate conecta la %1:%2 (%3)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="487"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="503"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>Stația a trimis mai mult decât poate conține buffer-ul de recepție</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="526"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="542"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>Stația a trimis o trama pe care acest link nu a putut-o decoda</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="680"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="696"/>
         <source>The station did not answer within t1</source>
         <translation>Stația nu a răspuns în intervalul t1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="784"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="800"/>
         <source>IEC 104 Connection Lost</source>
         <translation>Conexiune IEC 104 Pierdută</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="906"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="914"/>
         <source>Not connected</source>
         <translation>Neconectat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="909"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="917"/>
         <source>Starting data transfer…</source>
         <translation>Se inițiază transferul de date…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="911"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="919"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>Se monitorizează %1 punct(e) de la stația %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1185"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1142"/>
         <source>Host</source>
         <translation>Gazdă</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1192"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1149"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1158"/>
         <source>Common Address</source>
         <translation>Adresă Comună</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Send Window (k)</source>
         <translation>Fereastră de Trimitere (k)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Ack Window (w)</source>
         <translation>Fereastră de Confirmare (w)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1226"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1183"/>
         <source>Timeout t%1 (ms)</source>
         <translation>Timeout t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1349"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1306"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>Proiect IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1354"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1311"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1385"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1342"/>
         <source>Status Points</source>
         <translation>Puncte de Stare</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Counters</source>
         <translation>Contoare</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Measurements</source>
         <translation>Măsurători</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1419"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1446"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1376"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1403"/>
         <source>Failed to load generated project</source>
         <translation>Eșec la încărcarea proiectului generat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1420"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1447"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1377"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1404"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>JSON-ul proiectului generat nu a putut fi încărcat.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1435"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1392"/>
         <source>No points discovered</source>
         <translation>Niciun punct descoperit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1436"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1393"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>Conectați-vă la stație și lăsați interogarea să se finalizeze înainte de a genera un proiect.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1438"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1458"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1415"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>Generator de Proiect IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1455"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1412"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Proiect generat cu succes cu %1 seturi de date.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1456"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1413"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
@@ -13557,117 +13560,117 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="79"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="81"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="82"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="83"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3 sau Mai Nou</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="84"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2 sau Mai Nou</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="85"/>
         <source>Any Protocol</source>
         <translation>Orice Protocol</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="86"/>
         <source>Secure Protocols Only</source>
         <translation>Doar Protocoale Securizate</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="88"/>
         <source>None</source>
         <translation>Niciunul</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="76"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="89"/>
         <source>Query Peer</source>
         <translation>Interogare Peer</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="90"/>
         <source>Verify Peer</source>
         <translation>Verificare Peer</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="91"/>
         <source>Auto Verify Peer</source>
         <translation>Verificare Automată Peer</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="140"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="153"/>
         <source>MQTT Connection Failed</source>
         <translation>Conexiune MQTT Eșuată</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="171"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="184"/>
         <source>The broker did not answer within %1 seconds</source>
         <translation>Broker-ul nu a răspuns în %1 secunde</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="237"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="250"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>Funcționalitatea MQTT Necesită o Licență Comercială</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="238"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="251"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>Abonarea la un broker MQTT este disponibilă doar cu o licență Serial Studio validă sau o perioadă de probă activă.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="498"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="487"/>
         <source>Use System Database</source>
         <translation>Utilizare Bază de Date Sistem</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="499"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="488"/>
         <source>Load From Folder…</source>
         <translation>Încărcare din Folder…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="532"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="521"/>
         <source>Select PEM Certificates Directory</source>
         <translation>Selectare Director Certificate PEM</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="847"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="836"/>
         <source>Hostname</source>
         <translation>Nume Gazdă</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="843"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="863"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="852"/>
         <source>Topic Filter</source>
         <translation>Filtru Subiect</translation>
     </message>
@@ -13682,212 +13685,212 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>ID Grup Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="861"/>
         <source>Client ID</source>
         <translation>ID Client</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="879"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="868"/>
         <source>Username</source>
         <translation>Nume de Utilizator</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="875"/>
         <source>Password</source>
         <translation>Parolă</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="893"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="882"/>
         <source>MQTT Version</source>
         <translation>Versiune MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="901"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="890"/>
         <source>Clean Session</source>
         <translation>Sesiune Curată</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="908"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="897"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="906"/>
         <source>Auto Keep Alive</source>
         <translation>Keep Alive Automat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="934"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="923"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS Activat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="944"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="933"/>
         <source>SSL Protocol</source>
         <translation>Protocol SSL</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="952"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="941"/>
         <source>Peer Verify Mode</source>
         <translation>Mod Verificare Peer</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="960"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="949"/>
         <source>Peer Verify Depth</source>
         <translation>Adâncime Verificare Peer</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="969"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="958"/>
         <source>Client Certificate (PEM)</source>
         <translation>Certificat Client (PEM)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="976"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="965"/>
         <source>Private Key (PEM)</source>
         <translation>Cheie Privată (PEM)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="983"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="972"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT pe portul 443)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="991"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="980"/>
         <source>ALPN Protocol</source>
         <translation>Protocol ALPN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1146"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1135"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>Broker-ul a închis conexiunea în timpul tentativei</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1141"/>
         <source>The connection could not be re-established</source>
         <translation>Conexiunea nu a putut fi restabilită</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1162"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1151"/>
         <source>MQTT Subscription Error</source>
         <translation>Eroare Abonare MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1163"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>Eșec la abonarea la topic-ul „%1".</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1417"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1406"/>
         <source>MQTT Client Certificate Error</source>
         <translation>Eroare Certificat Client MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1434"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1423"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>Fișiere PEM (*.pem *.crt *.cer *.key);;Toate fișierele (*)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1460"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1449"/>
         <source>Select Client Certificate</source>
         <translation>Selectează Certificatul Client</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1468"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1457"/>
         <source>Select Private Key</source>
         <translation>Selectează Cheia Privată</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1190"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1179"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>Versiune Protocol MQTT Invalidă</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1180"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>Broker-ul a respins versiunea protocolului MQTT configurată.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1194"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1183"/>
         <source>Client ID Rejected</source>
         <translation>ID Client Respins</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1184"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>Broker-ul a respins ID-ul clientului. Încercați un identificator diferit.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1198"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1187"/>
         <source>MQTT Server Unavailable</source>
         <translation>Server MQTT Indisponibil</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1188"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>Broker-ul este momentan indisponibil. Reîncercați mai târziu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
         <source>Authentication Error</source>
         <translation>Eroare de Autentificare</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1192"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>Acreditările furnizate au fost respinse de broker.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1206"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
         <source>Authorization Error</source>
         <translation>Eroare de Autorizare</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1207"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1196"/>
         <source>Account lacks permission for this operation.</source>
         <translation>Contul nu are permisiunea pentru această operațiune.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1210"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
         <source>Network or Transport Error</source>
         <translation>Eroare de Rețea sau Transport</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1211"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1200"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>Problemă la nivelul rețelei/transportului în timpul conectării la broker.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1214"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>Un certificat client este configurat: verifică că se potrivește cu cheia privată și este activat pe broker.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1219"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1208"/>
         <source>MQTT Protocol Violation</source>
         <translation>Violare Protocol MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1220"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1209"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>Broker-ul a raportat o violare de protocol și a închis conexiunea.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1223"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1212"/>
         <source>MQTT 5 Error</source>
         <translation>Eroare MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1224"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1213"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>A apărut o eroare la nivel de protocol MQTT 5.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1227"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1216"/>
         <source>MQTT Error</source>
         <translation>Eroare MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1228"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1217"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>A apărut o eroare MQTT neașteptată.</translation>
     </message>
@@ -14082,67 +14085,67 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Editorul de proiect este acum deschis pentru personalizare.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1192"/>
         <source>Error code: %1</source>
         <translation>Cod eroare: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1204"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1194"/>
         <source>Modbus Communication Error</source>
         <translation>Eroare de Comunicare Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1203"/>
         <source>Select Port</source>
         <translation>Selectează Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1305"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1295"/>
         <source>Protocol</source>
         <translation>Protocol</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1313"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1303"/>
         <source>Slave Address</source>
         <translation>Adresă Slave</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1322"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1312"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Interogare (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1340"/>
         <source>Host / IP</source>
         <translation>Gazdă / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1357"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1347"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1372"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1362"/>
         <source>Serial Port</source>
         <translation>Port Serial</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1380"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1370"/>
         <source>Baud Rate</source>
         <translation>Rată Baud</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1378"/>
         <source>Parity</source>
         <translation>Paritate</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1386"/>
         <source>Data Bits</source>
         <translation>Biți de Date</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1394"/>
         <source>Stop Bits</source>
         <translation>Biți de Stop</translation>
     </message>
@@ -24814,42 +24817,42 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
         <translation>Acest fișier nu este o bază de date Serial Studio Historian.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="211"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="277"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="394"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="465"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="490"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="518"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="558"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="852"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="935"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="212"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="278"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="395"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="466"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="519"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="559"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="853"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="936"/>
         <source>Database not open</source>
         <translation>Baza de date nu este deschisă</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="220"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="221"/>
         <source>This session is being recorded</source>
         <translation>Această sesiune este în curs de înregistrare</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="314"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="337"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="315"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="338"/>
         <source>Database not open or empty label</source>
         <translation>Baza de date nu este deschisă sau etichetă goală</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="439"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="440"/>
         <source>Invalid label</source>
         <translation>Etichetă invalidă</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="706"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="805"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="707"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="806"/>
         <source>Cancelled</source>
         <translation>Anulat</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="947"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="948"/>
         <source>Could not load session data</source>
         <translation>Nu s-au putut încărca datele sesiunii</translation>
     </message>
@@ -25094,63 +25097,63 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="329"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="318"/>
         <source>Open Session File</source>
         <translation>Deschide Fișier de Sesiune</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="331"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="320"/>
         <source>Session files (*.db)</source>
         <translation>Fișiere de sesiune (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="420"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="409"/>
         <source>Device Connection Active</source>
         <translation>Conexiune Dispozitiv Activă</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="421"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="410"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Pentru a utiliza această funcție, trebuie să vă deconectați de la dispozitiv. Doriți să continuați?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="463"/>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="452"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="479"/>
         <source>Cannot open session file</source>
         <translation>Nu se poate deschide fișierul de sesiune</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="464"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="453"/>
         <source>Unknown error</source>
         <translation>Eroare necunoscută</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="472"/>
         <source>No project data</source>
         <translation>Nicio dată de proiect</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="473"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Această sesiune nu conține un fișier de proiect încorporat — tabloul de bord revine la o dispunere de grafic rapid.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="480"/>
         <source>Check file permissions and try again.</source>
         <translation>Verifică permisiunile fișierului și încearcă din nou.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="641"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="630"/>
         <source>Sessions</source>
         <translation>Sesiuni</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="643"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="632"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Înregistrarea folosește o copie mai veche a proiectului</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="633"/>
         <source>This dashboard comes from the recording, and the project file has changed since it was recorded. Close the recording to return to the current project.</source>
         <translation>Tabloul de bord provine din înregistrare, iar fișierul proiectului s-a modificat de când a fost înregistrat. Închideți înregistrarea pentru a reveni la proiectul curent.</translation>
     </message>
@@ -26030,142 +26033,112 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
 <context>
     <name>Setup</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="35"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="34"/>
         <source>Device Setup</source>
         <translation>Configurare Dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
-        <source>API Server Active (%1)</source>
-        <translation>Server API Activ (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="147"/>
-        <source>API Server Ready</source>
-        <translation>Server API Pregătit</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="142"/>
-        <source>API Server Off</source>
-        <translation>Server API Dezactivat</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="133"/>
-        <source>Remote %1 - Stale</source>
-        <translation>La Distanță %1 - Învechit</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="136"/>
-        <source>Remote %1 - Live</source>
-        <translation>La Distanță %1 - Live</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="138"/>
-        <source>Remote %1 - No Data</source>
-        <translation>La Distanță %1 - Fără Date</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="94"/>
         <source>Operation Mode</source>
         <translation>Mod de Operare</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="108"/>
         <source>Console Only (No Parsing)</source>
         <translation>Doar Consolă (Fără Parsare)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="202"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="110"/>
         <source>Shows incoming data as text or hex. Nothing is parsed or plotted.</source>
         <translation>Afișează datele primite ca text sau hex. Nimic nu este analizat sau reprezentat grafic.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="122"/>
         <source>Quick Plot (Auto-Detected Format)</source>
         <translation>Grafic Rapid (Format Detectat Automat)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="125"/>
         <source>Plots every line the device sends. Values separated by commas, tabs, or spaces, name and value pairs, units, and one-line JSON are detected automatically.</source>
         <translation>Trasează fiecare linie pe care o trimite dispozitivul. Valorile separate prin virgule, tabulații sau spații, perechi nume și valoare, unități și JSON pe o singură linie sunt detectate automat.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
         <source>Parse via Project File</source>
         <translation>Analizează prin Fișier Proiect</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="240"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="148"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>Construiește tabloul de bord dintr-un proiect creat în Editorul de Proiect.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="167"/>
         <source>Change Project File (%1)</source>
         <translation>Schimbă Fișier Proiect (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="168"/>
         <source>Select Project File</source>
         <translation>Selectează Fișier Proiect</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="179"/>
         <source>Use Device Dashboard</source>
         <translation>Utilizează Tabloul de Bord Al Dispozitivului</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="188"/>
         <source>Keep Project</source>
         <translation>Păstrează Proiectul</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="298"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="206"/>
         <source>Data Export</source>
         <translation>Export Date</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
         <source>CSV Spreadsheet</source>
         <translation>Foaie de Calcul CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="254"/>
         <source>Historian Database</source>
         <translation>Bază de Date Istoric</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="432"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="340"/>
         <source>Connection: %1</source>
         <translation>Conexiune: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="527"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="435"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>Fiecare dispozitiv are propriile setări de conexiune. Configurează-le în Editorul de Proiect sub fila Dispozitive.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="275"/>
         <source>MDF4 Recording</source>
         <translation>Înregistrare MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="293"/>
         <source>Console Log</source>
         <translation>Jurnal Consolă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="501"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="409"/>
         <source>Multi-Device Project</source>
         <translation>Proiect Multi-dispozitiv</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="514"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="422"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>Acest proiect transmite date de la %1 dispozitive independente.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="548"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="456"/>
         <source>Open Project Editor</source>
         <translation>Deschide Editorul de Proiect</translation>
     </message>

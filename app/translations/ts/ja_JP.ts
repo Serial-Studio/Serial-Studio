@@ -1272,6 +1272,39 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
 </context>
 <context>
+    <name>ApiStatusIndicator</name>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="99"/>
+        <source>Remote %1 - Stale</source>
+        <translation>リモート %1 - 古いデータ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="102"/>
+        <source>Remote %1 - Live</source>
+        <translation>リモート %1 - ライブ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="104"/>
+        <source>Remote %1 - No Data</source>
+        <translation>リモート %1 - データなし</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="108"/>
+        <source>API Server Off</source>
+        <translation>APIサーバー オフ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="111"/>
+        <source>API Server Active (%1)</source>
+        <translation>APIサーバー アクティブ (%1)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/ApiStatusIndicator.qml" line="113"/>
+        <source>API Server Ready</source>
+        <translation>APIサーバー 準備完了</translation>
+    </message>
+</context>
+<context>
     <name>AppCommandBindings</name>
     <message>
         <location filename="../../qml/Commands/AppCommandBindings.qml" line="204"/>
@@ -5912,42 +5945,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardLayout</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="38"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="37"/>
         <source>Dashboard</source>
         <translation>ダッシュボード</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="250"/>
-        <source>Remote %1 - Stale</source>
-        <translation>リモート %1 - 古い</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="253"/>
-        <source>Remote %1 - Live</source>
-        <translation>リモート %1 - ライブ</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="255"/>
-        <source>Remote %1 - No Data</source>
-        <translation>リモート %1 - データなし</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="262"/>
-        <source>API Server Active (%1)</source>
-        <translation>APIサーバー稼働中 (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="264"/>
-        <source>API Server Ready</source>
-        <translation>APIサーバー準備完了</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="259"/>
-        <source>API Server Off</source>
-        <translation>APIサーバー停止中</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="676"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="584"/>
         <source>Command Palette</source>
         <translation>コマンドパレット</translation>
     </message>
@@ -13386,22 +13389,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>"%1"を開けませんでした</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="313"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="301"/>
         <source>HID Device Error</source>
         <translation>HIDデバイスエラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="314"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="302"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
         <translation>HIDデバイスが切断されたか、致命的な読み取りエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="446"/>
         <source>Select Device</source>
         <translation>デバイスを選択</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="600"/>
+        <location filename="../../../core/Devices/IO/Drivers/HID.cpp" line="588"/>
         <source>HID Device</source>
         <translation>HIDデバイス</translation>
     </message>
@@ -13409,145 +13412,145 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Iec104</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="374"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="390"/>
         <source>The connection is not configured: check the host and the port</source>
         <translation>接続が設定されていません：ホストとポートを確認してください</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="427"/>
         <source>IEC 104 Connection Failed</source>
         <translation>IEC 104 接続失敗</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="412"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="428"/>
         <source>Cannot connect to %1:%2 (%3)</source>
         <translation>%1:%2 に接続できません (%3)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="487"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="503"/>
         <source>The station sent more than the receive buffer holds</source>
         <translation>ステーションが受信バッファの容量を超えるデータを送信しました</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="526"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="542"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>ステーションがこのリンクでデコードできないフレームを送信しました</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="680"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="696"/>
         <source>The station did not answer within t1</source>
         <translation>ステーションが t1 以内に応答しませんでした</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="784"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="800"/>
         <source>IEC 104 Connection Lost</source>
         <translation>IEC 104 接続切断</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="906"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="914"/>
         <source>Not connected</source>
         <translation>未接続</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="909"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="917"/>
         <source>Starting data transfer…</source>
         <translation>データ転送を開始中…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="911"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="919"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>ステーション %2 から %1 ポイントを監視中</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1185"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1142"/>
         <source>Host</source>
         <translation>ホスト</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1192"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1149"/>
         <source>Port</source>
         <translation>ポート</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1158"/>
         <source>Common Address</source>
         <translation>共通アドレス</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Send Window (k)</source>
         <translation>送信ウィンドウ (k)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1170"/>
         <source>Ack Window (w)</source>
         <translation>確認応答ウィンドウ (w)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1226"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1183"/>
         <source>Timeout t%1 (ms)</source>
         <translation>タイムアウト t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1349"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1306"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>IEC 60870-5-104 プロジェクト</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1354"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1311"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1385"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1342"/>
         <source>Status Points</source>
         <translation>ステータスポイント</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Counters</source>
         <translation>カウンタ</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1343"/>
         <source>Measurements</source>
         <translation>測定値</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1419"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1446"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1376"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1403"/>
         <source>Failed to load generated project</source>
         <translation>生成されたプロジェクトの読み込みに失敗しました</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1420"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1447"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1377"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1404"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>生成されたプロジェクトJSONを読み込めませんでした。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1435"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1392"/>
         <source>No points discovered</source>
         <translation>ポイントが検出されませんでした</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1436"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1393"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>ステーションに接続し、プロジェクトを生成する前に問い合わせを完了させてください。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1438"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1458"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1415"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>IEC 60870-5-104プロジェクトジェネレーター</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1455"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1412"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>%1個のデータセットを含むプロジェクトを正常に生成しました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1456"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1413"/>
         <source>The project editor is now open for customization.</source>
         <translation>プロジェクトエディターがカスタマイズのために開かれました。</translation>
     </message>
@@ -13555,117 +13558,117 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::MQTT</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="64"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="65"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="66"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="79"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="68"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="81"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="69"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="82"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="70"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="83"/>
         <source>TLS 1.3 or Later</source>
         <translation>TLS 1.3以降</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="71"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="84"/>
         <source>DTLS 1.2 or Later</source>
         <translation>DTLS 1.2以降</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="72"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="85"/>
         <source>Any Protocol</source>
         <translation>任意のプロトコル</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="73"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="86"/>
         <source>Secure Protocols Only</source>
         <translation>セキュアプロトコルのみ</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="75"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="88"/>
         <source>None</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="76"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="89"/>
         <source>Query Peer</source>
         <translation>ピアに問い合わせ</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="77"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="90"/>
         <source>Verify Peer</source>
         <translation>ピアを検証</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="78"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="91"/>
         <source>Auto Verify Peer</source>
         <translation>ピアを自動検証</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="140"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="153"/>
         <source>MQTT Connection Failed</source>
         <translation>MQTT接続失敗</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="171"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="184"/>
         <source>The broker did not answer within %1 seconds</source>
         <translation>ブローカーが %1 秒以内に応答しませんでした</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="237"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="250"/>
         <source>MQTT Feature Requires a Commercial License</source>
         <translation>MQTT機能には商用ライセンスが必要</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="238"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="251"/>
         <source>Subscribing to an MQTT broker is only available with a valid Serial Studio license or an active trial.</source>
         <translation>MQTTブローカーへのサブスクライブは、有効なSerial Studioライセンスまたはアクティブなトライアルでのみ利用可能です。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="498"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="487"/>
         <source>Use System Database</source>
         <translation>システムデータベースを使用</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="499"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="488"/>
         <source>Load From Folder…</source>
         <translation>フォルダから読み込み…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="532"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="521"/>
         <source>Select PEM Certificates Directory</source>
         <translation>PEM証明書ディレクトリを選択</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="847"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="836"/>
         <source>Hostname</source>
         <translation>ホスト名</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="843"/>
         <source>Port</source>
         <translation>ポート</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="863"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="852"/>
         <source>Topic Filter</source>
         <translation>トピックフィルター</translation>
     </message>
@@ -13680,212 +13683,212 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>SparkplugグループID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="861"/>
         <source>Client ID</source>
         <translation>クライアントID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="879"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="868"/>
         <source>Username</source>
         <translation>ユーザー名</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="875"/>
         <source>Password</source>
         <translation>パスワード</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="893"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="882"/>
         <source>MQTT Version</source>
         <translation>MQTTバージョン</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="901"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="890"/>
         <source>Clean Session</source>
         <translation>クリーンセッション</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="908"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="897"/>
         <source>Keep Alive (s)</source>
         <translation>キープアライブ (秒)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="906"/>
         <source>Auto Keep Alive</source>
         <translation>自動キープアライブ</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="934"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="923"/>
         <source>SSL/TLS Enabled</source>
         <translation>SSL/TLS有効</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="944"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="933"/>
         <source>SSL Protocol</source>
         <translation>SSLプロトコル</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="952"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="941"/>
         <source>Peer Verify Mode</source>
         <translation>ピア検証モード</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="960"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="949"/>
         <source>Peer Verify Depth</source>
         <translation>ピア検証深度</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="969"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="958"/>
         <source>Client Certificate (PEM)</source>
         <translation>クライアント証明書（PEM）</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="976"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="965"/>
         <source>Private Key (PEM)</source>
         <translation>秘密鍵（PEM）</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="983"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="972"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN（ポート443経由のMQTT）</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="991"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="980"/>
         <source>ALPN Protocol</source>
         <translation>ALPNプロトコル</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1146"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1135"/>
         <source>The broker closed the connection during the attempt</source>
         <translation>試行中にブローカーが接続を切断しました</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1141"/>
         <source>The connection could not be re-established</source>
         <translation>接続を再確立できませんでした</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1162"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1151"/>
         <source>MQTT Subscription Error</source>
         <translation>MQTTサブスクリプションエラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1163"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1152"/>
         <source>Failed to subscribe to topic "%1".</source>
         <translation>トピック「%1」のサブスクライブに失敗しました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1417"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1406"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTTクライアント証明書エラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1434"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1423"/>
         <source>PEM files (*.pem *.crt *.cer *.key);;All files (*)</source>
         <translation>PEMファイル (*.pem *.crt *.cer *.key);;すべてのファイル (*)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1460"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1449"/>
         <source>Select Client Certificate</source>
         <translation>クライアント証明書を選択</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1468"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1457"/>
         <source>Select Private Key</source>
         <translation>秘密鍵を選択</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1190"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1179"/>
         <source>Invalid MQTT Protocol Version</source>
         <translation>無効なMQTTプロトコルバージョン</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1180"/>
         <source>The broker rejected the configured MQTT protocol version.</source>
         <translation>ブローカーが設定されたMQTTプロトコルバージョンを拒否しました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1194"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1183"/>
         <source>Client ID Rejected</source>
         <translation>クライアントIDが拒否されました</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1184"/>
         <source>The broker rejected the client ID. Try a different identifier.</source>
         <translation>ブローカーがクライアントIDを拒否しました。別の識別子を試してください。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1198"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1187"/>
         <source>MQTT Server Unavailable</source>
         <translation>MQTTサーバーが利用できません</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1188"/>
         <source>The broker is currently unavailable. Retry later.</source>
         <translation>ブローカーは現在利用できません。後で再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1191"/>
         <source>Authentication Error</source>
         <translation>認証エラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1192"/>
         <source>The credentials provided were rejected by the broker.</source>
         <translation>提供された資格情報がブローカーによって拒否されました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1206"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1195"/>
         <source>Authorization Error</source>
         <translation>認可エラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1207"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1196"/>
         <source>Account lacks permission for this operation.</source>
         <translation>アカウントにこの操作の権限がありません。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1210"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1199"/>
         <source>Network or Transport Error</source>
         <translation>ネットワークまたはトランスポートエラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1211"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1200"/>
         <source>Network/transport layer issue while connecting to the broker.</source>
         <translation>ブローカーへの接続中にネットワーク/トランスポート層の問題が発生しました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1214"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1203"/>
         <source>A client certificate is configured: verify that it matches the private key and is activated on the broker.</source>
         <translation>クライアント証明書が設定されています：秘密鍵と一致し、ブローカーで有効化されていることを確認してください。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1219"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1208"/>
         <source>MQTT Protocol Violation</source>
         <translation>MQTTプロトコル違反</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1220"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1209"/>
         <source>The broker reported a protocol violation and closed the connection.</source>
         <translation>ブローカーがプロトコル違反を報告し、接続を閉じました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1223"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1212"/>
         <source>MQTT 5 Error</source>
         <translation>MQTT 5 エラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1224"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1213"/>
         <source>An MQTT 5 protocol-level error occurred.</source>
         <translation>MQTT 5 プロトコルレベルのエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1227"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1216"/>
         <source>MQTT Error</source>
         <translation>MQTT エラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1228"/>
+        <location filename="../../../core/Devices/IO/Drivers/MQTT.cpp" line="1217"/>
         <source>An unexpected MQTT error occurred.</source>
         <translation>予期しない MQTT エラーが発生しました。</translation>
     </message>
@@ -14080,67 +14083,67 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>プロジェクトエディターがカスタマイズのために開かれました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1202"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1192"/>
         <source>Error code: %1</source>
         <translation>エラーコード: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1204"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1194"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus通信エラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1213"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1203"/>
         <source>Select Port</source>
         <translation>ポートを選択</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1305"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1295"/>
         <source>Protocol</source>
         <translation>プロトコル</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1313"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1303"/>
         <source>Slave Address</source>
         <translation>スレーブアドレス</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1322"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1312"/>
         <source>Poll Interval (ms)</source>
         <translation>ポーリング間隔（ms）</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1340"/>
         <source>Host / IP</source>
         <translation>ホスト / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1357"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1347"/>
         <source>Port</source>
         <translation>ポート</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1372"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1362"/>
         <source>Serial Port</source>
         <translation>シリアルポート</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1380"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1370"/>
         <source>Baud Rate</source>
         <translation>ボーレート</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1378"/>
         <source>Parity</source>
         <translation>パリティ</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1386"/>
         <source>Data Bits</source>
         <translation>データビット</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1394"/>
         <source>Stop Bits</source>
         <translation>ストップビット</translation>
     </message>
@@ -24806,42 +24809,42 @@ Add absolute addresses above to poll the controller.</source>
         <translation>このファイルはSerial Studio Historianデータベースではありません。</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="211"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="277"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="394"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="465"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="490"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="518"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="558"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="852"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="935"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="212"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="278"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="395"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="466"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="519"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="559"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="853"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="936"/>
         <source>Database not open</source>
         <translation>データベースが開かれていません</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="220"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="221"/>
         <source>This session is being recorded</source>
         <translation>このセッションは記録中です</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="314"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="337"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="315"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="338"/>
         <source>Database not open or empty label</source>
         <translation>データベースが開かれていないか、ラベルが空です</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="439"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="440"/>
         <source>Invalid label</source>
         <translation>無効なラベル</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="706"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="805"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="707"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="806"/>
         <source>Cancelled</source>
         <translation>キャンセルされました</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="947"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="948"/>
         <source>Could not load session data</source>
         <translation>セッションデータを読み込めませんでした</translation>
     </message>
@@ -25086,63 +25089,63 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="329"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="318"/>
         <source>Open Session File</source>
         <translation>セッションファイルを開く</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="331"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="320"/>
         <source>Session files (*.db)</source>
         <translation>セッションファイル (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="420"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="409"/>
         <source>Device Connection Active</source>
         <translation>デバイス接続がアクティブです</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="421"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="410"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>この機能を使用するには、デバイスから切断する必要があります。続行しますか?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="463"/>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="452"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="479"/>
         <source>Cannot open session file</source>
         <translation>セッションファイルを開けません</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="464"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="453"/>
         <source>Unknown error</source>
         <translation>不明なエラー</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="472"/>
         <source>No project data</source>
         <translation>プロジェクトデータがありません</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="473"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>このセッションには埋め込みプロジェクトファイルが含まれていません — ダッシュボードはクイックプロットレイアウトにフォールバックします。</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="480"/>
         <source>Check file permissions and try again.</source>
         <translation>ファイルのアクセス許可を確認して、再試行してください。</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="641"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="630"/>
         <source>Sessions</source>
         <translation>セッション</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="643"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="632"/>
         <source>Recording uses an older copy of the project</source>
         <translation>記録は古いバージョンのプロジェクトを使用しています</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="633"/>
         <source>This dashboard comes from the recording, and the project file has changed since it was recorded. Close the recording to return to the current project.</source>
         <translation>このダッシュボードは記録から取得したもので、プロジェクトファイルは記録以降に変更されています。記録を閉じて現在のプロジェクトに戻ってください。</translation>
     </message>
@@ -26022,142 +26025,112 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Setup</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="35"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="34"/>
         <source>Device Setup</source>
         <translation>デバイス設定</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
-        <source>API Server Active (%1)</source>
-        <translation>APIサーバー稼働中 (%1)</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="147"/>
-        <source>API Server Ready</source>
-        <translation>APIサーバー準備完了</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="142"/>
-        <source>API Server Off</source>
-        <translation>APIサーバー停止中</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="133"/>
-        <source>Remote %1 - Stale</source>
-        <translation>リモート %1 - 古い</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="136"/>
-        <source>Remote %1 - Live</source>
-        <translation>リモート %1 - ライブ</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="138"/>
-        <source>Remote %1 - No Data</source>
-        <translation>リモート %1 - データなし</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="94"/>
         <source>Operation Mode</source>
         <translation>動作モード</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="108"/>
         <source>Console Only (No Parsing)</source>
         <translation>コンソールのみ（解析なし）</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="202"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="110"/>
         <source>Shows incoming data as text or hex. Nothing is parsed or plotted.</source>
         <translation>受信データをテキストまたは16進数で表示します。解析またはプロットは行われません。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="122"/>
         <source>Quick Plot (Auto-Detected Format)</source>
         <translation>クイックプロット（自動検出フォーマット）</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="125"/>
         <source>Plots every line the device sends. Values separated by commas, tabs, or spaces, name and value pairs, units, and one-line JSON are detected automatically.</source>
         <translation>デバイスが送信するすべての行をプロット表示します。カンマ、タブ、またはスペースで区切られた値、名前と値のペア、単位、および1行のJSONが自動的に検出されます。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="237"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
         <source>Parse via Project File</source>
         <translation>プロジェクトファイル経由で解析</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="240"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="148"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>プロジェクトエディタで作成されたプロジェクトからダッシュボードを構築します。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="167"/>
         <source>Change Project File (%1)</source>
         <translation>プロジェクトファイルを変更（%1）</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="168"/>
         <source>Select Project File</source>
         <translation>プロジェクトファイルを選択</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="179"/>
         <source>Use Device Dashboard</source>
         <translation>デバイスダッシュボードを使用</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="188"/>
         <source>Keep Project</source>
         <translation>プロジェクトを保持</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="298"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="206"/>
         <source>Data Export</source>
         <translation>データエクスポート</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
         <source>CSV Spreadsheet</source>
         <translation>CSVスプレッドシート</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="254"/>
         <source>Historian Database</source>
         <translation>ヒストリアンデータベース</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="432"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="340"/>
         <source>Connection: %1</source>
         <translation>接続：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="527"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="435"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>各デバイスには独自の接続設定があります。プロジェクトエディタの「デバイス」タブで設定してください。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="275"/>
         <source>MDF4 Recording</source>
         <translation>MDF4記録</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="293"/>
         <source>Console Log</source>
         <translation>コンソールログ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="501"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="409"/>
         <source>Multi-Device Project</source>
         <translation>マルチデバイスプロジェクト</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="514"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="422"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>このプロジェクトは %1 台の独立したデバイスからデータをストリーミングします。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="548"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="456"/>
         <source>Open Project Editor</source>
         <translation>プロジェクトエディタを開く</translation>
     </message>
