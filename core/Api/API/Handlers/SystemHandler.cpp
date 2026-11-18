@@ -207,6 +207,53 @@ API::CommandResponse API::Handlers::SystemHandler::runningProcesses(const QStrin
   return CommandResponse::makeSuccess(id, result);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Launch defines (spec 0126)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns one --define value by key. An unknown key is an answer, not an error, so a
+ *        script can test for a value; there is no package refusal, since a define reveals
+ *        nothing about a package.
+ */
+API::CommandResponse API::Handlers::SystemHandler::getDefine(const QString& id,
+                                                             const QJsonObject& params)
+{
+  const QJsonValue requested = params.value(QStringLiteral("key"));
+  if (!requested.isString())
+    return CommandResponse::makeMissingParam(id, "key");
+
+  const QString key   = requested.toString();
+  const auto& defines = Core::Runtime::defines();
+  const auto it       = defines.constFind(key);
+  const bool defined  = it != defines.constEnd();
+
+  QJsonObject result;
+  result[QStringLiteral("key")]     = key;
+  result[QStringLiteral("defined")] = defined;
+  result[QStringLiteral("value")]   = defined ? it.value() : QString();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Returns every --define value by key. The object is wrapped, since the script bridges
+ *        drop an empty result and a run without defines must still answer with one.
+ */
+API::CommandResponse API::Handlers::SystemHandler::listDefines(const QString& id,
+                                                               const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  QJsonObject defines;
+  const auto& held = Core::Runtime::defines();
+  for (auto it = held.constBegin(); it != held.constEnd(); ++it)
+    defines.insert(it.key(), it.value());
+
+  QJsonObject result;
+  result[QStringLiteral("defines")] = defines;
+  return CommandResponse::makeSuccess(id, result);
+}
+
 /**
  * @brief Registers all system.* commands with the global registry.
  */
@@ -257,4 +304,21 @@ void API::Handlers::SystemHandler::registerCommands()
                    "script only."),
     emptySchema(),
     &runningProcesses);
+
+  registry.registerCommand(
+    QStringLiteral("system.getDefine"),
+    QStringLiteral("Return one value passed on the command line with --define KEY=VALUE. "
+                   "Answers {key, defined, value}; value is always text, and an unknown key "
+                   "answers defined: false with an empty value. Read-only, never prompts."),
+    makeSchema({
+      {QStringLiteral("key"), QStringLiteral("string"), QStringLiteral("Name of the define")}
+  }),
+    &getDefine);
+
+  registry.registerCommand(
+    QStringLiteral("system.listDefines"),
+    QStringLiteral("Return every value passed on the command line with --define, as "
+                   "{defines: {key: value}}. Empty when the option was not used."),
+    emptySchema(),
+    &listDefines);
 }

@@ -3068,10 +3068,21 @@ system.exec = function(program, options) {
   return apiCall('system.exec', p);
 };
 
+system.getDefine = function(key) {
+  var p = {};
+  p['key'] = key;
+  return apiCall('system.getDefine', p);
+};
+
 system.kill = function(processId) {
   var p = {};
   p['processId'] = processId;
   return apiCall('system.kill', p);
+};
+
+system.listDefines = function() {
+  var p = {};
+  return apiCall('system.listDefines', p);
 };
 
 system.projectDir = function() {

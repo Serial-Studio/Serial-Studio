@@ -31,6 +31,7 @@ static std::atomic<bool> s_sealed{false};
 static QString s_sealedMountRoot;
 static QString s_sealedProjectFolder;
 static QString s_operatorProject;
+static QMap<QString, QString> s_defines;
 static Core::Runtime::SealedHelpers s_sealedHelpers;
 
 /**
@@ -134,4 +135,22 @@ const QString& Core::Runtime::operatorProject() noexcept
 void Core::Runtime::setOperatorProject(const QString& projectPath) noexcept
 {
   s_operatorProject = projectPath;
+}
+
+/**
+ * @brief The values a launcher passed with --define, by key (spec 0126); empty without the
+ *        option. GUI thread.
+ */
+const QMap<QString, QString>& Core::Runtime::defines() noexcept
+{
+  return s_defines;
+}
+
+/**
+ * @brief Records the command line's defines, once, before any script engine exists. Nothing else
+ *        writes them, so a value lasts exactly as long as the process that was given it.
+ */
+void Core::Runtime::setDefines(const QMap<QString, QString>& defines)
+{
+  s_defines = defines;
 }

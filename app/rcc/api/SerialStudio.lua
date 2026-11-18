@@ -2745,10 +2745,21 @@ function system.exec(program, options)
   return apiCall('system.exec', p)
 end
 
+function system.getDefine(key)
+  local p = {}
+  p['key'] = key
+  return apiCall('system.getDefine', p)
+end
+
 function system.kill(processId)
   local p = {}
   p['processId'] = processId
   return apiCall('system.kill', p)
+end
+
+function system.listDefines()
+  local p = {}
+  return apiCall('system.listDefines', p)
 end
 
 function system.projectDir()

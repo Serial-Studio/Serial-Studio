@@ -127,6 +127,8 @@ struct CliOptions {
     "ms"};
   QCommandLineOption httpHeaderOpt{
     "http-header", "Adds an HTTP request header; repeatable", "name: value"};
+  QCommandLineOption defineOpt{
+    "define", "Passes a named text value to the project's scripts; repeatable", "KEY=VALUE"};
   QCommandLineOption insecureTlsOpt{
     "insecure-tls", "Accepts untrusted certificates on wss:// and https:// endpoints"};
   QCommandLineOption benchmarkHotpathOpt{
@@ -396,6 +398,8 @@ private:
   void applyOperatorTaskbarSettings(const RuntimeOptions& options);
   void warnIgnoredDeploymentFlags() const;
 #endif
+
+  [[nodiscard]] bool applyDefines() const;
 
   CliOptions m_opts;
   QCommandLineParser m_parser;

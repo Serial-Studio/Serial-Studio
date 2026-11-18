@@ -26,8 +26,9 @@
 namespace API {
 namespace Handlers {
 /**
- * @brief Registers system.* API commands: the loaded project's directory plus control-script
- *        managed process execution (run helper scripts on connect, reaped on disconnect).
+ * @brief Registers system.* API commands: the loaded project's directory, the launch defines
+ *        (spec 0126) and control-script managed process execution (run helper scripts on
+ *        connect, reaped on disconnect).
  */
 class SystemHandler {
 public:
@@ -38,6 +39,8 @@ private:
   static CommandResponse exec(const QString& id, const QJsonObject& params);
   static CommandResponse kill(const QString& id, const QJsonObject& params);
   static CommandResponse runningProcesses(const QString& id, const QJsonObject& params);
+  static CommandResponse getDefine(const QString& id, const QJsonObject& params);
+  static CommandResponse listDefines(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace Handlers

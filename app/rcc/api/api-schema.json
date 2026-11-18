@@ -6696,6 +6696,19 @@
         ]
     },
     {
+        "description": "Return one value passed on the command line with --define KEY=VALUE. Answers {key, defined, value}; value is always text, and an unknown key answers defined: false with an empty value. Read-only, never prompts.",
+        "name": "system.getDefine",
+        "properties": {
+            "key": {
+                "description": "Name of the define",
+                "type": "string"
+            }
+        },
+        "required": [
+            "key"
+        ]
+    },
+    {
         "description": "Terminate a managed helper process by id. Control script only.",
         "name": "system.kill",
         "properties": {
@@ -6706,6 +6719,14 @@
         },
         "required": [
             "processId"
+        ]
+    },
+    {
+        "description": "Return every value passed on the command line with --define, as {defines: {key: value}}. Empty when the option was not used.",
+        "name": "system.listDefines",
+        "properties": {
+        },
+        "required": [
         ]
     },
     {

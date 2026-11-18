@@ -21,6 +21,7 @@
 
 #include "Misc/CLI/CliSpecParsers.h"
 
+#include <algorithm>
 #include <QDebug>
 #include <QHash>
 #include <QStringList>
@@ -61,6 +62,56 @@ bool parseIntOption(const QCommandLineParser& parser,
   }
 
   out = val;
+  return true;
+}
+
+//---------------------------------------------------------------------------------------------------
+// Launch defines
+//---------------------------------------------------------------------------------------------------
+
+/**
+ * @brief True for the characters a define's key may hold: ASCII letters, digits, and "_", ".", "-".
+ */
+[[nodiscard]] static bool isDefineKeyChar(const QChar c)
+{
+  const char16_t u = c.unicode();
+  return (u >= u'A' && u <= u'Z') || (u >= u'a' && u <= u'z') || (u >= u'0' && u <= u'9')
+      || u == u'_' || u == u'.' || u == u'-';
+}
+
+/**
+ * @brief Splits one --define argument (spec 0126) at its first "=". The value is literal: it may
+ *        be empty and may hold "=", and its limit counts Unicode code points. Returns false with
+ *        a reason in @p error and the outputs untouched; unlike its neighbours it never warns,
+ *        because the caller ends the process on a failure.
+ */
+bool parseDefine(const QString& text, QString& key, QString& value, QString& error)
+{
+  const qsizetype split = text.indexOf(QLatin1Char('='));
+  if (split < 0) {
+    error = QStringLiteral("expected KEY=VALUE");
+    return false;
+  }
+
+  const QString k = text.left(split);
+  const QString v = text.mid(split + 1);
+  if (k.isEmpty() || k.size() > kDefineKeyMaxLength) {
+    error = QStringLiteral("the key must be 1 to %1 characters").arg(kDefineKeyMaxLength);
+    return false;
+  }
+
+  if (!std::all_of(k.cbegin(), k.cend(), isDefineKeyChar)) {
+    error = QStringLiteral("the key may only hold A-Z a-z 0-9 _ . -");
+    return false;
+  }
+
+  if (v.toUcs4().size() > kDefineValueMaxLength) {
+    error = QStringLiteral("the value is longer than %1 characters").arg(kDefineValueMaxLength);
+    return false;
+  }
+
+  key   = k;
+  value = v;
   return true;
 }
 

@@ -185,6 +185,7 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.httpMethodOpt);
   m_parser.addOption(m_opts.httpIntervalOpt);
   m_parser.addOption(m_opts.httpHeaderOpt);
+  m_parser.addOption(m_opts.defineOpt);
   m_parser.addOption(m_opts.insecureTlsOpt);
   m_parser.addOption(m_opts.benchmarkHotpathOpt);
   m_parser.addOption(m_opts.minFpsOpt);
@@ -353,6 +354,40 @@ bool CLI::isBenchmarkRequested(int argc, char** argv)
 }
 
 //---------------------------------------------------------------------------------------------------
+// Launch defines
+//---------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Validates every --define (spec 0126) and records them for the scripts; the last value of
+ *        a repeated key wins. A malformed one writes one line straight to stderr and returns
+ *        false, so the process ends instead of starting with a value silently dropped; Qt's
+ *        logging would send that line to the debugger on a Windows build without a console.
+ */
+bool CLI::applyDefines() const
+{
+  QMap<QString, QString> defines;
+  const QStringList arguments = m_parser.values(m_opts.defineOpt);
+  for (const QString& argument : arguments) {
+    QString key;
+    QString value;
+    QString error;
+    if (CliSpecParsers::parseDefine(argument, key, value, error)) {
+      defines.insert(key, value);
+      continue;
+    }
+
+    const QByteArray line =
+      QStringLiteral("[CLI] --define \"%1\": %2\n").arg(argument.left(80), error).toLocal8Bit();
+    std::fputs(line.constData(), stderr);
+    std::fflush(stderr);
+    return false;
+  }
+
+  Core::Runtime::setDefines(defines);
+  return true;
+}
+
+//---------------------------------------------------------------------------------------------------
 // Top-level processing
 //---------------------------------------------------------------------------------------------------
 
@@ -362,6 +397,9 @@ bool CLI::isBenchmarkRequested(int argc, char** argv)
 CLI::ProcessResult CLI::process(QApplication& app)
 {
   m_parser.process(app);
+  if (!applyDefines())
+    return ProcessResult::ExitFailure;
+
 #ifdef BUILD_COMMERCIAL
   m_deploymentPath = resolveDeploymentPath();
 #endif

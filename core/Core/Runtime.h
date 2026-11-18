@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QMap>
 #include <QString>
 
 /**
@@ -35,6 +36,8 @@
  *        resources were written, where the package file sits and which package it is.
  *        The operator project (spec 0098) is the one a headless run named on its command line,
  *        whose program launches the operator consented to by naming it.
+ *        The defines (spec 0126) are the named text values a launcher passed with --define: held
+ *        in memory for the life of the process, written to no file, read by scripts.
  */
 
 namespace Core::Runtime {
@@ -64,4 +67,6 @@ void seal(const QString& mountRoot,
           const SealedHelpers& helpers = SealedHelpers()) noexcept;
 [[nodiscard]] const QString& operatorProject() noexcept;
 void setOperatorProject(const QString& projectPath) noexcept;
+[[nodiscard]] const QMap<QString, QString>& defines() noexcept;
+void setDefines(const QMap<QString, QString>& defines);
 }  // namespace Core::Runtime

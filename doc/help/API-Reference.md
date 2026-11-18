@@ -548,7 +548,7 @@ When a command is invoked through the AI Assistant rather than a raw TCP/JSON cl
 - Data Table: 13 commands
 - Control Script: 6 commands
 - Reference Script: 2 commands
-- System: 4 commands
+- System: 6 commands
 - Sample Stream: 2 commands
 - Remote Dashboard: 2 commands
 - Extensions: 10 commands
@@ -4738,9 +4738,9 @@ Read one script's body.
 - `kind` (string): Script kind, as reported by `scripts.list`
 - `id` (string): The `file` field from `scripts.list`, without its extension
 
-### System Commands (4)
+### System Commands (6)
 
-Helper-process control for the control script. `system.exec`, `system.kill` and
+Launch facts and helper-process control for the control script. `system.exec`, `system.kill` and
 `system.runningProcesses` are **control script only**: they are rejected over the network and
 through the SDK, because launching a process from a remote client is not something an API
 token should buy. `system.exec` is also gated by a one-time **per-project consent prompt**
@@ -4754,6 +4754,21 @@ terminated automatically when the device disconnects or the project closes.
 #### 🟢 `system.projectDir`
 Return the loaded project's directory, file path and file name. Use it to resolve paths relative
 to the `.ssproj` before calling `system.exec`.
+
+**Parameters:** None
+
+#### 🟢 `system.getDefine`
+Return one value passed on the command line with `--define KEY=VALUE`. The reply is
+`{key, defined, value}`. `value` is always text, and an unknown key answers `defined: false`
+with an empty `value` instead of an error. Read-only and never prompts. See
+[Launch defines](Command-Line-Interface.md#launch-defines).
+
+**Parameters:**
+- `key` (string): Name of the define
+
+#### 🟢 `system.listDefines`
+Return every value passed with `--define`, as `{defines: {key: value}}`. The object is empty
+when the option was not used.
 
 **Parameters:** None
 

@@ -3095,12 +3095,24 @@
       "reserved": [],
       "next": 5
     },
+    "system.getDefine": {
+      "fields": {
+        "key": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
     "system.kill": {
       "fields": {
         "processId": 2
       },
       "reserved": [],
       "next": 3
+    },
+    "system.listDefines": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
     },
     "system.projectDir": {
       "fields": {},

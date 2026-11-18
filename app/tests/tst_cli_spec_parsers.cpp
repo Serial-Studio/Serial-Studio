@@ -47,6 +47,11 @@ private slots:
   void intOptionAcceptsADegenerateRange();
   void intOptionRejectsAnInvertedRange();
 
+  void defineSplitsAtTheFirstEquals_data();
+  void defineSplitsAtTheFirstEquals();
+  void defineRejectsAMalformedArgument_data();
+  void defineRejectsAMalformedArgument();
+
   void modbusTcpAddressDefaultsThePort();
   void modbusTcpAddressReadsAnExplicitPort();
   void modbusTcpAddressKeepsTheDefaultOnABadPort();
@@ -166,6 +171,84 @@ void TstCliSpecParsers::intOptionRejectsAnInvertedRange()
   int out = 9;
   QVERIFY(!Misc::CliSpecParsers::parseIntOption(parser, opt, 31, 0, QStringLiteral("slot"), out));
   QCOMPARE(out, 9);
+}
+
+//---------------------------------------------------------------------------------------------------
+// parseDefine
+//---------------------------------------------------------------------------------------------------
+
+void TstCliSpecParsers::defineSplitsAtTheFirstEquals_data()
+{
+  QTest::addColumn<QString>("text");
+  QTest::addColumn<QString>("key");
+  QTest::addColumn<QString>("value");
+
+  const QString long_key(Misc::CliSpecParsers::kDefineKeyMaxLength, QLatin1Char('k'));
+  const QString long_value(Misc::CliSpecParsers::kDefineValueMaxLength, QLatin1Char('v'));
+  QString astral;
+  for (int i = 0; i < Misc::CliSpecParsers::kDefineValueMaxLength; ++i)
+    astral += QString::fromUcs4(U"\U0001F600", 1);
+
+  QTest::newRow("plain") << QStringLiteral("engine=2") << QStringLiteral("engine")
+                         << QStringLiteral("2");
+  QTest::newRow("equals in value")
+    << QStringLiteral("x=a=b") << QStringLiteral("x") << QStringLiteral("a=b");
+  QTest::newRow("empty value") << QStringLiteral("empty=") << QStringLiteral("empty") << QString();
+  QTest::newRow("spaces in value")
+    << QStringLiteral("note=two words") << QStringLiteral("note") << QStringLiteral("two words");
+  QTest::newRow("every key character")
+    << QStringLiteral("aZ09_.-=1") << QStringLiteral("aZ09_.-") << QStringLiteral("1");
+  QTest::newRow("longest key") << long_key + QStringLiteral("=1") << long_key
+                               << QStringLiteral("1");
+  QTest::newRow("longest value") << QStringLiteral("k=") + long_value << QStringLiteral("k")
+                                 << long_value;
+  QTest::newRow("longest value in code points")
+    << QStringLiteral("k=") + astral << QStringLiteral("k") << astral;
+}
+
+void TstCliSpecParsers::defineSplitsAtTheFirstEquals()
+{
+  QFETCH(QString, text);
+  QFETCH(QString, key);
+  QFETCH(QString, value);
+
+  QString got_key;
+  QString got_value = QStringLiteral("untouched");
+  QString error;
+  QVERIFY2(Misc::CliSpecParsers::parseDefine(text, got_key, got_value, error), qPrintable(error));
+  QCOMPARE(got_key, key);
+  QCOMPARE(got_value, value);
+  QVERIFY(error.isEmpty());
+}
+
+void TstCliSpecParsers::defineRejectsAMalformedArgument_data()
+{
+  QTest::addColumn<QString>("text");
+
+  const QString long_key(Misc::CliSpecParsers::kDefineKeyMaxLength + 1, QLatin1Char('k'));
+  const QString long_value(Misc::CliSpecParsers::kDefineValueMaxLength + 1, QLatin1Char('v'));
+
+  QTest::newRow("no equals") << QStringLiteral("novalue");
+  QTest::newRow("empty") << QString();
+  QTest::newRow("empty key") << QStringLiteral("=1");
+  QTest::newRow("space in key") << QStringLiteral("bad key=1");
+  QTest::newRow("non-ASCII key") << QStringLiteral("clé=1");
+  QTest::newRow("key too long") << long_key + QStringLiteral("=1");
+  QTest::newRow("value too long") << QStringLiteral("k=") + long_value;
+  QTest::newRow("300 character value") << QStringLiteral("k=") + QString(300, QLatin1Char('v'));
+}
+
+void TstCliSpecParsers::defineRejectsAMalformedArgument()
+{
+  QFETCH(QString, text);
+
+  QString key   = QStringLiteral("untouched");
+  QString value = QStringLiteral("untouched");
+  QString error;
+  QVERIFY(!Misc::CliSpecParsers::parseDefine(text, key, value, error));
+  QCOMPARE(key, QStringLiteral("untouched"));
+  QCOMPARE(value, QStringLiteral("untouched"));
+  QVERIFY(!error.isEmpty());
 }
 
 //---------------------------------------------------------------------------------------------------

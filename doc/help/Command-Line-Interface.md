@@ -38,11 +38,41 @@ Options apply to the current run only and are not written to your saved settings
 | `--dump-api-schema` | `file` | Write the API command registry (name, description, parameter schema per command) to a JSON file and exit. Input for SDK generators. |
 | `-p`, `--project` | `file` | Load the specified project file. A project file given as the first positional argument works the same way. |
 | `--profile` | `name` | Open the project under the named [workspace profile](Project-Editor.md#workspace-profiles) instead of asking which one to show. |
+| `--define` | `KEY=VALUE` | Pass a named text value to the project's scripts (repeatable). See [Launch defines](#launch-defines). |
 | `-q`, `--quick-plot` | | Quick Plot mode: plot comma-separated numbers without a project file, using an auto-detected line format. |
 | `-t`, `--fps` | `Hz` | Set the visualization refresh rate in Hz. Values are clamped to 1-240. |
 | `-n`, `--points` | `count` | Set the number of data points per plot. |
 | `--exit-after` | `seconds` | Quit gracefully after the given number of seconds (CI runs, PGO training). Capped at 86400 (24 hours). A non-numeric or non-positive value is ignored and the application keeps running. |
 | `--simd` | `level` | Pin the vector kernels to `auto`, `scalar`, `sse4`, `avx2` or `neon`. An unknown or unsupported level falls back to `auto` and says so in the application log. See [SIMD instruction set](Data-Hotpath.md#simd-instruction-set). |
+
+### Launch defines
+
+`--define KEY=VALUE` hands a value to the project's scripts without editing the project file. A
+launcher uses it for facts that belong to one run, such as which unit is on the test stand:
+
+```
+serial-studio --project cell.ssproj --define engine=2 --define "note=two words"
+```
+
+- The key is 1 to 64 characters from `A-Z a-z 0-9 _ . -`.
+- The value is everything after the first `=`, taken literally. It may be empty, may contain
+  `=`, and holds at most 256 characters.
+- When a key is given twice, the last value wins.
+- A define with no `=`, an invalid key or a value that is too long stops the launch: Serial
+  Studio prints one line to standard error and exits with a non-zero code.
+
+Defines exist only in memory, for as long as the process runs. They are not saved to the
+project file or to your settings, so the next launch sees only what its own command line gives.
+
+A script reads a value with `system.getDefine`, which always answers with text:
+
+```javascript
+var r = system.getDefine("engine");
+var engine = r.ok && r.result.defined ? parseInt(r.result.value, 10) : -1;
+```
+
+`system.listDefines` returns all of them. Both commands are also open to API clients, so do not
+pass passwords or tokens as defines. See [API Reference](API-Reference.md#system-commands-6).
 
 ## API Server
 

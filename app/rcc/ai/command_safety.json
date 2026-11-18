@@ -173,6 +173,8 @@
     "sessions.listTags",
     "stream.getInfo",
     "stream.getSources",
+    "system.getDefine",
+    "system.listDefines",
     "system.projectDir",
     "system.runningProcesses",
     "ui.automation.listElements",

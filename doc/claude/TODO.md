@@ -29,6 +29,11 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
   survives a run-time `screen` command (deviation 14, needs `DashboardCanvas.qml`), and
   stay-on-top pop-outs may cover the launcher (AC8; the fix is gating `anyDashboardFullscreen`
   in `Dashboard.qml` on the application being active).
+- [ ] Spec 0126 (launch defines), maintainer-only: after the next build, re-dump
+  `app/rcc/api/api-schema.json` with `--dump-api-schema` to confirm the two hand-added entries,
+  run `tst_cli_spec_parsers` and `tests/integration/test_launch_defines.py` (`SS_BINARY`), then
+  AC1 and AC5 to AC8 in its `spec.md`. Unverified: the error line reaching a launcher's pipe on
+  a Windows build without a console.
 - [ ] MDF4 replay crashes on load for large multi-group recordings: `sizePayloadColumns` in
   `core/Storage/MDF4/PlayerLoaderWorker.cpp` allocates a dense channels × rows grid before the
   merge, so ~900 channels over ~1M rows (two 48 kHz stream sources) asks for ~7 GB and the failed

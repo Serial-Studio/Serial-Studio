@@ -361,6 +361,17 @@ Pass `-u` (as above) when launching Python so its output is unbuffered and appea
 
 Put the launch in `setup()` when Serial Studio listens for the data it generates (a UDP source). Put it in `onConnect()` when Serial Studio connects to it as a client (a TCP socket or a Modbus master), because the server must already be listening before the connection opens and `setup()` only runs once the connection is open. `onConnect()` runs before any device is attached, so it cannot read frames or write to the device.
 
+## Reading values from the command line
+
+A launcher can pass values to the script with `--define KEY=VALUE` when it starts Serial Studio. `system.getDefine(key)` reads one and works from the first line of the script, before any frame arrives:
+
+```javascript
+var r = system.getDefine("engine");
+var engine = r.ok && r.result.defined ? parseInt(r.result.value, 10) : -1;
+```
+
+The value is always text, and a key that was not given answers `defined: false`. `system.listDefines()` returns all of them. The values last until Serial Studio quits and are never saved with the project. See [Launch defines](Command-Line-Interface.md#launch-defines).
+
 ## Saving and lifecycle
 
 The script is saved inside the project file, so it travels with the project. Editing it while connected restarts it immediately; otherwise it starts the next time the device connects and stops when the device disconnects. Use **Validate** before connecting to catch syntax errors early; runtime errors (an exception inside `setup()` or `loop()`) are shown in the editor's status bar and stop the script.
@@ -375,4 +386,4 @@ Tools and scripts can manage the control loop through the API: `controlScript.ge
 - [Frame Parser Reference](Frame-Parser.md) for turning the bytes a device streams into dataset values.
 - [Actions](Actions.md) for user-triggered one-shot commands, the manual counterpart to an automated Control Loop.
 - [Bluetooth Low Energy](Drivers-Bluetooth-LE.md) for selecting the device, service, and notify characteristic the script writes alongside.
-- [API Reference](API-Reference.md#system-commands-4) for `system.exec` and the helper-process commands a control loop may launch.
+- [API Reference](API-Reference.md#system-commands-6) for `system.exec` and the helper-process commands a control loop may launch.

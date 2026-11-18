@@ -28,6 +28,9 @@
 namespace Misc {
 namespace CliSpecParsers {
 
+inline constexpr int kDefineKeyMaxLength   = 64;
+inline constexpr int kDefineValueMaxLength = 256;
+
 /**
  * @brief Pure text-to-value translation for the command-line bus options: no driver, no singleton
  *        and no application state is reachable from here, which is what makes the validation rules
@@ -42,6 +45,8 @@ namespace CliSpecParsers {
                                   const int hi,
                                   const QString& label,
                                   int& out);
+
+[[nodiscard]] bool parseDefine(const QString& text, QString& key, QString& value, QString& error);
 
 [[nodiscard]] bool parseModbusTcpAddress(const QString& tcpAddress, QString& host, quint16& port);
 

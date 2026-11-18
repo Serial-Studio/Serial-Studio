@@ -2408,9 +2408,18 @@ message SystemExecRequest {
   string workingDir = 4;
 }
 
+message SystemGetDefineRequest {
+  string id = 1;
+  string key = 2;
+}
+
 message SystemKillRequest {
   string id = 1;
   int64 processId = 2;
+}
+
+message SystemListDefinesRequest {
+  string id = 1;
 }
 
 message SystemProjectDirRequest {
@@ -3924,8 +3933,14 @@ service SerialStudioTypedAPI {
   // Launch a helper process (e.g. "python" with a script path). Control script only -- rejected over the network/SDK -- and gated by a one-time per-project consent prompt: the first launch answers CONSENT_REQUIRED while the user is asked, and the control script restarts once they allow it. workingDir defaults to the project directory. Returns a processId. The process is terminated automatically when the device disconnects, the project changes, or the app quits.
   rpc SystemExec(SystemExecRequest) returns (CommandResponse);
 
+  // Return one value passed on the command line with --define KEY=VALUE. Answers {key, defined, value}; value is always text, and an unknown key answers defined: false with an empty value. Read-only, never prompts.
+  rpc SystemGetDefine(SystemGetDefineRequest) returns (CommandResponse);
+
   // Terminate a managed helper process by id. Control script only.
   rpc SystemKill(SystemKillRequest) returns (CommandResponse);
+
+  // Return every value passed on the command line with --define, as {defines: {key: value}}. Empty when the option was not used.
+  rpc SystemListDefines(SystemListDefinesRequest) returns (CommandResponse);
 
   // Return the loaded project's directory, file path, and file name. Use this to resolve paths relative to the .ssproj (e.g. a sibling Python script) before calling system.exec.
   rpc SystemProjectDir(SystemProjectDirRequest) returns (CommandResponse);
