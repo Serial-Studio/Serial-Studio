@@ -41,6 +41,7 @@
 #include "Misc/ModuleManager.h"
 #include "Misc/SimdSettings.h"
 #include "Platform/AppPlatform.h"
+#include "Platform/KioskSession.h"
 #include "SessionContext.h"
 
 /**
@@ -77,10 +78,13 @@ static void configureApplicationStyle(QApplication& app)
 }
 
 /**
- * @brief Constructs and initializes the ModuleManager, exposing CLI flags to QML.
+ * @brief Constructs and initializes the ModuleManager, exposing CLI flags to QML. The kiosk
+ *        session (spec 0125) is configured before the QML load, so the first placement already
+ *        sees the screen and the reserved strip.
  */
 static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
                                    const Misc::CLI& cli,
+                                   Platform::KioskSession& kioskSession,
                                    bool headless,
                                    const QString& shortcutPath)
 {
@@ -88,6 +92,7 @@ static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
   moduleManager.setEphemeralSession(cli.runtimeMode());
   moduleManager.configureUpdater();
   moduleManager.registerQmlTypes();
+  kioskSession.configure(cli.kioskScreen(), cli.kioskReserveLeft(), cli.kioskControl());
 
   const QString settingsSuffix =
     shortcutPath.isEmpty()
@@ -97,6 +102,7 @@ static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
   const auto ctx = moduleManager.engine().rootContext();
   ctx->setContextProperty("CLI_START_FULLSCREEN", cli.fullscreen());
   ctx->setContextProperty("CLI_KIOSK", cli.kiosk());
+  ctx->setContextProperty("CLI_KIOSK_SESSION", &kioskSession);
   ctx->setContextProperty("CLI_HIDE_TOOLBAR", cli.hideToolbar());
   ctx->setContextProperty("CLI_RUNTIME_MODE", cli.runtimeMode());
   ctx->setContextProperty("CLI_DEPLOYMENT_TITLE", cli.deploymentTitle());
@@ -146,10 +152,11 @@ static void shutdownSession()
 static int runConfiguredSession(QApplication& app,
                                 Misc::CLI& cli,
                                 Misc::ModuleManager& moduleManager,
+                                Platform::KioskSession& kioskSession,
                                 bool headless,
                                 const QString& shortcutPath)
 {
-  if (!bootstrapModuleManager(moduleManager, cli, headless, shortcutPath)) {
+  if (!bootstrapModuleManager(moduleManager, cli, kioskSession, headless, shortcutPath)) {
     qCritical() << "Critical QML error";
     return EXIT_FAILURE;
   }
@@ -259,9 +266,10 @@ static int runApplication(int argc, char** argv, bool headless, const QString& s
 
   Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("module-manager-bootstrap"));
   int status = EXIT_SUCCESS;
+  Platform::KioskSession kioskSession;
   {
     Misc::ModuleManager moduleManager;
-    status = runConfiguredSession(app, cli, moduleManager, headless, shortcutPath);
+    status = runConfiguredSession(app, cli, moduleManager, kioskSession, headless, shortcutPath);
   }
 
   shutdownSession();

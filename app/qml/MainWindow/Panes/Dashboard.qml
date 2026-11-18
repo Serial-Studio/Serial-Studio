@@ -161,6 +161,9 @@ Item {
   // Spawns an external dashboard window, optionally seeded from a saved record
   //
   function openExternalWindow(record) {
+    if (mainWindow.kioskConfined)
+      return
+
     var rec = record || ({})
     var num = (rec.n > 0) ? rec.n : root.nextWindowNumber()
     var win = _extDashboardComponent.createObject(root, {
@@ -191,7 +194,7 @@ Item {
   // Serializes the live external windows into the project file
   //
   function syncExternalWindows() {
-    if (root.restoringExternal)
+    if (root.restoringExternal || mainWindow.kioskConfined)
       return
 
     if (Cpp_AppState.operationMode !== SerialStudio.ProjectFile)
@@ -246,6 +249,7 @@ Item {
 
     var ready = Cpp_AppState.operationMode === SerialStudio.ProjectFile
                 && Cpp_UI_Dashboard.available
+                && !mainWindow.kioskConfined
     var saved = ready ? (Cpp_JSON_ProjectModel.externalWindows() || []) : []
 
     var savedById = ({})
@@ -282,6 +286,15 @@ Item {
   }
 
   Component.onCompleted: _extReconcileTimer.restart()
+
+  //
+  // A kiosk confined to one screen (spec 0125) keeps external dashboards docked: reconcile
+  // then closes the open ones, and the saved list is left alone
+  //
+  Connections {
+    target: mainWindow
+    function onKioskConfinedChanged() { _extReconcileTimer.restart() }
+  }
 
   //
   // Freeze persistence during teardown so destroyed windows can't wipe the saved set

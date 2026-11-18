@@ -120,6 +120,9 @@ Operator mode is a locked-down session for people who run a dashboard without ed
 | `--no-toolbar` | | Hide the main window toolbar at startup. |
 | `--runtime` | | Operator runtime mode: hide toolbar, connect automatically, quit when the operator disconnects. An unexpected device drop shows the reconfigure dialog instead of quitting. |
 | `--kiosk` | | Kiosk display, only with `--runtime`. The main window fills its screen without a frame, and so does every external dashboard or widget window saved on another screen (one on the main window's screen stays a floating window). On macOS the Dock and the menu bar are hidden and app switching, Force Quit, Hide, the Apple menu and logout are disabled while Serial Studio is the frontmost app. Disconnecting still quits, so pair it with a launcher that is itself locked down. On Windows and Linux only the borderless windows apply. Replaces `--fullscreen`. |
+| `--kiosk-screen` | `name` | Only with `--kiosk`. Confine the kiosk to the screen with this name: the main window fills it and nothing of Serial Studio appears on another screen. External dashboard windows saved in the project stay docked in the main window, and widget windows float inside that screen. An unknown name falls back to the primary screen with a warning. When two screens report the same name, the first one in system order is used. |
+| `--kiosk-reserve-left` | `pixels` | Only with `--kiosk`. Leave this many pixels free at the left edge of the leftmost screen, for a launcher's own dock. Kiosk windows on any other screen use the whole screen. Default 0; capped at half the screen width. |
+| `--kiosk-control` | `server-name` | Only with `--kiosk`. Connect to the local server of this name so a launcher can raise, move and close the kiosk. See [Kiosk control channel](#kiosk-control-channel). |
 | `--deployment` | `file` | Open a deployment package (`.ssdeploy`) in a sealed runtime session. Passing a `.ssdeploy` file as the first positional argument does the same. The package's runtime options replace `--fullscreen`, `--no-toolbar`, the four export flags, `--actions-panel`, `--file-transmission`, the `--taskbar-*` flags, `--no-taskbar-search` and `--theme`, which are ignored with a warning; bus flags (`--uart`, `--tcp`, ...) and `--api-*` still apply. Cannot be combined with `--headless`. See [Operator Deployments](Operator-Deployments.md#deployment-packages). |
 | `--shortcut-path` | `path` | Path of the shortcut that launched the process. Set by launchers Serial Studio creates; you rarely pass it by hand. |
 | `--csv-export` | | Enable CSV export on startup. |
@@ -132,6 +135,31 @@ Operator mode is a locked-down session for people who run a dashboard without ed
 | `--taskbar-buttons` | `ids` | Comma-separated taskbar pin IDs for operator mode: `settings`, `console`, `notifications`, `clock`, `stopwatch`, `pause`, `file_transmission`, `ai_assistant`. |
 | `--no-taskbar-search` | | Hide the taskbar search bar in operator runtime mode. |
 | `--theme` | `name` | Override the application theme by name: `Default`, `Fluent Dark`, `Fluent Light`, `Millennium Light`, `Millennium Dark` or `Starliner`. An unknown name logs a warning with the available themes and leaves the theme unchanged. |
+
+### Kiosk control channel
+
+`--kiosk-control <server-name>` is for a launcher that manages several full-screen programs on one machine. The launcher runs a local server (a `QLocalServer`, which is a Unix domain socket on macOS and Linux and a named pipe on Windows) and Serial Studio connects to it once the main window is shown. If the server is absent or goes away, Serial Studio keeps running and tries again every 2 seconds.
+
+Both directions carry UTF-8 text, one JSON object per line. Unknown keys and unknown commands are ignored. A line longer than 64 KiB closes the connection.
+
+Serial Studio sends a greeting after every connect, followed by a state event. It sends another state event whenever the main window changes screen or the application becomes active or inactive:
+
+```json
+{"hello": 1, "id": "dashboard", "title": "Serial Studio", "pid": 1234, "screen": "DELL U2723QE", "can": ["raise", "screen", "close"]}
+{"event": "state", "screen": "DELL U2723QE", "active": true}
+```
+
+`hello` is the protocol version, `title` the main window title and `screen` the name of the screen the main window is on.
+
+The launcher can send three commands:
+
+| Command | Effect |
+|---------|--------|
+| `{"cmd": "raise"}` | Make Serial Studio the active application and bring the main window to the front. On macOS 14 and later the launcher has to yield activation to Serial Studio's process first. |
+| `{"cmd": "screen", "name": "LG HDR 4K", "reserve_left": 64}` | Move the kiosk to the named screen, as `--kiosk-screen` would have placed it. `reserve_left` replaces the `--kiosk-reserve-left` value; leave it out to keep the current one. The kiosk stays confined to one screen for the rest of the run. An unknown name does nothing; a known one is answered with a state event. |
+| `{"cmd": "close"}` | Quit, as when the operator disconnects in runtime mode. Recordings and exports are finalized first. |
+
+A run started with `--kiosk-screen`, or moved by a `screen` command, does not change the window position a plain `--kiosk` run opens at.
 
 ## Licensing (commercial builds)
 

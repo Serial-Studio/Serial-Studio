@@ -85,6 +85,35 @@ Widgets.SmartWindow {
   flags: window.chromeFlags
 
   //
+  // In a kiosk confined to one screen (spec 0125) a floating pop-out is held, whole frame,
+  // inside the part of that screen the kiosk may cover, also after the operator drags it
+  //
+  function confineToKiosk() {
+    if (!mainWindow.kioskMode || !CLI_KIOSK_SESSION.confined || window.kioskFill)
+      return
+
+    const g = CLI_KIOSK_SESSION.fillRect(CLI_KIOSK_SESSION.screenGeometry)
+    const maxX = g.x + Math.max(0, g.width - window.width)
+    const maxY = g.y + Math.max(0, g.height - window.height)
+    const x = Math.round(Math.min(Math.max(window.x, g.x), maxX))
+    const y = Math.round(Math.min(Math.max(window.y, g.y), maxY))
+    window.isMaximized = false
+    if (x !== window.x)
+      window.x = x
+
+    if (y !== window.y)
+      window.y = y
+  }
+
+  onPreviousXChanged: window.confineToKiosk()
+  onPreviousYChanged: window.confineToKiosk()
+
+  Connections {
+    target: mainWindow.kioskMode ? CLI_KIOSK_SESSION : null
+    function onPlacementChanged() { window.confineToKiosk() }
+  }
+
+  //
   // Driven by the owning canvas: keep this pop-out above a fullscreen dashboard so it is not
   // hidden behind it (never one filling its own kiosk screen). Platform bits survive.
   //
@@ -384,6 +413,7 @@ Widgets.SmartWindow {
       LayoutMirroring.enabled: false
       LayoutMirroring.childrenInherit: true
       Component.onCompleted: {
+        window.confineToKiosk()
         if (window.showKiosk(mainWindow.kioskGeometry))
           window.titlebarHeight = 0
         else

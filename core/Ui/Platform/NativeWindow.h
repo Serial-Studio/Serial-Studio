@@ -60,6 +60,7 @@ public slots:
   void addWindow(QObject* window, const QString& color = "");
   void setCsdEnabled(bool enabled);
   void setKioskLock(bool enabled);
+  void activateApplication();
 
 private slots:
   void onThemeChanged();

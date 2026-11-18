@@ -170,6 +170,21 @@ struct CliOptions {
     "Kiosk display for --runtime: the main window and every external window on another screen "
     "fill their screen without a frame; on macOS the Dock, the menu bar, app switching and "
     "Force Quit are disabled while Serial Studio is frontmost (Pro)"};
+  QCommandLineOption kioskScreenOpt{
+    "kiosk-screen",
+    "Confine the --kiosk display to the screen with this name; an unknown name falls back to "
+    "the primary screen (Pro)",
+    "name"};
+  QCommandLineOption kioskReserveLeftOpt{
+    "kiosk-reserve-left",
+    "Leave this many pixels free at the left edge of the leftmost screen in --kiosk "
+    "(default: 0) (Pro)",
+    "pixels"};
+  QCommandLineOption kioskControlOpt{
+    "kiosk-control",
+    "Connect the --kiosk display to the local server of this name, which may raise, move and "
+    "close it with JSON lines (Pro)",
+    "server-name"};
   QCommandLineOption shortcutPathOpt{
     "shortcut-path", "Path of the shortcut that launched this process (Pro)", "path"};
   QCommandLineOption deploymentOpt{
@@ -326,6 +341,9 @@ public:
 
   [[nodiscard]] bool fullscreen() const noexcept;
   [[nodiscard]] bool kiosk() const noexcept;
+  [[nodiscard]] int kioskReserveLeft() const;
+  [[nodiscard]] QString kioskScreen() const;
+  [[nodiscard]] QString kioskControl() const;
   [[nodiscard]] bool runtimeMode() const noexcept;
   [[nodiscard]] bool hideToolbar() const noexcept;
   [[nodiscard]] bool apiServerEnabled() const;

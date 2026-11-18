@@ -23,6 +23,7 @@
 
 #include <cstdio>
 #include <cstring>
+#include <limits>
 #include <QApplication>
 #include <QFile>
 #include <QHash>
@@ -45,6 +46,7 @@
 #include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
 #include "Misc/CLI/CliBusConfig.h"
+#include "Misc/CLI/CliSpecParsers.h"
 #include "Misc/CrashTracker.h"
 #include "Misc/ModuleManager.h"
 #include "SessionContext.h"
@@ -209,6 +211,9 @@ void CLI::registerCommercialOptions()
   m_parser.addOption(m_opts.noToolbarOpt);
   m_parser.addOption(m_opts.runtimeOpt);
   m_parser.addOption(m_opts.kioskOpt);
+  m_parser.addOption(m_opts.kioskScreenOpt);
+  m_parser.addOption(m_opts.kioskReserveLeftOpt);
+  m_parser.addOption(m_opts.kioskControlOpt);
   m_parser.addOption(m_opts.shortcutPathOpt);
   m_parser.addOption(m_opts.deploymentOpt);
   m_parser.addOption(m_opts.csvExportOpt);
@@ -703,6 +708,57 @@ bool CLI::kiosk() const noexcept
   return runtimeMode() && m_parser.isSet(m_opts.kioskOpt);
 #else
   return false;
+#endif
+}
+
+/**
+ * @brief Screen name given with --kiosk-screen, or empty; meaningful only in a kiosk, so the
+ *        value is dropped outside one.
+ */
+QString CLI::kioskScreen() const
+{
+#ifdef BUILD_COMMERCIAL
+  return kiosk() ? m_parser.value(m_opts.kioskScreenOpt) : QString();
+#else
+  return {};
+#endif
+}
+
+/**
+ * @brief Width given with --kiosk-reserve-left; 0 outside a kiosk and for a value that is not a
+ *        non-negative whole number, which the shared parser reports on stderr. The placement
+ *        rule caps the strip at half the screen, so no upper bound is applied here.
+ */
+int CLI::kioskReserveLeft() const
+{
+#ifdef BUILD_COMMERCIAL
+  constexpr int kMaxReserve = std::numeric_limits<int>::max();
+
+  int pixels = 0;
+  if (!kiosk()
+      || !CliSpecParsers::parseIntOption(m_parser,
+                                         m_opts.kioskReserveLeftOpt,
+                                         0,
+                                         kMaxReserve,
+                                         QStringLiteral("--kiosk-reserve-left"),
+                                         pixels))
+    return 0;
+
+  return pixels;
+#else
+  return 0;
+#endif
+}
+
+/**
+ * @brief Local server name given with --kiosk-control, or empty; no socket opens outside a kiosk.
+ */
+QString CLI::kioskControl() const
+{
+#ifdef BUILD_COMMERCIAL
+  return kiosk() ? m_parser.value(m_opts.kioskControlOpt) : QString();
+#else
+  return {};
 #endif
 }
 

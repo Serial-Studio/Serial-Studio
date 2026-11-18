@@ -22,6 +22,12 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 
 ## Code follow-ups
 
+- [ ] Spec 0125 (kiosk launcher control), maintainer-only: reconfigure so `tst_kiosk_session` and
+  `tst_kiosk_control` build and run, then AC1, AC2, AC4, AC6 to AC9 in its `spec.md` on two
+  screens with the launcher. Two open items there: a pop-out that already fills another screen
+  survives a run-time `screen` command (deviation 14, needs `DashboardCanvas.qml`), and
+  stay-on-top pop-outs may cover the launcher (AC8; the fix is gating `anyDashboardFullscreen`
+  in `Dashboard.qml` on the application being active).
 - [ ] MDF4 replay crashes on load for large multi-group recordings: `sizePayloadColumns` in
   `core/Storage/MDF4/PlayerLoaderWorker.cpp` allocates a dense channels × rows grid before the
   merge, so ~900 channels over ~1M rows (two 48 kHz stream sources) asks for ~7 GB and the failed

@@ -58,10 +58,11 @@ Window {
   }
 
   //
-  // Kiosk display (--kiosk): a window that fills its screen without a frame. kioskGeometry is
-  // the screen it took, so an external window saved on that same screen stays a floating one.
+  // Kiosk display (--kiosk): a frameless window filling its screen. kioskGeometry is the whole
+  // screen it took; kioskConfined (spec 0125) switches the main window's settings category.
   //
   property bool kioskFill: false
+  property bool kioskConfined: false
   property rect kioskGeometry: Qt.rect(0, 0, 0, 0)
   readonly property bool kioskMode: typeof CLI_KIOSK !== "undefined" && CLI_KIOSK
 
@@ -80,28 +81,58 @@ Window {
   }
 
   //
-  // Fills the screen under the window's saved position. Returns false with nothing done
-  // outside kiosk mode, or when that screen is the one `taken` already fills.
+  // Fills the screen under the saved position, or the session's screen when confined. False
+  // outside kiosk mode, when `taken` fills that screen, or for a confined kiosk's other windows.
   //
   function showKiosk(taken) {
     if (!root.kioskMode)
       return false
 
-    const g = root.screenGeometryAt(root.x + root.width / 2, root.y + root.height / 2)
+    const confined = CLI_KIOSK_SESSION.confined
+    if (confined && taken)
+      return false
+
+    const g = confined
+            ? CLI_KIOSK_SESSION.screenGeometry
+            : root.screenGeometryAt(root.x + root.width / 2, root.y + root.height / 2)
     if (taken && taken.width > 0 && taken.x === g.x && taken.y === g.y)
       return false
 
+    root.kioskConfined = confined
     root.kioskFill = true
     root.kioskGeometry = Qt.rect(g.x, g.y, g.width, g.height)
     root.flags = Qt.Window | Qt.FramelessWindowHint
-    root.x = g.x
-    root.y = g.y
-    root.width = g.width
-    root.height = g.height
+    root.applyKioskRect(g)
     root.showNormal()
     root.raise()
     root.requestActivate()
     return true
+  }
+
+  //
+  // Takes the part of screen `g` a kiosk window may cover: all of it, minus the strip reserved
+  // on the leftmost screen
+  //
+  function applyKioskRect(g) {
+    const f = CLI_KIOSK_SESSION.fillRect(g)
+    root.x = f.x
+    root.y = f.y
+    root.width = f.width
+    root.height = f.height
+  }
+
+  //
+  // Follows the session after a screen command; the settings category switches first, so the
+  // new geometry never lands in the category an unconfined kiosk reads
+  //
+  function moveKiosk() {
+    if (!root.kioskFill || !CLI_KIOSK_SESSION.confined)
+      return
+
+    const g = CLI_KIOSK_SESSION.screenGeometry
+    root.kioskConfined = true
+    root.kioskGeometry = Qt.rect(g.x, g.y, g.width, g.height)
+    root.applyKioskRect(g)
   }
 
   //
@@ -314,6 +345,6 @@ Window {
     property alias pw: root.previousWidth
     property alias ph: root.previousHeight
     property alias pn: root.previousScreenName
-    category: root.category + app.settingsSuffix
+    category: root.category + (root.kioskConfined ? "_KioskConfined" : "") + app.settingsSuffix
   }
 }

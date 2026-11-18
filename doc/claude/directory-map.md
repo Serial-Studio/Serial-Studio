@@ -247,6 +247,8 @@ core/
     ├── Console/     Terminal + export, Annotations.* (frame annotation layer, spec 0059)
     ├── Platform/    CSD, NativeWindow (true-size CSD windows: no painted shadow; Win10 gets
     │                a DWM-drawn shadow via WM_NCCALCSIZE filter, Linux the 1px border);
+    │                KioskSession + KioskControl (spec 0125: --kiosk screen, reserved strip and the
+    │                launcher's local-socket channel; owned by main.cpp as CLI_KIOSK_SESSION),
     │                FileOpenEventFilter (queued QFileOpenEvent .ssproj open,
     │                unit-test-linkable)
     ├── AI/  (Pro)   The in-app assistant: Assistant, Conversation, ToolDispatcher,

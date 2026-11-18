@@ -90,6 +90,8 @@ qt_add_library(
   ApiHandlers/WorkspaceProfileHandler.cpp
   ApiHandlers/WorkspacesHandler.cpp
   Platform/FileOpenEventFilter.cpp
+  Platform/KioskControl.cpp
+  Platform/KioskSession.cpp
   UI/DashboardWidget.cpp
   UI/Dashboard.cpp
   UI/SerialStudioHelpers.cpp
@@ -291,6 +293,8 @@ qt_add_library(
   UI/Widgets/Terminal/TerminalSearch.h
   UI/UISessionRegistry.h
   Platform/NativeWindow.h
+  Platform/KioskControl.h
+  Platform/KioskSession.h
   Console/Annotations.h
   Console/Handler.h
   Console/SendLibrary.h

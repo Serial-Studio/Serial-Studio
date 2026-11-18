@@ -166,6 +166,20 @@ void NativeWindow::setKioskLock(bool enabled)
 }
 
 /**
+ * @brief Makes this application the active one (the kiosk control channel's raise command). Since
+ * macOS 14 activation is cooperative: the request is honored when the frontmost application
+ * yielded to this process first, which is the launcher's half of the exchange. The deployment
+ * floor is macOS 14, so the call needs no availability guard.
+ */
+void NativeWindow::activateApplication()
+{
+  if (QGuiApplication::platformName() != QStringLiteral("cocoa"))
+    return;
+
+  [NSApp activate];
+}
+
+/**
  * @brief Retrieves the height of the title bar; must never force platform-window creation,
  * since materializing a hidden dialog centers it over its still-unpolished transient parent
  * and Cocoa then warns about an off-screen position.

@@ -2483,6 +2483,30 @@ ss_add_unit_test(tst_cli_spec_parsers
 )
 
 #
+# Kiosk launcher control (spec 0125): the leftmost-screen and reserved-strip rule as pure
+# functions, and the control channel's line protocol against an in-process QLocalServer. The
+# session source is compiled in for its static rule only; no window and no screen is created.
+#
+ss_add_unit_test(tst_kiosk_session
+  SOURCES tst_kiosk_session.cpp
+          ${SS_CORE_SRC}/Ui/Platform/KioskSession.cpp
+          ${SS_CORE_SRC}/Ui/Platform/KioskSession.h
+          ${SS_CORE_SRC}/Ui/Platform/KioskControl.cpp
+          ${SS_CORE_SRC}/Ui/Platform/KioskControl.h
+  LIBS    Qt6::Gui
+          Qt6::Network
+          SerialStudio::Core
+)
+
+ss_add_unit_test(tst_kiosk_control
+  SOURCES tst_kiosk_control.cpp
+          ${SS_CORE_SRC}/Ui/Platform/KioskControl.cpp
+          ${SS_CORE_SRC}/Ui/Platform/KioskControl.h
+  LIBS    Qt6::Network
+          SerialStudio::Core
+)
+
+#
 # The io.getLatestFrame capture lane (spec 0070): SPSC mirror ring, arming latch, sequence
 # dedup and the 1 Hz parse-load mirror, driven GUI-side with a stub builder thread.
 # HAL_Driver.h is listed for AUTOMOC (header-only Q_OBJECT).

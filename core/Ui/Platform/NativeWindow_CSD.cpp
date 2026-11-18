@@ -219,6 +219,12 @@ void NativeWindow::setKioskLock(bool enabled)
   Q_UNUSED(enabled)
 }
 
+/**
+ * @brief No-op off macOS: raising and activating the window is all these desktops need, and QML
+ *        does both.
+ */
+void NativeWindow::activateApplication() {}
+
 //--------------------------------------------------------------------------------------------------
 // Window management
 //--------------------------------------------------------------------------------------------------

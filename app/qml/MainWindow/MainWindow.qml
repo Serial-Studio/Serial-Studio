@@ -169,6 +169,7 @@ Widgets.SmartWindow {
     if (root.kioskMode) {
       Cpp_NativeWindow.setKioskLock(true)
       root.showKiosk(null)
+      CLI_KIOSK_SESSION.setMainWindow(root)
     }
 
     else if (typeof CLI_START_FULLSCREEN !== "undefined" && CLI_START_FULLSCREEN)
@@ -176,6 +177,42 @@ Widgets.SmartWindow {
     else
       root.displayWindow()
   }
+
+  //
+  // Kiosk launcher control (spec 0125): the session relays the launcher's commands. Raise
+  // activates the application first, then restores the lock and brings the window forward.
+  //
+  Connections {
+    target: root.kioskMode ? CLI_KIOSK_SESSION : null
+
+    function onPlacementChanged() { root.moveKiosk() }
+    function onCloseRequested() { app.quitApplication() }
+    function onRaiseRequested() {
+      Cpp_NativeWindow.activateApplication()
+      Cpp_NativeWindow.setKioskLock(true)
+      root.raise()
+      root.requestActivate()
+    }
+  }
+
+  //
+  // A launcher-controlled kiosk loses and regains the foreground; restore the lock each time
+  //
+  Connections {
+    target: Qt.application
+    enabled: root.kioskFill && CLI_KIOSK_SESSION.controlled
+
+    function onStateChanged() {
+      if (Qt.application.state === Qt.ApplicationActive)
+        Cpp_NativeWindow.setKioskLock(true)
+    }
+  }
+
+  //
+  // A confined kiosk moved between screens of different scale takes its rectangle again once
+  // the screen change lands
+  //
+  onScreenChanged: root.moveKiosk()
 
   //
   // Save settings
