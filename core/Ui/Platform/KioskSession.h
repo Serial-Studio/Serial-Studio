@@ -27,6 +27,7 @@
 #include <QRect>
 #include <QRectF>
 #include <QString>
+#include <QTimer>
 #include <QWindow>
 
 #include "Platform/KioskControl.h"
@@ -38,7 +39,8 @@ namespace Platform {
 /**
  * @brief Where a kiosk (--kiosk) goes and who may move it (spec 0125): the screen it is confined
  *        to, the strip reserved at the left edge of the leftmost screen, and the launcher's
- *        control channel. QML keeps placing the windows; this object supplies the rectangle.
+ *        control channel. QML decides which window fills which screen; this object reads the
+ *        live screens, places the window, and says when every window must take its place again.
  */
 class KioskSession : public QObject {
   // clang-format off
@@ -68,6 +70,7 @@ public:
   [[nodiscard]] bool controlled() const noexcept;
   [[nodiscard]] QRectF screenGeometry() const;
   [[nodiscard]] Q_INVOKABLE QRectF fillRect(const QRectF& screen) const;
+  [[nodiscard]] Q_INVOKABLE QRectF screenRectAt(qreal x, qreal y) const;
 
   [[nodiscard]] static int leftmostIndex(const QList<QRect>& screens, int primary_index);
   [[nodiscard]] static QRect insetRect(const QList<QRect>& screens,
@@ -76,12 +79,16 @@ public:
                                        int reserve_left);
 
 public slots:
+  void settle();
   void setMainWindow(QObject* window);
+  void place(QObject* window, const QRectF& screen);
 
 private slots:
   void greet();
   void publishState();
   void onScreensChanged();
+  void watchScreen(QScreen* screen);
+  void onApplicationState(Qt::ApplicationState state);
   void moveToScreen(const QString& name, int reserve_left);
 
 private:
@@ -90,6 +97,7 @@ private:
   [[nodiscard]] QString currentScreenName() const;
 
   KioskControl m_control;
+  QTimer m_settle;
   QPointer<QWindow> m_window;
   QString m_controlServer;
   QString m_sentScreen;

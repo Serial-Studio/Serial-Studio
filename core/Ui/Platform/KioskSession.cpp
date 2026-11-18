@@ -27,6 +27,11 @@
 
 #include "Core/SSAssert.h"
 
+/**
+ * @brief Delay before kiosk windows take their rectangles a second time.
+ */
+static constexpr int kSettleMs = 250;
+
 //--------------------------------------------------------------------------------------------------
 // Screen lookup
 //--------------------------------------------------------------------------------------------------
@@ -51,19 +56,30 @@
 
 /**
  * @brief Builds an unconfined session with no reserved strip and no control channel, which is
- *        what every run without the three options keeps.
+ *        what every run without the three options keeps. Every screen is watched from here on,
+ *        since a kiosk window must take its rectangle again when its screen changes.
  */
 Platform::KioskSession::KioskSession(QObject* parent)
   : QObject(parent), m_reserveLeft(0), m_sentActive(false), m_confined(false)
 {
+  m_settle.setSingleShot(true);
+  m_settle.setInterval(kSettleMs);
+  connect(&m_settle, &QTimer::timeout, this, &KioskSession::placementChanged);
+
   connect(&m_control, &KioskControl::linkEstablished, this, &KioskSession::greet);
   connect(&m_control, &KioskControl::raiseRequested, this, &KioskSession::raiseRequested);
   connect(&m_control, &KioskControl::closeRequested, this, &KioskSession::closeRequested);
   connect(&m_control, &KioskControl::screenRequested, this, &KioskSession::moveToScreen);
-  connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, &KioskSession::publishState);
+  connect(
+    qGuiApp, &QGuiApplication::applicationStateChanged, this, &KioskSession::onApplicationState);
+  connect(qGuiApp, &QGuiApplication::screenAdded, this, &KioskSession::watchScreen);
   connect(qGuiApp, &QGuiApplication::screenAdded, this, &KioskSession::onScreensChanged);
   connect(qGuiApp, &QGuiApplication::screenRemoved, this, &KioskSession::onScreensChanged);
   connect(qGuiApp, &QGuiApplication::primaryScreenChanged, this, &KioskSession::onScreensChanged);
+
+  const auto screens = QGuiApplication::screens();
+  for (QScreen* screen : screens)
+    watchScreen(screen);
 }
 
 /**
@@ -144,6 +160,22 @@ QRectF Platform::KioskSession::fillRect(const QRectF& screen) const
 }
 
 /**
+ * @brief Full geometry, read now, of the screen holding a point, else of the primary screen. By
+ *        position and not by name, since two monitors of one model report the same name.
+ */
+QRectF Platform::KioskSession::screenRectAt(qreal x, qreal y) const
+{
+  const QPoint point(qRound(x), qRound(y));
+  const auto screens = QGuiApplication::screens();
+  for (const QScreen* screen : screens)
+    if (screen && screen->geometry().contains(point))
+      return QRectF(screen->geometry());
+
+  const QScreen* primary = QGuiApplication::primaryScreen();
+  return primary ? QRectF(primary->geometry()) : QRectF();
+}
+
+/**
  * @brief Index of the leftmost screen: the smallest left coordinate, and among equals the primary
  *        screen, else the first. Returns -1 for an empty list.
  */
@@ -186,6 +218,30 @@ QRect Platform::KioskSession::insetRect(const QList<QRect>& screens,
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Tells every kiosk window to take its rectangle again, now and once more shortly after:
+ *        macOS holds a window below the menu bar until the kiosk lock has hidden it, and reports
+ *        the corrected geometry late.
+ */
+void Platform::KioskSession::settle()
+{
+  Q_EMIT placementChanged();
+  m_settle.start();
+}
+
+/**
+ * @brief Gives @p window the part of @p screen a kiosk window may cover, as one geometry change
+ *        so the platform cannot constrain a half-moved window.
+ */
+void Platform::KioskSession::place(QObject* window, const QRectF& screen)
+{
+  auto* target = qobject_cast<QWindow*>(window);
+  if (!target || screen.isEmpty())
+    return;
+
+  target->setGeometry(fillRect(screen).toRect());
+}
+
+/**
  * @brief Adopts the shown main window: its screen feeds the state events, and showing it is the
  *        moment the control channel may open.
  */
@@ -205,16 +261,40 @@ void Platform::KioskSession::setMainWindow(QObject* window)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief A screen came, went or became primary: a confined kiosk takes its rectangle again, which
- *        moves it to the primary screen when its own was unplugged, and reports where it is.
+ * @brief A screen came, went, became primary or changed its geometry: every kiosk window takes
+ *        its rectangle again, which moves a confined kiosk to the primary screen when its own was
+ *        unplugged, and the launcher learns where the kiosk is.
  */
 void Platform::KioskSession::onScreensChanged()
 {
-  if (!m_confined)
+  settle();
+  reportState(false);
+}
+
+/**
+ * @brief Follows @p screen for as long as it lives; the menu bar and the Dock leaving it change
+ *        its available geometry, which is one sign that the kiosk lock took effect.
+ */
+void Platform::KioskSession::watchScreen(QScreen* screen)
+{
+  if (!screen)
     return;
 
-  Q_EMIT placementChanged();
+  connect(
+    screen, &QScreen::geometryChanged, this, &KioskSession::onScreensChanged, Qt::UniqueConnection);
+  connect(
+    screen, &QScreen::availableGeometryChanged, this, &KioskSession::settle, Qt::UniqueConnection);
+}
+
+/**
+ * @brief Reports the active flag to the launcher; on becoming active the kiosk lock applies
+ *        again, so the windows take their rectangles once it has.
+ */
+void Platform::KioskSession::onApplicationState(Qt::ApplicationState state)
+{
   reportState(false);
+  if (state == Qt::ApplicationActive)
+    settle();
 }
 
 /**

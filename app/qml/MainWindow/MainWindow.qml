@@ -185,7 +185,6 @@ Widgets.SmartWindow {
   Connections {
     target: root.kioskMode ? CLI_KIOSK_SESSION : null
 
-    function onPlacementChanged() { root.moveKiosk() }
     function onCloseRequested() { app.quitApplication() }
     function onRaiseRequested() {
       Cpp_NativeWindow.activateApplication()
@@ -207,12 +206,6 @@ Widgets.SmartWindow {
         Cpp_NativeWindow.setKioskLock(true)
     }
   }
-
-  //
-  // A confined kiosk moved between screens of different scale takes its rectangle again once
-  // the screen change lands
-  //
-  onScreenChanged: root.moveKiosk()
 
   //
   // Save settings

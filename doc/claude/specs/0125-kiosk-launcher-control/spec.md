@@ -306,8 +306,47 @@ Candidates considered:
 14. A widget pop-out that already fills another screen is not closed by a run-time `screen`
     command (see Design); start with `--kiosk-screen` to avoid it.
 
+## Amendment: kiosk windows take their place again (2026-11-18)
+
+Seen on the two-screen test cell: an external dashboard filling the leftmost screen sat under
+the launcher's 72 px dock and did not reach the bottom of the screen.
+
+- **R14** — Every kiosk-filled window (main window, external dashboard, widget pop-out) covers
+  the full geometry of its screen, never the available geometry, less the reserved strip on the
+  leftmost screen. The reserved width is the option's value or the one in the last `screen`
+  command, for all of these windows.
+- **R15** — The rectangle is taken again when a screen is added, removed, becomes primary or
+  changes its geometry or available geometry, when the application becomes active (the kiosk
+  lock applies then), when a window lands on another screen, and 250 ms after each of these.
+- **R16** — Screens are read live, not from the list taken at startup.
+
+Design: the session owns the live screen lookup, places a window with one geometry change, and
+emits the placement signal for all of the above; every kiosk-filled window answers it. A window
+other than the main one stays on the screen it took (found by that screen's centre); while
+that screen is gone the window is left where the system put it, and it goes back when the
+screen returns. Size: 125 net lines on top of the 1,660 shipped (approved estimate 1,246).
+
+Measured on a two-screen Mac (PySide6 6.11.1): a window shown and then made frameless, sized by
+four separate assignments, lands 30 px low under a visible menu bar; the same window placed with
+one geometry change lands exactly. Not reproduced: the missing 72 px inset and the short height.
+The stale startup screen list is the one path found in the code that skips the inset.
+
+Not changed: a window on a screen the main window fills still floats, and a confined kiosk
+still keeps external dashboards docked (R2). The report's check 5 can only be met for widget
+pop-outs until R2 is reversed.
+
+- [ ] **AC10** — `--kiosk --kiosk-reserve-left 72`, external dashboard on the leftmost screen:
+  72 px stay free, no widget text is hidden.
+- [ ] **AC11** — The same window on the other screen covers all of it.
+- [ ] **AC12** — On both screens the bottom edge is the screen's bottom edge, also when the
+  window was created while the menu bar was visible.
+- [ ] **AC13** — Two `screen` commands with different `reserve_left`: the main window follows,
+  and a kiosk-filled widget pop-out keeps to R14 on its own screen.
+
 ## Open Questions
 
+- Amendment (R14 to R16) approved by the maintainer on 2026-11-18. Still open: whether R2 is
+  reversed so external dashboards stay open in a confined kiosk, each filling its own screen.
 - **Re-confirmation needed (amended during implementation, 2026-11-18):** session ownership
   in `main.cpp` as `CLI_KIOSK_SESSION`; R13 through a separate settings category; deviations
   10 to 14; and whether `DashboardCanvas.qml` joins the file list to close deviation 14.

@@ -58,30 +58,17 @@ Window {
   }
 
   //
-  // Kiosk display (--kiosk): a frameless window filling its screen. kioskGeometry is the whole
-  // screen it took; kioskConfined (spec 0125) switches the main window's settings category.
+  // Kiosk display (--kiosk): a frameless window filling its screen, kioskGeometry. kioskLead is
+  // the main window, which follows the session; kioskConfined switches its settings category.
   //
   property bool kioskFill: false
+  property bool kioskLead: false
   property bool kioskConfined: false
   property rect kioskGeometry: Qt.rect(0, 0, 0, 0)
   readonly property bool kioskMode: typeof CLI_KIOSK !== "undefined" && CLI_KIOSK
 
   //
-  // Geometry of the screen holding a point; by position, not by name, since two monitors of
-  // the same model report the same name
-  //
-  function screenGeometryAt(px, py) {
-    for (let i = 0; i < Cpp_ScreenList.length; ++i) {
-      let g = Cpp_ScreenList[i].geometry
-      if (px >= g.x && px < g.x + g.width && py >= g.y && py < g.y + g.height)
-        return g
-    }
-
-    return Cpp_PrimaryScreen.geometry
-  }
-
-  //
-  // Fills the screen under the saved position, or the session's screen when confined. False
+  // Fills the live screen under the saved position, or the session's screen when confined. False
   // outside kiosk mode, when `taken` fills that screen, or for a confined kiosk's other windows.
   //
   function showKiosk(taken) {
@@ -94,10 +81,11 @@ Window {
 
     const g = confined
             ? CLI_KIOSK_SESSION.screenGeometry
-            : root.screenGeometryAt(root.x + root.width / 2, root.y + root.height / 2)
+            : CLI_KIOSK_SESSION.screenRectAt(root.x + root.width / 2, root.y + root.height / 2)
     if (taken && taken.width > 0 && taken.x === g.x && taken.y === g.y)
       return false
 
+    root.kioskLead = !taken
     root.kioskConfined = confined
     root.kioskFill = true
     root.kioskGeometry = Qt.rect(g.x, g.y, g.width, g.height)
@@ -106,34 +94,52 @@ Window {
     root.showNormal()
     root.raise()
     root.requestActivate()
+    CLI_KIOSK_SESSION.settle()
     return true
   }
 
   //
   // Takes the part of screen `g` a kiosk window may cover: all of it, minus the strip reserved
-  // on the leftmost screen
+  // on the leftmost screen. One geometry change, so macOS cannot constrain a half-moved window.
   //
   function applyKioskRect(g) {
-    const f = CLI_KIOSK_SESSION.fillRect(g)
-    root.x = f.x
-    root.y = f.y
-    root.width = f.width
-    root.height = f.height
+    CLI_KIOSK_SESSION.place(root, g)
   }
 
   //
-  // Follows the session after a screen command; the settings category switches first, so the
-  // new geometry never lands in the category an unconfined kiosk reads
+  // Takes the kiosk rectangle again: the confined main window on the session's screen, any other
+  // on the screen it took, waiting for that screen while it is gone. Category switches first.
   //
   function moveKiosk() {
-    if (!root.kioskFill || !CLI_KIOSK_SESSION.confined)
+    if (!root.kioskFill)
       return
 
-    const g = CLI_KIOSK_SESSION.screenGeometry
-    root.kioskConfined = true
+    const follow = root.kioskLead && CLI_KIOSK_SESSION.confined
+    const c = root.kioskGeometry
+    const cx = c.x + c.width / 2
+    const cy = c.y + c.height / 2
+    const g = follow ? CLI_KIOSK_SESSION.screenGeometry : CLI_KIOSK_SESSION.screenRectAt(cx, cy)
+    const gone = cx < g.x || cx >= g.x + g.width || cy < g.y || cy >= g.y + g.height
+    if (g.width <= 0 || g.height <= 0 || (!follow && gone))
+      return
+
+    if (follow)
+      root.kioskConfined = true
+
     root.kioskGeometry = Qt.rect(g.x, g.y, g.width, g.height)
     root.applyKioskRect(g)
   }
+
+  //
+  // Every kiosk window takes its rectangle again when the session says so (a screen command or
+  // change, the kiosk lock taking effect) and when the window lands on another screen
+  //
+  Connections {
+    target: root.kioskMode ? CLI_KIOSK_SESSION : null
+    function onPlacementChanged() { root.moveKiosk() }
+  }
+
+  onScreenChanged: root.moveKiosk()
 
   //
   // Save previous values for maximize/unmaximize cycle with delay
