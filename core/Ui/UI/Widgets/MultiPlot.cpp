@@ -723,7 +723,9 @@ void Widgets::MultiPlot::updateRange()
 }
 
 /**
- * @brief Calculates the auto scale range of the multiplot.
+ * @brief Calculates the auto scale range of the multiplot. A scan that finds no finite point
+ *        (a zoom onto a span the live sweep has not reached yet) holds the range it had instead
+ *        of snapping to [0, 1].
  */
 void Widgets::MultiPlot::calculateAutoScaleRange()
 {
@@ -737,7 +739,13 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
 
   else if (!computeRangeFromDatasets()) {
     scanCurvesForRange();
-    padDerivedRange();
+    if (m_minY > m_maxY && prevMinY < prevMaxY) {
+      m_minY = prevMinY;
+      m_maxY = prevMaxY;
+    }
+
+    else
+      padDerivedRange();
   }
 
   if (DSP::notEqual(prevMinY, m_minY) || DSP::notEqual(prevMaxY, m_maxY))

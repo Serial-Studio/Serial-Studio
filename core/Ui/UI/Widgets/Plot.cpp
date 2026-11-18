@@ -903,7 +903,9 @@ bool Widgets::Plot::updateDataExtremes(const DataModel::Dataset& dataset)
 
 /**
  * @brief Computes the minimum and maximum values for a given axis of the plot (kLane 0 = x,
- *        1 = y).
+ *        1 = y). An empty render list holds the range it had: a zoom onto a span the live sweep
+ *        has not reached yet draws no points, and snapping to [0, 1] there threw the retained
+ *        sweeps off-screen.
  */
 template<int kLane>
 bool Widgets::Plot::computeMinMaxValues(double& min,
@@ -912,26 +914,24 @@ bool Widgets::Plot::computeMinMaxValues(double& min,
                                         const bool addPadding,
                                         const bool logAxis)
 {
-  bool ok             = true;
   const auto prevMinY = min;
   const auto prevMaxY = max;
 
-  if (m_data.isEmpty()) {
-    min = 0;
-    max = 1;
+  bool ok = DSP::notEqual(dataset.pltMin, dataset.pltMax);
+  if (ok) {
+    min = qMin(dataset.pltMin, dataset.pltMax);
+    max = qMax(dataset.pltMin, dataset.pltMax);
+    if (logAxis)
+      ok = LogScale::resolveLogBounds(min, max);
   }
 
-  else {
-    ok &= DSP::notEqual(dataset.pltMin, dataset.pltMax);
-    if (ok) {
-      min = qMin(dataset.pltMin, dataset.pltMax);
-      max = qMax(dataset.pltMin, dataset.pltMax);
-      if (logAxis)
-        ok = LogScale::resolveLogBounds(min, max);
-    }
+  if (!ok && m_data.isEmpty()) {
+    const bool held = prevMinY < prevMaxY;
+    min             = held ? prevMinY : 0;
+    max             = held ? prevMaxY : 1;
   }
 
-  if (!ok) {
+  else if (!ok) {
     min = std::numeric_limits<double>::max();
     max = std::numeric_limits<double>::lowest();
     DSP::simdFiniteMinMaxPointF<kLane>(m_data.constData(), m_data.size(), min, max);
