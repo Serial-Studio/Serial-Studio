@@ -663,13 +663,20 @@ void UI::Dashboard::connectStreamAvailableInputs()
 }
 
 /**
- * @brief Drops the session view state when the widget identity space changes: a widget id is only
- *        type:groupId:datasetIndex, so a new project or mode inherits foreign zoom, pan and
- *        cursors. Direct rather than queued, because Sessions::Player applies a recording's bundle
- *        right after the project load and a queued clear would land on top of it.
+ * @brief Drops the session view state when the widget identity space changes. Direct, because
+ *        Sessions::Player applies a recording's bundle right after the project load and a queued
+ *        clear would land on top of it. A live link opening onto an empty dashboard drops the
+ *        paused flags alone; never on disconnect, where the closing snapshot needs them.
  */
 void UI::Dashboard::connectViewStateResets(AppState& appState)
 {
+  // clang-format off
+  connect(&m_connectionManager, &IO::ConnectionManager::connectedChanged, this, [this] {
+    if (m_connectionManager.isConnected() && !m_layoutValid && m_viewState.clearPausedFlags())
+      Q_EMIT viewStateChanged();
+  }, Qt::DirectConnection);
+  // clang-format on
+
   connect(&appState,
           &AppState::projectFileChanged,
           this,

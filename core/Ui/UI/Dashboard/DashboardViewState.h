@@ -30,10 +30,10 @@ class QSettings;
 namespace UI {
 
 /**
- * @brief Session view state (spec 0062) and layout preferences of the dashboard. View state is
- *        session state, never project state: it never marks the project modified and is dropped
- *        whenever the widget identity space changes. Every mutator answers whether it changed
- *        anything instead of emitting; the notify signals belong to the Dashboard facade.
+ * @brief Session view state (spec 0062) and layout preferences of the dashboard. View state never
+ *        marks the project modified and is dropped whenever the widget identity space changes; a
+ *        pause also ends at the next live link. Every mutator answers whether it changed anything
+ *        instead of emitting; the notify signals belong to the Dashboard facade.
  */
 class DashboardViewState {
 public:
@@ -54,6 +54,7 @@ public:
   [[nodiscard]] QJsonObject widgetViewState(const QString& widgetId) const;
 
   [[nodiscard]] bool clearViewState();
+  [[nodiscard]] bool clearPausedFlags();
   [[nodiscard]] bool setViewStateJson(const QString& json);
   [[nodiscard]] bool saveGlobalViewState(const QString& key, const QVariant& value);
   [[nodiscard]] bool saveWidgetViewState(const QString& widgetId,

@@ -43,6 +43,7 @@ private slots:
   void jsonRoundTripsBothScopes();
   void malformedJsonClearsTheState();
   void clearIsIdempotent();
+  void pausedFlagsClearAlone();
   void layoutValuesClampToTheirFloors();
   void persistenceGateSuppressesLayoutWrites();
   void autoHideToolbarPersistsThroughTheGate();
@@ -154,6 +155,27 @@ void DashboardViewStateTest::clearIsIdempotent()
   QVERIFY(state.saveWidgetViewState("bar:2", "cursor", 1));
   QVERIFY(state.clearViewState());
   QVERIFY(!state.clearViewState());
+}
+
+/**
+ * @brief A new live link drops the paused flags and nothing else: the zoom recorded beside one
+ *        survives, and a state without a set flag reports no change.
+ */
+void DashboardViewStateTest::pausedFlagsClearAlone()
+{
+  QTemporaryDir dir;
+  QVERIFY(dir.isValid());
+  QSettings settings(dir.filePath("ss.ini"), QSettings::IniFormat);
+  UI::DashboardViewState state(settings);
+
+  QVERIFY(state.saveWidgetViewState("plot:1", "xZoom", 4));
+  QVERIFY(state.saveWidgetViewState("plot:1", "paused", true));
+  QVERIFY(state.saveWidgetViewState("plot:2", "paused", false));
+
+  QVERIFY(state.clearPausedFlags());
+  QVERIFY(!state.widgetViewState("plot:1").contains("paused"));
+  QCOMPARE(state.widgetViewState("plot:1").value("xZoom").toInt(), 4);
+  QVERIFY(!state.clearPausedFlags());
 }
 
 //--------------------------------------------------------------------------------------------------

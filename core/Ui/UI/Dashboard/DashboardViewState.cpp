@@ -313,3 +313,24 @@ bool UI::DashboardViewState::clearViewState()
   m_globalViewState = QJsonObject();
   return true;
 }
+
+/**
+ * @brief Drops every widget's paused flag and keeps its zoom, pan and cursors; answers whether
+ *        any flag was set. A plot restored paused on a new link looks dead with no hint why.
+ */
+bool UI::DashboardViewState::clearPausedFlags()
+{
+  bool changed   = false;
+  const auto ids = m_widgetViewState.keys();
+  for (const auto& id : ids) {
+    auto obj = m_widgetViewState.value(id).toObject();
+    if (!obj.value(QStringLiteral("paused")).toBool())
+      continue;
+
+    obj.remove(QStringLiteral("paused"));
+    m_widgetViewState.insert(id, obj);
+    changed = true;
+  }
+
+  return changed;
+}
