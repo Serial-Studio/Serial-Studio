@@ -485,6 +485,8 @@ static constexpr QLatin1StringView kPlain[] = {
   QLatin1StringView("sessions.setNotes"),
   QLatin1StringView("stream.getInfo"),
   QLatin1StringView("stream.getSources"),
+  QLatin1StringView("system.getDefine"),
+  QLatin1StringView("system.listDefines"),
   QLatin1StringView("system.projectDir"),
   QLatin1StringView("ui.automation.listElements"),
   QLatin1StringView("ui.automation.listWindows"),
