@@ -709,7 +709,8 @@ API::CommandResponse API::Handlers::SessionsHandler::listTags(const QString& id,
 }
 
 /**
- * @brief Create a new tag.
+ * @brief Queues a tag insert on the database worker. Refuses the two requests the manager would
+ *        drop without a word (blank label, no database), so `added` never reports one of those.
  */
 API::CommandResponse API::Handlers::SessionsHandler::addTag(const QString& id,
                                                             const QJsonObject& params)
@@ -718,7 +719,17 @@ API::CommandResponse API::Handlers::SessionsHandler::addTag(const QString& id,
     return CommandResponse::makeMissingParam(id, "label");
 
   const auto label = params.value(QStringLiteral("label")).toString();
-  auto& db         = API::handlerContext().databaseManager;
+  if (label.trimmed().isEmpty())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("The tag label must not be empty."));
+
+  auto& db = API::handlerContext().databaseManager;
+  if (!db.isOpen())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("No database open. Call sessions.openDatabase first."));
+
   db.addTag(label);
 
   QJsonObject result;

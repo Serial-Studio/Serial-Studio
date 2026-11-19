@@ -37,6 +37,28 @@ from utils import APIError, session_diagnostics
 # ---------------------------------------------------------------------------
 
 
+def _wait_until(condition, what: str, timeout: float = 5.0, interval: float = 0.05):
+    """Poll `condition` until it is truthy and return its value; fail the test on timeout.
+
+    The session recorder, the database manager and the frame pipeline all work
+    on their own threads and answer the API before the work lands, so every
+    step that depends on one of them waits for the state it needs. A fixed
+    sleep is a bet on the host's speed, and a loaded CI runner loses it.
+    """
+    deadline = time.time() + timeout
+    while True:
+        value = condition()
+        if value:
+            return value
+        if time.time() >= deadline:
+            pytest.fail(f"timed out after {timeout}s waiting for {what}")
+        time.sleep(interval)
+
+
+def _export_enabled(api_client) -> bool:
+    return api_client.command("sessions.getStatus").get("exportEnabled", False)
+
+
 @pytest.fixture
 def pro_only(api_client):
     """Skip the test when session recording isn't usable on this instance."""
@@ -50,10 +72,8 @@ def pro_only(api_client):
 
     try:
         api_client.command("sessions.setExportEnabled", {"enabled": True})
-        time.sleep(0.1)
-        enabled = api_client.command("sessions.getStatus").get("exportEnabled", False)
+        enabled = _export_enabled(api_client)
         api_client.command("sessions.setExportEnabled", {"enabled": False})
-        time.sleep(0.1)
     except APIError:
         pytest.skip("session recording refused enable (license-gated)")
 
@@ -79,12 +99,53 @@ JS_PARSER_REJECTING = (
 
 def _enable_export(api_client, enabled: bool) -> None:
     api_client.command("sessions.setExportEnabled", {"enabled": enabled})
-    time.sleep(0.1)
+    _wait_until(
+        lambda: _export_enabled(api_client) is enabled,
+        f"session recording to report exportEnabled={enabled}",
+    )
+
+
+def _recorder_closed(api_client) -> bool:
+    return not api_client.command("sessions.getStatus").get("isOpen", False)
 
 
 def _close_session(api_client) -> None:
     api_client.command("sessions.close")
-    time.sleep(0.3)
+    _wait_until(lambda: _recorder_closed(api_client), "the session recorder to close")
+
+
+def _disconnect(api_client) -> None:
+    api_client.disconnect_device()
+    _wait_until(lambda: not api_client.is_connected(), "the device link to close")
+
+
+def _latest_frame(api_client) -> dict:
+    return api_client.command("io.getLatestFrame", {"sourceId": 0})
+
+
+def _send_and_drain(api_client, device_simulator, payloads: list) -> None:
+    """Send the framed payloads and wait until the parser has seen the last one.
+
+    The timestamp check keeps a frame left in the mirror by an earlier
+    recording, which carries the same text, from satisfying the wait.
+    """
+    stale = _latest_frame(api_client).get("timestampMs")
+    device_simulator.send_frames(
+        [b"/*" + payload + b"*/" for payload in payloads],
+        interval_seconds=0.05,
+    )
+
+    last = payloads[-1].decode()
+
+    def drained():
+        frame = _latest_frame(api_client)
+        return (
+            frame.get("hasData", False)
+            and frame.get("text") == last
+            and frame.get("timestampMs") != stale
+        )
+
+    _wait_until(drained, f"the parser to reach the last frame ({last!r})")
 
 
 def _db_path_for(api_client, title: str) -> Path:
@@ -112,12 +173,8 @@ def _record_session(
 ) -> Path:
     """Record a small JS-parser session and return the canonical .db path."""
     api_client.create_new_project(title)
-    time.sleep(0.2)
-
     api_client.command("project.group.add", {"title": "G", "widgetType": 0})
-    time.sleep(0.1)
     api_client.command("project.dataset.add", {"groupId": 0, "options": 1})
-    time.sleep(0.1)
 
     api_client.set_operation_mode("project")
     api_client.configure_frame_parser(
@@ -127,17 +184,13 @@ def _record_session(
         operation_mode=0,
     )
     api_client.configure_frame_parser(frame_detection=1, operation_mode=0)
-    time.sleep(0.1)
-
     api_client.command(
         "project.frameParser.setCode",
         {"code": JS_PARSER, "language": 0, "sourceId": 0},
     )
-    time.sleep(0.15)
 
     if with_table:
         api_client.command("project.dataTable.add", {"name": "CalTable"})
-        time.sleep(0.1)
         api_client.command(
             "project.dataset.setTransformCode",
             {
@@ -147,7 +200,6 @@ def _record_session(
                 "language": 0,
             },
         )
-        time.sleep(0.1)
 
     db_path = _db_path_for(api_client, title)
     if fresh_db:
@@ -155,23 +207,20 @@ def _record_session(
 
     _enable_export(api_client, True)
     api_client.command("project.activate")
-    time.sleep(0.2)
-
     api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
     api_client.connect_device()
     assert device_simulator.wait_for_connection(timeout=5.0)
 
     frames = [f"{i * 10}".encode() for i in range(20)]
-    device_simulator.send_frames(
-        [b"/*" + f + b"*/" for f in frames],
-        interval_seconds=0.05,
-    )
-    time.sleep(2.5)
+    _send_and_drain(api_client, device_simulator, frames)
 
-    api_client.disconnect_device()
-    time.sleep(0.2)
+    _disconnect(api_client)
     _close_session(api_client)
     _enable_export(api_client, False)
+
+    deadline = time.time() + 5.0
+    while not db_path.exists() and time.time() < deadline:
+        time.sleep(0.05)
 
     assert db_path.exists(), (
         f"session DB was never created at {db_path}; "
@@ -180,12 +229,36 @@ def _record_session(
     return db_path
 
 
-def _open_archive(api_client, path: Path) -> int:
-    api_client.command("sessions.openDatabase", {"filePath": str(path)})
-    time.sleep(0.5)
+def _open_database(api_client, path: Path, min_sessions: int = 1) -> list:
+    """Open a session database and return its sessions once the worker has listed them.
 
-    sessions = api_client.command("sessions.list").get("sessions", [])
-    assert sessions, f"no sessions listed in {path}"
+    The open runs on the database worker. Until it lands, sessions.list either
+    refuses (nothing open) or still describes the previously open file, so the
+    wait checks the reported path as well as the count.
+    """
+    api_client.command("sessions.openDatabase", {"filePath": str(path)})
+    wanted = Path(path).resolve()
+
+    def listed():
+        try:
+            result = api_client.command("sessions.list")
+        except APIError:
+            return None
+
+        if not result.get("isOpen") or not result.get("filePath"):
+            return None
+
+        if Path(result["filePath"]).resolve() != wanted:
+            return None
+
+        sessions = result.get("sessions", [])
+        return sessions if len(sessions) >= min_sessions else None
+
+    return _wait_until(listed, f"{min_sessions} session(s) listed from {path}")
+
+
+def _open_archive(api_client, path: Path) -> int:
+    sessions = _open_database(api_client, path)
     return max(s["session_id"] for s in sessions)
 
 
@@ -201,6 +274,33 @@ def _run_regression(api_client, params: dict, timeout: float = 120.0) -> dict:
         time.sleep(0.5)
 
     pytest.fail(f"regression {params} did not finish in {timeout}s")
+
+
+def _add_tag(api_client, label: str, timeout: float = 5.0) -> int:
+    """Add a tag and poll sessions.listTags for its id: the insert runs on the database worker."""
+    api_client.command("sessions.addTag", {"label": label})
+
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        for tag in api_client.command("sessions.listTags").get("tags", []):
+            if tag["label"] == label:
+                return tag["tag_id"]
+        time.sleep(0.05)
+
+    pytest.fail(f"tag {label!r} did not appear in sessions.listTags within {timeout}s")
+
+
+def _assign_tag(api_client, session_id: int, tag_id: int) -> None:
+    """Assign a tag and wait until the session reports it: the write runs on the worker."""
+    api_client.command("sessions.assignTag", {"sessionId": session_id, "tagId": tag_id})
+
+    def assigned():
+        tags = api_client.command("sessions.get", {"sessionId": session_id}).get(
+            "tags", []
+        )
+        return any(tag["tag_id"] == tag_id for tag in tags)
+
+    _wait_until(assigned, f"session {session_id} to carry tag {tag_id}")
 
 
 def _datasets(report: dict) -> list:
@@ -264,7 +364,6 @@ def test_transform_edit_is_value_drift(
             "language": 0,
         },
     )
-    time.sleep(0.2)
 
     state = _run_regression(api_client, {"sessionId": session_id})
     report = state["report"]
@@ -301,7 +400,6 @@ def test_frame_rejection_is_coverage_drift_only(
         "project.frameParser.setCode",
         {"code": JS_PARSER_REJECTING, "language": 0, "sourceId": 0},
     )
-    time.sleep(0.2)
 
     state = _run_regression(api_client, {"sessionId": session_id})
     report = state["report"]
@@ -333,7 +431,6 @@ def test_dataset_add_remove_is_structural_drift(
     session_id = _open_archive(api_client, db_path)
 
     api_client.command("project.dataset.add", {"groupId": 0, "options": 1})
-    time.sleep(0.2)
 
     state = _run_regression(api_client, {"sessionId": session_id})
     report = state["report"]
@@ -435,7 +532,8 @@ def _close_archive_quietly(api_client) -> None:
         api_client.command("sessions.close")
     except APIError:
         pass
-    time.sleep(0.3)
+
+    _wait_until(lambda: _recorder_closed(api_client), "the session recorder to close")
 
 
 # ---------------------------------------------------------------------------
@@ -452,20 +550,11 @@ def test_golden_tag_sweep(api_client, device_simulator, clean_state, regress_ava
     _record_session(api_client, device_simulator, title, fresh_db=False)
     _record_session(api_client, device_simulator, title, fresh_db=False)
 
-    api_client.command("sessions.openDatabase", {"filePath": str(db_path)})
-    time.sleep(0.5)
-    sessions = api_client.command("sessions.list").get("sessions", [])
-    assert len(sessions) >= 3, sessions
+    sessions = _open_database(api_client, db_path, min_sessions=3)
 
-    api_client.command("sessions.addTag", {"label": "golden"})
-    time.sleep(0.2)
-    tags = api_client.command("sessions.listTags").get("tags", [])
-    tag_id = next(t["tag_id"] for t in tags if t["label"] == "golden")
+    tag_id = _add_tag(api_client, "golden")
     for s in sessions[:3]:
-        api_client.command(
-            "sessions.assignTag", {"sessionId": s["session_id"], "tagId": tag_id}
-        )
-        time.sleep(0.1)
+        _assign_tag(api_client, s["session_id"], tag_id)
 
     api_client.command(
         "project.dataset.setTransformCode",
@@ -476,7 +565,6 @@ def test_golden_tag_sweep(api_client, device_simulator, clean_state, regress_ava
             "language": 0,
         },
     )
-    time.sleep(0.2)
 
     state = _run_regression(api_client, {"tag": "golden"}, timeout=300.0)
     sweep = state["sweep"]
@@ -530,8 +618,7 @@ def test_regression_during_live_capture(
     status = api_client.command("sessions.getStatus")
     assert status.get("exportEnabled", False) is True
 
-    api_client.disconnect_device()
-    time.sleep(0.2)
+    _disconnect(api_client)
     _close_session(api_client)
     _enable_export(api_client, False)
 
