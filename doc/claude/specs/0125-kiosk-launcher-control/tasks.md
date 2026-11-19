@@ -78,6 +78,19 @@ updated: 2026-11-18
 - **Deps:** T4
 - [x] done
 
+### T8 — External dashboards under a launcher (amendment of 2026-11-19, R17 to R22)
+
+- **Files:** `core/Ui/Platform/KioskControl.h/.cpp`, `core/Ui/Platform/KioskSession.h/.cpp`,
+  `app/qml/Widgets/SmartWindow.qml`, `app/qml/MainWindow/Panes/Dashboard.qml`,
+  `app/tests/tst_kiosk_control.cpp`, `doc/help/Command-Line-Interface.md`,
+  `doc/help/Operator-Deployments.md`
+- **Does:** An identity on the control client; managed windows in the session, one client each;
+  a managed window fills a screen in a confined kiosk and obeys its own three commands.
+- **Verify:** `syntax-check.py`, `code-verify.py --check`, `qmllint` for the syntax; AC14 to
+  AC18 are the maintainer's.
+- **Deps:** T1 to T5
+- [x] done
+
 ## Definition of Done
 
 - [ ] Every acceptance criterion in `spec.md` is met and checked off there.

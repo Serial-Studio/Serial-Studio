@@ -112,6 +112,7 @@ private slots:
   void takeLine();
 
   void greetsOnConnect();
+  void greetsUnderItsOwnIdentity();
   void sendsState();
   void decodesCommands();
   void reserveLeftValues_data();
@@ -229,6 +230,24 @@ void TstKioskControl::greetsOnConnect()
 }
 
 /**
+ * @brief A client that stands for an external dashboard greets under the identity it was given,
+ *        which is what lets a launcher list it beside the main window.
+ */
+void TstKioskControl::greetsUnderItsOwnIdentity()
+{
+  Launcher launcher(serverName("identity"));
+  QVERIFY(launcher.listen());
+
+  Platform::KioskControl control;
+  control.setIdentity(QStringLiteral("dashboard-2"));
+  greetOnLink(control);
+  control.start(serverName("identity"));
+
+  QTRY_COMPARE(launcher.lines().size(), 1);
+  QCOMPARE(launcher.lines().constFirst().value("id").toString(), QStringLiteral("dashboard-2"));
+}
+
+/**
  * @brief The state event carries the screen and the active flag, and nothing is written before
  *        there is a link.
  */
@@ -249,6 +268,11 @@ void TstKioskControl::sendsState()
   QCOMPARE(state.value("event").toString(), QStringLiteral("state"));
   QCOMPARE(state.value("screen").toString(), QStringLiteral("Screen B"));
   QCOMPARE(state.value("active").toBool(true), false);
+  QVERIFY(!state.contains("title"));
+
+  control.sendState(QStringLiteral("Screen B"), true, QStringLiteral("Engine Test"));
+  QTRY_COMPARE(launcher.lines().size(), 2);
+  QCOMPARE(launcher.lines().constLast().value("title").toString(), QStringLiteral("Engine Test"));
 }
 
 //--------------------------------------------------------------------------------------------------

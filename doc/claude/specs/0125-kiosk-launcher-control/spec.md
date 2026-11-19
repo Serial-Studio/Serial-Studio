@@ -343,10 +343,83 @@ pop-outs until R2 is reversed.
 - [ ] **AC13** — Two `screen` commands with different `reserve_left`: the main window follows,
   and a kiosk-filled widget pop-out keeps to R14 on its own screen.
 
+## Amendment: external dashboards under a launcher (2026-11-19)
+
+Seen in the test cell's training simulator: the operator pressed the external window button in
+the launcher's kiosk and nothing happened. R2 kept external dashboards docked in every confined
+kiosk, and the launcher always confines. The maintainer asked on 2026-11-19 for R2 to be
+reversed where a launcher is there to switch between the windows.
+
+- **R17** — R2 holds only for a confined kiosk without `--kiosk-control`. With a control
+  channel, external dashboard windows are restored and can be opened, whether the kiosk is
+  confined or not; each fills a screen without a frame (R14), also a screen another kiosk
+  window fills, and the project's saved window list is written as in any other run.
+- **R18** — Each such window opens a connection of its own to the launcher's server and greets
+  as `dashboard-<n>`, `<n>` being the window's number, which the project keeps across runs. Its
+  `title` is the window's title. The main window stays `dashboard`. The wire format is unchanged.
+- **R19** — On a window's connection `raise` brings that window forward, `close` closes that
+  window alone and `screen` moves that window alone; the main window and the confinement are
+  untouched. A `reserve_left` in it replaces the one reserved width of the whole kiosk (R14).
+- **R20** — A window's `state` event carries its own screen and is `active` only while that
+  window holds the focus. The main window's `active` is true while the application is active
+  and no such window holds the focus, which without external windows is R7 as it was.
+- **R21** — Closing the window, by any path, drops its connection.
+- **R22** — Until the launcher's first `screen` command a new external dashboard fills the
+  screen under its saved position, else the primary screen.
+
+- **R23** — A window's `title`, in the hello and from then on in every `state` event, is the
+  name of its active workspace, else the window's own title. A change of workspace sends a
+  state event. This holds for the main window too. (Maintainer, 2026-11-19: the launcher's keys
+  did not say which workspace a window shows.)
+- **R24** — The start menu and the command palette of an external dashboard window have a
+  Close Window command (`window.close`), which the main window does not show. A kiosk-filled
+  window has no frame, so without a launcher key it could not be closed.
+
+Design: the session keeps a list of managed windows, each with a control client of its own (the
+client gained an identity, default `dashboard`), relays a managed client's commands as three
+signals that carry the window, and reports focus per window. QML marks an external dashboard as
+managed when the session is controlled; a managed window skips the two refusals in
+`showKiosk()` and takes a screen on the session's word. The confined-and-docked test in the
+dashboard pane now also asks for the absence of a control channel. Files: `KioskSession.h/.cpp`,
+`KioskControl.h/.cpp`, `SmartWindow.qml`, `Dashboard.qml`, `tst_kiosk_control.cpp`, the two help
+pages. Size: about 230 lines. R23 adds an optional title to the state sender and a title slot on
+the session that QML feeds from each window's taskbar. R24 is one command in `app.json` and the
+start-menu layout, its binding in `DashboardCommandBindings.qml`, and the signal carried through
+`StartMenu.qml` and `DashboardLayout.qml` to the window; `Toolbar-Reference.md` has its row.
+
+Candidates considered: one connection with a window key in every line (changes the wire format
+and every launcher that speaks it); one connection per window (chosen: a launcher that keys
+windows by `id` needs no protocol change); float the external dashboards inside the kiosk
+screen (rejected in the first round, always-on-top windows over the launcher's own).
+
+Tradeoffs and risks:
+
+- A managed window may fill the screen the main window fills. That is the point of a launcher
+  with a key per window, and why R17 does not apply without one.
+- The reserved width stays one value. A launcher must send the strip's width in every `screen`
+  command, not 0 for a window on another screen, or a window on the leftmost screen covers the
+  strip. The launcher in use was changed to do so.
+- Deviation 14 (a widget pop-out that already fills another screen) is unchanged.
+- Not built and not run: I can neither compile nor launch the application. Checked: the
+  syntax check on the three C++ files, `code-verify`, and the launcher's side against a
+  scripted client.
+
+- [ ] **AC14** — Launcher kiosk, two screens: the external window button opens a dashboard that
+  fills a screen, and the launcher shows a key for it (maintainer).
+- [ ] **AC15** — That key brings the window forward, moves it to the other screen and closes it,
+  and the main dashboard stays where it is (maintainer).
+- [ ] **AC16** — After a restart the window is restored and returns to the screen the launcher
+  remembers for it (maintainer).
+- [ ] **AC17** — `--kiosk --kiosk-screen <name>` without `--kiosk-control`: external dashboards
+  stay docked, as before (maintainer).
+- [ ] **AC18** — A client given an identity greets under it (`tst_kiosk_control`, written and
+  syntax-checked, not yet built or run).
+
 ## Open Questions
 
-- Amendment (R14 to R16) approved by the maintainer on 2026-11-18. Still open: whether R2 is
-  reversed so external dashboards stay open in a confined kiosk, each filling its own screen.
+- Amendment (R14 to R16) approved by the maintainer on 2026-11-18. R2 was reversed for a
+  controlled kiosk on 2026-11-19 (R17 to R22); the design of that amendment was written and
+  implemented in one pass on the maintainer's word and is his to re-confirm.
 - **Re-confirmation needed (amended during implementation, 2026-11-18):** session ownership
   in `main.cpp` as `CLI_KIOSK_SESSION`; R13 through a separate settings category; deviations
   10 to 14; and whether `DashboardCanvas.qml` joins the file list to close deviation 14.

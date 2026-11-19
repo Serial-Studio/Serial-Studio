@@ -72,6 +72,31 @@ Item {
   }
 
   //
+  // Under a kiosk launcher (spec 0125) a window goes by its active workspace: tell the session
+  //
+  function tellKioskTitle(window, bar) {
+    if (!mainWindow.kioskMode || !CLI_KIOSK_SESSION.controlled || !bar)
+      return
+
+    var title = ""
+    var model = bar.workspaceModel
+    for (var i = 0; i < model.length; ++i) {
+      if (model[i].id === bar.activeGroupId) {
+        title = model[i].text
+        break
+      }
+    }
+
+    CLI_KIOSK_SESSION.setWindowTitle(window, title)
+  }
+
+  Connections {
+    target: root.taskBar
+    function onActiveGroupIdChanged() { root.tellKioskTitle(mainWindow, root.taskBar) }
+    function onWorkspaceModelChanged() { root.tellKioskTitle(mainWindow, root.taskBar) }
+  }
+
+  //
   // Main dashboard's palette model + open request, surfaced to the main window's single palette.
   //
   property alias paletteModel: _mainLayout.paletteModel
@@ -161,7 +186,7 @@ Item {
   // Spawns an external dashboard window, optionally seeded from a saved record
   //
   function openExternalWindow(record) {
-    if (mainWindow.kioskConfined)
+    if (root.kioskDocked)
       return
 
     var rec = record || ({})
@@ -175,6 +200,7 @@ Item {
     if (win) {
       extWindows.push(win)
       win.closing.connect(function() {
+        CLI_KIOSK_SESSION.removeWindow(win)
         var idx = extWindows.indexOf(win)
         if (idx !== -1)
           extWindows.splice(idx, 1)
@@ -194,7 +220,7 @@ Item {
   // Serializes the live external windows into the project file
   //
   function syncExternalWindows() {
-    if (root.restoringExternal || mainWindow.kioskConfined)
+    if (root.restoringExternal || root.kioskDocked)
       return
 
     if (Cpp_AppState.operationMode !== SerialStudio.ProjectFile)
@@ -249,7 +275,7 @@ Item {
 
     var ready = Cpp_AppState.operationMode === SerialStudio.ProjectFile
                 && Cpp_UI_Dashboard.available
-                && !mainWindow.kioskConfined
+                && !root.kioskDocked
     var saved = ready ? (Cpp_JSON_ProjectModel.externalWindows() || []) : []
 
     var savedById = ({})
@@ -288,13 +314,11 @@ Item {
   Component.onCompleted: _extReconcileTimer.restart()
 
   //
-  // A kiosk confined to one screen (spec 0125) keeps external dashboards docked: reconcile
-  // then closes the open ones, and the saved list is left alone
+  // A confined kiosk with no launcher (spec 0125) keeps external dashboards docked and the
+  // saved list alone; under a control channel each is a window the launcher switches to.
   //
-  Connections {
-    target: mainWindow
-    function onKioskConfinedChanged() { _extReconcileTimer.restart() }
-  }
+  readonly property bool kioskDocked: mainWindow.kioskConfined && !CLI_KIOSK_SESSION.controlled
+  onKioskDockedChanged: _extReconcileTimer.restart()
 
   //
   // Freeze persistence during teardown so destroyed windows can't wipe the saved set
@@ -317,6 +341,7 @@ Item {
       minimumHeight: 480
       transientParent: null
       title: qsTr("Dashboard %1").arg(windowNumber)
+      kioskManaged: mainWindow.kioskMode && CLI_KIOSK_SESSION.controlled
       color: Cpp_ThemeManager.colors["dashboard_background"]
 
 
@@ -464,8 +489,37 @@ Item {
             hostWindow: _extWindow
             taskBar: _extWindow.extTaskBar
             onExternalWindowClicked: root.openExternalWindow()
+            onCloseWindowRequested: _extWindow.close()
             onWidgetWindowRequested: (windowId) => _mainLayout.openWidgetWindow(windowId)
           }
+        }
+      }
+
+      //
+      // The launcher's commands for this window alone (spec 0125): raise as the main window
+      // does, close as the operator would, and move to the screen the launcher names
+      //
+      Connections {
+        target: _extWindow.kioskManaged ? CLI_KIOSK_SESSION : null
+
+        function onWindowCloseRequested(window) {
+          if (window === _extWindow)
+            _extWindow.close()
+        }
+
+        function onWindowScreenRequested(window, screen) {
+          if (window === _extWindow)
+            _extWindow.takeKioskScreen(screen)
+        }
+
+        function onWindowRaiseRequested(window) {
+          if (window !== _extWindow)
+            return
+
+          Cpp_NativeWindow.activateApplication()
+          Cpp_NativeWindow.setKioskLock(true)
+          _extWindow.raise()
+          _extWindow.requestActivate()
         }
       }
 
@@ -474,7 +528,11 @@ Item {
       //
       Connections {
         target: _extWindow.extTaskBar
-        function onActiveGroupIdChanged() { root.syncExternalWindows() }
+        function onWorkspaceModelChanged() { root.tellKioskTitle(_extWindow, _extWindow.extTaskBar) }
+        function onActiveGroupIdChanged() {
+          root.syncExternalWindows()
+          root.tellKioskTitle(_extWindow, _extWindow.extTaskBar)
+        }
       }
 
       //
@@ -514,8 +572,11 @@ Item {
           }
         }
 
-        if (_extWindow.showKiosk(mainWindow.kioskGeometry))
+        if (_extWindow.showKiosk(mainWindow.kioskGeometry)) {
           _extWindow.titlebarHeight = 0
+          CLI_KIOSK_SESSION.addWindow(_extWindow, "dashboard-" + _extWindow.windowNumber)
+          root.tellKioskTitle(_extWindow, _extWindow.extTaskBar)
+        }
 
         else {
           _extWindow.displayWindow()

@@ -46,7 +46,8 @@ static constexpr int kMaxLinesPerRead = 256;
  *        socket's own read buffer is capped as well, so a peer that floods short lines is held
  *        back by the operating system instead of filling this process.
  */
-Platform::KioskControl::KioskControl(QObject* parent) : QObject(parent)
+Platform::KioskControl::KioskControl(QObject* parent)
+  : QObject(parent), m_identity(QStringLiteral("dashboard"))
 {
   m_retry.setSingleShot(true);
   m_retry.setInterval(kRetryIntervalMs);
@@ -125,6 +126,17 @@ void Platform::KioskControl::setRetryInterval(int msec)
 }
 
 /**
+ * @brief Names the window this client stands for in its greeting; the main window keeps the
+ *        default, "dashboard". An empty name is refused, since the launcher keys on it.
+ */
+void Platform::KioskControl::setIdentity(const QString& id)
+{
+  SS_ASSERT(!id.isEmpty(), return);
+
+  m_identity = id;
+}
+
+/**
  * @brief Names the launcher's server and dials it; an empty name leaves the channel closed.
  */
 void Platform::KioskControl::start(const QString& server_name)
@@ -137,14 +149,18 @@ void Platform::KioskControl::start(const QString& server_name)
 }
 
 /**
- * @brief Sends the state event: the screen the kiosk is on and whether the application is active.
+ * @brief Sends the state event: the screen the window is on, whether it is the active one, and
+ *        what it shows now when @p title is given, so a launcher can label it.
  */
-void Platform::KioskControl::sendState(const QString& screen, bool active)
+void Platform::KioskControl::sendState(const QString& screen, bool active, const QString& title)
 {
   QJsonObject message;
   message.insert(QStringLiteral("event"), QStringLiteral("state"));
   message.insert(QStringLiteral("screen"), screen);
   message.insert(QStringLiteral("active"), active);
+  if (!title.isEmpty())
+    message.insert(QStringLiteral("title"), title);
+
   sendLine(message);
 }
 
@@ -155,7 +171,7 @@ void Platform::KioskControl::sendHello(const QString& title, const QString& scre
 {
   QJsonObject message;
   message.insert(QStringLiteral("hello"), kProtocolVersion);
-  message.insert(QStringLiteral("id"), QStringLiteral("dashboard"));
+  message.insert(QStringLiteral("id"), m_identity);
   message.insert(QStringLiteral("title"), title);
   message.insert(QStringLiteral("pid"), QCoreApplication::applicationPid());
   message.insert(QStringLiteral("screen"), screen);

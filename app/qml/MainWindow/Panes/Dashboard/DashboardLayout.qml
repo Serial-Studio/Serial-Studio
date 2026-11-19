@@ -57,6 +57,7 @@ Widgets.Pane {
   // Signals
   //
   signal externalWindowClicked()
+  signal closeWindowRequested()
   signal widgetWindowRequested(int windowId)
 
   //
@@ -508,6 +509,7 @@ Widgets.Pane {
       y: parent.height - height - _taskbar.height + 1
       x: Cpp_Misc_Translator.rtl ? parent.width - width : 0
       onExternalWindowClicked: root.externalWindowClicked()
+      onCloseWindowClicked: root.closeWindowRequested()
       onNewWorkspaceRequested: _wsDialog.openNew(root.taskBar)
       onRenameWorkspaceRequested: (wsId, name) => _wsDialog.openEdit(root.taskBar, wsId, name)
       onFullScreenRequested: {
@@ -525,7 +527,9 @@ Widgets.Pane {
 
     taskBar: root.taskBar
     hostWindow: root.hostWindow
+    allowCloseWindow: root.isExternalWindow
     onExternalWindowRequested: root.externalWindowClicked()
+    onCloseWindowRequested: root.closeWindowRequested()
     onFullScreenRequested: {
       if (root.hostWindow)
         root.hostWindow.toggleFullScreen()

@@ -11,6 +11,7 @@
     { "type": "separator" },
     { "type": "command", "id": "app.fullScreen" },
     { "type": "command", "id": "window.external" },
+    { "type": "command", "id": "window.close" },
     { "type": "separator" },
     { "type": "submenu", "name": "export", "title": "Export", "icon": "commands/export",
       "items": [

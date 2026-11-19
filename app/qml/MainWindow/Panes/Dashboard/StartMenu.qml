@@ -104,6 +104,7 @@ Popup {
   // Signals
   //
   signal externalWindowClicked()
+  signal closeWindowClicked()
   signal fullScreenRequested()
   signal newWorkspaceRequested()
   signal renameWorkspaceRequested(int workspaceId, string currentName)
@@ -117,7 +118,9 @@ Popup {
     taskBar: root.taskBar
     hostWindow: root.hostWindow
     onFullScreenRequested: root.fullScreenRequested()
+    allowCloseWindow: root.isExternalWindow
     onExternalWindowRequested: root.externalWindowClicked()
+    onCloseWindowRequested: root.closeWindowClicked()
   }
 
   Commands.CommandModel {
@@ -615,6 +618,10 @@ Popup {
 
     StartMenuCommand {
       commandId: "window.external"
+    }
+
+    StartMenuCommand {
+      commandId: "window.close"
     }
 
     StartMenuDivider {

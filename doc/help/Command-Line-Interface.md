@@ -150,7 +150,7 @@ Operator mode is a locked-down session for people who run a dashboard without ed
 | `--no-toolbar` | | Hide the main window toolbar at startup. |
 | `--runtime` | | Operator runtime mode: hide toolbar, connect automatically, quit when the operator disconnects. An unexpected device drop shows the reconfigure dialog instead of quitting. |
 | `--kiosk` | | Kiosk display, only with `--runtime`. The main window fills its screen without a frame, and so does every external dashboard or widget window saved on another screen (one on the main window's screen stays a floating window). On macOS the Dock and the menu bar are hidden and app switching, Force Quit, Hide, the Apple menu and logout are disabled while Serial Studio is the frontmost app. Disconnecting still quits, so pair it with a launcher that is itself locked down. On Windows and Linux only the borderless windows apply. Replaces `--fullscreen`. |
-| `--kiosk-screen` | `name` | Only with `--kiosk`. Confine the kiosk to the screen with this name: the main window fills it and nothing of Serial Studio appears on another screen. External dashboard windows saved in the project stay docked in the main window, and widget windows float inside that screen. An unknown name falls back to the primary screen with a warning. When two screens report the same name, the first one in system order is used. |
+| `--kiosk-screen` | `name` | Only with `--kiosk`. Confine the kiosk to the screen with this name: the main window fills it and nothing of Serial Studio appears on another screen. Without `--kiosk-control`, external dashboard windows saved in the project stay docked in the main window; with it they stay windows, each filling a screen (see [Kiosk control channel](#kiosk-control-channel)). Widget windows float inside that screen. An unknown name falls back to the primary screen with a warning. When two screens report the same name, the first one in system order is used. |
 | `--kiosk-reserve-left` | `pixels` | Only with `--kiosk`. Leave this many pixels free at the left edge of the leftmost screen, for a launcher's own dock. Kiosk windows on any other screen use the whole screen. Default 0; capped at half the screen width. |
 | `--kiosk-control` | `server-name` | Only with `--kiosk`. Connect to the local server of this name so a launcher can raise, move and close the kiosk. See [Kiosk control channel](#kiosk-control-channel). |
 | `--deployment` | `file` | Open a deployment package (`.ssdeploy`) in a sealed runtime session. Passing a `.ssdeploy` file as the first positional argument does the same. The package's runtime options replace `--fullscreen`, `--no-toolbar`, the four export flags, `--actions-panel`, `--file-transmission`, the `--taskbar-*` flags, `--no-taskbar-search` and `--theme`, which are ignored with a warning; bus flags (`--uart`, `--tcp`, ...) and `--api-*` still apply. Cannot be combined with `--headless`. See [Operator Deployments](Operator-Deployments.md#deployment-packages). |
@@ -179,7 +179,7 @@ Serial Studio sends a greeting after every connect, followed by a state event. I
 {"event": "state", "screen": "DELL U2723QE", "active": true}
 ```
 
-`hello` is the protocol version, `title` the main window title and `screen` the name of the screen the main window is on.
+`hello` is the protocol version, `title` what the window shows (its active workspace, else the window title) and `screen` the name of the screen the main window is on. A state event carries `title` as well, and one is sent when the window changes workspace, so a launcher can label the window with it.
 
 The launcher can send three commands:
 
@@ -188,6 +188,10 @@ The launcher can send three commands:
 | `{"cmd": "raise"}` | Make Serial Studio the active application and bring the main window to the front. On macOS 14 and later the launcher has to yield activation to Serial Studio's process first. |
 | `{"cmd": "screen", "name": "LG HDR 4K", "reserve_left": 64}` | Move the kiosk to the named screen, as `--kiosk-screen` would have placed it. `reserve_left` replaces the `--kiosk-reserve-left` value; leave it out to keep the current one. The kiosk stays confined to one screen for the rest of the run. An unknown name does nothing; a known one is answered with a state event. |
 | `{"cmd": "close"}` | Quit, as when the operator disconnects in runtime mode. Recordings and exports are finalized first. |
+
+Each external dashboard window opens a connection of its own to the same server and greets as `dashboard-1`, `dashboard-2` and so on, with the window's title; the number is the one in the window's title and is kept in the project. On that connection `raise`, `screen` and `close` act on that window alone, and its state events report its own screen and whether it holds the focus. Closing the window drops the connection. A launcher that keeps one entry per `id` therefore lists every dashboard window by itself.
+
+The reserved width is one value for all kiosk windows of the process, applied on the leftmost screen only. Send the width of the launcher's strip in every `screen` command, also for a window that goes to another screen.
 
 A run started with `--kiosk-screen`, or moved by a `screen` command, does not change the window position a plain `--kiosk` run opens at.
 

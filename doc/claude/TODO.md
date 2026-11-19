@@ -23,9 +23,10 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
 ## Code follow-ups
 
 - [ ] Spec 0125 (kiosk launcher control), maintainer-only: reconfigure so `tst_kiosk_session` and
-  `tst_kiosk_control` build and run, then AC1, AC2, AC4, AC6 to AC13 in its `spec.md` on two
-  screens with the launcher. Open there: whether a confined kiosk keeps external dashboards
-  docked (R2), and two items: a pop-out that already fills another screen
+  `tst_kiosk_control` build and run, then AC1, AC2, AC4, AC6 to AC18 in its `spec.md` on two
+  screens with the launcher (AC14 to AC18 are the 2026-11-19 amendment: external dashboards as
+  windows of their own under a control channel, never built or run). Open there, two items: a
+  pop-out that already fills another screen
   survives a run-time `screen` command (deviation 14, needs `DashboardCanvas.qml`), and
   stay-on-top pop-outs may cover the launcher (AC8; the fix is gating `anyDashboardFullscreen`
   in `Dashboard.qml` on the application being active).

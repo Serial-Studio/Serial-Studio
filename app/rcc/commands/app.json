@@ -261,6 +261,17 @@
       "category": "view"
     },
     {
+      "id": "window.close",
+      "title": "Close Window",
+      "icon": "commands/window-close",
+      "kind": "action",
+      "contexts": [
+        "dashboard"
+      ],
+      "order": 4,
+      "category": "view"
+    },
+    {
       "id": "app.quit",
       "title": "Quit",
       "icon": "commands/quit",

@@ -5866,7 +5866,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="306"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="343"/>
         <source>Dashboard %1</source>
         <translation>Dashboard %1</translation>
     </message>
@@ -5950,7 +5950,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="588"/>
         <source>Command Palette</source>
         <translation>Command Palette</translation>
     </message>
@@ -11267,7 +11267,7 @@ Add controller tags above to poll them.</translation>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="284"/>
         <source>The widget could not be created.</source>
         <translation>The widget could not be created.</translation>
     </message>
@@ -17751,37 +17751,37 @@ Thank you again for supporting Serial Studio!</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="225"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="255"/>
         <source>Console Only Mode</source>
         <translation>Console Only Mode</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="258"/>
         <source>Quick Plot Mode</source>
         <translation>Quick Plot Mode</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="235"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="265"/>
         <source>Empty Project</source>
         <translation>Empty Project</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="708"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="738"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="716"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="746"/>
         <source>Waiting for data…</source>
         <translation>Waiting for data…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="717"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="747"/>
         <source>Connecting to device…</source>
         <translation>Connecting to device…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="780"/>
         <source>Command Palette</source>
         <translation>Command Palette</translation>
     </message>
@@ -23176,12 +23176,12 @@ The separator parameter is no longer needed.</translation>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="997"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1091"/>
         <source>Project file not found</source>
         <translation>Project file not found</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="998"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1092"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -23190,17 +23190,17 @@ The separator parameter is no longer needed.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="1001"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1095"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Would you like to delete this shortcut?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="1005"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1099"/>
         <source>Delete Shortcut</source>
         <translation>Delete Shortcut</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="1007"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1101"/>
         <source>Quit</source>
         <translation>Quit</translation>
     </message>
@@ -26703,77 +26703,77 @@ Add absolute addresses above to poll the controller.</translation>
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="356"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="359"/>
         <source>Workspaces</source>
         <translation>Workspaces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="445"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="448"/>
         <source>New Workspace…</source>
         <translation>New Workspace…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="483"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="486"/>
         <source>Actions</source>
         <translation>Actions</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
         <source>No Actions Available</source>
         <translation>No Actions Available</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="528"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="531"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="577"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="580"/>
         <source>No Plugins Installed</source>
         <translation>No Plugins Installed</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="821"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="828"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="822"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="829"/>
         <source>Hide</source>
         <translation>Hide</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="462"/>
         <source>No Workspaces Available</source>
         <translation>No Workspaces Available</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="567"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="570"/>
         <source>Manage Plugins…</source>
         <translation>Manage Plugins…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="674"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="681"/>
         <source>No Export Formats Available</source>
         <translation>No Export Formats Available</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
         <source>Show "%1"</source>
         <translation>Show "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="436"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="439"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Show All Hidden Workspaces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="741"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="748"/>
         <source>No Tools Available</source>
         <translation>No Tools Available</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="810"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="817"/>
         <source>Edit…</source>
         <translation>Edit…</translation>
     </message>
@@ -27979,22 +27979,22 @@ Add absolute addresses above to poll the controller.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1368"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1372"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1376"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1380"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1384"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1388"/>
         <source>Clock</source>
         <translation>Clock</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1391"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1395"/>
         <source>Stopwatch</source>
         <translation>Stopwatch</translation>
     </message>

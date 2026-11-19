@@ -5866,7 +5866,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="306"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="343"/>
         <source>Dashboard %1</source>
         <translation>Панель %1</translation>
     </message>
@@ -5950,7 +5950,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Панель Приладів</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="588"/>
         <source>Command Palette</source>
         <translation>Палітра Команд</translation>
     </message>
@@ -11267,7 +11267,7 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="284"/>
         <source>The widget could not be created.</source>
         <translation>Не вдалося створити віджет.</translation>
     </message>
@@ -17752,37 +17752,37 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="225"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="255"/>
         <source>Console Only Mode</source>
         <translation>Режим Лише Консолі</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="258"/>
         <source>Quick Plot Mode</source>
         <translation>Режим Швидких Графіків</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="235"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="265"/>
         <source>Empty Project</source>
         <translation>Порожній Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="708"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="738"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="716"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="746"/>
         <source>Waiting for data…</source>
         <translation>Очікування даних…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="717"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="747"/>
         <source>Connecting to device…</source>
         <translation>Підключення до пристрою…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="780"/>
         <source>Command Palette</source>
         <translation>Палітра Команд</translation>
     </message>
@@ -23178,12 +23178,12 @@ function parse(%1) { ... }
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="997"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1091"/>
         <source>Project file not found</source>
         <translation>Файл проєкту не знайдено</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="998"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1092"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -23192,17 +23192,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="1001"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1095"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Видалити цей ярлик?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="1005"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1099"/>
         <source>Delete Shortcut</source>
         <translation>Видалити Ярлик</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="1007"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1101"/>
         <source>Quit</source>
         <translation>Вийти</translation>
     </message>
@@ -26707,77 +26707,77 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="356"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="359"/>
         <source>Workspaces</source>
         <translation>Робочі Простори</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="483"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="486"/>
         <source>Actions</source>
         <translation>Дії</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
         <source>No Actions Available</source>
         <translation>Немає Доступних Дій</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="528"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="531"/>
         <source>Plugins</source>
         <translation>Плагіни</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="577"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="580"/>
         <source>No Plugins Installed</source>
         <translation>Плагіни Не Встановлено</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="741"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="748"/>
         <source>No Tools Available</source>
         <translation>Немає Доступних Інструментів</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="821"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="828"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="822"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="829"/>
         <source>Hide</source>
         <translation>Приховати</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="445"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="448"/>
         <source>New Workspace…</source>
         <translation>Нова Робоча Область…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
         <source>Show "%1"</source>
         <translation>Показати "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="436"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="439"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Показати Всі Приховані Робочі Простори</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="462"/>
         <source>No Workspaces Available</source>
         <translation>Немає Доступних Робочих Областей</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="567"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="570"/>
         <source>Manage Plugins…</source>
         <translation>Керування Плагінами…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="674"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="681"/>
         <source>No Export Formats Available</source>
         <translation>Формати Експорту Недоступні</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="810"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="817"/>
         <source>Edit…</source>
         <translation>Редагувати…</translation>
     </message>
@@ -27983,22 +27983,22 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1368"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1372"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1376"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1380"/>
         <source>Notifications</source>
         <translation>Сповіщення</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1384"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1388"/>
         <source>Clock</source>
         <translation>Годинник</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1391"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1395"/>
         <source>Stopwatch</source>
         <translation>Секундомір</translation>
     </message>

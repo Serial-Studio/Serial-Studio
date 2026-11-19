@@ -72,6 +72,7 @@ Platform::KioskSession::KioskSession(QObject* parent)
   connect(&m_control, &KioskControl::screenRequested, this, &KioskSession::moveToScreen);
   connect(
     qGuiApp, &QGuiApplication::applicationStateChanged, this, &KioskSession::onApplicationState);
+  connect(qGuiApp, &QGuiApplication::focusWindowChanged, this, &KioskSession::publishState);
   connect(qGuiApp, &QGuiApplication::screenAdded, this, &KioskSession::watchScreen);
   connect(qGuiApp, &QGuiApplication::screenAdded, this, &KioskSession::onScreensChanged);
   connect(qGuiApp, &QGuiApplication::screenRemoved, this, &KioskSession::onScreensChanged);
@@ -256,6 +257,78 @@ void Platform::KioskSession::setMainWindow(QObject* window)
   m_control.start(m_controlServer);
 }
 
+/**
+ * @brief Gives an external dashboard a control channel of its own under @p id, so the launcher
+ *        lists it beside the main window and can raise, move and close it alone. Nothing
+ *        happens without a launcher: an unmanaged kiosk has nobody to switch between windows.
+ */
+void Platform::KioskSession::addWindow(QObject* window, const QString& id)
+{
+  auto* target = qobject_cast<QWindow*>(window);
+  if (!target || id.isEmpty() || !controlled() || managedIndex(target) >= 0)
+    return;
+
+  auto* control = new KioskControl(this);
+  control->setIdentity(id);
+  connect(control, &KioskControl::linkEstablished, target, [this, target] { greetWindow(target); });
+  connect(control, &KioskControl::raiseRequested, target, [this, target] {
+    Q_EMIT windowRaiseRequested(target);
+  });
+  connect(control, &KioskControl::closeRequested, target, [this, target] {
+    Q_EMIT windowCloseRequested(target);
+  });
+  connect(control,
+          &KioskControl::screenRequested,
+          target,
+          [this, target](const QString& name, int reserve_left) {
+            moveWindowToScreen(target, name, reserve_left);
+          });
+  connect(target, &QWindow::screenChanged, this, &KioskSession::publishState);
+  connect(target, &QObject::destroyed, this, &KioskSession::removeWindow);
+
+  m_managed.append(
+    Managed{target, target, control, QString(), QString(), QString(), QString(), false});
+  control->start(m_controlServer);
+}
+
+/**
+ * @brief Names what @p window shows now, the main window or a managed one; QML passes the active
+ *        workspace, which is what an operator calls the window. The launcher hears it in the
+ *        next state event. An empty title falls back to the window's own, and a window that
+ *        is not managed counts as the main one until that is adopted.
+ */
+void Platform::KioskSession::setWindowTitle(QObject* window, const QString& title)
+{
+  const qsizetype index = managedIndex(window);
+  if (index >= 0)
+    m_managed[index].title = title;
+  else if (window && (!m_window || window == m_window))
+    m_title = title;
+  else
+    return;
+
+  reportState(false);
+}
+
+/**
+ * @brief Ends the channel of a managed window, which is how the launcher learns it is gone.
+ *        Reached from the window's close and from its destruction, so it compares addresses
+ *        and never touches @p window; the client is deleted later because a close command
+ *        arrives through that very client.
+ */
+void Platform::KioskSession::removeWindow(QObject* window)
+{
+  const qsizetype index = managedIndex(window);
+  if (index < 0)
+    return;
+
+  KioskControl* control = m_managed.at(index).control;
+  m_managed.removeAt(index);
+  control->disconnect();
+  control->deleteLater();
+  reportState(false);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Private slots
 //--------------------------------------------------------------------------------------------------
@@ -303,8 +376,7 @@ void Platform::KioskSession::onApplicationState(Qt::ApplicationState state)
  */
 void Platform::KioskSession::greet()
 {
-  const QString title = m_window ? m_window->title() : QGuiApplication::applicationDisplayName();
-  m_control.sendHello(title, currentScreenName());
+  m_control.sendHello(mainTitle(), currentScreenName());
   reportState(true);
 }
 
@@ -340,22 +412,129 @@ void Platform::KioskSession::moveToScreen(const QString& name, int reserve_left)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sends the state event; unless @p force is set, only when the screen or the active flag
- *        differs from the last one sent on this run.
+ * @brief Sends the state events, the main window's and every managed window's; unless @p force
+ *        is set, each only when its screen or active flag differs from the last one sent. The
+ *        main window is the active one whenever the application is and no managed window holds
+ *        the focus, which with no managed window is the application's own state, as before.
  */
 void Platform::KioskSession::reportState(bool force)
 {
+  for (Managed& managed : m_managed)
+    reportManaged(managed, false);
+
   if (!m_control.isLinked())
     return;
 
+  const QString title  = mainTitle();
   const QString screen = currentScreenName();
-  const bool active    = QGuiApplication::applicationState() == Qt::ApplicationActive;
-  if (!force && screen == m_sentScreen && active == m_sentActive)
+  const bool active =
+    QGuiApplication::applicationState() == Qt::ApplicationActive && !managedHasFocus();
+  if (!force && screen == m_sentScreen && active == m_sentActive && title == m_sentTitle)
     return;
 
+  m_sentTitle  = title;
   m_sentScreen = screen;
   m_sentActive = active;
-  m_control.sendState(screen, active);
+  m_control.sendState(screen, active, title);
+}
+
+/**
+ * @brief What the launcher calls the main window: the title QML gave, else the window's own.
+ */
+QString Platform::KioskSession::mainTitle() const
+{
+  if (!m_title.isEmpty())
+    return m_title;
+
+  return m_window ? m_window->title() : QGuiApplication::applicationDisplayName();
+}
+
+/**
+ * @brief Sends one managed window's state event: the screen it was last sent to while that
+ *        screen lives, else the one it is on, and whether it holds the focus.
+ */
+void Platform::KioskSession::reportManaged(Managed& managed, bool force)
+{
+  if (!managed.window || !managed.control->isLinked())
+    return;
+
+  const QScreen* sent   = managed.screenName.isEmpty() ? nullptr : screenNamed(managed.screenName);
+  const QScreen* screen = sent ? sent : managed.window->screen();
+  const QString name    = screen ? screen->name() : QString();
+  const bool active     = QGuiApplication::applicationState() == Qt::ApplicationActive
+                       && QGuiApplication::focusWindow() == managed.window;
+  const QString title   = managed.title.isEmpty() ? managed.window->title() : managed.title;
+  const bool same_place = name == managed.sentScreen && active == managed.sentActive;
+  if (!force && same_place && title == managed.sentTitle)
+    return;
+
+  managed.sentTitle  = title;
+  managed.sentScreen = name;
+  managed.sentActive = active;
+  managed.control->sendState(name, active, title);
+}
+
+/**
+ * @brief Greets the launcher for a managed window on every connection of its channel, then
+ *        reports its state.
+ */
+void Platform::KioskSession::greetWindow(QObject* window)
+{
+  const qsizetype index = managedIndex(window);
+  if (index < 0 || !m_managed.at(index).window)
+    return;
+
+  Managed& managed      = m_managed[index];
+  const QScreen* screen = managed.window->screen();
+  const QString title   = managed.title.isEmpty() ? managed.window->title() : managed.title;
+  managed.control->sendHello(title, screen ? screen->name() : QString());
+  reportManaged(managed, true);
+}
+
+/**
+ * @brief Answers a managed window's screen command: that window alone goes to @p name, and the
+ *        main window stays where it is. The reserved width is one value for the whole kiosk, so
+ *        a present @p reserve_left makes every kiosk window take its rectangle again. An unknown
+ *        name changes and sends nothing.
+ */
+void Platform::KioskSession::moveWindowToScreen(QObject* window,
+                                                const QString& name,
+                                                int reserve_left)
+{
+  const QScreen* screen = screenNamed(name);
+  const qsizetype index = managedIndex(window);
+  if (!screen || index < 0)
+    return;
+
+  m_managed[index].screenName = name;
+  if (reserve_left >= 0 && reserve_left != m_reserveLeft) {
+    m_reserveLeft = reserve_left;
+    Q_EMIT placementChanged();
+  }
+
+  Q_EMIT windowScreenRequested(window, QRectF(screen->geometry()));
+  reportManaged(m_managed[index], true);
+}
+
+/**
+ * @brief Returns true while a managed window is the focus window.
+ */
+bool Platform::KioskSession::managedHasFocus() const
+{
+  const QWindow* focus = QGuiApplication::focusWindow();
+  return focus && managedIndex(focus) >= 0;
+}
+
+/**
+ * @brief Index of the managed entry for @p window, by address, or -1.
+ */
+qsizetype Platform::KioskSession::managedIndex(const QObject* window) const
+{
+  for (qsizetype i = 0; i < m_managed.size(); ++i)
+    if (m_managed.at(i).key == window)
+      return i;
+
+  return -1;
 }
 
 /**

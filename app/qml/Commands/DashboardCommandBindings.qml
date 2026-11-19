@@ -34,6 +34,7 @@ QtObject {
   property var taskBar: null
   property var hostWindow: null
   property bool allowFullScreen: true
+  property bool allowCloseWindow: false
   property bool allowExternalWindow: true
 
   //
@@ -41,6 +42,7 @@ QtObject {
   //
   signal fullScreenRequested()
   signal externalWindowRequested()
+  signal closeWindowRequested()
 
   //
   // Command id -> behavior entry, consumed by CommandModel.join().
@@ -49,6 +51,7 @@ QtObject {
     "dashboard.autoLayout": root.cmdDashboardAutoLayout,
     "app.fullScreen": root.cmdAppFullScreen,
     "window.external": root.cmdWindowExternal,
+    "window.close": root.cmdWindowClose,
     "dashboard.console": root.cmdDashboardConsole,
     "dashboard.notifications": root.cmdDashboardNotifications,
     "dashboard.clock": root.cmdDashboardClock,
@@ -101,6 +104,11 @@ QtObject {
   readonly property QtObject cmdWindowExternal: QtObject {
     readonly property bool visible: root.allowExternalWindow
     function run() { root.externalWindowRequested() }
+  }
+
+  readonly property QtObject cmdWindowClose: QtObject {
+    readonly property bool visible: root.allowCloseWindow
+    function run() { root.closeWindowRequested() }
   }
 
   readonly property QtObject cmdDashboardConsole: QtObject {

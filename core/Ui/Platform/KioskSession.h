@@ -39,8 +39,8 @@ namespace Platform {
 /**
  * @brief Where a kiosk (--kiosk) goes and who may move it (spec 0125): the screen it is confined
  *        to, the strip reserved at the left edge of the leftmost screen, and the launcher's
- *        control channel. QML decides which window fills which screen; this object reads the
- *        live screens, places the window, and says when every window must take its place again.
+ *        control channel. QML decides which window fills which screen; this object places it
+ *        and gives each external dashboard under a launcher a channel of its own.
  */
 class KioskSession : public QObject {
   // clang-format off
@@ -60,6 +60,9 @@ signals:
   void raiseRequested();
   void closeRequested();
   void placementChanged();
+  void windowRaiseRequested(QObject* window);
+  void windowCloseRequested(QObject* window);
+  void windowScreenRequested(QObject* window, const QRectF& screen);
 
 public:
   explicit KioskSession(QObject* parent = nullptr);
@@ -81,7 +84,10 @@ public:
 public slots:
   void settle();
   void setMainWindow(QObject* window);
+  void removeWindow(QObject* window);
   void place(QObject* window, const QRectF& screen);
+  void addWindow(QObject* window, const QString& id);
+  void setWindowTitle(QObject* window, const QString& title);
 
 private slots:
   void greet();
@@ -92,16 +98,36 @@ private slots:
   void moveToScreen(const QString& name, int reserve_left);
 
 private:
+  struct Managed {
+    QObject* key;
+    QPointer<QWindow> window;
+    KioskControl* control;
+    QString screenName;
+    QString sentScreen;
+    QString title;
+    QString sentTitle;
+    bool sentActive;
+  };
+
   void reportState(bool force);
+  void greetWindow(QObject* window);
+  void reportManaged(Managed& managed, bool force);
+  void moveWindowToScreen(QObject* window, const QString& name, int reserve_left);
+  [[nodiscard]] QString mainTitle() const;
+  [[nodiscard]] bool managedHasFocus() const;
+  [[nodiscard]] qsizetype managedIndex(const QObject* window) const;
   [[nodiscard]] QScreen* confinedScreen() const;
   [[nodiscard]] QString currentScreenName() const;
 
   KioskControl m_control;
+  QList<Managed> m_managed;
   QTimer m_settle;
   QPointer<QWindow> m_window;
   QString m_controlServer;
   QString m_sentScreen;
   QString m_screenName;
+  QString m_sentTitle;
+  QString m_title;
   int m_reserveLeft;
   bool m_sentActive;
   bool m_confined;

@@ -5866,7 +5866,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="306"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="343"/>
         <source>Dashboard %1</source>
         <translation>Dashboard %1</translation>
     </message>
@@ -5950,7 +5950,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="588"/>
         <source>Command Palette</source>
         <translation>Paleta Příkazů</translation>
     </message>
@@ -11267,7 +11267,7 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="284"/>
         <source>The widget could not be created.</source>
         <translation>Widget nemohl být vytvořen.</translation>
     </message>
@@ -17752,37 +17752,37 @@ Děkujeme znovu za podporu Serial Studio!</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="225"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="255"/>
         <source>Console Only Mode</source>
         <translation>Režim Pouze Konzole</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="258"/>
         <source>Quick Plot Mode</source>
         <translation>Režim Rychlého Grafu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="235"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="265"/>
         <source>Empty Project</source>
         <translation>Prázdný Projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="708"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="738"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="716"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="746"/>
         <source>Waiting for data…</source>
         <translation>Čekání na data…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="717"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="747"/>
         <source>Connecting to device…</source>
         <translation>Připojování k zařízení…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="780"/>
         <source>Command Palette</source>
         <translation>Paleta Příkazů</translation>
     </message>
@@ -23178,12 +23178,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="997"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1091"/>
         <source>Project file not found</source>
         <translation>Soubor projektu nenalezen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="998"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1092"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -23192,17 +23192,17 @@ Parametr oddělovače již není potřeba.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="1001"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1095"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Chcete tento zástupce smazat?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="1005"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1099"/>
         <source>Delete Shortcut</source>
         <translation>Smazat Zástupce</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="1007"/>
+        <location filename="../../src/Misc/CLI.cpp" line="1101"/>
         <source>Quit</source>
         <translation>Ukončit</translation>
     </message>
@@ -26707,77 +26707,77 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="356"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="359"/>
         <source>Workspaces</source>
         <translation>Pracovní Prostory</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="483"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="486"/>
         <source>Actions</source>
         <translation>Akce</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
         <source>No Actions Available</source>
         <translation>Žádné Dostupné Akce</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="528"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="531"/>
         <source>Plugins</source>
         <translation>Pluginy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="577"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="580"/>
         <source>No Plugins Installed</source>
         <translation>Žádné Nainstalované Pluginy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="741"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="748"/>
         <source>No Tools Available</source>
         <translation>Žádné Nástroje k Dispozici</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="821"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="828"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="822"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="829"/>
         <source>Hide</source>
         <translation>Skrýt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="445"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="448"/>
         <source>New Workspace…</source>
         <translation>Nový Pracovní Prostor…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
         <source>Show "%1"</source>
         <translation>Zobrazit "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="436"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="439"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Zobrazit Všechny Skryté Pracovní Prostory</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="462"/>
         <source>No Workspaces Available</source>
         <translation>Žádné Pracovní Prostory Nejsou k Dispozici</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="567"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="570"/>
         <source>Manage Plugins…</source>
         <translation>Spravovat Pluginy…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="674"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="681"/>
         <source>No Export Formats Available</source>
         <translation>Žádné Exportní Formáty k Dispozici</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="810"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="817"/>
         <source>Edit…</source>
         <translation>Upravit…</translation>
     </message>
@@ -27983,22 +27983,22 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1368"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1372"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1376"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1380"/>
         <source>Notifications</source>
         <translation>Oznámení</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1384"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1388"/>
         <source>Clock</source>
         <translation>Hodiny</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1391"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1395"/>
         <source>Stopwatch</source>
         <translation>Stopky</translation>
     </message>

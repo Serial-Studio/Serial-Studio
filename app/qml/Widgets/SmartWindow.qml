@@ -59,30 +59,32 @@ Window {
 
   //
   // Kiosk display (--kiosk): a frameless window filling its screen, kioskGeometry. kioskLead is
-  // the main window, which follows the session; kioskConfined switches its settings category.
+  // the main window; kioskManaged is a window the launcher switches to (an external dashboard).
   //
   property bool kioskFill: false
   property bool kioskLead: false
+  property bool kioskManaged: false
   property bool kioskConfined: false
   property rect kioskGeometry: Qt.rect(0, 0, 0, 0)
   readonly property bool kioskMode: typeof CLI_KIOSK !== "undefined" && CLI_KIOSK
 
   //
   // Fills the live screen under the saved position, or the session's screen when confined. False
-  // outside kiosk mode, when `taken` fills that screen, or for a confined kiosk's other windows.
+  // outside kiosk mode, and for a window that is not managed on a taken or confined screen.
   //
   function showKiosk(taken) {
     if (!root.kioskMode)
       return false
 
+    const managed = root.kioskManaged && !!taken
     const confined = CLI_KIOSK_SESSION.confined
-    if (confined && taken)
+    if (confined && taken && !managed)
       return false
 
-    const g = confined
+    const g = confined && !managed
             ? CLI_KIOSK_SESSION.screenGeometry
             : CLI_KIOSK_SESSION.screenRectAt(root.x + root.width / 2, root.y + root.height / 2)
-    if (taken && taken.width > 0 && taken.x === g.x && taken.y === g.y)
+    if (!managed && taken && taken.width > 0 && taken.x === g.x && taken.y === g.y)
       return false
 
     root.kioskLead = !taken
@@ -104,6 +106,17 @@ Window {
   //
   function applyKioskRect(g) {
     CLI_KIOSK_SESSION.place(root, g)
+  }
+
+  //
+  // A managed window goes to screen `g` on the launcher's word, and stays there from then on
+  //
+  function takeKioskScreen(g) {
+    if (!root.kioskFill || g.width <= 0 || g.height <= 0)
+      return
+
+    root.kioskGeometry = Qt.rect(g.x, g.y, g.width, g.height)
+    root.applyKioskRect(g)
   }
 
   //

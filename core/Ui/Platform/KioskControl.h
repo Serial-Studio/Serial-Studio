@@ -33,7 +33,8 @@ namespace Platform {
 /**
  * @brief Client end of the kiosk control channel (spec 0125): one JSON object per line over a
  *        local socket whose server is the launcher. It knows nothing about windows; it turns
- *        received lines into the three command signals and hello/state into sent lines.
+ *        received lines into the three command signals and hello/state into sent lines. One
+ *        client stands for one window, named by its identity.
  */
 class KioskControl : public QObject {
   Q_OBJECT
@@ -62,8 +63,9 @@ public:
 
 public slots:
   void setRetryInterval(int msec);
+  void setIdentity(const QString& id);
   void start(const QString& server_name);
-  void sendState(const QString& screen, bool active);
+  void sendState(const QString& screen, bool active, const QString& title = QString());
   void sendHello(const QString& title, const QString& screen);
 
 private slots:
@@ -79,6 +81,7 @@ private:
   QTimer m_drain;
   QTimer m_retry;
   QByteArray m_buffer;
+  QString m_identity;
   QString m_serverName;
   QLocalSocket m_socket;
 };
