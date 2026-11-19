@@ -556,6 +556,20 @@ above that `trySpanLane` returns `-1` and Native parses through the list path, s
 labels the run `native lane: span` or `native lane: list (> 128 fields)`. A 256- or
 635-channel run therefore measures the list lane, which is the cost a wide project pays today.
 
+**Second training load (`tests/benchmarks/big_db_test/run_load.sh` / `.ps1`).** The benchmark
+never loads QML, so the PGO flow runs a second profile: the `big_db_test` project against its
+UDP simulator, **windowed on the offscreen platform** (`-platform offscreen`,
+`QT_QUICK_BACKEND=software`), which builds, lays out and paints the real dashboard with no
+display. The project is shaped like a large customer project on purpose: one shared Lua
+transform library called through `transformParams`, `luaFastMode`, a Lua parser writing tables
+by handle, a second plain-text source on the built-in parser, constant-heavy tables,
+`datasetGetFinal` aggregates, LED and bar panels, large FFTs with waterfalls. Its control
+script walks every workspace when launched with `--define BIGDB_TOUR=1` and logs each one;
+the load script fails a windowed run that logged none, because that run exits 0 having
+profiled no widget code. A widget type only trains if a workspace of that project shows it,
+so a new widget family needs a tile there. `headless` as the third argument keeps the old
+no-QML run.
+
 **Symbols.** Production builds compile with line-table debug info (`-gline-tables-only` on the
 Clang flavours, `-g1` on GCC, `/Z7` on clang-cl); the commercial hardening block in
 `app/CMakeLists.txt` splits it into a `.dSYM` / `.debug` sidecar (Windows keeps its PDB) before

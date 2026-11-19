@@ -1,26 +1,51 @@
-# Headless load run for the big_db_test project (Windows / PowerShell).
+# Load run for the big_db_test project (Windows / PowerShell).
 #
-# Starts the UDP frame simulator, runs the app headless loading the big project
-# against a UDP source, and lets the app quit itself via --exit-after. Used by
-# CI for PGO training (heavy transform / dashboard coverage) and as a non-crash
-# verification of the optimized binary.
+# Starts the UDP frame simulator (both sources), runs the app loading the big
+# project against it, and lets the app quit itself via --exit-after. Used by
+# CI for PGO training (transform, dashboard and widget-paint coverage) and as
+# a non-crash verification of the optimized binary.
+#
+# Two modes:
+#   windowed (default)  The full QML interface on the offscreen platform with
+#                       the software scene graph: no desktop session is needed,
+#                       and the widgets are built, laid out and painted. The
+#                       project's control script walks every workspace
+#                       (--define BIGDB_TOUR=1) and logs each one it shows.
+#   headless            No QML at all: parse, transform and export paths only.
 #
 # The app must exit through its own event loop: PGO-instrumented builds flush
 # profile data (.profraw/.pgc) only on a normal exit, so killing it here used
 # to silently discard the whole training run. A kill is now the failure path,
 # taken only when the app misses its exit window.
 #
-# Usage: run_load.ps1 -App <app.exe> [-Seconds 25]
+# A windowed run that never shows a workspace is a failure too: it exits 0
+# having painted nothing, and a training run would then profile no widget code
+# without anyone noticing. The proof is the app's own log, so its stdout goes
+# to a file.
 #
-# Exits non-zero if the app crashes before the window elapses or has to be
-# killed because it failed to quit gracefully within the grace period.
+# Usage: run_load.ps1 -App <app.exe> [-Seconds 25] [-Mode windowed|headless]
+#
+# Exits non-zero if the app crashes before the window elapses, has to be
+# killed because it failed to quit gracefully within the grace period, or (in
+# windowed mode) showed no workspace.
 param(
     [Parameter(Mandatory = $true)][string]$App,
-    [int]$Seconds = 25
+    [int]$Seconds = 25,
+    [ValidateSet('windowed', 'headless')][string]$Mode = 'windowed'
 )
 
-$dir  = Split-Path -Parent $MyInvocation.MyCommand.Path
-$port = 8080
+$dir     = Split-Path -Parent $MyInvocation.MyCommand.Path
+$port    = 8080
+$vibPort = 8081
+$log     = Join-Path ([System.IO.Path]::GetTempPath()) "big_db_test_$PID.log"
+
+if ($Mode -eq 'windowed') {
+    $modeArgs = @('-platform', 'offscreen', '--define', 'BIGDB_TOUR=1')
+    $env:QT_QUICK_BACKEND = 'software'
+}
+else {
+    $modeArgs = @('--headless')
+}
 
 # Ask WER for a minidump on any crash: the exit code alone cannot say whether the app died
 # mid-run or during teardown, and CI uploads the dump for offline triage. CI runner images ship
@@ -48,24 +73,29 @@ catch {
 # One faulted channel per board type keeps the diagnostics decode path under
 # load: healthy boards suppress their diagnostics frame entirely.
 $sim = Start-Process -FilePath 'python' `
-    -ArgumentList @("$dir/big_db_test.py", '--host', '127.0.0.1', '--port', "$port", '--rate', '50', `
-        '--faults', 'TA:2:5,TB:1:3,TC:3:7') `
+    -ArgumentList @("$dir/big_db_test.py", '--host', '127.0.0.1', '--port', "$port", `
+        '--vib-port', "$vibPort", '--rate', '50', '--faults', 'TA:2:5,TB:1:3,TC:3:7') `
     -PassThru -NoNewWindow
 $env:SS_TEARDOWN_TRACE = '1'
 $env:SS_CRASH_DUMP_DIR = $dumpDir
 $clock = [System.Diagnostics.Stopwatch]::StartNew()
 $appProc = Start-Process -FilePath $App `
-    -ArgumentList @('--headless', '--project', "$dir/big_db_test.ssproj", '--udp', "$port", `
-        '--exit-after', "$Seconds") `
-    -PassThru -NoNewWindow
+    -ArgumentList ($modeArgs + @('--project', "$dir/big_db_test.ssproj", '--udp', "$port", `
+            '--exit-after', "$Seconds")) `
+    -RedirectStandardOutput $log -PassThru -NoNewWindow
 
 $grace = 30
 $rc = 0
 if ($appProc.WaitForExit(($Seconds + $grace) * 1000)) {
     $rc = $appProc.ExitCode
     $elapsed = [math]::Round($clock.Elapsed.TotalSeconds, 1)
-    if ($rc -eq 0) {
-        Write-Host "big_db_test: load run completed $Seconds s and exited cleanly"
+    $shown = @(Select-String -Path $log -Pattern '\[BigDB\] workspace ' -ErrorAction SilentlyContinue).Count
+    if ($rc -eq 0 -and $Mode -eq 'windowed' -and $shown -eq 0) {
+        Write-Host 'big_db_test: the dashboard never showed a workspace (nothing was painted)'
+        $rc = 1
+    }
+    elseif ($rc -eq 0) {
+        Write-Host "big_db_test: $Mode load run completed $Seconds s and exited cleanly ($shown workspaces shown)"
     }
     else {
         $phase = if ($elapsed -lt $Seconds) { 'mid-run' } else { 'during teardown' }
@@ -79,6 +109,13 @@ else {
 }
 
 try { $sim.Kill() } catch { }
+
+if ($rc -ne 0 -and (Test-Path $log)) {
+    Write-Host 'big_db_test: last lines of the app log:'
+    Get-Content -Path $log -Tail 40
+}
+
+Remove-Item -Path $log -ErrorAction SilentlyContinue
 
 # Surface any crash dump: name it in the log and print a stack if a debugger is on the image.
 if ($rc -ne 0) {

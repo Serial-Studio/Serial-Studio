@@ -45,9 +45,19 @@ and the info/aux descriptor frames repeat every ~5 s. A ``--faults`` channel
 carries the 0xFFFF invalid sentinel in its data frame paired with fault byte
 0xA8 in diagnostics, exactly as the device pairs them.
 
+Second stream (``--vib-port``)
+------------------------------
+The project's second source, "Vibration", is a plain-text UDP source decoded by
+the built-in delimited parser: one line of four comma-separated integer counts
+per sample, newline terminated. ``--vib-port`` turns the stream on; each cycle
+sends the samples that fell due in one datagram, ``--vib-rate`` samples per
+second. The four channels carry 50 Hz and 120 Hz tones (the project's spectrum
+markers) at different mixes, in milli-g counts.
+
 Usage
 -----
     python3 big_db_test.py --host 127.0.0.1 --port 8080
+    python3 big_db_test.py --port 8080 --vib-port 8081       # both sources
     python3 big_db_test.py --rate 20 --cycles 200            # bounded CI run
     python3 big_db_test.py --print                           # dump hex, send nothing
 
@@ -87,6 +97,13 @@ DIAG_HEALTHY = 0x00
 # device pairs it with the invalid sentinel in the data frame.
 DIAG_FAULT = 0xA8
 INVALID_VALUE = 0xFFFF
+
+# Tones on the vibration stream, matching the project's spectrum markers.
+VIB_TONE_LOW_HZ = 50.0
+VIB_TONE_HIGH_HZ = 120.0
+
+# Most sample lines in one datagram: keeps it under a 1500-byte MTU after a stall.
+VIB_MAX_LINES = 48
 
 # How often the low-rate descriptor frames (aux / info) are re-sent, in
 # seconds, matching the device's ~5 s housekeeping cadence.
@@ -188,6 +205,29 @@ def build_cycle_frames(
     return frames
 
 
+def vibration_lines(first_sample: int, count: int, rate: float) -> bytes:
+    """Return ``count`` newline-terminated sample lines starting at ``first_sample``.
+
+    Samples are indexed, not clocked, so the tones stay phase-continuous across
+    datagrams whatever the send jitter.
+    """
+    two_pi = 2.0 * math.pi
+    lines = []
+    for n in range(first_sample, first_sample + count):
+        t = n / rate
+        low = math.sin(two_pi * VIB_TONE_LOW_HZ * t)
+        high = math.sin(two_pi * VIB_TONE_HIGH_HZ * t)
+        drift = math.sin(two_pi * 0.2 * t)
+        counts = (
+            1500.0 * low + 300.0 * high,
+            400.0 * low + 1200.0 * high,
+            (800.0 + 600.0 * drift) * high,
+            250.0 * low * high + 100.0 * drift,
+        )
+        lines.append(",".join(str(int(round(c))) for c in counts))
+    return ("\n".join(lines) + "\n").encode("ascii")
+
+
 def parse_fault_spec(spec: str) -> dict:
     """Parse ``--faults TA:3:2,TB:1:5`` into {(type, board): {channel,...}}."""
     name_to_type = {v: k for k, v in TYPE_NAMES.items()}
@@ -241,6 +281,18 @@ def parse_args(argv) -> argparse.Namespace:
         help="inject faults, e.g. 'TB:1:3,TA:2:5' (TYPE:board:channel)",
     )
     p.add_argument(
+        "--vib-port",
+        type=int,
+        default=0,
+        help="UDP port of the vibration stream (default: 0 = stream off)",
+    )
+    p.add_argument(
+        "--vib-rate",
+        type=float,
+        default=1000.0,
+        help="vibration samples per second (default: 1000)",
+    )
+    p.add_argument(
         "--print",
         dest="dump",
         action="store_true",
@@ -251,6 +303,8 @@ def parse_args(argv) -> argparse.Namespace:
         p.error("--boards must be between 1 and 6")
     if args.rate <= 0:
         p.error("--rate must be positive")
+    if args.vib_rate <= 0:
+        p.error("--vib-rate must be positive")
     return args
 
 
@@ -262,6 +316,8 @@ def main(argv=None) -> int:
     if not args.dump:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     dest = (args.host, args.port)
+    vib_dest = (args.host, args.vib_port)
+    vib_sent = 0
 
     running = {"on": True}
     signal.signal(signal.SIGINT, lambda *_: running.__setitem__("on", False))
@@ -298,6 +354,18 @@ def main(argv=None) -> int:
                         sock.sendto(frame, dest)
                     sent += 1
 
+        if args.vib_port:
+            vib_due = int(t * args.vib_rate) - vib_sent
+            if vib_due > 0:
+                chunk = vibration_lines(
+                    vib_sent, min(vib_due, VIB_MAX_LINES), args.vib_rate
+                )
+                if args.dump:
+                    print(chunk.decode("ascii"), end="")
+                else:
+                    sock.sendto(chunk, vib_dest)
+                vib_sent += vib_due
+
         cycle += 1
         if args.cycles and cycle >= args.cycles:
             break
@@ -311,6 +379,8 @@ def main(argv=None) -> int:
         sock.close()
     where = "printed" if args.dump else f"sent to {args.host}:{args.port}"
     print(f"\n{cycle} cycles, {sent} frames {where}.", file=sys.stderr)
+    if args.vib_port:
+        print(f"{vib_sent} vibration samples on port {args.vib_port}.", file=sys.stderr)
     return 0
 
 

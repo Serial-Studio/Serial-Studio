@@ -54,7 +54,9 @@ runs:
 
   #
   # Second profile: the big_db_test load exercises the project and dashboard paths that the
-  # hotpath benchmark never reaches
+  # hotpath benchmark never reaches. It runs windowed on the offscreen platform, so the QML
+  # interface is up and the widgets are built and painted; the script fails a run that showed
+  # no workspace
   #
   - name: '🏋️ PGO training run (big project)'
     shell: bash

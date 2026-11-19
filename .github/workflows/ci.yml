@@ -1005,7 +1005,9 @@ jobs:
 
     #
     # Second profile: the big_db_test load exercises the project and dashboard paths that the
-    # hotpath benchmark never reaches
+    # hotpath benchmark never reaches. It runs windowed on the offscreen platform, so the QML
+    # interface is up and the widgets are built and painted; the script fails a run that showed
+    # no workspace
     #
     - name: '🏋️ PGO training run (big project)'
       env:
@@ -1701,7 +1703,8 @@ jobs:
 
     #
     # continue-on-error: the second profile is a bonus, and this load is the flakiest step in the
-    # job on Windows
+    # job on Windows. Windowed on the offscreen platform like the other two, so the widgets are
+    # built and painted
     #
     - name: '🏋️ PGO training run (big project)'
       continue-on-error: true
