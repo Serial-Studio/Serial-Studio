@@ -1015,9 +1015,9 @@ void UI::Dashboard::setPoints(const int points)
 
 /**
  * @brief Resets all data in the dashboard, including plot values, widget structures, and actions.
- *        The action reconfigure is gated on @p notify: the notify==false (reconfigure) caller
- *        re-runs configureActions with the real frame afterward, so the blocking builder marshal
- *        here would only spin a nested loop on the display tick for a discarded result (0099 f6).
+ *        A hard reset (@p notify) rebuilds the actions from the project, on this thread: fetching
+ *        the builder's template frame spun a nested loop that adopted a layout mid-reset. The
+ *        reconfigure caller re-runs configureActions itself (0099 f6).
  */
 void UI::Dashboard::resetData(const bool notify)
 {
@@ -1041,6 +1041,8 @@ void UI::Dashboard::resetData(const bool notify)
   m_valuePushes.clear();
   m_extremePushes.clear();
   m_ingest.clearPushTables();
+  if (notify)
+    m_datasetExtremes.clear();
 
 #ifdef BUILD_COMMERCIAL
   m_plotData3D.clear();
@@ -1083,16 +1085,11 @@ void UI::Dashboard::resetData(const bool notify)
   m_lastFrame = DataModel::Frame();
   m_sourceRawFrames.clear();
 
-  if (notify && m_appState->operationMode() == SerialStudio::ProjectFile) {
-    DataModel::Frame templateFrame;
-    auto* builder = m_frameBuilder;
-    builder->invokeOnBuilderThreadBlocking(
-      [&templateFrame, builder] { templateFrame = builder->frame(); });
-    m_tools.configureActions(templateFrame);
-  }
+  const bool projectMode = m_appState->operationMode() == SerialStudio::ProjectFile;
+  if (notify && projectMode && m_projectModel->groupCount() > 0)
+    m_tools.refreshActionsFromProject();
 
   if (notify) {
-    m_datasetExtremes.clear();
     m_rebuildLedger.clear();
 
     // code-verify off

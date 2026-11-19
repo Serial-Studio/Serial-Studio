@@ -297,7 +297,7 @@
     {
       "name": "rebuild-ledger-hard-reset-only",
       "source": "core/Ui/UI/Dashboard.cpp",
-      "source_pattern": "if \\(notify\\) \\{\\s*m_datasetExtremes\\.clear\\(\\);\\s*m_rebuildLedger\\.clear\\(\\);",
+      "source_pattern": "if \\(notify\\) \\{\\s*m_rebuildLedger\\.clear\\(\\);",
       "docs": [
         {
           "path": "doc/claude/architecture/dashboard.md",
