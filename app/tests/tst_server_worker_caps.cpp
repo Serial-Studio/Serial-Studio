@@ -21,6 +21,7 @@
 
 #include <atomic>
 #include <QJsonObject>
+#include <QSignalSpy>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QTest>
@@ -45,9 +46,12 @@ private slots:
   void broadcastsAreSkippedOverTheCap();
   void mirrorPushesAreSkippedOverTheCap();
   void responsesDropTheClientOverTheCap();
+  void responsesSurviveABroadcastSaturatedSocket();
 
   void unauthenticatedSocketReceivesRepliesOnly();
   void mcpSocketsReceiveRepliesOnly();
+
+  void socketClosedBeforeAdoptionIsRemoved();
 
 private:
   void fillBacklogPastTheCap();
@@ -208,6 +212,34 @@ void TstServerWorkerCaps::responsesDropTheClientOverTheCap()
   QVERIFY(m_serverSide->state() != QAbstractSocket::ConnectedState);
 }
 
+/**
+ * @brief The broadcast lanes stop below the hard cap, so a socket the stream alone filled still
+ *        gets its answer: the server's own unsolicited traffic never drops a client that asks.
+ */
+void TstServerWorkerCaps::responsesSurviveABroadcastSaturatedSocket()
+{
+  const qint64 broadcastCap = API::ServerWorker::maxBroadcastBacklogBytes();
+  QCOMPARE(broadcastCap, qint64(8 * 1024 * 1024));
+  QVERIFY(broadcastCap < API::ServerWorker::maxPendingWriteBytes());
+
+  m_serverSide->write(QByteArray(static_cast<qsizetype>(broadcastCap) + 1, 'x'));
+  const qint64 saturated = m_serverSide->bytesToWrite();
+  QVERIFY(saturated > broadcastCap);
+
+  QJsonObject event;
+  event.insert(QStringLiteral("event"), QStringLiteral("connected"));
+  m_worker->broadcastEvent(event);
+  QCOMPARE(m_serverSide->bytesToWrite(), saturated);
+  QCOMPARE(m_worker->droppedBroadcasts(), quint64(1));
+
+  const QByteArray payload = QByteArrayLiteral("{\"type\":\"response\",\"success\":true}\n");
+  m_worker->writeToSocket(m_serverSide, QStringLiteral("s1"), payload);
+
+  QCOMPARE(m_serverSide->bytesToWrite() - saturated, qint64(payload.size()));
+  QCOMPARE(m_worker->backlogDisconnects(), quint64(0));
+  QCOMPARE(m_serverSide->state(), QAbstractSocket::ConnectedState);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Authentication hold
 //--------------------------------------------------------------------------------------------------
@@ -270,6 +302,29 @@ void TstServerWorkerCaps::mcpSocketsReceiveRepliesOnly()
   const QByteArray reply = QByteArrayLiteral("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{}}\n");
   m_worker->writeToSocket(m_serverSide, QStringLiteral("s1"), reply);
   QCOMPARE(m_serverSide->bytesToWrite() - held, qint64(reply.size()));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Adoption of a dead socket
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief A socket that closed before the queued adoption ran never emits disconnected again, so
+ *        the worker has to report its removal itself or the server keeps the connection forever.
+ */
+void TstServerWorkerCaps::socketClosedBeforeAdoptionIsRemoved()
+{
+  QSignalSpy removed(m_worker, &API::ServerWorker::socketRemoved);
+  QSignalSpy counts(m_worker, &API::ServerWorker::clientCountChanged);
+
+  auto* dead = new QTcpSocket;
+  QCOMPARE(dead->state(), QAbstractSocket::UnconnectedState);
+  m_worker->addSocket(dead, QStringLiteral("dead"), true);
+
+  QCOMPARE(removed.count(), 1);
+  QCOMPARE(removed.first().at(1).toString(), QStringLiteral("dead"));
+  QVERIFY(!counts.isEmpty());
+  QCOMPARE(counts.last().at(0).toInt(), 1);
 }
 
 QTEST_GUILESS_MAIN(TstServerWorkerCaps)

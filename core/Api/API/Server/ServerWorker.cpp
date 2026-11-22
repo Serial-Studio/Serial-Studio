@@ -36,8 +36,11 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-// Broadcast-lane cap per socket: over-cap (non-reading) clients are skipped, bounding the buffer
+// Hard cap per socket: a response that finds the backlog past it drops the client
 constexpr qint64 kMaxApiPendingWriteBytes = 16 * 1024 * 1024;
+
+// Producer-paced lanes stop at half of it: the server's own broadcast never drops a client
+constexpr qint64 kMaxApiBroadcastBacklogBytes = kMaxApiPendingWriteBytes / 2;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
@@ -72,7 +75,15 @@ qint64 API::ServerWorker::maxPendingWriteBytes() noexcept
 }
 
 /**
- * @brief The one cap decision every outbound lane goes through.
+ * @brief The backlog at which the broadcast, mirror and stream lanes start skipping a socket.
+ */
+qint64 API::ServerWorker::maxBroadcastBacklogBytes() noexcept
+{
+  return kMaxApiBroadcastBacklogBytes;
+}
+
+/**
+ * @brief The hard cap decision: past it, a response drops the client.
  */
 bool API::ServerWorker::exceedsWriteCap(qint64 pendingBytes) noexcept
 {
@@ -120,15 +131,15 @@ bool API::ServerWorker::dropBackloggedClient(QTcpSocket* socket, const QString& 
 
 /**
  * @brief True while @p socket has room for another broadcast; an over-cap socket is skipped and
- *        counted, warned once per socket so a wedged client is visible without per-batch log spam
- *        and a second client's stall is not swallowed by the first one's warning. Skipping is
- *        self-healing: a client that resumes reading drains its backlog and rejoins the broadcast.
+ *        counted, warned once per socket so a second client's stall is not swallowed by the
+ *        first one's warning. Skipping self-heals: a client that drains rejoins the broadcast.
+ *        The cap sits below the hard one: a stream-saturated socket keeps room for its answers.
  */
 bool API::ServerWorker::underWriteCap(QTcpSocket* socket)
 {
   SS_ASSERT(socket != nullptr, return false);
 
-  if (!exceedsWriteCap(socket->bytesToWrite())) [[likely]]
+  if (socket->bytesToWrite() <= kMaxApiBroadcastBacklogBytes) [[likely]]
     return true;
 
   ++m_droppedBroadcasts;
@@ -136,7 +147,7 @@ bool API::ServerWorker::underWriteCap(QTcpSocket* socket)
     m_warnedSockets.insert(socket);
     qWarning() << "[API] Client" << socket->peerAddress().toString() << ":" << socket->peerPort()
                << "is not reading the broadcast stream; dropping its broadcasts while the socket"
-               << "backlog exceeds" << kMaxApiPendingWriteBytes << "bytes";
+               << "backlog exceeds" << kMaxApiBroadcastBacklogBytes << "bytes";
   }
 
   return false;
@@ -179,16 +190,15 @@ void API::ServerWorker::closeResources()
 }
 
 /**
- * @brief Adds a socket to the worker thread, keyed to its immutable session id (socket pointers
- *        get reused across connect cycles, so every queued hop carries it). An unauthenticated
- *        socket is held out of every broadcast until setSocketAuthenticated(). Bytes that landed
- *        before this queued adoption ran are drained here (the notifier never re-fires for them).
+ * @brief Adds a socket to the worker thread, keyed to its immutable session id (pointers get
+ *        reused across connect cycles). An unauthenticated socket is held out of every broadcast.
+ *        Bytes that landed before this queued adoption are drained here, and a socket that closed
+ *        before it is removed here: neither its notifier nor its disconnected signal fires again.
  */
 void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId, bool authenticated)
 {
   SS_ASSERT(socket != nullptr, return);
   SS_ASSERT_LOG(!sessionId.isEmpty());
-  SS_ASSERT_LOG(socket->state() != QAbstractSocket::UnconnectedState);
 
   m_sockets.insert(socket, sessionId);
   m_streamAcks.remove(socket);
@@ -207,6 +217,11 @@ void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId, 
 
   if (socket->bytesAvailable() > 0)
     Q_EMIT dataReceived(socket, sessionId, socket->readAll());
+
+  if (socket->state() == QAbstractSocket::UnconnectedState) {
+    removeSocket(socket);
+    return;
+  }
 
   Q_EMIT clientCountChanged(m_sockets.count());
 }

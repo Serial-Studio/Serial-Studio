@@ -58,6 +58,7 @@ public:
   [[nodiscard]] quint64 droppedBroadcasts() const noexcept;
   [[nodiscard]] quint64 backlogDisconnects() const noexcept;
   [[nodiscard]] static qint64 maxPendingWriteBytes() noexcept;
+  [[nodiscard]] static qint64 maxBroadcastBacklogBytes() noexcept;
   [[nodiscard]] static bool exceedsWriteCap(qint64 pendingBytes) noexcept;
 
 public slots:
