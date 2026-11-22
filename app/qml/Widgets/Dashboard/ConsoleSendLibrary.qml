@@ -78,7 +78,7 @@ Popup {
     }
   }
 
-  width: 420
+  width: 520
   padding: 8
   margins: 8
   transformOrigin: Popup.BottomLeft
@@ -161,6 +161,50 @@ Popup {
         visible: root.lib.pins.length > 0
       }
 
+      //
+      // Command list (spec 0127): send the ticked pins in order, each after its own delay
+      //
+      RowLayout {
+        spacing: 6
+        Layout.fillWidth: true
+        Layout.bottomMargin: 2
+        visible: root.lib.pins.length > 0 && root.lib.automationAllowed
+
+        Label {
+          opacity: 0.7
+          Layout.fillWidth: true
+          wrapMode: Text.WordWrap
+          font: Cpp_Misc_CommonFonts.customUiFont(0.85)
+          text: root.lib.sequenceRunning
+                ? qsTr("Sending the ticked pins in order…")
+                : qsTr("Tick pins and set a delay in ms to send them as a list.")
+        }
+
+        Widgets.PushButton {
+          text: qsTr("Run List")
+          objectName: "console.sendLibrary.runList"
+          onClicked: root.lib.runSequence(false)
+          ToolTip.text: qsTr("Send every ticked pin once, in order")
+          enabled: Cpp_IO_Manager.readWrite && !root.lib.sequenceRunning && !root.lib.cyclicArmed
+        }
+
+        Widgets.PushButton {
+          text: qsTr("Loop")
+          objectName: "console.sendLibrary.loopList"
+          onClicked: root.lib.runSequence(true)
+          ToolTip.text: qsTr("Send the ticked pins in order and start over until stopped")
+          enabled: Cpp_IO_Manager.readWrite && !root.lib.sequenceRunning && !root.lib.cyclicArmed
+        }
+
+        Widgets.PushButton {
+          text: qsTr("Stop")
+          enabled: root.lib.sequenceRunning
+          onClicked: root.lib.stopSequence()
+          objectName: "console.sendLibrary.stopList"
+          ToolTip.text: qsTr("Stop sending the list")
+        }
+      }
+
       Repeater {
         model: root.lib.pins
 
@@ -171,9 +215,33 @@ Popup {
           required property int index
 
           property bool renaming: false
+          readonly property bool listed: pinRow.modelData.enabled !== false
+          readonly property int delayMs: pinRow.modelData.delayMs !== undefined
+                                         ? pinRow.modelData.delayMs
+                                         : 1000
 
           spacing: 2
           Layout.fillWidth: true
+
+          CheckBox {
+            implicitHeight: 26
+            checked: pinRow.listed
+            visible: root.lib.automationAllowed
+            objectName: "console.sendLibrary.pinEnabled." + pinRow.index
+            onClicked: root.lib.setPinEnabled(pinRow.index, checked)
+            ToolTip.delay: 700
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Include this pin when the list is sent")
+          }
+
+          Rectangle {
+            width: 3
+            radius: 1
+            implicitHeight: 18
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["highlight"]
+            visible: root.lib.sequenceRunning && root.lib.sequenceIndex === pinRow.index
+          }
 
           ItemDelegate {
             implicitHeight: 26
@@ -206,6 +274,25 @@ Popup {
               pinRow.renaming = false
             }
             Keys.onEscapePressed: pinRow.renaming = false
+          }
+
+          TextField {
+            implicitWidth: 64
+            implicitHeight: 26
+            text: String(pinRow.delayMs)
+            horizontalAlignment: Text.AlignRight
+            font: Cpp_Misc_CommonFonts.monoFont
+            visible: root.lib.automationAllowed && !pinRow.renaming
+            validator: IntValidator { bottom: 0; top: 3600000 }
+            objectName: "console.sendLibrary.pinDelay." + pinRow.index
+            ToolTip.text: qsTr("Milliseconds to wait before this pin is sent in a list")
+            ToolTip.visible: hovered
+            ToolTip.delay: 700
+            onEditingFinished: {
+              const value = parseInt(text)
+              if (!isNaN(value) && value !== pinRow.delayMs)
+                root.lib.setPinDelay(pinRow.index, value)
+            }
           }
 
           RowButton {

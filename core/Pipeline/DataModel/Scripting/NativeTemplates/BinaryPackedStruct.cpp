@@ -79,7 +79,7 @@ static constexpr FieldSpec kFieldSpecs[] = {
  * @brief The value a single-precision field reads as: the shortest decimal that names the float,
  *        so 1.2f shows as 1.2 and the saved project's text parse yields the same double.
  */
-[[nodiscard]] static double floatAsDecimal(const float value) noexcept
+double DataModel::packedFloatAsDecimal(const float value) noexcept
 {
   if (!std::isfinite(value))
     return static_cast<double>(value);
@@ -127,7 +127,7 @@ static constexpr FieldSpec kFieldSpecs[] = {
     case PackedType::U64:
       return static_cast<double>(be ? u64Be(frame, at) : u64Le(frame, at));
     case PackedType::F32:
-      return floatAsDecimal(be ? f32Be(frame, at) : f32Le(frame, at));
+      return DataModel::packedFloatAsDecimal(be ? f32Be(frame, at) : f32Le(frame, at));
     case PackedType::F64:
       return be ? f64Be(frame, at) : f64Le(frame, at);
   }

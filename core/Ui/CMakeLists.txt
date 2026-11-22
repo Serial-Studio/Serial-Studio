@@ -157,6 +157,7 @@ qt_add_library(
   UI/Widgets/Terminal/AnsiStateMachine.cpp
   UI/Widgets/Terminal/TerminalCatchUp.cpp
   UI/Widgets/Terminal/TerminalSearch.cpp
+  UI/Widgets/Terminal/TerminalHighlighter.cpp
   UI/Widgets/Gyroscope.cpp
   UI/Widgets/GPS.cpp
   UI/Widgets/MultiPlot.cpp
@@ -164,6 +165,10 @@ qt_add_library(
   Console/Annotations.cpp
   Console/Handler.cpp
   Console/SendLibrary.cpp
+  Console/SendSequence.cpp
+  Console/AutoReplyRule.cpp
+  Console/AutoReply.cpp
+  Console/HighlightRules.cpp
   Console/WelcomeText.cpp
   Console/SilentLinkWatch.cpp
   Console/TextFormat.cpp
@@ -272,6 +277,7 @@ qt_add_library(
   UI/Widgets/PlotCurve.h
   UI/Widgets/PlotLogScale.h
   UI/Widgets/PlotAutoScale.h
+  UI/Widgets/PlotLaneRanges.h
   UI/Widgets/DataGrid.h
   UI/Widgets/DatasetWidgetLinks.h
   UI/Widgets/FFTPlot.h
@@ -291,6 +297,7 @@ qt_add_library(
   UI/Widgets/Terminal/AnsiStateMachine.h
   UI/Widgets/Terminal/TerminalCatchUp.h
   UI/Widgets/Terminal/TerminalSearch.h
+  UI/Widgets/Terminal/TerminalHighlighter.h
   UI/UISessionRegistry.h
   Platform/NativeWindow.h
   Platform/KioskControl.h
@@ -298,6 +305,10 @@ qt_add_library(
   Console/Annotations.h
   Console/Handler.h
   Console/SendLibrary.h
+  Console/SendSequence.h
+  Console/AutoReplyRule.h
+  Console/AutoReply.h
+  Console/HighlightRules.h
   Console/WelcomeText.h
   Console/SilentLinkWatch.h
   Console/TextFormat.h
@@ -387,6 +398,10 @@ if(BUILD_COMMERCIAL)
     ProjectEditor/Editors/PainterCodeEditor.cpp
     ApiHandlers/NotificationsHandler.h
     ApiHandlers/NotificationsHandler.cpp
+    Console/BusMonitor.h
+    Console/BusMonitor.cpp
+    Console/ModbusRtuAnalyzer.h
+    Console/ModbusRtuAnalyzer.cpp
   )
 endif()
 

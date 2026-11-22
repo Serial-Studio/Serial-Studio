@@ -107,6 +107,9 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
           this,
           &Widgets::Terminal::applyScrollbackLimit);
   connect(&m_consoleHandler, &Console::Handler::cleared, this, &Widgets::Terminal::clear);
+  connect(&m_consoleHandler.keywordRules(), &Console::HighlightRules::rulesChanged, this, [this] {
+    m_stateChanged = true;
+  });
   connect(&m_silentLinkWatch, &Console::SilentLinkWatch::hint, this, &Terminal::append);
   connect(&m_connectionManager, &IO::ConnectionManager::connectedChanged, this, [=, this] {
     if (m_connectionManager.isConnected())
@@ -403,7 +406,9 @@ void Widgets::Terminal::drawRepeatBadge(
 }
 
 /**
- * @brief Paints the terminal widget content.
+ * @brief Paints the terminal widget content. The keyword colour rules (spec 0127) are drawn over
+ *        the text and are skipped while Find is open, so a search match is never recoloured,
+ *        and in a right-to-left layout, whose rows are not positioned by character cell.
  */
 void Widgets::Terminal::paint(QPainter* painter)
 {
@@ -420,6 +425,17 @@ void Widgets::Terminal::paint(QPainter* painter)
     paintSearchHighlights(painter, firstLine, lastVLine, lineHeight);
 
   paintTextContent(painter, firstLine, lastVLine, lineHeight);
+  if (!searchActive() && !m_translator.rtl())
+    m_keywords.paint(painter,
+                     m_buffer.lines(),
+                     m_consoleHandler.keywordRules().compiled(),
+                     {firstLine,
+                      lastVLine,
+                      lineHeight,
+                      m_borderX,
+                      m_borderY,
+                      static_cast<int>(height()),
+                      maxCharsPerLine()});
 
   if (m_cursorVisible && !m_cursorHidden)
     drawCursor(painter, firstLine, lastVLine, lineHeight);

@@ -104,8 +104,37 @@ Item {
   //
   readonly property int consoleMinimumHeight: {
     const base = Cpp_Console_Handler.defaultCharHeight * root.minimumRows
-    const taken = root.annotationsOpen ? root.annotationsHeight + layout.spacing + 4 : 0
+    const open = root.annotationsOpen || root.toolPanelOpen
+    const taken = open ? root.annotationsHeight + layout.spacing + 4 : 0
     return Math.max(0, base - taken)
+  }
+
+  //
+  // Tool panels (spec 0127) share the annotation panel's slot: "autoReply", "colorRules" or
+  // "busMonitor", one at a time, and never together with the annotation panel
+  //
+  property string toolPanel: ""
+  readonly property bool toolPanelOpen: root.toolPanel.length > 0
+  readonly property bool automationAllowed: Cpp_Console_Handler.sendLibrary.automationAllowed
+
+  function toggleToolPanel(name) {
+    root.toolPanel = root.toolPanel === name ? "" : name
+    if (root.toolPanelOpen)
+      root.annotationsOpen = false
+  }
+
+  //
+  // The bus monitor is a Pro feature. The binding follows the licence and the trial, so an
+  // activation that completes after start-up shows the button, and a lapse closes the panel.
+  //
+  readonly property bool busMonitorAllowed: Cpp_CommercialBuild
+                                            && Cpp_Console_Handler.busMonitor !== null
+                                            && (Cpp_Licensing_LemonSqueezy.isActivated
+                                                || Cpp_Licensing_Trial.trialEnabled)
+
+  onBusMonitorAllowedChanged: {
+    if (!root.busMonitorAllowed && root.toolPanel === "busMonitor")
+      root.toolPanel = ""
   }
 
   //
@@ -301,9 +330,46 @@ Item {
 
             text: qsTr("Annotations")
             checked: root.annotationsOpen
-            onClicked: root.annotationsOpen = !root.annotationsOpen
             icon.source: Cpp_Misc_IconRegistry.icon("console", "annotations", 32)
             ToolTip.text: qsTr("Label the incoming bytes with a decoder and inspect them")
+            onClicked: {
+              root.annotationsOpen = !root.annotationsOpen
+              if (root.annotationsOpen)
+                root.toolPanel = ""
+            }
+          }
+
+          RibbonButton {
+            objectName: "console.autoReply"
+
+            text: qsTr("Auto Reply")
+            visible: root.automationAllowed
+            checked: root.toolPanel === "autoReply"
+            onClicked: root.toggleToolPanel("autoReply")
+            icon.source: Cpp_Misc_IconRegistry.icon("console", "utilities", 32)
+            ToolTip.text: qsTr("Answer matching messages from a table of rules")
+          }
+
+          RibbonButton {
+            objectName: "console.colorRules"
+
+            text: qsTr("Colors")
+            checked: root.toolPanel === "colorRules"
+            onClicked: root.toggleToolPanel("colorRules")
+            ToolTip.text: qsTr("Color words such as ERROR in the console")
+            icon.source: Cpp_Misc_IconRegistry.icon("console", "plain-text", 32)
+          }
+
+          RibbonButton {
+            objectName: "console.busMonitor"
+
+            text: qsTr("Bus Monitor")
+            visible: root.busMonitorAllowed
+            checked: root.toolPanel === "busMonitor"
+            onClicked: root.toggleToolPanel("busMonitor")
+            icon.source: Cpp_Misc_IconRegistry.icon("console", "hexadecimal", 32)
+            ToolTip.text: qsTr("List the messages on the line with their timing, and check "
+                               + "Modbus RTU traffic for faults")
           }
         }
 
@@ -693,6 +759,32 @@ Item {
       visible: root.annotationsOpen
       Layout.topMargin: root.annotationsOpen ? 4 : 0
       Layout.preferredHeight: root.annotationsHeight
+    }
+
+    //
+    // Tool panel slot (spec 0127): built only while open, in the annotation panel's place
+    //
+    Loader {
+      Layout.leftMargin: 8
+      Layout.rightMargin: 8
+      Layout.fillWidth: true
+      Layout.minimumHeight: 0
+      active: root.toolPanelOpen
+      visible: root.toolPanelOpen
+      Layout.topMargin: root.toolPanelOpen ? 4 : 0
+      Layout.preferredHeight: root.toolPanelOpen ? root.annotationsHeight : 0
+      source: {
+        if (root.toolPanel === "autoReply")
+          return "ConsoleAutoReply.qml"
+
+        if (root.toolPanel === "colorRules")
+          return "ConsoleHighlightRules.qml"
+
+        if (root.toolPanel === "busMonitor")
+          return "ConsoleBusMonitor.qml"
+
+        return ""
+      }
     }
 
     //

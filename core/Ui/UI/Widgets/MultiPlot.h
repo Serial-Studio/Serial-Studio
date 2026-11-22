@@ -26,11 +26,13 @@
 #include <QVariantList>
 #include <QVector>
 #include <QXYSeries>
+#include <vector>
 
 #include "Core/SerialStudio.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/PlotBase.h"
+#include "UI/Widgets/PlotLaneRanges.h"
 
 namespace Widgets {
 /**
@@ -129,6 +131,13 @@ class MultiPlot : public QQuickItem {
   Q_PROPERTY(bool historyExact
              READ historyExact
              NOTIFY historyExactChanged)
+  Q_PROPERTY(bool laneRangesEnabled
+             READ laneRangesEnabled
+             WRITE setLaneRangesEnabled
+             NOTIFY laneRangesChanged)
+  Q_PROPERTY(QVariantList laneRanges
+             READ laneRanges
+             NOTIFY laneRangesChanged)
   // clang-format on
 
 signals:
@@ -138,6 +147,7 @@ signals:
   void curvesChanged();
   void runningChanged();
   void dataSizeChanged();
+  void laneRangesChanged();
   void historyExactChanged();
   void interpolationModeChanged();
 
@@ -181,9 +191,12 @@ public:
   [[nodiscard]] SerialStudio::SweepMode sweepMode() const noexcept;
   [[nodiscard]] SerialStudio::TriggerEdge triggerEdge() const noexcept;
   [[nodiscard]] bool historyExact() const noexcept;
+  [[nodiscard]] bool laneRangesEnabled() const noexcept;
+  [[nodiscard]] QVariantList laneRanges() const;
 
 public slots:
   void draw(QXYSeries* series, const int index);
+  void setLaneRangesEnabled(const bool enabled);
   void setDataW(const int width);
   void setDataH(const int height);
   void setRunning(const bool enabled);
@@ -212,6 +225,7 @@ private:
   void syncStringCurves();
   void applyLogYToCurve(QList<QPointF>& curve);
   [[nodiscard]] bool computeRangeFromDatasets();
+  void assignDeclaredLanes();
   void scanCurvesForRange();
   void padDerivedRange();
   void applyDerivedYBounds();
@@ -229,6 +243,7 @@ private:
   bool m_logX;
   bool m_logY;
   bool m_historyExact;
+  bool m_laneRangesEnabled;
   QString m_yLabel;
   QString m_xLabel;
   QStringList m_colors;
@@ -238,6 +253,7 @@ private:
   QList<bool> m_visibleCurves;
   QList<QList<QPointF>> m_data;
   QList<QPointF> m_renderData;
+  std::vector<LaneRanges::Lane> m_lanes;
 
   int m_triggerSource;
   PlotBase m_base;

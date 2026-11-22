@@ -51,6 +51,7 @@ qt_add_library(
   IO/Drivers/UART.cpp
   IO/Drivers/UART/SequenceRunner.cpp
   IO/Drivers/UART/UartSequencePort.cpp
+  IO/Drivers/UART/UartLineWatch.cpp
   IO/Drivers/BluetoothLE.cpp
   IO/Drivers/BluetoothLE/BleUuids.cpp
   IO/Drivers/SerialPortIdentity.cpp
@@ -75,6 +76,7 @@ qt_add_library(
   IO/Drivers/UART/SequencePort.h
   IO/Drivers/UART/SequenceRunner.h
   IO/Drivers/UART/UartSequencePort.h
+  IO/Drivers/UART/UartLineWatch.h
   IO/Drivers/Network.h
   IO/Drivers/BluetoothLE.h
   IO/DeviceManager.h

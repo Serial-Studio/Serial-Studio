@@ -83,6 +83,7 @@ IO::ConnectionManager::ConnectionManager(Core::Bus::MessageBus& bus, IIngestBind
     this,
     {[this] { rebuildDevices(); }, [this] { disconnectDevice(); }, [this] { connectDevice(); }});
   m_uiDrivers.attachMessageBus(m_bus);
+  m_uiDrivers.uart()->bindLineSource([this] { return qobject_cast<Drivers::UART*>(driver(0)); });
   connect(this, &ConnectionManager::busTypeChanged, this, &ConnectionManager::configurationChanged);
 
   connect(qApp, &QApplication::aboutToQuit, this, &ConnectionManager::disconnectAllDevices);

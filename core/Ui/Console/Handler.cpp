@@ -30,6 +30,8 @@
 #include <QFontMetrics>
 
 #include "AppState.h"
+#include "Console/AutoReply.h"
+#include "Console/HighlightRules.h"
 #include "Console/SendLibrary.h"
 #include "Console/TextFormat.h"
 #include "Console/WelcomeText.h"
@@ -48,6 +50,10 @@
 #include "DataModel/TextCodec.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/CommonFonts.h"
+
+#ifdef BUILD_COMMERCIAL
+#  include "Console/BusMonitor.h"
+#endif
 
 Console::Handler* Console::Handler::s_instance = nullptr;
 
@@ -159,7 +165,16 @@ Console::Handler::Handler(Core::Bus::MessageBus& bus, IO::ConnectionManager& con
   , m_annotationDecoder(new AnnotationDecoder(m_annotations, this))
   , m_annotationFilter(new AnnotationFilter(this))
   , m_sendLibrary(nullptr)
+  , m_autoReply(nullptr)
+  , m_highlightRules(new HighlightRules(this))
+  , m_busMonitor(nullptr)
+  , m_busMonitorFilter(nullptr)
 {
+#ifdef BUILD_COMMERCIAL
+  auto* monitor      = new BusMonitor(this);
+  m_busMonitor       = monitor;
+  m_busMonitorFilter = new BusMonitorFilter(monitor, this);
+#endif
   m_annotationFilter->setSourceModel(m_annotations);
   clear();
   const auto defaultFont = m_commonFonts->monoFont();
@@ -196,6 +211,22 @@ Console::Handler::Handler(Core::Bus::MessageBus& bus, IO::ConnectionManager& con
   m_fontFamilyIndex   = availableFonts().indexOf(m_fontFamily);
   m_sendLibrary       = new SendLibrary(*this);
 
+  ReplyLink link;
+  link.connected = [this] {
+    return m_connectionManager->isConnected();
+  };
+  link.send = [this](int deviceId, const QByteArray& bytes) {
+    sendBytes(deviceId, bytes);
+  };
+  link.note = [this](const QString& text) {
+    append(text + QLatin1Char('\n'), true);
+  };
+  m_autoReply = new AutoReply(std::move(link), this);
+  connect(m_connectionManager,
+          &IO::ConnectionManager::connectedChanged,
+          m_autoReply,
+          &AutoReply::onLinkChanged);
+
   auto& timerEvents = Core::services().timerEvents;
   connect(&timerEvents, &Misc::TimerEvents::uiTimeout, this, [this]() {
     if (!m_pendingDisplay.isEmpty()) {
@@ -208,6 +239,10 @@ Console::Handler::Handler(Core::Bus::MessageBus& bus, IO::ConnectionManager& con
     }
 
     m_annotations->commitPending();
+#ifdef BUILD_COMMERCIAL
+    auto* monitor = static_cast<BusMonitor*>(m_busMonitor);
+    monitor->commitPending(monitor->toMs(std::chrono::steady_clock::now()));
+#endif
   });
 
   updateFont();
@@ -766,12 +801,24 @@ void Console::Handler::sendPayload(const QString& data, bool recordHistory)
   }
 
   const QByteArray bin = DataModel::encode_tx(spec);
-  if (!bin.isEmpty()) {
-    if (m_currentDeviceId >= 0)
-      (void)m_connectionManager->writeDataToDevice(m_currentDeviceId, bin);
-    else
-      (void)m_connectionManager->writeData(bin);
-  }
+  if (!bin.isEmpty())
+    sendBytes(m_currentDeviceId, bin);
+}
+
+/**
+ * @brief Writes already-encoded bytes to @a deviceId, or to the single link when it is negative.
+ *        The command list and the auto-reply send through here with their own stored framing.
+ */
+void Console::Handler::sendBytes(int deviceId, const QByteArray& bytes)
+{
+  SS_ASSERT(m_connectionManager != nullptr, return);
+  if (bytes.isEmpty() || !m_connectionManager->isConnected())
+    return;
+
+  if (deviceId >= 0)
+    (void)m_connectionManager->writeDataToDevice(deviceId, bytes);
+  else
+    (void)m_connectionManager->writeData(bytes);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1026,6 +1073,46 @@ QObject* Console::Handler::sendLibrary() const noexcept
 }
 
 /**
+ * @brief The rule-driven responder (spec 0127): answers received messages while armed.
+ */
+QObject* Console::Handler::autoReply() const noexcept
+{
+  return m_autoReply;
+}
+
+/**
+ * @brief The keyword colour rules (spec 0127), as the object QML edits.
+ */
+QObject* Console::Handler::highlightRules() const noexcept
+{
+  return m_highlightRules;
+}
+
+/**
+ * @brief The Pro bus monitor (spec 0127); null in a GPL build.
+ */
+QObject* Console::Handler::busMonitor() const noexcept
+{
+  return m_busMonitor;
+}
+
+/**
+ * @brief The bus monitor's table filter; null in a GPL build.
+ */
+QObject* Console::Handler::busMonitorFilter() const noexcept
+{
+  return m_busMonitorFilter;
+}
+
+/**
+ * @brief The keyword colour rules as every terminal view's paint pass reads them.
+ */
+const Console::HighlightRules& Console::Handler::keywordRules() const noexcept
+{
+  return *m_highlightRules;
+}
+
+/**
  * @brief The frame annotation store (spec 0059) fed by this console's raw byte stream.
  */
 QObject* Console::Handler::annotations() const noexcept
@@ -1061,11 +1148,10 @@ void Console::Handler::hotpathRxDeviceData(int deviceId, const QByteArray& data)
     m_annotationDecoder->feed(data);
 
   const auto str = dataToString(data);
-  if (str.isEmpty())
-    return;
+  if (!str.isEmpty())
+    Q_EMIT deviceDataReady(deviceId, appendToDevice(deviceId, str, showTimestamp()));
 
-  const auto processed = appendToDevice(deviceId, str, showTimestamp());
-  Q_EMIT deviceDataReady(deviceId, processed);
+  m_autoReply->feed(deviceId, data);
 }
 
 /**
@@ -1075,6 +1161,12 @@ void Console::Handler::hotpathRxDeviceData(int deviceId, const QByteArray& data)
 void Console::Handler::onDeviceBytes(int deviceId, const IO::CapturedDataPtr& data)
 {
   SS_ASSERT(data != nullptr, return);
+
+#ifdef BUILD_COMMERCIAL
+  auto* monitor = static_cast<BusMonitor*>(m_busMonitor);
+  if (m_currentDeviceId < 0 || deviceId == m_currentDeviceId)
+    monitor->feedReceived(data->data, monitor->toMs(data->timestamp));
+#endif
 
   hotpathRxDeviceData(deviceId, data->data);
 }
@@ -1104,6 +1196,12 @@ void Console::Handler::onInjectedBytes(const IO::CapturedDataPtr& data)
  */
 void Console::Handler::onSentBytes(int deviceId, const QByteArray& data)
 {
+#ifdef BUILD_COMMERCIAL
+  auto* monitor = static_cast<BusMonitor*>(m_busMonitor);
+  if (m_currentDeviceId < 0 || deviceId == m_currentDeviceId)
+    monitor->feedSent(data, monitor->toMs(std::chrono::steady_clock::now()));
+#endif
+
   displaySentData(deviceId, data);
 }
 

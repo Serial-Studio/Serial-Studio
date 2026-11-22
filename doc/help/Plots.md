@@ -53,6 +53,7 @@ When a plot is large enough to show its toolbar, these controls appear left to r
 | **Area** | <img src="icon:commands/area" alt="area" width="16" height="16"> | Plot only. Fills the region under the curve. Enabled for linear and ZOH; disabled for none and stem. |
 | **X / Y label** | <img src="icon:commands/x" alt="x" width="16" height="16"> <img src="icon:commands/y" alt="y" width="16" height="16"> | Shows or hides each axis label. |
 | **Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Shows a tracking crosshair that follows the cursor. |
+| **Lanes** | <img src="icon:commands/poliline" alt="lanes" width="16" height="16"> | Multi-Plot only. Gives each visible channel its own band with its own Y range; see [Lanes](#lanes). |
 | **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Freezes this plot. Readings that arrive while paused are not drawn after Resume. Other widgets keep updating. |
 | **Sweep / Trigger Mode** | <img src="icon:commands/sweep" alt="sweep" width="16" height="16"> | Turns [Sweep / Trigger mode](#sweep--trigger-mode-pro) on or off. A repeating waveform holds still, like on an oscilloscope (Pro, time-axis plots only). |
 | **Trigger Settings** | <img src="icon:commands/trigger" alt="trigger" width="16" height="16"> | Opens the trigger settings (Pro). Enabled only while Sweep is on. |
@@ -61,6 +62,17 @@ When a plot is large enough to show its toolbar, these controls appear left to r
 | **Axis Range Settings** | <img src="cmd:app.preferences" alt="Preferences" width="16" height="16"> | Opens the Axis Range dialog to set fixed minimum and maximum values for the axes. The button shows the gear (Preferences) icon. |
 
 Drag inside the plot to pan and scroll to zoom; **Reset View** undoes both. These buttons and the toolbars of every other widget are catalogued in the [Toolbar & Button Reference](Toolbar-Reference.md#plot).
+
+## Lanes
+
+A Multi-Plot draws every channel against one Y axis, so a 0 to 1 flag is a flat line next to a 0 to 4000 count. Press **Lanes** in the toolbar to split the plot into one band per visible channel. The bands share the X axis and have equal height. Each band scales to its own channel and shows the channel's name and Y range in its top-left corner.
+
+- A channel you hide in the legend gives up its band, and the others grow to fill the space.
+- Pause, the X cursors, and pan and zoom along X work as in the overlaid view.
+- A channel with a fixed plot range in the Project Editor uses that range. Other channels scale to the visible data.
+- The **Lanes** setting is saved with the widget.
+
+Lanes are not available on a Multi-Plot with a logarithmic Y axis or a single channel. Trigger settings cannot be edited while Lanes is on, because a trigger level belongs to the shared axis. The *none* line style draws connected lines in lane mode.
 
 ## Sweep / Trigger mode (Pro)
 

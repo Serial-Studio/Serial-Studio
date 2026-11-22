@@ -153,6 +153,7 @@ Decoding runs on the interface thread at chunk rate, never on the frame pipeline
 
 ## See also
 
+- [Console Automation](Console-Automation.md): command lists, auto-reply rules and color rules for the console.
 - [Frame Parser Scripting](Frame-Parser.md): the `parse(frame)` function that turns frames into dataset values.
 - [Communication Protocols](Communication-Protocols.md): frame detection and delimiters for the parsing pipeline.
 - [Dataset value transforms](Dataset-Transforms.md): per-dataset conditioning of parsed values.

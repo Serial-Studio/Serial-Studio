@@ -90,6 +90,8 @@ qt_add_library(
   DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
   DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
   DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
+  DataModel/Scripting/NativeTemplates/BinaryFieldLayout.cpp
+  DataModel/Scripting/NativeTemplates/BinaryJustFloat.cpp
   DataModel/Scripting/NativeTemplates/BinaryRaw.cpp
   DataModel/Scripting/NativeTemplates/BinaryHex.cpp
   DataModel/Scripting/NativeTemplates/BinaryBase64.cpp
@@ -225,6 +227,8 @@ qt_add_library(
   DataModel/Scripting/NativeTemplates/NativeTemplate.h
   DataModel/Scripting/NativeTemplates/NativeTemplateSupport.h
   DataModel/Scripting/NativeTemplates/BinaryPackedStruct.h
+  DataModel/Scripting/NativeTemplates/BinaryFieldLayout.h
+  DataModel/Scripting/NativeTemplates/BinaryJustFloat.h
   DataModel/Scripting/NativeTemplates/BinaryRaw.h
   DataModel/Scripting/NativeTemplates/BinaryHex.h
   DataModel/Scripting/NativeTemplates/BinaryBase64.h

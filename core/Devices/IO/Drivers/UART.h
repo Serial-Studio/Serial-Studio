@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <QByteArray>
 #include <QObject>
@@ -37,6 +38,7 @@
 namespace IO {
 namespace Drivers {
 class SequenceRunner;
+class UartLineWatch;
 class UartSequencePort;
 
 /**
@@ -63,6 +65,9 @@ class UART : public HAL_Driver {
   Q_PROPERTY(QString connectionSequenceJson
              READ connectionSequenceJson
              NOTIFY connectionSequenceChanged)
+  Q_PROPERTY(QObject* lineWatch
+             READ lineWatch
+             CONSTANT)
   Q_PROPERTY(quint8 portIndex
              READ portIndex
              WRITE setPortIndex
@@ -157,6 +162,8 @@ public:
   [[nodiscard]] bool sendBreak(int ms);
   [[nodiscard]] bool setLiveBaudRate(qint32 rate);
   [[nodiscard]] QJsonObject lineStates() const;
+  [[nodiscard]] QObject* lineWatch() const noexcept;
+  void bindLineSource(std::function<UART*()> source);
   [[nodiscard]] QString connectionSequenceJson() const;
   Q_INVOKABLE [[nodiscard]] QVariantMap validateConnectionSequence(const QString& json) const;
 
@@ -265,6 +272,9 @@ private:
   Async::SystemClock m_clock;
   std::unique_ptr<UartSequencePort> m_sequencePort;
   std::unique_ptr<SequenceRunner> m_runner;
+
+  // Spec 0127: a child object, deleted with the driver
+  UartLineWatch* m_lineWatch;
 };
 }  // namespace Drivers
 }  // namespace IO

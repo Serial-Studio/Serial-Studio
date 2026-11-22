@@ -84,6 +84,32 @@ Item {
   property bool alive: true
   Component.onDestruction: root.alive = false
 
+  //
+  // Lane mode (spec 0127 R23): one equal-height band per visible curve, each with its own Y
+  // range. A log Y axis keeps the shared scale, and a single curve has nothing to split.
+  //
+  property bool lanes: false
+  readonly property bool laneMode: root.lanes && root.lanesAllowed
+  readonly property var laneRanges: root.laneMode ? root.model.laneRanges : []
+  readonly property bool lanesAllowed: root.model && root.model.count > 1 && !root.model.logY
+  readonly property var laneBands: {
+    const bands = []
+    if (!root.model)
+      return bands
+
+    const shown = root.model.visibleCurves
+    for (let i = 0; i < shown.length; ++i)
+      if (shown[i])
+        bands.push(i)
+
+    return bands
+  }
+
+  onLaneModeChanged: {
+    if (root.model)
+      root.model.laneRangesEnabled = root.laneMode
+  }
+
   PlotCommon {
     id: plotCommon
   }
@@ -114,6 +140,9 @@ Item {
 
     if (s["userShowYLabel"] !== undefined)
       root.userShowYLabel = s["userShowYLabel"]
+
+    if (s["lanes"] !== undefined)
+      root.lanes = s["lanes"] === true
 
     if (s["visibleCurves"] !== undefined) {
       const curves = s["visibleCurves"]
@@ -405,6 +434,18 @@ Item {
       glyph: "commands/crosshair"
     }
 
+    DashboardToolButton {
+      checked: root.laneMode
+      glyph: "commands/poliline"
+      visible: root.lanesAllowed
+      objectName: "multiplot.lanes"
+      ToolTip.text: qsTr("Lanes: one band per channel, each with its own Y range")
+      onClicked: {
+        root.lanes = !root.lanes
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "lanes", root.lanes)
+      }
+    }
+
     Rectangle {
       visible: root.sweepAllowed
       implicitWidth: 1
@@ -427,8 +468,8 @@ Item {
       glyph: "commands/trigger"
       visible: root.sweepAllowed
       opacity: enabled ? 1 : 0.5
-      enabled: root.model.sweepEnabled
       ToolTip.text: qsTr("Trigger Settings")
+      enabled: root.model.sweepEnabled && !root.laneMode
       onClicked: triggerDialog.openDialog(root.model, true)
     }
 
@@ -514,7 +555,7 @@ Item {
       curveColors: root.model.colors
       sweepMode: root.model.sweepEnabled
       mouseAreaEnabled: windowRoot.focused
-      triggerEditing: triggerDialog.visible
+      triggerEditing: triggerDialog.visible && !root.laneMode
       triggerLevel: root.model.logY
                     ? Math.log10(Math.max(root.model.triggerLevel, 1e-12))
                     : root.model.triggerLevel
@@ -552,19 +593,44 @@ Item {
         model: root.model.count
         delegate: PlotCurve {
           parent: plot.curveLayer
-          anchors.fill: parent
           lineWidth: 2
           source: LineSeries {}
           color: root.model.colors[index]
           xMin: plot.xVisibleMin
           xMax: plot.xVisibleMax
-          yMin: plot.yVisibleMin
-          yMax: plot.yVisibleMax
           visible: curveVisible
+          width: parent ? parent.width : 0
+          y: root.laneMode ? Math.max(0, laneSlot) * bandHeight : 0
+          yMin: root.laneMode && laneRange ? laneRange.min : plot.yVisibleMin
+          yMax: root.laneMode && laneRange ? laneRange.max : plot.yVisibleMax
+          height: root.laneMode ? bandHeight : (parent ? parent.height : 0)
           property int curveIndex: index
-          property bool curveVisible: root.interpolationMode !== SerialStudio.InterpolationNone
+          property var laneRange: root.laneRanges[index]
+          property int laneSlot: root.laneBands.indexOf(index)
+          property real bandHeight: parent ? parent.height / Math.max(1, root.laneBands.length) : 0
+          property bool curveVisible: (root.laneMode
+                                       || root.interpolationMode !== SerialStudio.InterpolationNone)
                                      && root.model.visibleCurves[index]
         }
+      }
+
+      //
+      // Lane mode hides the shared Y scale: each band carries its own range label instead
+      //
+      Binding {
+        value: false
+        target: plot.yAxis
+        when: root.laneMode
+        property: "labelsVisible"
+      }
+
+      Parts.PlotLaneLabels {
+        plot: parent
+        bands: root.laneBands
+        visible: root.laneMode
+        ranges: root.laneRanges
+        colors: root.model.colors
+        titles: root.model.labels
       }
 
       //
@@ -575,6 +641,7 @@ Item {
         delegate: ScatterSeries {
           property int curveIndex: index
           property bool curveVisible: root.interpolationMode === SerialStudio.InterpolationNone
+                                     && !root.laneMode
                                      && root.model.visibleCurves[index]
           Component.onCompleted: plot.graph.addSeries(this)
           pointDelegate: Rectangle {

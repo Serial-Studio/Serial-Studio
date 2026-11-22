@@ -58,7 +58,9 @@ class ProjectModel;
 
 namespace Console {
 
+class AutoReply;
 class SendLibrary;
+class HighlightRules;
 
 /**
  * @brief Receives device data and formats it for the console text view.
@@ -192,6 +194,18 @@ class Handler
   Q_PROPERTY(QObject* annotationFilter
              READ annotationFilter
              CONSTANT)
+  Q_PROPERTY(QObject* autoReply
+             READ autoReply
+             CONSTANT)
+  Q_PROPERTY(QObject* highlightRules
+             READ highlightRules
+             CONSTANT)
+  Q_PROPERTY(QObject* busMonitor
+             READ busMonitor
+             CONSTANT)
+  Q_PROPERTY(QObject* busMonitorFilter
+             READ busMonitorFilter
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -302,10 +316,16 @@ public:
   [[nodiscard]] Q_INVOKABLE bool validateUserHex(const QString& text);
   [[nodiscard]] Q_INVOKABLE QString formatUserHex(const QString& text);
   void sendPayload(const QString& data, bool recordHistory);
+  void sendBytes(int deviceId, const QByteArray& bytes);
   [[nodiscard]] QObject* sendLibrary() const noexcept;
   [[nodiscard]] QObject* annotations() const noexcept;
   [[nodiscard]] QObject* annotationDecoder() const noexcept;
   [[nodiscard]] QObject* annotationFilter() const noexcept;
+  [[nodiscard]] QObject* autoReply() const noexcept;
+  [[nodiscard]] QObject* highlightRules() const noexcept;
+  [[nodiscard]] QObject* busMonitor() const noexcept;
+  [[nodiscard]] QObject* busMonitorFilter() const noexcept;
+  [[nodiscard]] const HighlightRules& keywordRules() const noexcept;
 
 public slots:
   void clear();
@@ -416,5 +436,13 @@ private:
 
   // TX command library (spec 0091): persisted history + pins, console tier only
   SendLibrary* m_sendLibrary;
+
+  // Console automation (spec 0127): rule-driven replies and keyword colours, app-wide settings
+  AutoReply* m_autoReply;
+  HighlightRules* m_highlightRules;
+
+  // Bus monitor (spec 0127, Pro): null in a GPL build, which does not compile its sources
+  QObject* m_busMonitor;
+  QObject* m_busMonitorFilter;
 };
 }  // namespace Console

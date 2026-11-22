@@ -35,6 +35,7 @@
 #include "UI/Widgets/Terminal/AnsiStateMachine.h"
 #include "UI/Widgets/Terminal/TerminalBuffer.h"
 #include "UI/Widgets/Terminal/TerminalCatchUp.h"
+#include "UI/Widgets/Terminal/TerminalHighlighter.h"
 #include "UI/Widgets/Terminal/TerminalSearch.h"
 
 namespace Console {
@@ -310,6 +311,7 @@ private:
   TerminalBuffer m_buffer;
   AnsiStateMachine m_ansi;
   TerminalSearch m_search;
+  TerminalHighlighter m_keywords;
   TerminalCatchUp m_catchUp;
 
   QFont m_badgeFont;

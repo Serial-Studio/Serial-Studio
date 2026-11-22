@@ -45,6 +45,27 @@ Item {
   }
 
   //
+  // Input control-line levels: polled by the driver only while this pane is on screen
+  //
+  property bool watchingLines: false
+  readonly property var lineWatch: Cpp_IO_Serial.lineWatch
+
+  function syncLineWatch(wanted) {
+    if (wanted === root.watchingLines)
+      return
+
+    root.watchingLines = wanted
+    if (wanted)
+      root.lineWatch.attach()
+    else
+      root.lineWatch.detach()
+  }
+
+  onVisibleChanged: root.syncLineWatch(root.visible)
+  Component.onDestruction: root.syncLineWatch(false)
+  Component.onCompleted: root.syncLineWatch(root.visible)
+
+  //
   // Lazy-loaded Connection Sequence editor, shared with the Project Editor
   //
   Loader {
@@ -377,6 +398,57 @@ Item {
       onCheckedChanged: {
         if (Cpp_IO_Serial.rtsEnabled !== checked)
           Cpp_IO_Serial.rtsEnabled = checked
+      }
+    }
+
+    //
+    // Input control lines of the open port (hidden while the port is closed)
+    //
+    Label {
+      text: qsTr("Line Status") + ":"
+      visible: root.lineWatch.available
+    } RowLayout {
+      spacing: 6
+      visible: root.lineWatch.available
+      Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+
+      Repeater {
+        model: [
+          { "name": "CTS", "key": "cts", "hint": qsTr("Clear To Send") },
+          { "name": "DSR", "key": "dsr", "hint": qsTr("Data Set Ready") },
+          { "name": "DCD", "key": "dcd", "hint": qsTr("Data Carrier Detect") },
+          { "name": "RI", "key": "ri", "hint": qsTr("Ring Indicator") }
+        ]
+
+        delegate: RowLayout {
+          id: _line
+
+          required property var modelData
+
+          spacing: 2
+          objectName: "setup.uart.line." + _line.modelData.key
+
+          Widgets.LedIndicator {
+            diameter: 10
+            Layout.alignment: Qt.AlignVCenter
+            on: root.lineWatch[_line.modelData.key]
+            offColor: Cpp_ThemeManager.colors["mid"]
+            onColor: Cpp_ThemeManager.colors["alarm_ok"]
+          }
+
+          Label {
+            ToolTip.delay: 700
+            text: _line.modelData.name
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: _line.modelData.hint
+            ToolTip.visible: _lineHover.hovered
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85)
+
+            HoverHandler {
+              id: _lineHover
+            }
+          }
+        }
       }
     }
 

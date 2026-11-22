@@ -24,7 +24,7 @@
 
 #include "DataModel/FrameBuilder/QuickPlotFormatState.h"
 
-// Quick Plot's format state (spec 0106): the 35-stream corpus of outcomes, channel titles, units
+// Quick Plot's format state (spec 0106): the 38-stream corpus of outcomes, channel titles, units
 // and values, the rebuild budget, the replay pin and the reset.
 
 using Outcome = DataModel::QuickPlotLineOutcome;
@@ -112,7 +112,8 @@ static const double kNaN = qQNaN();
 }
 
 /**
- * @brief Streams 8 to 13, 26, 27, 30, 31 and 34: named fields, units and mixed streams.
+ * @brief Streams 8 to 13, 26, 27, 30, 31 and 34: named fields, units and mixed streams, then the
+ *        three FireWater streams of spec 0127 R19 (a name on the first value only).
  */
 [[nodiscard]] static QList<Expect> namedCorpus()
 {
@@ -161,6 +162,27 @@ static const double kNaN = qQNaN();
     .outcomes = {R},
     .titles   = {"temp", "status"},
     .numbers  = {23.5, kNaN}
+  });
+  out.append({
+    .lines    = {"ch:1.5,-2.25,3", "ch:4,5,6"},
+    .outcomes = {R, Outcome::Apply},
+    .channels = 3,
+    .titles   = {"ch", "", ""},
+    .numbers  = {4, 5, 6}
+  });
+  out.append({
+    .lines    = {"data: 1.5, -2.25, 3", "data: 1.5, -2.25, 3"},
+    .outcomes = {R, Outcome::Apply},
+    .channels = 3,
+    .titles   = {"data", "", ""},
+    .numbers  = {1.5, -2.25, 3}
+  });
+  out.append({
+    .lines    = {"samples:0.5", "samples:0.25"},
+    .outcomes = {R, Outcome::Apply},
+    .channels = 1,
+    .titles   = {"samples"},
+    .numbers  = {0.25}
   });
   return out;
 }
@@ -266,7 +288,7 @@ static const double kNaN = qQNaN();
 }
 
 /**
- * @brief The whole 35-stream corpus.
+ * @brief The whole 38-stream corpus.
  */
 [[nodiscard]] static QList<Expect> corpus()
 {
@@ -398,7 +420,7 @@ void QuickPlotFormatStateTest::corpusStreams_data()
 {
   QTest::addColumn<int>("index");
   const auto cases = corpus();
-  QCOMPARE(cases.size(), 35);
+  QCOMPARE(cases.size(), 38);
   for (qsizetype i = 0; i < cases.size(); ++i)
     QTest::newRow(cases.at(i).lines.first().constData()) << static_cast<int>(i);
 }

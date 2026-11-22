@@ -26,6 +26,7 @@ With **UART/COM** selected as the connection in the Setup Panel, these fields ap
 | **Auto Reconnect** | After the port drops with a fatal error (unplug, resource loss), rescans once per second and reopens the same port name when it reappears. A manual Disconnect cancels the retry. Shown as Auto-Reconnect in the Project Editor | off |
 | **Send DTR Signal** | Asserts the DTR line on connect. Leave it on unless your Arduino resets when you connect; see [Common pitfalls](#common-pitfalls) | on |
 | **Hold RTS** | Asserts the RTS line on connect and holds it for the whole connection. Leave it off unless the device datasheet asks for RTS. Not applicable under RTS/CTS flow control, where the port driver owns RTS | off |
+| **Line Status** | Four indicators for the CTS, DSR, DCD and RI input lines. Shown only while the port is open; each lights while its line is asserted and follows a change within half a second | n/a |
 | **Connection Sequence** | Steps run on every open before any byte reaches the dashboard; see [Connection Sequence](#connection-sequence) | no steps |
 
 On Linux and macOS the **Serial Port** field is editable: type a device path missing from the list (for example `/dev/ttyAMA0`) and press Enter to register it. On macOS each adapter is listed once, as its `cu.*` device; the `tty.*` duplicates are hidden.

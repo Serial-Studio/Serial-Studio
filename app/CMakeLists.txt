@@ -369,6 +369,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/FlowDiagram/NodeCard.qml
   qml/ProjectEditor/Views/FlowDiagram/NodeFolder.qml
   qml/ProjectEditor/Views/NativeParserPane.qml
+  qml/ProjectEditor/Views/FieldLayoutEditor.qml
   qml/ProjectEditor/Views/GroupView.qml
   qml/ProjectEditor/Views/ProjectView.qml
   qml/ProjectEditor/Views/SourceView.qml
@@ -421,6 +422,8 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/Stopwatch.qml
   qml/Widgets/Dashboard/ConsoleAnnotations.qml
   qml/Widgets/Dashboard/ConsoleSendLibrary.qml
+  qml/Widgets/Dashboard/ConsoleAutoReply.qml
+  qml/Widgets/Dashboard/ConsoleHighlightRules.qml
   qml/Widgets/Dashboard/Terminal.qml
   qml/Widgets/Dashboard/WidgetTitleBar.qml
   qml/Widgets/Dashboard/WidgetToolbar.qml
@@ -461,6 +464,7 @@ set(QML_SOURCES
   qml/Widgets/PlotWidget/PlotMarkerPopup.qml
   qml/Widgets/PlotWidget/PlotCursor.qml
   qml/Widgets/PlotWidget/PlotDecimatedChip.qml
+  qml/Widgets/PlotWidget/PlotLaneLabels.qml
   qml/Widgets/PlotWidget/PlotTriggerLine.qml
   qml/Widgets/PopupEnter.qml
   qml/Widgets/PopupExit.qml
@@ -539,6 +543,7 @@ if(BUILD_COMMERCIAL)
     qml/DatabaseExplorer/ReportOptionsDialog.qml
     qml/DatabaseExplorer/ReportProgressDialog.qml
     qml/Dialogs/RuntimeReconfigure.qml
+    qml/Widgets/Dashboard/ConsoleBusMonitor.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml

@@ -225,10 +225,12 @@
         <file>scripts/native/can_signal_map.md</file>
         <file>scripts/native/cobs_encoded.md</file>
         <file>scripts/native/delimited.md</file>
+        <file>scripts/native/field_layout.md</file>
         <file>scripts/native/fixed_width.md</file>
         <file>scripts/native/hexadecimal_bytes.md</file>
         <file>scripts/native/ini_config.md</file>
         <file>scripts/native/json_data.md</file>
+        <file>scripts/native/justfloat.md</file>
         <file>scripts/native/key_value.md</file>
         <file>scripts/native/mavlink.md</file>
         <file>scripts/native/messagepack.md</file>

@@ -513,6 +513,34 @@ ss_add_unit_test(tst_packed_struct
 )
 
 #
+# The JustFloat Built-In template (spec 0127 R18): it decodes through the packed-struct kernel, so
+# that TU joins the list.
+#
+ss_add_unit_test(tst_justfloat
+  SOURCES tst_justfloat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryJustFloat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# The Field Layout Built-In template (spec 0127 R20/R21): bit extraction in both byte orders, sign
+# extension and the field-past-the-end rule.
+#
+ss_add_unit_test(tst_field_layout
+  SOURCES tst_field_layout.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryFieldLayout.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # Group widget requirements (spec 0100 R15/R16): the one rule the group editor warning and the
 # Problem Center finding share, matched to the tags the dashboard widgets bind by.
 #
@@ -728,6 +756,16 @@ ss_add_unit_test(tst_data_block
 #
 ss_add_unit_test(tst_plot_autoscale
   SOURCES tst_plot_autoscale.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# Multi-plot lane ranges (spec 0127 R23): the header-only per-curve range rule the lane bands
+# read, on top of the auto-scale ladder above.
+#
+ss_add_unit_test(tst_multiplot_lanes
+  SOURCES tst_multiplot_lanes.cpp
   LIBS    Qt6::Core
           SerialStudio::Core
 )
@@ -1320,6 +1358,8 @@ ss_add_unit_test(tst_opcua_wire
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryFieldLayout.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryJustFloat.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
@@ -1672,6 +1712,8 @@ ss_add_unit_test(tst_cframe_parser
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryPackedStruct.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryFieldLayout.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryJustFloat.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
@@ -1907,6 +1949,71 @@ ss_add_unit_test(tst_console_text_format
   SOURCES tst_console_text_format.cpp
           ${SS_CORE_SRC}/Ui/Console/TextFormat.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# Console automation (spec 0127 R1-R9). The command-list runner and the auto-reply responder take
+# their link as callbacks, so neither suite links the console handler; both encode through the
+# unified TX encoder, hence ActionBytes.cpp and TextCodec.cpp with Core5Compat, and Qt6::Gui for
+# Frame.h's QColor. Each suite seals the process in its last case, so they stay separate binaries.
+#
+ss_add_unit_test(tst_console_send_sequence
+  SOURCES tst_console_send_sequence.cpp
+          ${SS_CORE_SRC}/Ui/Console/SendSequence.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/ActionBytes.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/TextCodec.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+          SerialStudio::Core
+)
+
+ss_add_unit_test(tst_console_auto_reply
+  SOURCES tst_console_auto_reply.cpp
+          ${SS_CORE_SRC}/Ui/Console/AutoReply.cpp
+          ${SS_CORE_SRC}/Ui/Console/AutoReplyRule.cpp
+          ${SS_CORE_SRC}/Ui/Console/SendSequence.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/ActionBytes.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/TextCodec.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+          SerialStudio::Core
+)
+
+#
+# The Pro bus monitor (spec 0127 R10-R17). The analyzer is a plain class over byte arrays, so its
+# suite links QtCore alone and replays the spec's premise trace; the store is a table model with
+# QSettings. Commercial-licensed TUs, so both suites exist only in a Pro build.
+#
+if(BUILD_COMMERCIAL)
+  ss_add_unit_test(tst_modbus_rtu_analyzer
+    SOURCES tst_modbus_rtu_analyzer.cpp
+            ${SS_CORE_SRC}/Ui/Console/ModbusRtuAnalyzer.cpp
+    LIBS    Qt6::Core
+            SerialStudio::Core
+  )
+
+  ss_add_unit_test(tst_bus_monitor
+    SOURCES tst_bus_monitor.cpp
+            ${SS_CORE_SRC}/Ui/Console/BusMonitor.cpp
+            ${SS_CORE_SRC}/Ui/Console/ModbusRtuAnalyzer.cpp
+    LIBS    Qt6::Core
+            SerialStudio::Core
+  )
+endif()
+
+#
+# Console colour rules (spec 0127 R8/R9): the span collection the paint pass draws from and the
+# rule store. TerminalHighlighter.cpp carries the QPainter overlay, hence Qt6::Gui.
+#
+ss_add_unit_test(tst_terminal_highlight
+  SOURCES tst_terminal_highlight.cpp
+          ${SS_CORE_SRC}/Ui/Console/HighlightRules.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/TerminalHighlighter.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
           SerialStudio::Core
 )
 

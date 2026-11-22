@@ -61,6 +61,7 @@ struct PackedLayout {
   bool bigEndian = false;
 };
 
+[[nodiscard]] double packedFloatAsDecimal(float value) noexcept;
 [[nodiscard]] bool parsePackedLayout(const QString& fields,
                                      const QString& endianness,
                                      PackedLayout& layout,

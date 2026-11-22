@@ -70,6 +70,8 @@ using Outcome = DataModel::QuickPlotLineOutcome;
     "temp:23,5;hum:60",
     "Temp Sensor: 23.5, Humidity: 60",
     "temp:23.5,status:OK",
+    "ch:1.5,-2.25,3",
+    "data: 1.5, -2.25, 3",
   };
 }
 
@@ -182,7 +184,7 @@ void QuickPlotRoundTripTest::roundTrip_data()
 {
   QTest::addColumn<QByteArray>("line");
   const auto lines = corpusLines();
-  QCOMPARE(lines.size(), 20);
+  QCOMPARE(lines.size(), 22);
   for (const auto& line : lines)
     QTest::newRow(line.constData()) << line;
 }

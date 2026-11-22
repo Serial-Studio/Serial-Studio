@@ -32,6 +32,7 @@ Rectangle {
   //
   property int sourceId: 0
   readonly property alias editor: nativeEditor
+  readonly property bool layoutTemplate: nativeEditor.templateId === "field_layout"
 
   color: Cpp_ThemeManager.colors["base"]
 
@@ -87,7 +88,7 @@ Rectangle {
       contentWidth: width
       Layout.fillWidth: true
       contentHeight: parameterForm.implicitHeight
-      visible: nativeEditor.parameterCount > 0
+      visible: nativeEditor.parameterCount > 0 && !root.layoutTemplate
       Layout.preferredHeight: Math.min(parameterForm.implicitHeight, root.height * 0.45)
       ScrollBar.vertical.policy: parameterForm.implicitHeight > parameterView.height
                                  ? ScrollBar.AlwaysOn
@@ -106,6 +107,22 @@ Rectangle {
           property: "modelPointer"
           value: nativeEditor.parameterModel
         }
+      }
+    }
+
+    //
+    // Field table of the Field Layout template, in place of its raw JSON parameter
+    //
+    Loader {
+      id: layoutLoader
+
+      Layout.fillWidth: true
+      active: root.layoutTemplate
+      visible: root.layoutTemplate
+      Layout.preferredHeight: active ? Math.min(360, root.height * 0.55) : 0
+
+      sourceComponent: FieldLayoutEditor {
+        editor: nativeEditor
       }
     }
 

@@ -290,6 +290,34 @@ Load-bearing rules, all earned against a 48 kHz audio stream (2026-08-17):
   class only when the record, the gap before it, AND the resulting cluster all fit inside
   `minSpanBytes`; merging on the gap alone collapsed a lane of legible records separated by one
   delimiter byte.
+**Console automation and the bus monitor (spec 0127).** Four more objects hang off
+`Console::Handler`, all GUI thread, all fed from its raw-tap entry points, none on the pipeline:
+
+- **`Console::SendSequencer`** (owned by `SendLibrary`) and **`Console::AutoReply`** transmit
+  without a click per send, so both take their link as callbacks (`SequenceLink`, `ReplyLink`)
+  instead of reaching into the handler; that is what lets `tst_console_send_sequence` and
+  `tst_console_auto_reply` run them without the app. Rules binding a change: the armed state is
+  never stored, both stop on `connectedChanged`, both refuse under `Core::Runtime::sealed()`,
+  auto-reply is fed only from `hotpathRxDeviceData` (never from injected or replayed bytes) and
+  answers the device the message came from, and past 50 replies a second it disarms. Their
+  settings are app-wide (`Console/SendPins`, `Console/AutoReplyRules`); nothing enters the project.
+- **`Console::HighlightRules`** is drawn by `Widgets::TerminalHighlighter` at paint time over
+  the visible rows, not written into `TerminalBuffer`: the buffer keeps colour cells only while
+  ANSI colours are on, and a rewrite would change what Copy and the Console Log see. It is
+  skipped while Find is active and in a right-to-left layout.
+- **`Console::BusMonitor`** (Pro, `BUILD_COMMERCIAL`; `Handler::busMonitor()` is null in a GPL
+  build) follows the annotation layer's rules: a viewer set gates ingestion, messages are staged
+  per chunk and published once per `uiTimeout` in one model transaction, and the timeline is flat
+  geometry painted on a `Canvas`. Received time is the chunk's own `CapturedData::timestamp`.
+- **`Console::ModbusRtuAnalyzer`** is a plain class (no QObject, no timer). Frames are found by
+  function code and CRC because idle gaps do not survive chunking. Two rules were measured, not
+  reasoned (the premise trace, `tst_modbus_rtu_analyzer::premiseTrace`): a candidate length is
+  only *waited for* when its byte count is plausible for the waiting request, and the idle flush
+  runs a final resync pass instead of discarding the buffer. Without them 72 of 38,758 frames were
+  lost behind a corrupt one. Plausibility never decides acceptance: a candidate whose bytes have
+  all arrived always goes to the CRC.
+- **`Handler.cpp` is at 1,495 of 1,500 lines.** The next console feature starts in its own file.
+
 - **Persistence is two-sided.** `widgetSettings("console")` carries the decoder with the `.ssproj`
   but is a **no-op outside `ProjectFile` mode** (the `widget_settings_active()` guard in `ProjectPresentation::saveWidgetSetting`), so `Settings { category:
   "ConsoleAnnotations" }` also stores decoder code/enabled plus window bytes, current tab and the

@@ -18,9 +18,27 @@ Icon ids are `category/name`, drawn once per pack under `app/rcc/iconpacks/<pack
   plus the add badge) and `editor/frequency-markers` (24 px; an Icons8 pick). Until then the
   Office set falls back to Basic's drawings for these two.
 
+- [ ] Spec 0127 placeholders: four buttons borrow existing glyphs until they have their own.
+  `console/auto-reply`, `console/color-rules` and `console/bus-monitor` (32 px ribbon; today
+  `console/utilities`, `console/plain-text` and `console/hexadecimal` in `Terminal.qml`) and
+  `commands/lanes` (the Multi-Plot toolbar; today `commands/poliline` in `MultiPlot.qml` and in
+  the `Plots.md` toolbar table).
+
 <!-- claim-verify on -->
 
 ## Code follow-ups
+
+- [ ] Spec 0127 (bench tools), maintainer-only: reconfigure so the eight new suites build
+  (`tst_justfloat`, `tst_field_layout`, `tst_multiplot_lanes`, `tst_console_send_sequence`,
+  `tst_console_auto_reply`, `tst_terminal_highlight`, and in a Pro build
+  `tst_modbus_rtu_analyzer` and `tst_bus_monitor`), run them with `tst_cframe_parser`,
+  `tst_quickplot_format_state` and `tst_quickplot_roundtrip`, then AC9, AC13, the visual half of
+  AC14 and AC15 (`--benchmark-hotpath`) in its `spec.md`. Nothing in it has been built or run.
+- [ ] Spec 0127 deferrals: JustFloat auto-detection in Quick Plot (declared framing refuses a
+  config without a start sequence), a listen-only Modbus driver that turns sniffed registers into
+  datasets, and API commands for the command list, auto-reply and the bus monitor.
+- [ ] `app/rcc/scripts/native/can_signal_map.md` and `modbus_register_map.md` (and their
+  `rcc.qrc` entries) are orphans: their templates were removed on 2026-06-11.
 
 - [ ] Spec 0125 (kiosk launcher control), maintainer-only: reconfigure so `tst_kiosk_session` and
   `tst_kiosk_control` build and run, then AC1, AC2, AC4, AC6 to AC18 in its `spec.md` on two

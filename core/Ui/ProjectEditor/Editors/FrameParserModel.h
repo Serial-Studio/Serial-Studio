@@ -67,6 +67,12 @@ class FrameParserModel : public QObject {
   Q_PROPERTY(QString templateDocumentation
              READ templateDocumentation
              NOTIFY templateIndexChanged)
+  Q_PROPERTY(QString templateId
+             READ templateId
+             NOTIFY templateIndexChanged)
+  Q_PROPERTY(QVariantList layoutFields
+             READ layoutFields
+             NOTIFY layoutFieldsChanged)
   Q_PROPERTY(QAbstractItemModel* parameterModel
              READ parameterModel
              NOTIFY parameterModelChanged)
@@ -117,6 +123,7 @@ signals:
   void pipelineChanged();
   void paramErrorChanged();
   void templateIndexChanged();
+  void layoutFieldsChanged();
   void parameterModelChanged();
   void pipelineOptionsChanged();
   void previewReady(const QVariantList& frames, const QString& error, const QString& stats);
@@ -127,6 +134,8 @@ public:
   [[nodiscard]] int sourceId() const noexcept;
   [[nodiscard]] int templateIndex() const;
   [[nodiscard]] QString paramError() const;
+  [[nodiscard]] QString templateId() const;
+  [[nodiscard]] QVariantList layoutFields() const;
   [[nodiscard]] QString templateDescription() const;
   [[nodiscard]] QString templateDocumentation() const;
   [[nodiscard]] int parameterCount() const;
@@ -145,9 +154,11 @@ public:
 
   Q_INVOKABLE [[nodiscard]] QVariantMap datasetIndexMap() const;
   Q_INVOKABLE [[nodiscard]] bool inputContainsDelimiters(const QString& input, bool hex) const;
+  Q_INVOKABLE [[nodiscard]] QStringList decodeLayoutSample(const QString& hex) const;
 
 public slots:
   void selectTemplate();
+  void setLayoutFields(const QVariantList& rows);
   void setSourceId(int sourceId);
   void setTemplateIndex(int index);
   void setDecoderIndex(int index);

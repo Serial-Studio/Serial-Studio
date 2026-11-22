@@ -75,6 +75,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_logX(false)
   , m_logY(false)
   , m_historyExact(true)
+  , m_laneRangesEnabled(false)
   , m_triggerSource(0)
   , m_dashboard(UI::Dashboard::instance())
   , m_themeManager(Misc::ThemeManager::instance())
@@ -114,6 +115,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   }
 
   m_data.resize(group.datasets.size());
+  m_lanes.resize(group.datasets.size());
 
   connect(&m_dashboard, &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange);
   connect(&m_dashboard, &UI::Dashboard::plotTimeRangeChanged, this, &MultiPlot::updateRange);
@@ -354,6 +356,32 @@ bool Widgets::MultiPlot::historyExact() const noexcept
   return m_historyExact;
 }
 
+/**
+ * @brief Whether per-curve Y ranges are being kept for lane mode (spec 0127 R23).
+ */
+bool Widgets::MultiPlot::laneRangesEnabled() const noexcept
+{
+  return m_laneRangesEnabled;
+}
+
+/**
+ * @brief Returns one {min, max} pair per curve for the lane bands. Built only when the view
+ *        reads it, which happens when a lane's quantized range moves, not per display tick.
+ */
+QVariantList Widgets::MultiPlot::laneRanges() const
+{
+  QVariantList ranges;
+  ranges.reserve(static_cast<qsizetype>(m_lanes.size()));
+  for (const auto& lane : m_lanes) {
+    QVariantMap range;
+    range.insert(QStringLiteral("min"), lane.min);
+    range.insert(QStringLiteral("max"), lane.max);
+    ranges.append(range);
+  }
+
+  return ranges;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------------------------
@@ -448,6 +476,23 @@ void Widgets::MultiPlot::setRunning(const bool enabled)
 void Widgets::MultiPlot::setVisibleXWindow(const double lo, const double hi)
 {
   m_base.setVisibleXWindow(lo, hi);
+}
+
+/**
+ * @brief Turns the per-curve range bookkeeping on or off. Off is the default and leaves the
+ *        shared-axis scan doing exactly the work it did before lanes existed.
+ */
+void Widgets::MultiPlot::setLaneRangesEnabled(const bool enabled)
+{
+  if (m_laneRangesEnabled == enabled)
+    return;
+
+  m_laneRangesEnabled = enabled;
+  for (auto& lane : m_lanes)
+    lane = LaneRanges::Lane();
+
+  calculateAutoScaleRange();
+  Q_EMIT laneRangesChanged();
 }
 
 /**
@@ -776,6 +821,9 @@ bool Widgets::MultiPlot::computeRangeFromDatasets()
     ++index;
   }
 
+  if (m_laneRangesEnabled)
+    assignDeclaredLanes();
+
   if (m_logY)
     return LogScale::resolveLogBounds(m_minY, m_maxY);
 
@@ -783,20 +831,53 @@ bool Widgets::MultiPlot::computeRangeFromDatasets()
 }
 
 /**
- * @brief Scans visible curves for finite min/max values.
+ * @brief Gives every lane the range its dataset declares; called only when all of them declare
+ *        one, which is also the case where the curves are not scanned at all.
+ */
+void Widgets::MultiPlot::assignDeclaredLanes()
+{
+  SS_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index), return);
+
+  const auto& group  = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  const size_t count = qMin(group.datasets.size(), m_lanes.size());
+  bool changed       = false;
+  for (size_t i = 0; i < count; ++i) {
+    const auto& dataset  = group.datasets[i];
+    changed             |= LaneRanges::assignDeclared(m_lanes[i], dataset.pltMin, dataset.pltMax);
+  }
+
+  if (changed)
+    Q_EMIT laneRangesChanged();
+}
+
+/**
+ * @brief Scans visible curves for finite min/max values. Each curve is scanned into its own
+ *        extent and folded into the shared one, so lane mode gets its per-curve ranges from
+ *        this same pass instead of a second walk over the points.
  */
 void Widgets::MultiPlot::scanCurvesForRange()
 {
   m_minY = std::numeric_limits<double>::max();
   m_maxY = std::numeric_limits<double>::lowest();
 
-  int index = 0;
+  bool changed = false;
+  int index    = 0;
   for (const auto& curve : std::as_const(m_data)) {
-    if (index < m_visibleCurves.size() && m_visibleCurves[index])
-      DSP::simdFiniteMinMaxPointF<1>(curve.constData(), curve.count(), m_minY, m_maxY);
+    if (index < m_visibleCurves.size() && m_visibleCurves[index]) {
+      double lo = std::numeric_limits<double>::max();
+      double hi = std::numeric_limits<double>::lowest();
+      DSP::simdFiniteMinMaxPointF<1>(curve.constData(), curve.count(), lo, hi);
+      m_minY = qMin(m_minY, lo);
+      m_maxY = qMax(m_maxY, hi);
+      if (m_laneRangesEnabled && static_cast<size_t>(index) < m_lanes.size())
+        changed |= LaneRanges::assignScanned(m_lanes[static_cast<size_t>(index)], lo, hi);
+    }
 
     ++index;
   }
+
+  if (changed)
+    Q_EMIT laneRangesChanged();
 }
 
 /**

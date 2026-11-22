@@ -70,6 +70,7 @@ Serial Studio detects the format from the first qualifying line, one where at le
 | Values separated by commas, semicolons, tabs or runs of spaces | `23.5,60,1013` or `23.5 60 1013` | One channel per value |
 | Decimal comma under semicolon or space separation | `23,5;60` | Channels `23.5` and `60` |
 | Named values, `name:value` or `name=value`, optional spaces after the delimiter | `temp: 23.5, hum: 60` | The names title the channels |
+| A name on the first value only (the VOFA+ FireWater format) | `data: 1.5, -2.25, 3` | One channel per value; the name titles the first |
 | Unit after a number | `23.5degC`, `1013hPa`, `45%` | The unit becomes the channel's unit and is stripped from the value |
 | One-line JSON object | `{"t":23.5,"h":60}` | Nested objects flatten to dotted names (`imu.ax`), arrays to indexed names (`acc[0]`); strings, booleans and nulls are ignored |
 | Line wrapped in `/*` and `*/` | `/* 23.5,60 */` | Parsed as its contents |
@@ -91,7 +92,7 @@ Known difference: in a saved project a missing named field repeats the previous 
 
 ### Limitations
 
-Quick Plot has no manual format override (use Save as Project for anything the detector cannot settle) and no binary or hex input. Widgets, alarms, parser scripts and multi-source are Project File features; see the [Feature comparison](#feature-comparison).
+Quick Plot has no manual format override (use Save as Project for anything the detector cannot settle) and no binary or hex input: a binary stream such as VOFA+ JustFloat needs a project with the matching Built-In template. Widgets, alarms, parser scripts and multi-source are Project File features; see the [Feature comparison](#feature-comparison).
 
 ## Project File mode
 

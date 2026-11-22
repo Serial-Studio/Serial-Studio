@@ -143,6 +143,9 @@ The console toolbar is free, except that **Attach** opens file transmission (Pro
 | **Find** | Utilities | Opens the in-console search bar (match case, previous and next match, close). |
 | **Collapse** | Utilities | Collapses repeated lines into a single entry. |
 | **Annotations** | Utilities | Opens the byte-annotation panel: label incoming bytes with a decoder and inspect them. |
+| **Auto Reply** | Utilities | Opens the [auto-reply table](Console-Automation.md#auto-reply): send a reply when a received message matches a rule. Hidden in a sealed deployment session. |
+| **Colors** | Utilities | Opens the [color rules](Console-Automation.md#colors): draw words such as `ERROR` in chosen colors. |
+| **Bus Monitor** | Utilities | Opens the [bus monitor](Bus-Monitor.md) (Pro, shown while a license or the trial is active): messages on the line with their timing, and Modbus RTU fault diagnosis. |
 | **Pause / Resume** | Utilities | Freezes the console display. Data keeps logging in the background. |
 | **Text** / **Hex** | Format | Switches the display mode. |
 | **Settings** | (none) | Opens the popup described below. |
@@ -160,7 +163,7 @@ With **Emulate VT-100** on, keystrokes typed into the console view are translate
 | **HEX** toggle | Sends the input as hexadecimal. |
 | Line-ending dropdown | **No Line Ending** (default), **New Line**, **Carriage Return**, or **CR + NL**. |
 | Checksum dropdown | **No Checksum** (default) or one of the available checksum methods. |
-| Command library | History, pinned commands and actions. |
+| Command library | History, pinned commands and actions. Ticked pins can be sent in order as a [command list](Console-Automation.md#command-list) with **Run List** or **Loop**. |
 | Cyclic send | Repeats the current command every Cyclic Send Interval milliseconds. |
 
 On a multi-device project a device selector picks the target. Right-click the terminal for **Copy**, **Select all**, and **Clear**.

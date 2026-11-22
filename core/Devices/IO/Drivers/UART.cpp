@@ -32,6 +32,7 @@
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/SerialPortIdentity.h"
 #include "IO/Drivers/UART/SequenceRunner.h"
+#include "IO/Drivers/UART/UartLineWatch.h"
 #include "IO/Drivers/UART/UartPolicy.h"
 #include "IO/Drivers/UART/UartSequencePort.h"
 
@@ -82,6 +83,7 @@ IO::Drivers::UART::UART()
   , m_sequenceConnecting(false)
   , m_portIndex(0)
   , m_breakTimer(Async::kInvalidTimerId)
+  , m_lineWatch(new UartLineWatch(*this))
 {
   populateErrors();
 
@@ -958,6 +960,23 @@ bool IO::Drivers::UART::relocateOpenPortIndex(const QVector<QSerialPortInfo>& po
 //--------------------------------------------------------------------------------------------------
 // Line control & Connection Sequence (spec 0103)
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The polled input-line levels the setup pane's indicators bind to (spec 0127 R22).
+ */
+QObject* IO::Drivers::UART::lineWatch() const noexcept
+{
+  return m_lineWatch;
+}
+
+/**
+ * @brief Points this driver's line watch at the port @p source names on each poll: the settings
+ *        driver never opens a port, so the connection manager names the live one.
+ */
+void IO::Drivers::UART::bindLineSource(std::function<UART*()> source)
+{
+  m_lineWatch->bindSource(std::move(source));
+}
 
 /**
  * @brief Reads the modem lines of the open port; empty when it is closed.

@@ -21,6 +21,8 @@
 
 #include "ProjectEditor/Editors/FrameParserModel.h"
 
+#include <array>
+#include <cmath>
 #include <QFile>
 #include <QInputDialog>
 #include <QJsonArray>
@@ -39,6 +41,7 @@
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/FrameParserPipeline.h"
+#include "DataModel/Scripting/NativeTemplates/BinaryFieldLayout.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "IO/PipelineHost.h"
 #include "ProjectEditor/ProjectEditor.h"
@@ -46,6 +49,13 @@
 //--------------------------------------------------------------------------------------------------
 // Internal helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Field Layout type and byte-order names in the editor's combobox order (spec 0127 R21).
+ */
+static const QStringList kLayoutTypes = {
+  QStringLiteral("uint"), QStringLiteral("int"), QStringLiteral("f32"), QStringLiteral("f64")};
+static const QStringList kLayoutEndians = {QStringLiteral("little"), QStringLiteral("big")};
 
 /**
  * @brief Frame detection values in combobox order.
@@ -456,6 +466,137 @@ void DataModel::FrameParserModel::resetToDefaults()
   rebuildParameterModel();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Field Layout table (spec 0127 R21)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reads a number an editor row carries, or @p fallback when the cell holds none.
+ */
+[[nodiscard]] static double layoutNumber(const QVariant& cell, const double fallback) noexcept
+{
+  bool ok            = false;
+  const double value = SerialStudio::toDouble(cell, &ok);
+  return ok ? value : fallback;
+}
+
+/**
+ * @brief Returns the stable id of the selected template.
+ */
+QString DataModel::FrameParserModel::templateId() const
+{
+  const auto* tmpl = currentTemplate();
+  if (!tmpl)
+    return QString();
+
+  return tmpl->id();
+}
+
+/**
+ * @brief Returns the field table of a Field Layout source as rows the editor binds to; type and
+ *        endian are combobox indices. A source that never stored a table shows the default one.
+ */
+QVariantList DataModel::FrameParserModel::layoutFields() const
+{
+  const auto key    = QStringLiteral("fields");
+  const auto stored = m_params.value(key);
+  const auto table  = stored.isArray() ? stored.toArray() : DataModel::defaultFieldLayout();
+
+  QVariantList rows;
+  rows.reserve(table.size());
+  for (const auto& entry : table) {
+    const auto obj   = entry.toObject();
+    const auto type  = obj.value(QStringLiteral("type")).toString(kLayoutTypes.constFirst());
+    const auto order = obj.value(QStringLiteral("endian")).toString(kLayoutEndians.constFirst());
+
+    QVariantMap row;
+    row.insert(QStringLiteral("offset"), obj.value(QStringLiteral("offset")).toInt(0));
+    row.insert(QStringLiteral("bit"), obj.value(QStringLiteral("bit")).toInt(0));
+    row.insert(QStringLiteral("length"), obj.value(QStringLiteral("length")).toInt(8));
+    row.insert(QStringLiteral("type"), qMax<qsizetype>(0, kLayoutTypes.indexOf(type)));
+    row.insert(QStringLiteral("endian"), qMax<qsizetype>(0, kLayoutEndians.indexOf(order)));
+    row.insert(QStringLiteral("scale"),
+               SerialStudio::toDouble(obj.value(QStringLiteral("scale")), 1.0));
+    row.insert(QStringLiteral("add"),
+               SerialStudio::toDouble(obj.value(QStringLiteral("add")), 0.0));
+    rows.append(row);
+  }
+
+  return rows;
+}
+
+/**
+ * @brief Decodes a pasted hexadecimal sample frame with the current field table: one text per
+ *        field, empty where the sample is too short. An unreadable sample or table yields none.
+ */
+QStringList DataModel::FrameParserModel::decodeLayoutSample(const QString& hex) const
+{
+  QString error;
+  DataModel::FieldLayout layout;
+  const auto stored = m_params.value(QStringLiteral("fields"));
+  const auto table  = stored.isArray() ? stored.toArray() : DataModel::defaultFieldLayout();
+  const auto frame  = QByteArray::fromHex(hex.simplified().remove(QLatin1Char(' ')).toLatin1());
+  if (frame.isEmpty() || !DataModel::parseFieldLayout(table, layout, error))
+    return {};
+
+  std::array<double, DataModel::kMaxLayoutFields> values;
+  const auto count = DataModel::decodeFieldLayout(frame, layout, values.data(), values.size());
+  SS_ASSERT(count <= DataModel::kMaxLayoutFields, return {});
+
+  QStringList texts;
+  texts.reserve(qMax<qsizetype>(0, count));
+  for (qsizetype i = 0; i < count; ++i) {
+    const double value = values[static_cast<size_t>(i)];
+    texts.append(std::isnan(value) ? QString() : QString::number(value, 'g', 12));
+  }
+
+  return texts;
+}
+
+/**
+ * @brief Writes the editor's rows back as the template's field table. The write goes through the
+ *        same project call as the parameter form, so undo covers it, and the applying guard
+ *        keeps the editor from being rebuilt under the row being typed in. A table the template
+ *        refuses is reported and never stored.
+ */
+void DataModel::FrameParserModel::setLayoutFields(const QVariantList& rows)
+{
+  if (m_applying)
+    return;
+
+  QJsonArray table;
+  for (const auto& entry : rows) {
+    const auto row = entry.toMap();
+    QJsonObject obj;
+    obj.insert(QStringLiteral("offset"), row.value(QStringLiteral("offset")).toInt());
+    obj.insert(QStringLiteral("bit"), row.value(QStringLiteral("bit")).toInt());
+    obj.insert(QStringLiteral("length"), row.value(QStringLiteral("length")).toInt());
+    obj.insert(QStringLiteral("type"),
+               kLayoutTypes.value(row.value(QStringLiteral("type")).toInt(), kLayoutTypes.at(0)));
+    obj.insert(
+      QStringLiteral("endian"),
+      kLayoutEndians.value(row.value(QStringLiteral("endian")).toInt(), kLayoutEndians.at(0)));
+    obj.insert(QStringLiteral("scale"), layoutNumber(row.value(QStringLiteral("scale")), 1.0));
+    obj.insert(QStringLiteral("add"), layoutNumber(row.value(QStringLiteral("add")), 0.0));
+    table.append(obj);
+  }
+
+  auto params = m_params;
+  params.insert(QStringLiteral("fields"), table);
+
+  QString error;
+  if (!validateParams(params, error)) {
+    setParamError(error);
+    return;
+  }
+
+  m_params = params;
+  setParamError(QString());
+  m_applying = true;
+  m_projectModel.updateSourceFrameParserParams(m_sourceId, m_params);
+  m_applying = false;
+}
+
 /**
  * @brief Returns true when the sample input carries every delimiter the detection mode needs.
  */
@@ -847,6 +988,7 @@ void DataModel::FrameParserModel::rebuildParameterModel()
   auto* previous   = m_parameterModel;
   m_parameterModel = model;
   Q_EMIT parameterModelChanged();
+  Q_EMIT layoutFieldsChanged();
 
   if (previous) {
     previous->disconnect(this);

@@ -32,6 +32,7 @@
 namespace Console {
 
 class Handler;
+class SendSequencer;
 
 /**
  * @brief The console-tier TX command library (spec 0091): persisted send history and
@@ -57,11 +58,24 @@ class SendLibrary : public QObject {
   Q_PROPERTY(bool canPromote
              READ canPromote
              NOTIFY canPromoteChanged)
+  Q_PROPERTY(bool sequenceRunning
+             READ sequenceRunning
+             NOTIFY sequenceChanged)
+  Q_PROPERTY(bool sequenceLooping
+             READ sequenceLooping
+             NOTIFY sequenceChanged)
+  Q_PROPERTY(int sequenceIndex
+             READ sequenceIndex
+             NOTIFY sequenceChanged)
+  Q_PROPERTY(bool automationAllowed
+             READ automationAllowed
+             CONSTANT)
   // clang-format on
 
 signals:
   void pinsChanged();
   void historyChanged();
+  void sequenceChanged();
   void canPromoteChanged();
   void cyclicArmedChanged();
   void cyclicIntervalChanged();
@@ -78,6 +92,10 @@ public:
   [[nodiscard]] bool cyclicArmed() const noexcept;
   [[nodiscard]] int cyclicIntervalMs() const noexcept;
   [[nodiscard]] bool canPromote() const;
+  [[nodiscard]] bool sequenceRunning() const noexcept;
+  [[nodiscard]] bool sequenceLooping() const noexcept;
+  [[nodiscard]] int sequenceIndex() const noexcept;
+  [[nodiscard]] bool automationAllowed() const noexcept;
 
   [[nodiscard]] Q_INVOKABLE QString recallPin(int index);
 
@@ -93,6 +111,10 @@ public slots:
   void setCyclicIntervalMs(int intervalMs);
   void promotePin(int index);
   void promoteCurrent(const QString& payload);
+  void setPinEnabled(int index, bool enabled);
+  void setPinDelay(int index, int delayMs);
+  void runSequence(bool loop);
+  void stopSequence();
 
 private slots:
   void onCyclicTick();
@@ -110,6 +132,7 @@ private:
   QString m_cyclicPayload;
   int m_cyclicIntervalMs;
   Core::Bus::Subscription m_opModeWatch;
+  SendSequencer* m_sequencer;
 };
 
 }  // namespace Console

@@ -27,9 +27,11 @@
 
 #include "AppState.h"
 #include "Console/Handler.h"
+#include "Console/SendSequence.h"
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/Checksum.h"
+#include "Core/Runtime.h"
 #include "Core/SSAssert.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
@@ -49,14 +51,34 @@ static const QString kHexFlag     = QStringLiteral("hex");
 static const QString kEol         = QStringLiteral("lineEnding");
 static const QString kCrcName     = QStringLiteral("checksumName");
 static const QString kTextEnc     = QStringLiteral("encoding");
+static const QString kEnabled     = QStringLiteral("enabled");
+static const QString kDelayMs     = QStringLiteral("delayMs");
 
 /**
  * @brief Constructs the library and seeds the handler's in-memory history from the persisted
- *        copy, recall cursor past the end exactly as addToHistory() leaves it (R1).
+ *        copy, recall cursor past the end exactly as addToHistory() leaves it (R1). The command
+ *        list runner (spec 0127) sends through the handler's selected device.
  */
 Console::SendLibrary::SendLibrary(Handler& handler)
-  : QObject(&handler), m_handler(handler), m_cyclicIntervalMs(kCyclicIntervalReset)
+  : QObject(&handler)
+  , m_handler(handler)
+  , m_cyclicIntervalMs(kCyclicIntervalReset)
+  , m_sequencer(nullptr)
 {
+  SequenceLink link;
+  link.connected = [this] {
+    return m_handler.m_connectionManager->isConnected();
+  };
+  link.paused = [this] {
+    return m_handler.m_connectionManager->paused();
+  };
+  link.send = [this](const QByteArray& bytes) {
+    m_handler.sendBytes(m_handler.currentDeviceId(), bytes);
+  };
+
+  m_sequencer = new SendSequencer(std::move(link), this);
+  connect(m_sequencer, &SendSequencer::stateChanged, this, &SendLibrary::sequenceChanged);
+
   auto items = m_settings.value(kHistoryKey).toStringList();
   while (items.count() > kHistoryCap)
     items.removeFirst();
@@ -258,7 +280,7 @@ int Console::SendLibrary::cyclicIntervalMs() const noexcept
 void Console::SendLibrary::armCyclic(const QString& payload)
 {
   SS_ASSERT(m_handler.m_connectionManager != nullptr, return);
-  if (!m_handler.m_connectionManager->isConnected())
+  if (!m_handler.m_connectionManager->isConnected() || m_sequencer->running())
     return;
 
   m_cyclicPayload = payload;
@@ -322,8 +344,95 @@ void Console::SendLibrary::onCyclicTick()
 void Console::SendLibrary::onConnectionChanged()
 {
   SS_ASSERT(m_handler.m_connectionManager != nullptr, return);
-  if (!m_handler.m_connectionManager->isConnected())
-    disarmCyclic();
+  if (m_handler.m_connectionManager->isConnected())
+    return;
+
+  disarmCyclic();
+  m_sequencer->stop();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Command list (spec 0127 R1-R3)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Whether a command list is being run.
+ */
+bool Console::SendLibrary::sequenceRunning() const noexcept
+{
+  return m_sequencer->running();
+}
+
+/**
+ * @brief Whether the running list starts over after its last pin.
+ */
+bool Console::SendLibrary::sequenceLooping() const noexcept
+{
+  return m_sequencer->looping();
+}
+
+/**
+ * @brief Position of the pin that is sent next, or -1 when no list is running.
+ */
+int Console::SendLibrary::sequenceIndex() const noexcept
+{
+  return m_sequencer->currentIndex();
+}
+
+/**
+ * @brief False in a sealed deployment session, where the list controls are hidden.
+ */
+bool Console::SendLibrary::automationAllowed() const noexcept
+{
+  return !Core::Runtime::sealed();
+}
+
+/**
+ * @brief Includes the pin at @a index in list runs, or leaves it out.
+ */
+void Console::SendLibrary::setPinEnabled(int index, bool enabled)
+{
+  SS_ASSERT(index >= 0 && index < m_pins.count(), return);
+
+  auto pin = m_pins.at(index).toMap();
+  pin.insert(kEnabled, enabled);
+  m_pins.replace(index, pin);
+  savePins();
+}
+
+/**
+ * @brief Sets how long the pin at @a index waits before it is sent in a list run.
+ */
+void Console::SendLibrary::setPinDelay(int index, int delayMs)
+{
+  SS_ASSERT(index >= 0 && index < m_pins.count(), return);
+
+  auto pin = m_pins.at(index).toMap();
+  pin.insert(kDelayMs, qBound(kSequenceDelayMin, delayMs, kSequenceDelayMax));
+  m_pins.replace(index, pin);
+  savePins();
+}
+
+/**
+ * @brief Sends every enabled pin in order, once or in a loop. Refused while cyclic send is armed:
+ *        two timers writing to one link interleave their payloads.
+ */
+void Console::SendLibrary::runSequence(bool loop)
+{
+  SS_ASSERT(m_sequencer != nullptr, return);
+  if (cyclicArmed())
+    return;
+
+  (void)m_sequencer->start(m_pins, loop);
+}
+
+/**
+ * @brief Stops the running command list.
+ */
+void Console::SendLibrary::stopSequence()
+{
+  SS_ASSERT(m_sequencer != nullptr, return);
+  m_sequencer->stop();
 }
 
 //--------------------------------------------------------------------------------------------------

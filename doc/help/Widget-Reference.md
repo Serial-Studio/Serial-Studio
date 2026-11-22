@@ -68,6 +68,7 @@ For a single number from your Arduino, start with [Plot](#plot); add a [Gauge](#
 
 - Widget key: `"multiplot"`.
 - Overlays multiple dataset curves on shared axes, with per-curve visibility toggles and an auto-scaling Y-axis.
+- The **Lanes** toolbar button splits it into one band per visible channel, each with its own Y range, for signals of very different size; see [Lanes](Plots.md#lanes).
 - Best for: comparing related signals (for example a 3-axis accelerometer over time).
 - Configuration: switch **Plot** on for each dataset in the group (project-file key `graph: true`).
 

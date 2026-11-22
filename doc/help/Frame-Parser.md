@@ -41,12 +41,17 @@ To test any parser, see [Test Your Parser](#test-your-parser).
 | Family | Templates |
 |---|---|
 | Text | Delimited text (CSV by default; any separator text works), Fixed-width fields, Key-value pairs, INI/config format, AT command responses, NMEA 0183 sentences, URL-encoded data, JSON data, XML data, YAML data |
-| Binary | Raw bytes, Hexadecimal bytes, Base64-encoded data, Binary TLV, COBS-encoded frames, SLIP-encoded frames, UBX protocol (u-blox), SiRF binary protocol, MAVLink messages, NMEA 2000 messages, RTCM corrections, Modbus frames, MessagePack data |
+| Binary | Raw bytes, Hexadecimal bytes, Base64-encoded data, Binary TLV, COBS-encoded frames, SLIP-encoded frames, UBX protocol (u-blox), SiRF binary protocol, MAVLink messages, NMEA 2000 messages, RTCM corrections, Modbus frames, MessagePack data, Packed struct, Field layout, VOFA+ JustFloat |
 | Multi-frame | Batched sensor data, Time-series 2D arrays |
 
 Every template exposes typed parameters. For example, *Delimited text* takes the separator text (a comma by default; type `;`, `|` or an escape sequence such as `\t` for tab), an optional quote character, whitespace trimming and empty-field removal. Templates that map named keys to channels (key-value, JSON, NMEA and similar) take an ordered key list: the position of each key in the list is the channel index, and missing keys keep their previous values between frames.
 
-Binary protocol templates expect the matching decoder: select **Binary (Direct)** for TLV, COBS, SLIP, UBX, SiRF, MAVLink, NMEA 2000, RTCM, Modbus and MessagePack, and **Hexadecimal** for the Hexadecimal bytes template. The frame delimiters, checksum and decoder are configured per source, exactly as with scripted parsers.
+Binary protocol templates expect the matching decoder: select **Binary (Direct)** for TLV, COBS, SLIP, UBX, SiRF, MAVLink, NMEA 2000, RTCM, Modbus, MessagePack, Packed struct, Field layout and JustFloat, and **Hexadecimal** for the Hexadecimal bytes template. The frame delimiters, checksum and decoder are configured per source, exactly as with scripted parsers.
+
+Two templates describe a fixed binary frame without code:
+
+- **Field layout** takes a table with one row per channel. Each row sets the byte offset, the bit offset inside that byte, the bit length, the type (unsigned, signed, 32-bit float or 64-bit float), the byte order, a scale and an offset. Paste a sample frame under the table to see each field's value before you connect. A field that reaches past the end of a frame has no value for that frame, and the other fields still decode.
+- **VOFA+ JustFloat** decodes a frame of little-endian 32-bit floats into one channel per float. Set frame detection to **End Delimiter Only**, enable hexadecimal delimiters and enter `00 00 80 7F` as the end sequence.
 
 ### Built-In Templates Over the API
 

@@ -21,7 +21,9 @@
 
 #include "DataModel/Scripting/NativeTemplates/BinaryBase64.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryCobs.h"
+#include "DataModel/Scripting/NativeTemplates/BinaryFieldLayout.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryHex.h"
+#include "DataModel/Scripting/NativeTemplates/BinaryJustFloat.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryMavlink.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryMessagePack.h"
 #include "DataModel/Scripting/NativeTemplates/BinaryModbus.h"
@@ -59,7 +61,9 @@ QList<const DataModel::INativeTemplate*> DataModel::binaryNativeTemplates()
                                                     &rtcmTemplate(),
                                                     &modbusTemplate(),
                                                     &messagePackTemplate(),
-                                                    &packedStructTemplate()};
+                                                    &packedStructTemplate(),
+                                                    &fieldLayoutTemplate(),
+                                                    &justFloatTemplate()};
   list                                          += wireLatchNativeTemplates();
   return list;
 }

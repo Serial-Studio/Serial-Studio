@@ -28,6 +28,8 @@ To skip the hand-written parser, use **Generate Project** in the register-groups
 
 ## How Serial Studio uses it
 
+To watch a Modbus RTU line that another master is polling, without polling it yourself, connect with the UART driver and open the [bus monitor](Bus-Monitor.md). It lists each request and response and flags the ones that failed.
+
 Serial Studio acts as the master (Modbus client). Each connection has a slave address (called Unit ID on TCP) that its register groups follow by default, and any group may name a slave of its own, so one connection can read several devices sharing a bus.
 
 Writes from [Output Controls](Output-Controls.md) target holding registers on the connection's own slave. A write payload is a big-endian start address followed by one 16-bit value per register, so it covers anything from a single register up to the 123 a Write Multiple Registers request can carry. The `modbusWriteRegister` and `modbusWriteRegisters` helpers (see the [SDK](SerialStudio-SDK.md)) build it for you.
