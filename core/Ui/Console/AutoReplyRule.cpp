@@ -29,11 +29,11 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-static const QString kMatchKey   = QStringLiteral("match");
-static const QString kModeKey    = QStringLiteral("mode");
-static const QString kHexKey     = QStringLiteral("matchHex");
-static const QString kEnabledKey = QStringLiteral("enabled");
-static const QString kReplyKey   = QStringLiteral("reply");
+static const QString kMatchKey       = QStringLiteral("match");
+static const QString kRuleModeKey    = QStringLiteral("mode");
+static const QString kRuleHexKey     = QStringLiteral("matchHex");
+static const QString kRuleEnabledKey = QStringLiteral("enabled");
+static const QString kReplyKey       = QStringLiteral("reply");
 
 /**
  * @brief Translates a rule problem in the auto-reply context.
@@ -54,11 +54,11 @@ Console::ReplyRule Console::replyRuleFromMap(const QVariantMap& map)
 {
   ReplyRule rule;
   rule.match   = map.value(kMatchKey).toString();
-  rule.hex     = map.value(kHexKey, false).toBool();
-  rule.enabled = map.value(kEnabledKey, false).toBool();
+  rule.hex     = map.value(kRuleHexKey, false).toBool();
+  rule.enabled = map.value(kRuleEnabledKey, false).toBool();
   rule.reply   = txPresetFromMap(map.value(kReplyKey).toMap());
 
-  const int mode = map.value(kModeKey, 0).toInt();
+  const int mode = map.value(kRuleModeKey, 0).toInt();
   if (mode >= 0 && mode <= static_cast<int>(ReplyMatchMode::Regex))
     rule.mode = static_cast<ReplyMatchMode>(mode);
 
@@ -75,9 +75,9 @@ QVariantMap Console::replyRuleToMap(const ReplyRule& rule)
 
   QVariantMap map;
   map.insert(kMatchKey, rule.match);
-  map.insert(kModeKey, static_cast<int>(rule.mode));
-  map.insert(kHexKey, rule.hex);
-  map.insert(kEnabledKey, rule.enabled);
+  map.insert(kRuleModeKey, static_cast<int>(rule.mode));
+  map.insert(kRuleHexKey, rule.hex);
+  map.insert(kRuleEnabledKey, rule.enabled);
   map.insert(kReplyKey, reply);
   return map;
 }

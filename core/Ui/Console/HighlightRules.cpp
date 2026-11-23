@@ -31,14 +31,14 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-static const QString kRulesKey   = QStringLiteral("Console/HighlightRules");
-static const QString kKeywordKey = QStringLiteral("keyword");
-static const QString kCaseKey    = QStringLiteral("caseSensitive");
-static const QString kFgKey      = QStringLiteral("foreground");
-static const QString kBgKey      = QStringLiteral("background");
-static const QString kEnabledKey = QStringLiteral("enabled");
-static const QString kDefaultFg  = QStringLiteral("#ffffff");
-static const QString kDefaultBg  = QStringLiteral("#c0392b");
+static const QString kHighlightRulesKey   = QStringLiteral("Console/HighlightRules");
+static const QString kKeywordKey          = QStringLiteral("keyword");
+static const QString kCaseKey             = QStringLiteral("caseSensitive");
+static const QString kFgKey               = QStringLiteral("foreground");
+static const QString kBgKey               = QStringLiteral("background");
+static const QString kHighlightEnabledKey = QStringLiteral("enabled");
+static const QString kDefaultFg           = QStringLiteral("#ffffff");
+static const QString kDefaultBg           = QStringLiteral("#c0392b");
 
 //--------------------------------------------------------------------------------------------------
 // Construction and reading
@@ -100,7 +100,7 @@ bool Console::HighlightRules::normalize(const QVariantMap& rule, QVariantMap& ou
   out.insert(kCaseKey, rule.value(kCaseKey, true).toBool());
   out.insert(kFgKey, fg.isValid() ? fg.name() : kDefaultFg);
   out.insert(kBgKey, bg.isValid() ? bg.name() : kDefaultBg);
-  out.insert(kEnabledKey, rule.value(kEnabledKey, true).toBool());
+  out.insert(kHighlightEnabledKey, rule.value(kHighlightEnabledKey, true).toBool());
   return true;
 }
 
@@ -165,7 +165,7 @@ void Console::HighlightRules::setRuleEnabled(int index, bool enabled)
   SS_ASSERT(index >= 0 && index < m_rules.count(), return);
 
   auto rule = m_rules.at(index).toMap();
-  rule.insert(kEnabledKey, enabled);
+  rule.insert(kHighlightEnabledKey, enabled);
   m_rules.replace(index, rule);
   saveRules();
 }
@@ -176,7 +176,7 @@ void Console::HighlightRules::setRuleEnabled(int index, bool enabled)
  */
 void Console::HighlightRules::loadRules()
 {
-  const auto doc = QJsonDocument::fromJson(m_settings.value(kRulesKey).toByteArray());
+  const auto doc = QJsonDocument::fromJson(m_settings.value(kHighlightRulesKey).toByteArray());
   if (!doc.isArray())
     return;
 
@@ -197,7 +197,7 @@ void Console::HighlightRules::loadRules()
 void Console::HighlightRules::saveRules()
 {
   const auto doc = QJsonDocument(QJsonArray::fromVariantList(m_rules));
-  m_settings.setValue(kRulesKey, doc.toJson(QJsonDocument::Compact));
+  m_settings.setValue(kHighlightRulesKey, doc.toJson(QJsonDocument::Compact));
   recompile();
   Q_EMIT rulesChanged();
 }
@@ -210,7 +210,7 @@ void Console::HighlightRules::recompile()
   m_compiled.clear();
   for (const auto& entry : std::as_const(m_rules)) {
     const auto rule = entry.toMap();
-    if (!rule.value(kEnabledKey, true).toBool())
+    if (!rule.value(kHighlightEnabledKey, true).toBool())
       continue;
 
     KeywordRule compiled;

@@ -34,8 +34,8 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-static const QString kRulesKey = QStringLiteral("Console/AutoReplyRules");
-static const QString kGapKey   = QStringLiteral("Console/AutoReplyGapMs");
+static const QString kRulesKey    = QStringLiteral("Console/AutoReplyRules");
+static const QString kReplyGapKey = QStringLiteral("Console/AutoReplyGapMs");
 
 //--------------------------------------------------------------------------------------------------
 // Construction
@@ -56,8 +56,8 @@ Console::AutoReply::AutoReply(ReplyLink link, QObject* parent)
 {
   SS_ASSERT_LOG(m_link.connected && m_link.send && m_link.note);
 
-  m_gapMs =
-    qBound(kReplyGapMinMs, m_settings.value(kGapKey, kReplyGapDefaultMs).toInt(), kReplyGapMaxMs);
+  m_gapMs = qBound(
+    kReplyGapMinMs, m_settings.value(kReplyGapKey, kReplyGapDefaultMs).toInt(), kReplyGapMaxMs);
 
   m_clock.start();
   m_gapTimer.setSingleShot(true);
@@ -263,7 +263,7 @@ void Console::AutoReply::setGapMs(int gapMs)
     return;
 
   m_gapMs = clamped;
-  m_settings.setValue(kGapKey, m_gapMs);
+  m_settings.setValue(kReplyGapKey, m_gapMs);
   Q_EMIT gapChanged();
 }
 
